@@ -8,17 +8,17 @@ My Bachelor thesis and individual software project.
 
 ////
 === Screenshot
-image:./docs/img/screenshot.png["bp screenshot", scalewidth="20%"]
+image:editor/docs/img/screenshot.png["bp screenshot", scalewidth="20%"]
 ////
 
 === Building
 * See: How-to setup your *build environment*:
-link:./docs/howto-setup-environment-windows.adoc[Windows], link:./docs/howto-setup-environment-linux.adoc[Linux & Mac]
+link:editor/docs/howto-setup-environment-windows.adoc[Windows], link:editor/docs/howto-setup-environment-linux.adoc[Linux & Mac]
 * *Recommended*: `mvn clean install -DskipTests`
 * To run *unit tests*: `mvn clean install`
 * To run *integration tests*: `mvn clean install -Pit`
 * To *clean*, run: `mvn clean`
-* Run a simple link:./docs/usage.adoc[demo]
+* Run a simple link:editor/docs/usage.adoc[demo]
 
 This project uses http://semver.org/[semantic versioning].
 
@@ -37,7 +37,7 @@ Here are some ways *you* can contribute:
 * by using alpha, beta, and pre-release versions
 * by reporting bugs
 * by suggesting new features
-* by implementing link:./docs/goals.adoc[planned features]
+* by implementing link:editor/docs/goals.adoc[planned features]
 * by translating to a new language
 * by link:./docs/howto-write-documentation.adoc[writing or editing documentation]
 * by writing specifications
