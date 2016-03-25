@@ -1,0 +1,10 @@
+Transport IPC 14
+
+https://helios.hud.ac.uk/scommv/IPC-14/domains_sequential.html
+© Copyright no one at all. Go to town.
+
+This domain is original from the IPC2008. There is no description of this domain,
+but it seems to be a kind of logistics one. Each vehicle can transport some packages
+depending on its capacity and moving has a cost depending on the length of the road.
+Picking up or dropping a package costs 1.
+
