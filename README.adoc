@@ -1,2 +1,3 @@
-# bp
+= Bachelor thesis
+
 My bachelor thesis and individual software project
