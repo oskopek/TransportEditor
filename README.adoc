@@ -39,7 +39,7 @@ Here are some ways *you* can contribute:
 * by suggesting new features
 * by implementing link:editor/docs/goals.adoc[planned features]
 * by translating to a new language
-* by link:./docs/howto-write-documentation.adoc[writing or editing documentation]
+* by link:editor/docs/howto-write-documentation.adoc[writing or editing documentation]
 * by writing specifications
 * by writing code (*no patch is too small*: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
