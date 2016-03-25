@@ -1,0 +1,34 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+# Use JDK 8u45. The above line just causes the use of a minor version of Java 8.
+# Courtesy of http://www.stevenschwenke.de/cannotFindSymbolInTravisAndShippable
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+env:
+  global:
+    - MAVEN_PROFILES="it"
+
+cache:
+  directories:
+    - $HOME/.m2
+
+script: "cd editor; mvn clean verify -P$MAVEN_PROFILES"
+
+install: /bin/true
+
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#carcv"
+    on_success: always
+    on_failure: always
+    template:
+      - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"

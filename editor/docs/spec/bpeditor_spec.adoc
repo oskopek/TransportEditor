@@ -1,0 +1,12 @@
+= Editor -- ročníkový projekt, LS 2016
+Ondrej Škopek <oskopek@matfyz.cz>
+
+== Stručne
+
+
+== Podrobne
+
+
+== Bonus
+
+
