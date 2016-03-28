@@ -1,0 +1,6 @@
+benchmarks_domains_fastdownward.pdf http://www.springer.com/gp/book/9783540777229?wt_mc=ThirdParty.SpringerLink.3.EPR653.About_eBook (techlib access)
+ipc_result_eval.pdf http://www.sciencedirect.com/science/article/pii/S0004370208001847
+review_of_ipc_planning_domains.pdf http://search.proquest.com.ezproxy.techlib.cz/docview/1442611728?pq-origsite=summon (techlib access)
+visualization_and_verification_bp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC97605A13253CC0B7C6E01D46DB/zzp/detail/70305/?back_id=49 (vizualizace, transport)
+aiplan_with_time_and_resources_dp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC97605A13253CC0B7C6E01D46DB/zzp/detail/48598/?back_id=47 (important, vela transportu!)
+classical_planning_techniques_bp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC97605A13253CC0B7C6E01D46DB/zzp/detail/49022/?back_id=45 (theory)
