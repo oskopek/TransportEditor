@@ -53,6 +53,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.1.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se</artifactId>
+            <version>2.3.3.Final</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>bpeditor</finalName>
