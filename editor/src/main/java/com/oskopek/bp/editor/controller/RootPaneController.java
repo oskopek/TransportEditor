@@ -17,9 +17,9 @@ import javax.inject.Inject;
 import java.io.File;
 
 /**
- * Created by skopeko on 14.4.16.
+ * Handles all actions in the menu bar of the main app.
  */
-public class RootPaneController { // TODO a lot of stuff left out
+public class RootPaneController { // TODO rework this after we have the model
 
     @Inject
     private transient Logger logger;
@@ -144,6 +144,10 @@ public class RootPaneController { // TODO a lot of stuff left out
         dialog.showAndWait();
     }
 
+    /**
+     * TODO temp comment.
+     * @param file f
+     */
     private void saveToFile(File file) {
         if (file == null) {
             logger.debug("Cannot save to null file.");
@@ -157,6 +161,10 @@ public class RootPaneController { // TODO a lot of stuff left out
 //        }
     }
 
+    /**
+     * TODO temp comment.
+     * @param file f
+     */
     private void openFromFile(File file) {
         if (file == null) {
             logger.debug("Cannot open from null file.");

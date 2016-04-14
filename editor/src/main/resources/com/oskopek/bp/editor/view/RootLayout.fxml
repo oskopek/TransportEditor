@@ -38,6 +38,8 @@
         </MenuBar>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
+                <!-- TODO fx:include more layouts! -->
+                <!-- http://stackoverflow.com/questions/12543487/javafx-nested-controllers-fxml-include -->
                 <BorderPane prefHeight="449.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0"
                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 </BorderPane>
