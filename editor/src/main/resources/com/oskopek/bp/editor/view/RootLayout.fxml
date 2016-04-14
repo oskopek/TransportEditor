@@ -13,25 +13,25 @@
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
-                <Menu mnemonicParsing="false" text="root.file">
+                <Menu mnemonicParsing="false" text="%root.file">
                     <items>
-                        <MenuItem fx:id="newMenuItem" mnemonicParsing="false" onAction="#handleNew" text="root.new"/>
+                        <MenuItem fx:id="newMenuItem" mnemonicParsing="false" onAction="#handleNew" text="%root.new"/>
                         <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#handleOpen"
-                                  text="root.open"/>
+                                  text="%root.open"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#handleSave"
-                                  text="root.save"/>
+                                  text="%root.save"/>
                         <MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" onAction="#handleSaveAs"
-                                  text="root.saveas"/>
+                                  text="%root.saveas"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" onAction="#handleQuit"
-                                  text="root.quit"/>
+                                  text="%root.quit"/>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="root.help">
+                <Menu mnemonicParsing="false" text="%root.help">
                     <items>
                         <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout"
-                                  text="root.about"/>
+                                  text="%root.about"/>
                     </items>
                 </Menu>
             </menus>
