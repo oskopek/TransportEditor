@@ -4,9 +4,6 @@ import com.oskopek.bp.editor.persistence.DataReader;
 import com.oskopek.bp.editor.persistence.DataWriter;
 import com.oskopek.bp.editor.view.BPEditorApplication;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -15,18 +12,17 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by skopeko on 14.4.16.
  */
 public class RootPaneController { // TODO a lot of stuff left out
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Inject
+    private transient Logger logger;
 
     @Inject
     private BPEditorApplication application;
@@ -66,7 +62,6 @@ public class RootPaneController { // TODO a lot of stuff left out
 
     @FXML
     private MenuItem aboutMenuItem;
-
 
 
     /**

@@ -1,11 +1,8 @@
 package com.oskopek.bp.editor.view;
 
-import com.oskopek.bp.editor.weld.StartupScene;
+import com.oskopek.bp.editor.weld.StartupStage;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
@@ -35,7 +32,8 @@ public class BPEditorApplication extends Application {
         // Now that JavaFX thread is ready // TODO reference https://dzone.com/articles/fxml-javafx-powered-cdi-jboss
         // let's inform whoever cares using standard CDI notification mechanism:
         // CDI events
-        container.event().select(Stage.class, new AnnotationLiteral<StartupScene>() {}).fire(primaryStage);
+        container.event().select(Stage.class, new AnnotationLiteral<StartupStage>() {
+        }).fire(primaryStage);
     }
 
     /**

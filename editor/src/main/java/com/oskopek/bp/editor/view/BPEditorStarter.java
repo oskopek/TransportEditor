@@ -1,6 +1,6 @@
 package com.oskopek.bp.editor.view;
 
-import com.oskopek.bp.editor.weld.StartupScene;
+import com.oskopek.bp.editor.weld.StartupStage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by skopeko on 14.4.16.
+ * A CDI-enabled version of {@link BPEditorApplication} that initializes the root layout.
  */
 public class BPEditorStarter {
 
@@ -20,9 +20,10 @@ public class BPEditorStarter {
     private FXMLLoader fxmlLoader;
 
     /**
-            * Initializes the root layout.
-            */
-    private void initRootLayout(@Observes @StartupScene Stage primaryStage) {
+     * Initializes the root layout.
+     * @param primaryStage the primaryStage delegated from the {@link javafx.application.Application} that calls us
+     */
+    private void initRootLayout(@Observes @StartupStage Stage primaryStage) {
         VBox rootLayout;
         try (InputStream is = getClass().getResourceAsStream("RootLayout.fxml")) {
             rootLayout = fxmlLoader.load(is);

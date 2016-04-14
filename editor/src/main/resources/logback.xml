@@ -8,8 +8,9 @@
     </appender>
 
     <logger name="com.oskopek.bp" level="TRACE"/>
+    <logger name="org.jboss.weld" level="WARNING"/>
 
-    <root level="debug">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
