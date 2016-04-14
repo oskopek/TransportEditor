@@ -15,9 +15,8 @@ public class BPEditorApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("StudyGuide");
+        this.primaryStage.setTitle("BPEditor");
         this.primaryStage.getIcons().add(new Image(BPEditorApplication.class.getResourceAsStream("logo_64x64.png")));
-
         initRootLayout();
     }
 
