@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.ResourceBundle;
 
 /**
  * Handles all actions in the menu bar of the main app.
@@ -25,7 +26,10 @@ public class RootPaneController { // TODO rework this after we have the model
     private transient Logger logger;
 
     @Inject
-    private BPEditorApplication application;
+    private transient ResourceBundle messages;
+
+    @Inject
+    private transient BPEditorApplication application;
 
     private File openedFile;
 
@@ -136,16 +140,17 @@ public class RootPaneController { // TODO rework this after we have the model
     @FXML
     private void handleAbout() {
         Dialog<Label> dialog = new Dialog<>();
-//        dialog.setContentText(
-//                "                               StudyGuide\n" + "    <https://github.com/oskopek/StudyGuide>\n"
-//                        + AbstractFXMLPane.messages.getString("menu.author") + ": Ondrej Skopek <oskopek@matfyz.cz>");
-//        dialog.setTitle(AbstractFXMLPane.messages.getString("root.about"));
+        dialog.setContentText(
+                "                               BP Editor\n" + "    <https://github.com/oskopek/bp>\n"
+                        + messages.getString("menu.author") + ": Ondrej Skopek <oskopek@matfyz.cz>");
+        dialog.setTitle(messages.getString("root.about"));
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dialog.showAndWait();
     }
 
     /**
      * TODO temp comment.
+     *
      * @param file f
      */
     private void saveToFile(File file) {
@@ -163,6 +168,7 @@ public class RootPaneController { // TODO rework this after we have the model
 
     /**
      * TODO temp comment.
+     *
      * @param file f
      */
     private void openFromFile(File file) {

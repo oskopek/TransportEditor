@@ -15,6 +15,9 @@ public class FXMLLoaderProducer {
     @Inject
     private Instance<Object> instance;
 
+    @Inject
+    private ResourceBundle messagesBundle;
+
     /**
      * Produces an {@link FXMLLoader} including the {@code messages} resource bundle. Useful for in all places
      * where an {@code *.fxml} component file is being loaded into a JavaFX container.
@@ -22,9 +25,8 @@ public class FXMLLoaderProducer {
      */
     @Produces
     public FXMLLoader createLoader() {
-        ResourceBundle bundle = ResourceBundle.getBundle("com.oskopek.bp.editor.view.messages");
         FXMLLoader loader = new FXMLLoader();
-        loader.setResources(bundle);
+        loader.setResources(messagesBundle);
         loader.setControllerFactory(param -> instance.select(param).get());
         return loader;
     }
