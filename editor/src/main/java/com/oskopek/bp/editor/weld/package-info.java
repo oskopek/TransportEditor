@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016 Ondrej Škopek <oskopek@matfyz.cz>. All rights reserved.
+ */
+
 /**
  * Producers and utility classes for CDI using Weld.
  */

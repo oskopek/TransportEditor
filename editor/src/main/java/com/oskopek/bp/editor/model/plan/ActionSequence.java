@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Ondrej Škopek <oskopek@matfyz.cz>. All rights reserved.
  */
 
-package com.oskopek.bp.editor.model;
+package com.oskopek.bp.editor.model.plan;
 
-public interface Edge {
+public class ActionSequence implements Plan {
 }

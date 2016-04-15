@@ -4,5 +4,10 @@
 
 package com.oskopek.bp.editor.model;
 
-public interface Edge {
+public interface Location extends Locatable {
+
+    @Override
+    default Location getLocation() {
+        return this;
+    }
 }
