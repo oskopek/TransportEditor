@@ -4,14 +4,15 @@
 
 package com.oskopek.bp.editor.model;
 
+import com.oskopek.bp.editor.model.graph.Cost;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class LongCost {
+public class LongCost implements Cost {
 
     private long cost;
 
-    public long getCost() {
+    public long getValue() {
         return cost;
     }
 
@@ -37,14 +38,14 @@ public class LongCost {
         LongCost longCost = (LongCost) o;
 
         return new EqualsBuilder()
-                .append(getCost(), longCost.getCost())
+                .append(getValue(), longCost.getValue())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(getCost())
+                .append(getValue())
                 .toHashCode();
     }
 }

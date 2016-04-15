@@ -4,5 +4,5 @@
 
 package com.oskopek.bp.editor.model;
 
-public interface Edge {
+public class LongCostRoad extends Road {
 }

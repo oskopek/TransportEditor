@@ -4,8 +4,10 @@
 
 package com.oskopek.bp.editor.model;
 
+import com.oskopek.bp.editor.model.graph.Node;
+
 public interface Locatable {
 
-    Location getLocation();
+    Node getCurrentNode();
 
 }

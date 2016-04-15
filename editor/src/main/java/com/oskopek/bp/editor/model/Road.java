@@ -4,5 +4,7 @@
 
 package com.oskopek.bp.editor.model;
 
-public class Road implements Edge {
+import com.oskopek.bp.editor.model.graph.Edge;
+
+public abstract class Road implements Edge {
 }

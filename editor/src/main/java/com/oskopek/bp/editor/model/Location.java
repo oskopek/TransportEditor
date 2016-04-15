@@ -4,10 +4,13 @@
 
 package com.oskopek.bp.editor.model;
 
-public interface Location extends Locatable {
+import com.oskopek.bp.editor.model.Locatable;
+import com.oskopek.bp.editor.model.graph.Node;
+
+public abstract class Location implements Node, Locatable {
 
     @Override
-    default Location getLocation() {
+    public Node getCurrentNode() {
         return this;
     }
 }
