@@ -1,0 +1,11 @@
+= NPRG -- Domain-dependant planner for the IPC 08 Transport domain
+Ondrej Skopek <oskopek@matfyz.cz>
+
+Written in Prolog for a course at MFF.
+
+== Usage
+
+== Test data
+
+== Developer notes
+
