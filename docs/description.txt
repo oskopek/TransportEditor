@@ -5,4 +5,4 @@ visualization_and_verification_bp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC
 aiplan_with_time_and_resources_dp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC97605A13253CC0B7C6E01D46DB/zzp/detail/48598/?back_id=47 (important, vela transportu!)
 classical_planning_techniques_bp.pdf https://is.cuni.cz/webapps/UKSESSIONC3EEDC97605A13253CC0B7C6E01D46DB/zzp/detail/49022/?back_id=45 (theory)
 doktorska_deutschland_ipcdomeny.pdf ??? http://www.avacs.org/Publikationen/Open/helmert.phd06.pdf
-
+picat_paper_nprg.pdf http://arxiv.org/abs/1507.03979
