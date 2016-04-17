@@ -6,7 +6,7 @@ inputfile="$1"
 outputfile="$2"
 tmpout="`mktemp`"
 
-./to_input.sh "$inputfile" | swipl planner.pl > "$tmpout"
+./to_input.sh "$inputfile" | swipl -s planner.pl -t 'plan(Plan, TotalCost).' > "$tmpout"
 
 if [ -n "$outputfile" ]; then
     cp "$tmpout" "$outputfile"

@@ -6,6 +6,7 @@
 % TODO imlement append in constant time --> or do we just prepend?
 % TODO implement IO
 % TODO implement heuristic
+% TODO optimize
 
 % PDDL actions (planner output):
 % (drive ?v-vehicle ?l1-location ?l2-location)
@@ -43,7 +44,7 @@ action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     NewP = p(PName, Location, PDestination),
     append(Packages, [NewP], NewPackages),
     NewCarryingNum is CarryingNum - 1,
-    delete(Destinations, PDestination, NewDestinations), % TODO find a way around this
+    delete(Destinations, PDestination, NewDestinations), % TODO find a way around this (breaks functionality!)
     NewV = v(Name, NewCarrying, Location, NewDestinations, NewCarryingNum, Capacity),
     append(NewVehicles, [NewV], ReturnVehicles),
     NewState = s(ReturnVehicles, NewPackages, Graph),
@@ -64,7 +65,7 @@ action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     NewV = v(Name, NewCarrying, Location, NewDestinations, NewCarryingNum, Capacity),
     append(NewVehicles, [NewV], ReturnVehicles),
     NewState = s(ReturnVehicles, NewPackages, Graph),
-    PlanAction = pick-up(Name, Location, PName, CarryingNum, NewCarryingNum).
+    PlanAction = pickup(Name, Location, PName, CarryingNum, NewCarryingNum).
 
 % drive
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
@@ -101,6 +102,7 @@ findactions(States, OldActions, NewActions, OldCost, NewCost) :-
 plan(Plan, TotalCost) :-
     problem(InitState),
     findactions([InitState], [], Plan, 0, TotalCost).
+    %!. % TODO remove me?
 
 
 % problemS(-InitState)
