@@ -22,6 +22,7 @@
 \usepackage{subcaption}
 \usepackage{placeins}
 \usepackage{setspace}
+\usepackage{wrapfig}
 
 %\onehalfspace
 \singlespace
@@ -32,7 +33,7 @@ Faculty of Mathematics and Physics\\
 Charles University in Prague\\
 \texttt{\href{mailto:oskopek@matfyz.cz}{oskopek@matfyz.cz}}}
 
-\title{\textbf{DRAFT:} Individual software project -- specification -- CodeName:TEdit}
+\title{\textbf{DRAFT}\\Individual software project -- specification -- CodeName:TEdit}
 
 %\date{3. mája 2015}
 \date{\today}
@@ -85,7 +86,7 @@ Charles University in Prague\\
 \begin{document}
 \maketitle
 
-\TODO Vymysliet nazov programu: TransportEditor, TEdit, VisualTransport
+\TODO Vymysliet nazov programu: TransportEditor, TEdit, VisualTransport?
 
 
 
@@ -199,7 +200,7 @@ In this section, we present the basic functionality requirements for \pname.
 The basic work flow of \pname consists of the following user's steps:
 \begin{itemize}
 \item Select which formulation of the Transport domain they want to work with.
-\item Load a problem of the given domain. See section \ref{inputoutput} for details on the input format.
+\item Load a problem of the given domain. See section \ref{input-output} for details on the input format.
 \item \pname draws the given graph as good as it can.
 \item Iterate among the following options:
 \begin{itemize}
@@ -208,14 +209,14 @@ The basic work flow of \pname consists of the following user's steps:
 \item Step through the individual plan actions and let \pname visualize them.
 \item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
 \item Save the currently generated plan.
-\item Save the problem (along with the graph drawing hints). For details, see section \ref{inputoutput}.
+\item Save the problem (along with the graph drawing hints). For details, see section \ref{input-output}.
 \end{itemize}
 \item Save and close the currently loaded problem. Exit the application, or go back to the first step.
 \end{itemize}
 
 There are a lot of requirements that arise from the typical work flow above. We will describe them in the next few sections.
 
-\subsection{User interface functionality}
+\subsection{User interface functionality} \label{ui}
 
 In order for \pname to be useful to it's users, it has to have enable a quick and efficient work flow.
 The biggest challenge will be to design an intuitive and responsive graphical user interface.
@@ -226,9 +227,15 @@ Key parts of the user interface are:
 \item A panel of tools to edit the problem and graph with.
 \end{itemize}
 
-We will describe these three in detail in the following sections.
+We will describe these three in detail in the following sections. For an image that aims to capture the formulated requirements, see section \ref{ui-layout}.
 
 \subsubsection{Graph visualization} \label{graphviz}
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+        \includegraphics[width=0.6\textwidth]{../data/img/pdf/seq-sat-6-p30}
+        \caption{seq-sat-6-p30 prototype graph drawing (drawn using \href{https://networkx.github.io/}{networkx})}
+        \label{fig:graph}
+\end{wrapfigure}
 
 Above all, the graph should be reasonably well arranged and drawn. However, drawing an arbitrary graph is considered a hard problem on it's own. \TODO citation needed
 We will focus on implementing a reasonable graph drawing algorithm and let the user make manual drag-and-drop style changes on top of the graph drawing we produce.
@@ -238,6 +245,13 @@ Clearly, this cannot fit on the graph drawing at once -- we will have to do sele
 not to crowd the graph.
 Popping up overlays on user mouse-over
 or a graph legend where the user can select what info to currently show are just a few options.
+
+To highlight the need for selective drawing of information, observe the following image on the right (figure \ref{fig:graph}) -- a graph drawing of the p30 problem from the seq-sat-6 dataset.
+
+%\begin{center}
+%\includegraphics[width=0.9\textwidth]{../data/img/pdf/seq-sat-6-p30}\label{fig:graph}
+%seq-sat-6-p30 prototype graph drawing
+%\end{center}
 
 \subsubsection{Plan action list}
 
@@ -281,7 +295,7 @@ More details on the specifics of decoupling of individual modules of \pname are 
 A few more optional features, which may or may not be included in the final product:
 
 \begin{itemize}
-\item Automatic plan verification -- Upon loading a plan, verify (using VAL) that the plan is valid for the given problem and domain.
+\item Automatic plan verification -- Upon loading a plan, verify (using VAL) that the plan is valid for the given problem and domain. See section \ref{plan-format} for more information.
 \item \TODO add more optional features
 \end{itemize}
 
@@ -356,6 +370,18 @@ The development dependencies will be:
 
 Any hardware dependencies or arising software dependencies will be specified in the user or developer documentation (section \ref{docs}).
 
+\subsection{Proposed user interface layout} \label{ui-layout}
+
+The following image (figure \ref{fig:gui}) aims to be a an abstract draft for the application's user interface.
+More details on the specifics of the UI can be found in section \ref{ui}.
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=0.97\textwidth]{../data/img/pdf/gui}
+        \caption{Abstract GUI prototype \TODO add toolbox}
+        \label{fig:gui}
+\end{figure}
+
+
 \subsection{User and developer documentation} \label{docs}
 
 We hope most of the user documentation will be left unread -- the user interface and work flow should be
@@ -381,64 +407,38 @@ The developer documentation consists of in-code comments, JavaDoc comments (and 
 
 
 
-\section{Input \& output format} \label{inputoutput}
+\section{Input \& output format} \label{input-output}
 
+There are two fundamentally different files \pname works with: problems and plans.
+Problem files contain information on the domain problem (roads, vehicles, packages, locations, \ldots).
+Plan files contain a sequence of actions on a specific problem that (if a plan is valid) constitute a plan
+for the given problem.
 
-\TODO an extension to the input PDDL in comments ;coordinates
+\subsubsection{Domain problem file format}\label{problem-format}
 
+Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{IPC-6}
+and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
+specify PDDL 3.1 as their official modelling language. Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
+\href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definiton of PDDL 3.1}.
+\pname doesn't load the PDDL domain definitions -- those are already built-in. We only read problems specified in PDDL 3.1 of the two Transport domain formulations.
 
+To allow \pname to save the positions of vertexes in the graph, we make use of an already used ``unwritten extension' of PDDL':
+above every road predicate, there is a comment in the form of \verb+; a,b -> c,d+,
+where \verb+a+, \verb+b+, \verb+c+ and \verb+d+ are integers (non-negative whole numbers).
+Those numbers correspond to the coordinates of the source \verb+(a,b)+ and destination \verb+(c,d)+ locations of the defined road on the line below. The upper left corner of the drawing corresponds to the \verb+(0,0)+ point. A point with the coordinates \verb+(x,y)+ is \verb+x+ units below and \verb+y+ units to the right of the \verb+(0,0)+ point.
 
+\subsubsection{Plan file format}\label{plan-format}
 
+The plan file format is generally specified as any plan for the given domain that is a valid plan according to the validator \href{http://www.inf.kcl.ac.uk/research/groups/PLANNING/index.php?option=com_content&view=article&id=70&Itemid=77}{VAL}. Source code of VAL \href{https://github.com/KCL-Planning/VAL}{can be found on GitHub}. \pname will try to accept any plan which is a valid plan of the given Transport domain formulation according to VAL.
 
+\section{Ending notes and remarks}
 
-
-
-
-
-\section{User interface}
-
-
-\subsection{Main screen}
-
-\FloatBarrier
-\begin{figure}
-        \centering
-        \includegraphics[width=0.8\textwidth]{../data/img/pdf/gui}
-        \caption{Abstract GUI prototype}
-        \label{fig:gui}
-\end{figure}
-\FloatBarrier
-
-\TODO Need to do selective label drawing (too crowded) with popup info boxes
-\TODO Make the graph nodes moveable
-\TODO scrollable own widget (transparent, fluid) for the plan. --> partial order plans? No.
-\TODO How do we simulate movement on an abstract graph?
-
-\subsection{Helper screens}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Open questions and ending notes}
-
-\begin{itemize}
-    \item Do we support the numerical Transport domain too?
-    \item Is it safe to assume that symmetric edges are weight-symmetric? (all datasets have this) -- more of a planner question
-\end{itemize}
-
-The conversion from hand-drawn pictures to vector images was done using the wonderful
+All conversions from hand-drawn pictures to vector images was done using the wonderful
 open-source project cartoonist: \url{https://github.com/honzajavorek/cartoonist}.
+
+
+
+
 
 {
 \footnotesize % 10pt in 12pt article size
