@@ -52,7 +52,7 @@ Charles University in Prague\\
     pdfsubject={\MyTitle},   % subject of the document
     pdfcreator={\MyAuthor},   % creator of the document
     pdfproducer={\MyAuthor}, % producer of the document
-    pdfkeywords={software} {project} {planning} {automated planning} {java} {javafx} {ipc} {transport domain}, % list of keywords
+    pdfkeywords={software} {project} {planning} {automated planning} {java} {javafx} {ipc} {icaps} {transport} {transport domain}, % list of keywords
     pdfnewwindow=true,      % links in new PDF window
     colorlinks=false,       % false: boxed links; true: colored links
     linkcolor=red,          % color of internal links (change box color with linkbordercolor)
@@ -237,7 +237,7 @@ We will describe these three in detail in the following sections. For an image t
         \label{fig:graph}
 \end{wrapfigure}
 
-Above all, the graph should be reasonably well arranged and drawn. However, drawing an arbitrary graph is considered a hard problem on it's own. \TODO citation needed
+Above all, the graph should be reasonably well arranged and drawn. However, drawing an arbitrary graph is considered a hard problem on it's own.
 We will focus on implementing a reasonable graph drawing algorithm and let the user make manual drag-and-drop style changes on top of the graph drawing we produce.
 
 A more specific property of the Transport domain graphs is that they have quite a lot of data on the edges (roads) and vertexes (locations) -- road lengths, fuel demands, location names and petrol station, package and vehicle current locations.
@@ -296,7 +296,7 @@ A few more optional features, which may or may not be included in the final prod
 
 \begin{itemize}
 \item Automatic plan verification -- Upon loading a plan, verify (using VAL) that the plan is valid for the given problem and domain. See section \ref{plan-format} for more information.
-\item \TODO add more optional features
+\item \TODO Add more optional features?
 \end{itemize}
 
 
@@ -326,7 +326,7 @@ We propose the following modules:
 
 \subsection{UML diagram of the model}
 
-\TODO UML diagram
+\TODO Add a UML diagram of the model
  
  
  
@@ -377,7 +377,7 @@ More details on the specifics of the UI can be found in section \ref{ui}.
 \begin{figure}[h]
         \centering
         \includegraphics[width=0.97\textwidth]{../data/img/pdf/gui}
-        \caption{Abstract GUI prototype \TODO add toolbox}
+        \caption{Abstract GUI prototype \TODO add toolbox to image}
         \label{fig:gui}
 \end{figure}
 
@@ -389,11 +389,11 @@ mostly self-explainable and intuitive.
 Nevertheless, we will produce user documentation, involving:
 \begin{itemize}
 \item a help document accessible from the menu bar inside the application
-\item helpful dialogs or other pop-up messages
+\item helpful dialog windows or other pop-up messages
 \item a standalone text document, documenting the features, supported data formats, instructions on the installing Java JRE and a demo usage tutorial
 \end{itemize}
 
-The developer documentation consists of in-code comments, JavaDoc comments (and a generated HTML page hierarchy using the \verb+javadoc+ tool) and a standalone text file, containing information on:
+The developer documentation consists of in-code comments, Java Doc comments (and a generated HTML page hierarchy using the \verb+javadoc+ tool) and a standalone text file, containing information on:
 \begin{itemize}
 \item Links to the code repository, issue tracker, continuous integration service, \ldots
 \item Getting the code from the code repository.
@@ -419,7 +419,7 @@ for the given problem.
 Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{IPC-6}
 and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
 specify PDDL 3.1 as their official modelling language. Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
-\href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definiton of PDDL 3.1}.
+\href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definition of PDDL 3.1}.
 \pname doesn't load the PDDL domain definitions -- those are already built-in. We only read problems specified in PDDL 3.1 of the two Transport domain formulations.
 
 To allow \pname to save the positions of vertexes in the graph, we make use of an already used ``unwritten extension' of PDDL':
