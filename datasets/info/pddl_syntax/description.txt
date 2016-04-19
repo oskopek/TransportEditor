@@ -2,5 +2,5 @@ The complete and commented BNF syntax of PDDL 3.1 is available in two unpublishe
 
 http://home.mit.bme.hu/~dkovacs                                                 Daniel L. Kovacs has kindly sent to the IPC 2011:
 
-https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf"     Daniel L, Kovacs. BNF definition of PDDL 3.1. 2011
+https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf      Daniel L, Kovacs. BNF definition of PDDL 3.1. 2011
 https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-draft-2011.pdf         A draft which discusses some imperfections in the original PDDL definitions and their correction.
