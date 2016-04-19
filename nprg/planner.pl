@@ -1,13 +1,5 @@
 % Simple forward DFS planner for IPC 08 Transport
 
-% TODOs:
-% TODO implement BFS -- this domain guarantees optimality with BFS
-% TODO implement to/from convert scripts
-% TODO imlement append in constant time --> or do we just prepend?
-% TODO implement IO
-% TODO implement heuristic
-% TODO optimize
-
 % PDDL actions (planner output):
 % (drive ?v-vehicle ?l1-location ?l2-location)
 % (pick-up ?v-vehicle ?l-location ?p-package ?s1-capacity-predecessor ?s2-capacity-predecessor)
@@ -89,8 +81,6 @@ action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     NewState = s(ReturnVehicles, Packages, Graph),
     PlanAction = drive(Name, Location1, Location2).
 
-% TODO do we need the appends or do we just prepend?
-
 % goal(+state) -- is the state a goal state?
 goal(s([], [], _)) :- !.
 goal(s([Vehicle|Tail], [], _)) :-
@@ -102,7 +92,7 @@ findactions([OldState|_], OldActions, RevActions, Cost, Cost) :-
     goal(OldState), reverse(OldActions, RevActions), !.
 findactions(States, OldActions, NewActions, OldCost, NewCost) :-
     States = [OldState|_],
-    \+goal(OldState), % do we need this?
+    \+goal(OldState), % TODO do we skip this? --> Yes!
     action(OldState, CurState, PlanAction, ActionCost),
     \+member(CurState, States),
     CurActions = [PlanAction|OldActions],
@@ -117,7 +107,7 @@ plan(Plan, TotalCost) :-
     %!. % TODO remove me?
 
 % problemS(-InitState)
-problemS(InitState) :- % TODO remove me
+problemS(InitState) :- % TODO remove me in favor of IO
     Packages = [p(package0, cityloc1, cityloc1), p(package1, cityloc1, cityloc2), p(package2, cityloc2, cityloc2)],
     T1 = v(truck1, [], cityloc1, 0, 4),
     Vehicles = [T1],
@@ -127,7 +117,7 @@ problemS(InitState) :- % TODO remove me
     InitState = s(Vehicles, Packages, Graph).
 
 % problem(-InitState)
-problem(InitState) :- % TODO remove me
+problem(InitState) :- % TODO remove me in favor of IO
     Packages = [p(package1, cityloc3, cityloc2), p(package2, cityloc3, cityloc2)],
     T1 = v(truck1, [], cityloc3, 0, 4),
     T2 = v(truck2, [], cityloc1, 0, 3),

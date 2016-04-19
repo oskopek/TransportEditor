@@ -1,0 +1,14 @@
+= NPRG TODO
+
+* Write docs incrementally
+
+* Rewrite to BFS (throw away DFS) -> document optimality
+* To/From conversion bash/haskell scripts
+* Implement IO in Prolog
+* Implement (a) heuristic(s)
+* Implement append in constant time (difference lists) ... do we need it at all? Or do we just prepend?
+* Optimize
+
+
+* Write docs (README) + document helper scripts
+* Write packaging script (adds data from ipc08)
