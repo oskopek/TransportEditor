@@ -189,13 +189,61 @@ The numerical version of Transport is very similar to the STRIPS version, see se
 
 
 
-\section{Feature description}
+\section{Feature requirements}
 
+In this section, we present the basic functionality requirements for \pname.
 
+\subsection{Functionality overview}
 
-\subsection{Main functionality}
+The basic work flow of \pname consists of the following user's steps:
+\begin{itemize}
+\item Select which formulation of the Transport domain they want to work with.
+\item Load a problem of the given domain. See section \ref{inputoutput} for details on the input format.
+\item \pname draws the given graph as good as it can.
+\item Iterate among the following options:
+\begin{itemize}
+\item Load a planner executable and let \pname run the planner on the loaded problem instance.
+\item Step through the individual plan actions and let \pname visualize them.
+\item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
+\item Save the currently generated plan.
+\item Save the problem (along with the graph drawing hints). For details, see section \ref{inputoutput}.
+\end{itemize}
+\item Save and close the currently loaded problem. Exit the application, or go back to the first step.
+\end{itemize}
+
+There are a lot of requirements that arise from the typical work flow above. We will describe them in the next few sections.
+
+\subsection{User interface functionality}
+
+In order for \pname to be useful to it's users, it has to have enable a quick and efficient work flow.
+The biggest challenge will be to design an intuitive and responsive graphical user interface.
+Key parts of the user interface are:
+\begin{itemize}
+\item A large and not crowded drawing of the road graph, showing only the most relevant information, possibly letting the user display details on-demand.
+\item A clear and concise list of actions in the plan the user wants to visualize.
+\item A panel of tools to edit the problem and graph with.
+\end{itemize}
+
+We will describe these three in detail in the following sections.
+
+\subsubsection{Graph visualization}
+
+Above all, the graph should be reasonably well arranged and drawn. However, drawing an arbitrary graph is considered a hard problem on it's own. \TODO citation needed
+We will focus on implementing a reasonable graph drawing algorithm and let the user make manual drag-and-drop style changes on top of the graph drawing we produce.
+
+A more specific property of the Transport domain graphs is that they have quite a lot of data on the edges (roads) and vertexes (locations) -- road lengths, fuel demands, location names and petrol station, package and vehicle current locations.
+Clearly, this cannot fit on the graph drawing at once -- we will have to do selective drawing of the information in order
+not to crowd the graph.
+Popping up overlays on user mouse-over
+or a graph legend where the user can select what info to currently show are just a few options.
+
+\subsubsection{Plan action list}
 
 \TODO Step-through the plan, step-back the plan (scroll? fluent?)
+
+\subsubsection{Editing tools}
+
+A big feature of \pname is editing the domain problems on the fly. 
 
 \subsection{Performance}
 \subsection{Extensibility}
@@ -260,10 +308,10 @@ The numerical version of Transport is very similar to the STRIPS version, see se
 
 
 
-\section{Input \& output format}
+\section{Input \& output format} \label{inputoutput}
 
 
-
+\TODO an extension to the input PDDL in comments ;coordinates
 
 
 
@@ -276,7 +324,6 @@ The numerical version of Transport is very similar to the STRIPS version, see se
 
 \section{User interface}
 
-\TODO The actual problem of drawing a 2D graph with lots of edges (i.e. a nonplannar graph... Springy algorithm?)
 
 \subsection{Main screen}
 
