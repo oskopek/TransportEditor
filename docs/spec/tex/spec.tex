@@ -33,7 +33,7 @@ Faculty of Mathematics and Physics\\
 Charles University in Prague\\
 \texttt{\href{mailto:oskopek@matfyz.cz}{oskopek@matfyz.cz}}}
 
-\title{\textbf{DRAFT}\\Individual software project -- specification -- CodeName:TEdit}
+\title{\textbf{DRAFT}\\Individual software project -- specification -- ProjectName}
 
 %\date{3. mája 2015}
 \date{\today}
@@ -81,12 +81,12 @@ Charles University in Prague\\
 \newcommand{\ZZ}{\mathbb{Z}}      % for Integers
 \newcommand{\col}[1]{\left[\begin{matrix} #1 \end{matrix} \right]}
 \newcommand{\comb}[2]{\binom{#1^2 + #2^2}{#1+#2}}
-\newcommand{\pname}{Codename:TEdit } % project name (or code name)
+\newcommand{\pname}{ProjectName} % project name (or code name)
 
 \begin{document}
 \maketitle
 
-\TODO Vymysliet nazov programu: TransportEditor, TEdit, VisualTransport?
+\TODO Create a name for the application and substitute it instead of ``\pname{}''. Ideas: TransportEditor, TEdit, VisualTransport?
 
 
 
@@ -100,8 +100,8 @@ Charles University in Prague\\
 
 \section{Basic information}
 
-\pname aims to be a problem editor and plan visualizer for the Transport domain from the International Planning Competition 2008.
-The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch. \pname will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
+\pname{} aims to be a problem editor and plan visualizer for the Transport domain from the International Planning Competition 2008.
+The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch. \pname{} will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain as part of our future bachelor thesis.
 
 \subsection{The Transport planning domain}
@@ -113,34 +113,27 @@ and \href{https://helios.hud.ac.uk/scommv/IPC-14/}{IPC-8 2014}.
 
 There are two basic formulations of the Transport domain family (i.e. two ``similar Transport domains''):
 \begin{itemize}
-\item \verb+transport-strips+ -- the classical, sequential Transport domain. See section \ref{transport-strips}.
-\item \verb+transport-numeric+ -- the numerical Transport domain. See section \ref{transport-numeric}.
+\item \verb+transport-strips+ -- the classical, sequential Transport domain. See section \ref{transport-strips} for details.
+\item \verb+transport-numeric+ -- the numerical Transport domain. See section \ref{transport-numeric} for details.
 \end{itemize}
 
 Both of these formulations have been used interchangeably in various competition tracks.
 The following is an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks):
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{c|c|c|c}
+\textbf{Dataset name} & \textbf{Competition} & \textbf{Track} & \textbf{Formulation} \\ 
 \hline 
-Dataset name & Competition & Track & Formulation \\ 
-\hline 
+\hline
 netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
-\hline 
 seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
-\hline 
 seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
-\hline 
 tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Numeric \\ 
 \hline 
 seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
-\hline 
 seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
-\hline 
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
-\hline 
 seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
-\hline 
 \end{tabular} 
 \end{center}
 
@@ -148,7 +141,7 @@ Short descriptions of the various tracks and subtracks can be found in the rule 
 \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-6}
 and the  \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{rule page of IPC-8}.
 
-Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subversion repository that promises to contain them is unavailable (\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}).
+Unfortunately, we weren't able to acquire the datasets for IPC-7, as the \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}{Subversion repository} that promises to contain them is unavailable.
 
 % Comparison with Trucks from IPC-5
 %In general, the Transport domain family is very similar to the Trucks domain family from \href{http://idm-lab.org/wiki/icaps/ipc2006/deterministic/}{IPC-5 2006}. The key differences are ...
@@ -193,32 +186,32 @@ The numerical version of Transport is very similar to the STRIPS version, see se
 
 \section{Feature requirements}
 
-In this section, we present the basic functionality requirements for \pname.
+In this section, we present the basic functionality requirements for \pname{}.
 
 \subsection{Functionality overview}
 
-The basic work flow of \pname consists of the following user's steps:
+The basic workflow of \pname{} consists of the following user's steps:
 \begin{itemize}
 \item Select which formulation of the Transport domain they want to work with.
 \item Load a problem of the given domain. See section \ref{input-output} for details on the input format.
-\item \pname draws the given graph as good as it can.
+\item \pname{} draws the given graph as good as it can.
 \item Iterate among the following options:
 \begin{itemize}
-\item Load a planner executable and let \pname run the planner on the loaded problem instance for a given time, then load the resulting plan.
+\item Load a planner executable and let \pname{} run the planner on the loaded problem instance for a given time, then load the resulting plan.
 \item Load a pre-generated plan.
-\item Step through the individual plan actions and let \pname visualize them.
+\item Step through the individual plan actions and let \pname{} visualize them.
 \item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
 \item Save the currently generated plan.
-\item Save the problem (along with the graph drawing hints). For details, see section \ref{input-output}.
+\item Save the problem (along with the graph drawing hints).
 \end{itemize}
-\item Save and close the currently loaded problem. Exit the application, or go back to the first step.
+\item Save and close the currently loaded problem. Exit the application or go back to the first step.
 \end{itemize}
 
-There are a lot of requirements that arise from the typical work flow above. We will describe them in the next few sections.
+There are a lot of requirements that arise from the typical workflow above. We will describe them in the next few sections.
 
 \subsection{User interface functionality} \label{ui}
 
-In order for \pname to be useful to it's users, it has to have enable a quick and efficient work flow.
+In order for \pname{} to be useful to it's users, it has to have enable a quick and efficient workflow.
 The biggest challenge will be to design an intuitive and responsive graphical user interface.
 Key parts of the user interface are:
 \begin{itemize}
@@ -233,7 +226,9 @@ We will describe these three in detail in the following sections. For an image t
 
 \begin{wrapfigure}{r}{0.5\textwidth}
         \includegraphics[width=0.6\textwidth]{../data/img/pdf/seq-sat-6-p30}
-        \caption{seq-sat-6-p30 prototype graph drawing (drawn using \href{https://networkx.github.io/}{networkx})}
+        \caption{seq-sat-6-p30 prototype graph drawing. Drawn using the
+         \href{http://emr.cs.iit.edu/~reingold/force-directed.pdf}{Fruchterman \& Reingold algorithm}
+         with the help of  \href{https://networkx.github.io/}{NetworkX}.}
         \label{fig:graph}
 \end{wrapfigure}
 
@@ -248,6 +243,10 @@ or a graph legend where the user can select what info to currently show are just
 
 To highlight the need for selective drawing of information, observe the following image on the right (figure \ref{fig:graph}) -- a graph drawing of the p30 problem from the seq-sat-6 dataset.
 
+Another important feature is symbolic visualization of individual actions in the plan.
+There are only 3-4 actions in the Transport domain family (drive, pick-up, drop and possibly refuel in the numerical formulation).
+We need to be able to visualize the selected plan action in the graph to help the user see what is going on in the plan.
+
 %\begin{center}
 %\includegraphics[width=0.9\textwidth]{../data/img/pdf/seq-sat-6-p30}\label{fig:graph}
 %seq-sat-6-p30 prototype graph drawing
@@ -255,7 +254,7 @@ To highlight the need for selective drawing of information, observe the followin
 
 \subsubsection{Plan action list}
 
-An important part of the visualization work flow is the actual planner-generated plan.
+An important part of the visualization workflow is the actual planner-generated plan.
 The user interface will show a context-aware list of them.
 
 Because plans can be quite long (generally hundreds/thousands of actions),
@@ -267,8 +266,8 @@ Jumping to a specific action will also be supported.
 
 \subsubsection{Editing tools}
 
-A big feature of \pname is editing the domain problems on the fly.
-All the graph vertexes will be movable using drag and drop (the edges will move along).
+A big feature of \pname{} is editing the domain problems on the fly.
+All the graph vertexes will be movable using drag-and-drop (the edges will move along, too).
 Details of individual elements on the graph (vehicles, packages, locations, roads) will be editable
 on user request.
 
@@ -279,7 +278,7 @@ the toolbox will contain a lock feature -- once enabled, no changes to the graph
 
 \subsection{Performance}
 
-The performance requirements of \pname cannot be numerically quantified -- the main benchmark is fast-enough
+The performance requirements of \pname{} cannot be numerically quantified -- the main benchmark is fast-enough
 responsiveness to user actions. The implementation specific details on how to achieve this are discussed in the section \ref{used-tech}.
 
 \subsection{Data model re-usability}
@@ -288,7 +287,7 @@ The internal data representation has to be reusable and therefore, reasonably de
 It is very probable that we will want to implement a planner for the Transport domain later on
 -- and for that, we can reuse the entire back-end data model that is used to represent the domain problem in memory
 and build the planner on top of it.
-More details on the specifics of decoupling of individual modules of \pname are in section \ref{modules}.
+More details on the specifics of decoupling of individual modules of \pname{} are in section \ref{modules}.
 
 \subsection{Optional features}
 
@@ -376,7 +375,7 @@ The following image (figure \ref{fig:gui}) aims to be a an abstract draft for th
 More details on the specifics of the UI can be found in section \ref{ui}.
 \begin{figure}[h]
         \centering
-        \includegraphics[width=0.97\textwidth]{../data/img/pdf/gui}
+        \includegraphics[width=0.73\textwidth]{../data/img/pdf/gui}
         \caption{Abstract GUI prototype \TODO add toolbox to image}
         \label{fig:gui}
 \end{figure}
@@ -384,7 +383,7 @@ More details on the specifics of the UI can be found in section \ref{ui}.
 
 \subsection{User and developer documentation} \label{docs}
 
-We hope most of the user documentation will be left unread -- the user interface and work flow should be
+We hope most of the user documentation will be left unread -- the user interface and workflow should be
 mostly self-explainable and intuitive.
 Nevertheless, we will produce user documentation, involving:
 \begin{itemize}
@@ -399,7 +398,7 @@ The developer documentation consists of in-code comments, Java Doc comments (and
 \item Getting the code from the code repository.
 \item Installing the needed dependencies.
 \item Compiling and building the project.
-\item Finding their way around the project: a high-level overview of the project, module descriptions, \ldots
+\item Finding their way around the project -- a high-level overview of the project, module content and usage descriptions, \ldots
 \end{itemize}
 
 
@@ -409,7 +408,7 @@ The developer documentation consists of in-code comments, Java Doc comments (and
 
 \section{Input \& output format} \label{input-output}
 
-There are two fundamentally different files \pname works with: problems and plans.
+There are two fundamentally different files \pname{} works with: problems and plans.
 Problem files contain information on the domain problem (roads, vehicles, packages, locations, \ldots).
 Plan files contain a sequence of actions on a specific problem that (if a plan is valid) constitute a plan
 for the given problem.
@@ -420,21 +419,21 @@ Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/Compe
 and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
 specify PDDL 3.1 as their official modelling language. Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
 \href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definition of PDDL 3.1}.
-\pname doesn't load the PDDL domain definitions -- those are already built-in. We only read problems specified in PDDL 3.1 of the two Transport domain formulations.
+\pname{} doesn't load the PDDL domain definitions -- those are already built-in. We only read problems specified in PDDL 3.1 of the two Transport domain formulations.
 
-To allow \pname to save the positions of vertexes in the graph, we make use of an already used ``unwritten extension' of PDDL':
+To allow \pname{} to save the positions of vertexes in the graph, we make use of an already used ``unwritten extension' of PDDL':
 above every road predicate, there is a comment in the form of \verb+; a,b -> c,d+,
 where \verb+a+, \verb+b+, \verb+c+ and \verb+d+ are integers (non-negative whole numbers).
 Those numbers correspond to the coordinates of the source \verb+(a,b)+ and destination \verb+(c,d)+ locations of the defined road on the line below. The upper left corner of the drawing corresponds to the \verb+(0,0)+ point. A point with the coordinates \verb+(x,y)+ is \verb+x+ units below and \verb+y+ units to the right of the \verb+(0,0)+ point.
 
 \subsubsection{Plan file format}\label{plan-format}
 
-The plan file format is generally specified as any plan for the given domain that is a valid plan according to the validator \href{http://www.inf.kcl.ac.uk/research/groups/PLANNING/index.php?option=com_content&view=article&id=70&Itemid=77}{VAL}. Source code of VAL \href{https://github.com/KCL-Planning/VAL}{can be found on GitHub}. \pname will try to accept any plan which is a valid plan of the given Transport domain formulation according to VAL.
+The plan file format is generally specified as any plan for the given domain that is a valid plan according to the validator \href{http://www.inf.kcl.ac.uk/research/groups/PLANNING/index.php?option=com_content&view=article&id=70&Itemid=77}{VAL}. Source code of VAL \href{https://github.com/KCL-Planning/VAL}{can be found on GitHub}. \pname{} will try to accept any plan which is a valid plan of the given Transport domain formulation according to VAL.
 
 \section{Ending notes and remarks}
 
 All conversions from hand-drawn pictures to vector images was done using the wonderful
-open-source project cartoonist: \url{https://github.com/honzajavorek/cartoonist}.
+open-source project \href{https://github.com/honzajavorek/cartoonist}{cartoonist}.
 
 
 
@@ -442,6 +441,7 @@ open-source project cartoonist: \url{https://github.com/honzajavorek/cartoonist}
 
 {
 \footnotesize % 10pt in 12pt article size
-\input{bibliography.tex}
+%\TODO enable bibliography?
+%\input{bibliography.tex}
 }
 \end{document}
