@@ -33,7 +33,7 @@ Faculty of Mathematics and Physics\\
 Charles University in Prague\\
 \texttt{\href{mailto:oskopek@matfyz.cz}{oskopek@matfyz.cz}}}
 
-\title{\textbf{DRAFT}\\Individual software project -- specification -- ProjectName}
+\title{\textbf{FINAL DRAFT}\\Individual Software Project specification -- TransportEditor}
 
 %\date{3. mája 2015}
 \date{\today}
@@ -81,12 +81,10 @@ Charles University in Prague\\
 \newcommand{\ZZ}{\mathbb{Z}}      % for Integers
 \newcommand{\col}[1]{\left[\begin{matrix} #1 \end{matrix} \right]}
 \newcommand{\comb}[2]{\binom{#1^2 + #2^2}{#1+#2}}
-\newcommand{\pname}{ProjectName} % project name (or code name)
+\newcommand{\pname}{TransportEditor} % project name (or code name)
 
 \begin{document}
 \maketitle
-
-\TODO Create a name for the application and substitute it instead of ``\pname{}''. Ideas: TransportEditor, TEdit, VisualTransport?
 
 
 
@@ -143,9 +141,6 @@ and the  \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRule
 
 Unfortunately, we weren't able to acquire the datasets for IPC-7, as the \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}{Subversion repository} that promises to contain them is unavailable.
 
-% Comparison with Trucks from IPC-5
-%In general, the Transport domain family is very similar to the Trucks domain family from \href{http://idm-lab.org/wiki/icaps/ipc2006/deterministic/}{IPC-5 2006}. The key differences are ...
-
 \subsection{Transport STRIPS formulation description}\label{transport-strips}
 
 The STRIPS version of Transport is a logistics domain -- vehicles with limited capacities drive around on a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way. Picking up or dropping a package costs 1, driving along a road costs depending on the edge weight. All packages have a size of 1. The general aim is to minimize the total cost, while delivering all packages to their destination.
@@ -192,8 +187,8 @@ In this section, we present the basic functionality requirements for \pname{}.
 
 The basic workflow of \pname{} consists of the following user's steps:
 \begin{itemize}
-\item Select which formulation of the Transport domain they want to work with.
-\item Load a problem of the given domain. See section \ref{input-output} for details on the input format.
+\item Select which formulation of the Transport domain they want to work with or create their own variant.
+\item Load or create their own problem of the given domain. See section \ref{input-output} for details on the input format.
 \item \pname{} draws the given graph as good as it can.
 \item Iterate among the following options:
 \begin{itemize}
@@ -203,6 +198,7 @@ The basic workflow of \pname{} consists of the following user's steps:
 \item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
 \item Save the currently generated plan.
 \item Save the problem (along with the graph drawing hints).
+\item Save the domain (export to a PDDL file).
 \end{itemize}
 \item Save and close the currently loaded problem. Exit the application or go back to the first step.
 \end{itemize}
@@ -295,7 +291,12 @@ A few more optional features, which may or may not be included in the final prod
 
 \begin{itemize}
 \item Automatic plan verification -- Upon loading a plan, verify (using VAL) that the plan is valid for the given problem and domain. See section \ref{plan-format} for more information.
-\item \TODO Add more optional features?
+\item Various plan action list visualization:
+\begin{itemize}
+\item Gantt chart \TODO complete this
+\item Partially ordered action graph \TODO visualize preconditions and effects
+\item Git-style tree \TODO visualize concurrent actions
+\end{itemize}
 \end{itemize}
 
 
@@ -318,7 +319,7 @@ We propose the following modules:
 
 \begin{itemize}
 \item View -- representation of the individual UI elements.
-\item Model-View -- an interfacing module, sitting between the view and model. Serves as a mediator -- updating the view based on model changes, and propagating user actions from the view back into the model.
+\item Controller -- an interfacing module, sitting between the view and model. Serves as a mediator -- updating the view based on model changes, and propagating user actions from the view back into the model.
 \item Model -- the back-end data model, an internal problem data representation.
 \item Persistence -- handles saving/loading the model and plans for the model to an external data store (f.e.~hard disk).
 \end{itemize}
@@ -387,9 +388,9 @@ We hope most of the user documentation will be left unread -- the user interface
 mostly self-explainable and intuitive.
 Nevertheless, we will produce user documentation, involving:
 \begin{itemize}
-\item a help document accessible from the menu bar inside the application
-\item helpful dialog windows or other pop-up messages
-\item a standalone text document, documenting the features, supported data formats, instructions on the installing Java JRE and a demo usage tutorial
+\item A help document accessible from the menu bar inside the application.
+\item Helpful hint and validation dialog windows or other pop-up messages. In general, we do not want to let the user do something that is be invalid, rather than notifying him of his error afterwards. Therefore, we disable buttons where appropriate, validate inputs, \ldots
+\item A standalone text document, documenting the features, supported data formats, instructions on the installing Java JRE and a demo usage tutorial.
 \end{itemize}
 
 The developer documentation consists of in-code comments, Java Doc comments (and a generated HTML page hierarchy using the \verb+javadoc+ tool) and a standalone text file, containing information on:
