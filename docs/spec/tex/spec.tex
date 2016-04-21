@@ -102,7 +102,7 @@ Charles University in Prague\\
 The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch. \pname{} will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain as part of our future bachelor thesis.
 
-\subsection{The Transport planning domain}
+\subsection{The Transport planning domain} \label{domain-info}
 
 Transport is a domain designed originally for the International Planning Competition (IPC, part of the International Conference on Automated Planning and Scheduling ICAPS).
 Originally, Transport appeared at \href{http://icaps-conference.org/ipc2008/deterministic/Domains.html}{IPC-6 2008}.
@@ -140,6 +140,8 @@ Short descriptions of the various tracks and subtracks can be found in the rule 
 and the  \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{rule page of IPC-8}.
 
 Unfortunately, we weren't able to acquire the datasets for IPC-7, as the \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}{Subversion repository} that promises to contain them is unavailable.
+
+As a bonus, \pname{} supports custom domains based on the Transport domain family. Users can create new Transport-like domains that have any subset of constraints/features of the two basic formulations. Only subsets in which individual constraints are not in conflict with each other are allowed.
 
 \subsection{Transport STRIPS formulation description}\label{transport-strips}
 
@@ -243,12 +245,7 @@ Another important feature is symbolic visualization of individual actions in the
 There are only 3-4 actions in the Transport domain family (drive, pick-up, drop and possibly refuel in the numerical formulation).
 We need to be able to visualize the selected plan action in the graph to help the user see what is going on in the plan.
 
-%\begin{center}
-%\includegraphics[width=0.9\textwidth]{../data/img/pdf/seq-sat-6-p30}\label{fig:graph}
-%seq-sat-6-p30 prototype graph drawing
-%\end{center}
-
-\subsubsection{Plan action list}
+\subsubsection{Plan action list} \label{plan-action-list}
 
 An important part of the visualization workflow is the actual planner-generated plan.
 The user interface will show a context-aware list of them.
@@ -259,6 +256,15 @@ The list will only show the currently selected action, a few actions preceding i
 
 The graph described in section \ref{graphviz} and the state it represents will change dynamically with the selected action in the list. The user can fluently scroll through the plan actions, continually stepping through the plan either forwards or backwards.
 Jumping to a specific action will also be supported.
+
+If users want to view the effect of a small change in the plan, they can choose to edit the current plan action or reorder it (move it up or down).
+In the case of temporal domains, they can edit the start time of actions.
+A user reordering or editing an action cannot invalidate the plan -- there will be dynamic validation in place, which will disable any changes that make the plan invalid.
+
+The list will also support filtering: the user can choose to view only those actions, which involve a certain subset of planning objects (vehicle, package, road, \ldots) in the given problem.
+
+Above the plan action list, there will be buttons to allow planning or re-planning the current problem using a planner the users choice.
+During planning, \pname{} will attempt to show the currently best found plan, if it gets the needed information from the planner.
 
 \subsubsection{Editing tools}
 
@@ -274,8 +280,8 @@ the toolbox will contain a lock feature -- once enabled, no changes to the graph
 
 \subsection{Performance}
 
-The performance requirements of \pname{} cannot be numerically quantified -- the main benchmark is fast-enough
-responsiveness to user actions. The implementation specific details on how to achieve this are discussed in the section \ref{used-tech}.
+The performance requirements of \pname{} cannot be quantified numerically -- the only criterion is, that the application must be sufficiently
+responsive to user actions. The implementation specific details on how to achieve this are discussed in the section \ref{used-tech}.
 
 \subsection{Data model re-usability}
 
@@ -291,11 +297,12 @@ A few more optional features, which may or may not be included in the final prod
 
 \begin{itemize}
 \item Automatic plan verification -- Upon loading a plan, verify (using VAL) that the plan is valid for the given problem and domain. See section \ref{plan-format} for more information.
-\item Various plan action list visualization:
+\item When a user select a certain subset of planning object to focus on in the plan action list (see section \ref{plan-action-list}), visualize those on the graph (section \ref{graphviz}).
+\item Various plan action list visualizations (can be selected based on user preferences):
 \begin{itemize}
-\item Gantt chart \TODO complete this
-\item Partially ordered action graph \TODO visualize preconditions and effects
-\item Git-style tree \TODO visualize concurrent actions
+\item \href{https://en.wikipedia.org/wiki/Gantt_chart}{Gantt chart} -- can clearly visualize changes in planning object properties (f.~e.~vehicle capacity).
+\item Partially ordered action graph -- visualizes preconditions and effects of actions clearly, allows the user to see what is ``holding up'' the action.
+\item Time-ordered multi-list -- for domains without temporal conditions, is equivalent to the original plan action list. For temporal domains, this visualizes concurrently occurring actions side-by-side -- the user can clearly see the relation between duration intervals of actions.
 \end{itemize}
 \end{itemize}
 
@@ -420,7 +427,12 @@ Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/Compe
 and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
 specify PDDL 3.1 as their official modelling language. Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
 \href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definition of PDDL 3.1}.
-\pname{} doesn't load the PDDL domain definitions -- those are already built-in. We only read problems specified in PDDL 3.1 of the two Transport domain formulations.
+
+\pname{} doesn't load the PDDL domain definitions directly -- those are already built-in.
+We only read the domain files to check which subset of conditions the user has chosen to model.
+See section \ref{domain-info} for more information.
+The loaded problem has to be compatible with the loaded domain variant.
+\pname{} will make an attempt to read problems which have more information than are needed for the currently modelled domain.
 
 To allow \pname{} to save the positions of vertexes in the graph, we make use of an already used ``unwritten extension' of PDDL':
 above every road predicate, there is a comment in the form of \verb+; a,b -> c,d+,
