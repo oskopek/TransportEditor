@@ -6,8 +6,8 @@
 % (drop ?v-vehicle ?l-location ?p-package ?s1-capacity-predecessor ?s2-capacity-predecessor)
 
 % Prolog data structures:
-% s(Vehicles, Packages) ... state
-% v(name, carrying_packages, location, carryingNumber, capacity) ... vehicle
+% s(Vehicles, Packages, Graph) ... state
+% v(name, carrying_packages, location, availableSpace) ... vehicle
 % p(name, location, destination) ... package
 % r(location1, location2, cost) ... road
 
@@ -17,52 +17,52 @@
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     Cost = 1,
     select(V, Vehicles, NewVehicles),
-    V = v(Name, Carrying, Location, CarryingNum, Capacity),
+    V = v(Name, Carrying, Location, AvailableNum),
     select(p(PName, _, Location), Carrying, NewCarrying),
-    NewCarryingNum is CarryingNum - 1,
-    NewV = v(Name, NewCarrying, Location, NewCarryingNum, Capacity),
-    append(NewVehicles, [NewV], ReturnVehicles),
+    NewAvailableNum is AvailableNum + 1,
+    NewV = v(Name, NewCarrying, Location, NewAvailableNum),
+    ReturnVehicles = [NewV|NewVehicles],
     NewState = s(ReturnVehicles, Packages, Graph),
-    PlanAction = drop(Name, Location, PName, CarryingNum, NewCarryingNum).
+    PlanAction = drop(Name, Location, PName, AvailableNum, NewAvailableNum).
 
 % drop (only packages where dest != loc ... due to ordering of clauses)
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     Cost = 1,
     select(V, Vehicles, NewVehicles),
-    V = v(Name, Carrying, Location, CarryingNum, Capacity),
+    V = v(Name, Carrying, Location, AvailableNum),
     select(P, Carrying, NewCarrying),
     P = p(PName, _, PDestination),
     NewP = p(PName, Location, PDestination),
-    append(Packages, [NewP], NewPackages),
-    NewCarryingNum is CarryingNum - 1,
-    NewV = v(Name, NewCarrying, Location, NewCarryingNum, Capacity),
-    append(NewVehicles, [NewV], ReturnVehicles),
+    NewPackages = [NewP|Packages],
+    NewAvailableNum is AvailableNum + 1,
+    NewV = v(Name, NewCarrying, Location, NewAvailableNum),
+    ReturnVehicles = [NewV|NewVehicles],
     NewState = s(ReturnVehicles, NewPackages, Graph),
-    PlanAction = drop(Name, Location, PName, CarryingNum, NewCarryingNum).
+    PlanAction = drop(Name, Location, PName, AvailableNum, NewAvailableNum).
 
 % pick-up
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     Cost = 1,
     select(V, Vehicles, NewVehicles),
-    V = v(Name, Carrying, Location, CarryingNum, Capacity),
-    CarryingNum < Capacity,
-    NewCarryingNum is CarryingNum + 1,
+    V = v(Name, Carrying, Location, AvailableNum),
+    AvailableNum > 0,
+    NewAvailableNum is AvailableNum - 1,
     select(P, Packages, NewPackages),
     P = p(PName, Location, PDestination),
     NewP = p(PName, in_transport, PDestination),
-    append(Carrying, [NewP], NewCarrying),
-    NewV = v(Name, NewCarrying, Location, NewCarryingNum, Capacity),
-    append(NewVehicles, [NewV], ReturnVehicles),
+    NewCarrying = [NewP|Carrying],
+    NewV = v(Name, NewCarrying, Location, NewAvailableNum),
+    ReturnVehicles = [NewV|NewVehicles],
     NewState = s(ReturnVehicles, NewPackages, Graph),
-    PlanAction = pickup(Name, Location, PName, CarryingNum, NewCarryingNum).
+    PlanAction = pickup(Name, Location, PName, NewAvailableNum, AvailableNum).
 
 % drive
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     member(r(Location1, Location2, Cost), Graph),
     select(V, Vehicles, NewVehicles),
-    V = v(Name, Carrying, Location1, CarryingNum, Capacity),
-    NewV = v(Name, Carrying, Location2, CarryingNum, Capacity),
-    append(NewVehicles, [NewV], ReturnVehicles),
+    V = v(Name, Carrying, Location1, AvailableNum),
+    NewV = v(Name, Carrying, Location2, AvailableNum),
+    ReturnVehicles = [NewV|NewVehicles],
     NewState = s(ReturnVehicles, Packages, Graph),
     PlanAction = drive(Name, Location1, Location2).
 
@@ -85,8 +85,20 @@ prepare(s(Vehicles, Packages, Graph), PreparedState) :-
 % goal(+state) -- is the state a goal state?
 goal(s([], [], _)) :- !.
 goal(s([Vehicle|Tail], [], _)) :-
-    Vehicle = v(_, [], _, 0, _),
+    Vehicle = v(_, [], _, _),
     goal(s(Tail, [], _)).
+
+% undoAction(+Action, ?UndoAction)
+undoAction(drive(Name, Location1, Location2), drive(Name, Location2, Location1)).
+undoAction(pickup(Name, Location, PName, _, _),
+             drop(Name, Location, PName, _, _)).
+undoAction(drop(Name, Location, PName, _, _),
+         pickup(Name, Location, PName, _, _)).
+
+% isNotUndoAction(+Action, +Actions)
+isNotUndoAction(_, []).
+isNotUndoAction(Action, [H|_]) :- % compare only the first two (as this gets done each step and if an action happened in between, it may be optimal
+    \+undoAction(Action, H).
 
 % Find plans of a length Depth
 % findnactions(+StateList, +Actions, -NewActions, +Depth, +Cost, -NewCost)
@@ -95,8 +107,8 @@ findnactions([State|_], Actions, RevActions, 0, Cost, Cost) :-
 findnactions(States, Actions, NewActions, Depth, Cost, NewCost) :-
     Depth > 0,
     States = [State|_],
-    %\+goal(State), % TODO do we skip this? --> Yes!
     action(State, CurState, PlanAction, ActionCost),
+    isNotUndoAction(PlanAction, Actions), % skip undo actions, they never lead to a optimal plan
     \+member(CurState, States),
     CurCost is Cost + ActionCost,
     NewDepth is Depth - 1,
@@ -111,9 +123,8 @@ findactions(InitState, Depth, Plan, TotalCost) :-
     findnactions([InitState], [], Plan, Depth, 0, TotalCost).
 findactions(InitState, Depth, Plan, TotalCost) :-
     NewDepth is Depth + 1,
-    NewDepth < 25, % TODO whats with the limit?
+    % NewDepth < 25, % TODO whats with the limit?
     findactions(InitState, NewDepth, Plan, TotalCost).
-
 
 % plan(-Plan, -TotalCost)
 plan(Plan, TotalCost) :-
@@ -121,14 +132,16 @@ plan(Plan, TotalCost) :-
     stdioproblem(InitState),
     prepare(InitState, PreparedState),
     findactions(PreparedState, Plan, TotalCost),
-    !.
+    !,
+    writef('Plan = %w\n', [Plan]),
+    writef('TotalCost = %w\n', [TotalCost]).
 
 % A sample problem (p01)
 % problem(-InitState)
 problem(InitState) :-
     Packages = [p(package1, cityloc3, cityloc2), p(package2, cityloc3, cityloc2)],
-    T1 = v(truck1, [], cityloc3, 0, 4),
-    T2 = v(truck2, [], cityloc1, 0, 3),
+    T1 = v(truck1, [], cityloc3, 4),
+    T2 = v(truck2, [], cityloc1, 3),
     Vehicles = [T1, T2],
     Graph = [r(cityloc3, cityloc1, 22),
              r(cityloc1, cityloc3, 22),

@@ -5,6 +5,10 @@
 input="$1"
 normalized="`cat "$input" | tr -d ':=()-' | tr -s ' '`"
 
+# Swipl
+echo "[planner]."
+echo "plan(Plan, TotalCost)."
+
 # Roads
 echo "roads([""`
     echo "$normalized" |
@@ -49,8 +53,8 @@ capacities="`
     echo "$normalized" |
     grep -E 'capacity ' |
     sed -E 's/^[ ]*capacity[ ]*//' |
-    sed -E 's/capacity([0-9]+)/\1/' |
-    sed -E 's/ ([0-9]+)/ 0 \1/'
+    sed -E 's/capacity([0-9]+)/\1/' #|
+    #sed -E 's/ ([0-9]+)/ 0 \1/'
 `"
 echo "$capacities" > "$tmp"
 resvehicles="`echo "$vehicles" | join - "$tmp" | sed 's/^/v(/;s/ /, /g;s/$/)/' | tr '\n' '+' | sed -E 's/\+$//;s/\+/, /g' `"

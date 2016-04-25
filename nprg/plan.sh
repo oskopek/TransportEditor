@@ -7,7 +7,7 @@ outputfile="$2"
 tmpout="`mktemp`"
 tmpout2="`mktemp`"
 
-./toinput.sh "$inputfile" | swipl -s planner.pl -t 'plan(Plan, TotalCost).' -- > "$tmpout"
+./toinput.sh "$inputfile" | swipl > "$tmpout" 2> /dev/null
 ./tooutput.sh "$tmpout" > "$tmpout2"
 
 if [ -n "$outputfile" ]; then
