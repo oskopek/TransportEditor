@@ -1,10 +1,9 @@
-% Simple forward DFS planner for IPC 08 Transport
+% Simple forward BFS planner for IPC 08 Transport (STRIPS)
 
 % PDDL actions (planner output):
 % (drive ?v-vehicle ?l1-location ?l2-location)
 % (pick-up ?v-vehicle ?l-location ?p-package ?s1-capacity-predecessor ?s2-capacity-predecessor)
 % (drop ?v-vehicle ?l-location ?p-package ?s1-capacity-predecessor ?s2-capacity-predecessor)
-% ; cost = 54 (general cost)
 
 % Prolog data structures:
 % s(Vehicles, Packages) ... state
@@ -12,22 +11,8 @@
 % p(name, location, destination) ... package
 % r(location1, location2, cost) ... road
 
+
 % action(+State, -NewState, -PlanAction, -Cost)
-
-% delete all packages which are at their destination
-preparePackages([], []).
-preparePackages([p(_, Location, Location)|Tail], NewPackages) :-
-    preparePackages(Tail, NewPackages).
-preparePackages([H|Tail], [H|NewPackages]) :-
-    H = p(_, Location, Location2),
-    Location \= Location2,
-    preparePackages(Tail, NewPackages).
-
-% prepare state for planning
-prepare(s(Vehicles, Packages, Graph), PreparedState) :-
-    preparePackages(Packages, NewPackages),
-    PreparedState = s(Vehicles, NewPackages, Graph).
-
 % force-drop all packages which are at their destination
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     Cost = 1,
@@ -81,43 +66,66 @@ action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
     NewState = s(ReturnVehicles, Packages, Graph),
     PlanAction = drive(Name, Location1, Location2).
 
+% delete all packages which are at their destination
+% preparedPackages(+Packages, -NewPackages)
+preparePackages([], []).
+preparePackages([p(_, Location, Location)|Tail], NewPackages) :-
+    preparePackages(Tail, NewPackages).
+preparePackages([H|Tail], [H|NewPackages]) :-
+    H = p(_, Location, Location2),
+    Location \= Location2,
+    preparePackages(Tail, NewPackages).
+
+% prepare state for planning
+% prepare(+State, -PreparedState)
+prepare(s(Vehicles, Packages, Graph), PreparedState) :-
+    preparePackages(Packages, NewPackages),
+    PreparedState = s(Vehicles, NewPackages, Graph).
+
 % goal(+state) -- is the state a goal state?
 goal(s([], [], _)) :- !.
 goal(s([Vehicle|Tail], [], _)) :-
     Vehicle = v(_, [], _, 0, _),
     goal(s(Tail, [], _)).
 
-% findactions(+State, +OldActions, -NewActions, +OldCost, -NewCost)
-findactions([OldState|_], OldActions, RevActions, Cost, Cost) :-
-    goal(OldState), reverse(OldActions, RevActions), !.
-findactions(States, OldActions, NewActions, OldCost, NewCost) :-
-    States = [OldState|_],
-    \+goal(OldState), % TODO do we skip this? --> Yes!
-    action(OldState, CurState, PlanAction, ActionCost),
+% Find plans of a length Depth
+% findnactions(+StateList, +Actions, -NewActions, +Depth, +Cost, -NewCost)
+findnactions([State|_], Actions, RevActions, 0, Cost, Cost) :-
+    goal(State), reverse(Actions, RevActions), !.
+findnactions(States, Actions, NewActions, Depth, Cost, NewCost) :-
+    Depth > 0,
+    States = [State|_],
+    %\+goal(State), % TODO do we skip this? --> Yes!
+    action(State, CurState, PlanAction, ActionCost),
     \+member(CurState, States),
-    CurActions = [PlanAction|OldActions],
-    CurCost is OldCost + ActionCost,
-    findactions([CurState|States], CurActions, NewActions, CurCost, NewCost).
+    CurCost is Cost + ActionCost,
+    NewDepth is Depth - 1,
+    findnactions([CurState|States], [PlanAction|Actions], NewActions, NewDepth, CurCost, NewCost).
+
+% findactions/3 (+InitState, -Plan, -TotalCost)
+findactions(InitState, Plan, TotalCost) :-
+    findactions(InitState, 0, Plan, TotalCost).
+
+% findactions/4 (+InitState, +Depth, -Plan, -TotalCost)
+findactions(InitState, Depth, Plan, TotalCost) :-
+    findnactions([InitState], [], Plan, Depth, 0, TotalCost).
+findactions(InitState, Depth, Plan, TotalCost) :-
+    NewDepth is Depth + 1,
+    NewDepth < 25, % TODO whats with the limit?
+    findactions(InitState, NewDepth, Plan, TotalCost).
+
 
 % plan(-Plan, -TotalCost)
 plan(Plan, TotalCost) :-
-    problemS(InitState),
+    %problem(InitState),
+    stdioproblem(InitState),
     prepare(InitState, PreparedState),
-    findactions([PreparedState], [], Plan, 0, TotalCost).
-    %!. % TODO remove me?
+    findactions(PreparedState, Plan, TotalCost),
+    !.
 
-% problemS(-InitState)
-problemS(InitState) :- % TODO remove me in favor of IO
-    Packages = [p(package0, cityloc1, cityloc1), p(package1, cityloc1, cityloc2), p(package2, cityloc2, cityloc2)],
-    T1 = v(truck1, [], cityloc1, 0, 4),
-    Vehicles = [T1],
-    Graph = [r(cityloc1, cityloc2, 50),
-             r(cityloc2, cityloc1, 50)
-             ],
-    InitState = s(Vehicles, Packages, Graph).
-
+% A sample problem (p01)
 % problem(-InitState)
-problem(InitState) :- % TODO remove me in favor of IO
+problem(InitState) :-
     Packages = [p(package1, cityloc3, cityloc2), p(package2, cityloc3, cityloc2)],
     T1 = v(truck1, [], cityloc3, 0, 4),
     T2 = v(truck2, [], cityloc1, 0, 3),
@@ -127,5 +135,13 @@ problem(InitState) :- % TODO remove me in favor of IO
              r(cityloc3, cityloc2, 50),
              r(cityloc2, cityloc3, 50)
              ],
+    InitState = s(Vehicles, Packages, Graph).
+
+% Read problem for standard input
+% stdioproblem(-InitState)
+stdioproblem(InitState) :-
+    read(roads(Graph)),
+    read(packages(Packages)),
+    read(vehicles(Vehicles)),
     InitState = s(Vehicles, Packages, Graph).
 

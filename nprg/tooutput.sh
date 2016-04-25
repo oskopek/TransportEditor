@@ -1,7 +1,8 @@
-if [ -n "$outputfile" ]; then
-    cp "$tmpout" "$outputfile"
-else
-    cat "$tmpout"
-fi
+#!/bin/bash
 
-rm "$tmpout"
+# Parameters: ./tooutput.sh [prolog-planner-output-file]
+input="$1"
+
+cat "$input"
+
+

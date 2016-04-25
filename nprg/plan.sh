@@ -5,13 +5,15 @@
 inputfile="$1"
 outputfile="$2"
 tmpout="`mktemp`"
+tmpout2="`mktemp`"
 
-./to_input.sh "$inputfile" | swipl -s planner.pl -t 'plan(Plan, TotalCost).' > "$tmpout"
+./toinput.sh "$inputfile" | swipl -s planner.pl -t 'plan(Plan, TotalCost).' -- > "$tmpout"
+./tooutput.sh "$tmpout" > "$tmpout2"
 
 if [ -n "$outputfile" ]; then
-    cp "$tmpout" "$outputfile"
+    cp "$tmpout2" "$outputfile"
 else
-    cat "$tmpout"
+    cat "$tmpout2"
 fi
 
-rm "$tmpout"
+rm "$tmpout" "$tmpout2"

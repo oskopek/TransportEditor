@@ -3,8 +3,7 @@
 * Write docs incrementally
 
 * Rewrite to BFS (throw away DFS) -> document optimality
-* To/From conversion bash/haskell scripts
-* Implement IO in Prolog
+* From conversion bash/haskell scripts + document them
 * Implement (a) heuristic(s)
 * Implement append in constant time (difference lists) ... do we need it at all? Or do we just prepend?
 * Optimize
