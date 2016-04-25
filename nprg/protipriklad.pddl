@@ -25,6 +25,10 @@
   ; 748,385 -> 890,543
   (road city-loc-3 city-loc-1)
   (= (road-length city-loc-3 city-loc-1) 22)
+  (road city-loc-2 city-loc-1)
+  (= (road-length city-loc-2 city-loc-1) 22)
+  (road city-loc-1 city-loc-2)
+  (= (road-length city-loc-1 city-loc-2) 22)
   ; 890,543 -> 748,385
   (road city-loc-1 city-loc-3)
   (= (road-length city-loc-1 city-loc-3) 22)

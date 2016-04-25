@@ -1,13 +1,11 @@
 = NPRG TODO
 
-* Write docs incrementally
-
-* Rewrite to BFS (throw away DFS) -> document optimality
-* From conversion bash/haskell scripts + document them
-* Implement (a) heuristic(s)
-* Implement append in constant time (difference lists) ... do we need it at all? Or do we just prepend?
+* Implement heuristics: Floyd-Warshall pre-computed (paths!) -> custom drive action, more memory in favour of time, ...?, 
 * Optimize
 
+* Document BFS + it's optimality (always use shortest path, else not optimal)
+* Document to/from/plan bash scripts
+* Document source code
 
-* Write docs (README) + document helper scripts
-* Write packaging script (adds data from ipc08)
+* Write user docs (README)
+* Write packaging script (adds data from ipc08 seq-opt)
