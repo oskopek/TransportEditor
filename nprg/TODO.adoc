@@ -3,9 +3,9 @@
 * Implement heuristics: Floyd-Warshall pre-computed (paths!) -> custom drive action, more memory in favour of time, ...?, 
 * Optimize
 
-* Document BFS + it's optimality (always use shortest path, else not optimal)
-* Document to/from/plan bash scripts
-* Document source code
+Documentation:
 
-* Write user docs (README)
-* Write packaging script (adds data from ipc08 seq-opt)
+* BFS + it's optimality (always use shortest path, else not optimal)
+* To/from/plan bash scripts
+* Source code
+* User docs (README)
