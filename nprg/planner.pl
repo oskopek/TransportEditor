@@ -128,8 +128,8 @@ findactions(InitState, Depth, Plan, TotalCost) :-
 
 % plan(-Plan, -TotalCost)
 plan(Plan, TotalCost) :-
-    %problem(InitState),
-    stdioproblem(InitState),
+    problem(InitState),
+    %stdioproblem(InitState),
     prepare(InitState, PreparedState),
     findactions(PreparedState, Plan, TotalCost),
     !,
@@ -158,3 +158,44 @@ stdioproblem(InitState) :-
     read(vehicles(Vehicles)),
     InitState = s(Vehicles, Packages, Graph).
 
+%%%%%%%%%%%%%%%%%%%%
+
+% emptyList(+Length, +FillElement, -List)
+emptyList(0, _, []).
+emptyList(N, Fill, [Fill|Tail]) :-
+    N1 is N - 1,
+    emptyList(N1, Fill, Tail).
+
+% fillInRoads(+Graph, +SortedNodes, +BaseMatrix, -Matrix)
+fillInRoads([], _, _, _).
+fillInRoads([Road|Graph], Nodes, Base, Matrix) :-
+
+
+% generateAdjMatrix(+Graph, -Matrix)
+generateAdjMatrix(Graph, Matrix) :-
+    Infinity = 1000000000,
+    parseNodes(Graph, Nodes),
+    length(Nodes, N),
+    generateMatrixRows(BaseMatrix, N, N, Infinity),
+    sort(Nodes, SortedNodes),
+    fillInRoads(Graph, SortedNodes, BaseMatrix, Matrix),
+    !.
+
+% generateMatrixRows(-Matrix, +Rows, +Cols, +Fill)
+generateMatrixRows([], 0, _, _).
+generateMatrixRows([Row|Matrix], N, Cols, Fill) :-
+    N1 is N - 1,
+    emptyList(Cols, Fill, Row),
+    generateMatrixRows(Matrix, N1, Cols, Fill).
+
+parseNodes([], []).
+parseNodes([Road|Graph], NewNodesSet) :-
+    parseNodes(Graph, Nodes),
+    Road = r(Node1, Node2, _),
+    NewNodes = [Node1, Node2],
+    union(Nodes, NewNodes, NewNodesSet).
+
+% Floyd-Warshall
+floydWarshall(Graph) :- 
+    generateAdjMatrix(Graph, Matrix),
+    display(Matrix).
