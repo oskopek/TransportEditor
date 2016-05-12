@@ -9,5 +9,4 @@
 Documentation:
 
 * BFS + it's optimality (always use shortest path, else not optimal)
-* Source code
 * User docs (README)

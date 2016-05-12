@@ -29,6 +29,8 @@ else
     cat "$tmpout2"
 fi
 
+echo "" 1>&2
+
 if command -v validate > /dev/null 2>&1; then # if we have validate on the system, run it
     echo 'Validating:' 1>&2
     validate "$domain" "$inputfile" "$tmpout2" 1>&2
