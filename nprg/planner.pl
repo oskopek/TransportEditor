@@ -80,7 +80,8 @@ preparePackages([H|Tail], [H|NewPackages]) :-
 % prepare(+State, -PreparedState)
 prepare(s(Vehicles, Packages, Graph), PreparedState) :-
     preparePackages(Packages, NewPackages),
-    PreparedState = s(Vehicles, NewPackages, Graph).
+    floydWarshall(Graph, Graph2),
+    PreparedState = s(Vehicles, NewPackages, Graph2).
 
 % goal(+state) -- is the state a goal state?
 goal(s([], [], _)) :- !.
@@ -123,14 +124,19 @@ findactions(InitState, Depth, Plan, TotalCost) :-
     findnactions([InitState], [], Plan, Depth, 0, TotalCost).
 findactions(InitState, Depth, Plan, TotalCost) :-
     NewDepth is Depth + 1,
-    % NewDepth < 25, % TODO whats with the limit?
     findactions(InitState, NewDepth, Plan, TotalCost).
 
 % plan(-Plan, -TotalCost)
 plan(Plan, TotalCost) :-
-    problem(InitState),
-    %stdioproblem(InitState),
+    write(reading),
+    nl,
+    %problem(InitState),
+    stdioproblem(InitState),
+    write(preparing),
+    nl,
     prepare(InitState, PreparedState),
+    write(planning),
+    nl,
     findactions(PreparedState, Plan, TotalCost),
     !,
     writef('Plan = %w\n', [Plan]),
@@ -161,41 +167,125 @@ stdioproblem(InitState) :-
 %%%%%%%%%%%%%%%%%%%%
 
 % emptyList(+Length, +FillElement, -List)
-emptyList(0, _, []).
+emptyList(0, _, []) :- !.
 emptyList(N, Fill, [Fill|Tail]) :-
     N1 is N - 1,
     emptyList(N1, Fill, Tail).
 
+% setElement(+List, +N, +Elem, -NewList)
+setElement(List, N, Elem, NewList) :-
+    nth0(N, List, _, List2), % remove old elem
+    nth0(N, NewList, Elem, List2), % insert new elem
+    !.
+
+% setElement(+Matrix, +I, +J, +Elem, -NewMatrix)
+setElement(Matrix, I, J, Elem, NewMatrix) :-
+    nth0(I, Matrix, Row),
+    setElement(Row, J, Elem, NewRow),
+    setElement(Matrix, I, NewRow, NewMatrix),
+    !.
+
+% indexOf(+Element, +List, -Index)
+indexOf(Elem, List, Index) :-
+    nth0(Index, List, Elem),
+    !.
+
 % fillInRoads(+Graph, +SortedNodes, +BaseMatrix, -Matrix)
-fillInRoads([], _, _, _).
-fillInRoads([Road|Graph], Nodes, Base, Matrix) :-
+fillInRoads([], _, Matrix, Matrix) :- !.
+fillInRoads([Road|Graph], Nodes, Base, NewMatrix) :-
+    Road = r(From, To, Dist),
+    indexOf(From, Nodes, I),
+    indexOf(To, Nodes, J),
+    setElement(Base, I, J, Dist, Matrix),
+    fillInRoads(Graph, Nodes, Matrix, NewMatrix).
 
-
-% generateAdjMatrix(+Graph, -Matrix)
-generateAdjMatrix(Graph, Matrix) :-
+% generateAdjMatrix(+Graph, +Nodes, -Matrix)
+generateAdjMatrix(Graph, Nodes, Matrix) :-
     Infinity = 1000000000,
-    parseNodes(Graph, Nodes),
     length(Nodes, N),
     generateMatrixRows(BaseMatrix, N, N, Infinity),
-    sort(Nodes, SortedNodes),
-    fillInRoads(Graph, SortedNodes, BaseMatrix, Matrix),
+    fillInRoads(Graph, Nodes, BaseMatrix, Matrix),
     !.
 
 % generateMatrixRows(-Matrix, +Rows, +Cols, +Fill)
-generateMatrixRows([], 0, _, _).
-generateMatrixRows([Row|Matrix], N, Cols, Fill) :-
+generateMatrixRows([], 0, _, _) :- !.
+generateMatrixRows([NewRow|Matrix], N, Cols, Fill) :-
     N1 is N - 1,
     emptyList(Cols, Fill, Row),
+    Diff is Cols - N,
+    setElement(Row, Diff, 0, NewRow), % set dist(a, a) = 0
     generateMatrixRows(Matrix, N1, Cols, Fill).
 
-parseNodes([], []).
+parseNodes([], []) :- !.
 parseNodes([Road|Graph], NewNodesSet) :-
     parseNodes(Graph, Nodes),
     Road = r(Node1, Node2, _),
     NewNodes = [Node1, Node2],
     union(Nodes, NewNodes, NewNodesSet).
 
-% Floyd-Warshall
-floydWarshall(Graph) :- 
-    generateAdjMatrix(Graph, Matrix),
-    display(Matrix).
+translateRowToGraph([], _, _, _, Graph, Graph) :- !.
+translateRowToGraph([Dist|Tail], RowIndex, ColIndex, Nodes, Graph, NewGraph) :-
+    nth0(RowIndex, Nodes, From),
+    nth0(ColIndex, Nodes, To),
+    From \= To, % skip road a -> a
+    Graph2 = [r(From, To, Dist)|Graph],
+    ColIndex1 is ColIndex + 1,
+    translateRowToGraph(Tail, RowIndex, ColIndex1, Nodes, Graph2, NewGraph).
+translateRowToGraph([_|Tail], RowIndex, ColIndex, Nodes, Graph, NewGraph) :-
+    ColIndex1 is ColIndex + 1,
+    translateRowToGraph(Tail, RowIndex, ColIndex1, Nodes, Graph, NewGraph).
+
+
+translateToGraph([], _, _, Graph, Graph) :- !.
+translateToGraph([Row|Tail], RowIndex, Nodes, Graph, NewGraph) :-
+    translateRowToGraph(Row, RowIndex, 0, Nodes, Graph, Graph2),
+    RowIndex1 is RowIndex + 1,
+    translateToGraph(Tail, RowIndex1, Nodes, Graph2, NewGraph).
+
+translateToGraph(Matrix, Nodes, Graph) :-
+    translateToGraph(Matrix, 0, Nodes, [], Graph),
+    !.
+
+% Floyd-Warshall % TODO translate actions into graph
+floydWarshall(Graph, NewGraph) :-
+    parseNodes(Graph, NodesOld),
+    sort(NodesOld, Nodes),
+    generateAdjMatrix(Graph, Nodes, Matrix),
+    length(Matrix, NodeCount), % the matrix is NxN where N = node count
+    floydWarshallK(Matrix, NewMatrix, 0, NodeCount),
+    translateToGraph(NewMatrix, Nodes, NewGraph),
+    !.
+
+floydWarshallK(Matrix, Matrix, N, N) :- !.
+floydWarshallK(Matrix, NewMatrix, K, NodeCount) :-
+    floydWarshallI(Matrix, Matrix2, K, 0, NodeCount),
+    K1 is K + 1,
+    floydWarshallK(Matrix2, NewMatrix, K1, NodeCount).
+
+floydWarshallI(Matrix, Matrix, _, N, N) :- !.
+floydWarshallI(Matrix, NewMatrix, K, I, NodeCount) :-
+    floydWarshallJ(Matrix, Matrix2, K, I, 0, NodeCount),
+    I1 is I + 1,
+    floydWarshallI(Matrix2, NewMatrix, K, I1, NodeCount).
+
+floydWarshallJ(Matrix, Matrix, _, _, N, N) :- !.
+floydWarshallJ(Matrix, NewMatrix, K, I, J, NodeCount) :-
+    floydWarshallStep(Matrix, Matrix2, K, I, J),
+    J1 is J + 1,
+    floydWarshallJ(Matrix2, NewMatrix, K, I, J1, NodeCount).
+
+elementAt(Matrix, I, J, Elem) :-
+    nth0(I, Matrix, Row),
+    nth0(J, Row, Elem),
+    !.
+
+floydWarshallStep(Matrix, NewMatrix, K, I, J) :-
+    elementAt(Matrix, I, J, DistIJ),
+    elementAt(Matrix, I, K, DistIK),
+    elementAt(Matrix, K, J, DistKJ),
+    NewDist is DistIK + DistKJ,
+    DistIJ > NewDist,
+    setElement(Matrix, I, J, NewDist, NewMatrix),
+    !.
+floydWarshallStep(Matrix, Matrix, _, _, _).
+

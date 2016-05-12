@@ -1,7 +1,6 @@
 = NPRG TODO
 
-* Implement heuristics: Floyd-Warshall pre-computed (paths!) -> custom drive action, more memory in favour of time, ...?, 
-* Optimize
+* Implement heuristics: custom drive action, more memory in favour of time, ...
 
 Documentation:
 

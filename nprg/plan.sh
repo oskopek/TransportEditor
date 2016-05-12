@@ -7,7 +7,9 @@ outputfile="$2"
 tmpout="`mktemp`"
 tmpout2="`mktemp`"
 
-./toinput.sh "$inputfile" | swipl > "$tmpout" 2> /dev/null
+echo -e "Planning...\n"
+
+./toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
 ./tooutput.sh "$tmpout" > "$tmpout2"
 
 if [ -n "$outputfile" ]; then

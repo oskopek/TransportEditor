@@ -19,4 +19,3 @@ costFormatted="`echo "$cost" | grep -oE '[0-9]+'`"
 echo "$planFormatted"
 echo "; cost = ""$costFormatted"" (general cost)"
 
-
