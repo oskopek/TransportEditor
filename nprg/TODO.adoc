@@ -1,6 +1,10 @@
 = NPRG TODO
 
-* Implement heuristics: custom drive action, more memory in favour of time, ...
+* Implement heuristics:
+** custom drive action
+** more memory in favour of time
+** ordered destinations heuristic
+** pruning (build a subgraph??)
 
 Documentation:
 

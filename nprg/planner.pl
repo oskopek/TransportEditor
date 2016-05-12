@@ -115,15 +115,39 @@ findnactions(States, Actions, NewActions, Depth, Cost, NewCost) :-
     NewDepth is Depth - 1,
     findnactions([CurState|States], [PlanAction|Actions], NewActions, NewDepth, CurCost, NewCost).
 
+
+% minimumCostResult/5(+Bag, +CurBestPlan, +CurMinCost, -BestPlan, -MinCost)
+minimumCostResult([], Plan, Cost, Plan, Cost) :- !.
+minimumCostResult([CurRes|Tail], CurBestPlan, CurMinCost, BestPlan, MinCost) :-
+    CurRes = res(CurPlan, CurCost),
+    CurCost < CurMinCost,
+    CurMinCost2 = CurCost,
+    CurBestPlan2 = CurPlan,
+    minimumCostResult(Tail, CurBestPlan2, CurMinCost2, BestPlan, MinCost).
+minimumCostResult([_|Tail], CurBestPlan, CurMinCost, BestPlan, MinCost) :-
+    minimumCostResult(Tail, CurBestPlan, CurMinCost, BestPlan, MinCost).
+
+% minimumCostResult/3(+Bag, -Plan, -TotalCost)
+minimumCostResult(Bag, Plan, TotalCost) :-
+    length(Bag, N),
+    N > 0,
+    Infinity = 100000000,
+    minimumCostResult(Bag, nil, Infinity, Plan, TotalCost),
+    !.
+
 % findactions/3 (+InitState, -Plan, -TotalCost)
 findactions(InitState, Plan, TotalCost) :-
     findactions(InitState, 0, Plan, TotalCost).
 
 % findactions/4 (+InitState, +Depth, -Plan, -TotalCost)
 findactions(InitState, Depth, Plan, TotalCost) :-
-    findnactions([InitState], [], Plan, Depth, 0, TotalCost).
+    findall(res(TempPlan, TempTotalCost), findnactions([InitState], [], TempPlan, Depth, 0, TempTotalCost), Bag),
+    minimumCostResult(Bag, Plan, TotalCost).
 findactions(InitState, Depth, Plan, TotalCost) :-
     NewDepth is Depth + 1,
+    write(increasingDepth),
+    write(NewDepth),
+    nl,
     findactions(InitState, NewDepth, Plan, TotalCost).
 
 % plan(-Plan, -TotalCost)

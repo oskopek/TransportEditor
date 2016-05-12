@@ -7,7 +7,7 @@ outputfile="$2"
 tmpout="`mktemp`"
 tmpout2="`mktemp`"
 
-echo -e "Planning...\n"
+#echo -e "Planning...\n"
 
 ./toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
 ./tooutput.sh "$tmpout" > "$tmpout2"
@@ -18,4 +18,4 @@ else
     cat "$tmpout2"
 fi
 
-rm "$tmpout" "$tmpout2"
+rm "$tmpout" "$tmpout2" debug
