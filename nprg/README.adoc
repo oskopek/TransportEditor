@@ -20,6 +20,8 @@ To use this planner, you need to install:
 * The main script to use is `plan.sh`: `./plan.sh pddl_input_file`
 * Try for example: `./plan.sh inputs/p01.pddl`
 * If you want to watch the progress of the planner while it's running, run: `tail -f debug`
+* If you want to try to run Fast Downward against a problem file, configure
+ your build of the `fast-downward.py` executable into `solve-fd.sh` and run `./solve-fd.sh pddl_input_file`
 
 == Test data
 

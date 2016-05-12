@@ -18,6 +18,11 @@ tmpout="`mktemp`"
 tmpout2="`mktemp`"
 domain="inputs/domain.pddl"
 
+if [ -z "$inputfile" ]; then
+    echo "ERROR: No input file specified. Please supply an argument PDDL file."
+    exit
+fi
+
 echo -e "Planning...\n" 1>&2
 
 bash toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
@@ -29,13 +34,10 @@ else
     cat "$tmpout2"
 fi
 
-echo "" 1>&2
-
 if command -v validate > /dev/null 2>&1; then # if we have validate on the system, run it
-    echo 'Validating:' 1>&2
+    echo -e '\nValidating:' 1>&2
     validate "$domain" "$inputfile" "$tmpout2" 1>&2
-else
-    echo 'Could not find "validate" executable' 1>&2
 fi
 
 rm "$tmpout" "$tmpout2" debug
+
