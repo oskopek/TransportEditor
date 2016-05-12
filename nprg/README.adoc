@@ -16,8 +16,10 @@ To use this planner, you need to install:
 
 == Usage
 
+* Don't forget to make `plan.sh` executable after unzipping: `chmod +x plan.sh`
 * The main script to use is `plan.sh`: `./plan.sh pddl_input_file`
 * Try for example: `./plan.sh inputs/p01.pddl`
+* If you want to watch the progress of the planner while it's running, run: `tail -f debug`
 
 == Test data
 

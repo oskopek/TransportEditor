@@ -20,8 +20,8 @@ domain="inputs/domain.pddl"
 
 echo -e "Planning...\n" 1>&2
 
-./toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
-./tooutput.sh "$tmpout" > "$tmpout2"
+bash toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
+bash tooutput.sh "$tmpout" > "$tmpout2"
 
 if [ -n "$outputfile" ]; then
     cp "$tmpout2" "$outputfile"
