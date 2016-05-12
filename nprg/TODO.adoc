@@ -1,0 +1,12 @@
+= NPRG TODO
+
+* Implement heuristics:
+** more memory in favour of time
+** pruning (build a subgraph??)
+
+* Translate shortcut actions from Floyd-Warshall back into their respective action sequences
+
+Documentation:
+
+* BFS + it's optimality (always use shortest path, else not optimal)
+* User docs (README)

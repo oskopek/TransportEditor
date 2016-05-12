@@ -1,0 +1,149 @@
+= NPRG -- Domain-dependant planner for the IPC 08 Transport domain
+Ondrej Skopek <oskopek@matfyz.cz>
+
+Written in Prolog for a course at MFF.
+
+== Prerequisites
+
+To use this planner, you need to install:
+
+* http://www.swi-prolog.org/[SWI Prolog]
+* Bash
+* Optional for reference planning: http://www.fast-downward.org/ObtainingAndRunningFastDownward[Fast Downward]
+ and its dependencies
+* Optional for plan validation: http://www.fast-downward.org/ObtainingAndRunningFastDownward#Validator_VAL[VAL]
+ and its dependencies
+
+== Usage
+
+* Don't forget to make `plan.sh` executable after unzipping: `chmod +x plan.sh`
+* The main script to use is `plan.sh`: `./plan.sh pddl_input_file`
+* Try for example: `./plan.sh inputs/p01.pddl`
+* If you want to watch the progress of the planner while it's running, run: `tail -f debug`
+* If you want to try to run Fast Downward against a problem file, configure
+ your build of the `fast-downward.py` executable into `solve-fd.sh` and run `./solve-fd.sh pddl_input_file`
+
+== Test data
+
+* Small input data is in the `inputs/` folder
+* You can find original inputs from the IPC 08 competition in `inputs/ipc08/`
+
+== Transport domain description
+
+Transport is a domain designed originally for the International Planning Competition
+(IPC, part of the International Conference on Automated Planning and Scheduling ICAPS).
+Originally, Transport appeared at http://icaps-conference.org/ipc2008/deterministic/Domains.html[IPC-6 2008].
+Since then, it has been used in every IPC, specifically http://www.plg.inf.uc3m.es/ipc2011-deterministic/[IPC-7 2011]
+and https://helios.hud.ac.uk/scommv/IPC-14/[IPC-8 2014].
+
+There are two basic formulations of the Transport domain family (i.e. two "similar Transport domains"):
+
+* `transport-strips` -- the classical, sequential Transport domain.
+* `transport-numeric` -- the numerical Transport domain.
+
+Both of these formulations have been used interchangeably in various competition tracks.
+The following is an overview of the distinct datasets, their associated IPC competition,
+track at the competition and the formulation used (descriptions of the tracks in hyperlinks):
+
+.IPC Datasets
+|===
+|Dataset name |Competition |Track |Formulation
+
+|netben-opt-6
+|IPC-6
+|http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html[Net-benefit: optimal]
+|Numeric
+
+|seq-opt-6
+|IPC-6
+|http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html[Sequential: satisficing]
+|STRIPS
+
+|seq-sat-6
+|IPC-6
+|http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html[Sequential: optimal]
+|STRIPS
+
+|tempo-sat-6
+|IPC-6
+|http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html[Temporal: satisficing]
+|Numeric
+
+|seq-agl-8
+|IPC-8
+|https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html[Sequential: agile]
+|STRIPS
+
+|seq-mco-8
+|IPC-8
+|https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html[Sequential: multi-core]
+|STRIPS
+
+|seq-opt-8
+|IPC-8
+|https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html[Sequential: optimal]
+|STRIPS
+
+|seq-sat-8
+|IPC-8
+|https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html[Sequential: satisficing]
+|STRIPS
+
+|===
+
+Short descriptions of the various tracks and subtracks can be found in the rule pages of
+https://helios.hud.ac.uk/scommv/IPC-14/rules.html[IPC-6]
+and the http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html[rule page of IPC-8].
+
+Unfortunately, we weren't able to acquire the datasets for IPC-7, as the
+http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html[Subversion repository]
+that promises to contain them is unavailable.
+
+=== Transport STRIPS formulation description
+
+The STRIPS version of Transport is a logistics domain
+-- vehicles with limited capacities drive around on a (generally asymmetric)
+positively-weighted oriented graph, picking up and dropping packages along the way.
+
+Picking up or dropping a package costs 1, driving along a road costs depending on the edge weight.
+All packages have a size of 1.
+The general aim is to minimize the total cost, while delivering all packages to their destination.
+
+=== Transport Numeric formulation description
+
+The numerical version of Transport is very similar to the STRIPS version. The key differences are:
+
+* Package sizes can now be any positive number.
+* The concept of fuel -- every vehicle has a maximum fuel level, current fuel level,
+ and all roads have a fuel demand (generally different than the length of the road).
+ A vehicle can refuel if there is a petrol station at the given location.
+ Refuelling always fills the vehicle's tank to the max.
+* The introduction of time:
+** The duration of driving along a road is equal to it's length.
+** The duration of picking a package up or dropping it off is equal to 1.
+** The duration of refuelling is equal to 10.
+** A vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time.
+** A vehicle cannot do other actions during driving to another location
+ (it is essentially placed ``off the graph'' for the duration of driving).
+* The cost function is removed (we now minimize the total duration of a plan).
+
+== Developer notes
+
+Our planner guarantees optimality because of the following properties:
+
+* We are minimizing the total cost (sum of costs of all actions in a plan)
+* All actions in the Transport STRIPS domain have a *positive* cost
+* We look for plans using BFS -> we generate and validate all plans of a given count
+ of actions before adding one more action to the plan.
+* We substitute the original graph with a nearest distance graph, calculated using Floyd-Warshall's algorithm.
+ This guarantees that we don't have multiple successiev drive actions using the same vehicle.
+ TODO: We should remember the shortest paths and reconstruct the original drive actions (preserving the total cost)
+ in order to end up with a valid plan.
+* We always drive to the nearest location first
+ (if we didn't, we may end up finding a non-optimal plan of the same length first).
+
+These properties guarantee that the first valid plan we find has the minimum cost
+and is one of the optimal plans for the problem.
+
+You can find more developer documentation in source code comments in the planner (`planner.pl`).
+
