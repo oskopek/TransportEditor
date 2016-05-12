@@ -1,6 +1,12 @@
 #!/bin/bash
 
+# Converts the input from the prolog planner into a standard VAL-compatible plan.
+# Prints either to stdout or into a file, if the optional filename parameter is specified.
+
 # Parameters: ./tooutput.sh [prolog-planner-output-file]
+
+##########################################################################################
+
 input="$1"
 
 plan="`cat "$input" | grep -E 'Plan' -m 1`"

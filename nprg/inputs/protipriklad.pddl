@@ -1,4 +1,7 @@
 ; Transport city-sequential-3nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed
+; a small counterexample for using shortest paths. The road 2<-->3 is longer than 2<-->1<-->3 (50 vs 22).
+; Optimal value = 48, plan length =  6
+
 
 (define (problem transport-city-sequential-3nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed)
  (:domain transport)

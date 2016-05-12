@@ -58,13 +58,27 @@ action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
 
 % drive
 action(s(Vehicles, Packages, Graph), NewState, PlanAction, Cost) :-
-    member(r(Location1, Location2, Cost), Graph),
     select(V, Vehicles, NewVehicles),
     V = v(Name, Carrying, Location1, AvailableNum),
+    selectShortestRoad(Location1, Graph, Road),
+    Road = r(Location1, Location2, Cost),
     NewV = v(Name, Carrying, Location2, AvailableNum),
     ReturnVehicles = [NewV|NewVehicles],
     NewState = s(ReturnVehicles, Packages, Graph),
     PlanAction = drive(Name, Location1, Location2).
+
+% selectNearestLocation(+SortedDifList, -Cost, -Location)
+selectNearestLocation([Head|_], Cost, To) :-
+    Head = Cost-To.
+selectNearestLocation([_|Tail], Cost, To) :-
+    selectNearestLocation(Tail, Cost, To).
+
+% selectShortestRoad(+From, +Graph, -Road)
+selectShortestRoad(From, Graph, Road) :-
+    findall(TmpCost-Location2, member(r(From, Location2, TmpCost), Graph), DifList), % build a dif list
+    keysort(DifList, SortedDifList),
+    selectNearestLocation(SortedDifList, Cost, To),
+    Road = r(From, To, Cost).
 
 % delete all packages which are at their destination
 % preparedPackages(+Packages, -NewPackages)
@@ -115,34 +129,13 @@ findnactions(States, Actions, NewActions, Depth, Cost, NewCost) :-
     NewDepth is Depth - 1,
     findnactions([CurState|States], [PlanAction|Actions], NewActions, NewDepth, CurCost, NewCost).
 
-
-% minimumCostResult/5(+Bag, +CurBestPlan, +CurMinCost, -BestPlan, -MinCost)
-minimumCostResult([], Plan, Cost, Plan, Cost) :- !.
-minimumCostResult([CurRes|Tail], CurBestPlan, CurMinCost, BestPlan, MinCost) :-
-    CurRes = res(CurPlan, CurCost),
-    CurCost < CurMinCost,
-    CurMinCost2 = CurCost,
-    CurBestPlan2 = CurPlan,
-    minimumCostResult(Tail, CurBestPlan2, CurMinCost2, BestPlan, MinCost).
-minimumCostResult([_|Tail], CurBestPlan, CurMinCost, BestPlan, MinCost) :-
-    minimumCostResult(Tail, CurBestPlan, CurMinCost, BestPlan, MinCost).
-
-% minimumCostResult/3(+Bag, -Plan, -TotalCost)
-minimumCostResult(Bag, Plan, TotalCost) :-
-    length(Bag, N),
-    N > 0,
-    Infinity = 100000000,
-    minimumCostResult(Bag, nil, Infinity, Plan, TotalCost),
-    !.
-
 % findactions/3 (+InitState, -Plan, -TotalCost)
 findactions(InitState, Plan, TotalCost) :-
     findactions(InitState, 0, Plan, TotalCost).
 
 % findactions/4 (+InitState, +Depth, -Plan, -TotalCost)
 findactions(InitState, Depth, Plan, TotalCost) :-
-    findall(res(TempPlan, TempTotalCost), findnactions([InitState], [], TempPlan, Depth, 0, TempTotalCost), Bag),
-    minimumCostResult(Bag, Plan, TotalCost).
+    findnactions([InitState], [], Plan, Depth, 0, TotalCost).
 findactions(InitState, Depth, Plan, TotalCost) :-
     NewDepth is Depth + 1,
     write(increasingDepth),
@@ -270,7 +263,7 @@ translateToGraph(Matrix, Nodes, Graph) :-
     translateToGraph(Matrix, 0, Nodes, [], Graph),
     !.
 
-% Floyd-Warshall % TODO translate actions into graph
+% Floyd-Warshall
 floydWarshall(Graph, NewGraph) :-
     parseNodes(Graph, NodesOld),
     sort(NodesOld, Nodes),

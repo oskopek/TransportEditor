@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# Parses the standard PDDL for the STRIPS Transport domain into
+# a domain-dependent prolog planner compatible input.
+
 # Parameters: ./toinput.sh input_pddl_file
+
+####################################################################################
 
 input="$1"
 normalized="`cat "$input" | tr -d ':=()-' | tr -s ' '`"
 
-# Swipl
+# Swipl instructions
 echo "[planner]."
 echo "plan(Plan, TotalCost)."
 

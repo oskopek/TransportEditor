@@ -1,14 +1,13 @@
 = NPRG TODO
 
 * Implement heuristics:
-** custom drive action
 ** more memory in favour of time
-** ordered destinations heuristic
 ** pruning (build a subgraph??)
+
+* Translate shortcut actions from Floyd-Warshall back into their respective action sequences
 
 Documentation:
 
 * BFS + it's optimality (always use shortest path, else not optimal)
-* To/from/plan bash scripts
 * Source code
 * User docs (README)
