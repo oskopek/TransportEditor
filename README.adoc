@@ -4,11 +4,13 @@ image:https://travis-ci.com/oskopek/bp.svg?token=bw12aB3sCJh79ytwo7U1["Build Sta
 // image:https://coveralls.io/repos/oskopek/bp/badge.png?branch=master["Coverage status", link="https://coveralls.io/r/oskopek/bp?branch=master"]
 // image:https://www.ohloh.net/p/bp/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/bp"]
 
-My Bachelor thesis and individual software project.
+My Bachelor thesis and individual software project, TransportEditor.
+
+TransportEditor aims to be a problem editor and plan visualizer for the Transport domain from the IPC 2008. The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch.
 
 ////
 === Screenshot
-image:editor/docs/img/screenshot.png["bp screenshot", scalewidth="20%"]
+image:editor/docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
 ////
 
 === Building
