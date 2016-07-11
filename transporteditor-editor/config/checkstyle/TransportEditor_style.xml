@@ -8,7 +8,7 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="SuppressionFilter">
-        <property name="file" value="config/checkstyle/suppression.xml"/>
+        <property name="file" value="transporteditor-editor/config/checkstyle/suppression.xml"/>
     </module>
     <!--<property name="severity" value="warning" default="warning"/>-->
     <!-- Checks whether files end with a new line.                        -->

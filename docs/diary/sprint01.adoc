@@ -4,6 +4,8 @@
 
 * Ammended spec
 * Created spec diaries
-* Populated backlog and ideas with items from spec
+* Set up diary scripts
 
 == 2016/07/12
+
+* Populated backlog and ideas with items from spec
