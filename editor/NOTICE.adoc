@@ -1,4 +1,4 @@
-= BP editor - Licensing NOTICE
+= TransportEditor - Licensing NOTICE
 :numbered:
 
 Copyright (C) 2016, Ondrej Skopek.
@@ -24,6 +24,18 @@ The Apache Software Foundation (http://www.apache.org/).
 This product includes software from the Spring Framework,
 under the Apache License 2.0 (see: StringUtils.containsWhitespace())
 
+=== Apache Commons Validator
+
+http://commons.apache.org/proper/commons-validator/
+
+License: APL v2.0
+
+Apache Commons Validator
+Copyright 2001-2016 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
 === JUnit
 
 http://junit.org/
@@ -47,3 +59,47 @@ the Eclipse Foundation
 
 under the terms of the GNU Lesser General Public License version 2.1
 as published by the Free Software Foundation.
+
+=== Jackson
+
+http://wiki.fasterxml.com/JacksonHome
+
+License: APL v2.0
+
+=== Simmetrics
+
+https://github.com/Simmetrics/simmetrics
+
+License: APL v2.0
+
+=== JSoup
+
+http://jsoup.org/
+
+License: MIT
+
+jsoup: Java HTML parser that makes sense of real-world HTML soup.
+
+=== Guava
+
+https://github.com/google/guava
+
+License: APL v2.0
+
+Guava: Google Core Libraries for Java 6+
+
+=== Weld
+
+http://weld.cdi-spec.org/
+
+License: APL v2.0
+
+Weld: Contexts and Dependency Injection for the Java Platform.
+
+=== Mockito
+
+http://mockito.org/
+
+License: MIT
+
+Mockito: Tasty mocking framework for unit tests in Java

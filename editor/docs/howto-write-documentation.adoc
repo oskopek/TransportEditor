@@ -1,7 +1,7 @@
 == How-to write documentation
 
 Apart from standard Javadoc comments used inside the actual source code,
-BP has all its documentation written in the `docs/` folder,
+TransportEditor has all its documentation written in the `docs/` folder,
 using link:http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[Asciidoctor] markup.
 
 To preview the changes you make, you can use one of these:
