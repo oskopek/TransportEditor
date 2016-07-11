@@ -121,13 +121,13 @@ The following is an overview of the distinct datasets, their associated IPC comp
 \begin{center}
 \begin{tabular}{c|c|c|c}
 \textbf{Dataset name} & \textbf{Competition} & \textbf{Track} & \textbf{Formulation} \\ 
-\hline 
+\hline
 \hline
 netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
 seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
 seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
 tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Numeric \\ 
-\hline 
+\hline
 seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
 seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
@@ -197,6 +197,7 @@ The basic workflow of \pname{} consists of the following user's steps:
 \item Load a planner executable and let \pname{} run the planner on the loaded problem instance for a given time, then load the resulting plan.
 \item Load a pre-generated plan.
 \item Step through the individual plan actions and let \pname{} visualize them.
+The user can go forward and backward in the plan and inspect each step in great detail.
 \item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
 \item Save the currently generated plan.
 \item Save the problem (along with the graph drawing hints).
