@@ -21,3 +21,8 @@ for dir in $subdirs; do
     cd "$origdir"
 done
 
+# Report:
+echo "Generating report..."
+report_out="`mktemp`"
+bash report.sh > $report_out
+mv "$report_out" "$projectdir"/report.html
