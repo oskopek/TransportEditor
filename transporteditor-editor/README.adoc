@@ -1,0 +1,3 @@
+= README
+
+Check out the project README at link:../README.adoc[]
