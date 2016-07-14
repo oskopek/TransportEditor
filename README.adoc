@@ -33,6 +33,7 @@ https://github.com/oskopek/TransportEditor/issues[open an issue].
 * To run *unit tests*: `mvn clean install`
 * To run *integration tests*: `mvn clean install -Pit`
 * To *clean*, run: `mvn clean`
+* To build *docs* too: `mvn clean install -Pdocs`
 * *Run TransportEditor*:
 ** If you followed the build environment setup and want to run your version of TransportEditor,
 run `mvn exec:java` from the main project directory.

@@ -14,7 +14,7 @@ addons:
 
 env:
   global:
-    - MAVEN_PROFILES="editor,it"
+    - MAVEN_PROFILES="it"
 
 cache:
   directories:

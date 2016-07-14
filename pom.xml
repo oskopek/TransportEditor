@@ -10,7 +10,6 @@
     <inceptionYear>2016</inceptionYear>
     <modules>
         <module>transporteditor-editor</module>
-        <module>transporteditor-docs</module>
     </modules>
     <scm>
         <url>https://github.com/oskopek/TransportEditor.git</url>
@@ -32,7 +31,7 @@
         <url>https://github.com/oskopek/TransportEditor/graphs/contributors</url>
     </organization>
     <prerequisites>
-        <maven>3.0.5</maven>
+        <maven>3.2.1</maven>
     </prerequisites>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -331,4 +330,12 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>docs</id>
+            <modules>
+                <module>transporteditor-docs</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
