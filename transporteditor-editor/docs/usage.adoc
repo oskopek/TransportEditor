@@ -1,6 +1,0 @@
-== Using BP editor
-:source-highlighter: coderay
-
-=== TODO Running the BP editor demo
-
-If you want to run a little demo of BP editor, follow these quick instructions.

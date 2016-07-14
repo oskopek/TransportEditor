@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sprint="`cat CURRENT_SPRINT`"
+sprint="`cat config/CURRENT_SPRINT`"
 out=/dev/stdout
 startdate="`date --date='last week' "+%d. %m. %Y"`"
 enddate="`date "+%d. %m. %Y"`"

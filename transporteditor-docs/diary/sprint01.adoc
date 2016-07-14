@@ -1,0 +1,19 @@
+= Sprint 01
+
+== 2016/07/11
+
+* Ammended spec
+* Created spec diaries
+* Set up diary scripts
+
+== 2016/07/14
+
+* Added thesis template
+* Created report script
+* Created proper POM files (ported from StudyGuide)
+* Verified build, test & release pipeline works
+
+== 2016/07/15
+
+* Populated backlog and ideas with items from spec
+* Pruned branches

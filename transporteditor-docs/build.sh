@@ -1,7 +1,7 @@
 #!/bin/bash
 
 origdir="`pwd`"
-projectdir="`realpath "$origdir/.."`"/target/docs
+projectdir="$origdir"/target/docs/
 subdirs="spec diary bp"
 
 rm -rf "$projectdir"
