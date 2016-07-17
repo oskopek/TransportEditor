@@ -41,12 +41,14 @@ echo "Current version: $oldVersion"
 relVersion=`input "Please enter the release version number: "`
 relBranch=`input "Please enter the release branch name: "`
 newVersion=`input "Please enter the new version number: "`
+newRelBranch=`input "Please enter the new release branch version number: "`
 tagName="v$relVersion"
 
 echo
 echo "Current version: $oldVersion"
 echo "Release version: $relVersion"
 echo "Release branch: $relBranch"
+echo "New Release branch version: $newRelBranch"
 echo "Tag name: $tagName"
 echo "New version: $newVersion"
 echo
@@ -80,6 +82,12 @@ mv "$tmpdir" "$relName"
 zip -r "$relName".zip "$relName"
 rm -rf "$relName"
 mvn clean -P"$MVN_PROFILES"
+
+mvn versions:set -DnewVersion="$newRelBranch" -DgenerateBackupPoms=false -P"$MVN_PROFILES"
+git add '**/pom.xml' 'pom.xml'
+git commit -m "Bumping release branch version to $newRelBranch"
+
+git checkout master
 
 mvn versions:set -DnewVersion="$newVersion" -DgenerateBackupPoms=false -P"$MVN_PROFILES"
 git add '**/pom.xml' 'pom.xml'
