@@ -2,7 +2,6 @@ package com.oskopek.transporteditor.weld;
 
 import javax.enterprise.inject.spi.CDI;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Utility class for constructing bean instances in classes that aren't necessary beans and that don't necessarily
@@ -33,8 +32,7 @@ public final class BeanManagerUtil {
                 Constructor<T> constructor = clazz.getDeclaredConstructor(); // get the bean constructor
                 constructor.setAccessible(true);
                 return constructor.newInstance();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                    InvocationTargetException e) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Failed to create non-CDI instance.", e);
             }
         }
