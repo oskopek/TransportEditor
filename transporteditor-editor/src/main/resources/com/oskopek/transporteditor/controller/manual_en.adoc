@@ -1,0 +1,51 @@
+= TransportEditor Manual (EN)
+:sectnums:
+
+Welcome to TransportEditor's manual!
+
+// TODO intro
+
+How TransportEditor works and what it can do:
+
+// TODO workflow
+
+Read the following sections if you want to learn to work with TransportEditor quickly and effectively.
+
+== Getting help
+
+If you can't find the answer to your question or request in this document
+(located in the menu, in "%root.help" -> "%root.help"),
+feel free to submit a pull request / issue in the GitHub repository of TransportEditor,
+post a question on StackOverflow,
+or email me personally. You can find all the needed information in the menu, in
+"%root.help" -> "%root.about".
+
+=== Changing the language
+
+If you want to run a translated version of TransportEditor, set your system locale accordingly and restart TransportEditor.
+
+If you want to try out a translated version (on Linux) without changing your system locale permanently,
+try running: `LC_ALL="LOCALE" java -jar TransportEditor.jar`, where `LOCALE` is any locale available on your system
+(run `locale -a` to view all available).
+
+TransportEditor currently does not support changing the language on the fly.
+
+== Load and save
+
+// TODO load and save
+
+=== Loading
+
+=== Saving
+
+
+
+=== Demo data
+
+== Edit
+
+// TODO edit
+
+=== Creating your own
+
+=== Verifying problem integrity

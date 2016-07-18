@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+      fx:controller="com.oskopek.transporteditor.controller.RootLayoutController">
+    <MenuBar VBox.vgrow="NEVER">
+        <Menu mnemonicParsing="false" text="%root.file">
+            <MenuItem fx:id="newMenuItem" mnemonicParsing="false" onAction="#handleNew" text="%root.new"/>
+            <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#handleOpen"
+                      text="%root.open"/>
+            <MenuItem fx:id="openFromItem" mnemonicParsing="false" onAction="#handleOpenFrom"
+                      text="%root.openFrom"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#handleSave"
+                      text="%root.save"/>
+            <MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" onAction="#handleSaveAs"
+                      text="%root.saveAs"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" onAction="#handleQuit"
+                      text="%root.quit"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="%root.help">
+            <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp"
+                      text="%root.manual"/>
+            <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout"
+                      text="%root.about"/>
+        </Menu>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+        <BorderPane prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <!--<fx:include source="SemesterPane.fxml"/>-->
+            </center>
+            <right>
+                <!--<fx:include source="StudyPane.fxml"/>-->
+            </right>
+        </BorderPane>
+    </AnchorPane>
+</VBox>
