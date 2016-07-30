@@ -1,11 +1,13 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.domain.StudyPlan;
+import com.oskopek.transporteditor.plan.PlanSession;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -19,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.commons.validator.routines.UrlValidator;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.slf4j.Logger;
@@ -37,10 +38,7 @@ public class TransportEditorApplication extends Application {
     private final String logoResource = "logo_64x64.png";
     private final String logoResourceLarge = "logo_640x640.png";
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
-    private final ObjectProperty<StudyPlan> studyPlan = new SimpleObjectProperty<>();
-    private final transient StringProperty sisUrl = new SimpleStringProperty("https://is.cuni.cz/studium");
-    private final transient UrlValidator urlValidator = new UrlValidator(new String[]{"http", "https", "ftp", "file"},
-            UrlValidator.ALLOW_LOCAL_URLS);
+    private final ObjectProperty<PlanSession> orchestrator = new SimpleObjectProperty<>();
     private transient Stage primaryStage;
 
     /**
@@ -72,11 +70,10 @@ public class TransportEditorApplication extends Application {
                 return new ReadOnlyObjectWrapper<>(primaryStage);
             }
         };
-        mainStageTask.exceptionProperty().addListener((observable, oldValue, newValue) -> {
+        mainStageTask.exceptionProperty().addListener((observable, oldValue, newValue) ->
             Platform.runLater(() -> {
                 throw new IllegalStateException("Main stage loading failed.", newValue);
-            });
-        });
+            }));
         showSplashScreen(initStage, mainStageTask);
     }
 
@@ -134,56 +131,15 @@ public class TransportEditorApplication extends Application {
         this.primaryStage = primaryStage;
     }
 
-    /**
-     * Get the SIS URL we scrape courses from.
-     *
-     * @return non-null
-     */
-    public String getSisUrl() {
-        return sisUrl.get();
+    public PlanSession getPlanSession() {
+        return orchestrator.get();
     }
 
-    /**
-     * Set a valid SIS URL base. May not be null, have trailing slashes, must be a valid {@link java.net.URL}
-     * and be a SIS base (f.e. {@code https://student.vscht.cz/} or {@code https://is.cuni.cz/studium/})
-     *
-     * @param sisUrl non-null, no trailing slashes
-     * @throws IllegalArgumentException if the argument is invalid (see the comment of this method)
-     */
-    public void setSisUrl(String sisUrl) throws IllegalArgumentException {
-        if (sisUrl == null || sisUrl.endsWith("/")) {
-            throw new IllegalArgumentException("Invalid SIS URL (null or trailing slash): " + sisUrl);
-        } else if (!urlValidator.isValid(sisUrl)) {
-            throw new IllegalArgumentException("Invalid SIS URL (invalid URL format): " + sisUrl);
-        } else {
-            this.sisUrl.set(sisUrl);
-        }
+    public void setPlanSession(PlanSession planSession) {
+        this.orchestrator.set(planSession);
     }
 
-    /**
-     * Get the current model instance.
-     *
-     * @return may be null (no study plan currently loaded)
-     */
-    public StudyPlan getStudyPlan() {
-        return studyPlan.get();
-    }
-
-    /**
-     * Set a new model instance.
-     *
-     * @param studyPlan the new model
-     */
-    public void setStudyPlan(StudyPlan studyPlan) {
-        this.studyPlan.setValue(studyPlan);
-    }
-
-    /**
-     * The JavaFX property for {@link #getStudyPlan()}.
-     *
-     * @return the study plan property
-     */
-    public ObjectProperty<StudyPlan> studyPlanProperty() {
-        return studyPlan;
+    public ObjectProperty<PlanSession> orchestratorProperty() {
+        return orchestrator;
     }
 }

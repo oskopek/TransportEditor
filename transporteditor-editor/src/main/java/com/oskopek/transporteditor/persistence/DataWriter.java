@@ -13,8 +13,8 @@ public interface DataWriter<Persistable_> {
      *
      * @param persistable the object to persist
      * @param fileName the file to write to
-     * @throws IOException if something writing the plan failed
-     * @throws IllegalArgumentException if plan or fileName is null
+     * @throws IOException if something writing the persistable failed
+     * @throws IllegalArgumentException if persistable or fileName is null
      */
     void writeTo(Persistable_ persistable, String fileName) throws IOException, IllegalArgumentException;
 
@@ -23,8 +23,8 @@ public interface DataWriter<Persistable_> {
      *
      * @param persistable the object to persist
      * @param outputStream the stream to write to
-     * @throws IOException if something writing the plan failed
-     * @throws IllegalArgumentException if plan or outputStream is null
+     * @throws IOException if something writing the persistable failed
+     * @throws IllegalArgumentException if persistable or outputStream is null
      */
     void writeTo(Persistable_ persistable, OutputStream outputStream) throws IOException, IllegalArgumentException;
 

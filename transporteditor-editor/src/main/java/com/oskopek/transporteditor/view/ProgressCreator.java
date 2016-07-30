@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.persistence.ProgressObservable;
+import com.oskopek.transporteditor.event.ProgressObservable;
 import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

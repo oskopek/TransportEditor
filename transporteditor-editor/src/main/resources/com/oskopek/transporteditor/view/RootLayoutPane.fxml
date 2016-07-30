@@ -9,8 +9,6 @@
             <MenuItem fx:id="newMenuItem" mnemonicParsing="false" onAction="#handleNew" text="%root.new"/>
             <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#handleOpen"
                       text="%root.open"/>
-            <MenuItem fx:id="openFromItem" mnemonicParsing="false" onAction="#handleOpenFrom"
-                      text="%root.openFrom"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#handleSave"
                       text="%root.save"/>
@@ -31,10 +29,10 @@
         <BorderPane prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <!--<fx:include source="SemesterPane.fxml"/>-->
+                <!--<fx:include source="CenterPane.fxml"/>-->
             </center>
             <right>
-                <!--<fx:include source="StudyPane.fxml"/>-->
+                <!--<fx:include source="RightPane.fxml"/>-->
             </right>
         </BorderPane>
     </AnchorPane>

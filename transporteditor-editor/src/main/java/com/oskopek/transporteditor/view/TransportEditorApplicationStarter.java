@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.view;
 
 import com.google.common.eventbus.EventBus;
-import com.oskopek.transporteditor.domain.DefaultStudyPlan;
 import com.oskopek.transporteditor.weld.DeadEventListener;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.application.Platform;
@@ -27,7 +26,7 @@ class TransportEditorApplicationStarter {
     private Instance<FXMLLoader> fxmlLoader;
 
     @Inject
-    private TransportEditorApplication studyGuideApplication;
+    private TransportEditorApplication application;
 
     @Inject
     private EventBus eventBus;
@@ -56,13 +55,7 @@ class TransportEditorApplicationStarter {
             primaryStage.setScene(scene);
             primaryStage.show();
         });
-        studyGuideApplication.studyPlanProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                ((DefaultStudyPlan) newValue).constraintsProperty().addListener(
-                        (observable1, oldValue1, newValue1) -> newValue1.recheckAll()); // TODO HACK
-            }
-        });
         eventBus.register(deadEventListener);
-        studyGuideApplication.setPrimaryStage(primaryStage);
+        application.setPrimaryStage(primaryStage);
     }
 }

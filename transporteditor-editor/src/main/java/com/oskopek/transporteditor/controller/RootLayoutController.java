@@ -1,13 +1,12 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.domain.DefaultStudyPlan;
-import com.oskopek.transporteditor.domain.StudyPlan;
+import com.oskopek.transporteditor.persistence.CompositeJsonPlanSessionReaderWriter;
+import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
-import com.oskopek.transporteditor.persistence.JsonDataReaderWriter;
-import com.oskopek.transporteditor.persistence.MFFHtmlScraper;
+import com.oskopek.transporteditor.plan.DefaultPlanSession;
+import com.oskopek.transporteditor.plan.PlanSession;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
-import com.oskopek.transporteditor.view.ProgressCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -28,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.*;
 import java.util.MissingResourceException;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,7 +37,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class RootLayoutController extends AbstractController {
 
-    private final DataWriter writer = new JsonDataReaderWriter();
+    private final DataWriter<PlanSession> writer = new CompositeJsonPlanSessionReaderWriter();
 
     private File openedFile;
 
@@ -57,7 +55,7 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleNew() {
         openedFile = null;
-        studyGuideApplication.setStudyPlan(new DefaultStudyPlan());
+        application.setPlanSession(new DefaultPlanSession());
     }
 
     /**
@@ -68,47 +66,12 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleOpen() {
         FileChooser chooser = new FileChooser();
-        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON StudyPlan", ".json", ".JSON"));
-        File chosen = chooser.showOpenDialog(studyGuideApplication.getPrimaryStage());
+        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON", ".json", ".JSON"));
+        File chosen = chooser.showOpenDialog(application.getPrimaryStage());
         if (chosen == null) {
             return;
         }
         openFromFile(chosen);
-    }
-
-    /**
-     * Menu item: File->Open From....
-     * Scrape a study plan off the network resource and load it into the main app.
-     * Doesn't save the currently opened one!
-     */
-    @FXML
-    private void handleOpenFrom() {
-        EnterStringController enterStringController = enterStringDialogPaneCreator.create(
-                messages.getString("root.enterUrl"));
-        Optional<ButtonType> result = enterStringController.getDialog().showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.APPLY) {
-            String submittedURL = enterStringController.getSubmittedString();
-            MFFHtmlScraper scraper = new MFFHtmlScraper(studyGuideApplication.getSisUrl());
-            Stage progressDialog = ProgressCreator.showProgress(scraper, messages.getString("progress.pleaseWait"));
-            Task<StudyPlan> studyPlanTask = new Task<StudyPlan>() {
-                @Override
-                protected StudyPlan call() throws Exception {
-                    return scraper.scrapeStudyPlan(submittedURL);
-                }
-            };
-            studyPlanTask.setOnSucceeded(event -> {
-                progressDialog.close();
-                studyGuideApplication.setStudyPlan(studyPlanTask.getValue());
-                openedFile = null;
-            });
-            studyPlanTask.setOnFailed(event -> {
-                progressDialog.close();
-                AlertCreator.showAlert(Alert.AlertType.ERROR,
-                        messages.getString("root.openFromFailed") + ":\n\n" + event.getSource().getException());
-            });
-
-            new Thread(studyPlanTask).start();
-        }
     }
 
     /**
@@ -118,7 +81,7 @@ public class RootLayoutController extends AbstractController {
      */
     @FXML
     private void handleSave() {
-        if (openedFile == null && studyGuideApplication.getStudyPlan() != null) {
+        if (openedFile == null && application.getPlanSession() != null) {
             handleSaveAs();
             return;
         }
@@ -132,8 +95,8 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleSaveAs() {
         FileChooser chooser = new FileChooser();
-        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON StudyPlan", ".json", ".JSON"));
-        File chosen = chooser.showSaveDialog(studyGuideApplication.getPrimaryStage());
+        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON", ".json", ".JSON"));
+        File chosen = chooser.showSaveDialog(application.getPrimaryStage());
         if (chosen == null) {
             return;
         }
@@ -151,30 +114,6 @@ public class RootLayoutController extends AbstractController {
     }
 
     /**
-     * Menu item: SIS->Set SIS URL
-     * Sets the SIS's URL to be used for course scraping.
-     */
-    @FXML
-    private void handleSetSisUrl() {
-        EnterStringController enterStringController = enterStringDialogPaneCreator.create(
-                messages.getString("root.enterUrl"));
-        enterStringController.getTextField().setText(studyGuideApplication.getSisUrl());
-        Optional<ButtonType> result = enterStringController.getDialog().showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.APPLY) {
-            String newSisUrl = enterStringController.getSubmittedString().trim();
-            while (newSisUrl.endsWith("/")) {
-                newSisUrl = newSisUrl.substring(0, newSisUrl.length() - 1);
-            }
-            try {
-                studyGuideApplication.setSisUrl(newSisUrl);
-            } catch (IllegalArgumentException e) {
-                AlertCreator.showAlert(Alert.AlertType.ERROR,
-                        String.format(messages.getString("root.urlInvalid"), e.getLocalizedMessage()));
-            }
-        }
-    }
-
-    /**
      * Menu item: Help->Help.
      * Shows a how-to help dialog.
      */
@@ -183,6 +122,11 @@ public class RootLayoutController extends AbstractController {
         WebView webView = new WebView();
         webView.setContextMenuEnabled(false);
         String manualHtml = readResourceToString(messages.getString("root.manualResource"));
+        if (manualHtml == null) {
+            AlertCreator.showAlert(Alert.AlertType.WARNING,
+                    messages.getString("root.manualNotAvailableInYourLanguage"));
+            return;
+        }
 
         Pattern messagePattern = Pattern.compile("%([a-z.A-Z]+)");
         Matcher messageMatcher = messagePattern.matcher(manualHtml);
@@ -200,16 +144,10 @@ public class RootLayoutController extends AbstractController {
         }
         messageMatcher.appendTail(replaceHtmlBuffer);
         manualHtml = replaceHtmlBuffer.toString();
-
-        if (manualHtml == null) {
-            AlertCreator.showAlert(Alert.AlertType.WARNING,
-                    messages.getString("root.manualNotAvailableInYourLanguage"));
-            return;
-        }
         webView.getEngine().loadContent(manualHtml);
 
         Stage webViewDialogStage = new Stage(StageStyle.DECORATED);
-        webViewDialogStage.initOwner(studyGuideApplication.getPrimaryStage());
+        webViewDialogStage.initOwner(application.getPrimaryStage());
         webViewDialogStage.setResizable(true);
         webViewDialogStage.setTitle("TransportEditor - " + messages.getString("root.help"));
         webViewDialogStage.initModality(Modality.NONE);
@@ -257,7 +195,7 @@ public class RootLayoutController extends AbstractController {
      * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
      *
      * @param file if null, does nothing
-     * @see TransportEditorApplication#getStudyPlan()
+     * @see TransportEditorApplication#getPlanSession()
      */
     private void saveToFile(File file) {
         if (file == null) {
@@ -265,7 +203,7 @@ public class RootLayoutController extends AbstractController {
             return;
         }
         try {
-            writer.writeTo(studyGuideApplication.getStudyPlan(), file.getAbsolutePath());
+            writer.writeTo(application.getPlanSession(), file.getAbsolutePath());
         } catch (IOException e) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ": " + e);
             e.printStackTrace();
@@ -279,36 +217,33 @@ public class RootLayoutController extends AbstractController {
      * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
      *
      * @param file if null, does nothing
-     * @see TransportEditorApplication#setStudyPlan(com.oskopek.transporteditor.domain.StudyPlan)
+     * @see TransportEditorApplication#setPlanSession(PlanSession)
      */
     private void openFromFile(File file) {
         if (file == null) {
             logger.error("Cannot open from null file.");
             return;
         }
-        StudyPlan oldPlan = studyGuideApplication.getStudyPlan();
+        PlanSession oldSession = application.getPlanSession();
         // notify the user something will happen (erase semester boxes)
-        studyGuideApplication.setStudyPlan(new DefaultStudyPlan());
-        Task<StudyPlan> loadFromFileTask = new Task<StudyPlan>() {
+        application.setPlanSession(new DefaultPlanSession());
+        Task<PlanSession> loadFromFileTask = new Task<PlanSession>() {
             @Override
-            protected StudyPlan call() throws Exception {
-                JsonDataReaderWriter reader = new JsonDataReaderWriter(messages, eventBus);
-                StudyPlan studyPlan = reader.readFrom(file.getAbsolutePath());
-                return studyPlan;
+            protected PlanSession call() throws Exception {
+                DataReader<PlanSession> reader = new CompositeJsonPlanSessionReaderWriter();
+                return reader.readFrom(file.getAbsolutePath());
             }
         };
         loadFromFileTask.setOnFailed(event -> {
             Throwable e = event.getSource().getException();
-            Platform.runLater(() -> studyGuideApplication.setStudyPlan(oldPlan));
+            Platform.runLater(() -> application.setPlanSession(oldSession));
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ":\n\n" + e);
+            logger.error("Exception during loading session: {}", e);
             e.printStackTrace();
         });
         loadFromFileTask.setOnSucceeded(event -> {
-            StudyPlan newPlan = loadFromFileTask.getValue();
-            Platform.runLater(() -> {
-                studyGuideApplication.setStudyPlan(newPlan);
-                newPlan.getConstraints().recheckAll();
-            });
+            PlanSession newSession = loadFromFileTask.getValue();
+            Platform.runLater(() -> application.setPlanSession(newSession));
             openedFile = file;
         });
         new Thread(loadFromFileTask).start();

@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.event;
 
-import com.oskopek.transporteditor.constraint.Constraint;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -15,19 +14,16 @@ public abstract class StringMessageEvent {
     protected final transient ResourceBundle messages;
 
     private final String message;
-    private final Constraint brokenConstraint;
 
     /**
      * Constructs a new message event with the given message.
      *
      * @param messages the resource bundle used for resolving messages to their localized versions
      * @param message the message to broadcast
-     * @param brokenConstraint the constraint that was broken and generated this event
      */
-    public StringMessageEvent(ResourceBundle messages, String message, Constraint brokenConstraint) {
+    public StringMessageEvent(ResourceBundle messages, String message) {
         this.messages = messages;
         this.message = message;
-        this.brokenConstraint = brokenConstraint;
     }
 
     /**
@@ -37,15 +33,6 @@ public abstract class StringMessageEvent {
      */
     public String getMessage() {
         return message;
-    }
-
-    /**
-     * Get the broken constraint this event originated at.
-     *
-     * @return the constraint
-     */
-    public Constraint getBrokenConstraint() {
-        return brokenConstraint;
     }
 
     /**

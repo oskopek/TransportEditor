@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 public abstract class AbstractController {
 
     @Inject
-    protected TransportEditorApplication studyGuideApplication;
+    protected TransportEditorApplication application;
 
     @Inject
     protected transient ResourceBundle messages;
