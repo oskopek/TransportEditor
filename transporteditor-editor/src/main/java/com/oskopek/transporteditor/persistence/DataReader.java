@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 /**
  * Basic methods for reading any persistable object from persistent data storage.
+ *
+ * @param <Persistable_> the persistable object type
  */
 public interface DataReader<Persistable_> {
 

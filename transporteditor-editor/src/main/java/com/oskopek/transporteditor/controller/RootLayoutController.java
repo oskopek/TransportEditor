@@ -1,10 +1,10 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.persistence.CompositeJsonPlanSessionReaderWriter;
 import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
-import com.oskopek.transporteditor.plan.DefaultPlanSession;
-import com.oskopek.transporteditor.plan.PlanSession;
+import com.oskopek.transporteditor.persistence.JsonPlanningSessionReaderWriter;
+import com.oskopek.transporteditor.plan.DefaultPlanningSession;
+import com.oskopek.transporteditor.plan.PlanningSession;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class RootLayoutController extends AbstractController {
 
-    private final DataWriter<PlanSession> writer = new CompositeJsonPlanSessionReaderWriter();
+    private final DataWriter<PlanningSession> writer = new JsonPlanningSessionReaderWriter();
 
     private File openedFile;
 
@@ -55,7 +55,7 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleNew() {
         openedFile = null;
-        application.setPlanSession(new DefaultPlanSession());
+        application.setPlanningSession(new DefaultPlanningSession());
     }
 
     /**
@@ -81,7 +81,7 @@ public class RootLayoutController extends AbstractController {
      */
     @FXML
     private void handleSave() {
-        if (openedFile == null && application.getPlanSession() != null) {
+        if (openedFile == null && application.getPlanningSession() != null) {
             handleSaveAs();
             return;
         }
@@ -195,7 +195,7 @@ public class RootLayoutController extends AbstractController {
      * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
      *
      * @param file if null, does nothing
-     * @see TransportEditorApplication#getPlanSession()
+     * @see TransportEditorApplication#getPlanningSession()
      */
     private void saveToFile(File file) {
         if (file == null) {
@@ -203,7 +203,7 @@ public class RootLayoutController extends AbstractController {
             return;
         }
         try {
-            writer.writeTo(application.getPlanSession(), file.getAbsolutePath());
+            writer.writeTo(application.getPlanningSession(), file.getAbsolutePath());
         } catch (IOException e) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ": " + e);
             e.printStackTrace();
@@ -217,33 +217,33 @@ public class RootLayoutController extends AbstractController {
      * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
      *
      * @param file if null, does nothing
-     * @see TransportEditorApplication#setPlanSession(PlanSession)
+     * @see TransportEditorApplication#setPlanningSession(PlanningSession)
      */
     private void openFromFile(File file) {
         if (file == null) {
             logger.error("Cannot open from null file.");
             return;
         }
-        PlanSession oldSession = application.getPlanSession();
+        PlanningSession oldSession = application.getPlanningSession();
         // notify the user something will happen (erase semester boxes)
-        application.setPlanSession(new DefaultPlanSession());
-        Task<PlanSession> loadFromFileTask = new Task<PlanSession>() {
+        application.setPlanningSession(new DefaultPlanningSession());
+        Task<PlanningSession> loadFromFileTask = new Task<PlanningSession>() {
             @Override
-            protected PlanSession call() throws Exception {
-                DataReader<PlanSession> reader = new CompositeJsonPlanSessionReaderWriter();
+            protected PlanningSession call() throws Exception {
+                DataReader<PlanningSession> reader = new JsonPlanningSessionReaderWriter();
                 return reader.readFrom(file.getAbsolutePath());
             }
         };
         loadFromFileTask.setOnFailed(event -> {
             Throwable e = event.getSource().getException();
-            Platform.runLater(() -> application.setPlanSession(oldSession));
+            Platform.runLater(() -> application.setPlanningSession(oldSession));
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ":\n\n" + e);
             logger.error("Exception during loading session: {}", e);
             e.printStackTrace();
         });
         loadFromFileTask.setOnSucceeded(event -> {
-            PlanSession newSession = loadFromFileTask.getValue();
-            Platform.runLater(() -> application.setPlanSession(newSession));
+            PlanningSession newSession = loadFromFileTask.getValue();
+            Platform.runLater(() -> application.setPlanningSession(newSession));
             openedFile = file;
         });
         new Thread(loadFromFileTask).start();

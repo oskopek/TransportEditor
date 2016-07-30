@@ -5,6 +5,8 @@ import java.io.OutputStream;
 
 /**
  * Basic methods for writing a persistable object to persistent data storage.
+ *
+ * @param <Persistable_> the persistable object type
  */
 public interface DataWriter<Persistable_> {
 

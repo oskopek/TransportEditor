@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.plan.PlanSession;
+import com.oskopek.transporteditor.plan.PlanningSession;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -38,7 +38,7 @@ public class TransportEditorApplication extends Application {
     private final String logoResource = "logo_64x64.png";
     private final String logoResourceLarge = "logo_640x640.png";
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
-    private final ObjectProperty<PlanSession> orchestrator = new SimpleObjectProperty<>();
+    private final ObjectProperty<PlanningSession> planningSession = new SimpleObjectProperty<>();
     private transient Stage primaryStage;
 
     /**
@@ -131,15 +131,30 @@ public class TransportEditorApplication extends Application {
         this.primaryStage = primaryStage;
     }
 
-    public PlanSession getPlanSession() {
-        return orchestrator.get();
+    /**
+     * Get the current planning session in the UI.
+     *
+     * @return may be null (no session loaded)
+     */
+    public PlanningSession getPlanningSession() {
+        return planningSession.get();
     }
 
-    public void setPlanSession(PlanSession planSession) {
-        this.orchestrator.set(planSession);
+    /**
+     * Set the current planning session.
+     *
+     * @param planningSession may be null (no session)
+     */
+    public void setPlanningSession(PlanningSession planningSession) {
+        this.planningSession.set(planningSession);
     }
 
-    public ObjectProperty<PlanSession> orchestratorProperty() {
-        return orchestrator;
+    /**
+     * Property for {@link #getPlanningSession()}.
+     *
+     * @return the planning session property, not null
+     */
+    public ObjectProperty<PlanningSession> planningSessionProperty() {
+        return planningSession;
     }
 }

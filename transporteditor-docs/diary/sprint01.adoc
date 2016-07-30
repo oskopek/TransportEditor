@@ -2,7 +2,7 @@
 
 == 2016/07/11
 
-* Ammended spec
+* Amended spec
 * Created spec diaries
 * Set up diary scripts
 
@@ -17,3 +17,11 @@
 
 * Populated backlog and ideas with items from spec
 * Pruned branches
+* Could not decide on Graph library, moved to later (issue #20)
+
+== 2016/07/30
+
+* Finished migration from StudyGuide
+* Started designing model, concepts and UI basics on paper
+
+== 2016/07/31
