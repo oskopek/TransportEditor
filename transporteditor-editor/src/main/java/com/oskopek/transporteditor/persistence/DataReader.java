@@ -1,32 +1,30 @@
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.domain.StudyPlan;
-
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Basic methods for reading a {@link com.oskopek.transporteditor.domain.StudyPlan} from persistent data storage.
+ * Basic methods for reading any persistable object from persistent data storage.
  */
-public interface DataReader {
+public interface DataReader<Persistable_> {
 
     /**
-     * Reads a {@link StudyPlan} from a file in the filesystem.
+     * Reads a persistable object from a file in the filesystem.
      *
      * @param fileName the file from which to read
-     * @return an initialized StudyPlan
-     * @throws IOException if reading the plan failed
+     * @return an initialized instance of the persistable object
+     * @throws IOException if reading the persistable failed
      * @throws IllegalArgumentException if fileName is null
      */
-    StudyPlan readFrom(String fileName) throws IOException, IllegalArgumentException;
+    Persistable_ readFrom(String fileName) throws IOException, IllegalArgumentException;
 
     /**
-     * Reads a {@link StudyPlan} from the stream.
+     * Reads a persistable object from the stream.
      *
      * @param inputStream the stream from which to read
-     * @return an initialized StudyPlan
-     * @throws IOException if reading the plan failed
+     * @return an initialized instance of the persistable object
+     * @throws IOException if reading the persistable failed
      * @throws IllegalArgumentException if the inputStream is null
      */
-    StudyPlan readFrom(InputStream inputStream) throws IOException, IllegalArgumentException;
+    Persistable_ readFrom(InputStream inputStream) throws IOException, IllegalArgumentException;
 }

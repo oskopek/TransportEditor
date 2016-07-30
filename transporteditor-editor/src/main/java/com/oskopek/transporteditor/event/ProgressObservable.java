@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.persistence;
+package com.oskopek.transporteditor.event;
 
 import javafx.beans.property.DoubleProperty;
 
