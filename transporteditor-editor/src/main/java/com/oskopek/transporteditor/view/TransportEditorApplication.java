@@ -70,10 +70,9 @@ public class TransportEditorApplication extends Application {
                 return new ReadOnlyObjectWrapper<>(primaryStage);
             }
         };
-        mainStageTask.exceptionProperty().addListener((observable, oldValue, newValue) ->
-            Platform.runLater(() -> {
-                throw new IllegalStateException("Main stage loading failed.", newValue);
-            }));
+        mainStageTask.exceptionProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
+            throw new IllegalStateException("Main stage loading failed.", newValue);
+        }));
         showSplashScreen(initStage, mainStageTask);
     }
 

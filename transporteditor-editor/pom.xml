@@ -22,7 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <skipTests>false</skipTests>
         <skipITs>true</skipITs>
-        <mainClass>com.oskopek.TransportEditor.view.TransportEditorApplication</mainClass>
+        <mainClass>com.oskopek.transporteditor.view.TransportEditorApplication</mainClass>
     </properties>
     <dependencies>
         <dependency>
