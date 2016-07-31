@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor;
+package com.oskopek.transporteditor.test;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

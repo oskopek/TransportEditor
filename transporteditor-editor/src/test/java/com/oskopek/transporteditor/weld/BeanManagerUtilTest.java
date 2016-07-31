@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.weld;
 
-import com.oskopek.transporteditor.TestUtils;
+import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

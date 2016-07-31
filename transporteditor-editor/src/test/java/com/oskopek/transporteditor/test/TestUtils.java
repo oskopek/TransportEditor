@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor;
+package com.oskopek.transporteditor.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
