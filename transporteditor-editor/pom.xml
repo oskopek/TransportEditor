@@ -14,9 +14,6 @@
     <packaging>jar</packaging>
     <name>TransportEditor</name>
     <description>Visual editor for IPC Transport domain problems.</description>
-    <prerequisites>
-        <maven>3.0.5</maven>
-    </prerequisites>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -67,6 +64,10 @@
     <build>
         <finalName>TransportEditor</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
