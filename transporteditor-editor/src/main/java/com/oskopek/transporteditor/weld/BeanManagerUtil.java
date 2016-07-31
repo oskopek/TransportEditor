@@ -1,5 +1,8 @@
 package com.oskopek.transporteditor.weld;
 
+import org.jboss.weld.exceptions.IllegalArgumentException;
+import org.jboss.weld.exceptions.UnsatisfiedResolutionException;
+
 import javax.enterprise.inject.spi.CDI;
 import java.lang.reflect.Constructor;
 
@@ -35,6 +38,8 @@ public final class BeanManagerUtil {
             } catch (Exception e) {
                 throw new IllegalArgumentException("Failed to create non-CDI instance.", e);
             }
+        } catch (UnsatisfiedResolutionException ure) { // CDI enabled, but unable to resolve bean
+            throw new IllegalArgumentException("Failed to create CDI instance.", ure);
         }
     }
 

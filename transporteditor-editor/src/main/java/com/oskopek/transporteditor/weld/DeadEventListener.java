@@ -3,8 +3,8 @@ package com.oskopek.transporteditor.weld;
 import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -13,8 +13,7 @@ import javax.inject.Singleton;
 @Singleton
 public final class DeadEventListener {
 
-    @Inject
-    private transient Logger logger;
+    private transient Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Private default constructor for CDI and to prevent instantiation.
