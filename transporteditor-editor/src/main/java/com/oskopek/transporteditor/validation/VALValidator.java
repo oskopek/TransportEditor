@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.validation;
 
 import com.oskopek.transporteditor.domain.Domain;
-import com.oskopek.transporteditor.plan.Plan;
+import com.oskopek.transporteditor.planning.plan.Plan;
 
 /**
  * A thin wrapper around the <a href="https://github.com/KCL-Planning/VAL">VAL validator</a> for any Transport domain

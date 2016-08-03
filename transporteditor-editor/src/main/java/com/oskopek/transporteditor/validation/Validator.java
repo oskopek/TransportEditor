@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.validation;
 
 import com.oskopek.transporteditor.domain.Domain;
-import com.oskopek.transporteditor.plan.Plan;
+import com.oskopek.transporteditor.planning.plan.Plan;
 
 /**
  * Represents a process that validates a plan against a given domain. See the {@link VALValidator} for an example.

@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.plan.PlanningSession;
+import com.oskopek.transporteditor.planning.PlanningSession;
 
 import java.io.IOException;
 import java.io.InputStream;
