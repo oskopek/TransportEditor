@@ -30,6 +30,38 @@ try running: `LC_ALL="LOCALE" java -jar TransportEditor.jar`, where `LOCALE` is 
 
 TransportEditor currently does not support changing the language on the fly.
 
+== Domain variant creator
+
+The domain variant creator helps you adjust the constraints and features available in your domain.
+The base of the domain includes a few predicates and functions:
+
+* the graph
+* distance of an edge
+* positioning of locatables (packages, vehicles, ...)
+* determining if a package is in a vehicle
+* capacity of a vehice
+
+And actions:
+
+* Pick up (a package into a vehicle)
+* Drop (a package from a vehicle)
+* Drive (a vehicle between two nodes on an edge)
+
+Each action has an associated cost, and the minimazition function is by default the total cost of a plan.
+
+There are several optional constraints you can place on your model:
+
+* absence of capacity (vehicles have no maximum capacity)
+* fuel (introduces petrol stations, max fuel capacity of a vehicle and it's current status)
+* fuel demand (introduces an additional edge-weight, fuel-demand, and hence a new minimization function, total-fuel - equally long edges can have different fuel-demands, for example)
+* time (introduces start/end times of actions, preconditions/effects are now checked with temporal reasoning (at start/at end/over all), new minimization function - total-time)
+
+You can select any subset of these constraint packages, but only a single cost function to go with them.
+The domain variant creator will then create your chosen domain and TransportEditor enables you to export it to PDDL,
+so that you can use it in different (mainly domain-independent) planners.
+
+
+
 == Load and save
 
 // TODO load and save

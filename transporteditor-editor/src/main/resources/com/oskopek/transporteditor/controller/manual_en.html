@@ -2073,31 +2073,111 @@
                 </div>
             </div>
             <div class="sect1">
-                <h2 id="_load_and_save">2. Load and save</h2>
+                <h2 id="_domain_variant_creator">2. Domain variant creator</h2>
+                <div class="sectionbody">
+                    <div class="paragraph">
+                        <p>The domain variant creator helps you adjust the constraints and features available in your
+                            domain.
+                            The base of the domain includes a few predicates and functions:</p>
+                    </div>
+                    <div class="ulist">
+                        <ul>
+                            <li>
+                                <p>the graph</p>
+                            </li>
+                            <li>
+                                <p>distance of an edge</p>
+                            </li>
+                            <li>
+                                <p>positioning of locatables (packages, vehicles, &#8230;&#8203;)</p>
+                            </li>
+                            <li>
+                                <p>determining if a package is in a vehicle</p>
+                            </li>
+                            <li>
+                                <p>capacity of a vehice</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="paragraph">
+                        <p>And actions:</p>
+                    </div>
+                    <div class="ulist">
+                        <ul>
+                            <li>
+                                <p>Pick up (a package into a vehicle)</p>
+                            </li>
+                            <li>
+                                <p>Drop (a package from a vehicle)</p>
+                            </li>
+                            <li>
+                                <p>Drive (a vehicle between two nodes on an edge)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="paragraph">
+                        <p>Each action has an associated cost, and the minimazition function is by default the total
+                            cost of a plan.</p>
+                    </div>
+                    <div class="paragraph">
+                        <p>There are several optional constraints you can place on your model:</p>
+                    </div>
+                    <div class="ulist">
+                        <ul>
+                            <li>
+                                <p>absence of capacity (vehicles have no maximum capacity)</p>
+                            </li>
+                            <li>
+                                <p>fuel (introduces petrol stations, max fuel capacity of a vehicle and it&#8217;s
+                                    current status)</p>
+                            </li>
+                            <li>
+                                <p>fuel demand (introduces an additional edge-weight, fuel-demand, and hence a new
+                                    minimization function, total-fuel - equally long edges can have different
+                                    fuel-demands, for example)</p>
+                            </li>
+                            <li>
+                                <p>time (introduces start/end times of actions, preconditions/effects are now checked
+                                    with temporal reasoning (at start/at end/over all), new minimization function -
+                                    total-time)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="paragraph">
+                        <p>You can select any subset of these constraint packages, but only a single cost function to go
+                            with them.
+                            The domain variant creator will then create your chosen domain and TransportEditor enables
+                            you to export it to PDDL,
+                            so that you can use it in different (mainly domain-independent) planners.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sect1">
+                <h2 id="_load_and_save">3. Load and save</h2>
                 <div class="sectionbody">
                     <div class="sect2">
-                        <h3 id="_loading">2.1. Loading</h3>
+                        <h3 id="_loading">3.1. Loading</h3>
 
                     </div>
                     <div class="sect2">
-                        <h3 id="_saving">2.2. Saving</h3>
+                        <h3 id="_saving">3.2. Saving</h3>
 
                     </div>
                     <div class="sect2">
-                        <h3 id="_demo_data">2.3. Demo data</h3>
+                        <h3 id="_demo_data">3.3. Demo data</h3>
 
                     </div>
                 </div>
             </div>
             <div class="sect1">
-                <h2 id="_edit">3. Edit</h2>
+                <h2 id="_edit">4. Edit</h2>
                 <div class="sectionbody">
                     <div class="sect2">
-                        <h3 id="_creating_your_own">3.1. Creating your own</h3>
+                        <h3 id="_creating_your_own">4.1. Creating your own</h3>
 
                     </div>
                     <div class="sect2">
-                        <h3 id="_verifying_problem_integrity">3.2. Verifying problem integrity</h3>
+                        <h3 id="_verifying_problem_integrity">4.2. Verifying problem integrity</h3>
 
                     </div>
                 </div>
@@ -2105,7 +2185,7 @@
         </div>
         <div id="footer">
             <div id="footer-text">
-                Last updated 2016-07-18 22:27:25 CEST
+                Last updated 2016-08-07 19:14:58 CEST
             </div>
         </div>
     </body>
