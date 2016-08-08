@@ -1,7 +1,8 @@
 package com.oskopek.transporteditor.validation;
 
-import com.oskopek.transporteditor.domain.Domain;
+import com.oskopek.transporteditor.planning.domain.Domain;
 import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.problem.Problem;
 
 /**
  * Dummy validator: assumes all plans are correct.
@@ -9,7 +10,7 @@ import com.oskopek.transporteditor.planning.plan.Plan;
 public class EmptyValidator implements Validator {
 
     @Override
-    public boolean isValid(Plan plan, Domain domain) {
-        return true;
+    public boolean isValid(Domain domain, Problem problem, Plan plan) {
+        return false;
     }
 }

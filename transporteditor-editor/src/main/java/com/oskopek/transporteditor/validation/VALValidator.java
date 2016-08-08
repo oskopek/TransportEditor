@@ -1,7 +1,8 @@
 package com.oskopek.transporteditor.validation;
 
-import com.oskopek.transporteditor.domain.Domain;
+import com.oskopek.transporteditor.planning.domain.Domain;
 import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.problem.Problem;
 
 /**
  * A thin wrapper around the <a href="https://github.com/KCL-Planning/VAL">VAL validator</a> for any Transport domain
@@ -12,7 +13,7 @@ import com.oskopek.transporteditor.planning.plan.Plan;
 public class VALValidator implements Validator {
 
     @Override
-    public boolean isValid(Plan plan, Domain domain) {
+    public boolean isValid(Domain domain, Problem problem, Plan plan) {
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 }
