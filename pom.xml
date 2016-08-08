@@ -373,6 +373,8 @@
                                             <module name="SimplifyBooleanReturn"/>
                                             <module name="OneStatementPerLine"/>
                                             <module name="CovariantEquals"/>
+                                            <module name="EqualsAvoidNull"/>
+                                            <module name="StringLiteralEquality"/>
                                             <!-- Checks for class design                         -->
                                             <!-- See http://checkstyle.sf.net/config_design.html -->
                                             <module name="FinalClass"/>

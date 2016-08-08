@@ -1,4 +1,4 @@
 /**
  * Planners, plans and planning sessions.
  */
-package com.oskopek.transporteditor.plan;
+package com.oskopek.transporteditor.planning;

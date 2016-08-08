@@ -11,6 +11,6 @@ public class EmptyValidator implements Validator {
 
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan) {
-        return false;
+        return true;
     }
 }

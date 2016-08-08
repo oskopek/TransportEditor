@@ -1,4 +1,6 @@
-package com.oskopek.transporteditor.plan;
+package com.oskopek.transporteditor.planning.plan;
+
+import java.util.Collection;
 
 /**
  * Represents a plan, for a specific domain.
@@ -8,5 +10,7 @@ package com.oskopek.transporteditor.plan;
  * Represents both time aware and non-temporal plans.
  */
 public interface Plan {
+
+    Collection<? extends PlanEntry> getPlanEntries();
 
 }
