@@ -37,6 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jung.version>2.1</jung.version>
+        <checkstyle.javadoc.severity>warning</checkstyle.javadoc.severity>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -279,7 +280,10 @@
                                             <property name="eachLine" value="true"/>
                                         </module>
                                         <!-- Javadoc comment checks.                       -->
-                                        <module name="JavadocPackage"/>
+                                        <module name="JavadocPackage">
+                                            <property name="severity" value="${checkstyle.javadoc.severity}"
+                                                      default="error"/>
+                                        </module>
                                         <!-- Miscellaneous other checks.                   -->
                                         <!-- See http://checkstyle.sf.net/config_misc.html -->
                                         <module name="RegexpSingleline">
@@ -293,11 +297,22 @@
                                             <property name="tabWidth" value="4"/>
                                             <!-- Checks for Javadoc comments.                     -->
                                             <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-                                            <module name="JavadocMethod"/>
-                                            <module name="JavadocType"/>
-                                            <module name="JavadocStyle"/>
+                                            <module name="JavadocMethod">
+                                                <property name="severity" value="${checkstyle.javadoc.severity}"
+                                                          default="error"/>
+                                            </module>
+                                            <module name="JavadocType">
+                                                <property name="severity" value="${checkstyle.javadoc.severity}"
+                                                          default="error"/>
+                                            </module>
+                                            <module name="JavadocStyle">
+                                                <property name="severity" value="${checkstyle.javadoc.severity}"
+                                                          default="error"/>
+                                            </module>
                                             <module name="JavadocVariable">
                                                 <property name="scope" value="public"/>
+                                                <property name="severity" value="${checkstyle.javadoc.severity}"
+                                                          default="error"/>
                                             </module>
                                             <!-- Checks for imports                              -->
                                             <!-- See http://checkstyle.sf.net/config_import.html -->
@@ -373,7 +388,7 @@
                                 <encoding>UTF-8</encoding>
                                 <consoleOutput>true</consoleOutput>
                                 <logViolationsToConsole>true</logViolationsToConsole>
-                                <failOnViolation>false</failOnViolation>
+                                <failOnViolation>true</failOnViolation>
                                 <includeResources>true</includeResources>
                                 <includeTestResources>true</includeTestResources>
                                 <includeTestSourceDirectory>true</includeTestSourceDirectory>
