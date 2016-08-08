@@ -18,18 +18,3 @@
 * Populated backlog and ideas with items from spec
 * Pruned branches
 * Could not decide on Graph library, moved to later (issue #20)
-
-== 2016/07/30
-
-* Finished migration from StudyGuide
-* Started designing model, concepts and UI basics on paper
-
-== 2016/08/07
-
-* Added JUNG graph library
-* Stubbing out the model, will take a few more hours.. will start implementing it when the UI features need it, ad hoc
-
-== 2016/08/09
-
-* Finish stubbing out the model
-* Finish sprint 2
