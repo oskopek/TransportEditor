@@ -4,6 +4,7 @@
 
 package com.oskopek.transporteditor.planning.domain;
 
+import com.oskopek.transporteditor.planning.problem.Location;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

@@ -4,10 +4,10 @@
 
 package com.oskopek.transporteditor.planning.domain.action.functions;
 
-import com.oskopek.transporteditor.planning.domain.DefaultRoad;
-import com.oskopek.transporteditor.planning.domain.Road;
 import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import com.oskopek.transporteditor.planning.problem.ActionObject;
+import com.oskopek.transporteditor.planning.problem.DefaultRoad;
+import com.oskopek.transporteditor.planning.problem.Road;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -15,13 +15,13 @@ public class RoadLengthTest {
 
     @Test
     public void returnsCorrectCost() {
-        Road road = new DefaultRoad(ActionCost.valueOf(12));
+        Road road = new DefaultRoad(null, ActionCost.valueOf(12));
         assertEquals(ActionCost.valueOf(12), new RoadLength().apply(road));
     }
 
     @Test
     public void returnsCorrectCostOnGenericCall() {
-        ActionObject object = new DefaultRoad(ActionCost.valueOf(12));
+        ActionObject object = new DefaultRoad(null, ActionCost.valueOf(12));
         assertEquals(ActionCost.valueOf(12), new RoadLength().apply(object));
     }
 
@@ -37,7 +37,8 @@ public class RoadLengthTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void throwsOnMultipleArguments() {
-        new RoadLength().apply(new DefaultRoad(ActionCost.valueOf(12)), new DefaultRoad(ActionCost.valueOf(1)));
+        new RoadLength().apply(new DefaultRoad(null, ActionCost.valueOf(12)),
+                new DefaultRoad(null, ActionCost.valueOf(1)));
     }
 
 }

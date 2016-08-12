@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
  */
 
-package com.oskopek.transporteditor.planning.domain;
+package com.oskopek.transporteditor.planning.problem;
 
 import edu.uci.ics.jung.graph.Graph;
 

@@ -4,8 +4,8 @@
 
 package com.oskopek.transporteditor.planning.plan.visualization;
 
-import com.oskopek.transporteditor.planning.domain.RoadGraph;
 import com.oskopek.transporteditor.planning.problem.ActionObject;
+import com.oskopek.transporteditor.planning.problem.RoadGraph;
 
 import java.util.List;
 

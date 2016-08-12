@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
  */
 
-package com.oskopek.transporteditor.planning.domain;
+package com.oskopek.transporteditor.planning.problem;
 
 import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import javafx.beans.property.ObjectProperty;
@@ -12,13 +12,12 @@ public class FuelRoad extends DefaultRoad {
 
     private final ObjectProperty<ActionCost> fuelCost = new SimpleObjectProperty<>();
 
-    public FuelRoad(ActionCost length) {
-        super(length);
-        this.fuelCost.setValue(length);
+    public FuelRoad(String name, ActionCost length) {
+        this(name, length, length);
     }
 
-    public FuelRoad(ActionCost length, ActionCost fuelCost) {
-        super(length);
+    public FuelRoad(String name, ActionCost length, ActionCost fuelCost) {
+        super(name, length);
         this.fuelCost.setValue(fuelCost);
     }
 

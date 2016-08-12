@@ -4,9 +4,9 @@
 
 package com.oskopek.transporteditor.planning.domain.action.functions;
 
-import com.oskopek.transporteditor.planning.domain.Road;
 import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import com.oskopek.transporteditor.planning.problem.ActionObject;
+import com.oskopek.transporteditor.planning.problem.Road;
 
 public class RoadLength implements Function {
 
