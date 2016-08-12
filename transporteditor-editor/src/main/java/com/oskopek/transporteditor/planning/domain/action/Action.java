@@ -23,4 +23,6 @@ public interface Action {
 
     ActionCost getCost();
 
+    ActionCost getDuration();
+
 }

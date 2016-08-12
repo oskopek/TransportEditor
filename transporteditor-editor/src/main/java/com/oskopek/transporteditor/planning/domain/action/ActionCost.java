@@ -21,16 +21,20 @@ public final class ActionCost {
         return new ActionCost(cost);
     }
 
+    public ActionCost add(ActionCost cost) {
+        return ActionCost.valueOf(getCost() + cost.getCost());
+    }
+
     public Integer getCost() {
         return cost.get();
     }
 
-    public IntegerProperty costProperty() {
-        return cost;
-    }
-
     public void setCost(Integer cost) {
         this.cost.setValue(cost);
+    }
+
+    public IntegerProperty costProperty() {
+        return cost;
     }
 
     @Override
