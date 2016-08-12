@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.planning.plan;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a plan, for a specific domain.
@@ -11,6 +11,8 @@ import java.util.Collection;
  */
 public interface Plan {
 
-    Collection<? extends PlanEntry> getPlanEntries();
+    List<PlanEntry> firstEntries();
+
+    List<? extends PlanEntry> aggregatePlanEntries();
 
 }
