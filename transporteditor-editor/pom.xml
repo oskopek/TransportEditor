@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.oskopek.transporteditor</groupId>
         <artifactId>transporteditor</artifactId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
     <artifactId>transporteditor-editor</artifactId>
     <packaging>jar</packaging>
