@@ -9,7 +9,7 @@ import com.oskopek.transporteditor.planning.plan.Plan;
 import com.oskopek.transporteditor.planning.plan.visualization.PlanState;
 import com.oskopek.transporteditor.planning.problem.Problem;
 
-public class Road extends SequentialPredicate {
+public class IsRoad extends SequentialPredicate {
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan, PlanState planState) {
         throw new UnsupportedOperationException("Not implemented yet");

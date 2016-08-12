@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface Domain {
 
-    List<Predicate> getPredicates();
+    List<? extends Predicate> getPredicates();
 
-    List<Function> getFunctions();
+    List<? extends Function> getFunctions();
 
     void toPDDLFormat(PrintWriter writer);
 
