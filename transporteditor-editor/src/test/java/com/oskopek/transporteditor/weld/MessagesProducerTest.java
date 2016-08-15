@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.weld;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Locale;
@@ -34,6 +35,7 @@ public class MessagesProducerTest {
     }
 
     @Test
+    @Ignore("Ignored until adding german translation")
     public void createMessagesResourceBundleGerman() throws Exception {
         Locale.setDefault(Locale.GERMAN);
         resourceBundle = new MessagesProducer().createMessagesResourceBundle();
