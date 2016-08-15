@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
+  -->
+
+<?import javafx.embed.swing.SwingNode?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="300" xmlns="http://javafx.com/javafx/8.0.92"
+            fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
+    <center>
+        <SwingNode fx:id="planGraph" VBox.vgrow="ALWAYS"/>
+    </center>
+    <top>
+        <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <center>
+                <Button fx:id="planButton" disable="false" onAction="#handlePlan" prefWidth="Infinity" text="%plan"
+                        BorderPane.alignment="CENTER">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
+            </center>
+            <right>
+                <Button fx:id="cancelPlanButton" disable="true" alignment="CENTER_RIGHT" maxWidth="40.0" minWidth="40.0"
+                        onAction="#handleCancelPlan" prefWidth="40.0" style="-fx-text-fill: red" text="%crossmark"
+                        BorderPane.alignment="CENTER_RIGHT">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
+            </right>
+        </BorderPane>
+    </top>
+</BorderPane>

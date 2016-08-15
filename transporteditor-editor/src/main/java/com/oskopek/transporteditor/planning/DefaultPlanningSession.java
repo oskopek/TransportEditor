@@ -94,4 +94,15 @@ public class DefaultPlanningSession implements PlanningSession {
     public ObjectProperty<Validator> validatorProperty() {
         return validatorProperty;
     }
+
+    @Override
+    public void startPlanning() {
+        getPlanner().startPlanning(getDomain(), getProblem());
+    }
+
+    @Override
+    public void stopPlanning() {
+        getPlanner().stopPlanning();
+        getValidator().isValid(getDomain(), getProblem(), getPlanner().getBestPlan());
+    }
 }

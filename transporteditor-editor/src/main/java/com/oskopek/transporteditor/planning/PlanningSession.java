@@ -50,4 +50,8 @@ public interface PlanningSession {
 
     ObjectProperty<Validator> validatorProperty();
 
+    void startPlanning();
+
+    void stopPlanning();
+
 }

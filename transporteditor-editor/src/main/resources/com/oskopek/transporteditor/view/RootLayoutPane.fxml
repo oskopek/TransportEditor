@@ -29,10 +29,10 @@
         <BorderPane prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <!--<fx:include source="CenterPane.fxml"/>-->
+                <fx:include source="CenterPane.fxml"/>
             </center>
             <right>
-                <!--<fx:include source="RightPane.fxml"/>-->
+                <fx:include source="RightPane.fxml"/>
             </right>
         </BorderPane>
     </AnchorPane>
