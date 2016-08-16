@@ -31,4 +31,9 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     public ObjectProperty<ActionCost> lengthProperty() {
         return length;
     }
+
+    @Override
+    public String toString() {
+        return "Road[" + getName() + ": " + length + ']';
+    }
 }
