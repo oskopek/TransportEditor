@@ -1,33 +1,18 @@
 package com.oskopek.transporteditor.persistence;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
- * Basic methods for writing a persistable object to persistent data storage.
+ * Basic methods for serializing any persistable object to a string serialized form.
  *
  * @param <Persistable_> the persistable object type
  */
 public interface DataWriter<Persistable_> {
 
     /**
-     * Writes a persistable object to a file in the filesystem.
+     * Serialize a persistable object to a string.s
      *
-     * @param persistable the object to persist
-     * @param fileName the file to write to
-     * @throws IOException if something writing the persistable failed
-     * @throws IllegalArgumentException if persistable or fileName is null
+     * @param object the persistable object to serialize
+     * @return an serialized representation of the persistable object
+     * @throws IllegalArgumentException if the object cannot be serialized
      */
-    void writeTo(Persistable_ persistable, String fileName) throws IOException, IllegalArgumentException;
-
-    /**
-     * Writes a persistable object to an {@link OutputStream}.
-     *
-     * @param persistable the object to persist
-     * @param outputStream the stream to write to
-     * @throws IOException if something writing the persistable failed
-     * @throws IllegalArgumentException if persistable or outputStream is null
-     */
-    void writeTo(Persistable_ persistable, OutputStream outputStream) throws IOException, IllegalArgumentException;
-
+    String serialize(Persistable_ object) throws IllegalArgumentException;
 }
