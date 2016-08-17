@@ -4,9 +4,7 @@
 
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.planning.domain.action.ActionCost;
-import com.oskopek.transporteditor.planning.problem.DefaultRoad;
-import com.oskopek.transporteditor.planning.problem.Location;
+import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.planning.problem.RoadGraph;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -34,34 +32,13 @@ public class CenterPaneController extends AbstractController {
     @FXML
     private SwingNode problemGraph;
 
-    private RoadGraph graph;
-
     @FXML
-    private void initialize() { // TODO remove me
-        RoadGraph testGraph = new RoadGraph("testGraph");
-
-        Location a = new Location("A", 0, 0);
-        Location b = new Location("B", 0, 1);
-        Location c = new Location("C", 1, 0);
-
-        testGraph.addLocation(c);
-        testGraph.addLocation(a);
-        testGraph.addLocation(b);
-
-        testGraph.addRoad(new DefaultRoad("A->B", ActionCost.valueOf(1)), a, b);
-        testGraph.addRoad(new DefaultRoad("B->A", ActionCost.valueOf(1)), b, a);
-        testGraph.addRoad(new DefaultRoad("B->C", ActionCost.valueOf(2)), b, c);
-        testGraph.addRoad(new DefaultRoad("C->A", ActionCost.valueOf(3)), c, a);
-
-        loadProblemGraph(testGraph);
+    private void initialize() {
+        eventBus.register(this);
     }
 
-    public void loadProblemGraph(RoadGraph graph) {
-        this.graph = graph;
-        redrawGraph();
-    }
-
-    private void redrawGraph() {
+    @Subscribe
+    public void redrawGraph(RoadGraph graph) {
         try {
             SwingUtilities.invokeAndWait(() -> {
                 problemGraph.setContent(null);
