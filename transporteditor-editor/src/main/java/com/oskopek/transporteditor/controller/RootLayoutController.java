@@ -1,5 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
+import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
+import com.oskopek.transporteditor.planning.DefaultPlanningSession;
 import com.oskopek.transporteditor.planning.PlanningSession;
 import com.oskopek.transporteditor.planning.domain.Domain;
 import com.oskopek.transporteditor.planning.domain.action.ActionCost;
@@ -10,6 +12,7 @@ import com.oskopek.transporteditor.planning.problem.Problem;
 import com.oskopek.transporteditor.planning.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
+import com.oskopek.transporteditor.view.TransportEditorApplication;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,11 +25,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.slf4j.Logger;
+import sun.plugin2.message.transport.Transport;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.*;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -37,21 +42,30 @@ import java.util.stream.Collectors;
 @Singleton
 public class RootLayoutController extends AbstractController {
 
-    public final OpenedTextObjectHandler<Problem> problemFileHandler = new JavaFxOpenedTextObjectHandler<>();
-    private final OpenedTextObjectHandler<PlanningSession> planningSessionFileHandler
-            = new JavaFxOpenedTextObjectHandler<>();
-    private final OpenedTextObjectHandler<Domain> domainFileHandler = new JavaFxOpenedTextObjectHandler<>();
-    private final OpenedTextObjectHandler<Plan> planFileHandler = new JavaFxOpenedTextObjectHandler<>();
-
     @Inject
     private EnterStringDialogPaneCreator enterStringDialogPaneCreator;
 
     @Inject
     private transient Logger logger;
 
+    @Inject
+    private transient ResourceBundle messages;
+
+    @Inject
+    private transient TransportEditorApplication application;
+
+    private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
+    private JavaFxOpenedTextObjectHandler<PlanningSession> planningSessionFileHandler;
+    private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
+    private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
+
     @FXML
     private void initialize() {
         eventBus.register(this);
+        problemFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
+        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
+        domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
+        planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
     }
 
     /**
@@ -66,21 +80,13 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleSessionNew() {
-        // TODO implement me
-    }
-
-    private File openFileWithDefaultFileChooser(String title) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle(title);
-        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML", "*.xml");
-        FileChooser.ExtensionFilter allFileFilter = new FileChooser.ExtensionFilter("All Files", "*");
-        chooser.getExtensionFilters().addAll(allFileFilter, xmlFilter);
-        chooser.setSelectedExtensionFilter(xmlFilter);
-        return chooser.showOpenDialog(application.getPrimaryStage());
+        DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
+        planningSessionFileHandler.newObject(new DefaultPlanningSession(), io, io);
     }
 
     @FXML
     private void handleSessionLoad() {
+        planningSessionFileHandler.
         // TODO implement handles + JavaFX wrapper + disabling
         File chosen = openFileWithDefaultFileChooser("Load Planning Session");
         if (chosen == null) {
@@ -92,17 +98,20 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleSessionSave() {
-
+        planningSessionFileHandler.save();
     }
 
     @FXML
     private void handleSessionSaveAs() {
-
+        planningSessionFileHandler.saveAs();
     }
 
     @FXML
     private void handleFileSetPlanner() {
+        PlanningSession session = planningSessionFileHandler.getObject();
+        if (session == null) {
 
+        }
     }
 
     @FXML
