@@ -6,12 +6,14 @@ import com.oskopek.transporteditor.planning.PlanningSession;
 import com.oskopek.transporteditor.planning.domain.Domain;
 import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.planner.ExternalPlanner;
 import com.oskopek.transporteditor.planning.problem.DefaultRoad;
 import com.oskopek.transporteditor.planning.problem.Location;
 import com.oskopek.transporteditor.planning.problem.Problem;
 import com.oskopek.transporteditor.planning.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
+import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -25,11 +27,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.slf4j.Logger;
-import sun.plugin2.message.transport.Transport;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -54,18 +57,21 @@ public class RootLayoutController extends AbstractController {
     @Inject
     private transient TransportEditorApplication application;
 
+    @Inject
+    private transient SaveDiscardDialogPaneCreator creator;
+
     private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
-    private JavaFxOpenedTextObjectHandler<PlanningSession> planningSessionFileHandler;
+    private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
     private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
     private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
 
     @FXML
     private void initialize() {
         eventBus.register(this);
-        problemFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
-        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
-        domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
-        planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages);
+        problemFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
+        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
+        domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
+        planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
     }
 
     /**
@@ -86,13 +92,8 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleSessionLoad() {
-        planningSessionFileHandler.
-        // TODO implement handles + JavaFX wrapper + disabling
-        File chosen = openFileWithDefaultFileChooser("Load Planning Session");
-        if (chosen == null) {
-            return;
-        }
-        //        openFromFile(chosen);
+        DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
+        planningSessionFileHandler.load(messages.getString("%load.planningSession"), io, io);
     }
 
 
@@ -110,8 +111,11 @@ public class RootLayoutController extends AbstractController {
     private void handleFileSetPlanner() {
         PlanningSession session = planningSessionFileHandler.getObject();
         if (session == null) {
-
+            throw new IllegalStateException("Cannot set planner on null session.");
         }
+        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
+                messages.getString("%planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
+        session.setPlanner(new ExternalPlanner(path));
     }
 
     @FXML

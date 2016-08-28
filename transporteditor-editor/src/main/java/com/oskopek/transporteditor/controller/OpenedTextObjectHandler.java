@@ -24,8 +24,14 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     private final ObjectProperty<DataReader<Persistable_>> reader = new SimpleObjectProperty<>();
     private final ObjectProperty<DataWriter<Persistable_>> writer = new SimpleObjectProperty<>();
 
+    private boolean changedSinceLastSave = false;
+
     public OpenedTextObjectHandler() {
-        // intentionally empty
+        this.object.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                changedSinceLastSave = true;
+            }
+        });
     }
 
     public void load(Path path, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
@@ -51,6 +57,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
             throw new IllegalStateException("Cannot save null object.");
         }
         writeFromString(writer.get().serialize(getObject()));
+        changedSinceLastSave = false;
     }
 
     public void saveAs(Path path) {
@@ -63,9 +70,8 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
 
     @Override
     public void close() {
-        if (!isSaveAsNeeded()) {
-            save();
-        }
+        setObject(null);
+        setPath(null);
     }
 
     public Path getPath() {
@@ -92,12 +98,16 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         return object;
     }
 
-    public boolean isSaveAsNeeded() {
+    protected boolean isSaveAsNeeded() {
         return getPath() == null;
     }
 
-    public boolean hasObject() {
+    protected boolean hasObject() {
         return getObject() == null;
+    }
+
+    protected boolean isChangedSinceLastSave() {
+        return changedSinceLastSave;
     }
 
     private List<String> readToLinesList() {

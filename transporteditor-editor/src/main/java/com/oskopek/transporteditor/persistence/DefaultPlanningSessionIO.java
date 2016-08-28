@@ -1,13 +1,13 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.planning.DefaultPlanningSession;
-import com.oskopek.transporteditor.planning.PlanningSession;
 import com.thoughtworks.xstream.XStream;
 
 /**
  * Created by t-onskop on 8/21/2016.
  */
-public class DefaultPlanningSessionIO implements DataReader<DefaultPlanningSession>, DataWriter<PlanningSession> {
+public class DefaultPlanningSessionIO
+        implements DataReader<DefaultPlanningSession>, DataWriter<DefaultPlanningSession> {
 
     private final XStream xStream;
 
@@ -17,7 +17,7 @@ public class DefaultPlanningSessionIO implements DataReader<DefaultPlanningSessi
     }
 
     @Override
-    public String serialize(PlanningSession object) throws IllegalArgumentException {
+    public String serialize(DefaultPlanningSession object) throws IllegalArgumentException {
         return xStream.toXML(object);
     }
 
