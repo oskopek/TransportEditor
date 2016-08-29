@@ -11,6 +11,7 @@ import com.oskopek.transporteditor.view.TransportEditorApplication;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     public void checkForSaveBeforeOverwrite(Runnable overwritingAction) {
         ButtonType result = null;
         if (isChangedSinceLastSave()) {
-            Optional<ButtonType> button = creator.show(messages.getString("%shouldSave"));
+            Optional<ButtonType> button = creator.show(messages.getString("shouldSave"));
             if (button.isPresent()) {
                 result = button.get();
             }
@@ -66,6 +67,9 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     public void load(String title, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
         checkForSaveBeforeOverwrite(() -> {
             Path path = openFileWithDefaultFileChooser(title);
+            if (path == null) {
+                return;
+            }
             super.load(path, writer, reader);
         });
 
@@ -88,15 +92,28 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     }
 
     private Path openFileWithDefaultFileChooser(String title) {
-        return Paths.get(buildDefaultFileChooser(title).showOpenDialog(application.getPrimaryStage()).toString());
+        File file = buildDefaultFileChooser(title).showOpenDialog(application.getPrimaryStage());
+        if (file == null) {
+            return null;
+        } else {
+            return Paths.get(file.toString());
+        }
     }
 
     private Path saveFileWithDefaultFileChooser(String title) {
-        return Paths.get(buildDefaultFileChooser(title).showSaveDialog(application.getPrimaryStage()).toString());
+        File file = buildDefaultFileChooser(title).showSaveDialog(application.getPrimaryStage());
+        if (file == null) {
+            return null;
+        } else {
+            return Paths.get(file.toString());
+        }
     }
 
     public void saveAs() {
-        Path path = saveFileWithDefaultFileChooser(messages.getString("%root.saveAs"));
+        Path path = saveFileWithDefaultFileChooser(messages.getString("root.saveAs"));
+        if (path == null) {
+            return;
+        }
         super.saveAs(path);
     }
 

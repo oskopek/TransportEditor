@@ -93,7 +93,7 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
-        planningSessionFileHandler.load(messages.getString("%load.planningSession"), io, io);
+        planningSessionFileHandler.load(messages.getString("load.planningSession"), io, io);
     }
 
 
@@ -114,7 +114,7 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot set planner on null session.");
         }
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
-                messages.getString("%planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
+                messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
         session.setPlanner(new ExternalPlanner(path));
     }
 

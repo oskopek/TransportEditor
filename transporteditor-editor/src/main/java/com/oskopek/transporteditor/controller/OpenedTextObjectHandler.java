@@ -8,6 +8,8 @@ import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -24,6 +26,8 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     private final ObjectProperty<DataReader<Persistable_>> reader = new SimpleObjectProperty<>();
     private final ObjectProperty<DataWriter<Persistable_>> writer = new SimpleObjectProperty<>();
 
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
+
     private boolean changedSinceLastSave = false;
 
     public OpenedTextObjectHandler() {
@@ -39,6 +43,9 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         this.reader.setValue(reader);
         this.writer.setValue(writer);
         setPath(path);
+        if (reader == null) {
+            throw new IllegalStateException("Cannot load object with null reader."); // TODO: Why doesn't "new" work?
+        }
         setObject(this.reader.get().parse(readToString()));
     }
 
@@ -55,6 +62,9 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         }
         if (!hasObject()) {
             throw new IllegalStateException("Cannot save null object.");
+        }
+        if (writer.get() == null) {
+            throw new IllegalStateException("Cannot save object with null writer.");
         }
         writeFromString(writer.get().serialize(getObject()));
         changedSinceLastSave = false;
@@ -117,20 +127,23 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         try {
             return Files.readAllLines(getPath(), Charset.forName("UTF-8"));
         } catch (IOException e) {
-            throw new IllegalStateException("Could not read lines from \"" + getPath() + "\".", e);
+            logger.debug("Could not read lines from \"" + getPath() + "\".", e);
         }
+        return null;
     }
 
     private String readToString() {
         if (getPath() == null) {
-            throw new IllegalStateException("Cannot read lines from null path.");
+            logger.debug("Cannot read lines from null path.");
+            return null;
         }
         return String.join("\n", readToLinesList());
     }
 
     private void writeFromList(List<String> lineList) {
         if (getPath() == null) {
-            throw new IllegalStateException("Cannot write lines to null path.");
+            logger.debug("Cannot write lines to null path.");
+            return;
         }
         try {
             Files.write(getPath(), lineList, Charset.forName("UTF-8"), StandardOpenOption.WRITE,
@@ -142,7 +155,8 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
 
     private void writeFromString(String contents) {
         if (getPath() == null) {
-            throw new IllegalStateException("Cannot write string to null path.");
+            logger.debug("Cannot write string to null path.");
+            return;
         }
         try (BufferedWriter writer = Files.newBufferedWriter(getPath(), Charset.forName("UTF-8"),
                 StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
