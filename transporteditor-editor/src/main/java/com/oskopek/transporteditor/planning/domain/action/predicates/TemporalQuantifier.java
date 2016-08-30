@@ -5,5 +5,5 @@
 package com.oskopek.transporteditor.planning.domain.action.predicates;
 
 public enum TemporalQuantifier {
-    NONE, AT_START, AT_END, OVER_ALL // TODO: Remove NONE?
+    AT_START, AT_END, OVER_ALL
 }

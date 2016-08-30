@@ -2,9 +2,7 @@ package com.oskopek.transporteditor.planning.domain;
 
 import com.oskopek.transporteditor.planning.domain.action.functions.Function;
 import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
-import com.oskopek.transporteditor.planning.plan.Plan;
 
-import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -19,13 +17,5 @@ public interface Domain {
     List<? extends Predicate> getPredicates();
 
     List<? extends Function> getFunctions();
-
-    void toPDDLFormat(PrintWriter writer);
-
-    Domain fromPDDLFormat(String input); // does this actually make sense?
-
-    void toVALFormat(PrintWriter writer, Plan plan);
-
-    Plan fromVALFormat(String input);
 
 }

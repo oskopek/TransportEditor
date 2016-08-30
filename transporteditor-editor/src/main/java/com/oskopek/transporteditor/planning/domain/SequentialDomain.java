@@ -12,9 +12,7 @@ import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
 import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.At;
 import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.Capacity;
 import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.In;
-import com.oskopek.transporteditor.planning.plan.Plan;
 
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,25 +30,5 @@ public class SequentialDomain implements Domain {
     @Override
     public List<? extends Function> getFunctions() {
         return functionList;
-    }
-
-    @Override
-    public void toPDDLFormat(PrintWriter writer) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-
-    @Override
-    public Domain fromPDDLFormat(String input) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-
-    @Override
-    public void toVALFormat(PrintWriter writer, Plan plan) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-
-    @Override
-    public Plan fromVALFormat(String input) {
-        throw new UnsupportedOperationException("Not implemented yet.");
     }
 }
