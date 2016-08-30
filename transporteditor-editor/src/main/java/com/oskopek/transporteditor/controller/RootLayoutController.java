@@ -1,20 +1,14 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
+import com.oskopek.transporteditor.persistence.*;
 import com.oskopek.transporteditor.planning.DefaultPlanningSession;
 import com.oskopek.transporteditor.planning.PlanningSession;
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.domain.action.ActionCost;
-import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.domain.VariableDomain;
+import com.oskopek.transporteditor.planning.plan.SequentialPlan;
 import com.oskopek.transporteditor.planning.planner.ExternalPlanner;
-import com.oskopek.transporteditor.planning.problem.DefaultRoad;
-import com.oskopek.transporteditor.planning.problem.Location;
-import com.oskopek.transporteditor.planning.problem.Problem;
+import com.oskopek.transporteditor.planning.problem.DefaultProblem;
 import com.oskopek.transporteditor.planning.problem.RoadGraph;
-import com.oskopek.transporteditor.view.AlertCreator;
-import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
-import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
-import com.oskopek.transporteditor.view.TransportEditorApplication;
+import com.oskopek.transporteditor.view.*;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,7 +16,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,9 +23,13 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -49,6 +46,9 @@ public class RootLayoutController extends AbstractController {
     private EnterStringDialogPaneCreator enterStringDialogPaneCreator;
 
     @Inject
+    private VariableDomainCreator variableDomainCreator;
+
+    @Inject
     private transient Logger logger;
 
     @Inject
@@ -60,18 +60,21 @@ public class RootLayoutController extends AbstractController {
     @Inject
     private transient SaveDiscardDialogPaneCreator creator;
 
-    private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
+    private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
-    private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
-    private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
+    private JavaFxOpenedTextObjectHandler<VariableDomain> domainFileHandler;
+    private JavaFxOpenedTextObjectHandler<SequentialPlan> planFileHandler; // TODO: How do we do co/contravariance here?
 
     @FXML
     private void initialize() {
         eventBus.register(this);
+
         problemFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
         planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
         domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
         planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
+
+        application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
     }
 
     /**
@@ -96,7 +99,6 @@ public class RootLayoutController extends AbstractController {
         planningSessionFileHandler.load(messages.getString("load.planningSession"), io, io);
     }
 
-
     @FXML
     private void handleSessionSave() {
         planningSessionFileHandler.save();
@@ -120,91 +122,96 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleDomainNew() {
-
+        VariableDomain domain = variableDomainCreator.createDomainInDialog();
+        VariableDomainIO io = new VariableDomainIO(domain);
+        domainFileHandler.newObject(domain, io, io);
     }
 
     @FXML
     private void handleDomainLoad() {
-
+        VariableDomainGuesser guesser = new VariableDomainGuesser();
+        domainFileHandler.load(messages.getString("load.domain"), null, guesser);
+        VariableDomainIO io = new VariableDomainIO(domainFileHandler.getObject());
+        domainFileHandler.load(domainFileHandler.getPath(), io, io);
     }
 
     @FXML
     private void handleDomainSave() {
-
+        domainFileHandler.save();
     }
 
     @FXML
     private void handleDomainSaveAs() {
-
+        domainFileHandler.saveAs();
     }
 
     @FXML
     private void handleProblemNew() {
-
+        if (application.getPlanningSession().getDomain() == null) {
+            throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
+        }
+        DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        problemFileHandler.newObject(new DefaultProblem(new RoadGraph("graph"), new ArrayList<>(), new ArrayList<>()),
+                io, io);
     }
 
     @FXML
     private void handleProblemLoad() {
-        // TODO: replace me with real impl
-        RoadGraph graph = new RoadGraph("test");
-        int nodes = (int) (System.currentTimeMillis() % 10) + 5;
-        Location first = new Location(0 + "", 0, 0);
-        Location preLast;
-        Location last = first;
-        graph.addLocation(last);
-        for (int i = 1; i < nodes; i++) {
-            preLast = last;
-            last = new Location(i + "", 0, 0);
-            graph.addLocation(last);
-            graph.addRoad(new DefaultRoad("r" + i, ActionCost.valueOf(i)), preLast, last);
+        if (application.getPlanningSession().getDomain() == null) {
+            throw new IllegalStateException("Cannot load problem, because no domain is loaded.");
         }
-        graph.addRoad(new DefaultRoad("last", ActionCost.valueOf(100)), last, first);
-        eventBus.post(graph);
-    }
+        DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        problemFileHandler.load(messages.getString("load.problem"), io, io);
+    } // TODO: find a way to bind the loaders to the model + eventbus.post(graph)
 
     @FXML
     private void handleProblemSave() {
-
+        if (application.getPlanningSession().getDomain() == null) {
+            throw new IllegalStateException("Cannot save problem, because no domain is loaded.");
+        }
+        problemFileHandler.save();
     }
 
     @FXML
     private void handleProblemSaveAs() {
-
+        if (application.getPlanningSession().getDomain() == null) {
+            throw new IllegalStateException("Cannot save problem as, because no domain is loaded.");
+        }
+        problemFileHandler.saveAs();
     }
 
     @FXML
     private void handlePlanNew() {
-
+        if (application.getPlanningSession().getProblem() == null) {
+            throw new IllegalStateException("Cannot create new plan, because no problem is loaded.");
+        }
+        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getProblem());
+        planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
     }
 
     @FXML
-    private void handlePlanLoad() {
-
+    private void handlePlanLoad() { // TODO: Auto-disabling of these buttons
+        if (application.getPlanningSession().getProblem() == null) {
+            throw new IllegalStateException("Cannot load plan, because no problem is loaded.");
+        }
+        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getProblem());
+        planFileHandler.load(messages.getString("load.plan"), io, io);
     }
 
     @FXML
     private void handlePlanSave() {
-
+        if (application.getPlanningSession().getProblem() == null) {
+            throw new IllegalStateException("Cannot save plan, because no problem is loaded.");
+        }
+        planFileHandler.save();
     }
 
     @FXML
     private void handlePlanSaveAs() {
-
-    }
-
-    /**
-     * Menu item: File->Save As.
-     * Save the opened model from the main app into a new file.
-     */
-    @FXML
-    private void handleSaveAs() {
-        FileChooser chooser = new FileChooser();
-        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON", ".json", ".JSON"));
-        File chosen = chooser.showSaveDialog(application.getPrimaryStage());
-        if (chosen == null) {
-            return;
+        if (application.getPlanningSession().getProblem() == null) {
+            throw new IllegalStateException("Cannot save plan as, because no problem is loaded.");
         }
-        //        saveToFile(chosen);
+        planFileHandler.saveAs();
     }
 
     /**
@@ -283,63 +290,4 @@ public class RootLayoutController extends AbstractController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dialog.showAndWait();
     }
-
-    //    /**
-    //     * Saves the currently opened model to a file.
-    //     * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
-    //     *
-    //     * @param file if null, does nothing
-    //     * @see TransportEditorApplication#getPlanningSession()
-    //     */
-    //    private void saveToFile(File file) {
-    //        if (file == null) {
-    //            logger.debug("Cannot save to null file.");
-    //            return;
-    //        }
-    //        try {
-    //            writer.writeTo(application.getPlanningSession(), file.getAbsolutePath());
-    //        } catch (IOException e) {
-    //            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ": " + e);
-    //            e.printStackTrace();
-    //            return;
-    //        }
-    //        openedFile = file;
-    //    }
-    //
-    //    /**
-    //     * Loads a model from a file into the main app.
-    //     * If an {@link IOException} occurs, opens a modal dialog window notifying the user and prints a stack trace.
-    //     *
-    //     * @param file if null, does nothing
-    //     * @see TransportEditorApplication#setPlanningSession(PlanningSession)
-    //     */
-    //    private void openFromFile(File file) {
-    //        if (file == null) {
-    //            logger.error("Cannot open from null file.");
-    //            return;
-    //        }
-    //        PlanningSession oldSession = application.getPlanningSession();
-    //        // notify the user something will happen (erase semester boxes)
-    //        application.setPlanningSession(new DefaultPlanningSession());
-    //        Task<PlanningSession> loadFromFileTask = new Task<PlanningSession>() {
-    //            @Override
-    //            protected PlanningSession call() throws Exception {
-    //                DataReader<PlanningSession> reader = new JsonPlanningSessionReaderWriter();
-    //                return reader.readFrom(file.getAbsolutePath());
-    //            }
-    //        };
-    //        loadFromFileTask.setOnFailed(event -> {
-    //            Throwable e = event.getSource().getException();
-    //            Platform.runLater(() -> application.setPlanningSession(oldSession));
-    //            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("root.openFailed") + ":\n\n" + e);
-    //            logger.error("Exception during loading session: {}", e);
-    //            e.printStackTrace();
-    //        });
-    //        loadFromFileTask.setOnSucceeded(event -> {
-    //            PlanningSession newSession = loadFromFileTask.getValue();
-    //            Platform.runLater(() -> application.setPlanningSession(newSession));
-    //            openedFile = file;
-    //        });
-    //        new Thread(loadFromFileTask).start();
-    //    }
 }

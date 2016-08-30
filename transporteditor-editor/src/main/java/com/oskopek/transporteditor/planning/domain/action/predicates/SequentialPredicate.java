@@ -8,6 +8,6 @@ public abstract class SequentialPredicate implements Predicate {
 
     @Override
     public TemporalQuantifier getTemporalQuantifier() {
-        return TemporalQuantifier.NONE;
+        return null;
     }
 }

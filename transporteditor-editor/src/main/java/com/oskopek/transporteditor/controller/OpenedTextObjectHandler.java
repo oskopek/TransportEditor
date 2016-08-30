@@ -100,11 +100,11 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         return object.get();
     }
 
-    private void setObject(Persistable_ object) {
+    public void setObject(Persistable_ object) {
         this.object.set(object);
     }
 
-    private ObjectProperty<Persistable_> objectProperty() {
+    public ObjectProperty<Persistable_> objectProperty() {
         return object;
     }
 

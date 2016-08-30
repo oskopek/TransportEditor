@@ -16,19 +16,19 @@
                       text="%root.load" disable="false"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="sessionSaveMenuItem" mnemonicParsing="false" onAction="#handleSessionSave"
-                      text="%root.save" disable="false"/> <!-- TODO: Automatic disabling of these buttons -->
+                      text="%root.save" disable="true"/>
             <MenuItem fx:id="sessionSaveAsMenuItem" mnemonicParsing="false" onAction="#handleSessionSaveAs"
-                      text="%root.saveAs" disable="false"/>
+                      text="%root.saveAs" disable="true"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="fileSetPlannerMenuItem" mnemonicParsing="false" onAction="#handleFileSetPlanner"
-                      text="%root.setPlanner" disable="false"/>
+                      text="%root.setPlanner" disable="true"/>
         </Menu>
         <Menu mnemonicParsing="false" text="%root.domain">
             <MenuItem fx:id="domainNewMenuItem" mnemonicParsing="false" onAction="#handleDomainNew" text="%root.new"
                       disable="true"/>
             <MenuItem fx:id="domainLoadMenuItem" mnemonicParsing="false" onAction="#handleDomainLoad"
                       text="%root.load" disable="true"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
+            <SeparatorMenuItem mnemonicParsing="true"/>
             <MenuItem fx:id="domainSaveMenuItem" mnemonicParsing="false" onAction="#handleDomainSave"
                       text="%root.save" disable="true"/>
             <MenuItem fx:id="domainSaveAsMenuItem" mnemonicParsing="false" onAction="#handleDomainSaveAs"
@@ -38,7 +38,7 @@
             <MenuItem fx:id="problemNewMenuItem" mnemonicParsing="false" onAction="#handleProblemNew" text="%root.new"
                       disable="true"/>
             <MenuItem fx:id="problemLoadMenuItem" mnemonicParsing="false" onAction="#handleProblemLoad"
-                      text="%root.load" disable="false"/>
+                      text="%root.load" disable="true"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="problemSaveMenuItem" mnemonicParsing="false" onAction="#handleProblemSave"
                       text="%root.save" disable="true"/>

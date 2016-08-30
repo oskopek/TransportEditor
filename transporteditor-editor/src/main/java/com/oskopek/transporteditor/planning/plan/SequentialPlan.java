@@ -12,7 +12,7 @@ public final class SequentialPlan implements Plan {
 
     private final List<PlanEntry> planEntryList;
 
-    private SequentialPlan(List<PlanEntry> planEntryList) {
+    public SequentialPlan(List<PlanEntry> planEntryList) {
         this.planEntryList = planEntryList;
     }
 
