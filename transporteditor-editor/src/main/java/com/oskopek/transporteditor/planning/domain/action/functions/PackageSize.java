@@ -8,7 +8,7 @@ import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import com.oskopek.transporteditor.planning.problem.ActionObject;
 import com.oskopek.transporteditor.planning.problem.Package;
 
-public class PackageSize implements Function {
+public class PackageSize extends DefaultFunction {
 
     @Override
     public ActionCost apply(ActionObject... actionObjects) {

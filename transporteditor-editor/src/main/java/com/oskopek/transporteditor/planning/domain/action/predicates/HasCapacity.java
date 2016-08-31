@@ -12,9 +12,9 @@ import com.oskopek.transporteditor.planning.problem.Problem;
 /**
  * Assert a vehicle has a current capacity (current available space) of x.
  */
-public class Capacity extends DefaultPredicate {
+public class HasCapacity extends DefaultPredicate {
 
-    public Capacity(TemporalQuantifier quantifier) {
+    public HasCapacity(TemporalQuantifier quantifier) {
         super(quantifier);
     }
 

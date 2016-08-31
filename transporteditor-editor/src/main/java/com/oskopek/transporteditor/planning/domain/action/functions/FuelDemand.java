@@ -8,7 +8,7 @@ import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import com.oskopek.transporteditor.planning.problem.ActionObject;
 import com.oskopek.transporteditor.planning.problem.FuelRoad;
 
-public class FuelDemand implements Function {
+public class FuelDemand extends DefaultFunction {
 
     @Override
     public ActionCost apply(ActionObject... actionObjects) {

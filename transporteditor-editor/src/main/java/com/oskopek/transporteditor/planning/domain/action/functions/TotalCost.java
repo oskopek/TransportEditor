@@ -9,7 +9,7 @@ import com.oskopek.transporteditor.planning.problem.ActionObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class TotalCost implements Function {
+public class TotalCost extends DefaultFunction {
 
     private final ObjectProperty<ActionCost> totalCost = new SimpleObjectProperty<>(ActionCost.valueOf(0));
 
