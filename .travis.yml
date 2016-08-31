@@ -20,6 +20,8 @@ cache:
   directories:
     - $HOME/.m2
 
+before_script: git lfs pull
+
 script: "mvn clean verify -P$MAVEN_PROFILES"
 
 install: /bin/true
