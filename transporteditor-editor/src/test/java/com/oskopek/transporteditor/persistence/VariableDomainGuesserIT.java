@@ -4,39 +4,43 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.planning.domain.SequentialDomain;
 import com.oskopek.transporteditor.planning.domain.VariableDomain;
 import com.oskopek.transporteditor.planning.domain.action.functions.Capacity;
 import com.oskopek.transporteditor.planning.domain.action.functions.RoadLength;
 import com.oskopek.transporteditor.planning.domain.action.functions.TotalCost;
 import com.oskopek.transporteditor.planning.domain.action.predicates.*;
+import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class VariableDomainGuesserIT {
 
-    private final String variableDomainSeqPDDL = "variableDomainSeq.pddl";
-    private final String variableDomainBPDDL = "variableDomainB.pddl";
-    private final VariableDomainGuesser variableDomainGuesser = new VariableDomainGuesser();
-    private String variableDomainSeqPDDLContents;
-    private String variableDomainBPDDLContents;
+    private static final String variableDomainSeqPDDL = "variableDomainSeq.pddl";
+    private static final String variableDomainBPDDL = "variableDomainB.pddl";
+    private static VariableDomainGuesser variableDomainGuesser;
+    private static String variableDomainSeqPDDLContents;
+    private static String variableDomainBPDDLContents;
     private VariableDomain variableDomainSeq;
     private VariableDomain variableDomainB;
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        variableDomainSeqPDDLContents = Files.readAllLines(Paths.get(variableDomainSeqPDDL)).stream().collect(
+    public static void setUpClass() throws Exception {
+        variableDomainSeqPDDLContents = TestUtils.readAllLines(
+                VariableDomainGuesserIT.class.getResourceAsStream(variableDomainSeqPDDL)).stream().collect(
                 Collectors.joining(""));
-        variableDomainBPDDLContents = Files.readAllLines(Paths.get(variableDomainBPDDL)).stream().collect(
+        variableDomainBPDDLContents = TestUtils.readAllLines(
+                VariableDomainGuesserIT.class.getResourceAsStream(variableDomainBPDDL)).stream().collect(
                 Collectors.joining(""));
+        variableDomainGuesser = new VariableDomainGuesser();
     }
 
     @Before
@@ -56,13 +60,16 @@ public class VariableDomainGuesserIT {
     }
 
     @Test
+    @Ignore("Not implemented yet")
     public void parseSeq() throws Exception {
         VariableDomain parsed = variableDomainGuesser.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(variableDomainSeq, parsed);
+        assertEquals(new SequentialDomain(), parsed);
     }
 
     @Test
+    @Ignore("Not implemented yet")
     public void serializeSeq() throws Exception {
         String serialized = variableDomainGuesser.serialize(variableDomainSeq);
         assertNotNull(serialized);
@@ -70,6 +77,7 @@ public class VariableDomainGuesserIT {
     }
 
     @Test
+    @Ignore("Not implemented yet")
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainGuesser.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
@@ -77,6 +85,7 @@ public class VariableDomainGuesserIT {
     }
 
     @Test
+    @Ignore("Not implemented yet")
     public void serializeB() throws Exception {
         String serialized = variableDomainGuesser.serialize(variableDomainB);
         assertNotNull(serialized);

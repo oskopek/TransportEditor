@@ -15,9 +15,6 @@ public class FuelRoadTest {
         FuelRoad road = new FuelRoad(null, null);
         assertNotNull(road.lengthProperty());
         assertNotNull(road.fuelCostProperty());
-        road = new FuelRoad(null, null);
-        assertNotNull(road.lengthProperty());
-        assertNotNull(road.fuelCostProperty());
     }
 
 }

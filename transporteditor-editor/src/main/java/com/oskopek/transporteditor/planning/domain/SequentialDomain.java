@@ -14,7 +14,8 @@ import java.util.List;
 
 public class SequentialDomain implements Domain {
 
-    private final List<Predicate> predicateList = Arrays.asList(new At(), new HasCapacity(), new In(), new IsRoad());
+    private final List<Predicate> predicateList = Arrays.asList(new At(null), new HasCapacity(null), new In(null),
+            new IsRoad(null));
 
     private final List<Function> functionList = Arrays.asList(new TotalCost(), new RoadLength());
 

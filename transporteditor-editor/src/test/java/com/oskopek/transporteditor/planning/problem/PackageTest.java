@@ -10,9 +10,10 @@ import org.junit.Test;
 public class PackageTest {
     @Test
     public void nonNullProperties() throws Exception {
-        Package pkg = new Package(null, null, null);
+        Package pkg = new Package(null, null, null, null);
         assertNotNull(pkg.nameProperty());
         assertNotNull(pkg.locationProperty());
         assertNotNull(pkg.targetProperty());
+        assertNotNull(pkg.sizeProperty());
     }
 }

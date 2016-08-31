@@ -3,6 +3,14 @@ package com.oskopek.transporteditor.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Various methods for easier testing. Util methods missing in JUnit, Mockito, etc.
  */
@@ -36,6 +44,23 @@ public final class TestUtils {
             logger.debug("Throwable detail: {}", t.toString());
         }
         return false;
+    }
+
+    public static List<String> readAllLines(InputStream stream) {
+        return readAllLines(stream, Charset.forName("UTF-8"));
+    }
+
+    public static List<String> readAllLines(InputStream stream, Charset charset) {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset))) {
+            String buffer;
+            while ((buffer = reader.readLine()) != null) {
+                lines.add(buffer);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("An error occurred during reading lines.", e);
+        }
+        return lines;
     }
 
 }
