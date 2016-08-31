@@ -38,7 +38,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graphstream.version>1.3</graphstream.version>
         <checkstyle.javadoc.severity>warning</checkstyle.javadoc.severity>
+        <rootLevelDir>${project.basedir}</rootLevelDir>
     </properties>
+    <repositories>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file://${rootLevelDir}/repo</url>
+        </repository>
+    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -90,7 +98,7 @@
                 <version>${graphstream.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
+                <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>1.3.2</version>
             </dependency>
@@ -98,6 +106,11 @@
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
                 <version>1.4.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.oskopek</groupId>
+                <artifactId>pddl4j</artifactId>
+                <version>3.3.6</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

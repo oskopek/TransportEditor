@@ -20,6 +20,7 @@
         <skipTests>false</skipTests>
         <skipITs>true</skipITs>
         <mainClass>com.oskopek.transporteditor.view.TransportEditorApplication</mainClass>
+        <rootLevelDir>${project.basedir}/..</rootLevelDir>
     </properties>
     <dependencies>
         <dependency>
@@ -57,12 +58,16 @@
             <artifactId>gs-ui</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
+            <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.oskopek</groupId>
+            <artifactId>pddl4j</artifactId>
         </dependency>
     </dependencies>
     <build>
