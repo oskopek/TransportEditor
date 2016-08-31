@@ -7,11 +7,7 @@ package com.oskopek.transporteditor.planning.domain;
 import com.oskopek.transporteditor.planning.domain.action.functions.Function;
 import com.oskopek.transporteditor.planning.domain.action.functions.RoadLength;
 import com.oskopek.transporteditor.planning.domain.action.functions.TotalCost;
-import com.oskopek.transporteditor.planning.domain.action.predicates.IsRoad;
-import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
-import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.At;
-import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.Capacity;
-import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.In;
+import com.oskopek.transporteditor.planning.domain.action.predicates.*;
 
 import java.util.Arrays;
 import java.util.List;

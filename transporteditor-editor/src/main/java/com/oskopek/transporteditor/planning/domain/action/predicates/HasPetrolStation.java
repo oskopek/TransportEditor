@@ -9,9 +9,9 @@ import com.oskopek.transporteditor.planning.plan.Plan;
 import com.oskopek.transporteditor.planning.plan.visualization.PlanState;
 import com.oskopek.transporteditor.planning.problem.Problem;
 
-public class IsRoad extends DefaultPredicate {
+public class HasPetrolStation extends DefaultPredicate {
 
-    public IsRoad(TemporalQuantifier quantifier) {
+    public HasPetrolStation(TemporalQuantifier quantifier) {
         super(quantifier);
     }
 

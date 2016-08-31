@@ -4,7 +4,7 @@
 
 package com.oskopek.transporteditor.planning.problem;
 
-import com.oskopek.transporteditor.planning.domain.action.predicates.sequential.Capacity;
+import com.oskopek.transporteditor.planning.domain.action.ActionCost;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -18,11 +18,11 @@ import java.util.List;
 
 public class Vehicle extends DefaultLocatable implements Locatable, ActionObject {
 
-    private final ObjectProperty<Capacity> curCapacity = new SimpleObjectProperty<>();
-    private final ObjectProperty<Capacity> maxCapacity = new SimpleObjectProperty<>();
+    private final ObjectProperty<ActionCost> curCapacity = new SimpleObjectProperty<>();
+    private final ObjectProperty<ActionCost> maxCapacity = new SimpleObjectProperty<>();
     private final ListProperty<Package> packageList = new SimpleListProperty<>();
 
-    public Vehicle(String name, Location location, Capacity curCapacity, Capacity maxCapacity,
+    public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
             List<Package> packageList) {
         super(name, location);
         this.curCapacity.setValue(curCapacity);
@@ -34,27 +34,27 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         }
     }
 
-    public Capacity getCurCapacity() {
+    public ActionCost getCurCapacity() {
         return curCapacity.get();
     }
 
-    public void setCurCapacity(Capacity curCapacity) {
+    public void setCurCapacity(ActionCost curCapacity) {
         this.curCapacity.set(curCapacity);
     }
 
-    public ObjectProperty<Capacity> curCapacityProperty() {
+    public ObjectProperty<ActionCost> curCapacityProperty() {
         return curCapacity;
     }
 
-    public Capacity getMaxCapacity() {
+    public ActionCost getMaxCapacity() {
         return maxCapacity.get();
     }
 
-    public void setMaxCapacity(Capacity maxCapacity) {
+    public void setMaxCapacity(ActionCost maxCapacity) {
         this.maxCapacity.set(maxCapacity);
     }
 
-    public ObjectProperty<Capacity> maxCapacityProperty() {
+    public ObjectProperty<ActionCost> maxCapacityProperty() {
         return maxCapacity;
     }
 

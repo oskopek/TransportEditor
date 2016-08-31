@@ -9,9 +9,12 @@ import com.oskopek.transporteditor.planning.plan.Plan;
 import com.oskopek.transporteditor.planning.plan.visualization.PlanState;
 import com.oskopek.transporteditor.planning.problem.Problem;
 
-public class IsRoad extends DefaultPredicate {
+/**
+ * Assert a vehicle has a current capacity (current available space) of x.
+ */
+public class Capacity extends DefaultPredicate {
 
-    public IsRoad(TemporalQuantifier quantifier) {
+    public Capacity(TemporalQuantifier quantifier) {
         super(quantifier);
     }
 
@@ -19,4 +22,5 @@ public class IsRoad extends DefaultPredicate {
     public boolean isValid(Domain domain, Problem problem, Plan plan, PlanState planState) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
 }
