@@ -21,6 +21,9 @@ cache:
   directories:
     - $HOME/.m2
 
+before_cache:
+    - rm -rf $HOME/.m2/repository/com/github/oskopek/pddl4j/
+
 before_script:
     #- "rm -rf $HOME/.m2"
     - "mkdir -p $HOME/bin"
