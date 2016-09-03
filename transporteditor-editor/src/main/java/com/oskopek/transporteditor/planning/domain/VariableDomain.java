@@ -9,15 +9,32 @@ import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
 
 import java.util.List;
 
-public class VariableDomain implements Domain {
+public class VariableDomain extends DefaultDomain {
 
-    @Override
-    public List<Predicate> getPredicates() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    private final List<Class<? extends Predicate>> predicateList;
+    private final List<Class<? extends Function>> functionList;
+
+    public VariableDomain(List<Class<? extends Predicate>> predicateList,
+            List<Class<? extends Function>> functionList) {
+        this.predicateList = predicateList;
+        if (this.predicateList != null) {
+            this.predicateList.sort((o1, o2) -> o1.getSimpleName().compareTo(o2.getSimpleName()));
+        }
+        this.functionList = functionList;
+        if (this.predicateList != null) {
+            this.functionList.sort((o1, o2) -> o1.getSimpleName().compareTo(o2.getSimpleName()));
+        }
     }
 
     @Override
-    public List<Function> getFunctions() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public List<Class<? extends Predicate>> getPredicateList() {
+        return predicateList;
     }
+
+    @Override
+    public List<Class<? extends Function>> getFunctionList() {
+        return functionList;
+    }
+
+
 }

@@ -14,8 +14,8 @@ import java.util.List;
  */
 public interface Domain {
 
-    List<? extends Predicate> getPredicates();
+    List<Class<? extends Predicate>> getPredicateList();
 
-    List<? extends Function> getFunctions();
+    List<Class<? extends Function>> getFunctionList();
 
 }

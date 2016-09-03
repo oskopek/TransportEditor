@@ -12,20 +12,20 @@ import com.oskopek.transporteditor.planning.domain.action.predicates.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class SequentialDomain implements Domain {
+public class SequentialDomain extends DefaultDomain {
 
-    private final List<Predicate> predicateList = Arrays.asList(new At(null), new HasCapacity(null), new In(null),
-            new IsRoad(null));
+    private final List<Class<? extends Predicate>> predicateList = Arrays.asList(At.class, HasCapacity.class, In.class,
+            IsRoad.class);
 
-    private final List<Function> functionList = Arrays.asList(new TotalCost(), new RoadLength());
+    private final List<Class<? extends Function>> functionList = Arrays.asList(RoadLength.class, TotalCost.class);
 
     @Override
-    public List<? extends Predicate> getPredicates() {
+    public List<Class<? extends Predicate>> getPredicateList() {
         return predicateList;
     }
 
     @Override
-    public List<? extends Function> getFunctions() {
+    public List<Class<? extends Function>> getFunctionList() {
         return functionList;
     }
 }
