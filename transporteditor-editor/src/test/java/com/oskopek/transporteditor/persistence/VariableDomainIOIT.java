@@ -4,6 +4,7 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.planning.domain.DomainType;
 import com.oskopek.transporteditor.planning.domain.SequentialDomain;
 import com.oskopek.transporteditor.planning.domain.VariableDomain;
 import com.oskopek.transporteditor.planning.domain.action.functions.Capacity;
@@ -22,11 +23,11 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class VariableDomainGuesserIT {
+public class VariableDomainIOIT {
 
     private static final String variableDomainSeqPDDL = "variableDomainSeq.pddl";
     private static final String variableDomainBPDDL = "variableDomainB.pddl";
-    private static VariableDomainGuesser variableDomainGuesser;
+    private static VariableDomainIO variableDomainIO;
     private static String variableDomainSeqPDDLContents;
     private static String variableDomainBPDDLContents;
     private VariableDomain variableDomainSeq;
@@ -35,12 +36,12 @@ public class VariableDomainGuesserIT {
     @BeforeClass
     public static void setUpClass() throws Exception {
         variableDomainSeqPDDLContents = TestUtils.readAllLines(
-                VariableDomainGuesserIT.class.getResourceAsStream(variableDomainSeqPDDL)).stream().collect(
+                VariableDomainIOIT.class.getResourceAsStream(variableDomainSeqPDDL)).stream().collect(
                 Collectors.joining("\n"));
         variableDomainBPDDLContents = TestUtils.readAllLines(
-                VariableDomainGuesserIT.class.getResourceAsStream(variableDomainBPDDL)).stream().collect(
+                VariableDomainIOIT.class.getResourceAsStream(variableDomainBPDDL)).stream().collect(
                 Collectors.joining("\n"));
-        variableDomainGuesser = new VariableDomainGuesser();
+        variableDomainIO = new VariableDomainIO();
     }
 
     @Before
@@ -58,12 +59,12 @@ public class VariableDomainGuesserIT {
         //                Arrays.asList(new IsRoad(TemporalQuantifier.AT_START), new At(TemporalQuantifier.AT_START),
         //                        new At(TemporalQuantifier.OVER_ALL), new At(TemporalQuantifier.AT_END),
         //                        new In(TemporalQuantifier.AT_START), new In(TemporalQuantifier.AT_END)));
-        variableDomainSeq = spy(new VariableDomain(null, null));
+        variableDomainSeq = spy(new VariableDomain(DomainType.ActionCost, null, null));
         when(variableDomainSeq.getFunctionList()).thenReturn(Arrays.asList(RoadLength.class, TotalCost.class));
         when(variableDomainSeq.getPredicateList()).thenReturn(
                 Arrays.asList(At.class, HasCapacity.class, In.class, IsRoad.class));
 
-        variableDomainB = spy(new VariableDomain(null, null));
+        variableDomainB = spy(new VariableDomain(DomainType.Temporal, null, null));
         when(variableDomainB.getFunctionList()).thenReturn(
                 Arrays.asList(Capacity.class, PackageSize.class, RoadLength.class));
         when(variableDomainB.getPredicateList()).thenReturn(
@@ -72,7 +73,7 @@ public class VariableDomainGuesserIT {
 
     @Test
     public void parseSeq() throws Exception {
-        VariableDomain parsed = variableDomainGuesser.parse(variableDomainSeqPDDLContents);
+        VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(parsed, variableDomainSeq);
         assertEquals(new SequentialDomain(), parsed);
@@ -80,23 +81,48 @@ public class VariableDomainGuesserIT {
 
     @Test
     public void serializeSeq() throws Exception {
-        String serialized = variableDomainGuesser.serialize(variableDomainSeq);
+        String serialized = variableDomainIO.serialize(variableDomainSeq);
         assertNotNull(serialized);
-        assertEquals(variableDomainSeqPDDLContents, serialized);
+        assertEquals(variableDomainSeqPDDLContents.replaceAll(";.*", "").trim(),
+                serialized.replaceAll(";.*", "").trim());
     }
 
     @Test
     public void parseB() throws Exception {
-        VariableDomain parsed = variableDomainGuesser.parse(variableDomainBPDDLContents);
+        VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
         assertEquals(parsed, variableDomainB);
     }
 
     @Test
     public void serializeB() throws Exception {
-        String serialized = variableDomainGuesser.serialize(variableDomainB);
+        String serialized = variableDomainIO.serialize(variableDomainB);
         assertNotNull(serialized);
-        assertEquals(variableDomainBPDDLContents, serialized);
+        assertEquals(variableDomainBPDDLContents.replaceAll(";.*", "").trim(), serialized.replaceAll(";.*", "").trim());
+    }
+
+    public void deserializeSerialize(String fileName) throws Exception {
+        String contents = TestUtils.readAllLines(VariableDomainIOIT.class.getResourceAsStream(fileName)).stream()
+                .collect(Collectors.joining("\n"));
+        VariableDomain domain = variableDomainIO.parse(contents);
+        assertNotNull(domain);
+        String serialized = variableDomainIO.serialize(domain);
+        assertEquals(contents.replaceAll(";.*", "").trim(), serialized.replaceAll(";.*", "").trim());
+    }
+
+    @Test
+    public void deserializeSerializeCompareSeq() throws Exception {
+        deserializeSerialize("variableDomainSeq.pddl");
+    }
+
+    @Test
+    public void deserializeSerializeCompareTemp() throws Exception {
+        deserializeSerialize("variableDomainTemp.pddl");
+    }
+
+    @Test
+    public void deserializeSerializeCompareNum() throws Exception {
+        deserializeSerialize("variableDomainNum.pddl");
     }
 
 }

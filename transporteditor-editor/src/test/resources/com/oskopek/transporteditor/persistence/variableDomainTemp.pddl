@@ -1,4 +1,4 @@
-;; Transport: temporal without fuel
+;; Transport
 ;;
 
 (define (domain transport)
@@ -16,12 +16,16 @@ vehicle package - locatable
 (road ?l1 ?l2 - location)
 (at ?x - locatable ?y - location)
 (in ?x - package ?y - vehicle)
+(has-petrol-station ?l - location)
 (ready-loading ?v - vehicle)
 )
 
 (:functions
 (capacity ?v - vehicle)
 (road-length ?l1 ?l2 - location)
+(fuel-demand ?l1 ?l2 - location)
+(fuel-left ?v - vehicle)
+(fuel-max ?v - vehicle)
 (package-size ?p - package)
 )
 
@@ -31,10 +35,12 @@ vehicle package - locatable
 :condition (and
 (at start (at ?v ?l1))
 (at start (road ?l1 ?l2))
+(at start (>= (fuel-left ?v) (fuel-demand ?l1 ?l2)))
 )
 :effect (and
 (at start (not (at ?v ?l1)))
 (at end (at ?v ?l2))
+(at start (decrease (fuel-left ?v) (fuel-demand ?l1 ?l2)))
 )
 )
 
@@ -74,6 +80,19 @@ vehicle package - locatable
 ; lock vehicle
 (at start (not (ready-loading ?v)))
 (at end (ready-loading ?v))
+)
+)
+
+(:durative-action refuel
+:parameters (?v - vehicle ?l - location)
+:duration (= ?duration 10)
+:condition (and
+(at start (at ?v ?l))
+(over all (at ?v ?l))
+(at start (has-petrol-station ?l))
+)
+:effect (and
+(at end (assign (fuel-left ?v) (fuel-max ?v)))
 )
 )
 

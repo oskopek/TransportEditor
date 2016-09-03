@@ -65,9 +65,13 @@
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.github.oskopek</groupId>-->
+        <!--<artifactId>pddl4j</artifactId>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>com.github.oskopek</groupId>
-            <artifactId>pddl4j</artifactId>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
         </dependency>
     </dependencies>
     <build>

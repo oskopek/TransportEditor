@@ -4,20 +4,29 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.planning.domain.DomainType;
 import com.oskopek.transporteditor.planning.domain.VariableDomain;
 import com.oskopek.transporteditor.planning.domain.action.functions.*;
 import com.oskopek.transporteditor.planning.domain.action.predicates.*;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class VariableDomainGuesser implements DataReader<VariableDomain>, DataWriter<VariableDomain> {
+public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<VariableDomain> {
 
-    private final static Map<String, Class<? extends Predicate>> predicateNameMap = new HashMap<>();
-    private final static Map<String, Class<? extends Function>> functionNameMap = new HashMap<>();
+    private static final Map<String, Class<? extends Predicate>> predicateNameMap = new HashMap<>();
+    private static final Map<String, Class<? extends Function>> functionNameMap = new HashMap<>();
+
+    private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
     private Stream<String> normalizeInput(String contents) {
         String[] lines = contents.split("\n");
@@ -67,18 +76,64 @@ public class VariableDomainGuesser implements DataReader<VariableDomain>, DataWr
                 Collectors.toList());
     }
 
+    private DomainType parseDomainType(String contents) {
+        if (contents.contains(":action-costs")) {
+            return DomainType.ActionCost;
+        } else if (contents.contains(":goal-utilities")) {
+            return DomainType.Numeric;
+        } else if (contents.contains(":durative-actions")) {
+            return DomainType.Temporal;
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public VariableDomain parse(String contents) throws IllegalArgumentException {
         List<Class<? extends Predicate>> predicates = parsePredicates(contents);
         List<Class<? extends Function>> functions = parseFunctions(contents);
-        return new VariableDomain(predicates, functions);
+        DomainType type = parseDomainType(contents);
+        return new VariableDomain(type, predicates, functions);
     }
 
     @Override
     public String serialize(VariableDomain object) throws IllegalArgumentException {
-        StringBuilder serialized = new StringBuilder();
+        Map<String, Object> input = new HashMap<>();
+        input.put("date", new Date());
+        input.put("domain", object);
+        input.put("actionCost", DomainType.ActionCost);
+        input.put("numeric", DomainType.Numeric);
+        input.put("temporal", DomainType.Temporal);
 
-        return serialized.toString();
+        input.put("Capacity", Capacity.class);
+        input.put("FuelDemand", FuelDemand.class);
+        input.put("FuelLeft", FuelLeft.class);
+        input.put("FuelMax", FuelMax.class);
+        input.put("PackageSize", PackageSize.class);
+        input.put("RoadLength", RoadLength.class);
+        input.put("TotalCost", TotalCost.class);
+
+        input.put("At", At.class);
+        input.put("HasCapacity", HasCapacity.class);
+        input.put("HasPetrolStation", HasPetrolStation.class);
+        input.put("In", In.class);
+        input.put("IsRoad", IsRoad.class);
+        input.put("ReadyLoading", ReadyLoading.class);
+
+        Template template = null;
+        try {
+            template = configuration.getTemplate("domain.pddl.ftl");
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred during reading template file.", e);
+        }
+
+        StringWriter writer = new StringWriter();
+        try {
+            template.process(input, writer);
+        } catch (IOException | TemplateException e) {
+            throw new IllegalStateException("Error occurred during processing template.", e);
+        }
+        return writer.toString();
     }
 
     static {
@@ -98,5 +153,12 @@ public class VariableDomainGuesser implements DataReader<VariableDomain>, DataWr
         functionNameMap.put("package-size", PackageSize.class);
         functionNameMap.put("road-length", RoadLength.class);
         functionNameMap.put("total-cost", TotalCost.class);
+    }
+
+    static {
+        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

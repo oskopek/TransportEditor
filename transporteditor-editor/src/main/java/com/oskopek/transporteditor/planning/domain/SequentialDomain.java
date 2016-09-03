@@ -28,4 +28,9 @@ public class SequentialDomain extends DefaultDomain {
     public List<Class<? extends Function>> getFunctionList() {
         return functionList;
     }
+
+    @Override
+    public DomainType getDomainType() {
+        return DomainType.ActionCost;
+    }
 }

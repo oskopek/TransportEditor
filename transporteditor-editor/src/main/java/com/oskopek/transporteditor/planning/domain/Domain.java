@@ -18,4 +18,6 @@ public interface Domain {
 
     List<Class<? extends Function>> getFunctionList();
 
+    DomainType getDomainType();
+
 }

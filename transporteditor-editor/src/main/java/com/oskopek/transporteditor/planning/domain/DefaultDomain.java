@@ -14,24 +14,27 @@ public abstract class DefaultDomain implements Domain {
             return true;
         }
 
-        if (!(o instanceof VariableDomain)) {
+        if (!(o instanceof DefaultDomain)) {
             return false;
         }
 
-        VariableDomain that = (VariableDomain) o;
+        DefaultDomain that = (DefaultDomain) o;
 
-        return new EqualsBuilder().append(getPredicateList(), that.getPredicateList()).append(getFunctionList(),
+        return new EqualsBuilder().append(getDomainType(), that.getDomainType()).append(getPredicateList(),
+                that.getPredicateList()).append(getFunctionList(),
                 that.getFunctionList()).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getPredicateList()).append(getFunctionList()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(getDomainType()).append(getPredicateList()).append(getFunctionList())
+                .toHashCode();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" + "predicateList=" + getPredicateList() + ", functionList="
+        return getClass().getSimpleName() + "{domainType=" + getDomainType() + ", predicateList=" + getPredicateList()
+                + ", functionList="
                 + getFunctionList() + '}';
     }
 }

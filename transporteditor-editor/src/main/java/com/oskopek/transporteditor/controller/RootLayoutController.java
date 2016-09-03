@@ -3,7 +3,7 @@ package com.oskopek.transporteditor.controller;
 import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
-import com.oskopek.transporteditor.persistence.VariableDomainGuesser;
+import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planning.DefaultPlanningSession;
 import com.oskopek.transporteditor.planning.PlanningSession;
 import com.oskopek.transporteditor.planning.domain.VariableDomain;
@@ -126,13 +126,13 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleDomainNew() {
         VariableDomain domain = variableDomainCreator.createDomainInDialog();
-        VariableDomainGuesser guesser = new VariableDomainGuesser();
+        VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.newObject(domain, guesser, guesser);
     }
 
     @FXML
     private void handleDomainLoad() {
-        VariableDomainGuesser guesser = new VariableDomainGuesser();
+        VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.load(messages.getString("load.domain"), guesser, guesser);
     }
 
