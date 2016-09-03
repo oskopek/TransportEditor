@@ -83,8 +83,7 @@ public class VariableDomainIOIT {
     public void serializeSeq() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainSeq);
         assertNotNull(serialized);
-        assertEquals(variableDomainSeqPDDLContents.replaceAll(";.*", "").trim(),
-                serialized.replaceAll(";.*", "").trim());
+        asserPDDLContentEquals(variableDomainSeqPDDLContents, serialized);
     }
 
     @Test
@@ -98,7 +97,7 @@ public class VariableDomainIOIT {
     public void serializeB() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainB);
         assertNotNull(serialized);
-        assertEquals(variableDomainBPDDLContents.replaceAll(";.*", "").trim(), serialized.replaceAll(";.*", "").trim());
+        asserPDDLContentEquals(variableDomainBPDDLContents, serialized);
     }
 
     public void deserializeSerialize(String fileName) throws Exception {
@@ -107,7 +106,21 @@ public class VariableDomainIOIT {
         VariableDomain domain = variableDomainIO.parse(contents);
         assertNotNull(domain);
         String serialized = variableDomainIO.serialize(domain);
-        assertEquals(contents.replaceAll(";.*", "").trim(), serialized.replaceAll(";.*", "").trim());
+        asserPDDLContentEquals(contents, serialized);
+    }
+
+    private void asserPDDLContentEquals(String contents, String serialized) {
+        String contentComp = contents.replaceAll(";.*", "").trim();
+        String serializedComp = serialized.replaceAll(";.*", "").trim();
+
+        String noSpaceContentComp = contentComp.replaceAll("\\s+", "");
+        String noSpaceSerializedComp = serializedComp.replaceAll("\\s+", "");
+
+        if (noSpaceContentComp.equals(noSpaceSerializedComp)) {
+            assertTrue(true);
+        } else {
+            assertEquals(contentComp, serializedComp);
+        }
     }
 
     @Test
