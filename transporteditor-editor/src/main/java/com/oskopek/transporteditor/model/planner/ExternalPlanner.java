@@ -2,21 +2,21 @@
  * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
  */
 
-package com.oskopek.transporteditor.planning.planner;
+package com.oskopek.transporteditor.model.planner;
 
 import com.google.common.io.Files;
+import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.DomainType;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.plan.TemporalPlan;
+import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.domain.DomainType;
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
-import com.oskopek.transporteditor.planning.plan.Plan;
-import com.oskopek.transporteditor.planning.plan.SequentialPlan;
-import com.oskopek.transporteditor.planning.plan.TemporalPlan;
-import com.oskopek.transporteditor.planning.problem.DefaultProblem;
-import com.oskopek.transporteditor.planning.problem.Problem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class ExternalPlanner implements Planner {
     @Override
     public void startPlanning(Domain domain, Problem problem) {
         if (isPlanning()) {
-            throw new IllegalStateException("Already planning!");
+            throw new IllegalStateException("Already model!");
         }
         VariableDomainIO io = new VariableDomainIO();
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
@@ -92,7 +92,7 @@ public class ExternalPlanner implements Planner {
         try {
             plannerProcess = builder.start();
         } catch (IOException e) {
-            throw new IllegalStateException("An error occurred during creating the planning process.", e);
+            throw new IllegalStateException("An error occurred during creating the model process.", e);
         }
     }
 
