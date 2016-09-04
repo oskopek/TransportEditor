@@ -15,7 +15,7 @@ In a recent Java project, I found myself needing to store several intervals of t
 
 I found a data structure that accomplishes just this, and interval tree.
 
-It’s a simple enough data structure, but I couldn’t find any Java implementations for it online.
+It’s a simple enough data structure, but I couldn't find any Java implementations for it online.
 
 I then went to coding the data structure at the airport last week, and just finished unit testing it to convince myself everything was good to go.  I’m making it available if you are interested, because it’s really a waste of time to hand-code a well-known data structure.
 
