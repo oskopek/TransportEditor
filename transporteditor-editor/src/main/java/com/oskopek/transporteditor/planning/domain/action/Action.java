@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface Action {
 
+    String getName();
+
     ActionObject getWho();
 
     ActionObject getWhere();

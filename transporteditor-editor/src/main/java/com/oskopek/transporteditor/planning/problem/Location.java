@@ -4,23 +4,36 @@
 
 package com.oskopek.transporteditor.planning.problem;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Location {
+public class Location implements Locatable {
 
     private final StringProperty name = new SimpleStringProperty();
     private final IntegerProperty xCoordinate = new SimpleIntegerProperty();
     private final IntegerProperty yCoordinate = new SimpleIntegerProperty();
+    private final ObjectProperty<Location> locationProperty = new ReadOnlyObjectWrapper<>(this);
 
     public Location(String name, Integer xCoordinate, Integer yCoordinate) {
         this.name.setValue(name);
         this.xCoordinate.setValue(xCoordinate);
         this.yCoordinate.setValue(yCoordinate);
+    }
+
+    @Override
+    public Location getLocation() {
+        return locationProperty.get();
+    }
+
+    @Override
+    public void setLocation(Location location) {
+        throw new UnsupportedOperationException("Cannot set location of a location.");
+    }
+
+    @Override
+    public ObjectProperty<Location> locationProperty() {
+        return locationProperty;
     }
 
     public String getName() {

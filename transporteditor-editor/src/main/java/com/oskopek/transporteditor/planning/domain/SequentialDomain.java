@@ -4,6 +4,10 @@
 
 package com.oskopek.transporteditor.planning.domain;
 
+import com.oskopek.transporteditor.planning.domain.action.Drive;
+import com.oskopek.transporteditor.planning.domain.action.Drop;
+import com.oskopek.transporteditor.planning.domain.action.PickUp;
+import com.oskopek.transporteditor.planning.domain.action.Refuel;
 import com.oskopek.transporteditor.planning.domain.action.functions.Function;
 import com.oskopek.transporteditor.planning.domain.action.functions.RoadLength;
 import com.oskopek.transporteditor.planning.domain.action.functions.TotalCost;
@@ -18,6 +22,10 @@ public class SequentialDomain extends DefaultDomain {
             IsRoad.class);
 
     private final List<Class<? extends Function>> functionList = Arrays.asList(RoadLength.class, TotalCost.class);
+
+    public SequentialDomain(String name) {
+        super(name, Drive.class, Drop.class, PickUp.class, Refuel.class);
+    }
 
     @Override
     public List<Class<? extends Predicate>> getPredicateList() {

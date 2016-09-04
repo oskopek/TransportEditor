@@ -46,19 +46,6 @@ public class VariableDomainIOIT {
 
     @Before
     public void setUp() throws Exception {
-        //        variableDomainSeq = spy(new VariableDomain(null, null));
-        //        when(variableDomainSeq.getFunctionList()).thenReturn(Arrays.asList(new RoadLength(), new TotalCost
-        // ()));
-        //        when(variableDomainSeq.getPredicateList()).thenReturn(
-        //                Arrays.asList(new IsRoad(null), new At(null), new In(null), new HasCapacity(null)));
-        //
-        //        variableDomainB = spy(new VariableDomain(null, null));
-        //        when(variableDomainB.getFunctionList()).thenReturn(
-        //                Arrays.asList(new RoadLength(), new TotalCost(), new Capacity()));
-        //        when(variableDomainB.getPredicateList()).thenReturn(
-        //                Arrays.asList(new IsRoad(TemporalQuantifier.AT_START), new At(TemporalQuantifier.AT_START),
-        //                        new At(TemporalQuantifier.OVER_ALL), new At(TemporalQuantifier.AT_END),
-        //                        new In(TemporalQuantifier.AT_START), new In(TemporalQuantifier.AT_END)));
         variableDomainSeq = spy(new VariableDomain(DomainType.ActionCost, null, null));
         when(variableDomainSeq.getFunctionList()).thenReturn(Arrays.asList(RoadLength.class, TotalCost.class));
         when(variableDomainSeq.getPredicateList()).thenReturn(

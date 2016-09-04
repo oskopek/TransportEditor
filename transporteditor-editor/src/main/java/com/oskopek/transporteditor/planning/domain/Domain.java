@@ -1,5 +1,10 @@
+/*
+ * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
+ */
+
 package com.oskopek.transporteditor.planning.domain;
 
+import com.oskopek.transporteditor.planning.domain.action.*;
 import com.oskopek.transporteditor.planning.domain.action.functions.Function;
 import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
 
@@ -14,9 +19,21 @@ import java.util.List;
  */
 public interface Domain {
 
+    String getName();
+
     List<Class<? extends Predicate>> getPredicateList();
 
     List<Class<? extends Function>> getFunctionList();
+
+    List<Class<? extends Action>> getActionList();
+
+    Drive getDriveAction();
+
+    Drop getDropAction();
+
+    PickUp getPickUpAction();
+
+    Class<? extends Refuel> getRefuelAction();
 
     DomainType getDomainType();
 
