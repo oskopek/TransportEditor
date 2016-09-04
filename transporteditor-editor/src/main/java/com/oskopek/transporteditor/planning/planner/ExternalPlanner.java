@@ -1,45 +1,170 @@
+/*
+ * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
+ */
+
 package com.oskopek.transporteditor.planning.planner;
 
+import com.google.common.io.Files;
+import com.oskopek.transporteditor.persistence.DefaultProblemIO;
+import com.oskopek.transporteditor.persistence.SequentialPlanIO;
+import com.oskopek.transporteditor.persistence.TemporalPlanIO;
+import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planning.domain.Domain;
+import com.oskopek.transporteditor.planning.domain.DomainType;
+import com.oskopek.transporteditor.planning.domain.VariableDomain;
 import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.plan.SequentialPlan;
+import com.oskopek.transporteditor.planning.plan.TemporalPlan;
+import com.oskopek.transporteditor.planning.problem.DefaultProblem;
 import com.oskopek.transporteditor.planning.problem.Problem;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.text.MessageFormat;
 
 public class ExternalPlanner implements Planner {
 
-    private ObjectProperty<Path> path = new SimpleObjectProperty<>();
+    private final String executableString;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private VariableDomain domain;
+    private DefaultProblem problem;
+    private File domainTmp;
+    private File problemTmp;
+    private Process plannerProcess;
+    private Plan bestPlan;
 
-    public ExternalPlanner(Path path) {
-        this.path.setValue(path);
+    /**
+     * {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     *
+     * @param executableString in the format: "/path/to/executable ... {0} ... {1}"
+     */
+    public ExternalPlanner(String executableString) {
+        if (!executableString.contains("{0}") || !executableString.contains("{1}")) {
+            throw new IllegalArgumentException("Executable string does not contain {0} and {1}.");
+        }
+        this.executableString = executableString;
     }
 
-    public Path getPath() {
-        return path.get();
-    }
-
-    public void setPath(Path path) {
-        this.path.set(path);
-    }
-
-    public ObjectProperty<Path> pathProperty() {
-        return path;
+    private boolean isPlanning() {
+        return plannerProcess != null;
     }
 
     @Override
     public void startPlanning(Domain domain, Problem problem) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (isPlanning()) {
+            throw new IllegalStateException("Already planning!");
+        }
+        VariableDomainIO io = new VariableDomainIO();
+        DefaultProblemIO problemIO = new DefaultProblemIO(domain);
+        startPlanning((VariableDomain) domain, io, (DefaultProblem) problem, problemIO); // TODO: Fix me properly
+    }
+
+    private void startPlanning(VariableDomain domain, VariableDomainIO io, DefaultProblem problem,
+            DefaultProblemIO problemIO) {
+        String serializedDomain = io.serialize(domain);
+        String serializedProblem = problemIO.serialize(problem);
+
+        try {
+            domainTmp = File.createTempFile("domain-", ".pddl");
+            problemTmp = File.createTempFile("problem-", ".pddl");
+
+            try (BufferedWriter writer = Files.newWriter(domainTmp, Charset.forName("UTF-8"))) {
+                writer.write(serializedDomain);
+            }
+            try (BufferedWriter writer = Files.newWriter(problemTmp, Charset.forName("UTF-8"))) {
+                writer.write(serializedProblem);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("An error occurred during creating and writing temp files.", e);
+        }
+
+        if (domainTmp == null || problemTmp == null) {
+            throw new IllegalStateException("Failed to persist domain and problem, cannot plan.");
+        }
+
+        String filledIn = MessageFormat.format(executableString, domainTmp.getAbsolutePath(),
+                problemTmp.getAbsolutePath());
+
+        ProcessBuilder builder = new ProcessBuilder(filledIn);
+        builder.redirectErrorStream(true);
+        try {
+            plannerProcess = builder.start();
+        } catch (IOException e) {
+            throw new IllegalStateException("An error occurred during creating the planning process.", e);
+        }
     }
 
     @Override
     public void stopPlanning() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int retVal;
+        try {
+            retVal = plannerProcess.waitFor();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Planning failed.", e);
+        }
+
+        if (!problemTmp.delete()) {
+            logger.warn("Couldn't delete problem temp file: {}", problemTmp.getAbsoluteFile());
+        }
+        if (!domainTmp.delete()) {
+            logger.warn("Couldn't delete domain temp file: {}", domainTmp.getAbsoluteFile());
+        }
+        problemTmp = null;
+        domainTmp = null;
+
+        logger.debug("Planner output:");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader((plannerProcess.getErrorStream())))) {
+            while (reader.ready()) {
+                logger.debug("PLANNER: stderr: {}", reader.readLine());
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Error while reading stderr of planner process.", e);
+        }
+
+        if (retVal != 0) {
+            throw new IllegalStateException("Planning failed: return value " + retVal + ".");
+        }
+
+        StringBuilder planOutput = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader((plannerProcess.getInputStream())))) {
+            while (reader.ready()) {
+                String line = reader.readLine();
+                logger.debug("PLANNER: stdout: {}", line);
+                planOutput.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Error while reading stderr of planner process.", e);
+        }
+
+        this.bestPlan = tryParsePlan(planOutput.toString());
+
+        this.domainTmp = null;
+        this.problemTmp = null;
+        this.problem = null;
+        this.domain = null;
+        this.plannerProcess = null;
+    }
+
+    private TemporalPlan tryParseTemporalPlan(String planContents) {
+        return new TemporalPlanIO(problem).parse(planContents);
+    }
+
+    private SequentialPlan tryParseSequentialPlan(String planContents) {
+        return new SequentialPlanIO(problem).parse(planContents);
+    }
+
+    private Plan tryParsePlan(String planContents) {
+        if (DomainType.Temporal.equals(domain.getDomainType())) {
+            return tryParseTemporalPlan(planContents);
+        } else {
+            return tryParseSequentialPlan(planContents);
+        }
     }
 
     @Override
     public Plan getBestPlan() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return bestPlan;
     }
 }
