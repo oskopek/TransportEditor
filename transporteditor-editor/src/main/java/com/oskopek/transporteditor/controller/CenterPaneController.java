@@ -5,7 +5,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.google.common.eventbus.Subscribe;
-import com.oskopek.transporteditor.planning.problem.RoadGraph;
+import com.oskopek.transporteditor.model.problem.RoadGraph;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import org.graphstream.ui.j2dviewer.J2DGraphRenderer;

@@ -6,7 +6,7 @@ package com.oskopek.transporteditor.model.planner;
 
 import com.google.common.io.Files;
 import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.DomainType;
+import com.oskopek.transporteditor.model.domain.DomainLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
@@ -156,7 +156,7 @@ public class ExternalPlanner implements Planner {
     }
 
     private Plan tryParsePlan(String planContents) {
-        if (DomainType.Temporal.equals(domain.getDomainType())) {
+        if (DomainLabel.Temporal.equals(domain.getDomainLabel())) {
             return tryParseTemporalPlan(planContents);
         } else {
             return tryParseSequentialPlan(planContents);

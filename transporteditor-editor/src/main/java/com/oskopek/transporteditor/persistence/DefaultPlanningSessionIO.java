@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.DefaultPlanningSession;
+import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.thoughtworks.xstream.XStream;
 
 /**

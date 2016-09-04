@@ -4,7 +4,7 @@
 
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;

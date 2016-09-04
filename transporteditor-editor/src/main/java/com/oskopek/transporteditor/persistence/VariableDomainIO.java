@@ -4,10 +4,10 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.domain.DomainType;
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
-import com.oskopek.transporteditor.planning.domain.action.functions.*;
-import com.oskopek.transporteditor.planning.domain.action.predicates.*;
+import com.oskopek.transporteditor.model.domain.DomainLabel;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.action.functions.*;
+import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -76,13 +76,13 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                 Collectors.toList());
     }
 
-    private DomainType parseDomainType(String contents) {
+    private DomainLabel parseDomainType(String contents) {
         if (contents.contains(":action-costs")) {
-            return DomainType.ActionCost;
+            return DomainLabel.ActionCost;
         } else if (contents.contains(":goal-utilities")) {
-            return DomainType.Numeric;
+            return DomainLabel.Numeric;
         } else if (contents.contains(":durative-actions")) {
-            return DomainType.Temporal;
+            return DomainLabel.Temporal;
         } else {
             return null;
         }
@@ -92,7 +92,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     public VariableDomain parse(String contents) throws IllegalArgumentException {
         List<Class<? extends Predicate>> predicates = parsePredicates(contents);
         List<Class<? extends Function>> functions = parseFunctions(contents);
-        DomainType type = parseDomainType(contents);
+        DomainLabel type = parseDomainType(contents);
         return new VariableDomain(type, predicates, functions);
     }
 
@@ -101,9 +101,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("domain", object);
-        input.put("actionCost", DomainType.ActionCost);
-        input.put("numeric", DomainType.Numeric);
-        input.put("temporal", DomainType.Temporal);
+        input.put("actionCost", DomainLabel.ActionCost);
+        input.put("numeric", DomainLabel.Numeric);
+        input.put("temporal", DomainLabel.Temporal);
 
         input.put("Capacity", Capacity.class);
         input.put("FuelDemand", FuelDemand.class);

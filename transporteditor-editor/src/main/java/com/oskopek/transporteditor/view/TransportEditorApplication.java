@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.planning.PlanningSession;
+import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;

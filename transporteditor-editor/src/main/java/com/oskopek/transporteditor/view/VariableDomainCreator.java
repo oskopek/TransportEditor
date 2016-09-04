@@ -5,7 +5,7 @@
 package com.oskopek.transporteditor.view;
 
 import com.oskopek.transporteditor.controller.VariableDomainController;
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.validation;
 
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.plan.Plan;
-import com.oskopek.transporteditor.planning.problem.Problem;
+import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.problem.Problem;
 
 /**
  * Dummy validator: assumes all plans are correct.

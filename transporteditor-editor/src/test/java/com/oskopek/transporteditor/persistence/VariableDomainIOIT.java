@@ -4,14 +4,14 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.domain.DomainType;
-import com.oskopek.transporteditor.planning.domain.SequentialDomain;
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
-import com.oskopek.transporteditor.planning.domain.action.functions.Capacity;
-import com.oskopek.transporteditor.planning.domain.action.functions.PackageSize;
-import com.oskopek.transporteditor.planning.domain.action.functions.RoadLength;
-import com.oskopek.transporteditor.planning.domain.action.functions.TotalCost;
-import com.oskopek.transporteditor.planning.domain.action.predicates.*;
+import com.oskopek.transporteditor.model.domain.DomainLabel;
+import com.oskopek.transporteditor.model.domain.SequentialDomain;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.action.functions.Capacity;
+import com.oskopek.transporteditor.model.domain.action.functions.PackageSize;
+import com.oskopek.transporteditor.model.domain.action.functions.RoadLength;
+import com.oskopek.transporteditor.model.domain.action.functions.TotalCost;
+import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -46,12 +46,12 @@ public class VariableDomainIOIT {
 
     @Before
     public void setUp() throws Exception {
-        variableDomainSeq = spy(new VariableDomain(DomainType.ActionCost, null, null));
+        variableDomainSeq = spy(new VariableDomain(DomainLabel.ActionCost, null, null));
         when(variableDomainSeq.getFunctionList()).thenReturn(Arrays.asList(RoadLength.class, TotalCost.class));
         when(variableDomainSeq.getPredicateList()).thenReturn(
                 Arrays.asList(At.class, HasCapacity.class, In.class, IsRoad.class));
 
-        variableDomainB = spy(new VariableDomain(DomainType.Temporal, null, null));
+        variableDomainB = spy(new VariableDomain(DomainLabel.Temporal, null, null));
         when(variableDomainB.getFunctionList()).thenReturn(
                 Arrays.asList(Capacity.class, PackageSize.class, RoadLength.class));
         when(variableDomainB.getPredicateList()).thenReturn(

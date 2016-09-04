@@ -4,8 +4,8 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.problem.DefaultProblem;
 
 public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<DefaultProblem> {
 

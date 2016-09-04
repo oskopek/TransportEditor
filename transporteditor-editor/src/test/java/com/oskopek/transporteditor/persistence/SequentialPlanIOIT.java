@@ -4,16 +4,16 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.domain.SequentialDomain;
-import com.oskopek.transporteditor.planning.domain.action.ActionCost;
-import com.oskopek.transporteditor.planning.domain.action.Drive;
-import com.oskopek.transporteditor.planning.domain.action.Drop;
-import com.oskopek.transporteditor.planning.domain.action.PickUp;
-import com.oskopek.transporteditor.planning.plan.DefaultPlanEntry;
-import com.oskopek.transporteditor.planning.plan.PlanEntry;
-import com.oskopek.transporteditor.planning.plan.SequentialPlan;
-import com.oskopek.transporteditor.planning.problem.*;
-import com.oskopek.transporteditor.planning.problem.Package;
+import com.oskopek.transporteditor.model.domain.SequentialDomain;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.Drive;
+import com.oskopek.transporteditor.model.domain.action.Drop;
+import com.oskopek.transporteditor.model.domain.action.PickUp;
+import com.oskopek.transporteditor.model.plan.DefaultPlanEntry;
+import com.oskopek.transporteditor.model.plan.PlanEntry;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.problem.*;
+import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;

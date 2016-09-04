@@ -1,16 +1,16 @@
 package com.oskopek.transporteditor.controller;
 
+import com.oskopek.transporteditor.model.DefaultPlanningSession;
+import com.oskopek.transporteditor.model.PlanningSession;
+import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.planner.ExternalPlanner;
+import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
-import com.oskopek.transporteditor.planning.DefaultPlanningSession;
-import com.oskopek.transporteditor.planning.PlanningSession;
-import com.oskopek.transporteditor.planning.domain.VariableDomain;
-import com.oskopek.transporteditor.planning.plan.SequentialPlan;
-import com.oskopek.transporteditor.planning.planner.ExternalPlanner;
-import com.oskopek.transporteditor.planning.problem.DefaultProblem;
-import com.oskopek.transporteditor.planning.problem.RoadGraph;
 import com.oskopek.transporteditor.view.*;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;

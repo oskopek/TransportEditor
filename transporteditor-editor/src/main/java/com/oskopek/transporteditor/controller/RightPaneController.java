@@ -29,7 +29,7 @@ public class RightPaneController extends AbstractController {
 
     @FXML
     private void handlePlan() {
-        logger.debug("Starting planning...");
+        logger.debug("Starting model...");
         cancelPlanButton.setDisable(false);
         planButton.setDisable(true);
         application.getPlanningSession().startPlanning();
@@ -37,7 +37,7 @@ public class RightPaneController extends AbstractController {
 
     @FXML
     private void handleCancelPlan() {
-        logger.debug("Stopping planning...");
+        logger.debug("Stopping model...");
         cancelPlanButton.setDisable(true);
         planButton.setDisable(false);
         application.getPlanningSession().stopPlanning();
