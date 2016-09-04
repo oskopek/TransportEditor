@@ -4,13 +4,9 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.planning.domain.action.*;
-import com.oskopek.transporteditor.planning.plan.PlanEntry;
-import com.oskopek.transporteditor.planning.plan.SequentialPlan;
-import com.oskopek.transporteditor.planning.problem.DefaultProblem;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
+import com.oskopek.transporteditor.model.domain.action.*;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.problem.DefaultProblem;
 
 public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<SequentialPlan> {
 
@@ -20,26 +16,8 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         this.problem = problem;
     }
 
-    @Override
-    public String serialize(SequentialPlan plan) throws IllegalArgumentException {
-        StringBuilder builder = new StringBuilder();
-        Deque<PlanEntry> entries = new ArrayDeque<>(plan.firstEntries());
-        while (!entries.isEmpty()) {
-            PlanEntry top = entries.removeFirst();
-            builder.append(serializePlanEntry(top)).append('\n');
-            entries.addAll(top.nextPlanEntries());
-        }
-        ActionCost totalCost = plan.aggregatePlanEntries().stream().map(a -> a.getAction().getCost()).reduce(
-                ActionCost.valueOf(0), ActionCost::add);
-        if (totalCost != null) {
-            builder.append("; cost = ").append(totalCost.getCost()).append(" (general-cost)\n");
-        }
-        return builder.toString();
-    }
-
-    private String serializePlanEntry(PlanEntry planEntry) {
+    public static String serializeAction(Action action) {
         StringBuilder str = new StringBuilder();
-        Action action = planEntry.getAction();
         str.append("(").append(action.getName()).append(" ").append(action.getWho().getName()).append(" ").append(
                 action.getWhere().getName());
         if (Drive.class.isInstance(action)) {
@@ -60,7 +38,19 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
     }
 
     @Override
+    public String serialize(SequentialPlan plan) throws IllegalArgumentException {
+        StringBuilder builder = new StringBuilder();
+        plan.forEach(action -> builder.append(serializeAction(action)).append('\n'));
+        ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
+                ActionCost::add);
+        if (totalCost != null) {
+            builder.append("; cost = ").append(totalCost.getCost()).append(" (general-cost)\n");
+        }
+        return builder.toString();
+    }
+
+    @Override
     public SequentialPlan parse(String contents) throws IllegalArgumentException {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
