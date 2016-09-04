@@ -146,21 +146,98 @@ please set-up https://github.com/oskopek/ide-config[IDE coding templates] first
 . Add, commit, and push your changes
 . http://help.github.com/send-pull-requests/[Submit a pull request]
 
-=== Data format TODO
+=== Short design description
 
-==== Data format details TODO
+The model for the Transport domain is pretty complicated,
+because it handles:
 
-////
-The following is a grammar of the input/output data format. Do note it may be outdated.
+* Multiple variants of the Transport domain
+* Planning and visualization with the same model
 
-*Conventions*:
+That's what this short section is for -- describing the ideas behind the model, so that reading the code
+afterwards is easier.
 
-* JSON uses the character pair `{` and `}` often,
-therefore we write zero-or-more repeated statements using `(` and `)*`,
-which JSON doesn't use (just like regexes).
-* Also, since JSON uses `[` and `]` for lists,
-they do not mean an optional statement - we use `(` and `)` (without the star) for that.
-* Under `<character>` we assume any valid UTF-8 character.
-* Under `<string>` we assume any *valid, non-empty* sequence of UTF-8 characters.
-* Under `<integer>` we assume any *non-negative* whole number smaller than or equal to `2^31 - 1`.
-////
+The model is split into 4 parts:
+
+* Session
+* Domain
+* Problem
+* Plan
+
+Lets start from the end.
+
+==== Plan
+
+The plan consists of an ordered list of actions.
+There are two types of plans:
+
+* Sequential - these plans are strictly linear, actions do not overlap. (simple doubly linked list)
+* Temporal - every action in this plan has a time interval in which it takes place. This plan is basically a Guava RangeMap.
+(Guava Range Map)
+
+===== Visualizing plans
+
+There are two ways to visualize both plan types:
+
+* "Gantt chart"
+** Sequential: list
+** Temporal: 2d list (one axis time, the other an actionobject)
+
+* "Graph"
+** Sequential: path with relationships to other tasks (precondition blockers) as edges
+** Temporal: graph (nodes sorted by time - find a visually pleasing way) with relationships to other tasks (precondition blockers) as edges
+
+==== Persisting plans
+
+Using simple java code and a lot of micro-hacks it is persisted into a VAL-like format.
+For parsing, we assume a correct and valid VAL-like plan. A very very simple Regex-based approach is used.
+
+==== Problem
+
+The problem is basically a graph (with multiple possible layers, f.e. fuel), a vehicle and package map.
+
+Fuel is added as different graph edge type (FuelRoad instead of DefaultRoad) + FuelVehicle instead of vehicle.
+If the domain is fuel enabled, the fuel layer of the graph + everything else will be checked thoroughly.
+
+===== Visualizing problems
+
+Problems are very similar between domains. Just  different way of showing the tooltips/graph.
+
+==== Persisting problems
+
+Using a freemarker template and a lot of micro-hacks it is persisted into PDDL.
+For parsing, we assume a correct and valid problem. A very very simple Regex-based approach is used.
+
+==== Domain
+
+There is basically only one domain type: VariantDomain.
+The domain has basically flags, telling which parts are enabled and which are not.
+The visualizer, verifier, reader/writer (and planner, of course) take this into account.
+
+===== Visualizing domains
+
+Domains are not visualized per se, just their parts.
+
+==== Persisting domains
+
+Using a freemarker template and a lot of micro-hacks it is persisted into PDDL.
+For parsing, we assume a correct and valid domain. A very very simple Regex-based approach is used.
+
+==== Session
+
+The session is where it all comes together. It keeps an instance of the domain, problem and plan (and planner).
+It enforces a lot of rules about what can be done when.
+
+===== Visualizing sessions
+
+N/A
+
+==== Persisting sessions
+
+One word: XStream.
+
+
+
+
+
+
