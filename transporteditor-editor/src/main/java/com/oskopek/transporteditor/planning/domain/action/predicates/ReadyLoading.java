@@ -4,10 +4,7 @@
 
 package com.oskopek.transporteditor.planning.domain.action.predicates;
 
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.plan.Plan;
 import com.oskopek.transporteditor.planning.plan.visualization.PlanState;
-import com.oskopek.transporteditor.planning.problem.Problem;
 
 public class ReadyLoading extends DefaultPredicate {
 
@@ -16,7 +13,7 @@ public class ReadyLoading extends DefaultPredicate {
     }
 
     @Override
-    public boolean isValid(Domain domain, Problem problem, Plan plan, PlanState planState) {
+    public boolean isValid(PlanState planState) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

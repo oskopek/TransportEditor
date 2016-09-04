@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.test;
 
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,20 @@ public final class TestUtils {
      */
     private TestUtils() {
         // intentionally empty
+    }
+
+    public static void assertPDDLContentEquals(String contents, String serialized) {
+        String contentComp = contents.replaceAll(";.*", "").trim();
+        String serializedComp = serialized.replaceAll(";.*", "").trim();
+
+        String noSpaceContentComp = contentComp.replaceAll("\\s+", "");
+        String noSpaceSerializedComp = serializedComp.replaceAll("\\s+", "");
+
+        if (noSpaceContentComp.equals(noSpaceSerializedComp)) {
+            assertTrue(true);
+        } else {
+            assertEquals(contentComp, serializedComp);
+        }
     }
 
     /**

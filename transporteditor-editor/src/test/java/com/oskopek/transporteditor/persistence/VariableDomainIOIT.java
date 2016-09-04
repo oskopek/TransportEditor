@@ -63,14 +63,14 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(parsed, variableDomainSeq);
-        assertEquals(new SequentialDomain(), parsed);
+        assertEquals(new SequentialDomain(""), parsed);
     }
 
     @Test
     public void serializeSeq() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainSeq);
         assertNotNull(serialized);
-        asserPDDLContentEquals(variableDomainSeqPDDLContents, serialized);
+        TestUtils.assertPDDLContentEquals(variableDomainSeqPDDLContents, serialized);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class VariableDomainIOIT {
     public void serializeB() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainB);
         assertNotNull(serialized);
-        asserPDDLContentEquals(variableDomainBPDDLContents, serialized);
+        TestUtils.assertPDDLContentEquals(variableDomainBPDDLContents, serialized);
     }
 
     public void deserializeSerialize(String fileName) throws Exception {
@@ -93,21 +93,7 @@ public class VariableDomainIOIT {
         VariableDomain domain = variableDomainIO.parse(contents);
         assertNotNull(domain);
         String serialized = variableDomainIO.serialize(domain);
-        asserPDDLContentEquals(contents, serialized);
-    }
-
-    private void asserPDDLContentEquals(String contents, String serialized) {
-        String contentComp = contents.replaceAll(";.*", "").trim();
-        String serializedComp = serialized.replaceAll(";.*", "").trim();
-
-        String noSpaceContentComp = contentComp.replaceAll("\\s+", "");
-        String noSpaceSerializedComp = serializedComp.replaceAll("\\s+", "");
-
-        if (noSpaceContentComp.equals(noSpaceSerializedComp)) {
-            assertTrue(true);
-        } else {
-            assertEquals(contentComp, serializedComp);
-        }
+        TestUtils.assertPDDLContentEquals(contents, serialized);
     }
 
     @Test

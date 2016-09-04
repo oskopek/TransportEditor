@@ -8,6 +8,7 @@ import com.oskopek.transporteditor.planning.problem.ActionObject;
 import com.oskopek.transporteditor.planning.problem.RoadGraph;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A specific snapshot of a plan. In the context of a specific plan, this describes
@@ -23,7 +24,7 @@ public interface PlanState {
 
     List<TimePoint> parentTimePoints();
 
-    List<ActionObject> getCurrentActionObjects();
+    Map<String, ActionObject> getCurrentActionObjects();
 
     RoadGraph getCurrentGraph();
 

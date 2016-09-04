@@ -4,10 +4,10 @@
 
 package com.oskopek.transporteditor.planning.domain.action.predicates;
 
-import com.oskopek.transporteditor.planning.domain.Domain;
-import com.oskopek.transporteditor.planning.plan.Plan;
+import com.oskopek.transporteditor.planning.domain.action.Action;
 import com.oskopek.transporteditor.planning.plan.visualization.PlanState;
-import com.oskopek.transporteditor.planning.problem.Problem;
+import com.oskopek.transporteditor.planning.problem.Locatable;
+import com.oskopek.transporteditor.planning.problem.Location;
 
 public class At extends DefaultPredicate {
 
@@ -16,7 +16,11 @@ public class At extends DefaultPredicate {
     }
 
     @Override
-    public boolean isValid(Domain domain, Problem problem, Plan plan, PlanState planState) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public boolean isValid(PlanState planState) {
+        Action action = planState.getTimePoint().getPlanEntry().getAction();
+        Locatable who = (Locatable) planState.getCurrentActionObjects().get(action.getWho().getName());
+        Location where = (Location) planState.getCurrentActionObjects().get(
+                action.getWhere().getName()); // TODO: What about type safety here?
+        return who.getLocation().equals(where);
     }
 }

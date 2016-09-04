@@ -29,11 +29,6 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
     }
 
     @Override
-    public ObjectProperty<Location> locationProperty() {
-        return location;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

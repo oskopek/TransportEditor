@@ -4,14 +4,10 @@
 
 package com.oskopek.transporteditor.planning.problem;
 
-import javafx.beans.property.ObjectProperty;
-
 public interface Locatable extends ActionObject {
 
     Location getLocation();
 
     void setLocation(Location location);
-
-    ObjectProperty<Location> locationProperty();
 
 }

@@ -31,11 +31,6 @@ public class Location implements Locatable {
         throw new UnsupportedOperationException("Cannot set location of a location.");
     }
 
-    @Override
-    public ObjectProperty<Location> locationProperty() {
-        return locationProperty;
-    }
-
     public String getName() {
         return name.get();
     }

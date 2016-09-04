@@ -9,16 +9,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class DefaultDomain implements Domain {
 
     private final String name;
-    private final Class<? extends Drive> driveAction;
-    private final Class<? extends Drop> dropAction;
-    private final Class<? extends PickUp> pickUpAction;
-    private final Class<? extends Refuel> refuelAction;
-    private final List<Class<? extends Action>> actionList;
+    private final DefaultActionBuilder driveBuilder;
+    private final DropBuilder dropAcBuilder
+    private final PickUpBuilder pickUpBuilder;
+    private final RefuelBuilder refuelBuilder;
 
     public DefaultDomain(String name, Class<? extends Drive> driveAction, Class<? extends Drop> dropAction,
             Class<? extends PickUp> pickUpAction) {
@@ -46,30 +44,6 @@ public abstract class DefaultDomain implements Domain {
         return name;
     }
 
-    @Override
-    public Class<? extends Drive> getDriveAction() {
-        return driveAction;
-    }
-
-    @Override
-    public Class<? extends Drop> getDropAction() {
-        return dropAction;
-    }
-
-    @Override
-    public Class<? extends PickUp> getPickUpAction() {
-        return pickUpAction;
-    }
-
-    @Override
-    public Class<? extends Refuel> getRefuelAction() {
-        return refuelAction;
-    }
-
-    @Override
-    public List<Class<? extends Action>> getActionList() {
-        return actionList;
-    }
 
     @Override
     public boolean equals(Object o) {

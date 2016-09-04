@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public class DefaultAction<Who extends Locatable, Where extends Location, What extends ActionObject> {
+public class DefaultAction<Who extends Locatable, Where extends Location, What extends ActionObject> implements Action {
 
     private final String name;
     private final Who who;
@@ -40,14 +40,17 @@ public class DefaultAction<Who extends Locatable, Where extends Location, What e
         return name;
     }
 
+    @Override
     public Who getWho() {
         return who;
     }
 
+    @Override
     public Where getWhere() {
         return where;
     }
 
+    @Override
     public What getWhat() {
         return what;
     }

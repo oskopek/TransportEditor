@@ -4,7 +4,10 @@
 
 package com.oskopek.transporteditor.planning.domain;
 
-import com.oskopek.transporteditor.planning.domain.action.*;
+import com.oskopek.transporteditor.planning.domain.action.Drive;
+import com.oskopek.transporteditor.planning.domain.action.Drop;
+import com.oskopek.transporteditor.planning.domain.action.PickUp;
+import com.oskopek.transporteditor.planning.domain.action.Refuel;
 import com.oskopek.transporteditor.planning.domain.action.functions.Function;
 import com.oskopek.transporteditor.planning.domain.action.predicates.Predicate;
 
@@ -25,15 +28,13 @@ public interface Domain {
 
     List<Class<? extends Function>> getFunctionList();
 
-    List<Class<? extends Action>> getActionList();
+    Drive buildDrive();
 
-    Drive getDriveAction();
+    Drop buildDrop();
 
-    Drop getDropAction();
+    PickUp buildPickUp();
 
-    PickUp getPickUpAction();
-
-    Class<? extends Refuel> getRefuelAction();
+    Refuel buildRefuel();
 
     DomainType getDomainType();
 

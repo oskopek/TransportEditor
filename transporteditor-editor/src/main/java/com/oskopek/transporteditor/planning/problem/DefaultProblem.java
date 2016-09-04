@@ -9,11 +9,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.util.List;
 
-public class DefaultProblem implements Problem {
+public class DefaultProblem implements Problem { // TODO: Rewrite to normal objects
 
     private final ObjectProperty<RoadGraph> roadGraph = new SimpleObjectProperty<>();
     private final ListProperty<Vehicle> vehicleList = new SimpleListProperty<>();
@@ -44,12 +43,7 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
-    public ObjectProperty<RoadGraph> roadGraphProperty() {
-        return roadGraph;
-    }
-
-    @Override
-    public ObservableList<Vehicle> getVehicleList() {
+    public List<Vehicle> getVehicleList() {
         return vehicleList.get();
     }
 
@@ -58,13 +52,9 @@ public class DefaultProblem implements Problem {
         this.vehicleList.set(FXCollections.observableArrayList(vehicleList));
     }
 
-    @Override
-    public ListProperty<Vehicle> vehicleListProperty() {
-        return vehicleList;
-    }
 
     @Override
-    public ObservableList<Package> getPackageList() {
+    public List<Package> getPackageList() {
         return packageList.get();
     }
 
@@ -73,8 +63,4 @@ public class DefaultProblem implements Problem {
         this.packageList.set(FXCollections.observableArrayList(packageList));
     }
 
-    @Override
-    public ListProperty<Package> packageListProperty() {
-        return packageList;
-    }
 }
