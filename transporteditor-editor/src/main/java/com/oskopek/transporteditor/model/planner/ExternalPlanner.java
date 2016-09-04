@@ -156,7 +156,7 @@ public class ExternalPlanner implements Planner {
     }
 
     private Plan tryParsePlan(String planContents) {
-        if (DomainLabel.Temporal.equals(domain.getDomainLabel())) {
+        if (domain.getDomainLabels().contains(DomainLabel.Temporal)) {
             return tryParseTemporalPlan(planContents);
         } else {
             return tryParseSequentialPlan(planContents);

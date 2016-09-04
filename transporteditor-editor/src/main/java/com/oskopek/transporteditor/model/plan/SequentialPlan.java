@@ -6,6 +6,7 @@ package com.oskopek.transporteditor.model.plan;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transporteditor.model.problem.Problem;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -16,6 +17,10 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
 
     public SequentialPlan(LinkedList<Action> actionList) {
         this.actionList = actionList;
+    }
+
+    public SequentialPlan(List<Action> actionList) {
+        this.actionList = new LinkedList<>(actionList);
     }
 
     @Override
@@ -48,5 +53,9 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
     @Override
     public Spliterator<Action> spliterator() {
         return actionList.spliterator();
+    }
+
+    public Problem apply(Problem instance, Action action) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

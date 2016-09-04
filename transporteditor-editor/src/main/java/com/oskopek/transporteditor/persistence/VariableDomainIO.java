@@ -8,6 +8,10 @@ import com.oskopek.transporteditor.model.domain.DomainLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.action.functions.*;
 import com.oskopek.transporteditor.model.domain.action.predicates.*;
+import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
+import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
+import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
+import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -33,7 +37,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         return Arrays.stream(lines).map(String::trim).map(s -> s.replaceFirst(";.*", "")).filter(s -> !s.isEmpty());
     }
 
-    private List<Class<? extends Predicate>> parsePredicates(String contents) {
+    private List<Predicate> parsePredicates(String contents) {
         List<String> predicates = new ArrayList<>();
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
 
@@ -54,7 +58,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                 Collectors.toList());
     }
 
-    private List<Class<? extends Function>> parseFunctions(String contents) {
+    private List<Function> parseFunctions(String contents) {
         List<String> functions = new ArrayList<>();
 
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
@@ -76,24 +80,32 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                 Collectors.toList());
     }
 
-    private DomainLabel parseDomainType(String contents) {
+    private Set<DomainLabel> parseDomainLabels(String contents) {
+        Set<DomainLabel> domainLabels = new HashSet<>();
         if (contents.contains(":action-costs")) {
-            return DomainLabel.ActionCost;
-        } else if (contents.contains(":goal-utilities")) {
-            return DomainLabel.Numeric;
-        } else if (contents.contains(":durative-actions")) {
-            return DomainLabel.Temporal;
-        } else {
-            return null;
+            domainLabels.add(DomainLabel.ActionCost);
         }
+        if (contents.contains(":goal-utilities")) {
+            domainLabels.add(DomainLabel.Numeric);
+        }
+        if (contents.contains(":durative-actions")) {
+            domainLabels.add(DomainLabel.Temporal);
+        }
+        return domainLabels;
     }
 
     @Override
     public VariableDomain parse(String contents) throws IllegalArgumentException {
-        List<Class<? extends Predicate>> predicates = parsePredicates(contents);
-        List<Class<? extends Function>> functions = parseFunctions(contents);
-        DomainLabel type = parseDomainType(contents);
-        return new VariableDomain(type, predicates, functions);
+        List<Predicate> predicates = parsePredicates(contents);
+        List<Function> functions = parseFunctions(contents);
+        DriveBuilder driveBuilder = parseDriveBuilder(contents);
+        DropBuilder dropBuilder = parseDropBuilder(contents);
+        PickUpBuilder pickUpBuilder = parsePickUpBuilder(contents);
+        RefuelBuilder refuelBuilder = parseRefuelBuilder(contents);
+
+        Set<DomainLabel> labels = parseDomainLabels(contents);
+        return new VariableDomain("domain-" + new Date().toString(), driveBuilder, dropBuilder, pickUpBuilder,
+                refuelBuilder, labels, predicates, functions);
     }
 
     @Override

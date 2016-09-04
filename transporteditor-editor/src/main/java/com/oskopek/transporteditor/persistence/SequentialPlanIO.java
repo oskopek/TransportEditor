@@ -6,13 +6,13 @@ package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.action.*;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.problem.Problem;
 
 public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<SequentialPlan> {
 
-    private final DefaultProblem problem;
+    private final Problem problem;
 
-    public SequentialPlanIO(DefaultProblem problem) {
+    public SequentialPlanIO(Problem problem) {
         this.problem = problem;
     }
 

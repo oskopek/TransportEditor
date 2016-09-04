@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -66,7 +67,7 @@ public class RootLayoutController extends AbstractController {
     private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
     private JavaFxOpenedTextObjectHandler<VariableDomain> domainFileHandler;
-    private JavaFxOpenedTextObjectHandler<SequentialPlan> planFileHandler; // TODO: How do we do co/contravariance here?
+    private JavaFxOpenedTextObjectHandler<SequentialPlan> planFileHandler;
 
     @FXML
     private void initialize() {
@@ -120,7 +121,7 @@ public class RootLayoutController extends AbstractController {
         }
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
                 messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
-        session.setPlanner(new ExternalPlanner(path));
+        session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
     }
 
     @FXML
@@ -152,7 +153,7 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
-        problemFileHandler.newObject(new DefaultProblem(new RoadGraph("graph"), new ArrayList<>(), new ArrayList<>()),
+        problemFileHandler.newObject(new DefaultProblem(new RoadGraph("graph"), new HashMap<>(), new HashMap<>()),
                 io, io);
     }
 

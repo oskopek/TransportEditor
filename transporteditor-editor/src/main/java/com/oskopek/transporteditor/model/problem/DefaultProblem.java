@@ -7,24 +7,26 @@ package com.oskopek.transporteditor.model.problem;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DefaultProblem implements Problem {
 
     private final RoadGraph roadGraph;
-    private final List<Vehicle> vehicleList;
-    private final List<Package> packageList;
+    private final Map<String, Vehicle> vehicleMap;
+    private final Map<String, Package> packageMap;
 
     public DefaultProblem(DefaultProblem defaultProblem) {
         this.roadGraph = new RoadGraph(defaultProblem.getRoadGraph());
-        this.vehicleList = defaultProblem.getVehicleList(); // vehicles are immutable
-        this.packageList = defaultProblem.getPackageList(); // packages are immutable
+        this.vehicleMap = new HashMap<>(defaultProblem.vehicleMap); // vehicles are immutable
+        this.packageMap = new HashMap<>(defaultProblem.packageMap); // packages are immutable
     }
 
-    public DefaultProblem(RoadGraph roadGraph, List<Vehicle> vehicleList, List<Package> packageList) {
+    public DefaultProblem(RoadGraph roadGraph, Map<String, Vehicle> vehicleMap, Map<String, Package> packageMap) {
         this.roadGraph = roadGraph;
-        this.vehicleList = vehicleList;
-        this.packageList = packageList;
+        this.vehicleMap = vehicleMap;
+        this.packageMap = packageMap;
     }
 
     @Override
@@ -33,13 +35,45 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
-    public List<Vehicle> getVehicleList() {
-        return vehicleList;
+    public Vehicle getVehicle(String name) {
+        return vehicleMap.get(name);
     }
 
     @Override
-    public List<Package> getPackageList() {
-        return packageList;
+    public Package getPackage(String name) {
+        return packageMap.get(name);
+    }
+
+    @Override
+    public Locatable getLocatable(String name) {
+        Vehicle vehicle = getVehicle(name);
+        if (vehicle != null) {
+            return vehicle;
+        }
+        Package aPackage = getPackage(name);
+        if (aPackage != null) {
+            return aPackage;
+        }
+        return null;
+    }
+
+    @Override
+    public ActionObject getActionObject(String name) {
+        Locatable locatable = getLocatable(name);
+        if (locatable != null) {
+            return locatable;
+        }
+        return null;
+    }
+
+    @Override
+    public Collection<Vehicle> getAllVehicles() {
+        return vehicleMap.values();
+    }
+
+    @Override
+    public Collection<Package> getAllPackages() {
+        return packageMap.values();
     }
 
     @Override
@@ -54,13 +88,12 @@ public class DefaultProblem implements Problem {
 
         DefaultProblem that = (DefaultProblem) o;
 
-        return new EqualsBuilder().append(getRoadGraph(), that.getRoadGraph()).append(getVehicleList(),
-                that.getVehicleList()).append(getPackageList(), that.getPackageList()).isEquals();
+        return new EqualsBuilder().append(getRoadGraph(), that.getRoadGraph()).append(vehicleMap, that.vehicleMap)
+                .append(packageMap, that.packageMap).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getRoadGraph()).append(getVehicleList()).append(getPackageList())
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(getRoadGraph()).append(vehicleMap).append(packageMap).toHashCode();
     }
 }

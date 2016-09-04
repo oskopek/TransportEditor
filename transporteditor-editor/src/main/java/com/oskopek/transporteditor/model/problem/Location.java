@@ -26,11 +26,6 @@ public class Location implements Locatable {
         return locationProperty.get();
     }
 
-    @Override
-    public void setLocation(Location location) {
-        throw new UnsupportedOperationException("Cannot set location of a location.");
-    }
-
     public String getName() {
         return name.get();
     }

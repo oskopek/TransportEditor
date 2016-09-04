@@ -4,7 +4,7 @@
 
 package com.oskopek.transporteditor.model.problem;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Problem extends Cloneable {
 
@@ -18,9 +18,9 @@ public interface Problem extends Cloneable {
 
     ActionObject getActionObject(String name);
 
-    List<Vehicle> getAllVehicles();
+    Collection<Vehicle> getAllVehicles();
 
-    List<Package> getAllPackages();
+    Collection<Package> getAllPackages();
 
 
 

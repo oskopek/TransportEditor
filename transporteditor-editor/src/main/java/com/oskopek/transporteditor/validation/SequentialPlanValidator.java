@@ -23,15 +23,22 @@ public class SequentialPlanValidator implements Validator {
         if (!SequentialPlan.class.isInstance(plan)) {
             throw new IllegalArgumentException("Cannot validate non-sequential plan with sequential validator.");
         }
-        return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
+        return isValid((DefaultProblem) problem, (SequentialPlan) plan);
     }
 
-    public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
+    public boolean isValid(DefaultProblem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getAllActions();
         Problem instance = new DefaultProblem(problem);
 
         for (Action action : actionList) {
-            action.areEffectsValid()
+            if (!action.arePreconditionsValid(instance)) {
+                return false;
+            }
+            instance = plan.apply(instance, action);
+            if (!action.areEffectsValid(instance)) {
+                return false;
+            }
         }
+        return true;
     }
 }
