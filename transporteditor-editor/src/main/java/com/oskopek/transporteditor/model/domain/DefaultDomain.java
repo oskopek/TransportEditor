@@ -8,6 +8,9 @@ import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Set;
 
@@ -61,5 +64,35 @@ public abstract class DefaultDomain implements Domain {
     @Override
     public Set<DomainLabel> getDomainLabels() {
         return domainLabelSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof DefaultDomain)) {
+            return false;
+        }
+
+        DefaultDomain that = (DefaultDomain) o;
+
+        return new EqualsBuilder().append(getName(), that.getName()).append(getDomainLabels(), that.getDomainLabels())
+                .append(getFunctionMap(), that.getFunctionMap()).append(getPredicateMap(), that.getPredicateMap())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).append(getDomainLabels()).append(getFunctionMap()).append(
+                getPredicateMap()).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("name", name).append("domainLabelSet", domainLabelSet).append(
+                "domainLabels", getDomainLabels()).append("functionMap", getFunctionMap()).append("predicateMap",
+                getPredicateMap()).toString();
     }
 }

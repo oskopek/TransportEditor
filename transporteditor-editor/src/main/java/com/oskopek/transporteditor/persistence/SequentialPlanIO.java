@@ -21,19 +21,19 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         str.append("(").append(action.getName()).append(" ").append(action.getWho().getName()).append(" ").append(
                 action.getWhere().getName());
         if (Drive.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat());
+            str.append(" ").append(action.getWhat().getName());
         } else if (PickUp.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat()).append(" ").append("capacity-number ").append("").append(" ")
-                    .append("capacity-number ").append("");
+            str.append(" ").append(action.getWhat().getName()).append(" ").append("capacity-").append("").append(" ")
+                    .append("capacity-").append("");
         } else if (Drop.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat()).append(" ").append("capacity-number ").append("").append(" ")
-                    .append("capacity-number ").append("");
+            str.append(" ").append(action.getWhat().getName()).append(" ").append("capacity-").append("").append(" ")
+                    .append("capacity-").append("");
         } else if (Refuel.class.isInstance(action)) {
             // intentionally empty
         } else {
             throw new IllegalArgumentException("Not recognized action: " + action);
         }
-        str.append(")").append("\n");
+        str.append(")");
         return str.toString();
     }
 
@@ -44,7 +44,7 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
                 ActionCost::add);
         if (totalCost != null) {
-            builder.append("; cost = ").append(totalCost.getCost()).append(" (general-cost)\n");
+            builder.append("; cost = ").append(totalCost.getCost()).append(" (general cost)");
         }
         return builder.toString();
     }

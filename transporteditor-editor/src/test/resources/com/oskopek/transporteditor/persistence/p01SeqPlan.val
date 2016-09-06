@@ -3,4 +3,4 @@
 (drive truck-1 city-loc-3 city-loc-2)
 (drop truck-1 city-loc-2 package-2 capacity-2 capacity-3)
 (drop truck-1 city-loc-2 package-1 capacity-3 capacity-4)
-; cost = 54 (general cost)
+; cost = 34 (general cost)

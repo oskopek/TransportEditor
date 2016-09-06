@@ -4,31 +4,19 @@
 
 package com.oskopek.transporteditor.model.problem;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class DefaultActionObject implements ActionObject {
 
-    private final StringProperty name = new SimpleStringProperty();
+    private final String name;
 
     public DefaultActionObject(String name) {
-        this.name.setValue(name);
+        this.name = name;
     }
 
     @Override
     public String getName() {
-        return name.get();
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    @Override
-    public StringProperty nameProperty() {
         return name;
     }
 
@@ -51,6 +39,6 @@ public class DefaultActionObject implements ActionObject {
 
     @Override
     public String toString() {
-        return "DefaultActionObject{" + "name=" + name + '}';
+        return "DefaultActionObject{" + "name=" + getName() + '}';
     }
 }

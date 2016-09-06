@@ -32,12 +32,16 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
+    public static String parseName(String contents) {
+        return contents.split("\n")[0].replaceAll(";", "").trim();
+    }
+
     private Stream<String> normalizeInput(String contents) {
         String[] lines = contents.split("\n");
         return Arrays.stream(lines).map(String::trim).map(s -> s.replaceFirst(";.*", "")).filter(s -> !s.isEmpty());
     }
 
-    private List<Predicate> parsePredicates(String contents) {
+    private Map<String, Class<? extends Predicate>> parsePredicates(String contents) {
         List<String> predicates = new ArrayList<>();
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
 
@@ -54,11 +58,10 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
         }
 
-        return predicates.stream().map(predicateNameMap::get).filter(aClass -> aClass != null).collect(
-                Collectors.toList());
+        return predicates.stream().collect(Collectors.toMap(p -> p, predicateNameMap::get));
     }
 
-    private List<Function> parseFunctions(String contents) {
+    private Map<String, Class<? extends Function>> parseFunctions(String contents) {
         List<String> functions = new ArrayList<>();
 
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
@@ -76,8 +79,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
         }
 
-        return functions.stream().map(functionNameMap::get).filter(aClass -> aClass != null).collect(
-                Collectors.toList());
+        return functions.stream().collect(Collectors.toMap(f -> f, functionNameMap::get));
     }
 
     private Set<DomainLabel> parseDomainLabels(String contents) {
@@ -94,17 +96,43 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         return domainLabels;
     }
 
+    public DriveBuilder parseDriveBuilder(String contents) {
+        return new DriveBuilder(null, null);
+    }
+
+    public DropBuilder parseDropBuilder(String contents) {
+        return new DropBuilder(null, null, null, null);
+    }
+
+    public PickUpBuilder parsePickUpBuilder(String contents) {
+        return new PickUpBuilder(new ArrayList<>(), null, null, null);
+    }
+
+    public RefuelBuilder parseRefuelBuilder(String contents) {
+        return new RefuelBuilder(null, null, null, null);
+    }
+
     @Override
     public VariableDomain parse(String contents) throws IllegalArgumentException {
-        List<Predicate> predicates = parsePredicates(contents);
-        List<Function> functions = parseFunctions(contents);
+        String name = parseName(contents);
+        Map<String, Class<? extends Predicate>> predicates = parsePredicates(contents);
+        Map<String, Class<? extends Function>> functions = parseFunctions(contents);
         DriveBuilder driveBuilder = parseDriveBuilder(contents);
         DropBuilder dropBuilder = parseDropBuilder(contents);
         PickUpBuilder pickUpBuilder = parsePickUpBuilder(contents);
         RefuelBuilder refuelBuilder = parseRefuelBuilder(contents);
 
         Set<DomainLabel> labels = parseDomainLabels(contents);
-        return new VariableDomain("domain-" + new Date().toString(), driveBuilder, dropBuilder, pickUpBuilder,
+        if (functions.containsKey("capacity")) {
+            labels.add(DomainLabel.Capacity);
+            if (pickUpBuilder.getPreconditions().stream().map(Object::getClass).anyMatch(HasCapacity.class::equals)) {
+                labels.add(DomainLabel.MaxCapacity); // TODO: probably doesn't work correctly for nested predicates
+            }
+        } else if (predicates.containsKey("capacity")) {
+            labels.add(DomainLabel.MaxCapacity);
+            labels.add(DomainLabel.Capacity);
+        }
+        return new VariableDomain(name, driveBuilder, dropBuilder, pickUpBuilder,
                 refuelBuilder, labels, predicates, functions);
     }
 

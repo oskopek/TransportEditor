@@ -1,4 +1,4 @@
-;; Transport: temporal without fuel
+;; Transport temporal without fuel
 ;;
 
 (define (domain transport)

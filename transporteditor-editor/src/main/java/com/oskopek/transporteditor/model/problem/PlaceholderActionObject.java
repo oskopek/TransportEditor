@@ -4,7 +4,6 @@
 
 package com.oskopek.transporteditor.model.problem;
 
-import javafx.beans.property.StringProperty;
 
 public class PlaceholderActionObject implements ActionObject {
 
@@ -13,13 +12,4 @@ public class PlaceholderActionObject implements ActionObject {
         throw new UnsupportedOperationException("Not supported on placeholder!");
     }
 
-    @Override
-    public void setName(String name) {
-        throw new UnsupportedOperationException("Not supported on placeholder!");
-    }
-
-    @Override
-    public StringProperty nameProperty() {
-        throw new UnsupportedOperationException("Not supported on placeholder!");
-    }
 }

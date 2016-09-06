@@ -12,6 +12,8 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.view.Viewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ import java.util.stream.Stream;
  * Wrapper interface around a GraphStream graph type.
  */
 public class RoadGraph extends MultiGraph implements Graph {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public RoadGraph(RoadGraph graph) {
         this(graph.getId());
@@ -93,6 +97,25 @@ public class RoadGraph extends MultiGraph implements Graph {
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
         edge.setAttribute("road", road);
         return edge;
+    }
+
+    public Road getRoadBetween(Location l1, Location l2) {
+        Node n1 = getNode(l1.getName());
+        if (n1 == null) {
+            logger.debug("Could not find node \"{}\"", l1.getName());
+            return null;
+        }
+        Node n2 = getNode(l2.getName());
+        if (n2 == null) {
+            logger.debug("Could not find node \"{}\"", l2.getName());
+            return null;
+        }
+        Edge e = n1.getEdgeToward(n2);
+        if (e == null) {
+            logger.debug("Could not find edge between given nodes \"{}\" and \"{}\".", l1.getName(), l2.getName());
+            return null;
+        }
+        return e.getAttribute("road");
     }
 
     public Road getRoad(String name) {

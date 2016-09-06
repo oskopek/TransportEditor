@@ -11,35 +11,29 @@ import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class VariableDomain extends DefaultDomain {
 
-    private final List<Predicate> predicateList;
-    private final List<Function> functionList;
+    private final Map<String, Class<? extends Predicate>> predicateMap;
+    private final Map<String, Class<? extends Function>> functionMap;
 
     public VariableDomain(String name, DriveBuilder driveBuilder, DropBuilder dropBuilder, PickUpBuilder pickUpBuilder,
-            RefuelBuilder refuelBuilder, Set<DomainLabel> domainLabelSet, List<Predicate> predicateList,
-            List<Function> functionList) {
+            RefuelBuilder refuelBuilder, Set<DomainLabel> domainLabelSet,
+            Map<String, Class<? extends Predicate>> predicateMap, Map<String, Class<? extends Function>> functionMap) {
         super(name, driveBuilder, dropBuilder, pickUpBuilder, refuelBuilder, domainLabelSet);
-        this.predicateList = predicateList;
-        if (this.predicateList != null) {
-            this.predicateList.sort((o1, o2) -> o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName()));
-        }
-        this.functionList = functionList;
-        if (this.predicateList != null) {
-            this.functionList.sort((o1, o2) -> o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName()));
-        }
+        this.predicateMap = predicateMap;
+        this.functionMap = functionMap;
     }
 
     @Override
-    public List<Predicate> getPredicateList() {
-        return predicateList;
+    public Map<String, Class<? extends Predicate>> getPredicateMap() {
+        return predicateMap;
     }
 
     @Override
-    public List<Function> getFunctionList() {
-        return functionList;
+    public Map<String, Class<? extends Function>> getFunctionMap() {
+        return functionMap;
     }
 }

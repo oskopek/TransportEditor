@@ -6,6 +6,6 @@ package com.oskopek.transporteditor.model.domain;
 
 public enum DomainLabel {
 
-    MinimizeDuration, ActionCost, Numeric, Temporal, Fuel, MinimizeFuel, Capacity, MaxCapacity
+    ActionCost, Numeric, Temporal, Fuel, Capacity, MaxCapacity
 
 }

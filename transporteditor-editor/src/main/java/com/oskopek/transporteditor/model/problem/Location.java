@@ -4,61 +4,35 @@
 
 package com.oskopek.transporteditor.model.problem;
 
-import javafx.beans.property.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Location implements Locatable {
 
-    private final StringProperty name = new SimpleStringProperty();
-    private final IntegerProperty xCoordinate = new SimpleIntegerProperty();
-    private final IntegerProperty yCoordinate = new SimpleIntegerProperty();
-    private final ObjectProperty<Location> locationProperty = new ReadOnlyObjectWrapper<>(this);
+    private final String name;
+    private final Integer xCoordinate;
+    private final Integer yCoordinate;
 
     public Location(String name, Integer xCoordinate, Integer yCoordinate) {
-        this.name.setValue(name);
-        this.xCoordinate.setValue(xCoordinate);
-        this.yCoordinate.setValue(yCoordinate);
+        this.name = name;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
 
     @Override
     public Location getLocation() {
-        return locationProperty.get();
+        return this;
     }
 
     public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public StringProperty nameProperty() {
         return name;
     }
 
     public int getxCoordinate() {
-        return xCoordinate.get();
-    }
-
-    public void setxCoordinate(int xCoordinate) {
-        this.xCoordinate.set(xCoordinate);
-    }
-
-    public IntegerProperty xCoordinateProperty() {
         return xCoordinate;
     }
 
     public int getyCoordinate() {
-        return yCoordinate.get();
-    }
-
-    public void setyCoordinate(int yCoordinate) {
-        this.yCoordinate.set(yCoordinate);
-    }
-
-    public IntegerProperty yCoordinateProperty() {
         return yCoordinate;
     }
 
@@ -86,6 +60,6 @@ public class Location implements Locatable {
 
     @Override
     public String toString() {
-        return "Loc[" + name + "]";
+        return "Loc[" + getName() + "]";
     }
 }

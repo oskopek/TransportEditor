@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class SequentialPlanIOIT {
 
     private static final String sequentialPlanFile = "p01SeqPlan.val";
-    private static final SequentialDomain domain = new SequentialDomain("test");
+    private static final SequentialDomain domain = new SequentialDomain("Transport sequential");
     private static final DefaultProblem problem = P01SequentialProblem();
     private static String P01SequentialPlanFileContents;
 
@@ -38,15 +38,21 @@ public class SequentialPlanIOIT {
     public static SequentialPlan P01SequentialPlan(DefaultProblem p01) {
         List<Action> planEntryList = new ArrayList<>();
         planEntryList.add(domain.buildPickUp()
-                .build(p01.getVehicle("v1"), p01.getRoadGraph().getLocation("city-loc-3"), p01.getPackage("p1")));
+                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+                        p01.getPackage("package-1")));
         planEntryList.add(domain.buildPickUp()
-                .build(p01.getVehicle("v1"), p01.getRoadGraph().getLocation("city-loc-3"), p01.getPackage("p2")));
-        planEntryList.add(domain.buildDrive().build(p01.getVehicle("v1"), p01.getRoadGraph().getLocation("city-loc-3"),
-                p01.getRoadGraph().getLocation("city-loc-2"), p01.getRoadGraph().getRoad("l3l2")));
+                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+                        p01.getPackage("package-2")));
+        planEntryList.add(domain.buildDrive()
+                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+                        p01.getRoadGraph().getLocation("city-loc-2"), p01.getRoadGraph().getLocation("city-loc-2"),
+                        p01.getRoadGraph()));
         planEntryList.add(domain.buildDrop()
-                .build(p01.getVehicle("v1"), p01.getRoadGraph().getLocation("city-loc-2"), p01.getPackage("p2")));
+                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
+                        p01.getPackage("package-2")));
         planEntryList.add(domain.buildDrop()
-                .build(p01.getVehicle("v1"), p01.getRoadGraph().getLocation("city-loc-2"), p01.getPackage("p1")));
+                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
+                        p01.getPackage("package-1")));
         return new SequentialPlan(planEntryList);
     }
 
@@ -88,17 +94,17 @@ public class SequentialPlanIOIT {
         graph.addRoad(new DefaultRoad("l4l5", ActionCost.valueOf(32)), graph.getLocation("city-loc-4"),
                 graph.getLocation("city-loc-5"));
 
-        Vehicle vehicle1 = new Vehicle("v1", graph.getLocation("city-loc-4"), ActionCost.valueOf(2),
+        Vehicle vehicle1 = new Vehicle("truck-1", graph.getLocation("city-loc-4"), ActionCost.valueOf(2),
                 ActionCost.valueOf(2), new ArrayList<>());
-        Vehicle vehicle2 = new Vehicle("v2", graph.getLocation("city-loc-5"), ActionCost.valueOf(4),
+        Vehicle vehicle2 = new Vehicle("truck-2", graph.getLocation("city-loc-5"), ActionCost.valueOf(4),
                 ActionCost.valueOf(4), new ArrayList<>());
         Map<String, Vehicle> vehicles = new HashMap<>();
         vehicles.put(vehicle1.getName(), vehicle1);
         vehicles.put(vehicle2.getName(), vehicle2);
 
-        Package package1 = new Package("p1", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-5"),
+        Package package1 = new Package("package-1", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-5"),
                 ActionCost.valueOf(1));
-        Package package2 = new Package("p2", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-2"),
+        Package package2 = new Package("package-2", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-2"),
                 ActionCost.valueOf(1));
         Map<String, Package> packages = new HashMap<>();
         packages.put(package1.getName(), package1);
@@ -113,7 +119,7 @@ public class SequentialPlanIOIT {
         SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(problem);
         String serializedPlan = sequentialPlanIO.serialize(P01SequentialPlan);
         assertNotNull(serializedPlan);
-        TestUtils.assertPDDLContentEquals(P01SequentialPlanFileContents, serializedPlan);
+        assertEquals(P01SequentialPlanFileContents, serializedPlan);
     }
 
     @Test

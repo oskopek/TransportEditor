@@ -15,6 +15,6 @@ public class PickUp extends DefaultAction<Vehicle, Package> {
 
     public PickUp(Vehicle vehicle, Location location, Package aPackage, List<Predicate> preconditions,
             List<Predicate> effects, ActionCost cost, ActionCost duration) {
-        super("pickup", vehicle, location, aPackage, preconditions, effects, cost, duration);
+        super("pick-up", vehicle, location, aPackage, preconditions, effects, cost, duration);
     }
 }

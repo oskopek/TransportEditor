@@ -4,6 +4,8 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.oskopek.transporteditor.model.domain.DomainLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
@@ -20,7 +22,6 @@ import org.junit.Test;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class VariableDomainIOIT {
@@ -46,16 +47,19 @@ public class VariableDomainIOIT {
 
     @Before
     public void setUp() throws Exception {
-        variableDomainSeq = spy(new VariableDomain(DomainLabel.ActionCost, null, null));
-        when(variableDomainSeq.getFunctionList()).thenReturn(Arrays.asList(RoadLength.class, TotalCost.class));
-        when(variableDomainSeq.getPredicateList()).thenReturn(
-                Arrays.asList(At.class, HasCapacity.class, In.class, IsRoad.class));
+        variableDomainSeq = spy(new VariableDomain("Transport sequential", null, null, null, null,
+                ImmutableSet.of(DomainLabel.ActionCost, DomainLabel.Capacity, DomainLabel.MaxCapacity), null, null));
+        when(variableDomainSeq.getFunctionMap()).thenReturn(
+                ImmutableMap.of("road-length", RoadLength.class, "total-cost", TotalCost.class));
+        when(variableDomainSeq.getPredicateMap()).thenReturn(
+                ImmutableMap.of("at", At.class, "capacity", HasCapacity.class, "in", In.class, "road", IsRoad.class));
 
-        variableDomainB = spy(new VariableDomain(DomainLabel.Temporal, null, null));
-        when(variableDomainB.getFunctionList()).thenReturn(
-                Arrays.asList(Capacity.class, PackageSize.class, RoadLength.class));
-        when(variableDomainB.getPredicateList()).thenReturn(
-                Arrays.asList(At.class, In.class, IsRoad.class, ReadyLoading.class));
+        variableDomainB = spy(new VariableDomain("Transport temporal without fuel", null, null, null, null,
+                ImmutableSet.of(DomainLabel.Temporal, DomainLabel.Capacity, DomainLabel.MaxCapacity), null, null));
+        when(variableDomainB.getFunctionMap()).thenReturn(ImmutableMap
+                .of("capacity", Capacity.class, "package-size", PackageSize.class, "road-length", RoadLength.class));
+        when(variableDomainB.getPredicateMap()).thenReturn(ImmutableMap
+                .of("at", At.class, "in", In.class, "road", IsRoad.class, "ready-loading", ReadyLoading.class));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(parsed, variableDomainSeq);
-        assertEquals(new SequentialDomain(""), parsed);
+        assertEquals(new SequentialDomain("Transport sequential"), parsed);
     }
 
     @Test
@@ -77,7 +81,7 @@ public class VariableDomainIOIT {
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
-        assertEquals(parsed, variableDomainB);
+        assertEquals(variableDomainB, parsed);
     }
 
     @Test

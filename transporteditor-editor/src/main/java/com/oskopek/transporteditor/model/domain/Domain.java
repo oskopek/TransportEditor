@@ -11,7 +11,7 @@ import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,9 +25,9 @@ public interface Domain {
 
     String getName();
 
-    List<Predicate> getPredicateList();
+    Map<String, Class<? extends Predicate>> getPredicateMap();
 
-    List<Function> getFunctionList();
+    Map<String, Class<? extends Function>> getFunctionMap();
 
     DriveBuilder buildDrive();
 

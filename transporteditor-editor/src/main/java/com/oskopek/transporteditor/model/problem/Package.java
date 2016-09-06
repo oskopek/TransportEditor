@@ -5,43 +5,25 @@
 package com.oskopek.transporteditor.model.problem;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Package extends DefaultLocatable implements ActionObject, Locatable {
 
-    private ObjectProperty<Location> target = new SimpleObjectProperty<>();
-    private ObjectProperty<ActionCost> size = new SimpleObjectProperty<>();
+    private final Location target;
+    private final ActionCost size;
 
     public Package(String name, Location location, Location target, ActionCost size) {
         super(name, location);
-        this.target.setValue(target);
-        this.size.setValue(size);
+        this.target = target;
+        this.size = size;
     }
 
     public Location getTarget() {
-        return target.get();
-    }
-
-    public void setTarget(Location target) {
-        this.target.set(target);
-    }
-
-    public ObjectProperty<Location> targetProperty() {
         return target;
     }
 
     public ActionCost getSize() {
-        return size.get();
-    }
-
-    public void setSize(ActionCost size) {
-        this.size.set(size);
-    }
-
-    public ObjectProperty<ActionCost> sizeProperty() {
         return size;
     }
 
