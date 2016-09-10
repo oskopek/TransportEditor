@@ -148,11 +148,11 @@ public class ExternalPlanner implements Planner {
     }
 
     private TemporalPlan tryParseTemporalPlan(String planContents) {
-        return new TemporalPlanIO(problem).parse(planContents);
+        return new TemporalPlanIO(domain, problem).parse(planContents);
     }
 
     private SequentialPlan tryParseSequentialPlan(String planContents) {
-        return new SequentialPlanIO(problem).parse(planContents);
+        return new SequentialPlanIO(domain, problem).parse(planContents);
     }
 
     private Plan tryParsePlan(String planContents) {

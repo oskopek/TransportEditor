@@ -187,7 +187,8 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getProblem() == null) {
             throw new IllegalStateException("Cannot create new plan, because no problem is loaded.");
         }
-        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getProblem());
+        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
+                application.getPlanningSession().getProblem());
         planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
     }
 
@@ -196,7 +197,8 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getProblem() == null) {
             throw new IllegalStateException("Cannot load plan, because no problem is loaded.");
         }
-        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getProblem());
+        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
+                application.getPlanningSession().getProblem());
         planFileHandler.load(messages.getString("load.plan"), io, io);
     }
 

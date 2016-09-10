@@ -27,6 +27,10 @@ public class RefuelBuilder extends DefaultActionBuilder<Refuel, Vehicle, Placeho
     @Override
     public <Who_ extends Vehicle, What_ extends PlaceholderActionObject> Refuel build(Who_ who, Location where,
             What_ what) {
+        return build(who, where);
+    }
+
+    public <Who_ extends Vehicle> Refuel build(Who_ who, Location where) {
         return new Refuel(who, where, getPreconditions(), getEffects(), cost, duration);
     }
 }

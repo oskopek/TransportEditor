@@ -37,21 +37,15 @@ public class SequentialPlanIOIT {
 
     public static SequentialPlan P01SequentialPlan(DefaultProblem p01) {
         List<Action> planEntryList = new ArrayList<>();
-        planEntryList.add(domain.buildPickUp()
-                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+        planEntryList.add(domain.buildPickUp(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
                         p01.getPackage("package-1")));
-        planEntryList.add(domain.buildPickUp()
-                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+        planEntryList.add(domain.buildPickUp(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
                         p01.getPackage("package-2")));
-        planEntryList.add(domain.buildDrive()
-                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
-                        p01.getRoadGraph().getLocation("city-loc-2"), p01.getRoadGraph().getLocation("city-loc-2"),
-                        p01.getRoadGraph()));
-        planEntryList.add(domain.buildDrop()
-                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
+        planEntryList.add(domain.buildDrive(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-3"),
+                p01.getRoadGraph().getLocation("city-loc-2"), p01.getRoadGraph()));
+        planEntryList.add(domain.buildDrop(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
                         p01.getPackage("package-2")));
-        planEntryList.add(domain.buildDrop()
-                .build(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
+        planEntryList.add(domain.buildDrop(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
                         p01.getPackage("package-1")));
         return new SequentialPlan(planEntryList);
     }
@@ -116,7 +110,7 @@ public class SequentialPlanIOIT {
     @Test
     public void serialize() throws Exception {
         SequentialPlan P01SequentialPlan = P01SequentialPlan(problem);
-        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(problem);
+        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, problem);
         String serializedPlan = sequentialPlanIO.serialize(P01SequentialPlan);
         assertNotNull(serializedPlan);
         assertEquals(P01SequentialPlanFileContents, serializedPlan);
@@ -124,7 +118,7 @@ public class SequentialPlanIOIT {
 
     @Test
     public void parse() throws Exception {
-        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(problem);
+        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, problem);
         SequentialPlan plan = sequentialPlanIO.parse(P01SequentialPlanFileContents);
         assertNotNull(plan);
         assertEquals(plan, P01SequentialPlan(problem));

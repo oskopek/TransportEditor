@@ -4,10 +4,16 @@
 
 package com.oskopek.transporteditor.model.domain;
 
+import com.oskopek.transporteditor.model.domain.action.Drive;
+import com.oskopek.transporteditor.model.domain.action.Drop;
+import com.oskopek.transporteditor.model.domain.action.PickUp;
+import com.oskopek.transporteditor.model.domain.action.Refuel;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
+import com.oskopek.transporteditor.model.problem.*;
+import com.oskopek.transporteditor.model.problem.Package;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -40,24 +46,48 @@ public abstract class DefaultDomain implements Domain {
         return name;
     }
 
+    @Override
+    public Drive buildDrive(Vehicle vehicle, Location from, Location to, Road road) {
+        return driveBuilder.build(vehicle, from, to, road);
+    }
 
     @Override
-    public DriveBuilder buildDrive() {
+    public Drive buildDrive(Vehicle vehicle, Location from, Location to, RoadGraph graph) {
+        return driveBuilder.build(vehicle, from, to, graph);
+    }
+
+    @Override
+    public Drop buildDrop(Vehicle vehicle, Location at, Package what) {
+        return dropBuilder.build(vehicle, at, what);
+    }
+
+    @Override
+    public PickUp buildPickUp(Vehicle vehicle, Location at, Package what) {
+        return pickUpBuilder.build(vehicle, at, what);
+    }
+
+    @Override
+    public Refuel buildRefuel(Vehicle vehicle, Location at) {
+        return refuelBuilder.build(vehicle, at);
+    }
+
+    @Override
+    public DriveBuilder getDriveBuilder() {
         return driveBuilder;
     }
 
     @Override
-    public DropBuilder buildDrop() {
+    public DropBuilder getDropBuilder() {
         return dropBuilder;
     }
 
     @Override
-    public PickUpBuilder buildPickUp() {
+    public PickUpBuilder getPickUpBuilder() {
         return pickUpBuilder;
     }
 
     @Override
-    public RefuelBuilder buildRefuel() {
+    public RefuelBuilder getRefuelBuilder() {
         return refuelBuilder;
     }
 

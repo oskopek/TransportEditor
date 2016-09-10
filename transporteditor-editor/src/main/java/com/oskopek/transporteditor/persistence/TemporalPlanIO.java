@@ -4,6 +4,7 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -13,9 +14,11 @@ import java.util.Set;
 
 public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<TemporalPlan> {
 
+    private final Domain domain;
     private final Problem problem;
 
-    public TemporalPlanIO(Problem problem) {
+    public TemporalPlanIO(Domain domain, Problem problem) {
+        this.domain = domain;
         this.problem = problem;
     }
 
@@ -47,4 +50,6 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     public TemporalPlan parse(String contents) throws IllegalArgumentException {
         return null;
     }
+
+
 }

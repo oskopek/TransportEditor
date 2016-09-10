@@ -4,12 +4,18 @@
 
 package com.oskopek.transporteditor.model.domain;
 
+import com.oskopek.transporteditor.model.domain.action.Drive;
+import com.oskopek.transporteditor.model.domain.action.Drop;
+import com.oskopek.transporteditor.model.domain.action.PickUp;
+import com.oskopek.transporteditor.model.domain.action.Refuel;
 import com.oskopek.transporteditor.model.domain.action.functions.Function;
 import com.oskopek.transporteditor.model.domain.action.predicates.Predicate;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
+import com.oskopek.transporteditor.model.problem.*;
+import com.oskopek.transporteditor.model.problem.Package;
 
 import java.util.Map;
 import java.util.Set;
@@ -29,13 +35,23 @@ public interface Domain {
 
     Map<String, Class<? extends Function>> getFunctionMap();
 
-    DriveBuilder buildDrive();
+    DriveBuilder getDriveBuilder();
 
-    DropBuilder buildDrop();
+    DropBuilder getDropBuilder();
 
-    PickUpBuilder buildPickUp();
+    PickUpBuilder getPickUpBuilder();
 
-    RefuelBuilder buildRefuel();
+    RefuelBuilder getRefuelBuilder();
+
+    Drive buildDrive(Vehicle vehicle, Location from, Location to, Road road);
+
+    Drive buildDrive(Vehicle vehicle, Location from, Location to, RoadGraph graph);
+
+    Drop buildDrop(Vehicle vehicle, Location at, Package what);
+
+    PickUp buildPickUp(Vehicle vehicle, Location at, Package what);
+
+    Refuel buildRefuel(Vehicle vehicle, Location at);
 
     Set<DomainLabel> getDomainLabels();
 

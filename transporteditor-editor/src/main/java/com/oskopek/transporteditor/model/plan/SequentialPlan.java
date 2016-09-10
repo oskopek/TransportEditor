@@ -7,6 +7,8 @@ package com.oskopek.transporteditor.model.plan;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.problem.Problem;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -57,5 +59,25 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
 
     public Problem apply(Problem instance, Action action) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof SequentialPlan)) {
+            return false;
+        }
+
+        SequentialPlan actions = (SequentialPlan) o;
+
+        return new EqualsBuilder().append(actionList, actions.actionList).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(actionList).toHashCode();
     }
 }

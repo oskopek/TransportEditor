@@ -1,5 +1,8 @@
 package com.github.kevinjdolan.intervaltree;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -164,5 +167,25 @@ public class IntervalTree<Type> {
         sb.append(nodeString(node.getLeft(), level + 1));
         sb.append(nodeString(node.getRight(), level + 1));
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof IntervalTree)) {
+            return false;
+        }
+
+        IntervalTree<?> that = (IntervalTree<?>) o;
+
+        return new EqualsBuilder().append(intervalList, that.intervalList).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(intervalList).toHashCode();
     }
 }

@@ -4,15 +4,27 @@
 
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.*;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.model.problem.Vehicle;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<SequentialPlan> {
 
     private final Problem problem;
+    private final Domain domain;
 
-    public SequentialPlanIO(Problem problem) {
+    public SequentialPlanIO(Domain domain, Problem problem) {
+        this.domain = domain;
         this.problem = problem;
     }
 
@@ -49,8 +61,49 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         return builder.toString();
     }
 
+    private Action parsePlanAction(String line) {
+        Pattern actionPattern = Pattern.compile("\\((([-a-zA-Z0-9]+ )+([-a-zA-Z0-9]+))\\)");
+        Matcher matcher = actionPattern.matcher(line);
+
+        String inside = null;
+        if (matcher.find()) {
+            inside = matcher.group(1);
+        } else {
+            throw new IllegalArgumentException("Couldn't parse line: " + line);
+        }
+
+        String[] groups = inside.split(" ");
+
+        String actionName = groups[0];
+        Vehicle vehicle = problem.getVehicle(groups[1]);
+        Location where = problem.getRoadGraph().getLocation(groups[2]);
+        switch (actionName) {
+            case "drop": {
+                Package what = problem.getPackage(groups[3]);
+                return domain.buildDrop(vehicle, where, what);
+            }
+            case "pick-up": {
+                Package what = problem.getPackage(groups[3]);
+                return domain.buildPickUp(vehicle, where, what);
+            }
+            case "refuel": {
+                return domain.buildRefuel(vehicle, where);
+            }
+            case "drive": {
+                Location to = problem.getRoadGraph().getLocation(groups[3]);
+                return domain.buildDrive(vehicle, where, to, problem.getRoadGraph());
+            }
+            default:
+                throw new IllegalArgumentException("Unknown action name: " + actionName);
+        }
+    }
+
     @Override
     public SequentialPlan parse(String contents) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<Action> actions = Arrays.stream(contents.split("\n")).map(s -> {
+            int index = s.indexOf(';');
+            return index >= 0 ? s.substring(0, index) : s;
+        }).filter(s -> !s.isEmpty()).map(this::parsePlanAction).collect(Collectors.toList());
+        return new SequentialPlan(actions);
     }
 }

@@ -30,18 +30,18 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
     }
 
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what,
-            Location fromWhere, RoadGraph graph) {
-        if (fromWhere == null) {
-            throw new IllegalArgumentException("From where cannot be null.");
-        }
+            RoadGraph graph) {
         if (where == null) {
             throw new IllegalArgumentException("Where cannot be null.");
         }
+        if (what == null) {
+            throw new IllegalArgumentException("What cannot be null.");
+        }
 
-        Road road = graph.getRoadBetween(fromWhere, where);
+        Road road = graph.getRoadBetween(where, what);
         if (road == null) {
             throw new IllegalArgumentException(
-                    "Could not find road \"" + fromWhere.getName() + "\" -> \"" + where.getName() + "\".");
+                    "Could not find road \"" + what.getName() + "\" -> \"" + what.getName() + "\".");
         }
         return build(who, where, what, road);
     }

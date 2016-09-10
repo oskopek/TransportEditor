@@ -8,6 +8,8 @@ import com.github.kevinjdolan.intervaltree.Interval;
 import com.github.kevinjdolan.intervaltree.IntervalTree;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,5 +58,25 @@ public class TemporalPlan implements Plan, Iterable<TemporalPlanAction> {
     @Override
     public Spliterator<TemporalPlanAction> spliterator() {
         return getTemporalPlanActions().spliterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof TemporalPlan)) {
+            return false;
+        }
+
+        TemporalPlan that = (TemporalPlan) o;
+
+        return new EqualsBuilder().append(actionIntervalTree, that.actionIntervalTree).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(actionIntervalTree).toHashCode();
     }
 }
