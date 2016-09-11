@@ -58,7 +58,8 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
         }
 
-        return predicates.stream().collect(Collectors.toMap(p -> p, predicateNameMap::get));
+        return predicates.stream().filter(p -> !"capacity-predecessor".equals(p)).collect(
+                Collectors.toMap(p -> p, predicateNameMap::get));
     }
 
     private Map<String, Class<? extends Function>> parseFunctions(String contents) {
@@ -145,20 +146,20 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         input.put("numeric", DomainLabel.Numeric);
         input.put("temporal", DomainLabel.Temporal);
 
-        input.put("Capacity", Capacity.class);
-        input.put("FuelDemand", FuelDemand.class);
-        input.put("FuelLeft", FuelLeft.class);
-        input.put("FuelMax", FuelMax.class);
-        input.put("PackageSize", PackageSize.class);
-        input.put("RoadLength", RoadLength.class);
-        input.put("TotalCost", TotalCost.class);
-
-        input.put("At", At.class);
-        input.put("HasCapacity", HasCapacity.class);
-        input.put("HasPetrolStation", HasPetrolStation.class);
-        input.put("In", In.class);
-        input.put("IsRoad", IsRoad.class);
-        input.put("ReadyLoading", ReadyLoading.class);
+        //        input.put("Capacity", Capacity.class);
+        //        input.put("FuelDemand", FuelDemand.class);
+        //        input.put("FuelLeft", FuelLeft.class);
+        //        input.put("FuelMax", FuelMax.class);
+        //        input.put("PackageSize", PackageSize.class);
+        //        input.put("RoadLength", RoadLength.class);
+        //        input.put("TotalCost", TotalCost.class);
+        //
+        //        input.put("At", At.class);
+        //        input.put("HasCapacity", HasCapacity.class);
+        //        input.put("HasPetrolStation", HasPetrolStation.class);
+        //        input.put("In", In.class);
+        //        input.put("IsRoad", IsRoad.class);
+        //        input.put("ReadyLoading", ReadyLoading.class);
 
         Template template = null;
         try {
