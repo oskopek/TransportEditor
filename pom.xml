@@ -107,11 +107,6 @@
                 <artifactId>xstream</artifactId>
                 <version>1.4.7</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>com.github.oskopek</groupId>-->
-                <!--<artifactId>pddl4j</artifactId>-->
-                <!--<version>3.3.6</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
@@ -123,15 +118,20 @@
                 <version>19.0</version>
             </dependency>
             <dependency>
-                <groupId>ru.lanwen.verbalregex</groupId>
-                <artifactId>java-verbal-expressions</artifactId>
-                <version>1.4</version>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>4.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>4.5</version>
+                </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>

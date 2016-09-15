@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class SequentialDomain extends DefaultDomain {
 
-    private final static Map<String, Class<? extends Predicate>> predicateMap;
-    private final static Map<String, Class<? extends Function>> functionMap;
+    private static final Map<String, Class<? extends Predicate>> predicateMap;
+    private static final Map<String, Class<? extends Function>> functionMap;
 
     public SequentialDomain(String name) {
         super(name, new DriveBuilder(Arrays.asList(new At(), new IsRoad()), Arrays.asList(new Not(new At()), new At())),
