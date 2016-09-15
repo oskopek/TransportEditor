@@ -16,6 +16,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import ru.lanwen.verbalregex.VerbalExpression;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -106,11 +107,31 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     }
 
     public PickUpBuilder parsePickUpBuilder(String contents) {
+        Map<String, String> parsed = actionParser("pick-up", contents);
         return new PickUpBuilder(new ArrayList<>(), null, null, null);
     }
 
     public RefuelBuilder parseRefuelBuilder(String contents) {
+        Map<String, String> parsed = actionParser("refuel", contents);
         return new RefuelBuilder(null, null, null, null);
+    }
+
+    private Map<String, String> actionParser(String name, String normalized) {
+        VerbalExpression.Builder simpleName = VerbalExpression.regex().capt().add("[-:?a-zA-Z0-9]").oneOrMore()
+                .endCapt();
+        VerbalExpression.Builder simplePredicate = VerbalExpression.regex().space().zeroOrMore().then("(").capt().add(
+                simpleName).space().oneOrMore().endCapt().zeroOrMore().add(simpleName).then(")").space().zeroOrMore();
+        VerbalExpression.Builder complexPredicate = VerbalExpression.regex().space().zeroOrMore().then("(").add(
+                simpleName).space().oneOrMore().add(simplePredicate).zeroOrMore().then(")").space().zeroOrMore();
+        VerbalExpression actionExpression = VerbalExpression.regex().then("(:").maybe("durative-").then("action")
+                .space().oneOrMore().then(name).space().oneOrMore().then(":parameters").space().zeroOrMore().add(
+                        simplePredicate).capt().then(":duration").space().zeroOrMore().add(simplePredicate).endCapt()
+                .count(0, 1).then(":").maybe("pre").then("condition").space().oneOrMore().add(complexPredicate).then(
+                        ":effect").space().oneOrMore().add(complexPredicate).space().zeroOrMore().then(")").build();
+
+        System.out.println(actionExpression.getText(normalized));
+        Map<String, String> parsed = new HashMap<>();
+        return parsed;
     }
 
     @Override
@@ -118,10 +139,11 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         String name = parseName(contents);
         Map<String, Class<? extends Predicate>> predicates = parsePredicates(contents);
         Map<String, Class<? extends Function>> functions = parseFunctions(contents);
-        DriveBuilder driveBuilder = parseDriveBuilder(contents);
-        DropBuilder dropBuilder = parseDropBuilder(contents);
-        PickUpBuilder pickUpBuilder = parsePickUpBuilder(contents);
-        RefuelBuilder refuelBuilder = parseRefuelBuilder(contents);
+        String normalized = normalizeInput(contents).collect(Collectors.joining(""));
+        DriveBuilder driveBuilder = parseDriveBuilder(normalized);
+        DropBuilder dropBuilder = parseDropBuilder(normalized);
+        PickUpBuilder pickUpBuilder = parsePickUpBuilder(normalized);
+        RefuelBuilder refuelBuilder = parseRefuelBuilder(normalized);
 
         Set<DomainLabel> labels = parseDomainLabels(contents);
         if (functions.containsKey("capacity")) {

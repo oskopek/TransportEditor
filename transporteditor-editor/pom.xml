@@ -77,6 +77,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.lanwen.verbalregex</groupId>
+            <artifactId>java-verbal-expressions</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>TransportEditor</finalName>
