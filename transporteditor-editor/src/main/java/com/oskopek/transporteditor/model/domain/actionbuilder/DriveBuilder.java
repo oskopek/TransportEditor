@@ -41,7 +41,7 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
         Road road = graph.getRoadBetween(where, what);
         if (road == null) {
             throw new IllegalArgumentException(
-                    "Could not find road \"" + what.getName() + "\" -> \"" + what.getName() + "\".");
+                    "Could not find road \"" + where.getName() + "\" -> \"" + what.getName() + "\".");
         }
         return build(who, where, what, road);
     }
