@@ -80,7 +80,7 @@ atomicFormulaSkeleton
    ;
 
 predicate
-   : NAME
+   : NAME | 'at'
    ;
 
 // If have any typed variables, they must come FIRST!
