@@ -5,12 +5,17 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<TemporalPlan> {
 
@@ -22,7 +27,7 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
         this.problem = problem;
     }
 
-    public static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
+    private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
         String action = SequentialPlanIO.serializeAction(temporalPlanAction.getAction());
         StringBuilder str = new StringBuilder();
         str.append(temporalPlanAction.getStartTimestamp()).append(';').append(temporalPlanAction.getEndTimestamp())
@@ -48,7 +53,40 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
 
     @Override
     public TemporalPlan parse(String contents) throws IllegalArgumentException {
-        return null;
+        Set<TemporalPlanAction> actions = new HashSet<>();
+
+        PlanParser parser = new PlanParser(new CommonTokenStream(new PlanLexer(new ANTLRInputStream(contents))));
+        ErrorDetectionListener listener = new ErrorDetectionListener();
+        parser.addErrorListener(listener);
+        PlanParser.PlanContext context = parser.plan();
+        if (listener.isFail()) {
+            throw new IllegalArgumentException("Plan failed to parse.");
+        }
+        PlanParser.TemporalPlanContext tempContext = context.temporalPlan();
+        for (PlanParser.TemporalActionContext action : tempContext.temporalAction()) {
+            double duration = Double.parseDouble(action.duration().NUMBER().getText());
+            if ((duration != Math.floor(duration)) || Double.isInfinite(duration)) {
+                throw new IllegalArgumentException("We do not support non-integer durations."
+                        + " There's no need for them in most Transport domains.");
+            }
+            double time = Double.parseDouble(action.time().NUMBER().getText());
+            if ((time != Math.floor(time)) || Double.isInfinite(time)) {
+                throw new IllegalArgumentException("We do not support non-integer times. There's no need for them in"
+                        + " most Transport domains.");
+            }
+
+            String actionString = String.format("(%s)",
+                    String.join(" ", action.sequentialAction().action().NAME().getText(),
+                            action.sequentialAction().object().stream().map(o -> o.NAME().getText())
+                                    .collect(Collectors.joining(" "))));
+            Action actionObj = SequentialPlanIO.parsePlanAction(domain, problem, actionString);
+            int timeInt = (int) time;
+            int durationInt = (int) duration;
+            TemporalPlanAction temporalPlanAction = new TemporalPlanAction(actionObj, timeInt, timeInt + durationInt);
+            actions.add(temporalPlanAction);
+        }
+
+        return new TemporalPlan(actions);
     }
 
 
