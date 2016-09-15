@@ -307,7 +307,7 @@ optimization
    ;
 
 metricFExp
-   : '(' binaryOp metricFExp metricFExp ')' | '(' ( '*' | '/' ) metricFExp metricFExp+ ')' | '(' '-' metricFExp ')' | NUMBER | '(' functionSymbol NAME* ')' | functionSymbol | 'total-time' | '(' 'is-violated' NAME ')'
+   : '(' binaryOp metricFExp metricFExp ')' | '(' ( '*' | '/' ) metricFExp metricFExp+ ')' | '(' '-' metricFExp ')' | NUMBER | '(' functionSymbol NAME* ')' | functionSymbol | 'total-time' | '(' 'total-time' ')' | '(' 'is-violated' NAME ')'
    ;
 
 /************* CONSTRAINTS ****************************/ conGD
