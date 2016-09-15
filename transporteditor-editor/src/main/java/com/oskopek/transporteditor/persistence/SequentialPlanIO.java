@@ -49,19 +49,7 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         return str.toString();
     }
 
-    @Override
-    public String serialize(SequentialPlan plan) throws IllegalArgumentException {
-        StringBuilder builder = new StringBuilder();
-        plan.forEach(action -> builder.append(serializeAction(action)).append('\n'));
-        ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
-                ActionCost::add);
-        if (totalCost != null) {
-            builder.append("; cost = ").append(totalCost.getCost()).append(" (general cost)");
-        }
-        return builder.toString();
-    }
-
-    private Action parsePlanAction(String line) {
+    public static Action parsePlanAction(Domain domain, Problem problem, String line) {
         Pattern actionPattern = Pattern.compile("\\((([-a-zA-Z0-9]+ )+([-a-zA-Z0-9]+))\\)");
         Matcher matcher = actionPattern.matcher(line);
 
@@ -99,11 +87,24 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
     }
 
     @Override
+    public String serialize(SequentialPlan plan) throws IllegalArgumentException {
+        StringBuilder builder = new StringBuilder();
+        plan.forEach(action -> builder.append(serializeAction(action)).append('\n'));
+        ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
+                ActionCost::add);
+        if (totalCost != null) {
+            builder.append("; cost = ").append(totalCost.getCost()).append(" (general cost)");
+        }
+        return builder.toString();
+    }
+
+    @Override
     public SequentialPlan parse(String contents) throws IllegalArgumentException {
         List<Action> actions = Arrays.stream(contents.split("\n")).map(s -> {
             int index = s.indexOf(';');
             return index >= 0 ? s.substring(0, index) : s;
-        }).filter(s -> !s.isEmpty()).map(this::parsePlanAction).collect(Collectors.toList());
+        }).filter(s -> !s.isEmpty()).map(s -> SequentialPlanIO.parsePlanAction(domain, problem, s)).collect(
+                Collectors.toList());
         return new SequentialPlan(actions);
     }
 }

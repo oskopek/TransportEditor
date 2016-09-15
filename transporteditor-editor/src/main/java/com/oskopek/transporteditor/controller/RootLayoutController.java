@@ -32,10 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -153,8 +150,9 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
-        problemFileHandler.newObject(new DefaultProblem(new RoadGraph("graph"), new HashMap<>(), new HashMap<>()),
-                io, io);
+        problemFileHandler.newObject(
+                new DefaultProblem("problem" + new Date().toString(), new RoadGraph("graph"), new HashMap<>(),
+                        new HashMap<>()), io, io);
     }
 
     @FXML

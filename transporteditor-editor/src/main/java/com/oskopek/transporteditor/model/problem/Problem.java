@@ -6,7 +6,9 @@ package com.oskopek.transporteditor.model.problem;
 
 import java.util.Collection;
 
-public interface Problem extends Cloneable {
+public interface Problem {
+
+    String getName();
 
     RoadGraph getRoadGraph();
 

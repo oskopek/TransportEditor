@@ -51,6 +51,7 @@ public class SequentialPlanIOIT {
     }
 
     public static DefaultProblem P01SequentialProblem() {
+        String name = "transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed";
         RoadGraph graph = new RoadGraph("test");
         graph.addLocation(new Location("city-loc-1", 456, 221));
         graph.addLocation(new Location("city-loc-2", 742, 542));
@@ -104,7 +105,7 @@ public class SequentialPlanIOIT {
         packages.put(package1.getName(), package1);
         packages.put(package2.getName(), package2);
 
-        return new DefaultProblem(graph, vehicles, packages);
+        return new DefaultProblem(name, graph, vehicles, packages);
     }
 
     @Test

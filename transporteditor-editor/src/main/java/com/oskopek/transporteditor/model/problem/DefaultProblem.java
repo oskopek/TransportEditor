@@ -13,20 +13,29 @@ import java.util.Map;
 
 public class DefaultProblem implements Problem {
 
+    private final String name;
     private final RoadGraph roadGraph;
     private final Map<String, Vehicle> vehicleMap;
     private final Map<String, Package> packageMap;
 
     public DefaultProblem(DefaultProblem defaultProblem) {
-        this.roadGraph = new RoadGraph(defaultProblem.getRoadGraph());
-        this.vehicleMap = new HashMap<>(defaultProblem.vehicleMap); // vehicles are immutable
-        this.packageMap = new HashMap<>(defaultProblem.packageMap); // packages are immutable
+        // vehicles are immutable
+        // packages are immutable
+        this(defaultProblem.getName(), new RoadGraph(defaultProblem.getRoadGraph()),
+                new HashMap<>(defaultProblem.vehicleMap), new HashMap<>(defaultProblem.packageMap));
     }
 
-    public DefaultProblem(RoadGraph roadGraph, Map<String, Vehicle> vehicleMap, Map<String, Package> packageMap) {
+    public DefaultProblem(String name, RoadGraph roadGraph, Map<String, Vehicle> vehicleMap,
+            Map<String, Package> packageMap) {
+        this.name = name;
         this.roadGraph = roadGraph;
         this.vehicleMap = vehicleMap;
         this.packageMap = packageMap;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -88,12 +97,14 @@ public class DefaultProblem implements Problem {
 
         DefaultProblem that = (DefaultProblem) o;
 
-        return new EqualsBuilder().append(getRoadGraph(), that.getRoadGraph()).append(vehicleMap, that.vehicleMap)
+        return new EqualsBuilder().append(getName(), that.getName()).append(getRoadGraph(), that.getRoadGraph()).append(
+                vehicleMap, that.vehicleMap)
                 .append(packageMap, that.packageMap).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getRoadGraph()).append(vehicleMap).append(packageMap).toHashCode();
+        return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
+                packageMap).toHashCode();
     }
 }
