@@ -1,3 +1,3 @@
 grammar Problem;
-nameExpr: NAME ;
+problem: NAME ;
 NAME: [a-z]+ ;

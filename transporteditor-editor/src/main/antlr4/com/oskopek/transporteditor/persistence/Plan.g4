@@ -1,3 +1,3 @@
 grammar Plan;
-nameExpr: NAME ;
+plan: NAME ;
 NAME: [a-z]+ ;
