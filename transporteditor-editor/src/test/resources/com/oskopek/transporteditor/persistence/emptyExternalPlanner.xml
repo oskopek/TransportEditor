@@ -1,0 +1,3 @@
+<com.oskopek.transporteditor.model.planner.ExternalPlanner id="1">
+    <executableString>planner.jar -domain {0} -problem {1}</executableString>
+</com.oskopek.transporteditor.model.planner.ExternalPlanner>

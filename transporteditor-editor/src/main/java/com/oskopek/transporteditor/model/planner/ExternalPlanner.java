@@ -17,6 +17,9 @@ import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +30,7 @@ import java.text.MessageFormat;
 public class ExternalPlanner implements Planner {
 
     private final String executableString;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private VariableDomain domain;
     private DefaultProblem problem;
     private File domainTmp;
@@ -166,5 +169,29 @@ public class ExternalPlanner implements Planner {
     @Override
     public Plan getBestPlan() {
         return bestPlan;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ExternalPlanner)) {
+            return false;
+        }
+        ExternalPlanner that = (ExternalPlanner) o;
+        return new EqualsBuilder().append(executableString, that.executableString).append(domain, that.domain).append(
+                problem, that.problem).append(getBestPlan(), that.getBestPlan()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(executableString).append(domain).append(problem).append(getBestPlan())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("executableString", executableString).toString();
     }
 }
