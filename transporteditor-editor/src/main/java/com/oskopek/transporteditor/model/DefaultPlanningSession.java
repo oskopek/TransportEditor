@@ -7,6 +7,8 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.validation.Validator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * The default implementation of a planning session.
@@ -104,5 +106,28 @@ public class DefaultPlanningSession implements PlanningSession {
     public void stopPlanning() {
         getPlanner().stopPlanning();
         getValidator().isValid(getDomain(), getProblem(), getPlanner().getBestPlan());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof DefaultPlanningSession)) {
+            return false;
+        }
+
+        DefaultPlanningSession session = (DefaultPlanningSession) o;
+
+        return new EqualsBuilder().append(getPlanner(), session.getPlanner()).append(getValidator(),
+                session.getValidator()).append(getDomain(), session.getDomain()).append(getProblem(),
+                session.getProblem()).append(getPlan(), session.getPlan()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getPlanner()).append(getValidator()).append(getDomain())
+                .append(getProblem()).append(getPlan()).toHashCode();
     }
 }
