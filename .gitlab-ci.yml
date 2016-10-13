@@ -1,0 +1,56 @@
+image: maven:3-jdk-8
+
+variables:
+  MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -Pit"
+
+cache:
+  paths:
+    - ./.m2/repository
+  # keep cache across branch
+  key: "$CI_BUILD_REF_NAME"
+
+before_script:
+  - apt-get update
+  - apt-get install -y openjfx bc
+
+stages:
+  - build
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - "mvn clean compile $MAVEN_CLI_OPTS"
+  artifacts:
+    paths:
+      - target/
+
+unittest-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - "mvn package $MAVEN_CLI_OPTS"
+    - echo "TotalInstructionCoverage:" `cat target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+  artifacts:
+    paths:
+      - target/
+
+integrationtest-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - "mvn verify $MAVEN_CLI_OPTS"
+    - echo "TotalInstructionCoverage:" `cat target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+  artifacts:
+    paths:
+      - target/
+
+deploy-job:
+  stage: deploy
+  artifacts:
+    paths:
+      - "target/*.jar"
