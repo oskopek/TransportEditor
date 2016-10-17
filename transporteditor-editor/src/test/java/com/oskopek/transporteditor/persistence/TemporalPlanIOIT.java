@@ -11,10 +11,12 @@ import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
 
+@Ignore("Testing CI")
 public class TemporalPlanIOIT {
 
     private static VariableDomain temporalDomain;
