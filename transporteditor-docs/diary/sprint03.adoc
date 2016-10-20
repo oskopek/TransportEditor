@@ -1,3 +1,13 @@
-= Sprint 02
+= Sprint 03
 
-== 2016/08/09
+== 2016/09/26
+
+Meeting with Bartak, continuing in the next semester.
+Should release and take feedback more often.
+Also, should take a look at Multi-agent planning benchmarks
+and see if we can import the file formats for our own benchmarks.
+
+== 2016/10/20
+
+Fixed CI, migrated to GitLab because of GitLab CI.
+
