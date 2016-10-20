@@ -25,7 +25,7 @@ build-job:
     - "mvn clean compile $MAVEN_CLI_OPTS"
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 unittest-job:
   stage: test
@@ -36,7 +36,7 @@ unittest-job:
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 integrationtest-job:
   stage: test
@@ -47,19 +47,25 @@ integrationtest-job:
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 deploy-job:
   stage: deploy
   artifacts:
     paths:
-      - "target/*.jar"
+      - "target/transporteditor-editor/*.jar"
 
 build-docs:
   stage: deploy
+  before_script:
+    - apt-get update
+    - apt-get install -y asciidoctor texlive-full
   script:
-    - "bash transporteditor-docs/build.sh"
+    - 'old="`pwd`"'
+    - 'cd transporteditor-docs'
+    - 'bash build.sh'
+    - 'cd "$old"'
   artifacts:
      paths:
-        - "target/*.pdf"
-        - "target/*.html"
+        - "transporteditor-docs/target/docs"
+
