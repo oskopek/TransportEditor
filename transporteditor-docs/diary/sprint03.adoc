@@ -11,3 +11,6 @@ and see if we can import the file formats for our own benchmarks.
 
 Fixed CI, migrated to GitLab because of GitLab CI.
 
+Couldn't find anything reasonable about Multi-agent planning benchmarks :/.
+Skipping.
+
