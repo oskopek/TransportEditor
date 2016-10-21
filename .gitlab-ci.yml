@@ -60,6 +60,9 @@ build-docs:
   before_script:
     - apt-get update
     - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended make texlive-latex-extra
+    - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+    - apt-get install git-lfs
+    - git lfs install
     - git lfs pull
   script:
     - 'old="`pwd`"'
