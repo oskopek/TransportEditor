@@ -59,7 +59,7 @@ build-docs:
   stage: deploy
   before_script:
     - apt-get update
-    - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended
+    - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended make texlive-latex-extra
   script:
     - 'old="`pwd`"'
     - 'cd transporteditor-docs'
