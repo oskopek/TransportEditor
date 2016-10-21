@@ -3,12 +3,17 @@
 # Install git-lfs and pull the data files
 
 LFS_VERSION=1.4.3
+build_dir="$(realpath $(pwd))"
+cd /tmp
 
 echo 'install git lfs'
 filename=git-lfs-linux-amd64-"$LFS_VERSION".tar.gz
 wget https://github.com/github/git-lfs/releases/download/v"$LFS_VERSION"/"$filename"
 tar -zxvf "$filename"
-export PATH="`pwd`/git-lfs-1.1.0:$PATH"
+cd "./git-lfs-$LFS_VERSION"
+. ./install.sh
+
+cd "$build_dir"
 git lfs install
 
 echo 'git reset'
