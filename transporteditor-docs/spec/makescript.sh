@@ -20,13 +20,13 @@ IFS=" "; for name in $names; do
     mv "$name".pdf ../pdf/
 done
 
-mv *.aux ../build/
-mv *.dvi ../build/
-mv *.log ../build/
-mv *.blg ../build/
-mv *.bbl ../build/
-mv *.out ../build/
-mv *.toc ../build/
-mv *.idx ../build/
+mv *.aux ../build/ || true
+mv *.dvi ../build/ || true
+mv *.log ../build/ || true
+mv *.blg ../build/ || true
+mv *.bbl ../build/ || true
+mv *.out ../build/ || true
+mv *.toc ../build/ || true
+mv *.idx ../build/ || true
 
-mv *~* ../backups/
+mv *~* ../backups/ || true

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 origdir="`pwd`"
 projectdir="$origdir"/target/docs/
 subdirs="spec diary bp"
@@ -9,7 +11,7 @@ mkdir -p "$projectdir"
 
 for dir in $subdirs; do
     cd "$dir"
-    bash build.sh
+    bash ./build.sh
 
     cd "$projectdir"
     mkdir "$dir"
@@ -17,7 +19,7 @@ for dir in $subdirs; do
     cp -r "$origdir"/"$dir"/target/* .
 
     cd "$origdir"/"$dir"
-    bash clean.sh
+    bash ./clean.sh
     cd "$origdir"
 done
 
@@ -26,3 +28,4 @@ echo "Generating report..."
 report_out="`mktemp`"
 bash report.sh > $report_out
 mv "$report_out" "$projectdir"/report.html
+exit 0
