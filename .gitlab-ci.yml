@@ -56,10 +56,11 @@ deploy-job:
       - "target/transporteditor-editor/*.jar"
 
 build-docs:
-  stage: deploy
+  stage: build
   before_script:
     - apt-get update
     - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended make texlive-latex-extra
+    - git lfs pull
   script:
     - 'old="`pwd`"'
     - 'cd transporteditor-docs'
