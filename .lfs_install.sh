@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Install git-lfs and pull the data files
 
 LFS_VERSION=1.4.3
