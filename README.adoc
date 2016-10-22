@@ -1,6 +1,7 @@
 = Bachelor thesis
 
-image:https://travis-ci.com/oskopek/TransportEditor.svg?token=bw12aB3sCJh79ytwo7U1["Build Status", link="https://travis-ci.com/oskopek/TransportEditor"]
+image:https://gitlab.com/oskopek/TransportEditor/badges/master/build.svg["GitLab Build Status", link="https://gitlab.com/oskopek/TransportEditor/commits/master"]
+image:https://gitlab.com/oskopek/TransportEditor/badges/master/coverage.svg["GitLab Coverage Report", link="https://gitlab.com/oskopek/TransportEditor/commits/master"]
 image:https://www.ohloh.net/p/TransportEditor/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/TransportEditor"]
 
 My Bachelor thesis and individual software project, TransportEditor.

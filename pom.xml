@@ -151,12 +151,14 @@
                         </execution>
                         <execution>
                             <id>default-report</id>
+                            <phase>package</phase>
                             <goals>
                                 <goal>report</goal>
                             </goals>
                         </execution>
                         <execution>
                             <id>default-report-integration</id>
+                            <phase>post-integration-test</phase>
                             <goals>
                                 <goal>report-integration</goal>
                             </goals>

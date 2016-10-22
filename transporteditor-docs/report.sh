@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 sprint="`cat config/CURRENT_SPRINT`"
 out=/dev/stdout
 startdate="`date --date='last week' "+%d. %m. %Y"`"

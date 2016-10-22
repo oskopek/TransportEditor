@@ -25,7 +25,7 @@ build-job:
     - "mvn clean compile $MAVEN_CLI_OPTS"
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 unittest-job:
   stage: test
@@ -33,10 +33,10 @@ unittest-job:
     - build-job
   script:
     - "mvn package $MAVEN_CLI_OPTS"
-    - echo "TotalInstructionCoverage:" `cat target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 integrationtest-job:
   stage: test
@@ -44,13 +44,30 @@ integrationtest-job:
     - build-job
   script:
     - "mvn verify $MAVEN_CLI_OPTS"
-    - echo "TotalInstructionCoverage:" `cat target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - target/
+      - transporteditor-editor/target/
 
 deploy-job:
   stage: deploy
   artifacts:
     paths:
-      - "target/*.jar"
+      - "target/transporteditor-editor/*.jar"
+
+#build-docs:
+#  stage: build
+#  before_script:
+#    - apt-get update
+#    - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended texlive-fonts-extra make texlive-latex-extra python-pip
+#    - pip install did
+#    - bash .lfs_install.sh
+#  script:
+#    - 'old="`pwd`"'
+#    - 'cd transporteditor-docs'
+#    - 'bash build.sh'
+#    - 'cd "$old"'
+#  artifacts:
+#     paths:
+#        - "transporteditor-docs/target/docs"
+
