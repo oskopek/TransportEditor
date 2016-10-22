@@ -55,19 +55,19 @@ deploy-job:
     paths:
       - "target/transporteditor-editor/*.jar"
 
-build-docs:
-  stage: build
-  before_script:
-    - apt-get update
-    - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended texlive-fonts-extra make texlive-latex-extra python-pip
-    - pip install did
-    - bash .lfs_install.sh
-  script:
-    - 'old="`pwd`"'
-    - 'cd transporteditor-docs'
-    - 'bash build.sh'
-    - 'cd "$old"'
-  artifacts:
-     paths:
-        - "transporteditor-docs/target/docs"
+#build-docs:
+#  stage: build
+#  before_script:
+#    - apt-get update
+#    - apt-get install -y asciidoctor texlive-latex-base texlive-fonts-recommended texlive-fonts-extra make texlive-latex-extra python-pip
+#    - pip install did
+#    - bash .lfs_install.sh
+#  script:
+#    - 'old="`pwd`"'
+#    - 'cd transporteditor-docs'
+#    - 'bash build.sh'
+#    - 'cd "$old"'
+#  artifacts:
+#     paths:
+#        - "transporteditor-docs/target/docs"
 
