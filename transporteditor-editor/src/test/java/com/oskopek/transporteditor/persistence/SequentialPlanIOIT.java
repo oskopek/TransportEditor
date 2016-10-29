@@ -13,7 +13,6 @@ import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -110,7 +109,6 @@ public class SequentialPlanIOIT {
     }
 
     @Test
-    @Ignore("Testing CI")
     public void serialize() throws Exception {
         SequentialPlan P01SequentialPlan = P01SequentialPlan(problem);
         SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, problem);

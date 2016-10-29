@@ -18,7 +18,6 @@ import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -79,7 +78,6 @@ public class VariableDomainIOIT {
     }
 
     @Test
-    @Ignore("Testing CI")
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
