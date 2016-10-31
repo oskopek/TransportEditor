@@ -8,6 +8,8 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.FuelVehicle;
+import com.oskopek.transporteditor.model.problem.Road;
+import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -68,9 +70,19 @@ public class DefaultProblemIOIT {
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
         assertEquals(2, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
 
-        assertNotNull(problem.getRoadGraph());
-        assertEquals(5, problem.getRoadGraph().getNodeCount());
-        assertEquals(6, problem.getRoadGraph().getEdgeCount());
+        RoadGraph rg = problem.getRoadGraph();
+        assertNotNull(rg);
+        assertEquals(5, rg.getNodeCount());
+        assertEquals(12, rg.getEdgeCount());
+        Road road = rg.getRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
+        assertNotNull(road);
+        assertNotNull(road.getLength());
+        assertEquals(32, road.getLength().getCost().intValue());
+
+        assertNotNull(problem.getPackage("package-1").getTarget());
+        assertEquals("city-loc-5", problem.getPackage("package-1").getTarget().getName());
+        assertNotNull(problem.getPackage("package-2").getTarget());
+        assertEquals("city-loc-2", problem.getPackage("package-2").getTarget().getName());
     }
 
     @Test

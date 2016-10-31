@@ -5,6 +5,7 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -71,7 +72,82 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
             }
         }
 
-        // TODO: init section, goal section, metric section
+        for (PddlParser.InitElContext initElContext : context.init().initEl()) {
+            if (initElContext.nameLiteral() != null) {
+                String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
+                String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
+                String arg2 = initElContext.nameLiteral().atomicNameFormula().NAME(1).getText();
+                switch (predicate) {
+                    case "at": {
+                        Vehicle vehicle = vehicleMap.get(arg1);
+                        if (vehicle != null) {
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), graph.getLocation(arg2),
+                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList());
+                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            break;
+                        }
+                        Package pkg = packageMap.get(arg1);
+                        if (pkg != null) {
+                            Package newpkg = new Package(pkg.getName(), graph.getLocation(arg2), pkg.getTarget(),
+                                    pkg.getSize());
+                            packageMap.put(newpkg.getName(), newpkg);
+                            break;
+                        }
+                        break;
+                    }
+                    case "capacity": {
+                        Vehicle vehicle = vehicleMap.get(arg1);
+                        if (vehicle != null) {
+                            ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
+                                    capacity, vehicle.getPackageList());
+                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            break;
+                        }
+                        break;
+                    }
+                    case "road": {
+                        Location from = graph.getLocation(arg1);
+                        Location to = graph.getLocation(arg2);
+                        Road road = DefaultRoad.build(from, to);
+                        graph.addRoad(road, from, to);
+                        break;
+                    }
+                }
+            }
+            if (initElContext.fHead() != null) {
+                PddlParser.FHeadContext fhead = initElContext.fHead();
+                int number = Integer.parseInt(initElContext.NUMBER().getText());
+                PddlParser.FunctionSymbolContext functionSymbol = fhead.functionSymbol();
+                if (functionSymbol != null && functionSymbol.getText().equals("road-length")) {
+                    String fromName = fhead.term(0).getText();
+                    String toName = fhead.term(1).getText();
+                    Location from = graph.getLocation(fromName);
+                    Location to = graph.getLocation(toName);
+                    graph.getRoadBetween(from, to);
+                    Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
+                    graph.putRoad(newRoad, from, to);
+                }
+            }
+        }
+
+        for (PddlParser.GoalDescContext goalDescContext : context.goal().goalDesc().goalDesc()) { // implict 'and'
+            String predicate = goalDescContext.atomicTermFormula().predicate().getText();
+            String arg1 = goalDescContext.atomicTermFormula().term(0).getText();
+            String arg2 = goalDescContext.atomicTermFormula().term(1).getText();
+            switch (predicate) {
+                case "at": {
+                    Package pkg = packageMap.get(arg1);
+                    Location target = graph.getLocation(arg2);
+                    if (pkg != null) {
+                        Package newpkg = new Package(pkg.getName(), pkg.getLocation(), target, pkg.getSize());
+                        packageMap.put(newpkg.getName(), newpkg);
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
 
         return new DefaultProblem(name, graph, vehicleMap, packageMap);
     }
