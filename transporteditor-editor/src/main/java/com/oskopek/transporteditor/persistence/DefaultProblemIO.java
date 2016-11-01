@@ -37,50 +37,23 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
             throw new IllegalArgumentException("Domain is not a transport domain!");
         }
 
-        String name = context.problemDecl().getText();
-        Map<String, Vehicle> vehicleMap = new HashMap<>();
-        Map<String, Package> packageMap = new HashMap<>();
-        RoadGraph graph = new RoadGraph(name + "_graph");
-        int maxCapacity = -1;
+        ParsedProblemContainer parsed = new ParsedProblemContainer(context.problemDecl().getText());
+        parseObjectDecl(context.objectDecl(), parsed);
+        parseInit(context.init(), parsed);
+        parseGoalDescContext(context.goal(), parsed);
+        return new DefaultProblem(parsed.name(), parsed.graph(), parsed.vehicleMap(), parsed.packageMap());
+    }
 
-        for (PddlParser.SingleTypeNameListContext typeNameListContext : context.objectDecl().typedNameList()
-                .singleTypeNameList()) {
-            String typeName = typeNameListContext.type().getText();
-            String objectName = typeNameListContext.NAME(0).getText();
-            switch (typeName) {
-                case "vehicle":
-                    vehicleMap.put(objectName, new Vehicle(objectName, null, null, null, null));
-                    break;
-                case "package":
-                    packageMap.put(objectName, new Package(objectName, null, null, null));
-                    break;
-                case "location":
-                    graph.addLocation(new Location(objectName, 0, 0));
-                    break;
-                case "capacity-number":
-                    String[] split = objectName.split("-");
-                    if (split.length != 2) {
-                        throw new IllegalArgumentException("Invalid capacity-number value: " + objectName);
-                    }
-                    int capacity = Integer.parseInt(split[1]);
-                    if (capacity > maxCapacity) {
-                        maxCapacity = capacity;
-                    }
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid type: " + typeName);
-            }
-        }
-
-        for (PddlParser.InitElContext initElContext : context.init().initEl()) {
+    private void parseInit(PddlParser.InitContext initContext, ParsedProblemContainer parsed) {
+        for (PddlParser.InitElContext initElContext : initContext.initEl()) {
             if (initElContext.nameLiteral() != null) {
                 String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
                 String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
 
-                if (predicate.equals("has-petrol-station")) {
-                    graph.setPetrolStation(graph.getLocation(arg1));
+                if ("has-petrol-station".equals(predicate)) {
+                    parsed.graph().setPetrolStation(parsed.graph().getLocation(arg1));
                     continue;
-                } else if (predicate.equals("ready-loading")) {
+                } else if ("ready-loading".equals(predicate)) {
                     // ignore predicate for now
                     continue;
                 }
@@ -88,38 +61,39 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                 String arg2 = initElContext.nameLiteral().atomicNameFormula().NAME(1).getText();
                 switch (predicate) {
                     case "at": {
-                        Vehicle vehicle = vehicleMap.get(arg1);
+                        Vehicle vehicle = parsed.vehicleMap().get(arg1);
                         if (vehicle != null) {
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), graph.getLocation(arg2),
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), parsed.graph().getLocation(arg2),
                                     vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList());
-                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
-                        Package pkg = packageMap.get(arg1);
+                        Package pkg = parsed.packageMap().get(arg1);
                         if (pkg != null) {
-                            Package newpkg = new Package(pkg.getName(), graph.getLocation(arg2), pkg.getTarget(),
+                            Package newpkg = new Package(pkg.getName(), parsed.graph().getLocation(arg2),
+                                    pkg.getTarget(),
                                     pkg.getSize());
-                            packageMap.put(newpkg.getName(), newpkg);
+                            parsed.packageMap().put(newpkg.getName(), newpkg);
                             break;
                         }
                         break;
                     }
                     case "capacity": {
-                        Vehicle vehicle = vehicleMap.get(arg1);
+                        Vehicle vehicle = parsed.vehicleMap().get(arg1);
                         if (vehicle != null) {
                             ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
                             Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
                                     capacity, vehicle.getPackageList());
-                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
                         break;
                     }
                     case "road": {
-                        Location from = graph.getLocation(arg1);
-                        Location to = graph.getLocation(arg2);
+                        Location from = parsed.graph().getLocation(arg1);
+                        Location to = parsed.graph().getLocation(arg2);
                         Road road = DefaultRoad.build(from, to);
-                        graph.addRoad(road, from, to);
+                        parsed.graph().addRoad(road, from, to);
                         break;
                     }
                     default:
@@ -137,52 +111,54 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                     case "road-length": {
                         String fromName = fhead.term(0).getText();
                         String toName = fhead.term(1).getText();
-                        Location from = graph.getLocation(fromName);
-                        Location to = graph.getLocation(toName);
+                        Location from = parsed.graph().getLocation(fromName);
+                        Location to = parsed.graph().getLocation(toName);
                         Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
-                        graph.putRoad(newRoad, from, to);
+                        parsed.graph().putRoad(newRoad, from, to);
                         break;
                     }
                     case "capacity": {
                         String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                         if (vehicle != null) {
                             ActionCost capacity = ActionCost.valueOf(number);
                             Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
                                     capacity, vehicle.getPackageList());
-                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
                         break;
                     }
                     case "fuel-left": {
                         String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                         if (vehicle != null) {
                             ActionCost fuelLeft = ActionCost.valueOf(number);
                             ActionCost fuelMax = null;
                             if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelMax = ((FuelVehicle)vehicle).getMaxFuelCapacity();
+                                fuelMax = ((FuelVehicle) vehicle).getMaxFuelCapacity();
                             }
-                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(), vehicle.getCurCapacity(),
-                                    vehicle.getMaxCapacity(), vehicle.getPackageList(), fuelLeft, fuelMax);
-                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(),
+                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList(),
+                                    fuelLeft, fuelMax);
+                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
                         break;
                     }
                     case "fuel-max": {
                         String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                         if (vehicle != null) {
                             ActionCost fuelMax = ActionCost.valueOf(number);
                             ActionCost fuelLeft = null;
                             if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelLeft = ((FuelVehicle)vehicle).getCurFuelCapacity();
+                                fuelLeft = ((FuelVehicle) vehicle).getCurFuelCapacity();
                             }
-                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(), vehicle.getCurCapacity(),
-                                    vehicle.getMaxCapacity(), vehicle.getPackageList(), fuelLeft, fuelMax);
-                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(),
+                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList(),
+                                    fuelLeft, fuelMax);
+                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
                         break;
@@ -190,10 +166,10 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                     case "fuel-demand": {
                         String fromName = fhead.term(0).getText();
                         String toName = fhead.term(1).getText();
-                        Location from = graph.getLocation(fromName);
-                        Location to = graph.getLocation(toName);
-                        Road road = graph.getRoadBetween(from, to);
-                        graph.putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
+                        Location from = parsed.graph().getLocation(fromName);
+                        Location to = parsed.graph().getLocation(toName);
+                        Road road = parsed.graph().getRoadBetween(from, to);
+                        parsed.graph().putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
                         break;
                     }
                     default:
@@ -201,18 +177,52 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                 }
             }
         }
+    }
 
-        for (PddlParser.GoalDescContext goalDescContext : context.goal().goalDesc().goalDesc()) { // implict 'and'
+    private void parseObjectDecl(PddlParser.ObjectDeclContext objectDecl, ParsedProblemContainer parsed) {
+        int maxCapacity = -1;
+        for (PddlParser.SingleTypeNameListContext typeNameListContext : objectDecl.typedNameList()
+                .singleTypeNameList()) {
+            String typeName = typeNameListContext.type().getText();
+            String objectName = typeNameListContext.NAME(0).getText();
+            switch (typeName) {
+                case "vehicle":
+                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, null));
+                    break;
+                case "package":
+                    parsed.packageMap().put(objectName, new Package(objectName, null, null, null));
+                    break;
+                case "location":
+                    parsed.graph().addLocation(new Location(objectName, 0, 0));
+                    break;
+                case "capacity-number":
+                    String[] split = objectName.split("-");
+                    if (split.length != 2) {
+                        throw new IllegalArgumentException("Invalid capacity-number value: " + objectName);
+                    }
+                    int capacity = Integer.parseInt(split[1]);
+                    if (capacity > maxCapacity) {
+                        maxCapacity = capacity;
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid type: " + typeName);
+            }
+        }
+    }
+
+    private void parseGoalDescContext(PddlParser.GoalContext goalContext, ParsedProblemContainer parsed) {
+        for (PddlParser.GoalDescContext goalDescContext : goalContext.goalDesc().goalDesc()) { // we add 'and' implictly
             String predicate = goalDescContext.atomicTermFormula().predicate().getText();
             String arg1 = goalDescContext.atomicTermFormula().term(0).getText();
             String arg2 = goalDescContext.atomicTermFormula().term(1).getText();
             switch (predicate) {
                 case "at": {
-                    Package pkg = packageMap.get(arg1);
-                    Location target = graph.getLocation(arg2);
+                    Package pkg = parsed.packageMap().get(arg1);
+                    Location target = parsed.graph().getLocation(arg2);
                     if (pkg != null) {
                         Package newpkg = new Package(pkg.getName(), pkg.getLocation(), target, pkg.getSize());
-                        packageMap.put(newpkg.getName(), newpkg);
+                        parsed.packageMap().put(newpkg.getName(), newpkg);
                         break;
                     }
                     break;
@@ -221,7 +231,34 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                     throw new IllegalArgumentException("Invalid predicate in goalDesc: " + predicate);
             }
         }
+    }
 
-        return new DefaultProblem(name, graph, vehicleMap, packageMap);
+    private static final class ParsedProblemContainer {
+
+        private final String name;
+        private final Map<String, Vehicle> vehicleMap = new HashMap<>();
+        private final Map<String, Package> packageMap = new HashMap<>();
+        private final RoadGraph graph;
+
+        ParsedProblemContainer(String name) {
+            this.name = name;
+            graph = new RoadGraph(name + "_graph");
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public Map<String, Vehicle> vehicleMap() {
+            return vehicleMap;
+        }
+
+        public Map<String, Package> packageMap() {
+            return packageMap;
+        }
+
+        public RoadGraph graph() {
+            return graph;
+        }
     }
 }
