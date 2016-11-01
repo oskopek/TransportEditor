@@ -24,7 +24,7 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
 
     @Override
     public String serialize(DefaultProblem object) throws IllegalArgumentException {
-        return null;
+        return "";
     }
 
     @Override
@@ -76,6 +76,15 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
             if (initElContext.nameLiteral() != null) {
                 String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
                 String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
+
+                if (predicate.equals("has-petrol-station")) {
+                    graph.setPetrolStation(graph.getLocation(arg1));
+                    continue;
+                } else if (predicate.equals("ready-loading")) {
+                    // ignore predicate for now
+                    continue;
+                }
+
                 String arg2 = initElContext.nameLiteral().atomicNameFormula().NAME(1).getText();
                 switch (predicate) {
                     case "at": {
@@ -113,20 +122,82 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                         graph.addRoad(road, from, to);
                         break;
                     }
+                    default:
+                        break; // ignore other predicates
                 }
             }
             if (initElContext.fHead() != null) {
                 PddlParser.FHeadContext fhead = initElContext.fHead();
                 int number = Integer.parseInt(initElContext.NUMBER().getText());
                 PddlParser.FunctionSymbolContext functionSymbol = fhead.functionSymbol();
-                if (functionSymbol != null && functionSymbol.getText().equals("road-length")) {
-                    String fromName = fhead.term(0).getText();
-                    String toName = fhead.term(1).getText();
-                    Location from = graph.getLocation(fromName);
-                    Location to = graph.getLocation(toName);
-                    graph.getRoadBetween(from, to);
-                    Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
-                    graph.putRoad(newRoad, from, to);
+                if (functionSymbol == null) {
+                    continue;
+                }
+                switch (functionSymbol.getText()) {
+                    case "road-length": {
+                        String fromName = fhead.term(0).getText();
+                        String toName = fhead.term(1).getText();
+                        Location from = graph.getLocation(fromName);
+                        Location to = graph.getLocation(toName);
+                        Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
+                        graph.putRoad(newRoad, from, to);
+                        break;
+                    }
+                    case "capacity": {
+                        String vehicleName = fhead.term(0).getText();
+                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        if (vehicle != null) {
+                            ActionCost capacity = ActionCost.valueOf(number);
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
+                                    capacity, vehicle.getPackageList());
+                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            break;
+                        }
+                        break;
+                    }
+                    case "fuel-left": {
+                        String vehicleName = fhead.term(0).getText();
+                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        if (vehicle != null) {
+                            ActionCost fuelLeft = ActionCost.valueOf(number);
+                            ActionCost fuelMax = null;
+                            if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
+                                fuelMax = ((FuelVehicle)vehicle).getMaxFuelCapacity();
+                            }
+                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(), vehicle.getCurCapacity(),
+                                    vehicle.getMaxCapacity(), vehicle.getPackageList(), fuelLeft, fuelMax);
+                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            break;
+                        }
+                        break;
+                    }
+                    case "fuel-max": {
+                        String vehicleName = fhead.term(0).getText();
+                        Vehicle vehicle = vehicleMap.get(vehicleName);
+                        if (vehicle != null) {
+                            ActionCost fuelMax = ActionCost.valueOf(number);
+                            ActionCost fuelLeft = null;
+                            if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
+                                fuelLeft = ((FuelVehicle)vehicle).getCurFuelCapacity();
+                            }
+                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(), vehicle.getCurCapacity(),
+                                    vehicle.getMaxCapacity(), vehicle.getPackageList(), fuelLeft, fuelMax);
+                            vehicleMap.put(newVehicle.getName(), newVehicle);
+                            break;
+                        }
+                        break;
+                    }
+                    case "fuel-demand": {
+                        String fromName = fhead.term(0).getText();
+                        String toName = fhead.term(1).getText();
+                        Location from = graph.getLocation(fromName);
+                        Location to = graph.getLocation(toName);
+                        Road road = graph.getRoadBetween(from, to);
+                        graph.putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
+                        break;
+                    }
+                    default:
+                        break; // ignore other functions
                 }
             }
         }
@@ -146,6 +217,8 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                     }
                     break;
                 }
+                default:
+                    throw new IllegalArgumentException("Invalid predicate in goalDesc: " + predicate);
             }
         }
 

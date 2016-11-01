@@ -6,10 +6,7 @@ package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
-import com.oskopek.transporteditor.model.problem.DefaultProblem;
-import com.oskopek.transporteditor.model.problem.FuelVehicle;
-import com.oskopek.transporteditor.model.problem.Road;
-import com.oskopek.transporteditor.model.problem.RoadGraph;
+import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -116,15 +113,24 @@ public class DefaultProblemIOIT {
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
         assertEquals(100, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
 
+        RoadGraph rg = problem.getRoadGraph();
+        assertNotNull(rg);
+        assertEquals(5, rg.getNodeCount());
+        assertEquals(12, rg.getEdgeCount());
+        Road road = rg.getRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
+        assertNotNull(road);
+        assertEquals(45, road.getLength().getCost().intValue());
+        assertEquals(FuelRoad.class, road.getClass());
+        FuelRoad fuelRoad = (FuelRoad) road;
+        assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
+        assertEquals(45, fuelRoad.getLength().getCost().intValue());
+
+        assertEquals(FuelVehicle.class, problem.getVehicle("truck-1").getClass());
         FuelVehicle truck1 = (FuelVehicle) problem.getVehicle("truck-1");
         assertNotNull(truck1.getCurFuelCapacity());
-        assertEquals(100, (int) truck1.getCurFuelCapacity().getCost());
+        assertEquals(424, (int) truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
-        assertEquals(100, (int) truck1.getMaxFuelCapacity().getCost());
-
-        assertNotNull(problem.getRoadGraph());
-        assertEquals(5, problem.getRoadGraph().getNodeCount());
-        assertEquals(6, problem.getRoadGraph().getEdgeCount());
+        assertEquals(424, (int) truck1.getMaxFuelCapacity().getCost());
     }
 
 }
