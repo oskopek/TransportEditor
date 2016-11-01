@@ -15,7 +15,13 @@ public class Location implements Locatable {
 
     public Location(String name, Integer xCoordinate, Integer yCoordinate) {
         this.name = name;
+        if (xCoordinate == null) {
+            throw new IllegalArgumentException("xCoordinate cannot be null.");
+        }
         this.xCoordinate = xCoordinate;
+        if (yCoordinate == null) {
+            throw new IllegalArgumentException("xCoordinate cannot be null.");
+        }
         this.yCoordinate = yCoordinate;
     }
 

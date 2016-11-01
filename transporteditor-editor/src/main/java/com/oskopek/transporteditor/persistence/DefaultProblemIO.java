@@ -55,7 +55,7 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                     packageMap.put(objectName, new Package(objectName, null, null, null));
                     break;
                 case "location":
-                    graph.addLocation(new Location(objectName, null, null));
+                    graph.addLocation(new Location(objectName, 0, 0));
                     break;
                 case "capacity-number":
                     String[] split = objectName.split("-");
