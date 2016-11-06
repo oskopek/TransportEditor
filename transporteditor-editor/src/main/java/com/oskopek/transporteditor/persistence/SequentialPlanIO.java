@@ -28,18 +28,22 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         this.problem = problem;
     }
 
-    public static String serializeAction(Action action) {
+    public static String serializeAction(Action action, boolean capacity) {
         StringBuilder str = new StringBuilder();
         str.append("(").append(action.getName()).append(" ").append(action.getWho().getName()).append(" ").append(
                 action.getWhere().getName());
         if (Drive.class.isInstance(action)) {
             str.append(" ").append(action.getWhat().getName());
         } else if (PickUp.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat().getName()).append(" ").append("capacity-").append("").append(" ")
-                    .append("capacity-").append("");
+            str.append(" ").append(action.getWhat().getName());
+            if (capacity) {
+                str.append(" ").append("capacity-").append("").append(" ").append("capacity-").append("");
+            }
         } else if (Drop.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat().getName()).append(" ").append("capacity-").append("").append(" ")
-                    .append("capacity-").append("");
+            str.append(" ").append(action.getWhat().getName());
+            if (capacity) {
+                str.append(" ").append("capacity-").append("").append(" ").append("capacity-").append("");
+            }
         } else if (Refuel.class.isInstance(action)) {
             // intentionally empty
         } else {
@@ -89,7 +93,7 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
     @Override
     public String serialize(SequentialPlan plan) throws IllegalArgumentException {
         StringBuilder builder = new StringBuilder();
-        plan.forEach(action -> builder.append(serializeAction(action)).append('\n'));
+        plan.forEach(action -> builder.append(serializeAction(action, true)).append('\n'));
         ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
                 ActionCost::add);
         if (totalCost != null) {

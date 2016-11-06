@@ -29,7 +29,7 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     }
 
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
-        String action = SequentialPlanIO.serializeAction(temporalPlanAction.getAction());
+        String action = SequentialPlanIO.serializeAction(temporalPlanAction.getAction(), false);
         StringBuilder str = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.000");
         Integer duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();

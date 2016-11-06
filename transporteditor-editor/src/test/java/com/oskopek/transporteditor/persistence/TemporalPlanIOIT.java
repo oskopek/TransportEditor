@@ -41,7 +41,6 @@ public class TemporalPlanIOIT {
     @Test
     public void serialize() throws Exception { // TODO: Fix, as it now sort of relies on `parse` working
         TemporalPlan plan = new TemporalPlanIO(temporalDomain, p01Temporal).parse(p01TemporalPlanContents);
-
         String serialized = new TemporalPlanIO(temporalDomain, p01Temporal).serialize(plan);
         TestUtils.assertPDDLContentEquals(p01TemporalPlanContents, serialized);
     }
