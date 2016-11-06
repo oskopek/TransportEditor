@@ -41,15 +41,14 @@ public class DefaultProblemIOIT {
 
         String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
         assertNotNull(serialized);
-        TestUtils.assertPDDLContentEquals(serialized, seqProblemFileContents);
+        TestUtils.assertPDDLContentEquals(seqProblemFileContents, serialized);
     }
 
     @Test
     public void parseSequential() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
         assertNotNull(problem);
-        assertEquals(
-                "(problemtransport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed)",
+        assertEquals("transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed",
                 problem.getName());
         assertEquals(2, problem.getAllPackages().size());
         assertEquals(2, problem.getAllVehicles().size());
@@ -88,15 +87,15 @@ public class DefaultProblemIOIT {
 
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
-        TestUtils.assertPDDLContentEquals(serialized, tempProblemFileContents);
+        TestUtils.assertPDDLContentEquals(tempProblemFileContents, serialized);
     }
 
     @Test
     public void parseTemporal() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
         assertNotNull(problem);
-        assertEquals("(problemtransport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity"
-                + "-2008seed)", problem.getName());
+        assertEquals("transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed",
+                problem.getName());
         assertEquals(2, problem.getAllPackages().size());
         assertEquals(2, problem.getAllVehicles().size());
 
@@ -105,6 +104,8 @@ public class DefaultProblemIOIT {
         assertEquals("city-loc-4", problem.getVehicle("truck-2").getLocation().getName());
 
         assertNotNull(problem.getPackage("package-1"));
+        assertNotNull(problem.getPackage("package-1").getSize());
+        assertEquals(23, problem.getPackage("package-1").getSize().getCost().intValue());
         assertNotNull(problem.getPackage("package-1").getLocation());
         assertEquals("city-loc-3", problem.getPackage("package-1").getLocation().getName());
 

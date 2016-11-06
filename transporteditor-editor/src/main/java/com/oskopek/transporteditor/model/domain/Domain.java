@@ -53,6 +53,6 @@ public interface Domain {
 
     Refuel buildRefuel(Vehicle vehicle, Location at);
 
-    Set<DomainLabel> getDomainLabels();
+    Set<PddlLabel> getPddlLabels();
 
 }

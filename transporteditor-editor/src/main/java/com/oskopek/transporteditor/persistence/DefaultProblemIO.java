@@ -5,17 +5,29 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+import javaslang.Tuple;
+import javaslang.Tuple3;
+import javaslang.collection.Array;
+import javaslang.collection.Seq;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<DefaultProblem> {
 
+    private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
     private final Domain domain;
 
     public DefaultProblemIO(Domain domain) {
@@ -24,7 +36,50 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
 
     @Override
     public String serialize(DefaultProblem object) throws IllegalArgumentException {
-        return "";
+        Map<String, Object> input = new HashMap<>();
+        input.put("date", new Date());
+        input.put("domain", domain);
+        input.put("problem", object);
+        input.put("packageList",
+                object.getAllPackages().stream().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                        .collect(Collectors.toList()));
+        input.put("locationList",
+                object.getRoadGraph().getAllLocations().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                        .collect(Collectors.toList()));
+        input.put("vehicleList",
+                object.getAllVehicles().stream().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                        .collect(Collectors.toList()));
+        Seq<Location> allLocations = object.getRoadGraph().getAllLocations().collect(Array.collector());
+        List<Tuple3<Location, Location, Road>> roads = allLocations.crossProduct().map(
+                t -> Tuple.of(t._1, t._2, object.getRoadGraph().getRoadBetween(t._1, t._2))).filter(t -> t._3 != null)
+                .toJavaList();
+        input.put("roads", roads);
+        input.put("petrolLocationList", allLocations.filter(object.getRoadGraph()::hasPetrolStation).toJavaList());
+        Optional<Integer> maxCapacityOpt = object.getAllVehicles().stream().map(Vehicle::getMaxCapacity).map(
+                ActionCost::getCost).collect(Collectors.maxBy(Integer::compare));
+        int maxCapacity = 0;
+        if (maxCapacityOpt.isPresent()) {
+            maxCapacity = maxCapacityOpt.get();
+        }
+        input.put("maxCapacity", maxCapacity);
+        input.put("actionCost", PddlLabel.ActionCost);
+        input.put("numeric", PddlLabel.Numeric);
+        input.put("temporal", PddlLabel.Temporal);
+
+        Template template = null;
+        try {
+            template = configuration.getTemplate("problem.pddl.ftl");
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred during reading template file.", e);
+        }
+
+        StringWriter writer = new StringWriter();
+        try {
+            template.process(input, writer);
+        } catch (IOException | TemplateException e) {
+            throw new IllegalStateException("Error occurred during processing template.", e);
+        }
+        return writer.toString();
     }
 
     @Override
@@ -37,7 +92,7 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
             throw new IllegalArgumentException("Domain is not a transport domain!");
         }
 
-        ParsedProblemContainer parsed = new ParsedProblemContainer(context.problemDecl().getText());
+        ParsedProblemContainer parsed = new ParsedProblemContainer(context.problemDecl().NAME().getText());
         parseObjectDecl(context.objectDecl(), parsed);
         parseInit(context.init(), parsed);
         parseGoalDescContext(context.goal(), parsed);
@@ -115,6 +170,17 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                         Location to = parsed.graph().getLocation(toName);
                         Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
                         parsed.graph().putRoad(newRoad, from, to);
+                        break;
+                    }
+                    case "package-size": {
+                        String packageName = fhead.term(0).getText();
+                        Package pkg = parsed.packageMap().get(packageName);
+                        if (pkg != null) {
+                            ActionCost size = ActionCost.valueOf(number);
+                            Package newPackage = new Package(pkg.getName(), pkg.getLocation(), pkg.getTarget(), size);
+                            parsed.packageMap().put(newPackage.getName(), newPackage);
+                            break;
+                        }
                         break;
                     }
                     case "capacity": {
@@ -260,5 +326,12 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
         public RoadGraph graph() {
             return graph;
         }
+    }
+
+    static {
+        configuration.setClassForTemplateLoading(DefaultProblemIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

@@ -6,7 +6,7 @@ package com.oskopek.transporteditor.persistence;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.oskopek.transporteditor.model.domain.DomainLabel;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.action.functions.Capacity;
@@ -48,14 +48,14 @@ public class VariableDomainIOIT {
     @Before
     public void setUp() throws Exception {
         variableDomainSeq = spy(new VariableDomain("Transport sequential", null, null, null, null,
-                ImmutableSet.of(DomainLabel.ActionCost, DomainLabel.Capacity, DomainLabel.MaxCapacity), null, null));
+                ImmutableSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity), null, null));
         when(variableDomainSeq.getFunctionMap()).thenReturn(
                 ImmutableMap.of("road-length", RoadLength.class, "total-cost", TotalCost.class));
         when(variableDomainSeq.getPredicateMap()).thenReturn(
                 ImmutableMap.of("at", At.class, "capacity", HasCapacity.class, "in", In.class, "road", IsRoad.class));
 
         variableDomainB = spy(new VariableDomain("Transport temporal without fuel", null, null, null, null,
-                ImmutableSet.of(DomainLabel.Temporal, DomainLabel.Capacity, DomainLabel.MaxCapacity), null, null));
+                ImmutableSet.of(PddlLabel.Temporal, PddlLabel.Capacity, PddlLabel.MaxCapacity), null, null));
         when(variableDomainB.getFunctionMap()).thenReturn(ImmutableMap
                 .of("capacity", Capacity.class, "package-size", PackageSize.class, "road-length", RoadLength.class));
         when(variableDomainB.getPredicateMap()).thenReturn(ImmutableMap

@@ -14,54 +14,54 @@ package-1 - package
 package-2 - package
 )
 (:init
-; 748,385 -> 890,543
-(road city-loc-3 city-loc-1)
-(= (road-length city-loc-3 city-loc-1) 22)
-(= (fuel-demand city-loc-3 city-loc-1) 43)
 ; 890,543 -> 748,385
 (road city-loc-1 city-loc-3)
 (= (road-length city-loc-1 city-loc-3) 22)
 (= (fuel-demand city-loc-1 city-loc-3) 43)
-; 748,385 -> 384,50
-(road city-loc-3 city-loc-2)
-(= (road-length city-loc-3 city-loc-2) 50)
-(= (fuel-demand city-loc-3 city-loc-2) 99)
-; 384,50 -> 748,385
-(road city-loc-2 city-loc-3)
-(= (road-length city-loc-2 city-loc-3) 50)
-(= (fuel-demand city-loc-2 city-loc-3) 99)
-; 912,799 -> 890,543
-(road city-loc-4 city-loc-1)
-(= (road-length city-loc-4 city-loc-1) 26)
-(= (fuel-demand city-loc-4 city-loc-1) 52)
 ; 890,543 -> 912,799
 (road city-loc-1 city-loc-4)
 (= (road-length city-loc-1 city-loc-4) 26)
 (= (fuel-demand city-loc-1 city-loc-4) 52)
-; 912,799 -> 748,385
-(road city-loc-4 city-loc-3)
-(= (road-length city-loc-4 city-loc-3) 45)
-(= (fuel-demand city-loc-4 city-loc-3) 89)
-; 748,385 -> 912,799
-(road city-loc-3 city-loc-4)
-(= (road-length city-loc-3 city-loc-4) 45)
-(= (fuel-demand city-loc-3 city-loc-4) 89)
-; 977,899 -> 890,543
-(road city-loc-5 city-loc-1)
-(= (road-length city-loc-5 city-loc-1) 37)
-(= (fuel-demand city-loc-5 city-loc-1) 74)
 ; 890,543 -> 977,899
 (road city-loc-1 city-loc-5)
 (= (road-length city-loc-1 city-loc-5) 37)
 (= (fuel-demand city-loc-1 city-loc-5) 74)
-; 977,899 -> 912,799
-(road city-loc-5 city-loc-4)
-(= (road-length city-loc-5 city-loc-4) 12)
-(= (fuel-demand city-loc-5 city-loc-4) 24)
+; 384,50 -> 748,385
+(road city-loc-2 city-loc-3)
+(= (road-length city-loc-2 city-loc-3) 50)
+(= (fuel-demand city-loc-2 city-loc-3) 99)
+; 748,385 -> 890,543
+(road city-loc-3 city-loc-1)
+(= (road-length city-loc-3 city-loc-1) 22)
+(= (fuel-demand city-loc-3 city-loc-1) 43)
+; 748,385 -> 384,50
+(road city-loc-3 city-loc-2)
+(= (road-length city-loc-3 city-loc-2) 50)
+(= (fuel-demand city-loc-3 city-loc-2) 99)
+; 748,385 -> 912,799
+(road city-loc-3 city-loc-4)
+(= (road-length city-loc-3 city-loc-4) 45)
+(= (fuel-demand city-loc-3 city-loc-4) 89)
+; 912,799 -> 890,543
+(road city-loc-4 city-loc-1)
+(= (road-length city-loc-4 city-loc-1) 26)
+(= (fuel-demand city-loc-4 city-loc-1) 52)
+; 912,799 -> 748,385
+(road city-loc-4 city-loc-3)
+(= (road-length city-loc-4 city-loc-3) 45)
+(= (fuel-demand city-loc-4 city-loc-3) 89)
 ; 912,799 -> 977,899
 (road city-loc-4 city-loc-5)
 (= (road-length city-loc-4 city-loc-5) 12)
 (= (fuel-demand city-loc-4 city-loc-5) 24)
+; 977,899 -> 890,543
+(road city-loc-5 city-loc-1)
+(= (road-length city-loc-5 city-loc-1) 37)
+(= (fuel-demand city-loc-5 city-loc-1) 74)
+; 977,899 -> 912,799
+(road city-loc-5 city-loc-4)
+(= (road-length city-loc-5 city-loc-4) 12)
+(= (fuel-demand city-loc-5 city-loc-4) 24)
 (at package-1 city-loc-3)
 (= (package-size package-1) 23)
 (at package-2 city-loc-4)

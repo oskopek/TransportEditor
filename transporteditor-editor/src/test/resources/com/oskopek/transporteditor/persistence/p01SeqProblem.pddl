@@ -24,42 +24,42 @@ capacity-4 - capacity-number
 (capacity-predecessor capacity-1 capacity-2)
 (capacity-predecessor capacity-2 capacity-3)
 (capacity-predecessor capacity-3 capacity-4)
-; 564,783 -> 742,542
-(road city-loc-3 city-loc-2)
-(= (road-length city-loc-3 city-loc-2) 30)
-; 742,542 -> 564,783
-(road city-loc-2 city-loc-3)
-(= (road-length city-loc-2 city-loc-3) 30)
-; 273,425 -> 456,221
-(road city-loc-4 city-loc-1)
-(= (road-length city-loc-4 city-loc-1) 28)
 ; 456,221 -> 273,425
 (road city-loc-1 city-loc-4)
 (= (road-length city-loc-1 city-loc-4) 28)
-; 566,552 -> 456,221
-(road city-loc-5 city-loc-1)
-(= (road-length city-loc-5 city-loc-1) 35)
 ; 456,221 -> 566,552
 (road city-loc-1 city-loc-5)
 (= (road-length city-loc-1 city-loc-5) 35)
-; 566,552 -> 742,542
-(road city-loc-5 city-loc-2)
-(= (road-length city-loc-5 city-loc-2) 18)
+; 742,542 -> 564,783
+(road city-loc-2 city-loc-3)
+(= (road-length city-loc-2 city-loc-3) 30)
 ; 742,542 -> 566,552
 (road city-loc-2 city-loc-5)
 (= (road-length city-loc-2 city-loc-5) 18)
-; 566,552 -> 564,783
-(road city-loc-5 city-loc-3)
-(= (road-length city-loc-5 city-loc-3) 24)
+; 564,783 -> 742,542
+(road city-loc-3 city-loc-2)
+(= (road-length city-loc-3 city-loc-2) 30)
 ; 564,783 -> 566,552
 (road city-loc-3 city-loc-5)
 (= (road-length city-loc-3 city-loc-5) 24)
-; 566,552 -> 273,425
-(road city-loc-5 city-loc-4)
-(= (road-length city-loc-5 city-loc-4) 32)
+; 273,425 -> 456,221
+(road city-loc-4 city-loc-1)
+(= (road-length city-loc-4 city-loc-1) 28)
 ; 273,425 -> 566,552
 (road city-loc-4 city-loc-5)
 (= (road-length city-loc-4 city-loc-5) 32)
+; 566,552 -> 456,221
+(road city-loc-5 city-loc-1)
+(= (road-length city-loc-5 city-loc-1) 35)
+; 566,552 -> 742,542
+(road city-loc-5 city-loc-2)
+(= (road-length city-loc-5 city-loc-2) 18)
+; 566,552 -> 564,783
+(road city-loc-5 city-loc-3)
+(= (road-length city-loc-5 city-loc-3) 24)
+; 566,552 -> 273,425
+(road city-loc-5 city-loc-4)
+(= (road-length city-loc-5 city-loc-4) 32)
 (at package-1 city-loc-4)
 (at package-2 city-loc-4)
 (at truck-1 city-loc-4)

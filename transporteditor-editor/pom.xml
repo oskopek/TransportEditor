@@ -77,6 +77,10 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.javaslang</groupId>
+            <artifactId>javaslang</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>TransportEditor</finalName>

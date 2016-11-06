@@ -29,7 +29,7 @@ public class SequentialDomain extends DefaultDomain {
                         ActionCost.valueOf(1), ActionCost.valueOf(1)),
                 new PickUpBuilder(Arrays.asList(new At(), new At(), new HasCapacity()),
                         Arrays.asList(new Not(new At()), new In()), ActionCost.valueOf(1), ActionCost.valueOf(1)), null,
-                ImmutableSet.of(DomainLabel.ActionCost, DomainLabel.Capacity, DomainLabel.MaxCapacity));
+                ImmutableSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity));
     }
 
     @Override

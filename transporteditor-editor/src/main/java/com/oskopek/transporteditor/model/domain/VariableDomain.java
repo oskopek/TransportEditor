@@ -20,9 +20,9 @@ public class VariableDomain extends DefaultDomain {
     private final Map<String, Class<? extends Function>> functionMap;
 
     public VariableDomain(String name, DriveBuilder driveBuilder, DropBuilder dropBuilder, PickUpBuilder pickUpBuilder,
-            RefuelBuilder refuelBuilder, Set<DomainLabel> domainLabelSet,
+            RefuelBuilder refuelBuilder, Set<PddlLabel> pddlLabelSet,
             Map<String, Class<? extends Predicate>> predicateMap, Map<String, Class<? extends Function>> functionMap) {
-        super(name, driveBuilder, dropBuilder, pickUpBuilder, refuelBuilder, domainLabelSet);
+        super(name, driveBuilder, dropBuilder, pickUpBuilder, refuelBuilder, pddlLabelSet);
         this.predicateMap = predicateMap;
         this.functionMap = functionMap;
     }

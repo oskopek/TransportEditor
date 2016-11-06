@@ -29,16 +29,16 @@ public abstract class DefaultDomain implements Domain {
     private final PickUpBuilder pickUpBuilder;
     private final RefuelBuilder refuelBuilder;
 
-    private final Set<DomainLabel> domainLabelSet;
+    private final Set<PddlLabel> pddlLabelSet;
 
     public DefaultDomain(String name, DriveBuilder driveBuilder, DropBuilder dropBuilder, PickUpBuilder pickUpBuilder,
-            RefuelBuilder refuelBuilder, Set<DomainLabel> domainLabelSet) {
+            RefuelBuilder refuelBuilder, Set<PddlLabel> pddlLabelSet) {
         this.name = name;
         this.driveBuilder = driveBuilder;
         this.dropBuilder = dropBuilder;
         this.pickUpBuilder = pickUpBuilder;
         this.refuelBuilder = refuelBuilder;
-        this.domainLabelSet = domainLabelSet;
+        this.pddlLabelSet = pddlLabelSet;
     }
 
     @Override
@@ -92,8 +92,8 @@ public abstract class DefaultDomain implements Domain {
     }
 
     @Override
-    public Set<DomainLabel> getDomainLabels() {
-        return domainLabelSet;
+    public Set<PddlLabel> getPddlLabels() {
+        return pddlLabelSet;
     }
 
     @Override
@@ -108,21 +108,21 @@ public abstract class DefaultDomain implements Domain {
 
         DefaultDomain that = (DefaultDomain) o;
 
-        return new EqualsBuilder().append(getName(), that.getName()).append(getDomainLabels(), that.getDomainLabels())
+        return new EqualsBuilder().append(getName(), that.getName()).append(getPddlLabels(), that.getPddlLabels())
                 .append(getFunctionMap(), that.getFunctionMap()).append(getPredicateMap(), that.getPredicateMap())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getDomainLabels()).append(getFunctionMap()).append(
+        return new HashCodeBuilder(17, 37).append(getName()).append(getPddlLabels()).append(getFunctionMap()).append(
                 getPredicateMap()).toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", name).append("domainLabelSet", domainLabelSet).append(
-                "domainLabels", getDomainLabels()).append("functionMap", getFunctionMap()).append("predicateMap",
+        return new ToStringBuilder(this).append("name", name).append("pddlLabelSet", pddlLabelSet).append("pddlLabels",
+                getPddlLabels()).append("functionMap", getFunctionMap()).append("predicateMap",
                 getPredicateMap()).toString();
     }
 }
