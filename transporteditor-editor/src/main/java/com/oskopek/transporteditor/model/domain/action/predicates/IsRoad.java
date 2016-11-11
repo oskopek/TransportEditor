@@ -10,7 +10,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 public class IsRoad extends DefaultPredicate {
 
     @Override
-    public boolean isValid(Problem state, Action action) {
+    public boolean isValidInternal(Problem state, Action action) {
         String location1 = action.getWhere().getName();
         String location2 = action.getWhat().getName();
         return state.getRoadGraph().getNode(location1).hasEdgeToward(location2);

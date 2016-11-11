@@ -63,6 +63,10 @@ public class DefaultProblem implements Problem {
         if (aPackage != null) {
             return aPackage;
         }
+        Location location = getRoadGraph().getLocation(name);
+        if (location != null) {
+            return location;
+        }
         return null;
     }
 

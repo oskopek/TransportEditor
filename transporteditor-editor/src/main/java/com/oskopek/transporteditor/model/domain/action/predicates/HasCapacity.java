@@ -15,7 +15,7 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 public class HasCapacity extends DefaultPredicate {
 
     @Override
-    public boolean isValid(Problem state, Action action) {
+    public boolean isValidInternal(Problem state, Action action) {
         Vehicle vehicle = state.getVehicle(action.getWho().getName());
         Package aPackage = state.getPackage(action.getWhat().getName());
         return vehicle.getCurCapacity().subtract(aPackage.getSize()).getCost() >= 0;

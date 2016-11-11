@@ -95,14 +95,13 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         StringBuilder str = serializeActionSimple(action);
         if (capacity) {
             Integer capacityVal = planState.getVehicleSafe(action.getWho().getName()).getCurCapacity().getCost();
-            Integer newCapacityVal = null;
             if (PickUp.class.isInstance(action)) {
-                newCapacityVal = capacityVal + 1;
+                str.append(" ").append("capacity-").append(capacityVal - 1).append(" ").append("capacity-")
+                        .append(capacityVal);
             } else if (Drop.class.isInstance(action)) {
-                newCapacityVal = capacityVal - 1;
+                str.append(" ").append("capacity-").append(capacityVal).append(" ").append("capacity-")
+                        .append(capacityVal + 1);
             }
-            str.append(" ").append("capacity-").append(capacityVal).append(" ").append("capacity-")
-                    .append(newCapacityVal);
         }
         str.append(")");
         return str.toString();

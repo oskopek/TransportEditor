@@ -23,12 +23,29 @@ public class SequentialDomain extends DefaultDomain {
     private static final Map<String, Class<? extends Predicate>> predicateMap;
     private static final Map<String, Class<? extends Function>> functionMap;
 
+    static {
+        predicateMap = new HashMap<>(4);
+        predicateMap.put("at", WhoAtWhere.class);
+        predicateMap.put("capacity", HasCapacity.class);
+        predicateMap.put("in", In.class);
+        predicateMap.put("road", IsRoad.class);
+    }
+
+    static {
+        functionMap = new HashMap<>(2);
+        functionMap.put("road-length", RoadLength.class);
+        functionMap.put("total-cost", TotalCost.class);
+    }
+
     public SequentialDomain(String name) {
-        super(name, new DriveBuilder(Arrays.asList(new At(), new IsRoad()), Arrays.asList(new Not(new At()), new At())),
-                new DropBuilder(Arrays.asList(new At(), new In()), Arrays.asList(new At(), new Not(new In())),
+        super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad()),
+                        Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
+                new DropBuilder(Arrays.asList(new WhoAtWhere(), new In()),
+                        Arrays.asList(new WhoAtWhere(), new Not(new In()), new WhatAtWhere()),
                         ActionCost.valueOf(1), ActionCost.valueOf(1)),
-                new PickUpBuilder(Arrays.asList(new At(), new At(), new HasCapacity()),
-                        Arrays.asList(new Not(new At()), new In()), ActionCost.valueOf(1), ActionCost.valueOf(1)), null,
+                new PickUpBuilder(Arrays.asList(new WhoAtWhere(), new WhatAtWhere(), new HasCapacity()),
+                        Arrays.asList(new Not(new WhatAtWhere()), new In()), ActionCost.valueOf(1),
+                        ActionCost.valueOf(1)), null,
                 ImmutableSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity));
     }
 
@@ -40,19 +57,5 @@ public class SequentialDomain extends DefaultDomain {
     @Override
     public Map<String, Class<? extends Function>> getFunctionMap() {
         return functionMap;
-    }
-
-    static {
-        predicateMap = new HashMap<>(4);
-        predicateMap.put("at", At.class);
-        predicateMap.put("capacity", HasCapacity.class);
-        predicateMap.put("in", In.class);
-        predicateMap.put("road", IsRoad.class);
-    }
-
-    static {
-        functionMap = new HashMap<>(2);
-        functionMap.put("road-length", RoadLength.class);
-        functionMap.put("total-cost", TotalCost.class);
     }
 }

@@ -4,6 +4,8 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,6 +14,7 @@ public class SequentialPlanState implements PlanState {
 
     private final Domain origDomain;
     private final Problem origProblem;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private Problem problem;
 
     public SequentialPlanState(Domain domain, Problem problem) {
@@ -22,10 +25,13 @@ public class SequentialPlanState implements PlanState {
 
     @Override
     public void apply(Action action) {
+        logger.debug("Checking preconditions of action {}.", action.getName());
         if (!action.arePreconditionsValid(problem)) {
             throw new IllegalStateException("Preconditions of action " + action + " are invalid in problem " + problem);
         }
+        logger.debug("Applying action {}.", action.getName());
         Problem newProblem = action.apply(origDomain, problem);
+        logger.debug("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             throw new IllegalStateException(
                     "Effects of action " + action + " are invalid after applying to problem " + problem + "(result: "

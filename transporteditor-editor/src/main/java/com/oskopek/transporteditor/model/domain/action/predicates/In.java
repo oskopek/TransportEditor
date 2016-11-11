@@ -12,7 +12,7 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 public class In extends DefaultPredicate {
 
     @Override
-    public boolean isValid(Problem state, Action action) {
+    public boolean isValidInternal(Problem state, Action action) {
         Package aPackage = state.getPackage(action.getWhat().getName());
         Vehicle vehicle = state.getVehicle(action.getWho().getName());
         return vehicle.getPackageList().contains(aPackage);

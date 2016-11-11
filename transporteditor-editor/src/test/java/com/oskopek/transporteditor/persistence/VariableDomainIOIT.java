@@ -55,14 +55,15 @@ public class VariableDomainIOIT {
         when(variableDomainSeq.getFunctionMap()).thenReturn(
                 ImmutableMap.of("road-length", RoadLength.class, "total-cost", TotalCost.class));
         when(variableDomainSeq.getPredicateMap()).thenReturn(
-                ImmutableMap.of("at", At.class, "capacity", HasCapacity.class, "in", In.class, "road", IsRoad.class));
+                ImmutableMap.of("at", WhoAtWhere.class, "capacity", HasCapacity.class, "in", In.class, "road",
+                        IsRoad.class));
 
         variableDomainB = spy(new VariableDomain("Transport temporal without fuel", null, null, null, null,
                 ImmutableSet.of(PddlLabel.Temporal, PddlLabel.Capacity, PddlLabel.MaxCapacity), null, null));
         when(variableDomainB.getFunctionMap()).thenReturn(ImmutableMap
                 .of("capacity", Capacity.class, "package-size", PackageSize.class, "road-length", RoadLength.class));
         when(variableDomainB.getPredicateMap()).thenReturn(ImmutableMap
-                .of("at", At.class, "in", In.class, "road", IsRoad.class, "ready-loading", ReadyLoading.class));
+                .of("at", WhoAtWhere.class, "in", In.class, "road", IsRoad.class, "ready-loading", ReadyLoading.class));
     }
 
     @Test

@@ -59,10 +59,7 @@ public class TemporalPlanAction {
 
     @Override
     public String toString() {
-        return "TemporalPlanAction{" +
-                "action=" + action +
-                ", startTimestamp=" + startTimestamp +
-                ", endTimestamp=" + endTimestamp +
-                '}';
+        return "TemporalPlanAction{" + "action=" + action + ", startTimestamp=" + startTimestamp + ", endTimestamp="
+                + endTimestamp + '}';
     }
 }

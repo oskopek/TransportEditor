@@ -33,7 +33,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
     static {
-        predicateNameMap.put("at", At.class);
+        predicateNameMap.put("at", WhoAtWhere.class);
         predicateNameMap.put("capacity", HasCapacity.class);
         predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
         predicateNameMap.put("in", In.class);

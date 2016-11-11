@@ -5,13 +5,15 @@
 package com.oskopek.transporteditor.model.domain.action.predicates;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
+import com.oskopek.transporteditor.model.problem.Locatable;
 import com.oskopek.transporteditor.model.problem.Problem;
 
-public class HasPetrolStation extends DefaultPredicate {
+public class WhoAtWhat extends DefaultPredicate {
 
     @Override
     public boolean isValidInternal(Problem state, Action action) {
-        String locationName = action.getWhere().getName();
-        return state.getRoadGraph().getNode(locationName).hasAttribute("has-petrol-station");
+        Locatable who = state.getLocatable(action.getWho().getName());
+        Locatable what = state.getLocatable(action.getWhat().getName());
+        return who.getLocation().equals(what.getLocation());
     }
 }

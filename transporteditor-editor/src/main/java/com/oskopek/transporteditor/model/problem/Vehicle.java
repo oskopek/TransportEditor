@@ -75,7 +75,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         }
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.add(pkg);
-        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+        return new Vehicle(getName(), getLocation(), getCurCapacity().subtract(pkg.getSize()), getMaxCapacity(),
+                getCurFuelCapacity(),
                 getMaxFuelCapacity(), newPackageList);
     }
 
@@ -89,7 +90,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         }
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.remove(pkg);
-        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+        return new Vehicle(getName(), getLocation(), getCurCapacity().add(pkg.getSize()), getMaxCapacity(),
+                getCurFuelCapacity(),
                 getMaxFuelCapacity(), newPackageList);
     }
 
