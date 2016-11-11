@@ -32,6 +32,32 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
+    static {
+        predicateNameMap.put("at", At.class);
+        predicateNameMap.put("capacity", HasCapacity.class);
+        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
+        predicateNameMap.put("in", In.class);
+        predicateNameMap.put("road", IsRoad.class);
+        predicateNameMap.put("ready-loading", ReadyLoading.class);
+    }
+
+    static {
+        functionNameMap.put("capacity", Capacity.class);
+        functionNameMap.put("fuel-demand", FuelDemand.class);
+        functionNameMap.put("fuel-left", FuelLeft.class);
+        functionNameMap.put("fuel-max", FuelMax.class);
+        functionNameMap.put("package-size", PackageSize.class);
+        functionNameMap.put("road-length", RoadLength.class);
+        functionNameMap.put("total-cost", TotalCost.class);
+    }
+
+    static {
+        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    }
+
     public static String parseName(String contents) {
         return contents.split("\n")[0].replaceAll(";", "").trim();
     }
@@ -125,10 +151,10 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         RefuelBuilder refuelBuilder = parseRefuelBuilder(normalized);
 
         Set<PddlLabel> labels = parsePddlLabels(contents);
-        if (functions.containsKey("capacity")) {
+        if (functions.containsKey("capacity")) { // only numerical
             labels.add(PddlLabel.Capacity);
-            if (pickUpBuilder.getPreconditions().stream().map(Object::getClass).anyMatch(HasCapacity.class::equals)) {
-                labels.add(PddlLabel.MaxCapacity); // TODO: probably doesn't work correctly for nested predicates
+            if (normalized.replaceAll(" ", "").matches("^.*\\(>=\\(capacity\\?v\\)\\(package-size\\?p\\)\\).*$")) {
+                labels.add(PddlLabel.MaxCapacity);
             }
         } else if (predicates.containsKey("capacity")) {
             labels.add(PddlLabel.MaxCapacity);
@@ -147,22 +173,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         input.put("numeric", PddlLabel.Numeric);
         input.put("temporal", PddlLabel.Temporal);
 
-        //        input.put("Capacity", Capacity.class);
-        //        input.put("FuelDemand", FuelDemand.class);
-        //        input.put("FuelLeft", FuelLeft.class);
-        //        input.put("FuelMax", FuelMax.class);
-        //        input.put("PackageSize", PackageSize.class);
-        //        input.put("RoadLength", RoadLength.class);
-        //        input.put("TotalCost", TotalCost.class);
-        //
-        //        input.put("At", At.class);
-        //        input.put("HasCapacity", HasCapacity.class);
-        //        input.put("HasPetrolStation", HasPetrolStation.class);
-        //        input.put("In", In.class);
-        //        input.put("IsRoad", IsRoad.class);
-        //        input.put("ReadyLoading", ReadyLoading.class);
-
-        Template template = null;
+        Template template;
         try {
             template = configuration.getTemplate("domain.pddl.ftl");
         } catch (IOException e) {
@@ -176,31 +187,5 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             throw new IllegalStateException("Error occurred during processing template.", e);
         }
         return writer.toString();
-    }
-
-    static {
-        predicateNameMap.put("at", At.class);
-        predicateNameMap.put("capacity", HasCapacity.class);
-        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
-        predicateNameMap.put("in", In.class);
-        predicateNameMap.put("road", IsRoad.class);
-        predicateNameMap.put("ready-loading", ReadyLoading.class);
-    }
-
-    static {
-        functionNameMap.put("capacity", Capacity.class);
-        functionNameMap.put("fuel-demand", FuelDemand.class);
-        functionNameMap.put("fuel-left", FuelLeft.class);
-        functionNameMap.put("fuel-max", FuelMax.class);
-        functionNameMap.put("package-size", PackageSize.class);
-        functionNameMap.put("road-length", RoadLength.class);
-        functionNameMap.put("total-cost", TotalCost.class);
-    }
-
-    static {
-        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setLocale(Locale.US);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

@@ -47,6 +47,26 @@ public abstract class DefaultDomain implements Domain {
     }
 
     @Override
+    public DriveBuilder getDriveBuilder() {
+        return driveBuilder;
+    }
+
+    @Override
+    public DropBuilder getDropBuilder() {
+        return dropBuilder;
+    }
+
+    @Override
+    public PickUpBuilder getPickUpBuilder() {
+        return pickUpBuilder;
+    }
+
+    @Override
+    public RefuelBuilder getRefuelBuilder() {
+        return refuelBuilder;
+    }
+
+    @Override
     public Drive buildDrive(Vehicle vehicle, Location from, Location to, Road road) {
         return driveBuilder.build(vehicle, from, to, road);
     }
@@ -72,28 +92,14 @@ public abstract class DefaultDomain implements Domain {
     }
 
     @Override
-    public DriveBuilder getDriveBuilder() {
-        return driveBuilder;
-    }
-
-    @Override
-    public DropBuilder getDropBuilder() {
-        return dropBuilder;
-    }
-
-    @Override
-    public PickUpBuilder getPickUpBuilder() {
-        return pickUpBuilder;
-    }
-
-    @Override
-    public RefuelBuilder getRefuelBuilder() {
-        return refuelBuilder;
-    }
-
-    @Override
     public Set<PddlLabel> getPddlLabels() {
         return pddlLabelSet;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).append(getPddlLabels()).append(getFunctionMap())
+                .append(getPredicateMap()).toHashCode();
     }
 
     @Override
@@ -101,28 +107,19 @@ public abstract class DefaultDomain implements Domain {
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof DefaultDomain)) {
             return false;
         }
-
         DefaultDomain that = (DefaultDomain) o;
-
         return new EqualsBuilder().append(getName(), that.getName()).append(getPddlLabels(), that.getPddlLabels())
                 .append(getFunctionMap(), that.getFunctionMap()).append(getPredicateMap(), that.getPredicateMap())
                 .isEquals();
     }
 
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getPddlLabels()).append(getFunctionMap()).append(
-                getPredicateMap()).toHashCode();
-    }
-
-    @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", name).append("pddlLabelSet", pddlLabelSet).append("pddlLabels",
-                getPddlLabels()).append("functionMap", getFunctionMap()).append("predicateMap",
-                getPredicateMap()).toString();
+        return new ToStringBuilder(this).append("name", name).append("pddlLabelSet", pddlLabelSet)
+                .append("pddlLabels", getPddlLabels()).append("functionMap", getFunctionMap())
+                .append("predicateMap", getPredicateMap()).toString();
     }
 }

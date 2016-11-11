@@ -22,7 +22,6 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
     @Override
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what) {
         throw new UnsupportedOperationException("Use the other build methods.");
-        //return build(who, where, what, null); // TODO: throw an exception, rather?
     }
 
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what, Road road) {

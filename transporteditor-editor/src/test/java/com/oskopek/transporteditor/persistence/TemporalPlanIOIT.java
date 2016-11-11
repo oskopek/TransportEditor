@@ -8,12 +8,14 @@ import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TemporalPlanIOIT {
 
@@ -39,7 +41,7 @@ public class TemporalPlanIOIT {
     }
 
     @Test
-    public void serialize() throws Exception { // TODO: Fix, as it now sort of relies on `parse` working
+    public void serialize() throws Exception {
         TemporalPlan plan = new TemporalPlanIO(temporalDomain, p01Temporal).parse(p01TemporalPlanContents);
         String serialized = new TemporalPlanIO(temporalDomain, p01Temporal).serialize(plan);
         TestUtils.assertPDDLContentEquals(p01TemporalPlanContents, serialized);

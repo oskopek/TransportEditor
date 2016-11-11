@@ -8,11 +8,13 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DefaultProblemIOIT {
 
@@ -36,7 +38,7 @@ public class DefaultProblemIOIT {
     }
 
     @Test
-    public void serializeSequential() throws Exception { // TODO: Rewrite to proper serialize test
+    public void serializeSequential() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
 
         String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
@@ -82,7 +84,7 @@ public class DefaultProblemIOIT {
     }
 
     @Test
-    public void serializeTemporal() throws Exception { // TODO: Rewrite to proper serialize test
+    public void serializeTemporal() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
 
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);

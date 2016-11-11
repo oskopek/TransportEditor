@@ -15,14 +15,17 @@ import com.oskopek.transporteditor.model.domain.action.functions.RoadLength;
 import com.oskopek.transporteditor.model.domain.action.functions.TotalCost;
 import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class VariableDomainIOIT {
 
@@ -81,7 +84,7 @@ public class VariableDomainIOIT {
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
-        assertEquals(variableDomainB, parsed);
+        assertTrue(parsed.equals(variableDomainB));
     }
 
     @Test
