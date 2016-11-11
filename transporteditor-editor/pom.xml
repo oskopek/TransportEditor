@@ -77,6 +77,10 @@
             <groupId>io.javaslang</groupId>
             <artifactId>javaslang</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>TransportEditor</finalName>

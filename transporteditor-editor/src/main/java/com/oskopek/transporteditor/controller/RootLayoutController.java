@@ -11,13 +11,14 @@ import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
+import com.oskopek.transporteditor.validation.VALValidator;
 import com.oskopek.transporteditor.view.*;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -81,11 +82,10 @@ public class RootLayoutController extends AbstractController {
     /**
      * Menu item: File->Quit.
      * Exit the main app.
-     * Doesn't save the currently opened model!
      */
     @FXML
     private void handleFileQuit() {
-        System.exit(0);
+        Platform.exit();
     }
 
     @FXML
@@ -119,6 +119,17 @@ public class RootLayoutController extends AbstractController {
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
                 messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
         session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
+    }
+
+    @FXML
+    private void handleFileSetValidator() {
+        PlanningSession session = planningSessionFileHandler.getObject();
+        if (session == null) {
+            throw new IllegalStateException("Cannot set validator on null session.");
+        }
+        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
+                messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString());
+        session.setValidator(new VALValidator(path.toAbsolutePath() + " {0} {1}"));
     }
 
     @FXML
@@ -222,21 +233,25 @@ public class RootLayoutController extends AbstractController {
      */
     @FXML
     private void handleAboutHelp() {
+        loadWebResource("root.manualResource", "root.help", "root.manualNotAvailableInYourLanguage");
+    }
+
+    private void loadWebResource(String resourceName, String titleResourceName, String errorResourceName) {
         WebView webView = new WebView();
         webView.setContextMenuEnabled(false);
-        String manualHtml = readResourceToString(messages.getString("root.manualResource"));
-        if (manualHtml == null) {
+        String resourceHtml = readResourceToString(messages.getString(resourceName));
+        if (resourceHtml == null) {
             AlertCreator.showAlert(Alert.AlertType.WARNING,
-                    messages.getString("root.manualNotAvailableInYourLanguage"));
+                    messages.getString(errorResourceName));
             return;
         }
 
         Pattern messagePattern = Pattern.compile("%([a-z.A-Z]+)");
-        Matcher messageMatcher = messagePattern.matcher(manualHtml);
+        Matcher messageMatcher = messagePattern.matcher(resourceHtml);
         StringBuffer replaceHtmlBuffer = new StringBuffer();
         while (messageMatcher.find()) {
             String found = messageMatcher.group(1);
-            logger.trace("Replacing {} in manual", found);
+            logger.trace("Replacing {} in resource", found);
             String replacement = null;
             try {
                 replacement = messages.getString(found);
@@ -246,13 +261,24 @@ public class RootLayoutController extends AbstractController {
             messageMatcher.appendReplacement(replaceHtmlBuffer, replacement == null ? found : replacement);
         }
         messageMatcher.appendTail(replaceHtmlBuffer);
-        manualHtml = replaceHtmlBuffer.toString();
-        webView.getEngine().loadContent(manualHtml);
+        resourceHtml = replaceHtmlBuffer.toString();
 
         Stage webViewDialogStage = new Stage(StageStyle.DECORATED);
+        BooleanProperty clicked = new SimpleBooleanProperty(false);
+        webView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty() && !clicked.get()) {
+                logger.debug("Redirecting link to web browser: {}", newValue);
+                clicked.setValue(true);
+                webView.getEngine().getLoadWorker().cancel();
+                application.getHostServices().showDocument(newValue);
+                webViewDialogStage.close();
+            }
+        });
+        webView.getEngine().loadContent(resourceHtml);
+
         webViewDialogStage.initOwner(application.getPrimaryStage());
         webViewDialogStage.setResizable(true);
-        webViewDialogStage.setTitle("TransportEditor - " + messages.getString("root.help"));
+        webViewDialogStage.setTitle("TransportEditor - " + messages.getString(titleResourceName));
         webViewDialogStage.initModality(Modality.NONE);
         webViewDialogStage.setScene(new Scene(webView));
         webViewDialogStage.toFront();
@@ -284,12 +310,6 @@ public class RootLayoutController extends AbstractController {
      */
     @FXML
     private void handleAboutAbout() {
-        Dialog<Label> dialog = new Dialog<>();
-        dialog.setContentText("                               TransportEditor\n"
-                + "    <https://github.com/oskopek/TransportEditor>\n" + messages.getString("menu.author")
-                + ": Ondrej Skopek <oskopek@matfyz.cz>");
-        dialog.setTitle(messages.getString("root.about"));
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        dialog.showAndWait();
+        loadWebResource("root.aboutResource", "root.about", "root.resourceNotAvailableInYourLanguage");
     }
 }
