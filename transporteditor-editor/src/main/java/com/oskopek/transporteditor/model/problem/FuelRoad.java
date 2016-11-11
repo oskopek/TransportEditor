@@ -21,6 +21,22 @@ public class FuelRoad extends DefaultRoad {
         this.fuelCost.setValue(fuelCost);
     }
 
+    public static FuelRoad build(Road road, ActionCost fuelCost) {
+        return new FuelRoad(road.getName(), road.getLength(), fuelCost);
+    }
+
+    public static FuelRoad build(Location from, Location to) {
+        return build(from, to, null);
+    }
+
+    public static FuelRoad build(Location from, Location to, ActionCost length) {
+        return build(from, to, length, null);
+    }
+
+    public static FuelRoad build(Location from, Location to, ActionCost length, ActionCost fuelCost) {
+        return new FuelRoad(from + "->" + to, length, fuelCost);
+    }
+
     public ActionCost getFuelCost() {
         return fuelCost.get();
     }

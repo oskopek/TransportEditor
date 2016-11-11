@@ -4,7 +4,7 @@
 
 package com.oskopek.transporteditor.model.domain;
 
-public enum DomainLabel {
+public enum PddlLabel {
 
     ActionCost, Numeric, Temporal, Fuel, Capacity, MaxCapacity
 

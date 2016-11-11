@@ -6,6 +6,6 @@
 fd="fast-downward"
 i="$1"
 
-eval "$fd" "--build release64" "../ipc08/seq-opt/transport-strips/p$i.pddl" "--search 'astar(ipdb())'"
+eval "$fd" "--build release64" "../ipc08/seq-sat/transport-strips/p$i.pddl" "--search 'astar(ipdb())'"
 cat sas_plan
 rm sas_plan output output.sas

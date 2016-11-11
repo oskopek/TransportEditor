@@ -46,7 +46,7 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
      * @param time
      */
     public boolean contains(long time) {
-        return time < end && time > start;
+        return time < end && time >= start;
     }
 
     /**

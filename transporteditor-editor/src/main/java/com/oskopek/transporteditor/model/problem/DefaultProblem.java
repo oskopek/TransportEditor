@@ -18,11 +18,11 @@ public class DefaultProblem implements Problem {
     private final Map<String, Vehicle> vehicleMap;
     private final Map<String, Package> packageMap;
 
-    public DefaultProblem(DefaultProblem defaultProblem) {
+    public DefaultProblem(Problem problem) {
         // vehicles are immutable
         // packages are immutable
-        this(defaultProblem.getName(), new RoadGraph(defaultProblem.getRoadGraph()),
-                new HashMap<>(defaultProblem.vehicleMap), new HashMap<>(defaultProblem.packageMap));
+        this(problem.getName(), new RoadGraph(problem.getRoadGraph()),
+                new HashMap<>(problem.getVehicleMap()), new HashMap<>(problem.getPackageMap()));
     }
 
     public DefaultProblem(String name, RoadGraph roadGraph, Map<String, Vehicle> vehicleMap,
@@ -63,6 +63,10 @@ public class DefaultProblem implements Problem {
         if (aPackage != null) {
             return aPackage;
         }
+        Location location = getRoadGraph().getLocation(name);
+        if (location != null) {
+            return location;
+        }
         return null;
     }
 
@@ -81,8 +85,38 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
+    public Map<String, Vehicle> getVehicleMap() {
+        return vehicleMap;
+    }
+
+    @Override
     public Collection<Package> getAllPackages() {
         return packageMap.values();
+    }
+
+    @Override
+    public Map<String, Package> getPackageMap() {
+        return packageMap;
+    }
+
+    @Override
+    public Problem updateVehicle(String name, Vehicle vehicle) {
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
+        newVehicleMap.put(name, vehicle);
+        return new DefaultProblem(getName(), getRoadGraph(), newVehicleMap, getPackageMap());
+    }
+
+    @Override
+    public Problem updatePackage(String name, Package pkg) {
+        Map<String, Package> newPackageMap = new HashMap<>(getPackageMap());
+        newPackageMap.put(name, pkg);
+        return new DefaultProblem(getName(), getRoadGraph(), getVehicleMap(), newPackageMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
+                packageMap).toHashCode();
     }
 
     @Override
@@ -100,11 +134,5 @@ public class DefaultProblem implements Problem {
         return new EqualsBuilder().append(getName(), that.getName()).append(getRoadGraph(), that.getRoadGraph()).append(
                 vehicleMap, that.vehicleMap)
                 .append(packageMap, that.packageMap).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
-                packageMap).toHashCode();
     }
 }

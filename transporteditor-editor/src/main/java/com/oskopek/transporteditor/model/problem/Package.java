@@ -27,6 +27,10 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
         return size;
     }
 
+    public Package updateLocation(Location location) {
+        return new Package(getName(), location, getTarget(), getSize());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

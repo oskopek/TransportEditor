@@ -4,7 +4,7 @@
 
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.model.domain.DomainLabel;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.action.functions.*;
 import com.oskopek.transporteditor.model.domain.action.predicates.*;
@@ -31,6 +31,32 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     private static final Map<String, Class<? extends Function>> functionNameMap = new HashMap<>();
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
+
+    static {
+        predicateNameMap.put("at", WhoAtWhere.class);
+        predicateNameMap.put("capacity", HasCapacity.class);
+        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
+        predicateNameMap.put("in", In.class);
+        predicateNameMap.put("road", IsRoad.class);
+        predicateNameMap.put("ready-loading", ReadyLoading.class);
+    }
+
+    static {
+        functionNameMap.put("capacity", Capacity.class);
+        functionNameMap.put("fuel-demand", FuelDemand.class);
+        functionNameMap.put("fuel-left", FuelLeft.class);
+        functionNameMap.put("fuel-max", FuelMax.class);
+        functionNameMap.put("package-size", PackageSize.class);
+        functionNameMap.put("road-length", RoadLength.class);
+        functionNameMap.put("total-cost", TotalCost.class);
+    }
+
+    static {
+        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    }
 
     public static String parseName(String contents) {
         return contents.split("\n")[0].replaceAll(";", "").trim();
@@ -83,18 +109,18 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         return functions.stream().collect(Collectors.toMap(f -> f, functionNameMap::get));
     }
 
-    private Set<DomainLabel> parseDomainLabels(String contents) {
-        Set<DomainLabel> domainLabels = new HashSet<>();
+    private Set<PddlLabel> parsePddlLabels(String contents) {
+        Set<PddlLabel> pddlLabels = new HashSet<>();
         if (contents.contains(":action-costs")) {
-            domainLabels.add(DomainLabel.ActionCost);
+            pddlLabels.add(PddlLabel.ActionCost);
         }
         if (contents.contains(":goal-utilities")) {
-            domainLabels.add(DomainLabel.Numeric);
+            pddlLabels.add(PddlLabel.Numeric);
         }
         if (contents.contains(":durative-actions")) {
-            domainLabels.add(DomainLabel.Temporal);
+            pddlLabels.add(PddlLabel.Temporal);
         }
-        return domainLabels;
+        return pddlLabels;
     }
 
     public DriveBuilder parseDriveBuilder(String contents) {
@@ -124,15 +150,15 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         PickUpBuilder pickUpBuilder = parsePickUpBuilder(normalized);
         RefuelBuilder refuelBuilder = parseRefuelBuilder(normalized);
 
-        Set<DomainLabel> labels = parseDomainLabels(contents);
-        if (functions.containsKey("capacity")) {
-            labels.add(DomainLabel.Capacity);
-            if (pickUpBuilder.getPreconditions().stream().map(Object::getClass).anyMatch(HasCapacity.class::equals)) {
-                labels.add(DomainLabel.MaxCapacity); // TODO: probably doesn't work correctly for nested predicates
+        Set<PddlLabel> labels = parsePddlLabels(contents);
+        if (functions.containsKey("capacity")) { // only numerical
+            labels.add(PddlLabel.Capacity);
+            if (normalized.replaceAll(" ", "").matches("^.*\\(>=\\(capacity\\?v\\)\\(package-size\\?p\\)\\).*$")) {
+                labels.add(PddlLabel.MaxCapacity);
             }
         } else if (predicates.containsKey("capacity")) {
-            labels.add(DomainLabel.MaxCapacity);
-            labels.add(DomainLabel.Capacity);
+            labels.add(PddlLabel.MaxCapacity);
+            labels.add(PddlLabel.Capacity);
         }
         return new VariableDomain(name, driveBuilder, dropBuilder, pickUpBuilder,
                 refuelBuilder, labels, predicates, functions);
@@ -143,26 +169,11 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("domain", object);
-        input.put("actionCost", DomainLabel.ActionCost);
-        input.put("numeric", DomainLabel.Numeric);
-        input.put("temporal", DomainLabel.Temporal);
+        input.put("actionCost", PddlLabel.ActionCost);
+        input.put("numeric", PddlLabel.Numeric);
+        input.put("temporal", PddlLabel.Temporal);
 
-        //        input.put("Capacity", Capacity.class);
-        //        input.put("FuelDemand", FuelDemand.class);
-        //        input.put("FuelLeft", FuelLeft.class);
-        //        input.put("FuelMax", FuelMax.class);
-        //        input.put("PackageSize", PackageSize.class);
-        //        input.put("RoadLength", RoadLength.class);
-        //        input.put("TotalCost", TotalCost.class);
-        //
-        //        input.put("At", At.class);
-        //        input.put("HasCapacity", HasCapacity.class);
-        //        input.put("HasPetrolStation", HasPetrolStation.class);
-        //        input.put("In", In.class);
-        //        input.put("IsRoad", IsRoad.class);
-        //        input.put("ReadyLoading", ReadyLoading.class);
-
-        Template template = null;
+        Template template;
         try {
             template = configuration.getTemplate("domain.pddl.ftl");
         } catch (IOException e) {
@@ -176,31 +187,5 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             throw new IllegalStateException("Error occurred during processing template.", e);
         }
         return writer.toString();
-    }
-
-    static {
-        predicateNameMap.put("at", At.class);
-        predicateNameMap.put("capacity", HasCapacity.class);
-        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
-        predicateNameMap.put("in", In.class);
-        predicateNameMap.put("road", IsRoad.class);
-        predicateNameMap.put("ready-loading", ReadyLoading.class);
-    }
-
-    static {
-        functionNameMap.put("capacity", Capacity.class);
-        functionNameMap.put("fuel-demand", FuelDemand.class);
-        functionNameMap.put("fuel-left", FuelLeft.class);
-        functionNameMap.put("fuel-max", FuelMax.class);
-        functionNameMap.put("package-size", PackageSize.class);
-        functionNameMap.put("road-length", RoadLength.class);
-        functionNameMap.put("total-cost", TotalCost.class);
-    }
-
-    static {
-        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setLocale(Locale.US);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

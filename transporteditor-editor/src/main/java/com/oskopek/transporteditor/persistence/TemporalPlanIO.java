@@ -12,7 +12,10 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,10 +31,15 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     }
 
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
-        String action = SequentialPlanIO.serializeAction(temporalPlanAction.getAction());
+        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
         StringBuilder str = new StringBuilder();
-        str.append(temporalPlanAction.getStartTimestamp()).append(';').append(temporalPlanAction.getEndTimestamp())
-                .append(" ").append(action).append('\n');
+        DecimalFormat df = new DecimalFormat("0.000");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(symbols);
+        Integer duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();
+        str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(" ").append(action).append(
+                " [").append(df.format(duration)).append("]\n");
         return str.toString();
     }
 
@@ -39,7 +47,7 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     public String serialize(TemporalPlan plan) throws IllegalArgumentException {
         StringBuilder str = new StringBuilder();
         Set<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
-        actionSet.forEach(temporalPlanAction -> str.append(serializeTemporalPlanAction(temporalPlanAction)));
+        actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
 
         Integer totalTime = 0;
         Optional<Integer> last = actionSet.stream().map(TemporalPlanAction::getEndTimestamp).max(Integer::compare);

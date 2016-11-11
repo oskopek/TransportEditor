@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public interface Plan {
 
-    Collection<Action> getAllActions();
+    Collection<Action> getActions();
 
     Collection<TemporalPlanAction> getTemporalPlanActions();
 

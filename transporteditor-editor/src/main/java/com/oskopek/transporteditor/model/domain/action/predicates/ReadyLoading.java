@@ -10,7 +10,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 public class ReadyLoading extends DefaultPredicate {
 
     @Override
-    public boolean isValid(Problem state, Action action) {
+    public boolean isValidInternal(Problem state, Action action) {
         throw new UnsupportedOperationException(
                 "Not implemented yet."); // TODO: Not sure what should be done here. remove it?s
     }

@@ -26,7 +26,7 @@ public final class ActionCost {
     }
 
     public ActionCost neg(ActionCost cost) {
-        return ActionCost.valueOf(-getCost());
+        return ActionCost.valueOf(-cost.getCost());
     }
 
     public ActionCost subtract(ActionCost cost) {
@@ -46,6 +46,11 @@ public final class ActionCost {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getCost()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -55,11 +60,6 @@ public final class ActionCost {
         }
         ActionCost that = (ActionCost) o;
         return new EqualsBuilder().append(getCost(), that.getCost()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getCost()).toHashCode();
     }
 
     @Override

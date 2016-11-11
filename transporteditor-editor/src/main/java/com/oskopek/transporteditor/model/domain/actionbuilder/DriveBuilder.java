@@ -13,7 +13,8 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
-public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location> {
+public class DriveBuilder
+        extends DefaultActionBuilder<Drive, Vehicle, Location> { // TODO: Add fuel as a pre and post condition to drive
 
     public DriveBuilder(List<Predicate> preconditions, List<Predicate> effects) {
         super(preconditions, effects);
@@ -22,7 +23,6 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
     @Override
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what) {
         throw new UnsupportedOperationException("Use the other build methods.");
-        //return build(who, where, what, null); // TODO: throw an exception, rather?
     }
 
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what, Road road) {

@@ -4,10 +4,19 @@
 
 package com.oskopek.transporteditor.model.domain.action;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class ActionCostTest {
+
+    @Test
+    public void subtract() throws Exception {
+        assertEquals(ActionCost.valueOf(1), ActionCost.valueOf(2).subtract(ActionCost.valueOf(1)));
+        assertEquals(ActionCost.valueOf(3), ActionCost.valueOf(2).subtract(ActionCost.valueOf(-1)));
+    }
 
     @Test
     public void nonNullProperties() {

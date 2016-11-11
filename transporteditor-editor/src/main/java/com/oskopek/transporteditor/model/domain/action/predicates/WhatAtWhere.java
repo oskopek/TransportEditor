@@ -9,12 +9,12 @@ import com.oskopek.transporteditor.model.problem.Locatable;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 
-public class At extends DefaultPredicate {
+public class WhatAtWhere extends DefaultPredicate {
 
     @Override
-    public boolean isValid(Problem state, Action action) {
-        Locatable who = state.getLocatable(action.getWho().getName());
+    public boolean isValidInternal(Problem state, Action action) {
+        Locatable what = state.getLocatable(action.getWhat().getName());
         Location where = action.getWhere();
-        return who.getLocation().equals(where);
+        return where.equals(what.getLocation());
     }
 }

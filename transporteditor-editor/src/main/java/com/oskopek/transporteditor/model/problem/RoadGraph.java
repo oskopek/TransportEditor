@@ -99,6 +99,23 @@ public class RoadGraph extends MultiGraph implements Graph {
         return edge;
     }
 
+    public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
+        removeAttribute(road.getName());
+        removeEdge(road.getName());
+        addAttribute(road.getName(), road);
+        T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
+        edge.setAttribute("road", road);
+        return edge;
+    }
+
+    public boolean hasPetrolStation(Location location) {
+        return hasAttribute(location.getName() + "-station");
+    }
+
+    public void setPetrolStation(Location location) {
+        setAttribute(location.getName() + "-station");
+    }
+
     public Road getRoadBetween(Location l1, Location l2) {
         Node n1 = getNode(l1.getName());
         if (n1 == null) {
