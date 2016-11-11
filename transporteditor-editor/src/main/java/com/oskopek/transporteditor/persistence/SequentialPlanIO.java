@@ -8,8 +8,10 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.*;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.problem.*;
+import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.model.problem.Vehicle;
 import com.oskopek.transporteditor.model.state.PlanState;
 import com.oskopek.transporteditor.model.state.SequentialPlanState;
 
@@ -78,9 +80,7 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
                 if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
                     throw new IllegalStateException("Cannot have a refuel action in a domain without fuel.");
                 }
-                // in such a domain, all vehicle are fuel vehicles
-                FuelVehicle fuelVehicle = (FuelVehicle) vehicle;
-                return domain.buildRefuel(fuelVehicle, where);
+                return domain.buildRefuel(vehicle, where);
             }
             case "drive": {
                 Location to = problem.getRoadGraph().getLocation(groups[3]);

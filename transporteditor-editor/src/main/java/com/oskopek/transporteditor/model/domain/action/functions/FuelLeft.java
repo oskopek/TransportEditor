@@ -6,21 +6,21 @@ package com.oskopek.transporteditor.model.domain.action.functions;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
-import com.oskopek.transporteditor.model.problem.FuelVehicle;
+import com.oskopek.transporteditor.model.problem.Vehicle;
 
 public class FuelLeft extends DefaultFunction {
 
     @Override
     public ActionCost apply(ActionObject... actionObjects) {
-        if (actionObjects == null || actionObjects.length != 1 || !FuelVehicle.class.isInstance(actionObjects[0])) {
-            throw new IllegalArgumentException("FuelLeft can only be applied to one argument of type FuelVehicle.");
+        if (actionObjects == null || actionObjects.length != 1 || !Vehicle.class.isInstance(actionObjects[0])) {
+            throw new IllegalArgumentException("FuelLeft can only be applied to one argument of type Vehicle.");
         }
-        return apply((FuelVehicle) actionObjects[0]);
+        return apply((Vehicle) actionObjects[0]);
     }
 
-    public ActionCost apply(FuelVehicle vehicle) {
+    public ActionCost apply(Vehicle vehicle) {
         if (vehicle == null) {
-            throw new IllegalArgumentException("FuelVehicle cannot be null.");
+            throw new IllegalArgumentException("Vehicle cannot be null.");
         }
         return vehicle.getCurFuelCapacity();
     }

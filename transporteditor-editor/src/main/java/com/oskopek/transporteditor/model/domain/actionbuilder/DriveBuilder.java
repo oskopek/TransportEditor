@@ -13,7 +13,8 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
-public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location> {
+public class DriveBuilder
+        extends DefaultActionBuilder<Drive, Vehicle, Location> { // TODO: Add fuel as a pre and post condition to drive
 
     public DriveBuilder(List<Predicate> preconditions, List<Predicate> effects) {
         super(preconditions, effects);

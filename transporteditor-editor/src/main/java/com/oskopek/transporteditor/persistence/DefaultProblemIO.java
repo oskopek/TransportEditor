@@ -28,6 +28,14 @@ import java.util.stream.Collectors;
 public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<DefaultProblem> {
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
+
+    static {
+        configuration.setClassForTemplateLoading(DefaultProblemIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    }
+
     private final Domain domain;
 
     public DefaultProblemIO(Domain domain) {
@@ -201,12 +209,12 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                         if (vehicle != null) {
                             ActionCost fuelLeft = ActionCost.valueOf(number);
                             ActionCost fuelMax = null;
-                            if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelMax = ((FuelVehicle) vehicle).getMaxFuelCapacity();
+                            if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
+                                fuelMax = vehicle.getMaxFuelCapacity();
                             }
-                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(),
-                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList(),
-                                    fuelLeft, fuelMax);
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
+                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
+                                    fuelLeft, fuelMax, vehicle.getPackageList());
                             parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
@@ -218,12 +226,12 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
                         if (vehicle != null) {
                             ActionCost fuelMax = ActionCost.valueOf(number);
                             ActionCost fuelLeft = null;
-                            if (FuelVehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelLeft = ((FuelVehicle) vehicle).getCurFuelCapacity();
+                            if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
+                                fuelLeft = vehicle.getCurFuelCapacity();
                             }
-                            FuelVehicle newVehicle = new FuelVehicle(vehicle.getName(), vehicle.getLocation(),
-                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList(),
-                                    fuelLeft, fuelMax);
+                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
+                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
+                                    fuelLeft, fuelMax, vehicle.getPackageList());
                             parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                             break;
                         }
@@ -326,12 +334,5 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
         public RoadGraph graph() {
             return graph;
         }
-    }
-
-    static {
-        configuration.setClassForTemplateLoading(DefaultProblemIO.class, "");
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setLocale(Locale.US);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

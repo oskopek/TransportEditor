@@ -128,8 +128,8 @@ public class DefaultProblemIOIT {
         assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
         assertEquals(45, fuelRoad.getLength().getCost().intValue());
 
-        assertEquals(FuelVehicle.class, problem.getVehicle("truck-1").getClass());
-        FuelVehicle truck1 = (FuelVehicle) problem.getVehicle("truck-1");
+        assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
+        Vehicle truck1 = (Vehicle) problem.getVehicle("truck-1");
         assertNotNull(truck1.getCurFuelCapacity());
         assertEquals(424, (int) truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
