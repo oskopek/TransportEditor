@@ -94,7 +94,7 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
     public String serialize(SequentialPlan plan) throws IllegalArgumentException {
         StringBuilder builder = new StringBuilder();
         plan.forEach(action -> builder.append(serializeAction(action, true)).append('\n'));
-        ActionCost totalCost = plan.getAllActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
+        ActionCost totalCost = plan.getActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
                 ActionCost::add);
         if (totalCost != null) {
             builder.append("; cost = ").append(totalCost.getCost()).append(" (general cost)");

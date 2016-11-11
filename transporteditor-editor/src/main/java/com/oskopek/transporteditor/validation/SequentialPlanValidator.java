@@ -27,7 +27,7 @@ public class SequentialPlanValidator implements Validator {
     }
 
     public boolean isValid(DefaultProblem problem, SequentialPlan plan) {
-        List<Action> actionList = plan.getAllActions();
+        List<Action> actionList = plan.getActions();
         Problem instance = new DefaultProblem(problem);
 
         for (Action action : actionList) {

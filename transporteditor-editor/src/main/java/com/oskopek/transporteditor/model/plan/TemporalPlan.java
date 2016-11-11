@@ -20,27 +20,29 @@ import java.util.stream.Collectors;
 
 public class TemporalPlan implements Plan, Iterable<TemporalPlanAction> {
 
-    private final IntervalTree<Action> actionIntervalTree = new IntervalTree<>();
+    private final IntervalTree<TemporalPlanAction> actionIntervalTree = new IntervalTree<>();
 
     public TemporalPlan(Collection<TemporalPlanAction> planActions) {
         planActions.forEach(
-                t -> actionIntervalTree.addInterval(t.getStartTimestamp(), t.getEndTimestamp(), t.getAction()));
+                t -> actionIntervalTree.addInterval(t.getStartTimestamp(), t.getEndTimestamp(), t));
         actionIntervalTree.build();
     }
 
     public Set<Action> getActionsAt(Integer timestamp) {
+        return getTemporalActionsAt(timestamp).stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
+    }
+
+    public Set<TemporalPlanAction> getTemporalActionsAt(Integer timestamp) {
         return actionIntervalTree.get(timestamp);
     }
 
     @Override
-    public Set<TemporalPlanAction> getTemporalPlanActions() {
-        return actionIntervalTree.getIntervals(Integer.MIN_VALUE, Integer.MAX_VALUE).stream().map(
-                i -> new TemporalPlanAction(i.getData(), (int) i.getStart(), (int) i.getEnd())).collect(
-                Collectors.toSet());
+    public Collection<Action> getActions() {
+        return getTemporalPlanActions().stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
     }
 
     @Override
-    public Collection<Action> getAllActions() {
+    public Set<TemporalPlanAction> getTemporalPlanActions() {
         return actionIntervalTree.getIntervals(Integer.MIN_VALUE, Integer.MAX_VALUE).stream().map(Interval::getData)
                 .collect(Collectors.toSet());
     }
@@ -61,22 +63,19 @@ public class TemporalPlan implements Plan, Iterable<TemporalPlanAction> {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(actionIntervalTree).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof TemporalPlan)) {
             return false;
         }
-
         TemporalPlan that = (TemporalPlan) o;
-
         return new EqualsBuilder().append(actionIntervalTree, that.actionIntervalTree).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(actionIntervalTree).toHashCode();
     }
 }

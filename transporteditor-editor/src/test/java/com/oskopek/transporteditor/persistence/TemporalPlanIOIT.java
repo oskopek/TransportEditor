@@ -51,14 +51,12 @@ public class TemporalPlanIOIT {
     public void parse() throws Exception {
         TemporalPlan plan = new TemporalPlanIO(temporalDomain, p01Temporal).parse(p01TemporalPlanContents);
         assertNotNull(plan);
-        assertEquals(6, plan.getAllActions().size());
+        assertEquals(6, plan.getActions().size());
         assertEquals(2, plan.getActionsAt(0).size());
         assertEquals(2, plan.getActionsAt(1).size());
-        assertEquals(1, plan.getActionsAt(46).size());
-        assertEquals(1, plan.getActionsAt(51).size());
-
-        // TODO: More of a TemporalPlan test
         assertEquals(2, plan.getActionsAt(45).size());
+        assertEquals(2, plan.getActionsAt(46).size());
+        assertEquals(1, plan.getActionsAt(51).size());
         assertEquals(0, plan.getActionsAt(52).size());
     }
 

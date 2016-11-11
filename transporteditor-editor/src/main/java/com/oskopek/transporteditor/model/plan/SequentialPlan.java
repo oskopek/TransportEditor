@@ -26,7 +26,7 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
     }
 
     @Override
-    public List<Action> getAllActions() {
+    public List<Action> getActions() {
         return actionList;
     }
 
@@ -62,6 +62,11 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(actionList).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -74,10 +79,5 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
         SequentialPlan actions = (SequentialPlan) o;
 
         return new EqualsBuilder().append(actionList, actions.actionList).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(actionList).toHashCode();
     }
 }
