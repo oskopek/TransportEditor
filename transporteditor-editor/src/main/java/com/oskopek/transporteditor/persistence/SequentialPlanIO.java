@@ -5,12 +5,13 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.*;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.model.problem.Vehicle;
+import com.oskopek.transporteditor.model.state.PlanState;
+import com.oskopek.transporteditor.model.state.SequentialPlanState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,42 +23,37 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
 
     private final Problem problem;
     private final Domain domain;
+    private PlanState planState;
 
     public SequentialPlanIO(Domain domain, Problem problem) {
         this.domain = domain;
         this.problem = problem;
     }
 
-    public static String serializeAction(Action action, boolean capacity) {
+    static StringBuilder serializeActionSimple(Action action) {
         StringBuilder str = new StringBuilder();
-        str.append("(").append(action.getName()).append(" ").append(action.getWho().getName()).append(" ").append(
-                action.getWhere().getName());
+        String whoName = action.getWho().getName();
+        str.append("(").append(action.getName()).append(" ").append(whoName).append(" ")
+                .append(action.getWhere().getName());
         if (Drive.class.isInstance(action)) {
             str.append(" ").append(action.getWhat().getName());
         } else if (PickUp.class.isInstance(action)) {
             str.append(" ").append(action.getWhat().getName());
-            if (capacity) {
-                str.append(" ").append("capacity-").append("").append(" ").append("capacity-").append("");
-            }
         } else if (Drop.class.isInstance(action)) {
             str.append(" ").append(action.getWhat().getName());
-            if (capacity) {
-                str.append(" ").append("capacity-").append("").append(" ").append("capacity-").append("");
-            }
         } else if (Refuel.class.isInstance(action)) {
             // intentionally empty
         } else {
             throw new IllegalArgumentException("Not recognized action: " + action);
         }
-        str.append(")");
-        return str.toString();
+        return str;
     }
 
-    public static Action parsePlanAction(Domain domain, Problem problem, String line) {
+    static Action parsePlanAction(Domain domain, Problem problem, String line) {
         Pattern actionPattern = Pattern.compile("\\((([-a-zA-Z0-9]+ )+([-a-zA-Z0-9]+))\\)");
         Matcher matcher = actionPattern.matcher(line);
 
-        String inside = null;
+        String inside;
         if (matcher.find()) {
             inside = matcher.group(1);
         } else {
@@ -79,7 +75,12 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
                 return domain.buildPickUp(vehicle, where, what);
             }
             case "refuel": {
-                return domain.buildRefuel(vehicle, where);
+                if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                    throw new IllegalStateException("Cannot have a refuel action in a domain without fuel.");
+                }
+                // in such a domain, all vehicle are fuel vehicles
+                FuelVehicle fuelVehicle = (FuelVehicle) vehicle;
+                return domain.buildRefuel(fuelVehicle, where);
             }
             case "drive": {
                 Location to = problem.getRoadGraph().getLocation(groups[3]);
@@ -90,10 +91,31 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
         }
     }
 
+    private String serializeAction(Action action, boolean capacity) {
+        StringBuilder str = serializeActionSimple(action);
+        if (capacity) {
+            Integer capacityVal = planState.getVehicleSafe(action.getWho().getName()).getCurCapacity().getCost();
+            Integer newCapacityVal = null;
+            if (PickUp.class.isInstance(action)) {
+                newCapacityVal = capacityVal + 1;
+            } else if (Drop.class.isInstance(action)) {
+                newCapacityVal = capacityVal - 1;
+            }
+            str.append(" ").append("capacity-").append(capacityVal).append(" ").append("capacity-")
+                    .append(newCapacityVal);
+        }
+        str.append(")");
+        return str.toString();
+    }
+
     @Override
-    public String serialize(SequentialPlan plan) throws IllegalArgumentException {
+    public synchronized String serialize(SequentialPlan plan) throws IllegalArgumentException {
         StringBuilder builder = new StringBuilder();
-        plan.forEach(action -> builder.append(serializeAction(action, true)).append('\n'));
+        planState = new SequentialPlanState(domain, problem);
+        for (Action action : plan) {
+            builder.append(serializeAction(action, true)).append('\n');
+            planState.apply(action);
+        }
         ActionCost totalCost = plan.getActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
                 ActionCost::add);
         if (totalCost != null) {

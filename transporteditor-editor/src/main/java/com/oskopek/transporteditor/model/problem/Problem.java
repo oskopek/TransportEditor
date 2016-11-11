@@ -5,6 +5,7 @@
 package com.oskopek.transporteditor.model.problem;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface Problem {
 
@@ -22,8 +23,12 @@ public interface Problem {
 
     Collection<Vehicle> getAllVehicles();
 
+    Map<String, Vehicle> getVehicleMap();
+
     Collection<Package> getAllPackages();
 
+    Map<String, Package> getPackageMap();
 
+    Problem updateVehicle(String name, Vehicle vehicle);
 
 }

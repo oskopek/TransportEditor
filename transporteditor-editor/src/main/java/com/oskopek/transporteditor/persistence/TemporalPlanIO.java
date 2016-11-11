@@ -31,7 +31,7 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     }
 
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
-        String action = SequentialPlanIO.serializeAction(temporalPlanAction.getAction(), false);
+        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
         StringBuilder str = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.000");
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());

@@ -4,6 +4,7 @@
 
 package com.oskopek.transporteditor.model.domain.action;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.predicates.Predicate;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Locatable;
@@ -29,6 +30,8 @@ public interface Action {
     ActionCost getCost();
 
     ActionCost getDuration();
+
+    Problem apply(Domain domain, Problem problemState);
 
     default boolean arePreconditionsValid(Problem state) {
         return getPreconditions().stream().map(p -> p.isValid(state, this)).reduce(true, Boolean::logicalAnd);

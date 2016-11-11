@@ -51,7 +51,7 @@ public interface Domain {
 
     PickUp buildPickUp(Vehicle vehicle, Location at, Package what);
 
-    Refuel buildRefuel(Vehicle vehicle, Location at);
+    Refuel buildRefuel(FuelVehicle vehicle, Location at);
 
     Set<PddlLabel> getPddlLabels();
 

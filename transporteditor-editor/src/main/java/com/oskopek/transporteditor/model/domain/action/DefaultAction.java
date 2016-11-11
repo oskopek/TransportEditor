@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public class DefaultAction<Who extends Locatable, What extends ActionObject> implements Action {
+public abstract class DefaultAction<Who extends Locatable, What extends ActionObject> implements Action {
 
     private final String name;
     private final Who who;
@@ -72,6 +72,12 @@ public class DefaultAction<Who extends Locatable, What extends ActionObject> imp
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).append(getWho()).append(getWhere()).append(getWhat())
+                .append(getPreconditions()).append(getEffects()).append(getCost()).append(getDuration()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -87,12 +93,6 @@ public class DefaultAction<Who extends Locatable, What extends ActionObject> imp
                 that.getWhere()).append(getWhat(), that.getWhat()).append(getPreconditions(), that.getPreconditions())
                 .append(getEffects(), that.getEffects()).append(getCost(), that.getCost()).append(getDuration(),
                         that.getDuration()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getWho()).append(getWhere()).append(getWhat())
-                .append(getPreconditions()).append(getEffects()).append(getCost()).append(getDuration()).toHashCode();
     }
 
     @Override

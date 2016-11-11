@@ -27,4 +27,10 @@ public class FuelVehicle extends Vehicle {
     public ActionCost getMaxFuelCapacity() {
         return maxFuelCapacity;
     }
+
+    public FuelVehicle updateCurFuelCapacity(ActionCost curFuelCapacity) {
+        return new FuelVehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getPackageList(),
+                curFuelCapacity,
+                getMaxFuelCapacity());
+    }
 }

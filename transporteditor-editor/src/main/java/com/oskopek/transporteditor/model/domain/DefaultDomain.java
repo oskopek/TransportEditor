@@ -87,7 +87,7 @@ public abstract class DefaultDomain implements Domain {
     }
 
     @Override
-    public Refuel buildRefuel(Vehicle vehicle, Location at) {
+    public Refuel buildRefuel(FuelVehicle vehicle, Location at) {
         return refuelBuilder.build(vehicle, at);
     }
 
