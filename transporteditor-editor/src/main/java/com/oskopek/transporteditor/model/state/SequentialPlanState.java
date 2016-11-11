@@ -88,4 +88,9 @@ public class SequentialPlanState implements PlanState {
     public Problem updateVehicle(String name, Vehicle vehicle) {
         return problem.updateVehicle(name, vehicle);
     }
+
+    @Override
+    public Problem updatePackage(String name, Package pkg) {
+        return problem.updatePackage(name, pkg);
+    }
 }

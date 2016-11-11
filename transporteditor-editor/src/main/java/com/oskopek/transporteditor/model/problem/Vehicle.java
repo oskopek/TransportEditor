@@ -8,6 +8,7 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Vehicle extends DefaultLocatable implements Locatable, ActionObject {
@@ -62,6 +63,34 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     public Vehicle updateLocation(Location location) {
         return new Vehicle(getName(), location, getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
                 getMaxFuelCapacity(), getPackageList());
+    }
+
+    public Vehicle addPackage(Package pkg) {
+        if (getPackageList().contains(pkg)) {
+            throw new IllegalArgumentException("Package " + pkg + " already is in vehicle " + this + ".");
+        }
+        if (pkg.getLocation() != null) {
+            throw new IllegalStateException(
+                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + ".");
+        }
+        List<Package> newPackageList = new ArrayList<>(getPackageList());
+        newPackageList.add(pkg);
+        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+                getMaxFuelCapacity(), newPackageList);
+    }
+
+    public Vehicle removePackage(Package pkg) {
+        if (!getPackageList().contains(pkg)) {
+            throw new IllegalArgumentException("Package " + pkg + " is not in vehicle " + this + ".");
+        }
+        if (pkg.getLocation() != null) {
+            throw new IllegalStateException(
+                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + ".");
+        }
+        List<Package> newPackageList = new ArrayList<>(getPackageList());
+        newPackageList.remove(pkg);
+        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+                getMaxFuelCapacity(), newPackageList);
     }
 
     @Override

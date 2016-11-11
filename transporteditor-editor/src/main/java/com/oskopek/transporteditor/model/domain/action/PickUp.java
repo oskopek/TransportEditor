@@ -22,6 +22,12 @@ public class PickUp extends DefaultAction<Vehicle, Package> {
 
     @Override
     public Problem apply(Domain domain, Problem problemState) {
-        throw new IllegalStateException("Not implemented yet.");
+        String vehicleName = this.getWho().getName();
+        String packageName = this.getWhat().getName();
+        Vehicle vehicle = problemState.getVehicle(vehicleName);
+        Package pkg = problemState.getPackage(packageName);
+        Package newPackage = pkg.updateLocation(null);
+        return problemState.updateVehicle(vehicleName, vehicle.addPackage(newPackage))
+                .updatePackage(packageName, newPackage);
     }
 }

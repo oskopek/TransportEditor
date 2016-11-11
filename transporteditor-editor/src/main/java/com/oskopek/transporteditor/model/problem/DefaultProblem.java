@@ -97,9 +97,16 @@ public class DefaultProblem implements Problem {
 
     @Override
     public Problem updateVehicle(String name, Vehicle vehicle) {
-        Map<String, Vehicle> newVehicleMap = new HashMap<>(vehicleMap);
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
         newVehicleMap.put(name, vehicle);
         return new DefaultProblem(getName(), getRoadGraph(), newVehicleMap, getPackageMap());
+    }
+
+    @Override
+    public Problem updatePackage(String name, Package pkg) {
+        Map<String, Package> newPackageMap = new HashMap<>(getPackageMap());
+        newPackageMap.put(name, pkg);
+        return new DefaultProblem(getName(), getRoadGraph(), getVehicleMap(), newPackageMap);
     }
 
     @Override

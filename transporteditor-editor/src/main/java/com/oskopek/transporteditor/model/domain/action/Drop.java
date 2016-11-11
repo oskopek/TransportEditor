@@ -22,6 +22,14 @@ public class Drop extends DefaultAction<Vehicle, Package> {
 
     @Override
     public Problem apply(Domain domain, Problem problemState) {
-        throw new IllegalStateException("Not implemented yet.");
+        String vehicleName = this.getWho().getName();
+        String packageName = this.getWhat().getName();
+        String locationName = this.getWhere().getName();
+        Vehicle vehicle = problemState.getVehicle(vehicleName);
+        Package pkg = problemState.getPackage(packageName);
+        Location location = problemState.getRoadGraph().getLocation(locationName);
+        Package newPackage = pkg.updateLocation(location);
+        return problemState.updateVehicle(vehicleName, vehicle.removePackage(pkg))
+                .updatePackage(packageName, newPackage);
     }
 }

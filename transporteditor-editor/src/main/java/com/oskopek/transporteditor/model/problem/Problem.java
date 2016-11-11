@@ -31,4 +31,6 @@ public interface Problem {
 
     Problem updateVehicle(String name, Vehicle vehicle);
 
+    Problem updatePackage(String name, Package pkg);
+
 }
