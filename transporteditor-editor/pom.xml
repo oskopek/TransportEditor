@@ -1,7 +1,3 @@
-<!--
-  ~ Copyright (c) 2016 Ondrej Škopek <oskopek@matfyz.cz>. All rights reserved.
-  -->
-
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -205,6 +201,42 @@
                         <goals>
                             <goal>antlr4</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <verbose>false</verbose>
+                </configuration>
+                <executions>
+                    <!--<execution>-->
+                    <!--<id>file-headers</id>-->
+                    <!--<goals>-->
+                    <!--<goal>update-file-header</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<licenseName>mit</licenseName>-->
+                    <!--<roots>-->
+                    <!--<root>src/main/java/com/oskopek/transporteditor</root>-->
+                    <!--<root>src/test/java</root>-->
+                    <!--</roots>-->
+                    <!--<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>-->
+                    <!--<emptyLineAfterHeader>true</emptyLineAfterHeader>-->
+                    <!--</configuration>-->
+                    <!--<phase>process-sources</phase>-->
+                    <!--</execution>-->
+                    <execution>
+                        <id>third-party</id>
+                        <goals>
+                            <goal>add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}</outputDirectory>
+                            <thirdPartyFilename>NOTICE.txt</thirdPartyFilename>
+                        </configuration>
+                        <phase>generate-resources</phase>
                     </execution>
                 </executions>
             </plugin>

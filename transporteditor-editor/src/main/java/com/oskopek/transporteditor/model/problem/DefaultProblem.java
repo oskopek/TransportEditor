@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
- */
-
 package com.oskopek.transporteditor.model.problem;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -132,7 +128,6 @@ public class DefaultProblem implements Problem {
         DefaultProblem that = (DefaultProblem) o;
 
         return new EqualsBuilder().append(getName(), that.getName()).append(getRoadGraph(), that.getRoadGraph()).append(
-                vehicleMap, that.vehicleMap)
-                .append(packageMap, that.packageMap).isEquals();
+                vehicleMap, that.vehicleMap).append(packageMap, that.packageMap).isEquals();
     }
 }

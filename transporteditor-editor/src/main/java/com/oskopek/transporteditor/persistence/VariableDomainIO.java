@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
- */
-
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.PddlLabel;
@@ -160,8 +156,8 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             labels.add(PddlLabel.MaxCapacity);
             labels.add(PddlLabel.Capacity);
         }
-        return new VariableDomain(name, driveBuilder, dropBuilder, pickUpBuilder,
-                refuelBuilder, labels, predicates, functions);
+        return new VariableDomain(name, driveBuilder, dropBuilder, pickUpBuilder, refuelBuilder, labels, predicates,
+                functions);
     }
 
     @Override

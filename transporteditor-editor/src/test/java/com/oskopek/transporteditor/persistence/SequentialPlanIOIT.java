@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2016 Ondrej Škopek <oskopek@oskopek.com>. All rights reserved.
- */
-
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
@@ -11,6 +7,7 @@ import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,9 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class SequentialPlanIOIT {
 
@@ -40,9 +34,9 @@ public class SequentialPlanIOIT {
     public static SequentialPlan P01SequentialPlan(DefaultProblem p01) {
         List<Action> planEntryList = new ArrayList<>();
         planEntryList.add(domain.buildPickUp(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-4"),
-                        p01.getPackage("package-1")));
+                p01.getPackage("package-1")));
         planEntryList.add(domain.buildPickUp(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-4"),
-                        p01.getPackage("package-2")));
+                p01.getPackage("package-2")));
         planEntryList.add(domain.buildDrive(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-4"),
                 p01.getRoadGraph().getLocation("city-loc-5"), p01.getRoadGraph()));
         planEntryList.add(domain.buildDrop(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-5"),
@@ -50,7 +44,7 @@ public class SequentialPlanIOIT {
         planEntryList.add(domain.buildDrive(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-5"),
                 p01.getRoadGraph().getLocation("city-loc-2"), p01.getRoadGraph()));
         planEntryList.add(domain.buildDrop(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-2"),
-                        p01.getPackage("package-2")));
+                p01.getPackage("package-2")));
         return new SequentialPlan(planEntryList);
     }
 

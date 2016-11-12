@@ -127,7 +127,7 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getPlanner()).append(getValidator()).append(getDomain())
-                .append(getProblem()).append(getPlan()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(getPlanner()).append(getValidator()).append(getDomain()).append(
+                getProblem()).append(getPlan()).toHashCode();
     }
 }
