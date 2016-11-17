@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class TemporalPlanGanttChart extends GanttChart {
+public final class TemporalPlanGanttChart extends GanttChart {
 
     private final Set<TemporalPlanAction> temporalPlanActionSet;
     private final Map<String, Color> colorMap;
@@ -51,6 +51,11 @@ public class TemporalPlanGanttChart extends GanttChart {
 
     public static TemporalPlanGanttChart build(TemporalPlan plan) {
         return new TemporalPlanGanttChart(plan.getTemporalPlanActions());
+    }
+
+    public TemporalPlanGanttChart rotate(double degrees) {
+        setRotate(degrees);
+        return this;
     }
 
 

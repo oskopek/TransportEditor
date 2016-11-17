@@ -45,7 +45,7 @@ public class RightPaneController extends AbstractController {
         TabPane tabPane = new TabPane();
 
         Plan plan = application.getPlanningSession().getPlan();
-        tabPane.getTabs().add(new Tab("Gantt", TemporalPlanGanttChart.build(plan.toTemporalPlan())));
+        tabPane.getTabs().add(new Tab("Gantt", TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90)));
 
         planTabAnchorPane.getChildren().add(tabPane);
     }
