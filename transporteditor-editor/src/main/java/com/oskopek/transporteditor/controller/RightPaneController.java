@@ -4,7 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.view.chart.TemporalPlanGanttChart;
+import com.oskopek.transporteditor.view.plan.SequentialPlanList;
+import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -45,6 +46,7 @@ public class RightPaneController extends AbstractController {
         TabPane tabPane = new TabPane();
 
         Plan plan = application.getPlanningSession().getPlan();
+        tabPane.getTabs().add(new Tab("Linear", SequentialPlanList.build(plan.toTemporalPlan())));
         tabPane.getTabs().add(new Tab("Gantt", TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90)));
 
         planTabAnchorPane.getChildren().add(tabPane);

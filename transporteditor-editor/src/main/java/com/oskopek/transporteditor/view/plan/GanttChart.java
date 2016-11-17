@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.view.chart;
+package com.oskopek.transporteditor.view.plan;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

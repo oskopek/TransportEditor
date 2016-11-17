@@ -1,16 +1,14 @@
-package com.oskopek.transporteditor.view.chart;
+package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.TemporalPlan;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Locatable;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class TemporalPlanGanttChart extends GanttChart {
 
@@ -18,9 +16,9 @@ public final class TemporalPlanGanttChart extends GanttChart {
     private final Map<String, Color> colorMap;
     private final Color defaultColor = Color.BLACK;
 
-    private TemporalPlanGanttChart(Set<TemporalPlanAction> actions) {
+    private TemporalPlanGanttChart(Collection<TemporalPlanAction> actions) {
         super("Time", "Action Object");
-        this.temporalPlanActionSet = Collections.unmodifiableSet(actions);
+        this.temporalPlanActionSet = Collections.unmodifiableSet(new HashSet<>(actions));
 
         setTitle("");
         setLegendVisible(false);
@@ -49,7 +47,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
         getData().addAll(series.toJavaList());
     }
 
-    public static TemporalPlanGanttChart build(TemporalPlan plan) {
+    public static TemporalPlanGanttChart build(Plan plan) {
         return new TemporalPlanGanttChart(plan.getTemporalPlanActions());
     }
 
