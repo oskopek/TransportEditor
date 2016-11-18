@@ -4,6 +4,7 @@ import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 
@@ -18,12 +19,32 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     private final TransportEditorApplication application;
     private final ResourceBundle messages;
     private final SaveDiscardDialogPaneCreator creator;
+    private final Node newNode;
+    private final Node loadNode;
+    private final Node saveNode;
+    private final Node saveAsNode;
 
     public JavaFxOpenedTextObjectHandler(TransportEditorApplication application, ResourceBundle messages,
-            SaveDiscardDialogPaneCreator creator) {
+            SaveDiscardDialogPaneCreator creator, Node newNode, Node loadNode, Node saveNode, Node saveAsNode,
+            OpenedTextObjectHandler<?> parentHandler) {
         this.application = application;
         this.messages = messages;
         this.creator = creator;
+        this.newNode = newNode;
+        this.loadNode = loadNode;
+        this.saveNode = saveNode;
+        this.saveAsNode = saveAsNode;
+
+        if (parentHandler == null) {
+            newNode.setDisable(false);
+            loadNode.setDisable(false);
+        } else {
+            newNode.disableProperty().bind(parentHandler.objectProperty().isNull());
+            loadNode.disableProperty().bind(parentHandler.objectProperty().isNull());
+        }
+
+        saveNode.disableProperty().bind(changedSinceLastSaveProperty().not());
+        saveAsNode.disableProperty().bind(changedSinceLastSaveProperty().not());
     }
 
     public static FileChooser buildDefaultFileChooser(String title) {

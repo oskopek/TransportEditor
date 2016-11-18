@@ -20,6 +20,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.MenuItem;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -62,6 +63,9 @@ public class RootLayoutController extends AbstractController {
 
     @Inject
     private transient SaveDiscardDialogPaneCreator creator;
+
+    @FXML
+    private transient MenuItem sessionNewMenuItem;
 
     private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;

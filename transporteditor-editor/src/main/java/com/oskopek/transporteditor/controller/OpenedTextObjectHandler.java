@@ -2,8 +2,7 @@ package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +23,12 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
-    private boolean changedSinceLastSave = false;
+    private BooleanProperty changedSinceLastSave = new SimpleBooleanProperty(false);
 
     public OpenedTextObjectHandler() {
         this.object.addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                changedSinceLastSave = true;
+                changedSinceLastSave.setValue(true);
             }
         });
     }
@@ -63,7 +62,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
             throw new IllegalStateException("Cannot save object with null writer.");
         }
         writeFromString(writer.get().serialize(getObject()));
-        changedSinceLastSave = false;
+        changedSinceLastSave.setValue(false);
     }
 
     public void saveAs(Path path) {
@@ -112,8 +111,12 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         return getObject() == null;
     }
 
-    protected boolean isChangedSinceLastSave() {
+    protected ReadOnlyBooleanProperty changedSinceLastSaveProperty() {
         return changedSinceLastSave;
+    }
+
+    protected boolean isChangedSinceLastSave() {
+        return changedSinceLastSave.get();
     }
 
     private List<String> readToLinesList() {
