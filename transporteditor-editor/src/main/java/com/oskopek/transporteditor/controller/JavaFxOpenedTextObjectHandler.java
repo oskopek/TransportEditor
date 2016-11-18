@@ -4,8 +4,9 @@ import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
-import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -19,32 +20,12 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     private final TransportEditorApplication application;
     private final ResourceBundle messages;
     private final SaveDiscardDialogPaneCreator creator;
-    private final Node newNode;
-    private final Node loadNode;
-    private final Node saveNode;
-    private final Node saveAsNode;
 
     public JavaFxOpenedTextObjectHandler(TransportEditorApplication application, ResourceBundle messages,
-            SaveDiscardDialogPaneCreator creator, Node newNode, Node loadNode, Node saveNode, Node saveAsNode,
-            OpenedTextObjectHandler<?> parentHandler) {
+            SaveDiscardDialogPaneCreator creator) {
         this.application = application;
         this.messages = messages;
         this.creator = creator;
-        this.newNode = newNode;
-        this.loadNode = loadNode;
-        this.saveNode = saveNode;
-        this.saveAsNode = saveAsNode;
-
-        if (parentHandler == null) {
-            newNode.setDisable(false);
-            loadNode.setDisable(false);
-        } else {
-            newNode.disableProperty().bind(parentHandler.objectProperty().isNull());
-            loadNode.disableProperty().bind(parentHandler.objectProperty().isNull());
-        }
-
-        saveNode.disableProperty().bind(changedSinceLastSaveProperty().not());
-        saveAsNode.disableProperty().bind(changedSinceLastSaveProperty().not());
     }
 
     public static FileChooser buildDefaultFileChooser(String title) {
@@ -57,6 +38,24 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         return chooser;
     }
 
+    public JavaFxOpenedTextObjectHandler<Persistable_> bind(Menu menu, MenuItem newMenuItem, MenuItem loadMenuItem,
+            MenuItem saveMenuItem, MenuItem saveAsMenuItem,
+            OpenedTextObjectHandler<?> parentHandler) {
+        if (parentHandler == null) {
+            menu.setDisable(false);
+            newMenuItem.setDisable(false);
+            loadMenuItem.setDisable(false);
+        } else {
+            menu.disableProperty().bind(parentHandler.objectProperty().isNull());
+            newMenuItem.disableProperty().bind(parentHandler.objectProperty().isNull());
+            loadMenuItem.disableProperty().bind(parentHandler.objectProperty().isNull());
+        }
+
+        saveMenuItem.disableProperty().bind(changedSinceLastSaveProperty().not());
+        saveAsMenuItem.disableProperty().bind(objectProperty().isNull());
+        return this;
+    }
+
     public void checkForSaveBeforeOverwrite(Runnable overwritingAction) {
         ButtonType result = null;
         if (isChangedSinceLastSave()) {
@@ -64,7 +63,10 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
             if (button.isPresent()) {
                 result = button.get();
             }
+        } else {
+            overwritingAction.run();
         }
+
         if (ButtonType.YES.equals(result)) {
             save();
             if (!isChangedSinceLastSave()) {
@@ -74,10 +76,6 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
             }
         } else if (ButtonType.NO.equals(result)) {
             overwritingAction.run();
-        } else if (ButtonType.CANCEL.equals(result)) {
-            return;
-        } else {
-            return;
         }
     }
 

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
@@ -26,7 +25,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     private BooleanProperty changedSinceLastSave = new SimpleBooleanProperty(false);
 
     public OpenedTextObjectHandler() {
-        this.object.addListener((observable, oldValue, newValue) -> {
+        object.addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 changedSinceLastSave.setValue(true);
             }
@@ -108,7 +107,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     }
 
     protected boolean hasObject() {
-        return getObject() == null;
+        return getObject() != null;
     }
 
     protected ReadOnlyBooleanProperty changedSinceLastSaveProperty() {
@@ -145,8 +144,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
             return;
         }
         try {
-            Files.write(getPath(), lineList, Charset.forName("UTF-8"), StandardOpenOption.WRITE,
-                    StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(getPath(), lineList, Charset.forName("UTF-8"));
         } catch (IOException e) {
             throw new IllegalStateException("Could not write lines to \"" + getPath() + "\".", e);
         }
@@ -157,8 +155,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
             logger.debug("Cannot write string to null path.");
             return;
         }
-        try (BufferedWriter writer = Files.newBufferedWriter(getPath(), Charset.forName("UTF-8"),
-                StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(getPath(), Charset.forName("UTF-8"))) {
             writer.write(contents);
         } catch (IOException e) {
             throw new IllegalStateException("Could not write string to \"" + getPath() + "\".", e);

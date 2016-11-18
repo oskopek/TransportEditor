@@ -20,6 +20,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
@@ -65,7 +66,70 @@ public class RootLayoutController extends AbstractController {
     private transient SaveDiscardDialogPaneCreator creator;
 
     @FXML
+    private transient MenuItem fileSetPlannerMenuItem;
+
+    @FXML
+    private transient MenuItem fileSetValidatorMenuItem;
+
+    @FXML
+    private transient Menu sessionMenu;
+
+    @FXML
     private transient MenuItem sessionNewMenuItem;
+
+    @FXML
+    private transient MenuItem sessionLoadMenuItem;
+
+    @FXML
+    private transient MenuItem sessionSaveMenuItem;
+
+    @FXML
+    private transient MenuItem sessionSaveAsMenuItem;
+
+    @FXML
+    private transient Menu domainMenu;
+
+    @FXML
+    private transient MenuItem domainNewMenuItem;
+
+    @FXML
+    private transient MenuItem domainLoadMenuItem;
+
+    @FXML
+    private transient MenuItem domainSaveMenuItem;
+
+    @FXML
+    private transient MenuItem domainSaveAsMenuItem;
+
+    @FXML
+    private transient Menu problemMenu;
+
+    @FXML
+    private transient MenuItem problemNewMenuItem;
+
+    @FXML
+    private transient MenuItem problemLoadMenuItem;
+
+    @FXML
+    private transient MenuItem problemSaveMenuItem;
+
+    @FXML
+    private transient MenuItem problemSaveAsMenuItem;
+
+    @FXML
+    private transient Menu planMenu;
+
+    @FXML
+    private transient MenuItem planNewMenuItem;
+
+    @FXML
+    private transient MenuItem planLoadMenuItem;
+
+    @FXML
+    private transient MenuItem planSaveMenuItem;
+
+    @FXML
+    private transient MenuItem planSaveAsMenuItem;
 
     private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
@@ -76,13 +140,24 @@ public class RootLayoutController extends AbstractController {
     private void initialize() {
         eventBus.register(this);
 
-        problemFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
-        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
-        domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
-        planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
+        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<DefaultPlanningSession>(application, messages,
+                creator)
+                .bind(sessionMenu, sessionNewMenuItem, sessionLoadMenuItem, sessionSaveMenuItem, sessionSaveAsMenuItem,
+                        null);
+        domainFileHandler = new JavaFxOpenedTextObjectHandler<VariableDomain>(application, messages, creator)
+                .bind(domainMenu, domainNewMenuItem, domainLoadMenuItem, domainSaveMenuItem, domainSaveAsMenuItem,
+                        planningSessionFileHandler);
+        problemFileHandler = new JavaFxOpenedTextObjectHandler<DefaultProblem>(application, messages, creator)
+                .bind(problemMenu, problemNewMenuItem, problemLoadMenuItem, problemSaveMenuItem, problemSaveAsMenuItem,
+                        domainFileHandler);
+        planFileHandler = new JavaFxOpenedTextObjectHandler<SequentialPlan>(application, messages, creator)
+                .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
+                        problemFileHandler);
 
         // TODO: Be careful with bindings and handlers to not create a memleak
         application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
+        fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
+        fileSetValidatorMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
     }
 
     /**
@@ -146,6 +221,7 @@ public class RootLayoutController extends AbstractController {
         VariableDomain domain = variableDomainCreator.createDomainInDialog();
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.newObject(domain, guesser, guesser);
+        application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
     }
 
     @FXML
@@ -155,6 +231,7 @@ public class RootLayoutController extends AbstractController {
         }
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.load(messages.getString("load.domain"), guesser, guesser);
+        application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
     }
 
     @FXML
@@ -182,6 +259,7 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler.newObject(
                 new DefaultProblem("problem" + new Date().toString(), new RoadGraph("graph"), new HashMap<>(),
                         new HashMap<>()), io, io);
+        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -192,6 +270,7 @@ public class RootLayoutController extends AbstractController {
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
         problemFileHandler.load(messages.getString("load.problem"), io, io);
+        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -219,6 +298,7 @@ public class RootLayoutController extends AbstractController {
         SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
                 application.getPlanningSession().getProblem());
         planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
+        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
     }
 
     @FXML
@@ -229,6 +309,7 @@ public class RootLayoutController extends AbstractController {
         SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
                 application.getPlanningSession().getProblem());
         planFileHandler.load(messages.getString("load.plan"), io, io);
+        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
     }
 
     @FXML
