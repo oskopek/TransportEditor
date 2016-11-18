@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
+import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
@@ -35,6 +36,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -199,8 +201,13 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot set planner on null session.");
         }
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
-        session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
+                messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString())
+                .toAbsolutePath();
+        if (!Files.isExecutable(path)) {
+            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
+        } else {
+            session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
+        }
     }
 
     @FXML
@@ -210,8 +217,13 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot set validator on null session.");
         }
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString());
-        session.setValidator(new VALValidator(path.toAbsolutePath() + " {0} {1}"));
+                messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString())
+                .toAbsolutePath();
+        if (!Files.isExecutable(path)) {
+            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
+        } else {
+            session.setValidator(new VALValidator(path + " {0} {1}"));
+        }
     }
 
     @FXML
@@ -302,10 +314,11 @@ public class RootLayoutController extends AbstractController {
                 application.getPlanningSession().getProblem());
         planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
         application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        eventBus.post(new PlanningFinishedEvent());
     }
 
     @FXML
-    private void handlePlanLoad() { // TODO: Auto-disabling of these buttons
+    private void handlePlanLoad() {
         if (application.getPlanningSession().getProblem() == null) {
             throw new IllegalStateException("Cannot load plan, because no problem is loaded.");
         }
@@ -313,6 +326,7 @@ public class RootLayoutController extends AbstractController {
                 application.getPlanningSession().getProblem());
         planFileHandler.load(messages.getString("load.plan"), io, io);
         application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        eventBus.post(new PlanningFinishedEvent());
     }
 
     @FXML
