@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.functions.Capacity;
 import com.oskopek.transporteditor.model.domain.action.functions.PackageSize;
 import com.oskopek.transporteditor.model.domain.action.functions.RoadLength;
@@ -66,6 +67,13 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(parsed, variableDomainSeq);
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(1), parsed.getDriveBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getDriveBuilder().build(null, null, null).getDuration());
+        assertEquals(null, parsed.getRefuelBuilder());
         assertEquals(new SequentialDomain("Transport sequential"), parsed);
     }
 
@@ -80,6 +88,11 @@ public class VariableDomainIOIT {
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(null, parsed.getRefuelBuilder());
         assertEquals(parsed, variableDomainB);
     }
 

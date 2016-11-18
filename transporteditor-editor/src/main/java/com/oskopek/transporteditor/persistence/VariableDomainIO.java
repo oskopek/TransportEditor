@@ -128,7 +128,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     }
 
     public PickUpBuilder parsePickUpBuilder(String contents) {
-        return new PickUpBuilder(new ArrayList<>(), null, null, null);
+        return new PickUpBuilder(null, null, null, null);
     }
 
     public RefuelBuilder parseRefuelBuilder(String contents) {
