@@ -65,6 +65,13 @@ public class RoadGraph extends MultiGraph implements Graph {
         return node;
     }
 
+    public Location moveLocation(String name, int newX, int newY) {
+        Location original = getAttribute(name);
+        Location newLocation = new Location(original.getName(), newX, newY);
+        setAttribute(newLocation.getName(), newLocation);
+        return original;
+    }
+
     public Location getLocation(String name) {
         return getAttribute(name);
     }

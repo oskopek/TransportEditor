@@ -11,6 +11,9 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.graphstream.algorithm.Toolkit;
+import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.j2dviewer.J2DGraphRenderer;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
@@ -23,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Function;
 
 @Singleton
 public class CenterPaneController extends AbstractController {
@@ -62,7 +66,7 @@ public class CenterPaneController extends AbstractController {
         Viewer viewer = graph.display();
         viewer.enableAutoLayout();
         ViewerPipe mousePipe = viewer.newViewerPipe();
-        mousePipe.addViewerListener(new MouseCatcher());
+        mousePipe.addViewerListener(new MouseCatcher(graph, viewer.getGraphicGraph()));
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
         viewPanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -122,7 +126,15 @@ public class CenterPaneController extends AbstractController {
 
     private static class MouseCatcher implements ViewerListener {
 
+        private static final Function<Double, Integer> convertToInt = x -> (int) (x * 1000);
         private final Logger logger = LoggerFactory.getLogger(getClass());
+        private final RoadGraph roadGraph;
+        private final GraphicGraph graph;
+
+        MouseCatcher(RoadGraph roadGraph, GraphicGraph graph) {
+            this.roadGraph = roadGraph;
+            this.graph = graph;
+        }
 
         @Override
         public void viewClosed(String s) {
@@ -137,6 +149,11 @@ public class CenterPaneController extends AbstractController {
         @Override
         public void buttonReleased(String s) {
             logger.debug("Released node \"{}\"", s);
+            roadGraph.getAllLocations().forEach(n -> {
+                String name = n.getName();
+                Point3 t3 = Toolkit.nodePointPosition(graph, name);
+                roadGraph.moveLocation(name, convertToInt.apply(t3.x), convertToInt.apply(t3.y));
+            });
         }
     }
 
