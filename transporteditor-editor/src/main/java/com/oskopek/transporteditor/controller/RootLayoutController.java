@@ -144,16 +144,16 @@ public class RootLayoutController extends AbstractController {
         planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<DefaultPlanningSession>(application, messages,
                 creator)
                 .bind(sessionMenu, sessionNewMenuItem, sessionLoadMenuItem, sessionSaveMenuItem, sessionSaveAsMenuItem,
-                        null);
+                        null).useXml();
         domainFileHandler = new JavaFxOpenedTextObjectHandler<VariableDomain>(application, messages, creator)
                 .bind(domainMenu, domainNewMenuItem, domainLoadMenuItem, domainSaveMenuItem, domainSaveAsMenuItem,
-                        planningSessionFileHandler);
+                        planningSessionFileHandler).usePddl();
         problemFileHandler = new JavaFxOpenedTextObjectHandler<DefaultProblem>(application, messages, creator)
                 .bind(problemMenu, problemNewMenuItem, problemLoadMenuItem, problemSaveMenuItem, problemSaveAsMenuItem,
-                        domainFileHandler);
+                        domainFileHandler).usePddl();
         planFileHandler = new JavaFxOpenedTextObjectHandler<SequentialPlan>(application, messages, creator)
                 .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
-                        problemFileHandler);
+                        problemFileHandler).useVal();
 
         // TODO: Be careful with bindings and handlers to not create a memleak
         application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
@@ -198,7 +198,7 @@ public class RootLayoutController extends AbstractController {
         if (session == null) {
             throw new IllegalStateException("Cannot set planner on null session.");
         }
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
+        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
                 messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString());
         session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
     }
@@ -209,7 +209,7 @@ public class RootLayoutController extends AbstractController {
         if (session == null) {
             throw new IllegalStateException("Cannot set validator on null session.");
         }
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildDefaultFileChooser(
+        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
                 messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString());
         session.setValidator(new VALValidator(path.toAbsolutePath() + " {0} {1}"));
     }

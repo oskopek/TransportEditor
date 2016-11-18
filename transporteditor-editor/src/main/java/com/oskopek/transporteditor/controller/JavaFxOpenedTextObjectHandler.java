@@ -17,9 +17,17 @@ import java.util.ResourceBundle;
 
 public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjectHandler<Persistable_> {
 
+    public static final FileChooser.ExtensionFilter pddlFilter = new FileChooser.ExtensionFilter("PDDL", "*.pddl",
+            "*.PDDL");
+    public static final FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML", "*.xml",
+            "*.XML");
+    public static final FileChooser.ExtensionFilter valFilter = new FileChooser.ExtensionFilter("VAL", "*.val",
+            "*.VAL");
+    public static final FileChooser.ExtensionFilter allFileFilter = new FileChooser.ExtensionFilter("All Files", "*");
     private final TransportEditorApplication application;
     private final ResourceBundle messages;
     private final SaveDiscardDialogPaneCreator creator;
+    private FileChooser.ExtensionFilter[] chosenFilters = new FileChooser.ExtensionFilter[] {allFileFilter};
 
     public JavaFxOpenedTextObjectHandler(TransportEditorApplication application, ResourceBundle messages,
             SaveDiscardDialogPaneCreator creator) {
@@ -28,14 +36,25 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         this.creator = creator;
     }
 
-    public static FileChooser buildDefaultFileChooser(String title) {
+    public static FileChooser buildFileChooser(String title) {
+        return buildFileChooser(title, allFileFilter);
+    }
+
+    public static FileChooser buildFileChooser(String title, FileChooser.ExtensionFilter... filters) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle(title);
-        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML", "*.xml");
-        FileChooser.ExtensionFilter allFileFilter = new FileChooser.ExtensionFilter("All Files", "*");
-        chooser.getExtensionFilters().addAll(allFileFilter, xmlFilter);
-        chooser.setSelectedExtensionFilter(xmlFilter);
+
+        if (filters == null || filters.length == 0) {
+            filters = new FileChooser.ExtensionFilter[] {allFileFilter};
+        }
+
+        chooser.getExtensionFilters().addAll(filters);
+        chooser.setSelectedExtensionFilter(filters[0]);
         return chooser;
+    }
+
+    private FileChooser buildCustomFileChooser(String title) {
+        return buildFileChooser(title, chosenFilters);
     }
 
     public JavaFxOpenedTextObjectHandler<Persistable_> bind(Menu menu, MenuItem newMenuItem, MenuItem loadMenuItem,
@@ -53,6 +72,32 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
         saveMenuItem.disableProperty().bind(changedSinceLastSaveProperty().not());
         saveAsMenuItem.disableProperty().bind(objectProperty().isNull());
+        return this;
+    }
+
+    private void prependFilters(FileChooser.ExtensionFilter... filters) {
+        if (filters == null) {
+            return;
+        }
+        FileChooser.ExtensionFilter[] newFilters = new FileChooser.ExtensionFilter[chosenFilters.length
+                + filters.length];
+        System.arraycopy(chosenFilters, 0, newFilters, filters.length, chosenFilters.length);
+        System.arraycopy(filters, 0, newFilters, 0, filters.length);
+        chosenFilters = newFilters;
+    }
+
+    public JavaFxOpenedTextObjectHandler<Persistable_> usePddl() {
+        prependFilters(pddlFilter);
+        return this;
+    }
+
+    public JavaFxOpenedTextObjectHandler<Persistable_> useXml() {
+        prependFilters(xmlFilter);
+        return this;
+    }
+
+    public JavaFxOpenedTextObjectHandler<Persistable_> useVal() {
+        prependFilters(valFilter);
         return this;
     }
 
@@ -106,13 +151,11 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     @Override
     public void close() {
-        checkForSaveBeforeOverwrite(() -> {
-            super.close();
-        });
+        checkForSaveBeforeOverwrite(super::close);
     }
 
     private Path openFileWithDefaultFileChooser(String title) {
-        File file = buildDefaultFileChooser(title).showOpenDialog(application.getPrimaryStage());
+        File file = buildCustomFileChooser(title).showOpenDialog(application.getPrimaryStage());
         if (file == null) {
             return null;
         } else {
@@ -121,7 +164,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     }
 
     private Path saveFileWithDefaultFileChooser(String title) {
-        File file = buildDefaultFileChooser(title).showSaveDialog(application.getPrimaryStage());
+        File file = buildCustomFileChooser(title).showSaveDialog(application.getPrimaryStage());
         if (file == null) {
             return null;
         } else {
