@@ -14,3 +14,9 @@ Fixed CI, migrated to GitLab because of GitLab CI.
 Couldn't find anything reasonable about Multi-agent planning benchmarks :/.
 Skipping.
 
+Interval tree: https://github.com/kevinjdolan/intervaltree
+
+== 2016/11/18
+
+Finished plan visualization (Gantt, linear), finished graph basic visualization.
+
