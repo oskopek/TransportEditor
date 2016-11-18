@@ -7,6 +7,7 @@ import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
@@ -256,8 +257,10 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        RoadGraph graph = new RoadGraph("graph");
+        graph.addLocation(new Location("Loc0", 0, 0));
         problemFileHandler.newObject(
-                new DefaultProblem("problem" + new Date().toString(), new RoadGraph("graph"), new HashMap<>(),
+                new DefaultProblem("problem" + new Date().toString(), graph, new HashMap<>(),
                         new HashMap<>()), io, io);
         application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
