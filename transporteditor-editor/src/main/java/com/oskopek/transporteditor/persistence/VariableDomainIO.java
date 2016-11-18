@@ -182,6 +182,6 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         } catch (IOException | TemplateException e) {
             throw new IllegalStateException("Error occurred during processing template.", e);
         }
-        return writer.toString();
+        return writer.toString().replaceAll("\\r\\n", "\n");
     }
 }
