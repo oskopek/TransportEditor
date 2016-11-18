@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.google.common.eventbus.Subscribe;
+import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ public class CenterPaneController extends AbstractController {
     }
 
     @Subscribe
-    public void redrawGraph(RoadGraph graph) {
+    public void redrawGraph(GraphUpdatedEvent event) {
         try {
             SwingUtilities.invokeAndWait(() -> {
                 problemGraph.setContent(null);
@@ -44,31 +45,39 @@ public class CenterPaneController extends AbstractController {
             logger.debug("An exception occurred while waiting for problemGraph to erase itself: {}", e);
         }
 
-        if (graph != null) {
-            Viewer viewer = graph.display();
-            viewer.enableAutoLayout();
-            ViewerPipe mousePipe = viewer.newViewerPipe();
-            mousePipe.addViewerListener(new MouseCatcher());
-            ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
-            //            viewer.disableAutoLayout();
-            viewPanel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    super.mousePressed(e);
-                    mousePipe.pump();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    super.mouseReleased(e);
-                    mousePipe.pump();
-                }
-            });
-            SwingUtilities.invokeLater(() -> {
-                problemGraph.setContent(viewPanel);
-                problemGraph.setDisable(false);
-            });
+        RoadGraph graph = null;
+        try {
+            graph = application.getPlanningSession().getProblem().getRoadGraph();
+        } catch (NullPointerException e) {
+            logger.trace("Could not get graph for redrawing, got a NPE along the way.");
         }
+
+        if (graph == null) {
+            return;
+        }
+        Viewer viewer = graph.display();
+        viewer.enableAutoLayout();
+        ViewerPipe mousePipe = viewer.newViewerPipe();
+        mousePipe.addViewerListener(new MouseCatcher());
+        ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
+        //        viewer.disableAutoLayout();
+        viewPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                mousePipe.pump();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                mousePipe.pump();
+            }
+        });
+        SwingUtilities.invokeLater(() -> {
+            problemGraph.setContent(viewPanel);
+            problemGraph.setDisable(false);
+        });
     }
 
     private static class MouseCatcher implements ViewerListener {

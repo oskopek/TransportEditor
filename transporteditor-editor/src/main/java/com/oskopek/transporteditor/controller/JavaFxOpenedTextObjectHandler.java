@@ -73,9 +73,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     @Override
     public void newObject(Persistable_ object, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
-        checkForSaveBeforeOverwrite(() -> {
-            super.newObject(object, writer, reader);
-        });
+        checkForSaveBeforeOverwrite(() -> super.newObject(object, writer, reader));
     }
 
     @Override
@@ -85,6 +83,13 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         } else {
             super.save();
         }
+    }
+
+    @Override
+    public void close() {
+        checkForSaveBeforeOverwrite(() -> {
+            super.close();
+        });
     }
 
     private Path openFileWithDefaultFileChooser(String title) {
@@ -111,12 +116,5 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
             return;
         }
         super.saveAs(path);
-    }
-
-    @Override
-    public void close() {
-        checkForSaveBeforeOverwrite(() -> {
-            super.close();
-        });
     }
 }

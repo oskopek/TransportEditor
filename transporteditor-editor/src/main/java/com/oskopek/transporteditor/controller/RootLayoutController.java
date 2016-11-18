@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.controller;
 
+import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
@@ -76,6 +77,7 @@ public class RootLayoutController extends AbstractController {
         domainFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
         planFileHandler = new JavaFxOpenedTextObjectHandler<>(application, messages, creator);
 
+        // TODO: Be careful with bindings and handlers to not create a memleak
         application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
     }
 
@@ -134,6 +136,9 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleDomainNew() {
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot create new domain, because no planning session is loaded.");
+        }
         VariableDomain domain = variableDomainCreator.createDomainInDialog();
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.newObject(domain, guesser, guesser);
@@ -141,17 +146,26 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleDomainLoad() {
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot load domain, because no planning session is loaded.");
+        }
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.load(messages.getString("load.domain"), guesser, guesser);
     }
 
     @FXML
     private void handleDomainSave() {
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot save domain, because no planning session is loaded.");
+        }
         domainFileHandler.save();
     }
 
     @FXML
     private void handleDomainSaveAs() {
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot save domain as, because no planning session is loaded.");
+        }
         domainFileHandler.saveAs();
     }
 
@@ -164,6 +178,7 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler.newObject(
                 new DefaultProblem("problem" + new Date().toString(), new RoadGraph("graph"), new HashMap<>(),
                         new HashMap<>()), io, io);
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
@@ -173,7 +188,8 @@ public class RootLayoutController extends AbstractController {
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
         problemFileHandler.load(messages.getString("load.problem"), io, io);
-    } // TODO: find a way to bind the loaders to the model + eventbus.post(graph)
+        eventBus.post(new GraphUpdatedEvent());
+    }
 
     @FXML
     private void handleProblemSave() {
