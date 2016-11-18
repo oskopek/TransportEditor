@@ -17,19 +17,18 @@ public class DefaultPlanningSession implements PlanningSession {
 
     private final ObjectProperty<Planner> plannerProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Validator> validatorProperty = new SimpleObjectProperty<>();
-
     private final ObjectProperty<Domain> domainProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Problem> problemProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
 
     @Override
     public Domain getDomain() {
-        return domainProperty.getValue();
+        return domainProperty.get();
     }
 
     @Override
     public void setDomain(Domain domain) {
-        domainProperty.setValue(domain);
+        domainProperty.set(domain);
     }
 
     @Override
@@ -39,12 +38,12 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public Problem getProblem() {
-        return problemProperty.getValue();
+        return problemProperty.get();
     }
 
     @Override
     public void setProblem(Problem problem) {
-        problemProperty.setValue(problem);
+        problemProperty.set(problem);
     }
 
     @Override
@@ -54,12 +53,12 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public Plan getPlan() {
-        return planProperty.getValue();
+        return planProperty.get();
     }
 
     @Override
     public void setPlan(Plan plan) {
-        planProperty.setValue(plan);
+        planProperty.set(plan);
     }
 
     @Override
@@ -69,12 +68,12 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public Planner getPlanner() {
-        return plannerProperty.getValue();
+        return plannerProperty.get();
     }
 
     @Override
     public void setPlanner(Planner planner) {
-        plannerProperty.setValue(planner);
+        plannerProperty.set(planner);
     }
 
     @Override
@@ -84,12 +83,12 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public Validator getValidator() {
-        return validatorProperty.getValue();
+        return validatorProperty.get();
     }
 
     @Override
     public void setValidator(Validator validator) {
-        validatorProperty.setValue(validator);
+        validatorProperty.set(validator);
     }
 
     @Override

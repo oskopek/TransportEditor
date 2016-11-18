@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -37,10 +36,10 @@ public class VariableDomainIOIT {
     public static void setUpClass() throws Exception {
         variableDomainSeqPDDLContents = TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream(variableDomainSeqPDDL)).stream().collect(
-                Collectors.joining("\n"));
+                Collectors.joining("\n")) + "\n";
         variableDomainBPDDLContents = TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream(variableDomainBPDDL)).stream().collect(
-                Collectors.joining("\n"));
+                Collectors.joining("\n")) + "\n";
         variableDomainIO = new VariableDomainIO();
     }
 
@@ -74,30 +73,30 @@ public class VariableDomainIOIT {
     public void serializeSeq() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainSeq);
         assertNotNull(serialized);
-        TestUtils.assertPDDLContentEquals(variableDomainSeqPDDLContents, serialized);
+        assertEquals(variableDomainSeqPDDLContents, serialized);
     }
 
     @Test
     public void parseB() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
-        assertTrue(parsed.equals(variableDomainB));
+        assertEquals(parsed, variableDomainB);
     }
 
     @Test
     public void serializeB() throws Exception {
         String serialized = variableDomainIO.serialize(variableDomainB);
         assertNotNull(serialized);
-        TestUtils.assertPDDLContentEquals(variableDomainBPDDLContents, serialized);
+        assertEquals(variableDomainBPDDLContents, serialized);
     }
 
     public void deserializeSerialize(String fileName) throws Exception {
         String contents = TestUtils.readAllLines(VariableDomainIOIT.class.getResourceAsStream(fileName)).stream()
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining("\n")) + "\n";
         VariableDomain domain = variableDomainIO.parse(contents);
         assertNotNull(domain);
         String serialized = variableDomainIO.serialize(domain);
-        TestUtils.assertPDDLContentEquals(contents, serialized);
+        assertEquals(contents, serialized);
     }
 
     @Test

@@ -42,6 +42,7 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
     public String serialize(DefaultProblem object) throws IllegalArgumentException {
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
+        input.put("title", object.getName().replaceFirst("transport-", ""));
         input.put("domain", domain);
         input.put("problem", object);
         input.put("packageList",
@@ -70,7 +71,7 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
         input.put("numeric", PddlLabel.Numeric);
         input.put("temporal", PddlLabel.Temporal);
 
-        Template template = null;
+        Template template;
         try {
             template = configuration.getTemplate("problem.pddl.ftl");
         } catch (IOException e) {
