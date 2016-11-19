@@ -53,7 +53,7 @@ deploy-job:
   stage: deploy
   artifacts:
     paths:
-      - "target/transporteditor-editor/*.jar"
+      - "transporteditor-editor/target/*.jar"
 
 #build-docs:
 #  stage: build
