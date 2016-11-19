@@ -40,13 +40,6 @@
         <checkstyle.javadoc.severity>warning</checkstyle.javadoc.severity>
         <rootLevelDir>${project.basedir}</rootLevelDir>
     </properties>
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file://${rootLevelDir}/repo</url>
-        </repository>
-    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>

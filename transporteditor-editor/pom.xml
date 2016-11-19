@@ -215,22 +215,6 @@
                     <verbose>false</verbose>
                 </configuration>
                 <executions>
-                    <!--<execution>-->
-                    <!--<id>file-headers</id>-->
-                    <!--<goals>-->
-                    <!--<goal>update-file-header</goal>-->
-                    <!--</goals>-->
-                    <!--<configuration>-->
-                    <!--<licenseName>mit</licenseName>-->
-                    <!--<roots>-->
-                    <!--<root>src/main/java/com/oskopek/transporteditor</root>-->
-                    <!--<root>src/test/java</root>-->
-                    <!--</roots>-->
-                    <!--<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>-->
-                    <!--<emptyLineAfterHeader>true</emptyLineAfterHeader>-->
-                    <!--</configuration>-->
-                    <!--<phase>process-sources</phase>-->
-                    <!--</execution>-->
                     <execution>
                         <id>third-party</id>
                         <goals>
