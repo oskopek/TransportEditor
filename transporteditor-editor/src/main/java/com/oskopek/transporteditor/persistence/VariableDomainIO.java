@@ -102,16 +102,23 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static DriveBuilder parseDriveBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
-        return new DriveBuilder(builder.getPredicates(), builder.getEffects());
+        return new DriveBuilder(builder.getPreconditions(), builder.getEffects());
     }
 
-    private static ActionCost parseEffects(List<PddlParser.PEffectContext> pEffectContextList,
+    private static ActionCost parseEffects(List<PddlParser.CEffectContext> cEffectContextList,
             List<Predicate> effects) {
         Optional<Integer> optionalCost = Optional.empty();
-        for (PddlParser.PEffectContext p : pEffectContextList) {
+        for (PddlParser.CEffectContext cEffectContext : cEffectContextList) {
+            PddlParser.PEffectContext p = cEffectContext.pEffect();
             if (p.atomicTermFormula() != null) {
+                if (p.atomicTermFormula().getText().toLowerCase().contains("capacity")) {
+                    continue; // skip capacity in effects, built into model
+                }
                 Predicate parsed = parseAtomicTermFormula(p.atomicTermFormula());
                 if (parsed != null) {
+                    if (cEffectContext.getText().startsWith("(not")) {
+                        parsed = new Not(parsed);
+                    }
                     effects.add(parsed);
                 }
             } else {
@@ -135,7 +142,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static Predicate parsePredicate(PddlParser.GoalDescContext goalDescContext) {
         if (goalDescContext.getText().startsWith("(not")) {
-            return new Not(parsePredicate(goalDescContext.goalDesc(0)));
+            return new Not(parsePredicate(goalDescContext.goalDesc(0))); // TODO: never gets hit
         } else if (goalDescContext.fComp() != null) {
             return null; // ignore constraints built into the model
         }
@@ -147,8 +154,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         Predicate parsed = null;
         switch (goalDescName) {
             case "at": {
+                String firstArg = atomicTermFormulaContext.term(0).getText();
                 String secondArg = atomicTermFormulaContext.term(1).getText();
-                if (secondArg.startsWith("?p")) {
+                if (firstArg.startsWith("?p")) {
                     parsed = new WhatAtWhere();
                 } else if (secondArg.startsWith("?l2")) {
                     parsed = new WhoAtWhat();
@@ -258,6 +266,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                     throw new IllegalStateException("Unexpected time specifier " + timeSpecifier);
                 }
             }
+            effects.add(new TemporalPredicate(parsePredicate(timedEffectContext.goalDesc()), quantifier));
         }
     }
 
@@ -266,13 +275,13 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             return null;
         }
 
-        final List<Predicate> predicates;
+        final List<Predicate> preconditions;
         final List<Predicate> effects = new ArrayList<>();
         final ActionCost cost;
         final ActionCost duration;
         if (context.durativeActionDef() != null) { // temporal
             PddlParser.DaDefBodyContext daDefBodyContext = context.durativeActionDef().daDefBody();
-            predicates = parseConditions(daDefBodyContext.daGD().daGD());
+            preconditions = parseConditions(daDefBodyContext.daGD().daGD());
             parseTemporalEffects(daDefBodyContext.daEffect().daEffect(), effects);
 
             PddlParser.DurValueContext durValueContext = daDefBodyContext.durationConstraint().simpleDurationConstraint(
@@ -285,23 +294,24 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             cost = duration;
         } else { // sequential
             PddlParser.ActionDefBodyContext actionContext = context.actionDef().actionDefBody();
-            predicates = parsePreconditions(actionContext.goalDesc().goalDesc());
-            cost = parseEffects(actionContext.effect().cEffect().stream().map(PddlParser.CEffectContext::pEffect)
-                    .collect(Collectors.toList()), effects);
+            preconditions = parsePreconditions(actionContext.goalDesc().goalDesc());
+            cost = parseEffects(actionContext.effect().cEffect(), effects);
             duration = ActionCost.valueOf(1);
         }
-        return new PartialBuilder(predicates, effects, cost, duration);
+        return new PartialBuilder(preconditions, effects, cost, duration);
 
     }
 
     private static DropBuilder parseDropBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
-        return new DropBuilder(builder.getPredicates(), builder.getEffects(), builder.getCost(), builder.getDuration());
+        List<Predicate> preconditions = builder.getPreconditions().stream().filter(
+                p -> !p.getClass().getSimpleName().toLowerCase().contains("capacity")).collect(Collectors.toList());
+        return new DropBuilder(preconditions, builder.getEffects(), builder.getCost(), builder.getDuration());
     }
 
     private static PickUpBuilder parsePickUpBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
-        return new PickUpBuilder(builder.getPredicates(), builder.getEffects(), builder.getCost(),
+        return new PickUpBuilder(builder.getPreconditions(), builder.getEffects(), builder.getCost(),
                 builder.getDuration());
     }
 
@@ -310,7 +320,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         if (builder == null) {
             return null;
         }
-        return new RefuelBuilder(builder.getPredicates(), builder.getEffects(), builder.getCost(),
+        return new RefuelBuilder(builder.getPreconditions(), builder.getEffects(), builder.getCost(),
                 builder.getDuration());
     }
 
@@ -346,7 +356,6 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             } else {
                 throw new IllegalArgumentException("Failed to parse domain pddl.");
             }
-
         }
 
         Map<String, PddlParser.StructureDefContext> structureDefContextMap = new HashMap<>();
@@ -364,8 +373,6 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
             structureDefContextMap.put(actionName, structureDefContext);
         }
-
-        // TODO OOO Add detailed tests
 
         DriveBuilder driveBuilder = parseDriveBuilder(structureDefContextMap.get("drive"));
         DropBuilder dropBuilder = parseDropBuilder(structureDefContextMap.get("drop"));
@@ -402,25 +409,25 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     }
 
     private static final class PartialBuilder {
-        final List<Predicate> predicates;
+        final List<Predicate> preconditions;
         final List<Predicate> effects;
         final ActionCost cost;
         final ActionCost duration;
 
-        PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost) {
-            this(predicates, effects, cost, ActionCost.valueOf(1));
+        PartialBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost) {
+            this(preconditions, effects, cost, ActionCost.valueOf(1));
         }
 
-        PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost,
+        PartialBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost,
                 ActionCost duration) {
-            this.predicates = predicates;
+            this.preconditions = preconditions;
             this.effects = effects;
             this.cost = cost;
             this.duration = duration;
         }
 
-        public List<Predicate> getPredicates() {
-            return predicates;
+        public List<Predicate> getPreconditions() {
+            return preconditions;
         }
 
         public List<Predicate> getEffects() {
@@ -447,20 +454,21 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
             PartialBuilder that = (PartialBuilder) o;
 
-            return new EqualsBuilder().append(getPredicates(), that.getPredicates()).append(getEffects(),
+            return new EqualsBuilder().append(getPreconditions(), that.getPreconditions()).append(getEffects(),
                     that.getEffects()).append(getCost(), that.getCost()).append(getDuration(), that.getDuration())
                     .isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getPredicates()).append(getEffects()).append(getCost()).append(
+            return new HashCodeBuilder(17, 37).append(getPreconditions()).append(getEffects()).append(getCost()).append(
                     getDuration()).toHashCode();
         }
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this).append("predicates", predicates).append("effects", effects).append("cost",
+            return new ToStringBuilder(this).append("predicates", preconditions).append("effects", effects).append(
+                    "cost",
                     cost).append("duration", duration).toString();
         }
     }

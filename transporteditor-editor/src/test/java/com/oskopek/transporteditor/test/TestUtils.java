@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +25,16 @@ public final class TestUtils {
      */
     private TestUtils() {
         // intentionally empty
+    }
+
+    public static <T> void assertNotContains(T element, Collection<T> collection) {
+        assertFalse("Collection \"" + collection + "\" contains not expected element \"" + element + "\".",
+                collection.contains(element));
+    }
+
+    public static <T> void assertContains(T element, Collection<T> collection) {
+        assertTrue("Collection \"" + collection + "\" does not contain expected element \"" + element + "\".",
+                collection.contains(element));
     }
 
     public static void assertPDDLContentEquals(String contents, String serialized) {
