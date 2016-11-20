@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="300" xmlns="http://javafx.com/javafx/8.0.92"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="300" xmlns="http://javafx.com/javafx/8.0.112-ea"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
-        <AnchorPane fx:id="planTabAnchorPane">
-            <TabPane/>
-        </AnchorPane>
+        <TabPane fx:id="planTabPane" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="linearPlanTab" text="Linear">
+                <ScrollPane fx:id="linearPlanTabScrollPane"/>
+            </Tab>
+            <Tab fx:id="ganttPlanTab" text="Gantt">
+                <ScrollPane fx:id="ganttPlanTabScrollPane"/>
+            </Tab>
+        </TabPane>
     </center>
     <top>
         <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -22,7 +26,7 @@
                 </Button>
             </center>
             <right>
-                <Button fx:id="cancelPlanButton" disable="true" alignment="CENTER_RIGHT" maxWidth="40.0" minWidth="40.0"
+                <Button fx:id="cancelPlanButton" alignment="CENTER_RIGHT" disable="true" maxWidth="40.0" minWidth="40.0"
                         onAction="#handleCancelPlan" prefWidth="40.0" style="-fx-text-fill: red" text="%crossmark"
                         BorderPane.alignment="CENTER_RIGHT">
                     <font>

@@ -4,16 +4,17 @@ import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.oskopek.transporteditor.model.PlanningSession;
+import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
-import com.oskopek.transporteditor.persistence.DefaultPlanningSessionIO;
-import com.oskopek.transporteditor.persistence.DefaultProblemIO;
-import com.oskopek.transporteditor.persistence.SequentialPlanIO;
-import com.oskopek.transporteditor.persistence.VariableDomainIO;
+import com.oskopek.transporteditor.persistence.*;
 import com.oskopek.transporteditor.validation.VALValidator;
 import com.oskopek.transporteditor.view.*;
 import javafx.application.Platform;
@@ -137,7 +138,7 @@ public class RootLayoutController extends AbstractController {
     private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
     private JavaFxOpenedTextObjectHandler<VariableDomain> domainFileHandler;
-    private JavaFxOpenedTextObjectHandler<SequentialPlan> planFileHandler;
+    private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
 
     @FXML
     private void initialize() {
@@ -153,7 +154,7 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler = new JavaFxOpenedTextObjectHandler<DefaultProblem>(application, messages, creator)
                 .bind(problemMenu, problemNewMenuItem, problemLoadMenuItem, problemSaveMenuItem, problemSaveAsMenuItem,
                         domainFileHandler).usePddl();
-        planFileHandler = new JavaFxOpenedTextObjectHandler<SequentialPlan>(application, messages, creator)
+        planFileHandler = new JavaFxOpenedTextObjectHandler<Plan>(application, messages, creator)
                 .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
                         problemFileHandler).useVal();
 
@@ -322,9 +323,15 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getProblem() == null) {
             throw new IllegalStateException("Cannot load plan, because no problem is loaded.");
         }
-        SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
-                application.getPlanningSession().getProblem());
-        planFileHandler.load(messages.getString("load.plan"), io, io);
+        Domain domain = application.getPlanningSession().getDomain();
+        Problem problem = application.getPlanningSession().getProblem();
+        if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
+            TemporalPlanIO io = new TemporalPlanIO(domain, problem);
+            planFileHandler.load(messages.getString("load.plan"), io, io);
+        } else {
+            SequentialPlanIO io = new SequentialPlanIO(domain, problem);
+            planFileHandler.load(messages.getString("load.plan"), io, io);
+        }
         application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }

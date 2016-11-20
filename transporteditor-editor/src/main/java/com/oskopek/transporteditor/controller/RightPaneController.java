@@ -9,9 +9,7 @@ import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.ScrollPane;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -24,7 +22,10 @@ public class RightPaneController extends AbstractController {
     private transient Logger logger;
 
     @FXML
-    private AnchorPane planTabAnchorPane;
+    private ScrollPane linearPlanTabScrollPane;
+
+    @FXML
+    private ScrollPane ganttPlanTabScrollPane;
 
     @FXML
     private Button planButton;
@@ -44,14 +45,10 @@ public class RightPaneController extends AbstractController {
     public void redrawPlans(PlanningFinishedEvent event) {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
-            planTabAnchorPane.getChildren().clear();
-            TabPane tabPane = new TabPane();
-
             Plan plan = application.getPlanningSession().getPlan();
-            tabPane.getTabs().add(new Tab("Linear", SequentialPlanList.build(plan.toTemporalPlan())));
-            tabPane.getTabs().add(new Tab("Gantt", TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90)));
+            linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
+            ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90));
 
-            planTabAnchorPane.getChildren().add(tabPane);
             cancelPlanButton.setDisable(true);
             planButton.setDisable(false);
         });

@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.*;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
@@ -17,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<SequentialPlan> {
+public class SequentialPlanIO implements DataReader<Plan>, DataWriter<Plan> {
 
     private final Problem problem;
     private final Domain domain;
@@ -104,10 +105,10 @@ public class SequentialPlanIO implements DataReader<SequentialPlan>, DataWriter<
     }
 
     @Override
-    public synchronized String serialize(SequentialPlan plan) throws IllegalArgumentException {
+    public synchronized String serialize(Plan plan) throws IllegalArgumentException {
         StringBuilder builder = new StringBuilder();
         planState = new SequentialPlanState(domain, problem);
-        for (Action action : plan) {
+        for (Action action : plan.getActions()) {
             builder.append(serializeAction(action, true)).append('\n');
             planState.apply(action);
         }

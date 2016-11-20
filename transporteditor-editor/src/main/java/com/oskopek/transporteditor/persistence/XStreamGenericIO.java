@@ -14,7 +14,7 @@ public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T
     }
 
     @Override
-    public String serialize(T object) throws IllegalArgumentException {
+    public <T1 extends T> String serialize(T1 object) throws IllegalArgumentException {
         return xStream.toXML(object);
     }
 

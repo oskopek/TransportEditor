@@ -14,5 +14,5 @@ public interface DataWriter<Persistable_> {
      * @return an serialized representation of the persistable object
      * @throws IllegalArgumentException if the object cannot be serialized
      */
-    String serialize(Persistable_ object) throws IllegalArgumentException;
+    <T extends Persistable_> String serialize(T object) throws IllegalArgumentException;
 }

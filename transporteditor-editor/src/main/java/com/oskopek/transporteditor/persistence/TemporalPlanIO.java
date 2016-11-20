@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -10,13 +11,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<TemporalPlan> {
+public class TemporalPlanIO implements DataReader<Plan>, DataWriter<Plan> {
 
     private final Domain domain;
     private final Problem problem;
@@ -40,9 +38,9 @@ public class TemporalPlanIO implements DataReader<TemporalPlan>, DataWriter<Temp
     }
 
     @Override
-    public String serialize(TemporalPlan plan) throws IllegalArgumentException {
+    public String serialize(Plan plan) throws IllegalArgumentException {
         StringBuilder str = new StringBuilder();
-        Set<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
+        Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
         actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
 
         Integer totalTime = 0;

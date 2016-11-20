@@ -206,8 +206,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                 // intentionally ignored, embedded in model
                 break;
             }
-
-            case "assign": { // TODO: test these assumptions
+            case "assign": {
                 // intentionally ignored, embedded in model
                 break;
             }
