@@ -7,7 +7,6 @@ public class ReadyLoading extends DefaultPredicate {
 
     @Override
     public boolean isValidInternal(Problem state, Action action) {
-        // TODO: Not sure what should be done here. remove the whole predicate?
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return true; // built in
     }
 }
