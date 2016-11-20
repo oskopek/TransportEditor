@@ -1,8 +1,17 @@
 package com.oskopek.transporteditor.controller;
 
-import javafx.embed.swing.SwingNode;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.oskopek.transporteditor.event.PlanningFinishedEvent;
+import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.view.plan.SequentialPlanList;
+import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -15,7 +24,7 @@ public class RightPaneController extends AbstractController {
     private transient Logger logger;
 
     @FXML
-    private SwingNode planGraph;
+    private AnchorPane planTabAnchorPane;
 
     @FXML
     private Button planButton;
@@ -23,9 +32,34 @@ public class RightPaneController extends AbstractController {
     @FXML
     private Button cancelPlanButton;
 
+    @Inject
+    private EventBus eventBus;
+
+    @FXML
+    private void initialize() {
+        eventBus.register(this);
+    }
+
+    @Subscribe
+    public void redrawPlans(PlanningFinishedEvent event) {
+        logger.debug("Caught planning finished event: redrawing plans.");
+        Platform.runLater(() -> {
+            planTabAnchorPane.getChildren().clear();
+            TabPane tabPane = new TabPane();
+
+            Plan plan = application.getPlanningSession().getPlan();
+            tabPane.getTabs().add(new Tab("Linear", SequentialPlanList.build(plan.toTemporalPlan())));
+            tabPane.getTabs().add(new Tab("Gantt", TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90)));
+
+            planTabAnchorPane.getChildren().add(tabPane);
+            cancelPlanButton.setDisable(true);
+            planButton.setDisable(false);
+        });
+    }
+
     @FXML
     private void handlePlan() {
-        logger.debug("Starting model...");
+        logger.debug("Starting planning...");
         cancelPlanButton.setDisable(false);
         planButton.setDisable(true);
         application.getPlanningSession().startPlanning();
@@ -33,10 +67,11 @@ public class RightPaneController extends AbstractController {
 
     @FXML
     private void handleCancelPlan() {
-        logger.debug("Stopping model...");
+        logger.debug("Stopping planning...");
         cancelPlanButton.setDisable(true);
         planButton.setDisable(false);
         application.getPlanningSession().stopPlanning();
+        eventBus.post(new PlanningFinishedEvent());
     }
 
 }

@@ -40,13 +40,6 @@
         <checkstyle.javadoc.severity>warning</checkstyle.javadoc.severity>
         <rootLevelDir>${project.basedir}</rootLevelDir>
     </properties>
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file://${rootLevelDir}/repo</url>
-        </repository>
-    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -126,6 +119,11 @@
                 <groupId>io.javaslang</groupId>
                 <artifactId>javaslang</artifactId>
                 <version>2.0.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.10.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

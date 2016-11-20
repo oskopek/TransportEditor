@@ -32,6 +32,9 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
         int i = 0;
         for (Action action : actionList) {
             int begin = i;
+            if (action.getDuration() == null) {
+                throw new IllegalStateException("Action duration cannot be null: " + action);
+            }
             i += action.getDuration().getCost();
             set.add(new TemporalPlanAction(action, begin, i));
         }

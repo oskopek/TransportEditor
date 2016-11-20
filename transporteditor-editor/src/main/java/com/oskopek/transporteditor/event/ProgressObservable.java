@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.event;
 
-import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ObservableValue;
 
 /**
  * Enables an object to be observable for internal progress.
@@ -13,6 +13,6 @@ public interface ProgressObservable {
      *
      * @return the double property
      */
-    DoubleProperty progressProperty();
+    ObservableValue<? extends Number> progressProperty();
 
 }

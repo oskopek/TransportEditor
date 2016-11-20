@@ -28,7 +28,7 @@ public final class DeadEventListener {
      * @param event the dead event
      */
     @Subscribe
-    private void listen(DeadEvent event) {
+    public void listen(DeadEvent event) {
         logger.error("Dead event ({}) pushed from ({})", event.getEvent(), event.getSource());
     }
 }

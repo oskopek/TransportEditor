@@ -5,15 +5,10 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
       fx:controller="com.oskopek.transporteditor.controller.RootLayoutController">
     <MenuBar VBox.vgrow="NEVER">
-        <Menu mnemonicParsing="false" text="%root.file">
-            <MenuItem fx:id="fileQuitMenuItem" mnemonicParsing="false" onAction="#handleFileQuit"
-                      text="%root.quit"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="%root.planningSession">
-            <MenuItem fx:id="sessionNewMenuItem" mnemonicParsing="false" onAction="#handleSessionNew" text="%root.new"
-                      disable="false"/>
+        <Menu fx:id="sessionMenu" mnemonicParsing="false" text="%root.session">
+            <MenuItem fx:id="sessionNewMenuItem" mnemonicParsing="false" onAction="#handleSessionNew" text="%root.new"/>
             <MenuItem fx:id="sessionLoadMenuItem" mnemonicParsing="false" onAction="#handleSessionLoad"
-                      text="%root.load" disable="false"/>
+                      text="%root.load"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="sessionSaveMenuItem" mnemonicParsing="false" onAction="#handleSessionSave"
                       text="%root.save" disable="true"/>
@@ -22,41 +17,43 @@
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="fileSetPlannerMenuItem" mnemonicParsing="false" onAction="#handleFileSetPlanner"
                       text="%root.setPlanner" disable="true"/>
+            <MenuItem fx:id="fileSetValidatorMenuItem" mnemonicParsing="false" onAction="#handleFileSetValidator"
+                      text="%root.setValidator" disable="true"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="fileQuitMenuItem" mnemonicParsing="false" onAction="#handleFileQuit"
+                      text="%root.quit"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="%root.domain">
-            <MenuItem fx:id="domainNewMenuItem" mnemonicParsing="false" onAction="#handleDomainNew" text="%root.new"
-                      disable="true"/>
+        <Menu fx:id="domainMenu" mnemonicParsing="false" text="%root.domain" disable="true">
+            <MenuItem fx:id="domainNewMenuItem" mnemonicParsing="false" onAction="#handleDomainNew" text="%root.new"/>
             <MenuItem fx:id="domainLoadMenuItem" mnemonicParsing="false" onAction="#handleDomainLoad"
-                      text="%root.load" disable="true"/>
+                      text="%root.load"/>
             <SeparatorMenuItem mnemonicParsing="true"/>
             <MenuItem fx:id="domainSaveMenuItem" mnemonicParsing="false" onAction="#handleDomainSave"
                       text="%root.save" disable="true"/>
             <MenuItem fx:id="domainSaveAsMenuItem" mnemonicParsing="false" onAction="#handleDomainSaveAs"
                       text="%root.saveAs" disable="true"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="%root.problem">
-            <MenuItem fx:id="problemNewMenuItem" mnemonicParsing="false" onAction="#handleProblemNew" text="%root.new"
-                      disable="true"/>
+        <Menu fx:id="problemMenu" mnemonicParsing="false" text="%root.problem" disable="true">
+            <MenuItem fx:id="problemNewMenuItem" mnemonicParsing="false" onAction="#handleProblemNew" text="%root.new"/>
             <MenuItem fx:id="problemLoadMenuItem" mnemonicParsing="false" onAction="#handleProblemLoad"
-                      text="%root.load" disable="true"/>
+                      text="%root.load"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="problemSaveMenuItem" mnemonicParsing="false" onAction="#handleProblemSave"
                       text="%root.save" disable="true"/>
             <MenuItem fx:id="problemSaveAsMenuItem" mnemonicParsing="false" onAction="#handleProblemSaveAs"
                       text="%root.saveAs" disable="true"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="%root.plan">
-            <MenuItem fx:id="planNewMenuItem" mnemonicParsing="false" onAction="#handlePlanNew" text="%root.new"
-                      disable="true"/>
+        <Menu fx:id="planMenu" mnemonicParsing="false" text="%root.plan" disable="true">
+            <MenuItem fx:id="planNewMenuItem" mnemonicParsing="false" onAction="#handlePlanNew" text="%root.new"/>
             <MenuItem fx:id="planLoadMenuItem" mnemonicParsing="false" onAction="#handlePlanLoad"
-                      text="%root.load" disable="true"/>
+                      text="%root.load"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="planSaveMenuItem" mnemonicParsing="false" onAction="#handlePlanSave"
                       text="%root.save" disable="true"/>
             <MenuItem fx:id="planSaveAsMenuItem" mnemonicParsing="false" onAction="#handlePlanSaveAs"
                       text="%root.saveAs" disable="true"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="%root.help">
+        <Menu fx:id="aboutMenu" mnemonicParsing="false" text="%root.help">
             <MenuItem fx:id="aboutHelpMenuItem" mnemonicParsing="false" onAction="#handleAboutHelp"
                       text="%root.manual"/>
             <MenuItem fx:id="aboutAboutMenuItem" mnemonicParsing="false" onAction="#handleAboutAbout"

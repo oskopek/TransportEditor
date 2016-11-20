@@ -4,13 +4,12 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class DefaultProblemIOIT {
 
@@ -27,10 +26,10 @@ public class DefaultProblemIOIT {
         sequentialDomain = new SequentialDomain("seq");
         seqProblemFileContents = TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01SeqProblem.pddl")).stream().collect(
-                Collectors.joining("\n"));
+                Collectors.joining("\n")) + "\n";
         tempProblemFileContents = TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream().collect(
-                Collectors.joining("\n"));
+                Collectors.joining("\n")) + "\n";
     }
 
     @Test
@@ -40,6 +39,16 @@ public class DefaultProblemIOIT {
         String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
         assertNotNull(serialized);
         TestUtils.assertPDDLContentEquals(seqProblemFileContents, serialized);
+    }
+
+    @Test
+    @Ignore("TODO: Parse point locations from comments")
+    public void serializeSequentialExact() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
+
+        String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
+        assertNotNull(serialized);
+        assertEquals(seqProblemFileContents, serialized);
     }
 
     @Test
@@ -82,10 +91,18 @@ public class DefaultProblemIOIT {
     @Test
     public void serializeTemporal() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
-
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
         TestUtils.assertPDDLContentEquals(tempProblemFileContents, serialized);
+    }
+
+    @Test
+    @Ignore("TODO: Parse point locations from comments")
+    public void serializeTemporalExact() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
+        String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
+        assertNotNull(serialized);
+        assertEquals(tempProblemFileContents, serialized);
     }
 
     @Test
@@ -125,7 +142,7 @@ public class DefaultProblemIOIT {
         assertEquals(45, fuelRoad.getLength().getCost().intValue());
 
         assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
-        Vehicle truck1 = (Vehicle) problem.getVehicle("truck-1");
+        Vehicle truck1 = problem.getVehicle("truck-1");
         assertNotNull(truck1.getCurFuelCapacity());
         assertEquals(424, (int) truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());

@@ -11,4 +11,8 @@ public interface Plan {
 
     Collection<TemporalPlanAction> getTemporalPlanActions();
 
+    default TemporalPlan toTemporalPlan() {
+        return new TemporalPlan(getTemporalPlanActions());
+    }
+
 }

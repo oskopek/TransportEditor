@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.embed.swing.SwingNode?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="300" xmlns="http://javafx.com/javafx/8.0.92"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
-        <SwingNode fx:id="planGraph" VBox.vgrow="ALWAYS"/>
+        <AnchorPane fx:id="planTabAnchorPane">
+            <TabPane/>
+        </AnchorPane>
     </center>
     <top>
         <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <center>
-                <Button fx:id="planButton" disable="false" onAction="#handlePlan" prefWidth="Infinity" text="%plan"
+                <Button fx:id="planButton" disable="true" onAction="#handlePlan" prefWidth="Infinity" text="%plan"
                         BorderPane.alignment="CENTER">
                     <font>
                         <Font size="18.0"/>

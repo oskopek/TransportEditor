@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.model.problem;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class DefaultActionObject implements ActionObject {
 
@@ -35,6 +36,6 @@ public class DefaultActionObject implements ActionObject {
 
     @Override
     public String toString() {
-        return "DefaultActionObject{" + "name=" + getName() + '}';
+        return new ToStringBuilder(this).append("name", name).toString();
     }
 }

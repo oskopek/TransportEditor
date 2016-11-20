@@ -76,6 +76,12 @@ public class TransportEditorApplication extends Application {
         showSplashScreen(initStage, mainStageTask);
     }
 
+    @Override
+    public void stop() {
+        System.out.println("Stage is closing");
+        // Save file
+    }
+
     /**
      * Helper method to construct a splash screen and display it while preparing the main stage for the application.
      *

@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 
 public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T> {
 
@@ -8,6 +9,7 @@ public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T
 
     public XStreamGenericIO() {
         xStream = new XStream();
+        xStream.registerConverter(new JavaBeanConverter(xStream.getMapper()), -10);
         xStream.setMode(XStream.ID_REFERENCES);
     }
 
