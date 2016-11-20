@@ -11,17 +11,18 @@ import com.oskopek.transporteditor.model.domain.action.functions.PackageSize;
 import com.oskopek.transporteditor.model.domain.action.functions.RoadLength;
 import com.oskopek.transporteditor.model.domain.action.functions.TotalCost;
 import com.oskopek.transporteditor.model.domain.action.predicates.*;
+import com.oskopek.transporteditor.model.problem.DefaultRoad;
+import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+
+import java.util.stream.Collectors;
 
 public class VariableDomainIOIT {
 
@@ -30,6 +31,7 @@ public class VariableDomainIOIT {
     private static VariableDomainIO variableDomainIO;
     private static String variableDomainSeqPDDLContents;
     private static String variableDomainBPDDLContents;
+    private static RoadGraph roadGraph;
     private VariableDomain variableDomainSeq;
     private VariableDomain variableDomainB;
 
@@ -42,6 +44,12 @@ public class VariableDomainIOIT {
                 VariableDomainIOIT.class.getResourceAsStream(variableDomainBPDDL)).stream().collect(
                 Collectors.joining("\n")) + "\n";
         variableDomainIO = new VariableDomainIO();
+
+        roadGraph = new RoadGraph("");
+        roadGraph.addLocation(new Location("a", 0, 0));
+        roadGraph.addLocation(new Location("b", 0, 0));
+        roadGraph.addRoad(new DefaultRoad("a->b", ActionCost.valueOf(11)), roadGraph.getLocation("a"),
+                roadGraph.getLocation("b"));
     }
 
     @Before
@@ -71,10 +79,23 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(1), parsed.getDriveBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getDriveBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(11),
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                        .getCost());
+        assertEquals(ActionCost.valueOf(11),
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                        .getDuration());
         assertEquals(null, parsed.getRefuelBuilder());
         assertEquals(new SequentialDomain("Transport sequential"), parsed);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void parseSeqIllegalRoad() throws Exception {
+        VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
+        assertNotNull(parsed);
+        assertEquals(ActionCost.valueOf(0),
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("b"), roadGraph.getLocation("a"), roadGraph)
+                        .getDuration());
     }
 
     @Test

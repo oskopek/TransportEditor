@@ -105,29 +105,49 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         return new DriveBuilder(builder.getPredicates(), builder.getEffects());
     }
 
-    private static ActionCost parseEffects(List<PddlParser.CEffectContext> cEffectContextList,
+    private static ActionCost parseEffects(List<PddlParser.PEffectContext> pEffectContextList,
             List<Predicate> effects) {
-        cEffectContextList.stream().map(e -> parseAtomicTermFormula(e.pEffect().atomicTermFormula())).forEach(
-                effects::add);
-        Optional<Integer> optionalCost = cEffectContextList.stream().map(e -> e.pEffect().atomicTermFormula()).filter(
-                f -> "increase".equals(f.predicate().NAME().getText())).map(f -> Integer.parseInt(f.term(1).getText()))
-                .findFirst();
+        Optional<Integer> optionalCost = Optional.empty();
+        for (PddlParser.PEffectContext p : pEffectContextList) {
+            if (p.atomicTermFormula() != null) {
+                Predicate parsed = parseAtomicTermFormula(p.atomicTermFormula());
+                if (parsed != null) {
+                    effects.add(parsed);
+                }
+            } else {
+                if (p.assignOp() != null && "increase".equals(p.assignOp().getText())) {
+                    optionalCost = tryParseInteger(p.fExp().getText());
+                }
+            }
+        }
         return ActionCost.valueOf(optionalCost.isPresent() ? optionalCost.get() : 0);
+    }
+
+    private static Optional<Integer> tryParseInteger(String value) {
+        Optional<Integer> result = Optional.empty();
+        try {
+            result = Optional.of(Integer.parseInt(value));
+        } catch (NumberFormatException e) {
+            // intentionally ignore
+        }
+        return result;
     }
 
     private static Predicate parsePredicate(PddlParser.GoalDescContext goalDescContext) {
         if (goalDescContext.getText().startsWith("(not")) {
             return new Not(parsePredicate(goalDescContext.goalDesc(0)));
+        } else if (goalDescContext.fComp() != null) {
+            return null; // ignore constraints built into the model
         }
         return parseAtomicTermFormula(goalDescContext.atomicTermFormula());
     }
 
     private static Predicate parseAtomicTermFormula(PddlParser.AtomicTermFormulaContext atomicTermFormulaContext) {
-        String goalDescName = atomicTermFormulaContext.predicate().NAME().getText();
+        String goalDescName = atomicTermFormulaContext.predicate().getText();
         Predicate parsed = null;
         switch (goalDescName) {
             case "at": {
-                String secondArg = atomicTermFormulaContext.term(1).NAME().getText();
+                String secondArg = atomicTermFormulaContext.term(1).getText();
                 if (secondArg.startsWith("?p")) {
                     parsed = new WhatAtWhere();
                 } else if (secondArg.startsWith("?l2")) {
@@ -139,6 +159,10 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
             case "in": {
                 parsed = new In();
+                break;
+            }
+            case "road": {
+                parsed = new IsRoad();
                 break;
             }
             case "capacity-predecessor": {
@@ -234,15 +258,14 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                     throw new IllegalStateException("Unexpected time specifier " + timeSpecifier);
                 }
             }
-            System.out.println();
-
-            //            timedEffectContext.
-            //            Predicate parsedPredicate = parsePredicate(timedGDContext.goalDesc());
-
         }
     }
 
     private static PartialBuilder parseGenericBuilder(PddlParser.StructureDefContext context) {
+        if (context == null) {
+            return null;
+        }
+
         final List<Predicate> predicates;
         final List<Predicate> effects = new ArrayList<>();
         final ActionCost cost;
@@ -263,7 +286,8 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         } else { // sequential
             PddlParser.ActionDefBodyContext actionContext = context.actionDef().actionDefBody();
             predicates = parsePreconditions(actionContext.goalDesc().goalDesc());
-            cost = parseEffects(actionContext.effect().cEffect(), effects);
+            cost = parseEffects(actionContext.effect().cEffect().stream().map(PddlParser.CEffectContext::pEffect)
+                    .collect(Collectors.toList()), effects);
             duration = ActionCost.valueOf(1);
         }
         return new PartialBuilder(predicates, effects, cost, duration);
@@ -283,6 +307,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static RefuelBuilder parseRefuelBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
+        if (builder == null) {
+            return null;
+        }
         return new RefuelBuilder(builder.getPredicates(), builder.getEffects(), builder.getCost(),
                 builder.getDuration());
     }
@@ -311,6 +338,15 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         PddlParser.DomainContext context = parser.domain();
         if (!context.domainName().NAME().getText().equals("transport")) {
             throw new IllegalArgumentException("Domain is not a transport domain!");
+        }
+        if (listener.isFail()) {
+            Exception reason = listener.getReason();
+            if (reason != null) {
+                throw new IllegalArgumentException("Failed to parse domain pddl: " + reason.getMessage(), reason);
+            } else {
+                throw new IllegalArgumentException("Failed to parse domain pddl.");
+            }
+
         }
 
         Map<String, PddlParser.StructureDefContext> structureDefContextMap = new HashMap<>();
