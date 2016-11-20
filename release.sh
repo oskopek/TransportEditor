@@ -41,14 +41,14 @@ echo "Current version: $oldVersion"
 relVersion=`input "Please enter the release version number: "`
 relBranch=`input "Please enter the release branch name: "`
 newVersion=`input "Please enter the new version number: "`
-newRelBranch=`input "Please enter the new release branch version number: "`
+newRelBranch=`input "Please enter the release branch new version number: "`
 tagName="v$relVersion"
 
 echo
 echo "Current version: $oldVersion"
 echo "Release version: $relVersion"
 echo "Release branch: $relBranch"
-echo "New Release branch version: $newRelBranch"
+echo "Release branch new version: $newRelBranch"
 echo "Tag name: $tagName"
 echo "New version: $newVersion"
 echo
