@@ -146,7 +146,7 @@ term
    ;
 
 daDefBody
-   : ':duration' durationConstraint | ':condition' ( ( '(' ')' ) | daGD ) | ':effect' ( ( '(' ')' ) | daEffect )
+   : ':duration' durationConstraint ':condition' ( ( '(' ')' ) | daGD ) ':effect' ( ( '(' ')' ) | daEffect )
    ;
 
 daGD
@@ -234,11 +234,11 @@ durValue
    ;
 
 daEffect
-   : '(' 'and' daEffect* ')' | timedEffect | '(' 'forall' '(' typedVariableList ')' daEffect ')' | '(' 'when' daGD timedEffect ')' | '(' assignOp fHead fExpDA ')'
+   : timedEffect | '(' 'and' daEffect+ ')' | '(' 'forall' '(' typedVariableList ')' daEffect ')' | '(' 'when' daGD timedEffect ')' | '(' assignOp fHead fExpDA ')'
    ;
 
 timedEffect
-   : '(' 'at' timeSpecifier daEffect ')' | '(' 'at' timeSpecifier fAssignDA ')' | '(' assignOp fHead fExp ')'
+   : '(' 'at' timeSpecifier goalDesc ')' | '(' 'at' timeSpecifier fAssignDA ')' | '(' assignOp fHead fExp ')'
    ;
 
 fAssignDA
@@ -316,7 +316,7 @@ metricFExp
 
 
 /************* LEXER ****************************/ REQUIRE_KEY
-   : ':strips' | ':typing' | ':negative-preconditions' | ':disjunctive-preconditions' | ':equality' | ':existential-preconditions' | ':universal-preconditions' | ':quantified-preconditions' | ':conditional-effects' | ':fluents' | ':adl' | ':durative-actions' | ':derived-predicates' | ':timed-initial-literals' | ':preferences' | ':constraints'
+   : ':strips' | ':typing' | ':negative-preconditions' | ':disjunctive-preconditions' | ':equality' | ':existential-preconditions' | ':universal-preconditions' | ':quantified-preconditions' | ':conditional-effects' | ':fluents' | ':adl' | ':durative-actions' | ':derived-predicates' | ':timed-initial-literals' | ':preferences' | ':constraints' | ':numeric-fluents'
    ;
 
 

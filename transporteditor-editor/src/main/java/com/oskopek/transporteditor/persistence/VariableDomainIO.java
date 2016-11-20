@@ -315,6 +315,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
         Map<String, PddlParser.StructureDefContext> structureDefContextMap = new HashMap<>();
         for (PddlParser.StructureDefContext structureDefContext : context.structureDef()) {
+            if (structureDefContext.getText().isEmpty()) {
+                continue;
+            }
             String actionName;
             if (structureDefContext.durativeActionDef() != null) {
                 actionName = structureDefContext.durativeActionDef().actionSymbol().NAME().getText();
@@ -325,6 +328,8 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
             }
             structureDefContextMap.put(actionName, structureDefContext);
         }
+
+        // TODO OOO Add detailed tests
 
         DriveBuilder driveBuilder = parseDriveBuilder(structureDefContextMap.get("drive"));
         DropBuilder dropBuilder = parseDropBuilder(structureDefContextMap.get("drop"));
@@ -366,11 +371,11 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         final ActionCost cost;
         final ActionCost duration;
 
-        public PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost) {
+        PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost) {
             this(predicates, effects, cost, ActionCost.valueOf(1));
         }
 
-        public PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost,
+        PartialBuilder(List<Predicate> predicates, List<Predicate> effects, ActionCost cost,
                 ActionCost duration) {
             this.predicates = predicates;
             this.effects = effects;
