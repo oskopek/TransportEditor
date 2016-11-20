@@ -4,14 +4,12 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class DefaultProblemIOIT {
 
@@ -93,7 +91,6 @@ public class DefaultProblemIOIT {
     @Test
     public void serializeTemporal() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
-
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
         TestUtils.assertPDDLContentEquals(tempProblemFileContents, serialized);
@@ -103,7 +100,6 @@ public class DefaultProblemIOIT {
     @Ignore("TODO: Parse point locations from comments")
     public void serializeTemporalExact() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
-
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
         assertEquals(tempProblemFileContents, serialized);
