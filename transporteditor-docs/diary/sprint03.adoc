@@ -16,7 +16,13 @@ Skipping.
 
 Interval tree: https://github.com/kevinjdolan/intervaltree
 
-== 2016/11/18
+== 2016/11/21
 
 Finished plan visualization (Gantt, linear), finished graph basic visualization.
+
+Basic UI for loading and displaying domains, problems and plans.
+
+Fixed up IO, added a bunch of tests.
+
+Finished and released sprint03.
 
