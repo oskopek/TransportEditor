@@ -10,7 +10,12 @@ public class Not extends PredicateWrapper {
     }
 
     @Override
-    public boolean isValid(Problem state, Action action) {
+    public boolean isValidInternal(Problem state, Action action) {
         return !getInternal().isValid(state, action);
+    }
+
+    @Override
+    public String getPredicateName() {
+        return "!(" + getInternal().getPredicateName() + ")";
     }
 }

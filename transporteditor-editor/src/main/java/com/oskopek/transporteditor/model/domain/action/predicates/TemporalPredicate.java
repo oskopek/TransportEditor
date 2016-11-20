@@ -17,13 +17,18 @@ public class TemporalPredicate extends PredicateWrapper {
         this.quantifier = quantifier;
     }
 
-    @Override
-    public boolean isValid(Problem state, Action action) {
+    @Override // TODO Add TemporalQuantifier to isValid somewhere
+    public boolean isValidInternal(Problem state, Action action) {
         return getInternal().isValid(state, action);
     }
 
     @Override
     public TemporalQuantifier getTemporalQuantifier() {
         return quantifier;
+    }
+
+    @Override
+    public String getPredicateName() {
+        return getInternal().getClass().getSimpleName() + "[" + quantifier.name() + "]";
     }
 }

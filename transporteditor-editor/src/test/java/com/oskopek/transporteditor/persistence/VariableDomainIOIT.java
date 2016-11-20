@@ -80,7 +80,6 @@ public class VariableDomainIOIT {
     public void parseTemp() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainTempPDDLContents);
         assertNotNull(parsed);
-        assertEquals(parsed, variableDomainSeq);
 
         assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
         assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
@@ -183,8 +182,7 @@ public class VariableDomainIOIT {
         // pickup
         assertContains(new WhoAtWhere(), parsed.getPickUpBuilder().getPreconditions());
         assertContains(new WhatAtWhere(), parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new HasCapacity(), parsed.getPickUpBuilder().getPreconditions());
-        assertEquals(3, parsed.getPickUpBuilder().getPreconditions().size());
+        assertEquals(2, parsed.getPickUpBuilder().getPreconditions().size());
 
         assertContains(new In(), parsed.getPickUpBuilder().getEffects());
         assertContains(new Not(new WhatAtWhere()), parsed.getPickUpBuilder().getEffects());
@@ -234,7 +232,7 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
-        assertNotNull(parsed.getRefuelBuilder());
+        assertNull(parsed.getRefuelBuilder());
 
         // drive
         assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),

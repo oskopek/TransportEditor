@@ -25,7 +25,7 @@ public abstract class DefaultPredicate implements Predicate {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getClass()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(getPredicateName()).append(getTemporalQuantifier()).toHashCode();
     }
 
     @Override
@@ -33,15 +33,16 @@ public abstract class DefaultPredicate implements Predicate {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DefaultPredicate)) {
+        if (!(o instanceof Predicate)) {
             return false;
         }
-        DefaultPredicate that = (DefaultPredicate) o;
-        return new EqualsBuilder().append(getClass(), that.getClass()).isEquals();
+        Predicate that = (Predicate) o;
+        return new EqualsBuilder().append(getPredicateName(), that.getPredicateName()).append(getTemporalQuantifier(),
+                that.getTemporalQuantifier()).isEquals();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getPredicateName();
     }
 }

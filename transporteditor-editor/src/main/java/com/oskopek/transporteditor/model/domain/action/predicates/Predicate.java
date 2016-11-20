@@ -12,4 +12,8 @@ public interface Predicate {
         return TemporalQuantifier.OVER_ALL;
     }
 
+    default String getPredicateName() {
+        return getClass().getSimpleName() + "[" + getTemporalQuantifier().name() + "]";
+    }
+
 }

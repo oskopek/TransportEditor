@@ -97,6 +97,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         if (contents.contains(":durative-actions")) {
             pddlLabels.add(PddlLabel.Temporal);
         }
+        if (contents.contains("(fuel-demand") && contents.contains("(fuel-left")) {
+            pddlLabels.add(PddlLabel.Fuel);
+        }
         return pddlLabels;
     }
 
@@ -111,9 +114,6 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         for (PddlParser.CEffectContext cEffectContext : cEffectContextList) {
             PddlParser.PEffectContext p = cEffectContext.pEffect();
             if (p.atomicTermFormula() != null) {
-                if (p.atomicTermFormula().getText().toLowerCase().contains("capacity")) {
-                    continue; // skip capacity in effects, built into model
-                }
                 Predicate parsed = parseAtomicTermFormula(p.atomicTermFormula());
                 if (parsed != null) {
                     if (cEffectContext.getText().startsWith("(not")) {
@@ -142,7 +142,12 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static Predicate parsePredicate(PddlParser.GoalDescContext goalDescContext) {
         if (goalDescContext.getText().startsWith("(not")) {
-            return new Not(parsePredicate(goalDescContext.goalDesc(0))); // TODO: never gets hit
+            Predicate parsed = parsePredicate(goalDescContext.goalDesc(0));
+            if (parsed == null) {
+                return null;
+            } else {
+                return new Not(parsed);
+            }
         } else if (goalDescContext.fComp() != null) {
             return null; // ignore constraints built into the model
         }
@@ -178,11 +183,11 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                 break;
             }
             case "capacity": {
-                parsed = new HasCapacity();
+                // intentionally ignore
                 break;
             }
             case "ready-loading": {
-                parsed = new ReadyLoading();
+                // intentionally ignore
                 break;
             }
             case "has-petrol-station": {
@@ -223,6 +228,9 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         for (PddlParser.TimedGDContext timedGDContext : daGDContextList.stream().map(m -> m.prefTimedGD().timedGD())
                 .collect(Collectors.toList())) {
             Predicate parsedPredicate = parsePredicate(timedGDContext.goalDesc());
+            if (parsedPredicate == null) {
+                continue;
+            }
             if (timedGDContext.getText().startsWith("(at")) { // at $timeSpecifier
                 String timeSpecifier = timedGDContext.timeSpecifier().getText();
                 TemporalQuantifier quantifier;
@@ -266,7 +274,13 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
                     throw new IllegalStateException("Unexpected time specifier " + timeSpecifier);
                 }
             }
-            effects.add(new TemporalPredicate(parsePredicate(timedEffectContext.goalDesc()), quantifier));
+            if (timedEffectContext.fAssignDA() != null) {
+                continue; // skip assigning operations, built into model
+            }
+            Predicate parsedPredicate = parsePredicate(timedEffectContext.goalDesc());
+            if (parsedPredicate != null) {
+                effects.add(new TemporalPredicate(parsedPredicate, quantifier));
+            }
         }
     }
 
@@ -304,9 +318,8 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static DropBuilder parseDropBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
-        List<Predicate> preconditions = builder.getPreconditions().stream().filter(
-                p -> !p.getClass().getSimpleName().toLowerCase().contains("capacity")).collect(Collectors.toList());
-        return new DropBuilder(preconditions, builder.getEffects(), builder.getCost(), builder.getDuration());
+        return new DropBuilder(builder.getPreconditions(), builder.getEffects(), builder.getCost(),
+                builder.getDuration());
     }
 
     private static PickUpBuilder parsePickUpBuilder(PddlParser.StructureDefContext context) {
