@@ -18,6 +18,7 @@
         <mainClass>com.oskopek.transporteditor.view.TransportEditorApplication</mainClass>
         <rootLevelDir>${project.basedir}/..</rootLevelDir>
     </properties>
+    <!-- IMPORTANT: Every time a dependency is changed, make sure to check beans.xml and add excludes -->
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -77,10 +78,6 @@
             <groupId>io.javaslang</groupId>
             <artifactId>javaslang</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <finalName>TransportEditor</finalName>
@@ -98,21 +95,6 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>${mainClass}</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>${mainClass}</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <Application-Name>${project.name}</Application-Name>
-                        </manifestEntries>
-                    </archive>
                 </configuration>
             </plugin>
             <plugin>
@@ -161,11 +143,26 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>org.slf4j</includeGroupIds>
-                            <outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <outputDirectory>${project.build.directory}/dependency-jars</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>dependency-jars/</classpathPrefix>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
