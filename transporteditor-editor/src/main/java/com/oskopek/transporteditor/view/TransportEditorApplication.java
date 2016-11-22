@@ -79,6 +79,7 @@ public class TransportEditorApplication extends Application {
     @Override
     public void stop() {
         System.out.println("Stage is closing");
+        System.exit(0);
         // Save file
     }
 
