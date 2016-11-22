@@ -47,7 +47,7 @@ public class RightPaneController extends AbstractController {
         Platform.runLater(() -> {
             Plan plan = application.getPlanningSession().getPlan();
             linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
-            ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()).rotate(90));
+            ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()));
 
             cancelPlanButton.setDisable(true);
             planButton.setDisable(false);
