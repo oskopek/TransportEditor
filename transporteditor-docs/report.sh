@@ -27,10 +27,10 @@ echo "<h2>My comments on this weeks work items</h2>"
 echo "    <pre><code>"
 cat diary/sprint"$sprint".adoc
 echo "    </code></pre>"
-echo "    <h2>What I did this week (git commits) and GitHub issues</h2>"
-echo "    <pre><code>"
-did this week --TransportEditor --github
-echo "    </code></pre>"
+#echo "    <h2>What I did this week (git commits) and GitHub issues</h2>"
+#echo "    <pre><code>"
+#did this week --TransportEditor --github
+#echo "    </code></pre>"
 echo "</body>"
 echo "</html>"
 
