@@ -3,7 +3,9 @@ all: thesis.pdf
 # LaTeX must be run multiple times to get references right
 thesis.pdf: thesis.tex $(wildcard *.tex) bibliography.bib
 	pdflatex $<
+	pdflatex $<
 	bibtex thesis
+	pdflatex $<
 	pdflatex $<
 	pdflatex $<
 
