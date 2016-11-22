@@ -51,6 +51,8 @@ integrationtest-job:
 
 deploy-job:
   stage: deploy
+  script: 
+    - "true"
   artifacts:
     paths:
       - "transporteditor-editor/target/*.jar"
@@ -70,4 +72,3 @@ deploy-job:
 #  artifacts:
 #     paths:
 #        - "transporteditor-docs/target/docs"
-
