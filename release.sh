@@ -73,10 +73,12 @@ git tag -a "$tagName" -m "Release $relVersion"
 tmpdir="TEMP`date +%s`"
 mkdir "$tmpdir"
 mvn clean install -P"$MVN_PROFILES"
+mkdir -p "$tmpdir"/datasets
+cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
 cp transporteditor-docs/target/*.zip "$tmpdir"/
 cp transporteditor-editor/target/*.jar "$tmpdir"/
 cp README.adoc LICENSE "$tmpdir"/
-cp "transporteditor-editor/NOTICE.adoc" "transporteditor-editor/AUTHORS.adoc" "$tmpdir"/
+cp "transporteditor-editor/NOTICE.txt" "transporteditor-editor/AUTHORS.adoc" "$tmpdir"/
 
 relName="TransportEditor-$relVersion"
 mv "$tmpdir" "$relName"
