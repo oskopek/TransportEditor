@@ -49,10 +49,4 @@ public final class TemporalPlanGanttChart extends GanttChart {
         }).values().toJavaList();
     }
 
-    public TemporalPlanGanttChart rotate(double degrees) {
-        setRotate(degrees);
-        return this;
-    }
-
-
 }
