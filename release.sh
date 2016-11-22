@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-MVN_PROFILES="docs"
+MVN_PROFILES="it,docs"
+base_branch="`git status | grep "On branch" | sed -E 's/On branch\s+(.*)/\1/' | tr -d '[:blank:]'`"
 
 function confirm {
     while true; do
@@ -18,7 +19,7 @@ function input {
     echo "$result"
 }
 
-echo "Testing..."
+echo "Testing base branch $base_branch..."
 
 mvn clean install -P"$MVN_PROFILES"
 testsPassed=$?
@@ -87,7 +88,7 @@ mvn versions:set -DnewVersion="$newRelBranch" -DgenerateBackupPoms=false -P"$MVN
 git add '**/pom.xml' 'pom.xml'
 git commit -m "Bumping release branch version to $newRelBranch"
 
-git checkout master
+git checkout "$base_branch"
 
 mvn versions:set -DnewVersion="$newVersion" -DgenerateBackupPoms=false -P"$MVN_PROFILES"
 git add '**/pom.xml' 'pom.xml'
