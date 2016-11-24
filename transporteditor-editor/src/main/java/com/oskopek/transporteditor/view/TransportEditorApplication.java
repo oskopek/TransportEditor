@@ -1,5 +1,7 @@
 package com.oskopek.transporteditor.view;
 
+import com.google.common.eventbus.EventBus;
+import com.oskopek.transporteditor.event.DisposeSwingNodesEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.animation.FadeTransition;
@@ -26,8 +28,11 @@ import org.jboss.weld.environment.se.WeldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Produces;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * TransportEditor JavaFX main class.
@@ -35,11 +40,17 @@ import javax.inject.Singleton;
 @Singleton
 public class TransportEditorApplication extends Application {
 
+    private static AtomicReference<TransportEditorApplication> atomicThis = new AtomicReference<>(null);
     private final String logoResource = "logo_64x64.png";
     private final String logoResourceLarge = "logo_640x640.png";
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ObjectProperty<PlanningSession> planningSession = new SimpleObjectProperty<>();
     private transient Stage primaryStage;
+    private transient EventBus eventBus;
+
+    public TransportEditorApplication() {
+        TransportEditorApplication.atomicThis.compareAndSet(null, this);
+    }
 
     /**
      * Main method.
@@ -78,8 +89,17 @@ public class TransportEditorApplication extends Application {
 
     @Override
     public void stop() {
-        System.out.println("Stage is closing");
-        // Save file
+        logger.debug("Stage is closing...");
+        eventBus.post(new DisposeSwingNodesEvent());
+        logger.debug("Dispose Swing nodes event sent.");
+        // TODO: Save file
+    }
+
+    @Produces
+    @Singleton
+    @Named("mainApp")
+    public TransportEditorApplication singletonAppProducer() {
+        return TransportEditorApplication.atomicThis.get();
     }
 
     /**
@@ -112,6 +132,10 @@ public class TransportEditorApplication extends Application {
         initStage.initStyle(StageStyle.TRANSPARENT);
         initStage.show();
         new Thread(mainStageTask).start();
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 
     /**

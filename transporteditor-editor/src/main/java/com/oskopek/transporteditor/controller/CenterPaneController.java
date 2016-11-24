@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.google.common.eventbus.Subscribe;
+import com.oskopek.transporteditor.event.DisposeSwingNodesEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
@@ -45,6 +46,14 @@ public class CenterPaneController extends AbstractController {
     private void initialize() {
         eventBus.register(this);
     }
+
+    @Subscribe
+    public void disposeSwingNodes(DisposeSwingNodesEvent event) {
+        logger.debug("Disposing Swing nodes in CenterPane.");
+        problemGraph.getContent().removeAll();
+        problemGraph.setContent(null);
+    }
+
 
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
