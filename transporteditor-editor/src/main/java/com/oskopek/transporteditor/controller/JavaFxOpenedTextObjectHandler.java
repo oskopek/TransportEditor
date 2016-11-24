@@ -67,6 +67,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
             menu.disableProperty().bind(parentHandler.objectProperty().isNull());
             newMenuItem.disableProperty().bind(parentHandler.objectProperty().isNull());
             loadMenuItem.disableProperty().bind(parentHandler.objectProperty().isNull());
+            parentHandler.objectProperty().addListener(observable -> clearObject());
         }
 
         saveMenuItem.disableProperty().bind(changedSinceLastSaveProperty().not());

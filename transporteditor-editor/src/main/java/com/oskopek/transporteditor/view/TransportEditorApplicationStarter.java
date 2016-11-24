@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.view;
 
 import com.google.common.eventbus.EventBus;
+import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.weld.DeadEventListener;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.application.Platform;
@@ -54,6 +55,7 @@ class TransportEditorApplicationStarter {
             primaryStage.setMinWidth(650d);
             primaryStage.setScene(scene);
             primaryStage.show();
+            eventBus.post(new GraphUpdatedEvent());
         });
         eventBus.register(deadEventListener);
         application.setPrimaryStage(primaryStage);

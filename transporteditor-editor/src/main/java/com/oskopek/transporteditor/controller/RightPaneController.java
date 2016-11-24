@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.controller;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.view.plan.SequentialPlanList;
@@ -42,10 +43,25 @@ public class RightPaneController extends AbstractController {
     }
 
     @Subscribe
+    public void redrawPlans(GraphUpdatedEvent event) {
+        redrawPlansInternal();
+    }
+
+    @Subscribe
     public void redrawPlans(PlanningFinishedEvent event) {
+        redrawPlansInternal();
+    }
+
+    private void redrawPlansInternal() {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
-            Plan plan = application.getPlanningSession().getPlan();
+            Plan plan = null;
+            try {
+                plan = application.getPlanningSession().getPlan();
+            } catch (NullPointerException e) {
+                logger.trace("Tried to redraw plans, caught NPE along the way.", e);
+            }
+
             if (plan == null) {
                 linearPlanTabScrollPane.setContent(null);
                 ganttPlanTabScrollPane.setContent(null);

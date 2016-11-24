@@ -25,11 +25,11 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     private BooleanProperty changedSinceLastSave = new SimpleBooleanProperty(false);
 
     public OpenedTextObjectHandler() {
-        object.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                changedSinceLastSave.setValue(true);
-            }
-        });
+        object.addListener((observable, oldValue, newValue) -> changedSinceLastSave.setValue(newValue != null));
+    }
+
+    protected void clearObject() {
+        newObject(null, writer.get(), reader.get());
     }
 
     public void load(Path path, DataWriter<Persistable_> writer, DataReader<Persistable_> reader)

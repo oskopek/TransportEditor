@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Function;
@@ -47,16 +48,13 @@ public class CenterPaneController extends AbstractController {
 
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
-        Platform.runLater(() -> {
-            problemGraph.setContent(null);
-            problemGraph.setDisable(true);
-        });
+        Platform.runLater(() -> problemGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
 
         RoadGraph graph = null;
         try {
             graph = application.getPlanningSession().getProblem().getRoadGraph();
         } catch (NullPointerException e) {
-            logger.trace("Could not get graph for redrawing, got a NPE along the way.");
+            logger.trace("Could not get graph for redrawing, got a NPE along the way.", e);
         }
 
         if (graph == null) {

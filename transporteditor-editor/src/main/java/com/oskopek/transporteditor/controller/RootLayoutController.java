@@ -177,12 +177,14 @@ public class RootLayoutController extends AbstractController {
     private void handleSessionNew() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
         planningSessionFileHandler.newObject(new DefaultPlanningSession(), io, io);
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
         planningSessionFileHandler.loadWithDefaultFileChooser(messages.getString("load.planningSession"), io, io);
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
@@ -236,6 +238,7 @@ public class RootLayoutController extends AbstractController {
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.newObject(domain, guesser, guesser);
         application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
@@ -246,6 +249,7 @@ public class RootLayoutController extends AbstractController {
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), guesser, guesser);
         application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
