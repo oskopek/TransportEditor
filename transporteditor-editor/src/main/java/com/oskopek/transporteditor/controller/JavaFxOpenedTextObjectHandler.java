@@ -4,6 +4,7 @@ import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -102,24 +103,33 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     }
 
     public void checkForSaveBeforeOverwrite(Runnable overwritingAction) {
-        ButtonType result = null;
-        if (isChangedSinceLastSave()) {
-            Optional<ButtonType> button = creator.show(messages.getString("shouldSave"));
-            if (button.isPresent()) {
-                result = button.get();
-            }
-        } else {
+        if (!isChangedSinceLastSave()) {
             overwritingAction.run();
+            return;
+        }
+        Optional<ButtonType> button = creator.show(messages.getString("shouldSave"));
+        ButtonBar.ButtonData result;
+        if (button.isPresent()) {
+            result = button.get().getButtonData();
+        } else {
+            return;
         }
 
-        if (ButtonType.YES.equals(result)) {
+        if (ButtonBar.ButtonData.YES.equals(result)) {
             save();
             if (!isChangedSinceLastSave()) {
                 overwritingAction.run();
             } else {
                 throw new IllegalStateException("State changed before new object could be loaded.");
             }
-        } else if (ButtonType.NO.equals(result)) {
+        } else if (ButtonBar.ButtonData.APPLY.equals(result)) {
+            saveAs();
+            if (!isChangedSinceLastSave()) {
+                overwritingAction.run();
+            } else {
+                throw new IllegalStateException("State changed before new object could be loaded.");
+            }
+        } else if (ButtonBar.ButtonData.NO.equals(result)) {
             overwritingAction.run();
         }
     }
@@ -151,7 +161,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     @Override
     public void close() {
-        checkForSaveBeforeOverwrite(super::close);
+        // intentionally empty
     }
 
     private Path openFileWithDefaultFileChooser(String title) {
