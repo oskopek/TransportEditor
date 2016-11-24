@@ -3,7 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="300" xmlns="http://javafx.com/javafx/8.0.112-ea"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="300" prefWidth="400"
+            xmlns="http://javafx.com/javafx/8.0.112-ea"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
         <TabPane fx:id="planTabPane" tabClosingPolicy="UNAVAILABLE">
