@@ -182,7 +182,7 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
-        planningSessionFileHandler.load(messages.getString("load.planningSession"), io, io);
+        planningSessionFileHandler.loadWithDefaultFileChooser(messages.getString("load.planningSession"), io, io);
     }
 
     @FXML
@@ -244,7 +244,7 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot load domain, because no planning session is loaded.");
         }
         VariableDomainIO guesser = new VariableDomainIO();
-        domainFileHandler.load(messages.getString("load.domain"), guesser, guesser);
+        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), guesser, guesser);
         application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
     }
 
@@ -285,7 +285,7 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot load problem, because no domain is loaded.");
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
-        problemFileHandler.load(messages.getString("load.problem"), io, io);
+        problemFileHandler.loadWithDefaultFileChooser(messages.getString("load.problem"), io, io);
         application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -327,10 +327,10 @@ public class RootLayoutController extends AbstractController {
         Problem problem = application.getPlanningSession().getProblem();
         if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
             TemporalPlanIO io = new TemporalPlanIO(domain, problem);
-            planFileHandler.load(messages.getString("load.plan"), io, io);
+            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
         } else {
             SequentialPlanIO io = new SequentialPlanIO(domain, problem);
-            planFileHandler.load(messages.getString("load.plan"), io, io);
+            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
         }
         application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());

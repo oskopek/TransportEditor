@@ -16,30 +16,33 @@ public class ErrorDetectionListener implements ANTLRErrorListener {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean fail = false;
     private Exception reason = null;
+    private String reasonString = null;
 
     public synchronized boolean isFail() {
         return fail;
-    }
-
-    public synchronized void setFail(boolean fail) {
-        this.fail = fail;
     }
 
     public Exception getReason() {
         return reason;
     }
 
-    @Override
-    public void syntaxError(Recognizer<?, ?> arg0, Object arg1, int arg2, int arg3, String arg4,
-            RecognitionException arg5) {
-        setFail(true);
-        logger.error("Syntax Error: {}", arg4);
-        reason = arg5;
+    public String getReasonString() {
+        return reasonString;
     }
 
     @Override
-    public void reportContextSensitivity(Parser arg0, DFA arg1, int arg2, int arg3, int arg4, ATNConfigSet arg5) {
-        logger.warn("Context sensitivity");
+    public void syntaxError(Recognizer<?, ?> arg0, Object arg1, int arg2, int arg3, String arg4,
+            RecognitionException arg5) {
+        fail = true;
+        logger.error("Syntax Error: {}", arg4);
+        reason = arg5;
+        reasonString = arg4;
+    }
+
+    @Override
+    public void reportAmbiguity(Parser arg0, DFA arg1, int arg2, int arg3, boolean arg4, BitSet arg5,
+            ATNConfigSet arg6) {
+        logger.warn("Ambiguity");
     }
 
     @Override
@@ -48,9 +51,8 @@ public class ErrorDetectionListener implements ANTLRErrorListener {
     }
 
     @Override
-    public void reportAmbiguity(Parser arg0, DFA arg1, int arg2, int arg3, boolean arg4, BitSet arg5,
-            ATNConfigSet arg6) {
-        logger.warn("Ambiguity");
+    public void reportContextSensitivity(Parser arg0, DFA arg1, int arg2, int arg3, int arg4, ATNConfigSet arg5) {
+        logger.warn("Context sensitivity");
     }
 }
 

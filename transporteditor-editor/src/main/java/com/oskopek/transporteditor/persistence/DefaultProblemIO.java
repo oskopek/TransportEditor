@@ -93,6 +93,15 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
         ErrorDetectionListener listener = new ErrorDetectionListener();
         parser.addErrorListener(listener);
         PddlParser.ProblemContext context = parser.problem();
+        if (listener.isFail()) {
+            Exception reason = listener.getReason();
+            if (reason != null) {
+                throw new IllegalArgumentException("Failed to parse problem pddl: " + listener.getReasonString(),
+                        reason);
+            } else {
+                throw new IllegalArgumentException("Failed to parse problem pddl.");
+            }
+        }
         if (!context.problemDomain().NAME().getText().equals("transport")) {
             throw new IllegalArgumentException("Domain is not a transport domain!");
         }

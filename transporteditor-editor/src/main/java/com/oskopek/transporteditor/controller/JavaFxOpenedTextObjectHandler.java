@@ -2,12 +2,10 @@ package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.persistence.DataReader;
 import com.oskopek.transporteditor.persistence.DataWriter;
+import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -134,13 +132,20 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         }
     }
 
-    public void load(String title, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
+    public void loadWithDefaultFileChooser(String title, DataWriter<Persistable_> writer,
+            DataReader<Persistable_> reader) {
         checkForSaveBeforeOverwrite(() -> {
             Path path = openFileWithDefaultFileChooser(title);
             if (path == null) {
                 return;
             }
-            super.load(path, writer, reader);
+            try {
+                super.load(path, writer, reader);
+            } catch (IllegalArgumentException e) {
+                // swallow exception
+                AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("load.failed") + ". " + e.getMessage(),
+                        ButtonType.OK);
+            }
         });
 
     }

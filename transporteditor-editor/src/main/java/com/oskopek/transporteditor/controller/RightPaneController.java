@@ -46,8 +46,13 @@ public class RightPaneController extends AbstractController {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
             Plan plan = application.getPlanningSession().getPlan();
-            linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
-            ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()));
+            if (plan == null) {
+                linearPlanTabScrollPane.setContent(null);
+                ganttPlanTabScrollPane.setContent(null);
+            } else {
+                linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
+                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()));
+            }
 
             cancelPlanButton.setDisable(true);
             planButton.setDisable(false);

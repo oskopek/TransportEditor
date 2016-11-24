@@ -35,6 +35,32 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
+    static {
+        predicateNameMap.put("at", WhoAtWhere.class);
+        predicateNameMap.put("capacity", HasCapacity.class);
+        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
+        predicateNameMap.put("in", In.class);
+        predicateNameMap.put("road", IsRoad.class);
+        predicateNameMap.put("ready-loading", ReadyLoading.class);
+    }
+
+    static {
+        functionNameMap.put("capacity", Capacity.class);
+        functionNameMap.put("fuel-demand", FuelDemand.class);
+        functionNameMap.put("fuel-left", FuelLeft.class);
+        functionNameMap.put("fuel-max", FuelMax.class);
+        functionNameMap.put("package-size", PackageSize.class);
+        functionNameMap.put("road-length", RoadLength.class);
+        functionNameMap.put("total-cost", TotalCost.class);
+    }
+
+    static {
+        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setLocale(Locale.US);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    }
+
     private static String parseName(String contents) {
         return contents.split("\n")[0].replaceAll(";", "").trim();
     }
@@ -358,16 +384,17 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         ErrorDetectionListener listener = new ErrorDetectionListener();
         parser.addErrorListener(listener);
         PddlParser.DomainContext context = parser.domain();
-        if (!context.domainName().NAME().getText().equals("transport")) {
-            throw new IllegalArgumentException("Domain is not a transport domain!");
-        }
         if (listener.isFail()) {
             Exception reason = listener.getReason();
             if (reason != null) {
-                throw new IllegalArgumentException("Failed to parse domain pddl: " + reason.getMessage(), reason);
+                throw new IllegalArgumentException("Failed to parse domain pddl: " + listener.getReasonString(),
+                        reason);
             } else {
                 throw new IllegalArgumentException("Failed to parse domain pddl.");
             }
+        }
+        if (!context.domainName().NAME().getText().equals("transport")) {
+            throw new IllegalArgumentException("Domain is not a transport domain!");
         }
 
         Map<String, PddlParser.StructureDefContext> structureDefContextMap = new HashMap<>();
@@ -455,6 +482,12 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         }
 
         @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37).append(getPreconditions()).append(getEffects()).append(getCost()).append(
+                    getDuration()).toHashCode();
+        }
+
+        @Override
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -472,42 +505,10 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
         }
 
         @Override
-        public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getPreconditions()).append(getEffects()).append(getCost()).append(
-                    getDuration()).toHashCode();
-        }
-
-        @Override
         public String toString() {
             return new ToStringBuilder(this).append("predicates", preconditions).append("effects", effects).append(
                     "cost",
                     cost).append("duration", duration).toString();
         }
-    }
-
-    static {
-        predicateNameMap.put("at", WhoAtWhere.class);
-        predicateNameMap.put("capacity", HasCapacity.class);
-        predicateNameMap.put("has-petrol-station", HasPetrolStation.class);
-        predicateNameMap.put("in", In.class);
-        predicateNameMap.put("road", IsRoad.class);
-        predicateNameMap.put("ready-loading", ReadyLoading.class);
-    }
-
-    static {
-        functionNameMap.put("capacity", Capacity.class);
-        functionNameMap.put("fuel-demand", FuelDemand.class);
-        functionNameMap.put("fuel-left", FuelLeft.class);
-        functionNameMap.put("fuel-max", FuelMax.class);
-        functionNameMap.put("package-size", PackageSize.class);
-        functionNameMap.put("road-length", RoadLength.class);
-        functionNameMap.put("total-cost", TotalCost.class);
-    }
-
-    static {
-        configuration.setClassForTemplateLoading(VariableDomainIO.class, "");
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setLocale(Locale.US);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 }

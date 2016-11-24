@@ -32,15 +32,23 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         });
     }
 
-    public void load(Path path, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
+    public void load(Path path, DataWriter<Persistable_> writer, DataReader<Persistable_> reader)
+            throws IllegalArgumentException {
         close();
         this.reader.setValue(reader);
         this.writer.setValue(writer);
         setPath(path);
         if (reader == null) {
-            throw new IllegalStateException("Cannot load object with null reader."); // TODO: Why doesn't "new" work?
+            throw new IllegalStateException("Cannot load object with null reader.");
         }
-        setObject(this.reader.get().parse(readToString()));
+        Persistable_ parsed;
+        try {
+            parsed = this.reader.get().parse(readToString());
+        } catch (IllegalArgumentException e) {
+            logger.warn("Failed to parse input file \"{}\": \"{}\".", path, e.getMessage(), e);
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
+        setObject(parsed);
     }
 
     public void newObject(Persistable_ object, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {

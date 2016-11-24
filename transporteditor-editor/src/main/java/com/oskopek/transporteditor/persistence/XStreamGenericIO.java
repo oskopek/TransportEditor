@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 
 public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T> {
@@ -20,7 +21,12 @@ public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T
 
     @Override
     public T parse(String contents) throws IllegalArgumentException {
-        return (T) xStream.fromXML(contents);
+        try {
+            return (T) xStream.fromXML(contents);
+        } catch (XStreamException e) {
+            throw new IllegalArgumentException(
+                    "Could not parse XML. " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
+        }
     }
 
 }
