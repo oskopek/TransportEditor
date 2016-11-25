@@ -1,12 +1,12 @@
 package com.oskopek.transporteditor.model.problem;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class FuelRoad extends DefaultRoad {
 
-    private final ObjectProperty<ActionCost> fuelCost = new SimpleObjectProperty<>();
+    private final ActionCost fuelCost;
 
     public FuelRoad(String name, ActionCost length) {
         this(name, length, length);
@@ -14,7 +14,7 @@ public class FuelRoad extends DefaultRoad {
 
     public FuelRoad(String name, ActionCost length, ActionCost fuelCost) {
         super(name, length);
-        this.fuelCost.setValue(fuelCost);
+        this.fuelCost = fuelCost;
     }
 
     public static FuelRoad build(Road road, ActionCost fuelCost) {
@@ -34,6 +34,29 @@ public class FuelRoad extends DefaultRoad {
     }
 
     public ActionCost getFuelCost() {
-        return fuelCost.get();
+        return fuelCost;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FuelRoad)) {
+            return false;
+        }
+        FuelRoad fuelRoad = (FuelRoad) o;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(getFuelCost(), fuelRoad.getFuelCost())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(getFuelCost())
+                .toHashCode();
     }
 }

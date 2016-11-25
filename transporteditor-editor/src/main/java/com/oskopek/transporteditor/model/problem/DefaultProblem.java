@@ -128,6 +128,6 @@ public class DefaultProblem implements Problem {
         DefaultProblem that = (DefaultProblem) o;
 
         return new EqualsBuilder().append(getName(), that.getName()).append(getRoadGraph(), that.getRoadGraph()).append(
-                vehicleMap, that.vehicleMap).append(packageMap, that.packageMap).isEquals();
+                getVehicleMap(), that.getVehicleMap()).append(getPackageMap(), that.getPackageMap()).isEquals();
     }
 }

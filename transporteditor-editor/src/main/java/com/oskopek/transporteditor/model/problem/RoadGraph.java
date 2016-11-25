@@ -1,6 +1,8 @@
 package com.oskopek.transporteditor.model.problem;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -12,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -27,7 +27,7 @@ public class RoadGraph extends MultiGraph implements Graph {
     public RoadGraph(RoadGraph graph) {
         this(graph.getId());
         graph.getAllLocations().forEach(this::addLocation);
-        graph.getAllRoads().forEach(e -> this.addRoad(e.getValue(), e.getKey().getNode0(), e.getKey().getNode1()));
+        graph.getAllRoads().forEach(e -> this.addRoad(e.getRoad(), e.getFrom(), e.getTo()));
     }
 
     public RoadGraph(String id) {
@@ -86,11 +86,11 @@ public class RoadGraph extends MultiGraph implements Graph {
         return stream.build();
     }
 
-    public Stream<Map.Entry<Edge, Road>> getAllRoads() {
-        Stream.Builder<Map.Entry<Edge, Road>> stream = Stream.builder();
+    public Stream<RoadEdge> getAllRoads() {
+        Stream.Builder<RoadEdge> stream = Stream.builder();
         for (Edge e : getEachEdge()) {
             Road road = getAttribute(e.getId());
-            stream.accept(new HashMap.SimpleImmutableEntry<>(e, road));
+            stream.accept(RoadEdge.of(road, getLocation(e.getNode0().getId()), getLocation(e.getNode1().getId())));
         }
         return stream.build();
     }
@@ -156,4 +156,84 @@ public class RoadGraph extends MultiGraph implements Graph {
         }
         return viewer;
     }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getAllLocations().toArray())
+                .append(getAllRoads().toArray())
+                .toHashCode();
+    }
+
+    public static final class RoadEdge {
+
+        private final Road road;
+        private final Location from;
+        private final Location to;
+
+        private RoadEdge(Road road, Location from, Location to) {
+            this.road = road;
+            this.from = from;
+            this.to = to;
+        }
+
+        public static RoadEdge of(Road road, Location from, Location to) {
+            return new RoadEdge(road, from, to);
+        }
+
+        public Road getRoad() {
+            return road;
+        }
+
+        public Location getFrom() {
+            return from;
+        }
+
+        public Location getTo() {
+            return to;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof RoadEdge)) {
+                return false;
+            }
+            RoadEdge roadEdge = (RoadEdge) o;
+            return new EqualsBuilder().append(getRoad(), roadEdge.getRoad()).append(getFrom(), roadEdge.getFrom())
+                    .append(getTo(), roadEdge.getTo()).isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37).append(getRoad()).append(getFrom())
+                    .append(getTo()).toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "RoadEdge{" + "road=" + road + ", from=" + from + ", to=" + to + '}';
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RoadGraph)) {
+            return false;
+        }
+        RoadGraph that = (RoadGraph) o;
+        return new EqualsBuilder()
+                .append(getAllLocations().toArray(), that.getAllLocations().toArray())
+                .append(getAllRoads().toArray(), that.getAllRoads().toArray())
+                .isEquals();
+    }
+
+
+
+
 }

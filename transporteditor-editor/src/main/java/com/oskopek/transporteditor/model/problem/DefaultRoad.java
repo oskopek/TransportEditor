@@ -1,6 +1,8 @@
 package com.oskopek.transporteditor.model.problem;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class DefaultRoad extends DefaultActionObject implements Road {
 
@@ -22,6 +24,32 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     @Override
     public ActionCost getLength() {
         return length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof DefaultRoad)) {
+            return false;
+        }
+
+        DefaultRoad that = (DefaultRoad) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(getLength(), that.getLength())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(getLength())
+                .toHashCode();
     }
 
     @Override
