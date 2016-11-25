@@ -94,8 +94,14 @@ public abstract class DefaultDomain implements Domain {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getPddlLabels()).append(getFunctionMap())
-                .append(getPredicateMap()).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .append(getName())
+                .append(getDriveBuilder())
+                .append(getDropBuilder())
+                .append(getPickUpBuilder())
+                .append(getRefuelBuilder())
+                .append(getPddlLabels())
+                .toHashCode();
     }
 
     @Override
@@ -107,8 +113,13 @@ public abstract class DefaultDomain implements Domain {
             return false;
         }
         DefaultDomain that = (DefaultDomain) o;
-        return new EqualsBuilder().append(getName(), that.getName()).append(getPddlLabels(), that.getPddlLabels())
-                .append(getFunctionMap(), that.getFunctionMap()).append(getPredicateMap(), that.getPredicateMap())
+        return new EqualsBuilder()
+                .append(getName(), that.getName())
+                .append(getDriveBuilder(), that.getDriveBuilder())
+                .append(getDropBuilder(), that.getDropBuilder())
+                .append(getPickUpBuilder(), that.getPickUpBuilder())
+                .append(getRefuelBuilder(), that.getRefuelBuilder())
+                .append(getPddlLabels(), that.getPddlLabels())
                 .isEquals();
     }
 

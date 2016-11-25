@@ -9,19 +9,14 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
-public class PickUpBuilder extends DefaultActionBuilder<PickUp, Vehicle, Package> {
-
-    private final ActionCost cost;
-    private final ActionCost duration;
+public class PickUpBuilder extends DefaultActionBuilderWithCost<PickUp, Vehicle, Package> {
 
     public PickUpBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost, ActionCost duration) {
-        super(preconditions, effects);
-        this.cost = cost;
-        this.duration = duration;
+        super(preconditions, effects, cost, duration);
     }
 
     @Override
     public <Who_ extends Vehicle, What_ extends Package> PickUp build(Who_ who, Location where, What_ what) {
-        return new PickUp(who, where, what, getPreconditions(), getEffects(), cost, duration);
+        return new PickUp(who, where, what, getPreconditions(), getEffects(), getCost(), getDuration());
     }
 }

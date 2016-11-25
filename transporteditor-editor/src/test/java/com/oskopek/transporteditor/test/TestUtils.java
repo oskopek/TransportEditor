@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.test;
 
-import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Various methods for easier testing. Util methods missing in JUnit, Mockito, etc.
@@ -72,12 +76,19 @@ public final class TestUtils {
         return false;
     }
 
+    public static String readAllConcatenatedLines(InputStream stream) {
+        return readAllLines(stream).stream().collect(Collectors.joining("\n")) + "\n";
+    }
+
     public static List<String> readAllLines(InputStream stream) {
         return readAllLines(stream, Charset.forName("UTF-8"));
     }
 
     public static List<String> readAllLines(InputStream stream, Charset charset) {
         List<String> lines = new ArrayList<>();
+        if (stream == null) {
+            return lines;
+        }
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset))) {
             String buffer;
             while ((buffer = reader.readLine()) != null) {

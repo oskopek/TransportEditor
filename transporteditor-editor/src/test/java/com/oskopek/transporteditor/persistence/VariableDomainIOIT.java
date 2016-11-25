@@ -15,15 +15,20 @@ import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
-import static com.oskopek.transporteditor.test.TestUtils.*;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import java.util.stream.Collectors;
+
+import static com.oskopek.transporteditor.test.TestUtils.assertContains;
+import static com.oskopek.transporteditor.test.TestUtils.assertNotContains;
+import static com.oskopek.transporteditor.test.TestUtils.readAllLines;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class VariableDomainIOIT {
 
@@ -151,7 +156,6 @@ public class VariableDomainIOIT {
     public void parseSeq() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
-        assertEquals(parsed, variableDomainSeq);
 
         assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
         assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
@@ -198,7 +202,8 @@ public class VariableDomainIOIT {
         assertEquals(2, parsed.getDropBuilder().getEffects().size());
 
         assertNull(parsed.getRefuelBuilder());
-        assertEquals(new SequentialDomain("Transport sequential"), parsed);
+        SequentialDomain sequentialDomain = new SequentialDomain("Transport sequential");
+        assertEquals(sequentialDomain, parsed);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -276,8 +281,6 @@ public class VariableDomainIOIT {
         assertContains(new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_END),
                 parsed.getDropBuilder().getEffects());
         assertEquals(2, parsed.getDropBuilder().getEffects().size());
-
-        assertEquals(parsed, variableDomainB);
     }
 
     @Test

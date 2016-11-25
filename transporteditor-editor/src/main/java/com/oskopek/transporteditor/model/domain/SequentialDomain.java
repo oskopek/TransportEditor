@@ -37,9 +37,9 @@ public class SequentialDomain extends DefaultDomain {
         super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad()),
                         Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
                 new DropBuilder(Arrays.asList(new WhoAtWhere(), new In()),
-                        Arrays.asList(new WhoAtWhere(), new Not(new In()), new WhatAtWhere()),
+                        Arrays.asList(new Not(new In()), new WhatAtWhere()),
                         ActionCost.valueOf(1), ActionCost.valueOf(1)),
-                new PickUpBuilder(Arrays.asList(new WhoAtWhere(), new WhatAtWhere(), new HasCapacity()),
+                new PickUpBuilder(Arrays.asList(new WhoAtWhere(), new WhatAtWhere()),
                         Arrays.asList(new Not(new WhatAtWhere()), new In()), ActionCost.valueOf(1),
                         ActionCost.valueOf(1)), null,
                 ImmutableSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity));

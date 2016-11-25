@@ -9,15 +9,10 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
-public class RefuelBuilder extends DefaultActionBuilder<Refuel, Vehicle, PlaceholderActionObject> {
-
-    private final ActionCost cost;
-    private final ActionCost duration;
+public class RefuelBuilder extends DefaultActionBuilderWithCost<Refuel, Vehicle, PlaceholderActionObject> {
 
     public RefuelBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost, ActionCost duration) {
-        super(preconditions, effects);
-        this.cost = cost;
-        this.duration = duration;
+        super(preconditions, effects, cost, duration);
     }
 
     @Override
@@ -27,6 +22,6 @@ public class RefuelBuilder extends DefaultActionBuilder<Refuel, Vehicle, Placeho
     }
 
     public <Who_ extends Vehicle> Refuel build(Who_ who, Location where) {
-        return new Refuel(who, where, getPreconditions(), getEffects(), cost, duration);
+        return new Refuel(who, where, getPreconditions(), getEffects(), getCost(), getDuration());
     }
 }
