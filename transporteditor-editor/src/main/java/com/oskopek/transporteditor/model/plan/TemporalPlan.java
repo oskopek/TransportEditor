@@ -8,13 +8,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class TemporalPlan implements Plan, Iterable<TemporalPlanAction> {
+public class TemporalPlan implements Plan {
 
     private final IntervalTree<TemporalPlanAction> actionIntervalTree = new IntervalTree<>();
 
@@ -41,21 +38,6 @@ public class TemporalPlan implements Plan, Iterable<TemporalPlanAction> {
     public Set<TemporalPlanAction> getTemporalPlanActions() {
         return actionIntervalTree.getIntervals(Integer.MIN_VALUE, Integer.MAX_VALUE).stream().map(Interval::getData)
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public Iterator<TemporalPlanAction> iterator() {
-        return getTemporalPlanActions().iterator();
-    }
-
-    @Override
-    public void forEach(Consumer<? super TemporalPlanAction> action) {
-        getTemporalPlanActions().forEach(action);
-    }
-
-    @Override
-    public Spliterator<TemporalPlanAction> spliterator() {
-        return getTemporalPlanActions().spliterator();
     }
 
     @Override

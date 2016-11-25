@@ -2,14 +2,15 @@ package com.oskopek.transporteditor.model.plan;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.problem.Problem;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-public final class SequentialPlan implements Iterable<Action>, Plan {
+public final class SequentialPlan implements Plan {
 
     private final LinkedList<Action> actionList;
 
@@ -39,25 +40,6 @@ public final class SequentialPlan implements Iterable<Action>, Plan {
             set.add(new TemporalPlanAction(action, begin, i));
         }
         return set;
-    }
-
-    @Override
-    public Iterator<Action> iterator() {
-        return actionList.iterator();
-    }
-
-    @Override
-    public void forEach(Consumer<? super Action> action) {
-        actionList.forEach(action);
-    }
-
-    @Override
-    public Spliterator<Action> spliterator() {
-        return actionList.spliterator();
-    }
-
-    public Problem apply(Problem instance, Action action) {
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

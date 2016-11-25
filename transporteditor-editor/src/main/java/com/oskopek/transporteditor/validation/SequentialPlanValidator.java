@@ -6,6 +6,8 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.model.state.PlanState;
+import com.oskopek.transporteditor.model.state.SequentialPlanState;
 
 import java.util.List;
 
@@ -19,19 +21,19 @@ public class SequentialPlanValidator implements Validator {
         if (!SequentialPlan.class.isInstance(plan)) {
             throw new IllegalArgumentException("Cannot validate non-sequential plan with sequential validator.");
         }
-        return isValid((DefaultProblem) problem, (SequentialPlan) plan);
+        return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
     }
 
-    public boolean isValid(DefaultProblem problem, SequentialPlan plan) {
+    public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
-        Problem instance = new DefaultProblem(problem);
+        PlanState state = new SequentialPlanState(domain, problem);
 
         for (Action action : actionList) {
-            if (!action.arePreconditionsValid(instance)) {
+            if (!action.arePreconditionsValid(state)) {
                 return false;
             }
-            instance = plan.apply(instance, action);
-            if (!action.areEffectsValid(instance)) {
+            state.apply(action);
+            if (!action.areEffectsValid(state)) {
                 return false;
             }
         }
