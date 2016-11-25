@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ResourceBundle;
 
 /**
@@ -12,6 +13,7 @@ import java.util.ResourceBundle;
 public abstract class AbstractController {
 
     @Inject
+    @Named("mainApp")
     protected TransportEditorApplication application;
 
     @Inject

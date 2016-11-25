@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
@@ -22,16 +24,15 @@ import java.io.InputStream;
  */
 class TransportEditorApplicationStarter {
 
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     @Inject
     @Named("fxmlloader")
     private Instance<FXMLLoader> fxmlLoader;
-
     @Inject
+    @Named("mainApp")
     private TransportEditorApplication application;
-
     @Inject
     private EventBus eventBus;
-
     @Inject
     private DeadEventListener deadEventListener;
 
@@ -58,6 +59,7 @@ class TransportEditorApplicationStarter {
             eventBus.post(new GraphUpdatedEvent());
         });
         eventBus.register(deadEventListener);
+        application.setEventBus(eventBus);
         application.setPrimaryStage(primaryStage);
     }
 }

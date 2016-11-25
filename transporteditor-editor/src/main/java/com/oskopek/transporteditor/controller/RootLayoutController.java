@@ -16,7 +16,10 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.*;
 import com.oskopek.transporteditor.validation.VALValidator;
-import com.oskopek.transporteditor.view.*;
+import com.oskopek.transporteditor.view.AlertCreator;
+import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
+import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
+import com.oskopek.transporteditor.view.VariableDomainCreator;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -40,7 +43,10 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -59,12 +65,6 @@ public class RootLayoutController extends AbstractController {
 
     @Inject
     private transient Logger logger;
-
-    @Inject
-    private transient ResourceBundle messages;
-
-    @Inject
-    private transient TransportEditorApplication application;
 
     @Inject
     private transient SaveDiscardDialogPaneCreator creator;
