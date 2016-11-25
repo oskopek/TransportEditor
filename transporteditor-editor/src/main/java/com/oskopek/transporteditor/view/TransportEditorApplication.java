@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.view;
 
 import com.google.common.eventbus.EventBus;
-import com.oskopek.transporteditor.event.DisposeSwingNodesEvent;
+import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.weld.StartupStage;
 import javafx.animation.FadeTransition;
@@ -90,8 +90,8 @@ public class TransportEditorApplication extends Application {
     @Override
     public void stop() {
         logger.debug("Stage is closing...");
-        eventBus.post(new DisposeSwingNodesEvent());
-        logger.debug("Dispose Swing nodes event sent.");
+        eventBus.post(new DisposeGraphViewerEvent());
+        logger.debug("Disposed graph viewer.");
         // TODO: Save file
     }
 

@@ -1,5 +1,5 @@
 package com.oskopek.transporteditor.event;
 
-public class DisposeSwingNodesEvent {
+public class DisposeGraphViewerEvent {
 
 }

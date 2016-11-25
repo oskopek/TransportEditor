@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.google.common.eventbus.Subscribe;
-import com.oskopek.transporteditor.event.DisposeSwingNodesEvent;
+import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
@@ -40,7 +40,9 @@ public class CenterPaneController extends AbstractController {
     private transient ProgressCreator progressCreator;
 
     @FXML
-    private SwingNode problemGraph;
+    private transient SwingNode problemGraph;
+
+    private transient Viewer viewer;
 
     @FXML
     private void initialize() {
@@ -48,8 +50,12 @@ public class CenterPaneController extends AbstractController {
     }
 
     @Subscribe
-    public void disposeSwingNodes(DisposeSwingNodesEvent event) {
-        logger.debug("Disposing Swing nodes in CenterPane.");
+    public void disposeGraphViewer(DisposeGraphViewerEvent event) {
+        logger.debug("Disposing Graph viewer in CenterPane.");
+        if (viewer != null) {
+            viewer.close();
+            viewer = null;
+        }
         problemGraph.getContent().removeAll();
         problemGraph.setContent(null);
     }
@@ -69,9 +75,10 @@ public class CenterPaneController extends AbstractController {
         if (graph == null) {
             return;
         }
+
+        disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
-        Viewer viewer = graph.display();
-        viewer.enableAutoLayout();
+        viewer = graph.display(true);
         ViewerPipe mousePipe = viewer.newViewerPipe();
         mousePipe.addViewerListener(new MouseCatcher(graph, viewer.getGraphicGraph()));
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
