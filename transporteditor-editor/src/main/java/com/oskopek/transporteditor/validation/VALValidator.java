@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A thin wrapper around the <a href="https://github.com/KCL-Planning/VAL">VAL validator</a> for any Transport domain
  * variant representable in PDDL.
- *
+ * <p>
  * First exports the domain to a PDDL file, then runs VAL on that and the exported plan.
  */
 public class VALValidator implements Validator {

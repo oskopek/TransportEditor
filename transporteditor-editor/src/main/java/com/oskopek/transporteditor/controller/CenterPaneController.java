@@ -60,7 +60,6 @@ public class CenterPaneController extends AbstractController {
         problemGraph.setContent(null);
     }
 
-
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
         Platform.runLater(() -> problemGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));

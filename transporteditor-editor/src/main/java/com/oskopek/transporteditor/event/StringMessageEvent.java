@@ -43,6 +43,11 @@ public abstract class StringMessageEvent {
     public abstract String message();
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getMessage()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -52,11 +57,6 @@ public abstract class StringMessageEvent {
         }
         StringMessageEvent that = (StringMessageEvent) o;
         return new EqualsBuilder().append(getMessage(), that.getMessage()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getMessage()).toHashCode();
     }
 
     @Override

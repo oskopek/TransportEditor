@@ -18,6 +18,11 @@ public class DefaultActionObject implements ActionObject {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -27,11 +32,6 @@ public class DefaultActionObject implements ActionObject {
         }
         DefaultActionObject that = (DefaultActionObject) o;
         return new EqualsBuilder().append(getName(), that.getName()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).toHashCode();
     }
 
     @Override

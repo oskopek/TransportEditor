@@ -60,41 +60,6 @@ public class ExternalPlanner implements Planner {
         startPlanning((VariableDomain) domain, io, (DefaultProblem) problem, problemIO); // TODO: Fix me properly
     }
 
-    private void startPlanning(VariableDomain domain, VariableDomainIO io, DefaultProblem problem,
-            DefaultProblemIO problemIO) {
-        String serializedDomain = io.serialize(domain);
-        String serializedProblem = problemIO.serialize(problem);
-
-        try {
-            domainTmp = File.createTempFile("domain-", ".pddl");
-            problemTmp = File.createTempFile("problem-", ".pddl");
-
-            try (BufferedWriter writer = Files.newWriter(domainTmp, Charset.forName("UTF-8"))) {
-                writer.write(serializedDomain);
-            }
-            try (BufferedWriter writer = Files.newWriter(problemTmp, Charset.forName("UTF-8"))) {
-                writer.write(serializedProblem);
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("An error occurred during creating and writing temp files.", e);
-        }
-
-        if (domainTmp == null || problemTmp == null) {
-            throw new IllegalStateException("Failed to persist domain and problem, cannot plan.");
-        }
-
-        String filledIn = MessageFormat.format(executableString, domainTmp.getAbsolutePath(),
-                problemTmp.getAbsolutePath());
-
-        ProcessBuilder builder = new ProcessBuilder(filledIn);
-        builder.redirectErrorStream(true);
-        try {
-            plannerProcess = builder.start();
-        } catch (IOException e) {
-            throw new IllegalStateException("An error occurred during creating the model process.", e);
-        }
-    }
-
     @Override
     public void stopPlanning() {
         int retVal;
@@ -146,6 +111,46 @@ public class ExternalPlanner implements Planner {
         this.plannerProcess = null;
     }
 
+    @Override
+    public Plan getBestPlan() {
+        return bestPlan;
+    }
+
+    private void startPlanning(VariableDomain domain, VariableDomainIO io, DefaultProblem problem,
+            DefaultProblemIO problemIO) {
+        String serializedDomain = io.serialize(domain);
+        String serializedProblem = problemIO.serialize(problem);
+
+        try {
+            domainTmp = File.createTempFile("domain-", ".pddl");
+            problemTmp = File.createTempFile("problem-", ".pddl");
+
+            try (BufferedWriter writer = Files.newWriter(domainTmp, Charset.forName("UTF-8"))) {
+                writer.write(serializedDomain);
+            }
+            try (BufferedWriter writer = Files.newWriter(problemTmp, Charset.forName("UTF-8"))) {
+                writer.write(serializedProblem);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("An error occurred during creating and writing temp files.", e);
+        }
+
+        if (domainTmp == null || problemTmp == null) {
+            throw new IllegalStateException("Failed to persist domain and problem, cannot plan.");
+        }
+
+        String filledIn = MessageFormat.format(executableString, domainTmp.getAbsolutePath(),
+                problemTmp.getAbsolutePath());
+
+        ProcessBuilder builder = new ProcessBuilder(filledIn);
+        builder.redirectErrorStream(true);
+        try {
+            plannerProcess = builder.start();
+        } catch (IOException e) {
+            throw new IllegalStateException("An error occurred during creating the model process.", e);
+        }
+    }
+
     private TemporalPlan tryParseTemporalPlan(String planContents) {
         return new TemporalPlanIO(domain, problem).parse(planContents);
     }
@@ -163,8 +168,9 @@ public class ExternalPlanner implements Planner {
     }
 
     @Override
-    public Plan getBestPlan() {
-        return bestPlan;
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(executableString).append(domain).append(problem).append(getBestPlan())
+                .toHashCode();
     }
 
     @Override
@@ -178,12 +184,6 @@ public class ExternalPlanner implements Planner {
         ExternalPlanner that = (ExternalPlanner) o;
         return new EqualsBuilder().append(executableString, that.executableString).append(domain, that.domain).append(
                 problem, that.problem).append(getBestPlan(), that.getBestPlan()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(executableString).append(domain).append(problem).append(getBestPlan())
-                .toHashCode();
     }
 
     @Override

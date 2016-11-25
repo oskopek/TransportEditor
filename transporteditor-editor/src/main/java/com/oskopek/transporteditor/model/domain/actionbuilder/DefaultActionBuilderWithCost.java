@@ -33,6 +33,15 @@ public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Whe
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(getCost())
+                .append(getDuration())
+                .toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -46,14 +55,5 @@ public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Whe
                 .append(getCost(), that.getCost())
                 .append(getDuration(), that.getDuration())
                 .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .appendSuper(super.hashCode())
-                .append(getCost())
-                .append(getDuration())
-                .toHashCode();
     }
 }

@@ -108,6 +108,12 @@ public class DefaultPlanningSession implements PlanningSession {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getPlanner()).append(getValidator()).append(getDomain()).append(
+                getProblem()).append(getPlan()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -122,11 +128,5 @@ public class DefaultPlanningSession implements PlanningSession {
         return new EqualsBuilder().append(getPlanner(), session.getPlanner()).append(getValidator(),
                 session.getValidator()).append(getDomain(), session.getDomain()).append(getProblem(),
                 session.getProblem()).append(getPlan(), session.getPlan()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getPlanner()).append(getValidator()).append(getDomain()).append(
-                getProblem()).append(getPlan()).toHashCode();
     }
 }

@@ -39,6 +39,12 @@ public class Location implements Locatable {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getName()).append(getxCoordinate()).append(getyCoordinate())
+                .toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -52,12 +58,6 @@ public class Location implements Locatable {
 
         return new EqualsBuilder().append(getName(), location.getName()).append(getxCoordinate(),
                 location.getxCoordinate()).append(getyCoordinate(), location.getyCoordinate()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getxCoordinate()).append(getyCoordinate())
-                .toHashCode();
     }
 
     @Override

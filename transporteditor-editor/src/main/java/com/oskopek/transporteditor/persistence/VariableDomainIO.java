@@ -448,6 +448,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     }
 
     private static final class PartialBuilder {
+
         final List<Predicate> preconditions;
         final List<Predicate> effects;
         final ActionCost cost;

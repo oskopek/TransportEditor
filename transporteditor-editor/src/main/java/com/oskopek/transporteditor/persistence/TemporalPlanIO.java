@@ -91,5 +91,4 @@ public class TemporalPlanIO implements DataReader<Plan>, DataWriter<Plan> {
         return new TemporalPlan(actions);
     }
 
-
 }

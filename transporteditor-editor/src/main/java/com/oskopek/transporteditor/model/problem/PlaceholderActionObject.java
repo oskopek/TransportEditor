@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.model.problem;
 
-
 public class PlaceholderActionObject implements ActionObject {
 
     @Override

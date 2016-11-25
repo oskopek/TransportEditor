@@ -105,7 +105,6 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.valueOf(10), parsed.getRefuelBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(10), parsed.getRefuelBuilder().build(null, null, null).getCost());
 
-
         // drive
         assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
                 parsed.getDriveBuilder().getPreconditions());

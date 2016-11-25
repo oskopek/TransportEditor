@@ -71,6 +71,39 @@ public class GanttChart extends XYChart<Number, String> {
     }
 
     @Override
+    protected void updateAxisRange() {
+        final Axis<Number> xAxis = getXAxis();
+        final Axis<String> yAxis = getYAxis();
+        List<Number> xData = null;
+        if (xAxis.isAutoRanging()) {
+            xData = new ArrayList<>();
+        }
+        List<String> yData = null;
+        if (yAxis.isAutoRanging()) {
+            yData = new ArrayList<>();
+        }
+
+        for (Series<Number, String> series : getData()) {
+            for (Data<Number, String> data : series.getData()) {
+                if (xData != null) {
+                    xData.add(data.getXValue());
+                    xData.add(xAxis.toRealValue(((ExtraValue) data.getExtraValue()).getTo().doubleValue()));
+                }
+                if (yData != null) {
+                    yData.add(data.getYValue());
+                }
+            }
+        }
+
+        if (xData != null) {
+            xAxis.invalidateRange(xData);
+        }
+        if (yData != null) {
+            yAxis.invalidateRange(yData);
+        }
+    }
+
+    @Override
     protected void layoutPlotChildren() {
         for (Series<Number, String> series : getData()) {
             Iterator<Data<Number, String>> iterator = getDisplayedDataIterator(series);
@@ -119,39 +152,6 @@ public class GanttChart extends XYChart<Number, String> {
         }
     }
 
-    @Override
-    protected void updateAxisRange() {
-        final Axis<Number> xAxis = getXAxis();
-        final Axis<String> yAxis = getYAxis();
-        List<Number> xData = null;
-        if (xAxis.isAutoRanging()) {
-            xData = new ArrayList<>();
-        }
-        List<String> yData = null;
-        if (yAxis.isAutoRanging()) {
-            yData = new ArrayList<>();
-        }
-
-        for (Series<Number, String> series : getData()) {
-            for (Data<Number, String> data : series.getData()) {
-                if (xData != null) {
-                    xData.add(data.getXValue());
-                    xData.add(xAxis.toRealValue(((ExtraValue) data.getExtraValue()).getTo().doubleValue()));
-                }
-                if (yData != null) {
-                    yData.add(data.getYValue());
-                }
-            }
-        }
-
-        if (xData != null) {
-            xAxis.invalidateRange(xData);
-        }
-        if (yData != null) {
-            yAxis.invalidateRange(yData);
-        }
-    }
-
     private Node createBlock(final Data<Number, String> item) {
         if (item.getNode() == null) {
             Pane block = new StackPane();
@@ -164,6 +164,7 @@ public class GanttChart extends XYChart<Number, String> {
     }
 
     protected static class ExtraValue {
+
         private final Color color;
         private final Number from;
         private final Number to;
@@ -187,6 +188,11 @@ public class GanttChart extends XYChart<Number, String> {
         }
 
         @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37).append(getColor()).append(getFrom()).append(getTo()).toHashCode();
+        }
+
+        @Override
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -200,11 +206,6 @@ public class GanttChart extends XYChart<Number, String> {
 
             return new EqualsBuilder().append(getColor(), that.getColor()).append(getFrom(), that.getFrom()).append(
                     getTo(), that.getTo()).isEquals();
-        }
-
-        @Override
-        public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getColor()).append(getFrom()).append(getTo()).toHashCode();
         }
 
         @Override

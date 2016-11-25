@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class StringMessageEventTest {
+
     @Before
     public void setUp() throws Exception {
 

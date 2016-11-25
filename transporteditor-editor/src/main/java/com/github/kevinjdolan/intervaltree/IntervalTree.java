@@ -149,11 +149,6 @@ public class IntervalTree<Type> {
         return intervalList.size();
     }
 
-    @Override
-    public String toString() {
-        return nodeString(head, 0);
-    }
-
     private String nodeString(IntervalNode<Type> node, int level) {
         if (node == null) {
             return "";
@@ -167,6 +162,11 @@ public class IntervalTree<Type> {
         sb.append(nodeString(node.getLeft(), level + 1));
         sb.append(nodeString(node.getRight(), level + 1));
         return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(intervalList).toHashCode();
     }
 
     @Override
@@ -185,7 +185,7 @@ public class IntervalTree<Type> {
     }
 
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(intervalList).toHashCode();
+    public String toString() {
+        return nodeString(head, 0);
     }
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class TestUtilsTest {
+
     @Test
     public void isThrown() throws Exception {
         Runnable throwISE = () -> {
