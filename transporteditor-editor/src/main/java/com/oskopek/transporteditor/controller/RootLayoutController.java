@@ -184,6 +184,25 @@ public class RootLayoutController extends AbstractController {
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
         planningSessionFileHandler.loadWithDefaultFileChooser(messages.getString("load.planningSession"), io, io);
+
+        PlanningSession session = application.getPlanningSession();
+        if (session != null) {
+            Domain domain = session.getDomain();
+            if (domain != null) {
+                domainFileHandler.setObject((VariableDomain) domain); // TODO: casting hack
+                session.domainProperty().bind(domainFileHandler.objectProperty());
+                Problem problem = session.getProblem();
+                if (problem != null) {
+                    problemFileHandler.setObject((DefaultProblem) problem); // TODO: casting hack
+                    session.problemProperty().bind(problemFileHandler.objectProperty());
+                    Plan plan = session.getPlan();
+                    if (plan != null) {
+                        planFileHandler.setObject(plan);
+                        session.planProperty().bind(planFileHandler.objectProperty());
+                    }
+                }
+            }
+        }
         eventBus.post(new GraphUpdatedEvent());
     }
 
