@@ -1,16 +1,18 @@
 package com.oskopek.transporteditor.model.domain.action;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public final class ActionCost {
 
-    private final IntegerProperty cost = new SimpleIntegerProperty();
+    private final Integer cost;
 
     private ActionCost(Integer cost) {
-        this.cost.setValue(cost);
+        if (cost == null) {
+            this.cost = 0;
+        } else {
+            this.cost = cost;
+        }
     }
 
     public static ActionCost valueOf(Integer cost) {
@@ -30,14 +32,6 @@ public final class ActionCost {
     }
 
     public Integer getCost() {
-        return cost.get();
-    }
-
-    public void setCost(Integer cost) {
-        this.cost.setValue(cost);
-    }
-
-    public IntegerProperty costProperty() {
         return cost;
     }
 
@@ -60,6 +54,6 @@ public final class ActionCost {
 
     @Override
     public String toString() {
-        return cost.getValue().toString();
+        return Integer.toString(cost);
     }
 }
