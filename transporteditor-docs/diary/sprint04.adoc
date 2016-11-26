@@ -4,3 +4,15 @@
 
 Sprint 04 begins.
 
+== 2016/11/24
+
+Fixed UI issues: splitpane added + save dialog now displays only when really needed.
+
+== 2016/11/25
+
+Fixed program exiting, now disposes graph viewers properly.
+Fixed session load/save and a corresponding parser bug.
+
+== 2016/11/26
+
+Started working on the domain variant creator dialog.
