@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonType?>
-<?import javafx.scene.control.DialogPane?>
-<DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="dialogPane" prefWidth="500.0" xmlns="http://javafx.com/javafx/8"
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="dialogPane" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/8.0.112-ea"
             fx:controller="com.oskopek.transporteditor.controller.VariableDomainController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
     <content>
+        <GridPane>
+            <children>
+                <RadioButton mnemonicParsing="false" text="%vdcreator.sequential"/>
+                <RadioButton mnemonicParsing="false" text="%vdcreator.temporal" GridPane.columnIndex="1"/>
+                <CheckBox mnemonicParsing="false" text="%vdcreator.capacity" GridPane.rowIndex="2"/>
+                <CheckBox mnemonicParsing="false" text="%vdcreator.fuel" GridPane.columnIndex="1"
+                          GridPane.rowIndex="2"/>
+                <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4"/>
+                <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
+                <CheckBox mnemonicParsing="false" text="%vdcreator.numeric" GridPane.rowIndex="3"/>
+                <Label text="%vdcreator.goal" GridPane.rowIndex="5"/>
+                <Label text="%vdcreator.metric" GridPane.rowIndex="6"/>
+                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints/>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="10.0" prefHeight="100.0"/>
+                <RowConstraints minHeight="10.0" prefHeight="100.0"/>
+            </rowConstraints>
+        </GridPane>
     </content>
+    <header>
+        <Label text="%vdcreator.selectall"/>
+    </header>
     <buttonTypes>
-        <ButtonType fx:constant="APPLY"/>
+        <ButtonType fx:constant="OK"/>
         <ButtonType fx:constant="CANCEL"/>
     </buttonTypes>
 </DialogPane>

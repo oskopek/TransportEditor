@@ -19,7 +19,7 @@ public class DefaultProblemIOIT {
     private static String tempProblemFileContents;
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() throws Exception { // TODO: Netbenefit parse/ser test
         variableDomainTemp = new VariableDomainIO().parse(TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainTemp.pddl")).stream()
                 .collect(Collectors.joining("\n")));
