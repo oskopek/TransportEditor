@@ -20,9 +20,9 @@
                                      GridPane.rowIndex="1"/>
                         <RadioButton fx:id="temporalRadio" mnemonicParsing="false" text="%vdcreator.temporal"
                                      GridPane.rowIndex="2"/>
-                        <Label fx:id="sequentialLabel" text="Explanation" GridPane.columnIndex="1"
+                        <Label fx:id="sequentialLabel" text="%vdcreator.label.sequential" GridPane.columnIndex="1"
                                GridPane.rowIndex="1"/>
-                        <Label fx:id="temporalLabel" text="Explanation" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label fx:id="temporalLabel" text="%vdcreator.label.temporal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                     </children>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
@@ -44,9 +44,9 @@
                           GridPane.rowIndex="0"/>
                 <CheckBox fx:id="fuelCheck" mnemonicParsing="false" text="%vdcreator.fuel" GridPane.rowIndex="1"/>
                 <CheckBox fx:id="numericCheck" mnemonicParsing="false" text="%vdcreator.numeric" GridPane.rowIndex="2"/>
-                <Label fx:id="capacityLabel" text="Explanation" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                <Label fx:id="fuelLabel" text="Explanation" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <Label fx:id="numericLabel" text="Explanation" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label fx:id="capacityLabel" text="%vdcreator.label.capacity" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label fx:id="fuelLabel" text="%vdcreator.label.fuel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label fx:id="numericLabel" text="%vdcreator.label.numeric" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             </children>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
