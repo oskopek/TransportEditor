@@ -3,6 +3,12 @@ package com.oskopek.transporteditor.controller;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomainBuilder;
+import com.oskopek.transporteditor.view.ValidationProperty;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -44,18 +50,37 @@ public class VariableDomainController extends AbstractController {
     @FXML
     private Label numericLabel;
     @FXML
-    private ButtonBar buttonBar;
+    private Button applyButton;
+    @FXML
+    private Button cancelButton;
+
     private ButtonBar.ButtonData result;
+
+    // TODO: add to messages
+    private final BooleanProperty sequentialRadioValid = new ValidationProperty("Exactly one of sequential/temporal domain bases must be selected.", sequentialRadio);
+    private final BooleanProperty temporalRadioValid = new ValidationProperty("Exactly one of sequential/temporal domain bases must be selected.", temporalRadio);
+    private final BooleanProperty radioButtonsValid = new SimpleBooleanProperty();
+
+    private final BooleanProperty fuelCheckValid = new ValidationProperty("Fuel cannot be selected with sequential domain.", fuelCheck);
+    private final BooleanProperty capacityCheckValid = new ValidationProperty("Capacity cannot be selected.", capacityCheck);
+    private final BooleanProperty numericCheckValid = new ValidationProperty("Numeric cannot be selected with sequential domain.", numericCheck);
+
+    // TODO: finish with composition
+    private final BooleanProperty goalAreaValid = new ValidationProperty("Metric cannot be  with sequential domain.", numericCheck);
+    private final BooleanProperty metricAreaValid = new ValidationProperty("Numeric cannot be selected with sequential domain.", numericCheck);
 
     @FXML
     private void initialize() {
-        Button applyButton = new Button(messages.getString("vdcreator.apply"));
-        applyButton.setDefaultButton(true);
-        Button cancelButton = new Button(messages.getString("vdcreator.cancel"));
-        applyButton.setCancelButton(true);
+        sequentialRadioValid.bind(radioButtonsValid);
+        temporalRadioValid.bind(radioButtonsValid);
+        temporalRadioValid.bind(group.selectedToggleProperty().isNotNull());
+
+        fuelCheckValid.bind(sequentialRadioValid.not());
+        capacityCheckValid.set(true);
+        numericCheckValid.bind(sequentialRadioValid.not());
+        
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
-        buttonBar.getButtons().addAll(applyButton, cancelButton);
 
         domainBuilder.nameProperty().bind(nameField.textProperty());
 
@@ -88,6 +113,24 @@ public class VariableDomainController extends AbstractController {
 
     public TextField getNameField() {
         return nameField;
+    }
+
+    @FXML
+    private void handleApplyButton() {
+        if (validate()) {
+            result = ButtonBar.ButtonData.APPLY;
+            dialog.close();
+        }
+    }
+
+    @FXML
+    private void handleCancelButton() {
+        result = ButtonBar.ButtonData.CANCEL_CLOSE;
+        dialog.close();
+    }
+
+    private boolean validate() {
+        return false;
     }
 
     /**

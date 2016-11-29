@@ -110,6 +110,10 @@
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </BorderPane.margin>
+            <buttons>
+                <Button fx:id="applyButton" onAction="#handleApplyButton" text="%vdcreator.apply" defaultButton="true"/>
+                <Button fx:id="cancelButton" onAction="#handleCancelButton" text="%vdcreator.apply" cancelButton="true"/>
+            </buttons>
         </ButtonBar>
     </bottom>
 </BorderPane>
