@@ -2,6 +2,8 @@ package com.oskopek.transporteditor.model.domain.builder;
 
 import com.oskopek.transporteditor.model.domain.action.functions.*;
 import com.oskopek.transporteditor.model.domain.action.predicates.*;
+import javaslang.Tuple;
+import javaslang.Tuple2;
 import scala.collection.mutable.*;
 
 import java.util.*;
@@ -43,43 +45,8 @@ public class DomainConstants {
         }
 
         @Override
-        public List<Predicate> drivePreconditions() {
-            return Arrays.asList();
-        }
-
-        @Override
-        public List<Predicate> driveEffects() {
-            return Arrays.asList();
-        }
-
-        @Override
-        public List<Predicate> pickUpPreconditions() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public List<Predicate> pickUpEffects() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public List<Predicate> dropPreconditions() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public List<Predicate> dropEffects() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public List<Predicate> refuelPreconditions() {
-            return Arrays.asList();
-        }
-
-        @Override
-        public List<Predicate> refuelEffects() {
-            return Arrays.asList();
+        public Map<String, Tuple2<List<Predicate>, List<Predicate>>> actionPredicatesEffectsMap() {
+            Map<String, Class<? extends Function>> functionMap = new HashMap<>(4);
         }
     }
 
@@ -147,35 +114,14 @@ public class DomainConstants {
     private static final class VariableDomainPredicates implements DomainPredicates {
         private final Map<String, Class<? extends Function>> functionMap;
         private final Map<String, Class<? extends Predicate>> predicateMap;
-        private final List<Predicate> drivePreconditions;
-        private final List<Predicate> driveEffects;
-        private final List<Predicate> pickUpPreconditions;
-        private final List<Predicate> pickUpEffects;
-        private final List<Predicate> dropPreconditions;
-        private final List<Predicate> dropEffects;
-        private final List<Predicate> refuelPreconditions;
-        private final List<Predicate> refuelEffects;
+        private final Map<String, Tuple2<List<Predicate>, List<Predicate>>> actionPredicateEffects;
 
         public VariableDomainPredicates(Map<String, Class<? extends Function>> functionMap,
                 Map<String, Class<? extends Predicate>> predicateMap,
-                List<Predicate> drivePreconditions,
-                List<Predicate> driveEffects,
-                List<Predicate> pickUpPreconditions,
-                List<Predicate> pickUpEffects,
-                List<Predicate> dropPreconditions,
-                List<Predicate> dropEffects,
-                List<Predicate> refuelPreconditions,
-                List<Predicate> refuelEffects) {
+                Map<String, Tuple2<List<Predicate>, List<Predicate>>> actionPredicateEffects) {
             this.functionMap = functionMap;
             this.predicateMap = predicateMap;
-            this.drivePreconditions = drivePreconditions;
-            this.driveEffects = driveEffects;
-            this.pickUpPreconditions = pickUpPreconditions;
-            this.pickUpEffects = pickUpEffects;
-            this.dropPreconditions = dropPreconditions;
-            this.dropEffects = dropEffects;
-            this.refuelPreconditions = refuelPreconditions;
-            this.refuelEffects = refuelEffects;
+            this.actionPredicateEffects = actionPredicateEffects;
         }
 
         @Override
@@ -190,17 +136,17 @@ public class DomainConstants {
 
         @Override
         public List<Predicate> drivePreconditions() {
-            return drivePreconditions;
+            return actionPredicateEffects.get("drive")._1;
         }
 
         @Override
         public List<Predicate> driveEffects() {
-            return driveEffects;
+            return actionPredicateEffects.get("drive")._2;
         }
 
         @Override
         public List<Predicate> pickUpPreconditions() {
-            return pickUpPreconditions;
+            return actionPredicateEffects.get("pick-up")._1;
         }
 
         @Override
