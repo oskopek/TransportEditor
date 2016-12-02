@@ -25,16 +25,14 @@
                         <Font size="18.0"/>
                     </font>
                 </Button>
-            </center>
-            <right>
-                <Button fx:id="cancelPlanButton" alignment="CENTER_RIGHT" disable="true" maxWidth="40.0" minWidth="40.0"
-                        onAction="#handleCancelPlan" prefWidth="40.0" style="-fx-text-fill: red" text="%crossmark"
-                        BorderPane.alignment="CENTER_RIGHT">
+                <Button fx:id="validateButton" disable="true" onAction="#handleValidate" prefWidth="Infinity"
+                        text="%validate"
+                        BorderPane.alignment="CENTER">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Button>
-            </right>
+            </center>
         </BorderPane>
     </top>
 </BorderPane>

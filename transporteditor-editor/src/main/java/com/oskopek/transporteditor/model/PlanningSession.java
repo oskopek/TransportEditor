@@ -7,6 +7,8 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.validation.Validator;
 import javafx.beans.property.ObjectProperty;
 
+import java.util.concurrent.CompletionStage;
+
 /**
  * Represents an orchestrator of the current planning session.
  * <p>
@@ -50,8 +52,8 @@ public interface PlanningSession {
 
     ObjectProperty<Validator> validatorProperty();
 
-    void startPlanning();
+    CompletionStage<Plan> startPlanningAsync();
 
-    void stopPlanning();
+    CompletionStage<Boolean> startValidationAsync();
 
 }

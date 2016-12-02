@@ -222,13 +222,16 @@ public class RootLayoutController extends AbstractController {
         if (session == null) {
             throw new IllegalStateException("Cannot set planner on null session.");
         }
+        String executable = "";
+        String parameters = "";
+
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
                 messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString())
                 .toAbsolutePath();
         if (!Files.isExecutable(path)) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
         } else {
-            session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
+            session.setPlanner(new ExternalPlanner(executable, parameters));
         }
     }
 
@@ -238,13 +241,16 @@ public class RootLayoutController extends AbstractController {
         if (session == null) {
             throw new IllegalStateException("Cannot set validator on null session.");
         }
+        String executable = "";
+        String parameters = "";
+
         Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
                 messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString())
                 .toAbsolutePath();
         if (!Files.isExecutable(path)) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
         } else {
-            session.setValidator(new VALValidator(path + " {0} {1}"));
+            session.setValidator(new VALValidator(executable, parameters));
         }
     }
 

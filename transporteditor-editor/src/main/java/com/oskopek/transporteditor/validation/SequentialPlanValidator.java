@@ -8,13 +8,17 @@ import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.state.PlanState;
 import com.oskopek.transporteditor.model.state.SequentialPlanState;
+import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Validates based on the DOM we built when parsing.
  */
-public class SequentialPlanValidator implements Validator {
+public class SequentialPlanValidator extends AbstractLogStreamable implements Validator {
 
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan) {
@@ -24,19 +28,31 @@ public class SequentialPlanValidator implements Validator {
         return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
     }
 
+    @Override
+    public CompletionStage<Boolean> isValidAsync(Domain domain, Problem problem, Plan plan) {
+        return CompletableFuture.supplyAsync(() -> isValid(domain, problem, plan));
+    }
+
     public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
         PlanState state = new SequentialPlanState(domain, problem);
-
+        log("Starting validation. Actions: " + actionList.size());
         for (Action action : actionList) {
+            log("Validating: " + action);
             if (!action.arePreconditionsValid(state)) {
+                log("Preconditions of \"" + action + "\"are invalid.");
                 return false;
             }
             state.apply(action);
             if (!action.areEffectsValid(state)) {
+                log("Effects of \"" + action + "\"are invalid.");
                 return false;
             }
         }
         return true;
+    }
+
+    protected void log(String message) {
+        super.log(new Date().toString() + ": " + message + "\n");
     }
 }

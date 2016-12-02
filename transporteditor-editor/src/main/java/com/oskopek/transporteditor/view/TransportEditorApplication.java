@@ -32,6 +32,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -131,7 +132,7 @@ public class TransportEditorApplication extends Application {
         initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
         initStage.initStyle(StageStyle.TRANSPARENT);
         initStage.show();
-        new Thread(mainStageTask).start();
+        CompletableFuture.runAsync(mainStageTask);
     }
 
     public void setEventBus(EventBus eventBus) {

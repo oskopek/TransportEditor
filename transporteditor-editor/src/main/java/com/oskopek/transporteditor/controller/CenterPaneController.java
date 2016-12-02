@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Singleton
@@ -132,8 +133,7 @@ public class CenterPaneController extends AbstractController {
                 progressDialog.close();
                 Platform.runLater(viewer::disableAutoLayout);
             });
-
-            new Thread(springLayoutEarlyTermination).start();
+            CompletableFuture.runAsync(springLayoutEarlyTermination);
         });
     }
 
