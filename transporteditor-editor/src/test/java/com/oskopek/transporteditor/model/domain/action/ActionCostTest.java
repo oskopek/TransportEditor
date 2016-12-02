@@ -2,8 +2,7 @@ package com.oskopek.transporteditor.model.domain.action;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public class ActionCostTest {
 

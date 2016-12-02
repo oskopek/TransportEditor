@@ -4,8 +4,9 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Road;
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class RoadLengthTest {
 

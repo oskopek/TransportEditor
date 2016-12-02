@@ -1,13 +1,14 @@
 package com.oskopek.transporteditor.weld;
 
 import org.junit.After;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static org.junit.Assert.*;
 
 public class MessagesProducerTest {
 

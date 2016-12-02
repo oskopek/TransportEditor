@@ -18,6 +18,11 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getLocation()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -27,10 +32,5 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
         }
         DefaultLocatable that = (DefaultLocatable) o;
         return new EqualsBuilder().append(getLocation(), that.getLocation()).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getLocation()).toHashCode();
     }
 }

@@ -4,11 +4,8 @@ import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomainBuilder;
 import com.oskopek.transporteditor.view.ValidationProperty;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -20,6 +17,7 @@ public class VariableDomainController extends AbstractController {
 
     private final VariableDomainBuilder domainBuilder = new VariableDomainBuilder();
     private final ToggleGroup group = new ToggleGroup();
+    private final BooleanProperty radioButtonsValid = new SimpleBooleanProperty();
     private Stage dialog;
     @FXML
     private Label headerText;
@@ -27,14 +25,30 @@ public class VariableDomainController extends AbstractController {
     private TextField nameField;
     @FXML
     private RadioButton sequentialRadio;
+    // TODO: add to messages
+    private final BooleanProperty sequentialRadioValid = new ValidationProperty(
+            "Exactly one of sequential/temporal domain bases must be selected.", sequentialRadio);
     @FXML
     private RadioButton temporalRadio;
+    private final BooleanProperty temporalRadioValid = new ValidationProperty(
+            "Exactly one of sequential/temporal domain bases must be selected.", temporalRadio);
     @FXML
     private CheckBox fuelCheck;
+    private final BooleanProperty fuelCheckValid = new ValidationProperty(
+            "Fuel cannot be selected with sequential domain.", fuelCheck);
     @FXML
     private CheckBox numericCheck;
+    private final BooleanProperty numericCheckValid = new ValidationProperty(
+            "Numeric cannot be selected with sequential domain.", numericCheck);
+    // TODO: finish with composition
+    private final BooleanProperty goalAreaValid = new ValidationProperty("Metric cannot be  with sequential domain.",
+            numericCheck);
+    private final BooleanProperty metricAreaValid = new ValidationProperty(
+            "Numeric cannot be selected with sequential domain.", numericCheck);
     @FXML
     private CheckBox capacityCheck;
+    private final BooleanProperty capacityCheckValid = new ValidationProperty("Capacity cannot be selected.",
+            capacityCheck);
     @FXML
     private TextArea goalArea;
     @FXML
@@ -53,21 +67,7 @@ public class VariableDomainController extends AbstractController {
     private Button applyButton;
     @FXML
     private Button cancelButton;
-
     private ButtonBar.ButtonData result;
-
-    // TODO: add to messages
-    private final BooleanProperty sequentialRadioValid = new ValidationProperty("Exactly one of sequential/temporal domain bases must be selected.", sequentialRadio);
-    private final BooleanProperty temporalRadioValid = new ValidationProperty("Exactly one of sequential/temporal domain bases must be selected.", temporalRadio);
-    private final BooleanProperty radioButtonsValid = new SimpleBooleanProperty();
-
-    private final BooleanProperty fuelCheckValid = new ValidationProperty("Fuel cannot be selected with sequential domain.", fuelCheck);
-    private final BooleanProperty capacityCheckValid = new ValidationProperty("Capacity cannot be selected.", capacityCheck);
-    private final BooleanProperty numericCheckValid = new ValidationProperty("Numeric cannot be selected with sequential domain.", numericCheck);
-
-    // TODO: finish with composition
-    private final BooleanProperty goalAreaValid = new ValidationProperty("Metric cannot be  with sequential domain.", numericCheck);
-    private final BooleanProperty metricAreaValid = new ValidationProperty("Numeric cannot be selected with sequential domain.", numericCheck);
 
     @FXML
     private void initialize() {
@@ -78,7 +78,7 @@ public class VariableDomainController extends AbstractController {
         fuelCheckValid.bind(sequentialRadioValid.not());
         capacityCheckValid.set(true);
         numericCheckValid.bind(sequentialRadioValid.not());
-        
+
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
 
