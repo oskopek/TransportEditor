@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.model.domain;
 
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.functions.Function;
 import com.oskopek.transporteditor.model.domain.action.predicates.Predicate;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
@@ -7,30 +8,96 @@ import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
 import javafx.beans.property.*;
-import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class VariableDomainBuilder {
 
     private final StringProperty name = new SimpleStringProperty();
 
-    private final ObjectProperty<DriveBuilder> driveBuilder = new SimpleObjectProperty<>();
-    private final ObjectProperty<DropBuilder> dropBuilder = new SimpleObjectProperty<>();
-    private final ObjectProperty<PickUpBuilder> pickUpBuilder = new SimpleObjectProperty<>();
-    private final ObjectProperty<RefuelBuilder> refuelBuilder = new SimpleObjectProperty<>();
-
     private final SetProperty<PddlLabel> pddlLabelSet = new SimpleSetProperty<>();
+    private final ObjectProperty<PddlLabel> domainType = new SimpleObjectProperty<>(PddlLabel.ActionCost);
 
-    private final MapProperty<String, Class<? extends Predicate>> predicateMap = new SimpleMapProperty<>();
-    private final MapProperty<String, Class<? extends Function>> functionMap = new SimpleMapProperty<>();
+    private final IntegerProperty pickUpCost = new SimpleIntegerProperty(1);
+    private final IntegerProperty dropCost = new SimpleIntegerProperty(1);
+    private final IntegerProperty refuelCost = new SimpleIntegerProperty(10);
 
     public VariableDomainBuilder() {
         // intentionally empty
     }
 
     public VariableDomain toDomain() {
+        Set<PddlLabel> labels = new HashSet<>(pddlLabelSet);
+        labels.add(domainType.get());
+
         return new VariableDomain(getName(), getDriveBuilder(), getDropBuilder(), getPickUpBuilder(),
-                getRefuelBuilder(), getPddlLabelSet(), getPredicateMap(), getFunctionMap());
+                getRefuelBuilder(), labels, getPredicateMap(), getFunctionMap());
+    }
+
+    private RefuelBuilder getRefuelBuilder() {
+        if (PddlLabel.Temporal.equals(domainType.get())) {
+            return new RefuelBuilder(, ,
+                    ActionCost.valueOf(refuelCost.get()), ActionCost.valueOf(refuelCost.get()));
+        } else {
+            return new RefuelBuilder(, ,
+                    ActionCost.valueOf(refuelCost.get()), ActionCost.valueOf(refuelCost.get()));
+        }
+    }
+
+    private Map<String, Class<? extends Predicate>> getPredicateMap() {
+        if (PddlLabel.Temporal.equals(domainType.get())) {
+            return new RefuelBuilder(, ,
+                    ActionCost.valueOf(refuelCost.get()), ActionCost.valueOf(refuelCost.get()));
+        } else {
+            return SequentialDomain.predicateMap;
+        }
+    }
+
+    private Map<String, Class<? extends Function>> getFunctionMap() {
+        return null;
+    }
+
+    private PickUpBuilder getPickUpBuilder() {
+        if (PddlLabel.Temporal.equals(domainType.get())) {
+            return new PickUpBuilder(, ,
+                    ActionCost.valueOf(pickUpCost.get()), ActionCost.valueOf(pickUpCost.get()));
+        } else {
+            return new PickUpBuilder(SequentialDomain.pickUpPreconditions, SequentialDomain.pickUpEffects,
+                    ActionCost.valueOf(pickUpCost.get()), ActionCost.valueOf(pickUpCost.get()));
+        }
+    }
+
+    private DropBuilder getDropBuilder() {
+        if (PddlLabel.Temporal.equals(domainType.get())) {
+            return new DropBuilder(, ,
+                    ActionCost.valueOf(dropCost.get()), ActionCost.valueOf(dropCost.get()));
+        } else {
+            return new DropBuilder(SequentialDomain.dropPreconditions, SequentialDomain.dropEffects,
+                    ActionCost.valueOf(dropCost.get()), ActionCost.valueOf(dropCost.get()));
+        }
+    }
+
+    public DriveBuilder getDriveBuilder() {
+        if (PddlLabel.Temporal.equals(domainType.get())) {
+            return null;
+        } else {
+            return new SequentialDomain("").getDriveBuilder();
+        }
+    }
+
+    public PddlLabel getDomainType() {
+        return domainType.get();
+    }
+
+    public ObjectProperty<PddlLabel> domainTypeProperty() {
+        return domainType;
+    }
+
+    public void setDomainType(PddlLabel domainType) {
+        this.domainType.set(domainType);
     }
 
     public String getName() {
@@ -45,88 +112,52 @@ public final class VariableDomainBuilder {
         return name;
     }
 
-    public DriveBuilder getDriveBuilder() {
-        return driveBuilder.get();
-    }
-
-    public void setDriveBuilder(DriveBuilder driveBuilder) {
-        this.driveBuilder.set(driveBuilder);
-    }
-
-    public ObjectProperty<DriveBuilder> driveBuilderProperty() {
-        return driveBuilder;
-    }
-
-    public DropBuilder getDropBuilder() {
-        return dropBuilder.get();
-    }
-
-    public void setDropBuilder(DropBuilder dropBuilder) {
-        this.dropBuilder.set(dropBuilder);
-    }
-
-    public ObjectProperty<DropBuilder> dropBuilderProperty() {
-        return dropBuilder;
-    }
-
-    public PickUpBuilder getPickUpBuilder() {
-        return pickUpBuilder.get();
-    }
-
-    public void setPickUpBuilder(PickUpBuilder pickUpBuilder) {
-        this.pickUpBuilder.set(pickUpBuilder);
-    }
-
-    public ObjectProperty<PickUpBuilder> pickUpBuilderProperty() {
-        return pickUpBuilder;
-    }
-
-    public RefuelBuilder getRefuelBuilder() {
-        return refuelBuilder.get();
-    }
-
-    public void setRefuelBuilder(RefuelBuilder refuelBuilder) {
-        this.refuelBuilder.set(refuelBuilder);
-    }
-
-    public ObjectProperty<RefuelBuilder> refuelBuilderProperty() {
-        return refuelBuilder;
-    }
-
     public ObservableSet<PddlLabel> getPddlLabelSet() {
         return pddlLabelSet.get();
-    }
-
-    public void setPddlLabelSet(ObservableSet<PddlLabel> pddlLabelSet) {
-        this.pddlLabelSet.set(pddlLabelSet);
     }
 
     public SetProperty<PddlLabel> pddlLabelSetProperty() {
         return pddlLabelSet;
     }
 
-    public ObservableMap<String, Class<? extends Predicate>> getPredicateMap() {
-        return predicateMap.get();
+    public void setPddlLabelSet(ObservableSet<PddlLabel> pddlLabelSet) {
+        this.pddlLabelSet.set(pddlLabelSet);
     }
 
-    public void setPredicateMap(ObservableMap<String, Class<? extends Predicate>> predicateMap) {
-        this.predicateMap.set(predicateMap);
+    public int getPickUpCost() {
+        return pickUpCost.get();
     }
 
-    public MapProperty<String, Class<? extends Predicate>> predicateMapProperty() {
-        return predicateMap;
+    public IntegerProperty pickUpCostProperty() {
+        return pickUpCost;
     }
 
-    public ObservableMap<String, Class<? extends Function>> getFunctionMap() {
-        return functionMap.get();
+    public void setPickUpCost(int pickUpCost) {
+        this.pickUpCost.set(pickUpCost);
     }
 
-    public void setFunctionMap(ObservableMap<String, Class<? extends Function>> functionMap) {
-        this.functionMap.set(functionMap);
+    public int getDropCost() {
+        return dropCost.get();
     }
 
-    public MapProperty<String, Class<? extends Function>> functionMapProperty() {
-        return functionMap;
+    public IntegerProperty dropCostProperty() {
+        return dropCost;
+    }
+
+    public void setDropCost(int dropCost) {
+        this.dropCost.set(dropCost);
+    }
+
+    public int getRefuelCost() {
+        return refuelCost.get();
+    }
+
+    public IntegerProperty refuelCostProperty() {
+        return refuelCost;
+    }
+
+    public void setRefuelCost(int refuelCost) {
+        this.refuelCost.set(refuelCost);
     }
 
 }

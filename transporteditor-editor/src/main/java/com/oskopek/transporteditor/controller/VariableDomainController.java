@@ -3,6 +3,8 @@ package com.oskopek.transporteditor.controller;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomainBuilder;
+import com.oskopek.transporteditor.model.domain.action.functions.Function;
+import com.oskopek.transporteditor.validation.TextAreaValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,34 +27,25 @@ public class VariableDomainController extends AbstractController {
     private TextField nameField;
     @FXML
     private RadioButton sequentialRadio;
-    // TODO: add to messages
-    private final BooleanProperty sequentialRadioValid = new ValidationProperty(
-            "Exactly one of sequential/temporal domain bases must be selected.", sequentialRadio);
+    private final BooleanProperty sequentialRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), sequentialRadio);
     @FXML
     private RadioButton temporalRadio;
-    private final BooleanProperty temporalRadioValid = new ValidationProperty(
-            "Exactly one of sequential/temporal domain bases must be selected.", temporalRadio);
+    private final BooleanProperty temporalRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), temporalRadio);
     @FXML
     private CheckBox fuelCheck;
-    private final BooleanProperty fuelCheckValid = new ValidationProperty(
-            "Fuel cannot be selected with sequential domain.", fuelCheck);
+    private final BooleanProperty fuelCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
     @FXML
     private CheckBox numericCheck;
-    private final BooleanProperty numericCheckValid = new ValidationProperty(
-            "Numeric cannot be selected with sequential domain.", numericCheck);
-    // TODO: finish with composition
-    private final BooleanProperty goalAreaValid = new ValidationProperty("Metric cannot be  with sequential domain.",
-            numericCheck);
-    private final BooleanProperty metricAreaValid = new ValidationProperty(
-            "Numeric cannot be selected with sequential domain.", numericCheck);
-    @FXML
-    private CheckBox capacityCheck;
-    private final BooleanProperty capacityCheckValid = new ValidationProperty("Capacity cannot be selected.",
-            capacityCheck);
+    private final BooleanProperty numericCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.numericCheck"), numericCheck);
     @FXML
     private TextArea goalArea;
+    private final BooleanProperty goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"), goalArea);
     @FXML
     private TextArea metricArea;
+    private final BooleanProperty metricAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.metricArea"), metricArea);
+    @FXML
+    private CheckBox capacityCheck;
+    private final BooleanProperty capacityCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.capacity"), capacityCheck);
     @FXML
     private Label goalLabel;
     @FXML
@@ -79,6 +72,9 @@ public class VariableDomainController extends AbstractController {
         capacityCheckValid.set(true);
         numericCheckValid.bind(sequentialRadioValid.not());
 
+        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> !s.isEmpty()).isValidProperty()); // TODO goal area validation
+        metricAreaValid.bind(new TextAreaValidator(metricArea.textProperty(), s -> !s.isEmpty()).isValidProperty()); // TODO metric area validation
+
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -88,11 +84,33 @@ public class VariableDomainController extends AbstractController {
         sequentialRadio.setUserData(PddlLabel.ActionCost);
         temporalRadio.setToggleGroup(group);
         temporalRadio.setUserData(PddlLabel.Temporal);
-        group.selectedToggleProperty().addListener(e -> {
-            Toggle selected = group.getSelectedToggle();
-            PddlLabel label = (PddlLabel) selected.getUserData();
-            // TODO: Ended here
+        group.selectedToggleProperty().addListener(e -> domainBuilder.setDomainType((PddlLabel) group.getSelectedToggle().getUserData()));
+
+        capacityCheck.selectedProperty().addListener(e -> {
+            if (capacityCheck.isSelected()) {
+                domainBuilder.getPddlLabelSet().add(PddlLabel.Capacity);
+                domainBuilder.getPddlLabelSet().add(PddlLabel.MaxCapacity);
+            } else {
+                domainBuilder.getPddlLabelSet().remove(PddlLabel.Capacity);
+                domainBuilder.getPddlLabelSet().remove(PddlLabel.MaxCapacity);
+            }
         });
+        fuelCheck.selectedProperty().addListener(e -> {
+            if (fuelCheck.isSelected()) {
+                domainBuilder.getPddlLabelSet().add(PddlLabel.Fuel);
+            } else {
+                domainBuilder.getPddlLabelSet().remove(PddlLabel.Fuel);
+            }
+        });
+        numericCheck.selectedProperty().addListener(e -> {
+            if (numericCheck.isSelected()) {
+                domainBuilder.getPddlLabelSet().add(PddlLabel.Numeric);
+            } else {
+                domainBuilder.getPddlLabelSet().remove(PddlLabel.Numeric);
+            }
+        });
+
+        // TODO: Metric and goal parsing
 
         numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull());

@@ -22,14 +22,22 @@ public class ValidationProperty extends SimpleBooleanProperty {
         this(errorMessage, "error", nodes);
     }
 
+    public boolean isValid() {
+        return get();
+    }
+
     @Override
     protected void fireValueChangedEvent() {
         super.fireValueChangedEvent();
         Arrays.stream(nodes).forEach(node -> {
-            Tooltip.install(node, tooltip);
-            node.getStyleClass().removeAll("error");
-            if (getValue()) {
-                node.getStyleClass().add("error");
+            node.getStyleClass().removeAll(styleClass);
+            if (isValid()) {
+                Tooltip.uninstall(node, tooltip);
+            } else {
+                Tooltip.install(node, tooltip);
+                if (getValue()) {
+                    node.getStyleClass().add(styleClass);
+                }
             }
         });
     }
