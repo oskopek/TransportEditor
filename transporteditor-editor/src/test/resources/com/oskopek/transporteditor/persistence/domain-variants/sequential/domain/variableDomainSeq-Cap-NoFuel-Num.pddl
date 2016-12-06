@@ -4,7 +4,8 @@
 (define (domain transport)
 (:requirements
 :typing
-:action-costs
+:numeric-fluents
+:goal-utilities
 )
 (:types
 location target locatable - object
@@ -21,8 +22,8 @@ capacity-number - object
 )
 
 (:functions
-(road-length ?l1 ?l2 - location) - number
-(total-cost) - number
+(road-length ?l1 ?l2 - location)
+(total-cost)
 )
 
 (:action drive
