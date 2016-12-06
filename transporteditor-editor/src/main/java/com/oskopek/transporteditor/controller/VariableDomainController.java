@@ -26,25 +26,32 @@ public class VariableDomainController extends AbstractController {
     private TextField nameField;
     @FXML
     private RadioButton sequentialRadio;
-    private final BooleanProperty sequentialRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), sequentialRadio);
+    private final BooleanProperty sequentialRadioValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.domainType"), sequentialRadio);
     @FXML
     private RadioButton temporalRadio;
-    private final BooleanProperty temporalRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), temporalRadio);
+    private final BooleanProperty temporalRadioValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.domainType"), temporalRadio);
     @FXML
     private CheckBox fuelCheck;
-    private final BooleanProperty fuelCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
+    private final BooleanProperty fuelCheckValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
     @FXML
     private CheckBox numericCheck;
-    private final BooleanProperty numericCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.numericCheck"), numericCheck);
+    private final BooleanProperty numericCheckValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.numericCheck"), numericCheck);
     @FXML
     private TextArea goalArea;
-    private final BooleanProperty goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"), goalArea);
+    private final BooleanProperty goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"),
+            goalArea);
     @FXML
     private TextArea metricArea;
-    private final BooleanProperty metricAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.metricArea"), metricArea);
+    private final BooleanProperty metricAreaValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.metricArea"), metricArea);
     @FXML
     private CheckBox capacityCheck;
-    private final BooleanProperty capacityCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.capacity"), capacityCheck);
+    private final BooleanProperty capacityCheckValid = new ValidationProperty(
+            messages.getString("vdcreator.valid.capacity"), capacityCheck);
     @FXML
     private Label goalLabel;
     @FXML
@@ -71,8 +78,10 @@ public class VariableDomainController extends AbstractController {
         capacityCheckValid.set(true);
         numericCheckValid.bind(sequentialRadioValid.not());
 
-        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> !s.isEmpty()).isValidProperty()); // TODO goal area validation
-        metricAreaValid.bind(new TextAreaValidator(metricArea.textProperty(), s -> !s.isEmpty()).isValidProperty()); // TODO metric area validation
+        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> !s.isEmpty())
+                .isValidProperty()); // TODO goal area validation
+        metricAreaValid.bind(new TextAreaValidator(metricArea.textProperty(), s -> !s.isEmpty())
+                .isValidProperty()); // TODO metric area validation
 
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -83,31 +92,12 @@ public class VariableDomainController extends AbstractController {
         sequentialRadio.setUserData(PddlLabel.ActionCost);
         temporalRadio.setToggleGroup(group);
         temporalRadio.setUserData(PddlLabel.Temporal);
-        group.selectedToggleProperty().addListener(e -> domainBuilder.setDomainType((PddlLabel) group.getSelectedToggle().getUserData()));
+        group.selectedToggleProperty().addListener(
+                e -> domainBuilder.setDomainType((PddlLabel) group.getSelectedToggle().getUserData()));
 
-        capacityCheck.selectedProperty().addListener(e -> {
-            if (capacityCheck.isSelected()) {
-                domainBuilder.getPddlLabelSet().add(PddlLabel.Capacity);
-                domainBuilder.getPddlLabelSet().add(PddlLabel.MaxCapacity);
-            } else {
-                domainBuilder.getPddlLabelSet().remove(PddlLabel.Capacity);
-                domainBuilder.getPddlLabelSet().remove(PddlLabel.MaxCapacity);
-            }
-        });
-        fuelCheck.selectedProperty().addListener(e -> {
-            if (fuelCheck.isSelected()) {
-                domainBuilder.getPddlLabelSet().add(PddlLabel.Fuel);
-            } else {
-                domainBuilder.getPddlLabelSet().remove(PddlLabel.Fuel);
-            }
-        });
-        numericCheck.selectedProperty().addListener(e -> {
-            if (numericCheck.isSelected()) {
-                domainBuilder.getPddlLabelSet().add(PddlLabel.Numeric);
-            } else {
-                domainBuilder.getPddlLabelSet().remove(PddlLabel.Numeric);
-            }
-        });
+        domainBuilder.capacityProperty().bind(capacityCheck.selectedProperty());
+        domainBuilder.fuelProperty().bind(fuelCheck.selectedProperty());
+        domainBuilder.numericProperty().bind(numericCheck.selectedProperty());
 
         // TODO: Metric and goal parsing
 
