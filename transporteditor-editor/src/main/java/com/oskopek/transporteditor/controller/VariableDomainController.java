@@ -2,8 +2,7 @@ package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
-import com.oskopek.transporteditor.model.domain.VariableDomainBuilder;
-import com.oskopek.transporteditor.model.domain.action.functions.Function;
+import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
 import com.oskopek.transporteditor.validation.TextAreaValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.property.BooleanProperty;
@@ -148,7 +147,7 @@ public class VariableDomainController extends AbstractController {
     }
 
     private boolean validate() {
-        return false;
+        return false; // TODO: implement validation
     }
 
     /**
