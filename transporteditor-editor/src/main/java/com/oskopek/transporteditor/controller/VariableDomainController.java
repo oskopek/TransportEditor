@@ -11,6 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Controller for choosing a course out of several choices.
  */
@@ -26,32 +30,25 @@ public class VariableDomainController extends AbstractController {
     private TextField nameField;
     @FXML
     private RadioButton sequentialRadio;
-    private final BooleanProperty sequentialRadioValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.domainType"), sequentialRadio);
+    private BooleanProperty sequentialRadioValid;
     @FXML
     private RadioButton temporalRadio;
-    private final BooleanProperty temporalRadioValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.domainType"), temporalRadio);
+    private BooleanProperty temporalRadioValid;
     @FXML
     private CheckBox fuelCheck;
-    private final BooleanProperty fuelCheckValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
+    private BooleanProperty fuelCheckValid;
     @FXML
     private CheckBox numericCheck;
-    private final BooleanProperty numericCheckValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.numericCheck"), numericCheck);
+    private BooleanProperty numericCheckValid;
     @FXML
     private TextArea goalArea;
-    private final BooleanProperty goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"),
-            goalArea);
+    private BooleanProperty goalAreaValid;
     @FXML
     private TextArea metricArea;
-    private final BooleanProperty metricAreaValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.metricArea"), metricArea);
+    private BooleanProperty metricAreaValid;
     @FXML
     private CheckBox capacityCheck;
-    private final BooleanProperty capacityCheckValid = new ValidationProperty(
-            messages.getString("vdcreator.valid.capacity"), capacityCheck);
+    private BooleanProperty capacityCheckValid;
     @FXML
     private Label goalLabel;
     @FXML
@@ -67,9 +64,19 @@ public class VariableDomainController extends AbstractController {
     @FXML
     private Button cancelButton;
     private ButtonBar.ButtonData result;
+    private List<BooleanProperty> validationProperties = new ArrayList<>();
 
     @FXML
     private void initialize() {
+        sequentialRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"),
+                sequentialRadio);
+        temporalRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), temporalRadio);
+        fuelCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
+        numericCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.numericCheck"), numericCheck);
+        goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"), goalArea);
+        metricAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.metricArea"), metricArea);
+        capacityCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.capacity"), capacityCheck);
+
         sequentialRadioValid.bind(radioButtonsValid);
         temporalRadioValid.bind(radioButtonsValid);
         temporalRadioValid.bind(group.selectedToggleProperty().isNotNull());
@@ -82,6 +89,9 @@ public class VariableDomainController extends AbstractController {
                 .isValidProperty()); // TODO goal area validation
         metricAreaValid.bind(new TextAreaValidator(metricArea.textProperty(), s -> !s.isEmpty())
                 .isValidProperty()); // TODO metric area validation
+
+        validationProperties.addAll(Arrays.asList(sequentialRadioValid, temporalRadioValid, fuelCheckValid,
+                numericCheckValid, goalAreaValid, metricAreaValid, capacityCheckValid, radioButtonsValid));
 
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -137,7 +147,7 @@ public class VariableDomainController extends AbstractController {
     }
 
     private boolean validate() {
-        return false; // TODO: implement validation
+        return validationProperties.stream().map(BooleanProperty::get).reduce(Boolean.TRUE, Boolean::logicalAnd);
     }
 
     /**

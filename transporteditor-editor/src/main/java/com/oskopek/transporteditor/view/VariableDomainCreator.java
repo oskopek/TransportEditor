@@ -42,6 +42,7 @@ public class VariableDomainCreator {
         } catch (IOException e) {
             AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
         }
+        dialogPane.getStylesheets().add(getClass().getResource("validation.css").toExternalForm());
         VariableDomainController variableDomainController = fxmlLoader.getController();
 
         Stage stage = new Stage();

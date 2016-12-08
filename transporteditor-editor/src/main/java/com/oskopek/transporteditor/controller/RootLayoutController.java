@@ -254,9 +254,7 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new domain, because no planning session is loaded.");
         }
         VariableDomain domain = variableDomainCreator.createDomainInDialog();
-        if (domain == null) {
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("couldnotcreate.domain"));
-        } else {
+        if (domain != null) {
             VariableDomainIO guesser = new VariableDomainIO();
             domainFileHandler.newObject(domain, guesser, guesser);
             application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
