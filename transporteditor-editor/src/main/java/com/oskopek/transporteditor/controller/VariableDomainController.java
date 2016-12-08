@@ -5,15 +5,12 @@ import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
 import com.oskopek.transporteditor.validation.TextAreaValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Controller for choosing a course out of several choices.
@@ -28,27 +25,28 @@ public class VariableDomainController extends AbstractController {
     private Label headerText;
     @FXML
     private TextField nameField;
+    private ValidationProperty nameFieldValid;
     @FXML
     private RadioButton sequentialRadio;
-    private BooleanProperty sequentialRadioValid;
+    private ValidationProperty sequentialRadioValid;
     @FXML
     private RadioButton temporalRadio;
-    private BooleanProperty temporalRadioValid;
+    private ValidationProperty temporalRadioValid;
     @FXML
     private CheckBox fuelCheck;
-    private BooleanProperty fuelCheckValid;
+    private ValidationProperty fuelCheckValid;
     @FXML
     private CheckBox numericCheck;
-    private BooleanProperty numericCheckValid;
+    private ValidationProperty numericCheckValid;
     @FXML
     private TextArea goalArea;
-    private BooleanProperty goalAreaValid;
+    private ValidationProperty goalAreaValid;
     @FXML
     private TextArea metricArea;
-    private BooleanProperty metricAreaValid;
+    private ValidationProperty metricAreaValid;
     @FXML
     private CheckBox capacityCheck;
-    private BooleanProperty capacityCheckValid;
+    private ValidationProperty capacityCheckValid;
     @FXML
     private Label goalLabel;
     @FXML
@@ -64,10 +62,12 @@ public class VariableDomainController extends AbstractController {
     @FXML
     private Button cancelButton;
     private ButtonBar.ButtonData result;
-    private List<BooleanProperty> validationProperties = new ArrayList<>();
+    private BooleanBinding allValidationsValid;
 
     @FXML
     private void initialize() {
+        nameFieldValid = new ValidationProperty(messages.getString("vdcreator.valid.name"),
+                nameField);
         sequentialRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"),
                 sequentialRadio);
         temporalRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), temporalRadio);
@@ -77,21 +77,28 @@ public class VariableDomainController extends AbstractController {
         metricAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.metricArea"), metricArea);
         capacityCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.capacity"), capacityCheck);
 
+        nameFieldValid.bind(nameField.textProperty().isNotEmpty());
+
         sequentialRadioValid.bind(radioButtonsValid);
         temporalRadioValid.bind(radioButtonsValid);
-        temporalRadioValid.bind(group.selectedToggleProperty().isNotNull());
+        radioButtonsValid.bind(group.selectedToggleProperty().isNotNull());
 
-        fuelCheckValid.bind(sequentialRadioValid.not());
+        fuelCheckValid.set(true);
         capacityCheckValid.set(true);
-        numericCheckValid.bind(sequentialRadioValid.not());
+        numericCheckValid.set(true);
 
-        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> !s.isEmpty())
+        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> goalArea.isDisabled() || !s.isEmpty())
+                .listenTo(goalArea.disabledProperty())
                 .isValidProperty()); // TODO goal area validation
-        metricAreaValid.bind(new TextAreaValidator(metricArea.textProperty(), s -> !s.isEmpty())
+        metricAreaValid
+                .bind(new TextAreaValidator(metricArea.textProperty(), s -> metricArea.isDisabled() || !s.isEmpty())
+                        .listenTo(metricArea.disabledProperty())
                 .isValidProperty()); // TODO metric area validation
 
-        validationProperties.addAll(Arrays.asList(sequentialRadioValid, temporalRadioValid, fuelCheckValid,
-                numericCheckValid, goalAreaValid, metricAreaValid, capacityCheckValid, radioButtonsValid));
+        allValidationsValid = nameFieldValid.and(sequentialRadioValid).and(temporalRadioValid).and(fuelCheckValid)
+                .and(numericCheckValid)
+                .and(goalAreaValid).and(metricAreaValid).and(capacityCheckValid);
+        applyButton.disableProperty().bind(allValidationsValid.not());
 
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -134,9 +141,11 @@ public class VariableDomainController extends AbstractController {
 
     @FXML
     private void handleApplyButton() {
-        if (validate()) {
+        if (allValidationsValid.get()) {
             result = ButtonBar.ButtonData.APPLY;
             dialog.close();
+        } else {
+            throw new IllegalStateException("Button should be disabled if validation failed!");
         }
     }
 
@@ -144,10 +153,6 @@ public class VariableDomainController extends AbstractController {
     private void handleCancelButton() {
         result = ButtonBar.ButtonData.CANCEL_CLOSE;
         dialog.close();
-    }
-
-    private boolean validate() {
-        return validationProperties.stream().map(BooleanProperty::get).reduce(Boolean.TRUE, Boolean::logicalAnd);
     }
 
     /**

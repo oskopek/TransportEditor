@@ -11,8 +11,10 @@ public class ValidationProperty extends SimpleBooleanProperty {
     private final Node[] nodes;
     private final String styleClass;
     private final Tooltip tooltip;
+    private final String errorMessage;
 
     public ValidationProperty(String errorMessage, String styleClass, Node... nodes) {
+        this.errorMessage = errorMessage;
         this.tooltip = new Tooltip(errorMessage);
         this.styleClass = styleClass;
         this.nodes = nodes;
@@ -35,10 +37,12 @@ public class ValidationProperty extends SimpleBooleanProperty {
                 Tooltip.uninstall(node, tooltip);
             } else {
                 Tooltip.install(node, tooltip);
-                if (getValue()) {
-                    node.getStyleClass().add(styleClass);
-                }
+                node.getStyleClass().add(styleClass);
             }
         });
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
