@@ -3,6 +3,8 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class VariableDomainBuilderFilesIT {
@@ -58,6 +58,7 @@ public class VariableDomainBuilderFilesIT {
 
     @Test
     public void toDomain() throws Exception {
+        Assume.assumeTrue("Numeric tests are ignored for now.", fileName.contains("NoNum")); // TODO: Num
         String domainFile = String.format(fileName, "domain", "domain");
         String problemFile = String.format(fileName, "problem", "p01");
 

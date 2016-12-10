@@ -4,13 +4,12 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
 
 public class DefaultProblemIOIT {
 
@@ -159,6 +158,7 @@ public class DefaultProblemIOIT {
     }
 
     @Test
+    @Ignore("Numeric tests are ignored for now")
     public void serializeNumeric() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
         String serialized = new DefaultProblemIO(variableDomainNum).serialize(problem);
@@ -176,6 +176,7 @@ public class DefaultProblemIOIT {
     }
 
     @Test
+    @Ignore("Numeric tests are ignored for now")
     public void parseNumeric() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
         assertNotNull(problem);
