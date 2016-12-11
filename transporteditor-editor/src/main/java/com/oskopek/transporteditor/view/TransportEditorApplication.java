@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javaslang.control.Try;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -177,6 +179,10 @@ public class TransportEditorApplication extends Application {
      */
     public void setPlanningSession(PlanningSession planningSession) {
         this.planningSession.set(planningSession);
+    }
+
+    public Optional<PlanningSession> getPlanningSessionOptional() {
+        return Try.of(this::getPlanningSession).toJavaOptional();
     }
 
     /**

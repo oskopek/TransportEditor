@@ -4,8 +4,12 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.validation.EmptyValidator;
 import com.oskopek.transporteditor.validation.Validator;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -24,6 +28,32 @@ public class DefaultPlanningSession implements PlanningSession {
     private final ObjectProperty<Domain> domainProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Problem> problemProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
+    private final transient IntegerProperty sessionChange = new SimpleIntegerProperty();
+
+    public DefaultPlanningSession() {
+        setValidator(new EmptyValidator());
+        plannerProperty().addListener(s -> registerChange());
+        validatorProperty().addListener(s -> registerChange());
+        domainProperty().addListener(s -> registerChange());
+        problemProperty().addListener(s -> registerChange());
+        planProperty().addListener(s -> registerChange());
+    }
+
+    public void addListener(InvalidationListener listener) {
+        sessionChangeProperty().addListener(listener);
+    }
+
+    public void removeListener(InvalidationListener listener) {
+        sessionChangeProperty().removeListener(listener);
+    }
+
+    private void registerChange() {
+        sessionChangeProperty().setValue(sessionChangeProperty().get() + 1);
+    }
+
+    private synchronized IntegerProperty sessionChangeProperty() {
+        return sessionChange;
+    }
 
     @Override
     public Domain getDomain() {

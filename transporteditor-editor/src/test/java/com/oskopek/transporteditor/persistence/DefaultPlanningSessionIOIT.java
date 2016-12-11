@@ -1,11 +1,11 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
+import static com.oskopek.transporteditor.test.TestUtils.readAllConcatenatedLines;
+import com.oskopek.transporteditor.validation.EmptyValidator;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import static com.oskopek.transporteditor.test.TestUtils.readAllConcatenatedLines;
-import static org.junit.Assert.*;
 
 public class DefaultPlanningSessionIOIT {
 
@@ -48,7 +48,7 @@ public class DefaultPlanningSessionIOIT {
     private void testEqualityGradually(DefaultPlanningSession referenceSession, DefaultPlanningSession parsed) {
         assertNotNull(parsed);
         assertNull(parsed.getPlanner());
-        assertNull(parsed.getValidator());
+        assertEquals(new EmptyValidator(), parsed.getValidator());
         assertEquals(referenceSession.getDomain(), parsed.getDomain());
         assertEquals(referenceSession.getProblem(), parsed.getProblem());
         assertEquals(referenceSession.getPlan(), parsed.getPlan());

@@ -5,6 +5,7 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.validation.Validator;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 
 import java.util.concurrent.CompletionStage;
@@ -55,5 +56,9 @@ public interface PlanningSession {
     CompletionStage<Plan> startPlanningAsync();
 
     CompletionStage<Boolean> startValidationAsync();
+
+    void addListener(InvalidationListener listener);
+
+    void removeListener(InvalidationListener listener);
 
 }

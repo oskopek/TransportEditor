@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="300" prefWidth="400"
-            xmlns="http://javafx.com/javafx/8.0.112-ea"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="300" prefWidth="400" xmlns="http://javafx.com/javafx/8.0.112"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
         <TabPane fx:id="planTabPane" tabClosingPolicy="UNAVAILABLE">
@@ -17,22 +17,24 @@
         </TabPane>
     </center>
     <top>
-        <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <center>
-                <Button fx:id="planButton" disable="true" onAction="#handlePlan" prefWidth="Infinity" text="%plan"
-                        BorderPane.alignment="CENTER">
+        <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="planButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handlePlan"
+                        text="%plan" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Button>
-                <Button fx:id="validateButton" disable="true" onAction="#handleValidate" prefWidth="Infinity"
-                        text="%validate"
-                        BorderPane.alignment="CENTER">
+                <Button fx:id="validateButton" disable="true" maxWidth="1.7976931348623157E308"
+                        onAction="#handleValidate" text="%validate" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Button>
-            </center>
-        </BorderPane>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </HBox>
     </top>
 </BorderPane>
