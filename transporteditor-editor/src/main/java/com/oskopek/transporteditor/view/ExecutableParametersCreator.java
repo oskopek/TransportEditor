@@ -38,7 +38,7 @@ public class ExecutableParametersCreator {
      * @return the executable with parameters
      */
     public ExecutableWithParameters createExecutableWithParameters(int parameterCount, String executableInstructions,
-            String parameterIntructions) {
+            String parameterIntructions, String noteText) {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();
         BorderPane dialogPane = null;
         try (InputStream is = getClass().getResourceAsStream("ExecutableParametersCreatorPane.fxml")) {
@@ -55,8 +55,9 @@ public class ExecutableParametersCreator {
         stage.setScene(new Scene(dialogPane));
         stage.setOnShown(e -> executableParametersController.getExecutableArea().requestFocus());
         executableParametersController.setDialog(stage);
-        executableParametersController.setExecutableSubLabelText(messages.getString("excreator.execsublabel"));
-        executableParametersController.setParametersSubLabelText(messages.getString("excreator.paramsublabel"));
+        executableParametersController.setExecutableSubLabelText(executableInstructions);
+        executableParametersController.setParametersSubLabelText(parameterIntructions);
+        executableParametersController.setNoteText(noteText);
 
         executableParametersController.enableValidation(
                 executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString).isPresent(),

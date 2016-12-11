@@ -26,19 +26,18 @@ public class ExecutableParametersController extends AbstractController {
     @FXML
     private Label headerText;
     @FXML
-    private Label executableLabel;
-    @FXML
     private Label executableSubLabel;
     @FXML
     private TextArea executableArea;
     private ValidationProperty executableAreaValid;
     @FXML
-    private Label parametersLabel;
-    @FXML
     private Label parametersSubLabel;
     @FXML
     private TextArea parametersArea;
     private ValidationProperty parametersAreaValid;
+
+    @FXML
+    private Label noteLabel;
 
     @FXML
     private Button applyButton;
@@ -52,6 +51,8 @@ public class ExecutableParametersController extends AbstractController {
         executableSubLabel.setFont(Font.font(null, FontPosture.ITALIC, 10d));
         parametersSubLabel.setFont(Font.font(null, FontPosture.ITALIC, 10d));
 
+        noteLabel.setStyle("-fx-border-color: transparent");
+
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
     }
@@ -62,6 +63,10 @@ public class ExecutableParametersController extends AbstractController {
 
     public void setHeaderText(String headerText) {
         this.headerText.setText(headerText);
+    }
+
+    public void setNoteText(String noteText) {
+        this.noteLabel.setText(noteText);
     }
 
     public void setExecutableSubLabelText(String subLabelText) {
@@ -115,6 +120,7 @@ public class ExecutableParametersController extends AbstractController {
     }
 
     public ExecutableWithParameters getExecutable() {
-        return new DefaultExecutableWithParameters(executableArea.getText(), parametersArea.getText());
+        return allValidationsValid.get() ? new DefaultExecutableWithParameters(executableArea.getText(),
+                parametersArea.getText()) : null;
     }
 }
