@@ -38,7 +38,7 @@ public class LogProgressCreator {
      * @return true iff the process completed successfully
      */
     public boolean createLogProgresDialog(LogStreamable logStreamable, ObservableValue<Boolean> successfullyFinished,
-            ObservableValue<Boolean> cancelAvailable) {
+            ObservableValue<Boolean> cancelAvailable, ObservableValue<Boolean> inProgress) {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();
         BorderPane dialogPane = null;
         try (InputStream is = getClass().getResourceAsStream("LogProgressViewer.fxml")) {
@@ -55,7 +55,7 @@ public class LogProgressCreator {
         logProgressController.setDialog(stage);
         LogListener logListener = logProgressController::appendLog;
         logStreamable.subscribe(logListener);
-        logProgressController.setProgressConditions(successfullyFinished, cancelAvailable);
+        logProgressController.setProgressConditions(successfullyFinished, cancelAvailable, inProgress);
         stage.setTitle("TransportEditor");
         stage.showAndWait();
         logStreamable.unsubscribe(logListener);

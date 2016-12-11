@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ExecutableWithParameters {
 
-    String getExecutable();
+    String getExecutableCommand();
 
     Optional<Path> findExecutablePath();
 
@@ -13,6 +13,6 @@ public interface ExecutableWithParameters {
         return findExecutablePath().isPresent();
     }
 
-    String getExecutableCommand(Object... params);
+    String getParameters(Object... params);
 
 }

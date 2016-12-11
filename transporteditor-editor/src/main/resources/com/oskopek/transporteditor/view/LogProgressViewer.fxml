@@ -24,7 +24,7 @@
                         <Insets bottom="10.0"/>
                     </BorderPane.margin>
                 </Label>
-                <ProgressBar maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS"/>
+                <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS"/>
             </children>
         </VBox>
     </top>

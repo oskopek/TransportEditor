@@ -4,10 +4,7 @@ import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 /**
@@ -19,6 +16,9 @@ public class LogProgressController extends AbstractController {
 
     @FXML
     private Label headerText;
+
+    @FXML
+    private ProgressBar progressBar;
 
     @FXML
     private TextArea logArea;
@@ -38,9 +38,15 @@ public class LogProgressController extends AbstractController {
     }
 
     public void setProgressConditions(ObservableValue<Boolean> successfullyFinished,
-            ObservableValue<Boolean> cancelAvailable) {
+            ObservableValue<Boolean> cancelAvailable, ObservableValue<Boolean> inProgress) {
         okButton.disableProperty().bind(successfullyFinished);
         cancelButton.disableProperty().bind(cancelAvailable);
+        inProgress.addListener((observable, oldValue, newInProgress) -> {
+            if (!newInProgress) {
+                progressBar.setProgress(1.0);
+                progressBar.setDisable(true);
+            }
+        });
     }
 
     public synchronized void appendLog(String logMessage) {

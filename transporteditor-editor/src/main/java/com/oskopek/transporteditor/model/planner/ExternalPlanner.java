@@ -43,7 +43,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
     }
 
     public ExternalPlanner(ExecutableWithParameters executable) {
-        String parameters = executable.getExecutableCommand();
+        String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
             throw new IllegalArgumentException("Executable command does not contain {0} and {1}.");
         }
@@ -59,9 +59,10 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
 
     private synchronized Plan startPlanning(VariableDomain domain, DefaultProblem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
-            String filledIn = executable.getExecutableCommand(serializer.getDomainTmpFile().toAbsolutePath(),
+            String executableCommand = executable.getExecutableCommand();
+            String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
-            ProcessBuilder builder = new ProcessBuilder(filledIn);
+            ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn);
             try {
                 plannerProcessProperty.set(builder.start());
             } catch (IOException e) {
@@ -107,8 +108,10 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
 
             this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
         } catch (IOException e) {
+            plannerProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain or problem, cannot plan.", e);
         }
+        plannerProcessProperty.setValue(null);
         return getBestPlan();
     }
 

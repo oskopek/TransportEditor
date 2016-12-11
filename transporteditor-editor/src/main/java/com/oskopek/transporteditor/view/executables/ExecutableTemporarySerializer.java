@@ -42,7 +42,7 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
 
         String serializedDomain = domainIO.serialize(domain);
         String serializedProblem = problemIO == null ? "" : problemIO.serialize(problem);
-        String serializedPlan = planIO == null ? "" : planIO.serialize(plan);
+        String serializedPlan = planIO == null || plan == null ? "" : planIO.serialize(plan);
         domainTmpFile = Files.createTempFile("domain-", ".pddl");
         problemTmpFile = Files.createTempFile("problem-", ".pddl");
         planTmpFile = Files.createTempFile("plan-", ".val");

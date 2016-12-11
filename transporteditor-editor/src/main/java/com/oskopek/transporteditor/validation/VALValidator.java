@@ -32,7 +32,7 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
     private transient ObjectProperty<Process> validatorProcessProperty = new SimpleObjectProperty<>();
 
     public VALValidator(ExecutableWithParameters executable) {
-        String parameters = executable.getExecutableCommand();
+        String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}") || !parameters.contains("{2}")) {
             throw new IllegalArgumentException("Executable command does not contain templates {0}, {1} and {2}.");
         }
@@ -46,9 +46,10 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
 
     private synchronized boolean validate(VariableDomain domain, DefaultProblem problem, Plan plan) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, plan)) {
-            String filledIn = executable.getExecutableCommand(serializer.getDomainTmpFile().toAbsolutePath(),
+            String executableCommand = executable.getExecutableCommand();
+            String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
-            ProcessBuilder builder = new ProcessBuilder(filledIn).redirectErrorStream(true);
+            ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn).redirectErrorStream(true);
             try {
                 validatorProcessProperty.set(builder.start());
             } catch (IOException e) {
@@ -78,8 +79,10 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
             if (retVal != 0) {
                 logger.debug("Validation failed: return value {}.", retVal);
             }
+            validatorProcessProperty.setValue(null);
             return retVal != 0;
         } catch (IOException e) {
+            validatorProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain, problem or plan - cannot validate.", e);
         }
     }

@@ -63,11 +63,7 @@ public class RightPaneController extends AbstractController {
         planButton.disableProperty().bind(disablePlanButton);
         validateButton.disableProperty().bind(
                 disablePlanButton.or(new IsNullBinding(PlanningSession::validatorProperty)));
-        InvalidationListener invalidatePlanButtonBindingListener = s -> {
-            disablePlanButton.invalidate();
-            planButton.setDisable(disablePlanButton.get());
-            validateButton.setDisable(disablePlanButton.get());
-        };
+        InvalidationListener invalidatePlanButtonBindingListener = s -> disablePlanButton.invalidate();
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -127,7 +123,7 @@ public class RightPaneController extends AbstractController {
             return null;
         });
         logProgressCreator.createLogProgresDialog(application.getPlanningSession().getPlanner(), successful,
-                successful.not());
+                successful.not(), completed.not());
     }
 
     @FXML
@@ -140,9 +136,11 @@ public class RightPaneController extends AbstractController {
             completed.setValue(true);
             if (isValid) {
                 successful.setValue(true);
-                AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"), ButtonType.CLOSE);
+                AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"),
+                        ButtonType.CLOSE);
             } else {
-                AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"), ButtonType.CLOSE);
+                AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"),
+                        ButtonType.CLOSE);
             }
         }).exceptionally(throwable -> {
             completed.setValue(true);
@@ -150,7 +148,7 @@ public class RightPaneController extends AbstractController {
             return null;
         });
         logProgressCreator.createLogProgresDialog(application.getPlanningSession().getValidator(), successful,
-                completed.not());
+                completed.not(), completed.not());
     }
 
     /**
