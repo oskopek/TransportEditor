@@ -17,9 +17,10 @@ import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.*;
 import com.oskopek.transporteditor.validation.VALValidator;
 import com.oskopek.transporteditor.view.AlertCreator;
-import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
+import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.VariableDomainCreator;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -40,9 +41,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,7 +56,7 @@ import java.util.stream.Collectors;
 public class RootLayoutController extends AbstractController {
 
     @Inject
-    private EnterStringDialogPaneCreator enterStringDialogPaneCreator;
+    private ExecutableParametersCreator executableParametersCreator;
 
     @Inject
     private VariableDomainCreator variableDomainCreator;
@@ -218,39 +216,27 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleFileSetPlanner() {
-        PlanningSession session = planningSessionFileHandler.getObject();
-        if (session == null) {
-            throw new IllegalStateException("Cannot set planner on null session.");
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot set planner, because no planning session is loaded.");
         }
-        String executable = "";
-        String parameters = "";
-
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString())
-                .toAbsolutePath();
-        if (!Files.isExecutable(path)) {
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
-        } else {
-            session.setPlanner(new ExternalPlanner(executable, parameters));
+        ExecutableWithParameters executableWithParameters = executableParametersCreator.createExecutableWithParameters(
+                2, messages.getString("planner.excreator.executable"),
+                messages.getString("planner.excreator.parameters"));
+        if (executableWithParameters != null) {
+            application.getPlanningSession().setPlanner(new ExternalPlanner(executableWithParameters));
         }
     }
 
     @FXML
     private void handleFileSetValidator() {
-        PlanningSession session = planningSessionFileHandler.getObject();
-        if (session == null) {
-            throw new IllegalStateException("Cannot set validator on null session.");
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot set validator, because no planning session is loaded.");
         }
-        String executable = "";
-        String parameters = "";
-
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString())
-                .toAbsolutePath();
-        if (!Files.isExecutable(path)) {
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
-        } else {
-            session.setValidator(new VALValidator(executable, parameters));
+        ExecutableWithParameters executableWithParameters = executableParametersCreator.createExecutableWithParameters(
+                3, messages.getString("validator.excreator.executable"),
+                messages.getString("validator.excreator.parameters"));
+        if (executableWithParameters != null) {
+            application.getPlanningSession().setValidator(new VALValidator(executableWithParameters));
         }
     }
 

@@ -40,10 +40,15 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
      * @param parameters in the format: "... {0} ... {1} ..."
      */
     public ExternalPlanner(String executableString, String parameters) {
-        this.executable = new DefaultExecutableWithParameters(executableString, parameters);
+        this(new DefaultExecutableWithParameters(executableString, parameters));
+    }
+
+    public ExternalPlanner(ExecutableWithParameters executable) {
+        String parameters = executable.getExecutableCommand();
         if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
             throw new IllegalArgumentException("Executable command does not contain {0} and {1}.");
         }
+        this.executable = executable;
     }
 
     protected Object readResolve() {

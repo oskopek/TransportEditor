@@ -1,12 +1,14 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.controller.VariableDomainController;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.controller.ExecutableParametersController;
+import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javaslang.collection.List;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -17,7 +19,7 @@ import java.io.InputStream;
 import java.util.ResourceBundle;
 
 /**
- * Dialog for entering a String. Creates a DialogPane encapsulated in it's controller.
+ * Dialog for entering a two strings - an executable and it's parameters.
  */
 @Singleton
 public class ExecutableParametersCreator {
@@ -30,26 +32,39 @@ public class ExecutableParametersCreator {
     private ResourceBundle messages;
 
     /**
-     * Create the dialog for creating a domain.
+     * Create the dialog for creating a executable with parameters.
      *
-     * @return the variable domain created from the user's settings
+     * @param parameterCount the number of parameters
+     * @return the executable with parameters
      */
-    public VariableDomain createDomainInDialog() {
+    public ExecutableWithParameters createExecutableWithParameters(int parameterCount, String executableInstructions,
+            String parameterIntructions) {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();
-        DialogPane dialogPane = null;
-        try (InputStream is = getClass().getResourceAsStream("VariableDomainCreatorPane.fxml")) {
+        BorderPane dialogPane = null;
+        try (InputStream is = getClass().getResourceAsStream("ExecutableParametersCreatorPane.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
             AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
         }
-        dialogPane.setHeaderText(messages.getString("domaincreator.title"));
-        VariableDomainController variableDomainController = fxmlLoader.getController();
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setDialogPane(dialogPane);
-        variableDomainController.setDialog(dialog);
-        dialog.setTitle("TransportEditor");
-        dialog.showAndWait();
-        return variableDomainController.getChosenDomain();
+        dialogPane.getStylesheets().add(getClass().getResource("validation.css").toExternalForm());
+        ExecutableParametersController executableParametersController = fxmlLoader.getController();
+
+        Stage stage = new Stage();
+        executableParametersController.setHeaderText(messages.getString("excreator.title"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(dialogPane));
+        stage.setOnShown(e -> executableParametersController.getExecutableArea().requestFocus());
+        executableParametersController.setDialog(stage);
+        executableParametersController.setExecutableSubLabelText(messages.getString("excreator.execsublabel"));
+        executableParametersController.setParametersSubLabelText(messages.getString("excreator.paramsublabel"));
+
+        executableParametersController.enableValidation(
+                executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString).isPresent(),
+                messages.getString("excreator.valid.executable"), parameterString -> List.range(0, parameterCount)
+                        .map(i -> "{" + i + "}").forAll(parameterString::contains),
+                messages.getString("excreator.valid.paramcount") + ": " + parameterCount);
+        stage.setTitle("TransportEditor");
+        stage.showAndWait();
+        return executableParametersController.getExecutable();
     }
 }

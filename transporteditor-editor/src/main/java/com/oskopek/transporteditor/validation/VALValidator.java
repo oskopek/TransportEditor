@@ -4,7 +4,6 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
-import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +22,12 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
 
-    public VALValidator(String executable, String parameters) {
-        this.executable = new DefaultExecutableWithParameters(executable, parameters);
-        if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
-            throw new IllegalArgumentException("Executable command does not contain {0} and {1}.");
+    public VALValidator(ExecutableWithParameters executable) {
+        String parameters = executable.getExecutableCommand();
+        if (!parameters.contains("{0}") || !parameters.contains("{1}") || !parameters.contains("{2}")) {
+            throw new IllegalArgumentException("Executable command does not contain templates {0}, {1} and {2}.");
         }
+        this.executable = executable;
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public final class DefaultExecutableWithParameters implements ExecutableWithParameters {
 
-    private final transient Logger logger = LoggerFactory.getLogger(getClass());
+    private static final transient Logger logger = LoggerFactory.getLogger(DefaultExecutableWithParameters.class);
 
     private final String executable;
     private final String parameters;
@@ -31,13 +31,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         this.parameters = parameters.trim();
     }
 
-    @Override
-    public String getExecutable() {
-        return executable;
-    }
-
-    @Override
-    public Optional<Path> findExecutablePath() {
+    public static Optional<Path> findExecutablePath(String executable) {
         if (Files.isExecutable(Paths.get(executable))) {
             return Optional.of(executable).map(Paths::get);
         }
@@ -53,11 +47,21 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         }
 
         Stream<Path> pathVariableFiles = Stream.of(pathFolders).map(Paths::get).filter(Files::isRegularFile);
-        Stream<Path> pathVariableFolderContents = Stream.of(pathFolders).map(Paths::get).filter(Files::isDirectory)
-                .map(d -> Try.of(() -> Files.list(d))).filter(Try::isSuccess).map(Try::get)
-                .flatMap(s -> Stream.ofAll(s.collect(Collectors.toList())));
-        return pathVariableFiles.appendAll(pathVariableFolderContents).filter(Files::isExecutable)
-                .filter(p -> p.getFileName().toString().equals(executable)).toJavaStream().findFirst();
+        Stream<Path> pathVariableFolderContents = Stream.of(pathFolders).map(Paths::get).filter(Files::isDirectory).map(
+                d -> Try.of(() -> Files.list(d))).filter(Try::isSuccess).map(Try::get).flatMap(
+                s -> Stream.ofAll(s.collect(Collectors.toList())));
+        return pathVariableFiles.appendAll(pathVariableFolderContents).filter(Files::isExecutable).filter(
+                p -> p.getFileName().toString().equals(executable)).toJavaStream().findFirst();
+    }
+
+    @Override
+    public String getExecutable() {
+        return executable;
+    }
+
+    @Override
+    public Optional<Path> findExecutablePath() {
+        return DefaultExecutableWithParameters.findExecutablePath(executable);
     }
 
     @Override
