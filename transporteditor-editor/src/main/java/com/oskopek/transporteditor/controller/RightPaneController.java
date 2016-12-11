@@ -8,12 +8,15 @@ import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
+import com.oskopek.transporteditor.view.LogProgressCreator;
 import com.oskopek.transporteditor.view.plan.SequentialPlanList;
 import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -31,6 +34,9 @@ public class RightPaneController extends AbstractController {
 
     @Inject
     private transient Logger logger;
+
+    @Inject
+    private LogProgressCreator logProgressCreator;
 
     @FXML
     private ScrollPane linearPlanTabScrollPane;
@@ -106,35 +112,45 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void handlePlan() {
         logger.debug("Starting planning...");
-        planButton.setDisable(true);
         CompletionStage<Plan> planFuture = application.getPlanningSession().startPlanningAsync();
-        planFuture.thenRun(() -> Platform.runLater(() -> {
-            planButton.setDisable(false);
-            eventBus.post(new PlanningFinishedEvent());
-        })).exceptionally(throwable -> {
+        BooleanProperty successful = new SimpleBooleanProperty(false);
+        BooleanProperty completed = new SimpleBooleanProperty(false);
+        planFuture.thenAcceptAsync(plan -> {
+            successful.setValue(plan != null);
+            completed.setValue(true);
+        }).thenRunAsync(() -> Platform.runLater(() -> eventBus.post(new PlanningFinishedEvent()))).exceptionally(
+                throwable -> {
+                    completed.setValue(true);
             logger.warn("Planning failed.", throwable);
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
                     + throwable.getMessage(), ButtonType.OK);
             return null;
         });
+        logProgressCreator.createLogProgresDialog(application.getPlanningSession().getPlanner(), successful,
+                successful.not());
     }
 
     @FXML
     private void handleValidate() {
         logger.debug("Starting validation...");
-        planButton.setDisable(true);
-
         CompletionStage<Boolean> validationFuture = application.getPlanningSession().startValidationAsync();
-        validationFuture.thenAccept(isValid -> {
-            Platform.runLater(() -> planButton.setDisable(false));
+        BooleanProperty successful = new SimpleBooleanProperty(false);
+        BooleanProperty completed = new SimpleBooleanProperty(false);
+        validationFuture.thenAcceptAsync(isValid -> {
+            completed.setValue(true);
             if (isValid) {
-                AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"),
-                        ButtonType.CLOSE);
+                successful.setValue(true);
+                AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"), ButtonType.CLOSE);
             } else {
-                AlertCreator
-                        .showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"), ButtonType.CLOSE);
+                AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"), ButtonType.CLOSE);
             }
+        }).exceptionally(throwable -> {
+            completed.setValue(true);
+            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.failed"), ButtonType.CLOSE);
+            return null;
         });
+        logProgressCreator.createLogProgresDialog(application.getPlanningSession().getValidator(), successful,
+                completed.not());
     }
 
     /**

@@ -88,7 +88,7 @@ public class ExecutableParametersController extends AbstractController {
                         .isValidProperty());
         parametersAreaValid.bind(
                 new TextAreaValidator(parametersArea.textProperty(), nonEmpty.and(parameterTextValidator)::test)
-                        .isValidProperty()); // TODO parameter area validation?
+                        .isValidProperty());
 
         allValidationsValid = executableAreaValid.and(parametersAreaValid);
         applyButton.disableProperty().bind(allValidationsValid.not());

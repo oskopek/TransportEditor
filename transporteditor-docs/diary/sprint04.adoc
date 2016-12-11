@@ -25,7 +25,7 @@ Are they useful at all?
 * Finished external planner and validator dialogs.
 * Added all planning objects to Gantt chart.
 
-== 2016/12/??
+== 2016/12/11
 
 * Finished external planner and validator dialogs.
 
