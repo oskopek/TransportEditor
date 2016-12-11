@@ -5,6 +5,7 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.view.executables.LogStreamable;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -30,6 +31,8 @@ public interface Validator extends LogStreamable {
      * @param plan the plan to validate
      * @return true iff the plan is valid in the domain according to this validator
      */
-    CompletionStage<Boolean> isValidAsync(Domain domain, Problem problem, Plan plan);
+    default CompletionStage<Boolean> isValidAsync(Domain domain, Problem problem, Plan plan) {
+        return CompletableFuture.supplyAsync(() -> isValid(domain, problem, plan));
+    }
 
 }

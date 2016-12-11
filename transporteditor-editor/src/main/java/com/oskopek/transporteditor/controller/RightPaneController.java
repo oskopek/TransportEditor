@@ -119,7 +119,8 @@ public class RightPaneController extends AbstractController {
         });
     }
 
-    public void handleValidate() {
+    @FXML
+    private void handleValidate() {
         logger.debug("Starting validation...");
         planButton.setDisable(true);
 

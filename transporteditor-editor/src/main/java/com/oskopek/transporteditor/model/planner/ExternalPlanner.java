@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 public class ExternalPlanner extends AbstractLogStreamable implements Planner {
 
@@ -58,7 +57,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
         return this;
     }
 
-    private Plan startPlanning(VariableDomain domain, DefaultProblem problem) {
+    private synchronized Plan startPlanning(VariableDomain domain, DefaultProblem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             String filledIn = executable.getExecutableCommand(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
@@ -66,7 +65,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
             try {
                 plannerProcessProperty.set(builder.start());
             } catch (IOException e) {
-                throw new IllegalStateException("An error occurred during creating the model process.", e);
+                throw new IllegalStateException("An error occurred during creating the planner process.", e);
             }
             CompletableFuture<Integer> retValFuture = CompletableFuture.supplyAsync(() -> {
                 try {
@@ -80,7 +79,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
                     new InputStreamReader((plannerProcessProperty.get().getErrorStream())))) {
                 String line = reader.readLine();
                 while (line != null && !retValFuture.isDone()) {
-                    sendToListeners(line);
+                    log(line);
                     line = reader.readLine();
                 }
             } catch (IOException e) {
@@ -98,7 +97,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
                     new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
                 String line = reader.readLine();
                 while (line != null) {
-                    sendToListeners(line);
+                    log(line);
                     planOutput.append(line).append('\n');
                     line = reader.readLine();
                 }
@@ -122,12 +121,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
     }
 
     @Override
-    public CompletionStage<Plan> startAsync(Domain domain, Problem problem) {
-        return CompletableFuture.supplyAsync(() -> startAndWait(domain, problem));
-    }
-
-    @Override
-    public Plan startAndWait(Domain domain, Problem problem) {
+    public synchronized Plan startAndWait(Domain domain, Problem problem) {
         if (isPlanning().getValue()) {
             throw new IllegalStateException("Already planning!");
         }
@@ -145,12 +139,8 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
     }
 
     @Override
-    public ObservableValue<Boolean> isPlanning() {
+    public synchronized ObservableValue<Boolean> isPlanning() {
         return plannerProcessProperty.isNotNull();
-    }
-
-    private void sendToListeners(String logMessage) {
-        forEach(l -> l.accept(logMessage));
     }
 
     @Override

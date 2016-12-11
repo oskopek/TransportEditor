@@ -12,8 +12,6 @@ import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 /**
  * Validates based on the DOM we built when parsing.
@@ -26,11 +24,6 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
             throw new IllegalArgumentException("Cannot validate non-sequential plan with sequential validator.");
         }
         return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
-    }
-
-    @Override
-    public CompletionStage<Boolean> isValidAsync(Domain domain, Problem problem, Plan plan) {
-        return CompletableFuture.supplyAsync(() -> isValid(domain, problem, plan));
     }
 
     public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
