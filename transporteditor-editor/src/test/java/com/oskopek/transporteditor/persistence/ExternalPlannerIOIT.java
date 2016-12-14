@@ -31,7 +31,7 @@ public class ExternalPlannerIOIT {
     public void parseEmpty() throws Exception {
         ExternalPlanner parsed = new ExternalPlannerIO().parse(emptyPlannerContents);
         assertNotNull(parsed);
-        assertNull(parsed.getBestPlan());
+        assertNull(parsed.getCurrentPlan());
         assertEquals(emptyPlanner, parsed);
     }
 }

@@ -18,9 +18,9 @@ public interface Planner extends LogStreamable {
 
     Plan startAndWait(Domain domain, Problem problem);
 
-    Plan getBestPlan();
+    Plan getCurrentPlan();
 
-    ObservableValue<Plan> getCurrentPlan();
+    ObservableValue<Plan> currentPlanProperty();
 
     ObservableValue<Boolean> isPlanning();
 

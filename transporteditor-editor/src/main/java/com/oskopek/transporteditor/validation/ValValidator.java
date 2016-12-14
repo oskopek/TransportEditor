@@ -25,13 +25,13 @@ import java.util.concurrent.CompletableFuture;
  * <p>
  * First exports the domain to a PDDL file, then runs VAL on that and the exported plan.
  */
-public class VALValidator extends AbstractLogStreamable implements Validator {
+public class ValValidator extends AbstractLogStreamable implements Validator {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
     private transient ObjectProperty<Process> validatorProcessProperty = new SimpleObjectProperty<>();
 
-    public VALValidator(ExecutableWithParameters executable) {
+    public ValValidator(ExecutableWithParameters executable) {
         String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}") || !parameters.contains("{2}")) {
             throw new IllegalArgumentException("Executable command does not contain templates {0}, {1} and {2}.");
@@ -41,14 +41,22 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
 
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan) {
-        return validate((VariableDomain) domain, (DefaultProblem) problem, plan); // TODO: casting fix
+        return isValidInternal((VariableDomain) domain, (DefaultProblem) problem, plan); // TODO: casting fix
     }
 
-    private synchronized boolean validate(VariableDomain domain, DefaultProblem problem, Plan plan) {
+    @Override
+    public ExecutableWithParameters getExecutableWithParameters() {
+        return executable;
+    }
+
+    private synchronized boolean isValidInternal(VariableDomain domain, DefaultProblem problem, Plan plan) {
+        if (plan == null) {
+            throw new IllegalArgumentException("Cannot validate null plan.");
+        }
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, plan)) {
             String executableCommand = executable.getExecutable();
             String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
-                    serializer.getProblemTmpFile().toAbsolutePath());
+                    serializer.getProblemTmpFile().toAbsolutePath(), serializer.getPlanTmpFile().toAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn).redirectErrorStream(true);
             try {
                 validatorProcessProperty.set(builder.start());
@@ -67,6 +75,7 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
                     new InputStreamReader((validatorProcessProperty.get().getInputStream())))) {
                 String line = reader.readLine();
                 while (line != null && !retValFuture.isDone()) {
+                    logger.debug("stdout/err: {}", line);
                     log(line);
                     line = reader.readLine();
                 }
@@ -80,7 +89,7 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
                 logger.debug("Validation failed: return value {}.", retVal);
             }
             validatorProcessProperty.setValue(null);
-            return retVal != 0;
+            return retVal == 0;
         } catch (IOException e) {
             validatorProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain, problem or plan - cannot validate.", e);

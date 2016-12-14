@@ -10,7 +10,7 @@
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
     <center>
-        <TextArea fx:id="logArea" prefHeight="400.0" wrapText="true">
+        <TextArea fx:id="logArea" prefHeight="400.0" wrapText="true" editable="false">
             <BorderPane.margin>
                 <Insets left="5.0" top="5.0"/>
             </BorderPane.margin>

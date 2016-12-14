@@ -61,9 +61,17 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::domainProperty)).or(
                         new IsNullBinding(PlanningSession::problemProperty));
         planButton.disableProperty().bind(disablePlanButton);
-        validateButton.disableProperty().bind(
-                disablePlanButton.or(new IsNullBinding(PlanningSession::validatorProperty)));
-        InvalidationListener invalidatePlanButtonBindingListener = s -> disablePlanButton.invalidate();
+        // TODO: Eliminate duplicity after binding is immutable
+        InvalidableOrBooleanBinding disableValidateButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty))
+                .or(new IsNullBinding(PlanningSession::planProperty))
+                .or(new IsNullBinding(PlanningSession::validatorProperty));
+        validateButton.disableProperty().bind(disableValidateButton);
+        InvalidationListener invalidatePlanButtonBindingListener = s -> {
+            disablePlanButton.invalidate();
+            disableValidateButton.invalidate();
+        };
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -112,18 +120,31 @@ public class RightPaneController extends AbstractController {
         BooleanProperty successful = new SimpleBooleanProperty(false);
         BooleanProperty completed = new SimpleBooleanProperty(false);
         planFuture.thenAcceptAsync(plan -> {
-            successful.setValue(plan != null);
-            completed.setValue(true);
-        }).thenRunAsync(() -> Platform.runLater(() -> eventBus.post(new PlanningFinishedEvent()))).exceptionally(
+            logger.trace("Planning finished {}", plan != null);
+            Platform.runLater(() -> {
+                successful.setValue(plan != null);
+                completed.setValue(true);
+            });
+        }).thenRunAsync(() -> {
+            logger.trace("EventBus begin");
+            Platform.runLater(() -> {
+                logger.trace("InEventBus begin");
+                eventBus.post(new PlanningFinishedEvent());
+                logger.trace("InEventBus end");
+            });
+            logger.trace("EventBus end");
+        }).exceptionally(
                 throwable -> {
-                    completed.setValue(true);
-            logger.warn("Planning failed.", throwable);
+                    Platform.runLater(() -> completed.setValue(true));
+                    logger.trace("Planning failed.", throwable);
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
                     + throwable.getMessage(), ButtonType.OK);
             return null;
         });
+        logger.trace("LogProgress begin");
         logProgressCreator.createLogProgresDialog(application.getPlanningSession().getPlanner(), successful,
                 successful.not(), completed.not());
+        logger.trace("LogProgress end");
     }
 
     @FXML
@@ -132,7 +153,7 @@ public class RightPaneController extends AbstractController {
         CompletionStage<Boolean> validationFuture = application.getPlanningSession().startValidationAsync();
         BooleanProperty successful = new SimpleBooleanProperty(false);
         BooleanProperty completed = new SimpleBooleanProperty(false);
-        validationFuture.thenAcceptAsync(isValid -> {
+        validationFuture.thenAcceptAsync(isValid -> Platform.runLater(() -> {
             completed.setValue(true);
             if (isValid) {
                 successful.setValue(true);
@@ -142,9 +163,10 @@ public class RightPaneController extends AbstractController {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"),
                         ButtonType.CLOSE);
             }
-        }).exceptionally(throwable -> {
-            completed.setValue(true);
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.failed"), ButtonType.CLOSE);
+        })).exceptionally(throwable -> {
+            Platform.runLater(() -> completed.setValue(true));
+            AlertCreator.showAlert(Alert.AlertType.ERROR,
+                    messages.getString("validation.failed") + ": " + throwable.getMessage(), ButtonType.CLOSE);
             return null;
         });
         logProgressCreator.createLogProgresDialog(application.getPlanningSession().getValidator(), successful,

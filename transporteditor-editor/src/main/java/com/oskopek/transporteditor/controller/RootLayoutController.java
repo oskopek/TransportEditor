@@ -15,7 +15,7 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.*;
-import com.oskopek.transporteditor.validation.VALValidator;
+import com.oskopek.transporteditor.validation.ValValidator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
@@ -252,7 +252,7 @@ public class RootLayoutController extends AbstractController {
                         messages.getString("validator.excreator.parameters"),
                         messages.getString("validator.excreator.note"), existing);
         if (executableWithParameters != null) {
-            application.getPlanningSession().setValidator(new VALValidator(executableWithParameters));
+            application.getPlanningSession().setValidator(new ValValidator(executableWithParameters));
         }
     }
 

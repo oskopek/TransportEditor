@@ -39,14 +39,6 @@ public class DefaultPlanningSession implements PlanningSession {
         planProperty().addListener(s -> registerChange());
     }
 
-    public void addListener(InvalidationListener listener) {
-        sessionChangeProperty().addListener(listener);
-    }
-
-    public void removeListener(InvalidationListener listener) {
-        sessionChangeProperty().removeListener(listener);
-    }
-
     private void registerChange() {
         sessionChangeProperty().setValue(sessionChangeProperty().get() + 1);
     }
@@ -135,7 +127,7 @@ public class DefaultPlanningSession implements PlanningSession {
         return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
             boolean isValid;
             try {
-                isValid = startValidationAsync().toCompletableFuture().get();
+                isValid = startValidationAsyncInternal(plan).toCompletableFuture().get();
             } catch (ExecutionException | InterruptedException e) {
                 throw new IllegalStateException("Could not validate plan.", e);
             }
@@ -148,7 +140,19 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public CompletionStage<Boolean> startValidationAsync() {
-        return getValidator().isValidAsync(getDomain(), getProblem(), getPlan());
+        return startValidationAsyncInternal(getPlan());
+    }
+
+    public void addListener(InvalidationListener listener) {
+        sessionChangeProperty().addListener(listener);
+    }
+
+    public void removeListener(InvalidationListener listener) {
+        sessionChangeProperty().removeListener(listener);
+    }
+
+    private CompletionStage<Boolean> startValidationAsyncInternal(Plan plan) {
+        return getValidator().isValidAsync(getDomain(), getProblem(), plan);
     }
 
     @Override

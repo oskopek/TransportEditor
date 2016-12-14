@@ -14,8 +14,10 @@ public abstract class AbstractLogStreamable implements LogStreamable {
         this.logListenerList = FXCollections.observableArrayList();
     }
 
-    private synchronized List<LogListener> getLogListenerList() {
-        return logListenerList;
+    private List<LogListener> getLogListenerList() {
+        synchronized (logListenerList) {
+            return logListenerList;
+        }
     }
 
     public ObservableList<LogListener> getLogListenerListUnmodifiable() {
@@ -27,7 +29,7 @@ public abstract class AbstractLogStreamable implements LogStreamable {
     }
 
     protected void log(String message) {
-        forEach(l -> l.accept(message));
+        forEach(l -> l.accept(message + "\n"));
     }
 
     @Override

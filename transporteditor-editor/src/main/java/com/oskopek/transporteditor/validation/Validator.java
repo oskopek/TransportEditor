@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Represents a process that validates a plan against a given domain. See the {@link VALValidator} for an example.
+ * Represents a process that validates a plan against a given domain. See the {@link ValValidator} for an example.
  */
 public interface Validator extends LogStreamable {
 

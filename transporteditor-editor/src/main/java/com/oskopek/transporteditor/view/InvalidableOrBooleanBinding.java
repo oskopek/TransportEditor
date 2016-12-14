@@ -2,15 +2,13 @@ package com.oskopek.transporteditor.view;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Binding;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class InvalidableOrBooleanBinding implements Binding<Boolean> {
 
-    private ObservableList<BooleanBinding> bindings = FXCollections.observableArrayList();
+    private ObservableList<Binding<Boolean>> bindings = FXCollections.observableArrayList();
     private ObservableList<ChangeListener<? super Boolean>> changeListeners = FXCollections.observableArrayList();
     private final ChangeListener<? super Boolean> changeListener
             = (observable, oldValue, newValue) -> getChangeListeners().forEach(
@@ -19,23 +17,23 @@ public class InvalidableOrBooleanBinding implements Binding<Boolean> {
     private final InvalidationListener invalidationListener = observable -> getInvalidationListeners().forEach(
             i -> i.invalidated(observable));
 
-    public InvalidableOrBooleanBinding(BooleanBinding binding) {
+    public InvalidableOrBooleanBinding(Binding<Boolean> binding) {
         addBinding(binding);
     }
 
-    private synchronized void addBinding(BooleanBinding binding) {
+    private synchronized void addBinding(Binding<Boolean> binding) {
         getBindings().add(binding);
         binding.addListener(changeListener);
         binding.addListener(invalidationListener);
     }
 
-    private synchronized void removeBinding(BooleanBinding binding) {
+    private synchronized void removeBinding(Binding<Boolean> binding) {
         getBindings().remove(binding);
         binding.removeListener(changeListener);
         binding.removeListener(invalidationListener);
     }
 
-    private synchronized ObservableList<BooleanBinding> getBindings() {
+    private synchronized ObservableList<Binding<Boolean>> getBindings() {
         return bindings;
     }
 
@@ -49,12 +47,12 @@ public class InvalidableOrBooleanBinding implements Binding<Boolean> {
 
     @Override
     public boolean isValid() {
-        return getBindings().stream().map(BooleanBinding::get).reduce(Boolean.TRUE, Boolean::logicalAnd);
+        return getBindings().stream().map(Binding::getValue).reduce(Boolean.TRUE, Boolean::logicalAnd);
     }
 
     @Override
     public void invalidate() {
-        getBindings().forEach(BooleanBinding::invalidate);
+        getBindings().forEach(Binding::invalidate);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class InvalidableOrBooleanBinding implements Binding<Boolean> {
 
     @Override
     public Boolean getValue() {
-        return getBindings().stream().map(BooleanExpression::getValue).reduce(Boolean.FALSE, Boolean::logicalOr);
+        return getBindings().stream().map(Binding::getValue).reduce(Boolean.FALSE, Boolean::logicalOr);
     }
 
     public Boolean get() {
@@ -96,7 +94,7 @@ public class InvalidableOrBooleanBinding implements Binding<Boolean> {
         getInvalidationListeners().remove(listener);
     }
 
-    public InvalidableOrBooleanBinding or(BooleanBinding binding) {
+    public InvalidableOrBooleanBinding or(Binding<Boolean> binding) {
         addBinding(binding);
         return this;
     }

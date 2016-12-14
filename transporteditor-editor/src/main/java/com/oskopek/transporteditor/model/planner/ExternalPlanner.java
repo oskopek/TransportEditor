@@ -18,6 +18,8 @@ import javafx.beans.value.ObservableValue;
 import javaslang.control.Try;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ExternalPlanner extends AbstractLogStreamable implements Planner {
 
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
     private transient ObjectProperty<Process> plannerProcessProperty = new SimpleObjectProperty<>();
     private transient ObjectProperty<Plan> bestPlan = new SimpleObjectProperty<>();
@@ -80,6 +83,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
                     new InputStreamReader((plannerProcessProperty.get().getErrorStream())))) {
                 String line = reader.readLine();
                 while (line != null && !retValFuture.isDone()) {
+                    logger.debug("stderr: {}", line);
                     log(line);
                     line = reader.readLine();
                 }
@@ -93,11 +97,14 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
                 throw new IllegalStateException("Planning failed: return value " + retVal + ".");
             }
 
+            log("");
+            log("Planner output:");
             StringBuilder planOutput = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
                 String line = reader.readLine();
                 while (line != null) {
+                    logger.debug("stdout: {}", line);
                     log(line);
                     planOutput.append(line).append('\n');
                     line = reader.readLine();
@@ -112,7 +119,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
             throw new IllegalStateException("Failed to persist domain or problem, cannot plan.", e);
         }
         plannerProcessProperty.setValue(null);
-        return getBestPlan();
+        return getCurrentPlan();
     }
 
     private Plan tryParsePlan(VariableDomain domain, DefaultProblem problem, String planContents) {
@@ -132,12 +139,12 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
     }
 
     @Override
-    public Plan getBestPlan() {
+    public Plan getCurrentPlan() {
         return bestPlan.get();
     }
 
     @Override
-    public ObservableValue<Plan> getCurrentPlan() {
+    public ObservableValue<Plan> currentPlanProperty() {
         return bestPlan;
     }
 
