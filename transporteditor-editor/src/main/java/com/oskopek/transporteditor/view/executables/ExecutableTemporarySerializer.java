@@ -1,9 +1,9 @@
 package com.oskopek.transporteditor.view.executables;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.*;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
@@ -23,8 +23,8 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
     private Path problemTmpFile;
     private Path planTmpFile;
 
-    public ExecutableTemporarySerializer(VariableDomain domain,
-            DefaultProblem problem, Plan plan) throws IOException {
+    public ExecutableTemporarySerializer(Domain domain,
+            Problem problem, Plan plan) throws IOException {
         VariableDomainIO domainIO = new VariableDomainIO();
         DefaultProblemIO problemIO = null;
         DataWriter<Plan> planIO = null;

@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
+import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -39,22 +40,22 @@ public class DefaultPlanningSessionIOIT {
 
     @Test
     public void testEmptySessionEquality() {
-        DefaultPlanningSession parsed = defaultPlanningSessionIO.parse(emptySessionFileContents);
+        PlanningSession parsed = defaultPlanningSessionIO.parse(emptySessionFileContents);
         testEqualityGradually(new DefaultPlanningSession(), parsed);
     }
 
     @Test
     public void testP01SessionEquality() {
-        DefaultPlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
+        PlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
         testEqualityGradually(referenceSession, parsed);
     }
 
     @Test
     public void testP01SessionSerializeEquality() {
-        DefaultPlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
+        PlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
         testEqualityGradually(referenceSession, parsed);
         String serialized = defaultPlanningSessionIO.serialize(parsed);
-        DefaultPlanningSession parsed2 = defaultPlanningSessionIO.parse(serialized);
+        PlanningSession parsed2 = defaultPlanningSessionIO.parse(serialized);
         assertFalse(parsed == parsed2);
         testEqualityGradually(referenceSession, parsed2);
         testEqualityGradually(parsed, parsed2);
@@ -62,7 +63,7 @@ public class DefaultPlanningSessionIOIT {
 
     @Test
     public void testP01SessionInDepth() throws Exception {
-        DefaultPlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
+        PlanningSession parsed = defaultPlanningSessionIO.parse(p01SessionContents);
         Domain domain = parsed.getDomain();
         VariableDomainIOIT.setUpClass();
         VariableDomainIOIT.assertSequentialDomain(domain);
@@ -74,9 +75,9 @@ public class DefaultPlanningSessionIOIT {
 
     @Test
     public void testP01SessionSerializeInDepth() throws Exception {
-        DefaultPlanningSession first = defaultPlanningSessionIO.parse(p01SessionContents);
+        PlanningSession first = defaultPlanningSessionIO.parse(p01SessionContents);
         String serialized = defaultPlanningSessionIO.serialize(first);
-        DefaultPlanningSession parsed = defaultPlanningSessionIO.parse(serialized);
+        PlanningSession parsed = defaultPlanningSessionIO.parse(serialized);
         Domain domain = parsed.getDomain();
         VariableDomainIOIT.setUpClass();
         VariableDomainIOIT.assertSequentialDomain(domain);
@@ -86,7 +87,7 @@ public class DefaultPlanningSessionIOIT {
         assertEquals(plan, SequentialPlanIOIT.P01SequentialPlan(problem));
     }
 
-    private void testEqualityGradually(DefaultPlanningSession referenceSession, DefaultPlanningSession parsed) {
+    private void testEqualityGradually(PlanningSession referenceSession, PlanningSession parsed) {
         assertNotNull(parsed);
         assertNull(parsed.getPlanner());
         assertEquals(new EmptyValidator(), parsed.getValidator());

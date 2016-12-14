@@ -21,7 +21,7 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<DefaultProblem> {
+public class DefaultProblemIO implements DataReader<Problem>, DataWriter<Problem> {
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
@@ -39,20 +39,20 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
     }
 
     @Override
-    public String serialize(DefaultProblem object) throws IllegalArgumentException {
+    public String serialize(Problem object) throws IllegalArgumentException {
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("title", object.getName().replaceFirst("transport-", ""));
         input.put("domain", domain);
         input.put("problem", object);
         input.put("packageList",
-                object.getAllPackages().stream().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                object.getAllPackages().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
                         .collect(Collectors.toList()));
         input.put("locationList",
-                object.getRoadGraph().getAllLocations().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                object.getRoadGraph().getAllLocations().sorted(Comparator.comparing(Location::getName))
                         .collect(Collectors.toList()));
         input.put("vehicleList",
-                object.getAllVehicles().stream().sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                object.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
                         .collect(Collectors.toList()));
         Seq<Location> allLocations = object.getRoadGraph().getAllLocations().collect(Array.collector());
         List<Tuple3<Location, Location, Road>> roads = allLocations.crossProduct().map(

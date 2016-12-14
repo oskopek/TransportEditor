@@ -2,9 +2,7 @@ package com.oskopek.transporteditor.model.planner;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
@@ -61,7 +59,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         return this;
     }
 
-    private synchronized Plan startPlanning(VariableDomain domain, DefaultProblem problem) {
+    private synchronized Plan startPlanning(Domain domain, Problem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             String executableCommand = executable.getExecutable();
             String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
@@ -133,7 +131,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         return getCurrentPlan();
     }
 
-    private Plan tryParsePlan(VariableDomain domain, DefaultProblem problem, String planContents) {
+    private Plan tryParsePlan(Domain domain, Problem problem, String planContents) {
         if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
             return new TemporalPlanIO(domain, problem).parse(planContents);
         } else {
@@ -146,7 +144,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         if (isPlanning().getValue()) {
             throw new IllegalStateException("Already planning!");
         }
-        return startPlanning((VariableDomain) domain, (DefaultProblem) problem); // TODO: Fix casting properly
+        return startPlanning(domain, problem);
     }
 
     @Override

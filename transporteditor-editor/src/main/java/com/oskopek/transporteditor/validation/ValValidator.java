@@ -1,9 +1,7 @@
 package com.oskopek.transporteditor.validation;
 
 import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.view.executables.AbstractLogCancellable;
 import com.oskopek.transporteditor.view.executables.ExecutableTemporarySerializer;
@@ -45,7 +43,7 @@ public class ValValidator extends AbstractLogCancellable implements Validator {
 
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan) {
-        return isValidInternal((VariableDomain) domain, (DefaultProblem) problem, plan); // TODO: casting fix
+        return isValidInternal(domain, problem, plan);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class ValValidator extends AbstractLogCancellable implements Validator {
         return executable;
     }
 
-    private synchronized boolean isValidInternal(VariableDomain domain, DefaultProblem problem, Plan plan) {
+    private synchronized boolean isValidInternal(Domain domain, Problem problem, Plan plan) {
         if (plan == null) {
             throw new IllegalArgumentException("Cannot validate null plan.");
         }

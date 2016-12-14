@@ -133,23 +133,23 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private transient MenuItem planSaveAsMenuItem;
 
-    private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
-    private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
-    private JavaFxOpenedTextObjectHandler<VariableDomain> domainFileHandler;
+    private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
+    private JavaFxOpenedTextObjectHandler<PlanningSession> planningSessionFileHandler;
+    private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
     private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
 
     @FXML
     private void initialize() {
         eventBus.register(this);
 
-        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<DefaultPlanningSession>(application, messages,
+        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<PlanningSession>(application, messages,
                 creator)
                 .bind(sessionMenu, sessionNewMenuItem, sessionLoadMenuItem, sessionSaveMenuItem, sessionSaveAsMenuItem,
                         null).useXml();
-        domainFileHandler = new JavaFxOpenedTextObjectHandler<VariableDomain>(application, messages, creator)
+        domainFileHandler = new JavaFxOpenedTextObjectHandler<Domain>(application, messages, creator)
                 .bind(domainMenu, domainNewMenuItem, domainLoadMenuItem, domainSaveMenuItem, domainSaveAsMenuItem,
                         planningSessionFileHandler).usePddl();
-        problemFileHandler = new JavaFxOpenedTextObjectHandler<DefaultProblem>(application, messages, creator)
+        problemFileHandler = new JavaFxOpenedTextObjectHandler<Problem>(application, messages, creator)
                 .bind(problemMenu, problemNewMenuItem, problemLoadMenuItem, problemSaveMenuItem, problemSaveAsMenuItem,
                         domainFileHandler).usePddl();
         planFileHandler = new JavaFxOpenedTextObjectHandler<Plan>(application, messages, creator)
@@ -157,7 +157,7 @@ public class RootLayoutController extends AbstractController {
                         problemFileHandler).useVal();
 
         // TODO: Be careful with bindings and handlers to not create a memleak
-        application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
+        application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
     }
@@ -187,12 +187,12 @@ public class RootLayoutController extends AbstractController {
         if (session != null) {
             Domain domain = session.getDomain();
             if (domain != null) {
-                domainFileHandler.setObject((VariableDomain) domain); // TODO: casting hack
-                session.domainProperty().bind(domainFileHandler.objectProperty());
+                domainFileHandler.setObject(domain);
+                session.domainProperty().bindBidirectional(domainFileHandler.objectProperty());
                 Problem problem = session.getProblem();
                 if (problem != null) {
-                    problemFileHandler.setObject((DefaultProblem) problem); // TODO: casting hack
-                    session.problemProperty().bind(problemFileHandler.objectProperty());
+                    problemFileHandler.setObject(problem);
+                    session.problemProperty().bindBidirectional(problemFileHandler.objectProperty());
                     Plan plan = session.getPlan();
                     if (plan != null) {
                         planFileHandler.setObject(plan);
@@ -265,7 +265,7 @@ public class RootLayoutController extends AbstractController {
         if (domain != null) {
             VariableDomainIO guesser = new VariableDomainIO();
             domainFileHandler.newObject(domain, guesser, guesser);
-            application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+            application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         }
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -277,7 +277,7 @@ public class RootLayoutController extends AbstractController {
         }
         VariableDomainIO guesser = new VariableDomainIO();
         domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), guesser, guesser);
-        application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+        application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -308,7 +308,7 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler.newObject(
                 new DefaultProblem("problem" + new Date().toString(), graph, new HashMap<>(),
                         new HashMap<>()), io, io);
-        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
+        application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -319,7 +319,7 @@ public class RootLayoutController extends AbstractController {
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
         problemFileHandler.loadWithDefaultFileChooser(messages.getString("load.problem"), io, io);
-        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
+        application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -347,7 +347,7 @@ public class RootLayoutController extends AbstractController {
         SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
                 application.getPlanningSession().getProblem());
         planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
-        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
 
@@ -365,7 +365,7 @@ public class RootLayoutController extends AbstractController {
             SequentialPlanIO io = new SequentialPlanIO(domain, problem);
             planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
         }
-        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
 
