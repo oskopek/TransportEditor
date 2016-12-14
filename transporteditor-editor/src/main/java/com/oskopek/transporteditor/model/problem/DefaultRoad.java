@@ -27,6 +27,14 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(getLength())
+                .toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -42,14 +50,6 @@ public class DefaultRoad extends DefaultActionObject implements Road {
                 .appendSuper(super.equals(o))
                 .append(getLength(), that.getLength())
                 .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .appendSuper(super.hashCode())
-                .append(getLength())
-                .toHashCode();
     }
 
     @Override

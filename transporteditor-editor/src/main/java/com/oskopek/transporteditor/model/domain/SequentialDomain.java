@@ -19,20 +19,6 @@ public class SequentialDomain extends DefaultDomain {
     private static final Map<String, Class<? extends Predicate>> predicateMap;
     private static final Map<String, Class<? extends Function>> functionMap;
 
-    static {
-        predicateMap = new HashMap<>(4);
-        predicateMap.put("at", WhoAtWhere.class);
-        predicateMap.put("capacity", HasCapacity.class);
-        predicateMap.put("in", In.class);
-        predicateMap.put("road", IsRoad.class);
-    }
-
-    static {
-        functionMap = new HashMap<>(2);
-        functionMap.put("road-length", RoadLength.class);
-        functionMap.put("total-cost", TotalCost.class);
-    }
-
     public SequentialDomain(String name) {
         super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad()),
                         Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
@@ -53,5 +39,19 @@ public class SequentialDomain extends DefaultDomain {
     @Override
     public Map<String, Class<? extends Function>> getFunctionMap() {
         return functionMap;
+    }
+
+    static {
+        predicateMap = new HashMap<>(4);
+        predicateMap.put("at", WhoAtWhere.class);
+        predicateMap.put("capacity", HasCapacity.class);
+        predicateMap.put("in", In.class);
+        predicateMap.put("road", IsRoad.class);
+    }
+
+    static {
+        functionMap = new HashMap<>(2);
+        functionMap.put("road-length", RoadLength.class);
+        functionMap.put("total-cost", TotalCost.class);
     }
 }

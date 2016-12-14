@@ -5,7 +5,7 @@ import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Road;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class DefaultRoadTest {
 

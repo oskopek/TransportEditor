@@ -2,7 +2,8 @@ package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.problem.Locatable;
+import com.oskopek.transporteditor.model.problem.ActionObject;
+import com.oskopek.transporteditor.model.problem.Location;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
@@ -32,20 +33,25 @@ public final class TemporalPlanGanttChart extends GanttChart {
         return new TemporalPlanGanttChart(plan.getTemporalPlanActions());
     }
 
-    private List<Series<Number, String>> computeData() { // TODO: add packages and non-occurring action objects
-        javaslang.collection.Map<Locatable, javaslang.collection.Stream<TemporalPlanAction>> who = Stream.ofAll(
+    private List<Series<Number, String>> computeData() {
+        javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> who = Stream.ofAll(
                 temporalPlanActionSet).groupBy(ta -> ta.getAction().getWho());
-        return who.map((locatable, temporalPlanActions) -> {
+        javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> what = Stream.ofAll(
+                temporalPlanActionSet).groupBy(ta -> ta.getAction().getWhat())
+                .filter(t -> !Location.class.isInstance(t._1));
+        javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> objs = who.merge(what);
+
+        return objs.map((actionObject, temporalPlanActions) -> {
             XYChart.Series<Number, String> series = new Series<>();
             temporalPlanActions.forEach(t -> {
                 Color color = colorMap.get(t.getAction().getName());
                 if (color == null) {
                     color = defaultColor;
                 }
-                series.getData().add(new XYChart.Data<>(t.getStartTimestamp(), t.getAction().getWho().getName(),
+                series.getData().add(new XYChart.Data<>(t.getStartTimestamp(), actionObject.getName(),
                         new ExtraValue(color, t.getStartTimestamp(), t.getEndTimestamp())));
             });
-            return Tuple.of(locatable, series);
+            return Tuple.of(actionObject, series);
         }).values().toJavaList();
     }
 

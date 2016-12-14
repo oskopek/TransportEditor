@@ -57,7 +57,7 @@ public class ExternalPlanner implements Planner {
         }
         VariableDomainIO io = new VariableDomainIO();
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
-        startPlanning((VariableDomain) domain, io, (DefaultProblem) problem, problemIO); // TODO: Fix me properly
+        startPlanning((VariableDomain) domain, io, (DefaultProblem) problem, problemIO); // TODO: casting hack
     }
 
     @Override

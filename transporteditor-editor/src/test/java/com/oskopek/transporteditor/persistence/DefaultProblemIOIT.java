@@ -15,13 +15,18 @@ public class DefaultProblemIOIT {
 
     private static VariableDomain variableDomainTemp;
     private static SequentialDomain sequentialDomain;
+    private static VariableDomain variableDomainNum;
     private static String seqProblemFileContents;
     private static String tempProblemFileContents;
+    private static String numProblemFileContents;
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() throws Exception { // TODO: Netbenefit parse/ser test
         variableDomainTemp = new VariableDomainIO().parse(TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainTemp.pddl")).stream()
+                .collect(Collectors.joining("\n")));
+        variableDomainNum = new VariableDomainIO().parse(TestUtils.readAllLines(
+                VariableDomainIOIT.class.getResourceAsStream("variableDomainNum.pddl")).stream()
                 .collect(Collectors.joining("\n")));
         sequentialDomain = new SequentialDomain("seq");
         seqProblemFileContents = TestUtils.readAllLines(
@@ -29,6 +34,9 @@ public class DefaultProblemIOIT {
                 Collectors.joining("\n")) + "\n";
         tempProblemFileContents = TestUtils.readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream().collect(
+                Collectors.joining("\n")) + "\n";
+        numProblemFileContents = TestUtils.readAllLines(
+                VariableDomainIOIT.class.getResourceAsStream("p01NetProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
     }
 
@@ -147,6 +155,71 @@ public class DefaultProblemIOIT {
         assertEquals(424, (int) truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
         assertEquals(424, (int) truck1.getMaxFuelCapacity().getCost());
+    }
+
+    @Test
+    @Ignore("Numeric tests are ignored for now")
+    public void serializeNumeric() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        String serialized = new DefaultProblemIO(variableDomainNum).serialize(problem);
+        assertNotNull(serialized);
+        TestUtils.assertPDDLContentEquals(numProblemFileContents, serialized);
+    }
+
+    @Test
+    @Ignore("TODO: Parse point locations from comments")
+    public void serializeNumericExact() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        String serialized = new DefaultProblemIO(variableDomainNum).serialize(problem);
+        assertNotNull(serialized);
+        assertEquals(numProblemFileContents, serialized);
+    }
+
+    @Test
+    @Ignore("Numeric tests are ignored for now")
+    public void parseNumeric() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        assertNotNull(problem);
+        assertEquals(
+                "transport-city-netbenefit-0petrol-station-6nodes-1000size-3degree-100mindistance-2trucks"
+                        + "-2packagespercity-2008seed",
+                problem.getName());
+        assertEquals(2, problem.getAllPackages().size());
+        assertEquals(2, problem.getAllVehicles().size());
+
+        assertNotNull(problem.getVehicle("truck-2"));
+        assertNotNull(problem.getVehicle("truck-2").getLocation());
+        assertEquals("city-loc-3", problem.getVehicle("truck-2").getLocation().getName());
+
+        assertNotNull(problem.getPackage("package-1"));
+        assertNotNull(problem.getPackage("package-1").getSize());
+        assertEquals(1, problem.getPackage("package-1").getSize().getCost().intValue());
+        assertNotNull(problem.getPackage("package-1").getLocation());
+        assertEquals("city-loc-5", problem.getPackage("package-1").getLocation().getName());
+
+        assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
+        assertEquals(3, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
+        assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
+        assertEquals(3, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+
+        RoadGraph rg = problem.getRoadGraph();
+        assertNotNull(rg);
+        assertEquals(6, rg.getNodeCount());
+        assertEquals(14, rg.getEdgeCount());
+        Road road = rg.getRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
+        assertNotNull(road);
+        assertEquals(45, road.getLength().getCost().intValue());
+        assertEquals(FuelRoad.class, road.getClass());
+        FuelRoad fuelRoad = (FuelRoad) road;
+        assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
+        assertEquals(45, fuelRoad.getLength().getCost().intValue());
+
+        assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
+        Vehicle truck1 = problem.getVehicle("truck-1");
+        assertNotNull(truck1.getCurFuelCapacity());
+        assertEquals(323, (int) truck1.getCurFuelCapacity().getCost());
+        assertNotNull(truck1.getMaxFuelCapacity());
+        assertEquals(323, (int) truck1.getMaxFuelCapacity().getCost());
     }
 
 }

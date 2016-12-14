@@ -2,11 +2,12 @@ package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.*;
 
 public class ExternalPlannerIOIT {
 

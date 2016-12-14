@@ -3,11 +3,12 @@ package com.oskopek.transporteditor.weld;
 import com.oskopek.transporteditor.test.TestUtils;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 import javax.enterprise.inject.spi.CDI;
 import java.io.Serializable;
+
+import static org.junit.Assert.*;
 
 public class BeanManagerUtilIT {
 

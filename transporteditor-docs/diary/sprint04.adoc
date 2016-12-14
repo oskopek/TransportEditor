@@ -16,3 +16,19 @@ Fixed session load/save and a corresponding parser bug.
 == 2016/11/26
 
 Started working on the domain variant creator dialog.
+
+== 2016/12/09
+
+* Finished domain variant creator dialog (except numeric domains).
+Are they useful at all?
+* TODO: Talk to advisor about multi-agent planning benchmarks, or absence of thereof.
+* Finished external planner and validator dialogs.
+* Added all planning objects to Gantt chart.
+
+== 2016/12/??
+
+* Finished external planner and validator dialogs.
+
+== 2016/12/??
+
+* Meeting with my advisor.

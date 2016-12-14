@@ -3,10 +3,10 @@ package com.oskopek.transporteditor.view;
 import com.oskopek.transporteditor.controller.VariableDomainController;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -36,20 +36,23 @@ public class VariableDomainCreator {
      */
     public VariableDomain createDomainInDialog() {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();
-        DialogPane dialogPane = null;
+        BorderPane dialogPane = null;
         try (InputStream is = getClass().getResourceAsStream("VariableDomainCreatorPane.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
             AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
         }
-        dialogPane.setHeaderText(messages.getString("domaincreator.title"));
+        dialogPane.getStylesheets().add(getClass().getResource("validation.css").toExternalForm());
         VariableDomainController variableDomainController = fxmlLoader.getController();
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setDialogPane(dialogPane);
-        variableDomainController.setDialog(dialog);
-        dialog.setTitle("TransportEditor");
-        dialog.showAndWait();
+
+        Stage stage = new Stage();
+        variableDomainController.setHeaderText(messages.getString("domaincreator.title"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(dialogPane));
+        stage.setOnShown(e -> variableDomainController.getNameField().requestFocus());
+        variableDomainController.setDialog(stage);
+        stage.setTitle("TransportEditor");
+        stage.showAndWait();
         return variableDomainController.getChosenDomain();
     }
 }
