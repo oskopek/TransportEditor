@@ -32,7 +32,7 @@ public class SequentialPlanIOIT {
                 Collectors.joining("\n"));
     }
 
-    public static SequentialPlan P01SequentialPlan(DefaultProblem p01) {
+    public static SequentialPlan P01SequentialPlan(Problem p01) {
         List<Action> planEntryList = new ArrayList<>();
         planEntryList.add(domain.buildPickUp(p01.getVehicle("truck-1"), p01.getRoadGraph().getLocation("city-loc-4"),
                 p01.getPackage("package-1")));

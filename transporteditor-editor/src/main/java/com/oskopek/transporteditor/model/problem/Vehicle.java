@@ -24,6 +24,9 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
             ActionCost curFuelCapacity, ActionCost maxFuelCapacity,
             List<Package> packageList) {
         super(name, location);
+        if (packageList == null) {
+            throw new IllegalArgumentException("Package list cannot be null.");
+        }
         this.curCapacity = curCapacity;
         this.maxCapacity = maxCapacity;
         this.curFuelCapacity = curFuelCapacity;
@@ -92,6 +95,13 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getCurCapacity()).append(
+                getMaxCapacity()).append(getCurFuelCapacity()).append(
+                getMaxFuelCapacity()).append(getPackageList()).toHashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -106,13 +116,6 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
                 .append(getMaxFuelCapacity(), vehicle.getMaxFuelCapacity())
                 .append(getPackageList(), vehicle.getPackageList())
                 .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getCurCapacity()).append(
-                getMaxCapacity()).append(getCurFuelCapacity()).append(
-                getMaxFuelCapacity()).append(getPackageList()).toHashCode();
     }
 
     @Override

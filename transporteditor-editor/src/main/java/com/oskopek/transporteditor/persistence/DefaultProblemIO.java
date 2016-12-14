@@ -267,10 +267,10 @@ public class DefaultProblemIO implements DataReader<DefaultProblem>, DataWriter<
             String objectName = typeNameListContext.NAME(0).getText();
             switch (typeName) {
                 case "vehicle":
-                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, null));
+                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, new ArrayList<>()));
                     break;
                 case "package":
-                    parsed.packageMap().put(objectName, new Package(objectName, null, null, null));
+                    parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.valueOf(1)));
                     break;
                 case "location":
                     parsed.graph().addLocation(new Location(objectName, 0, 0));
