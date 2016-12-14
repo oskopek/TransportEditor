@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.model.planner;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.LogStreamable;
 import javafx.beans.value.ObservableValue;
 
@@ -22,5 +23,9 @@ public interface Planner extends LogStreamable {
     ObservableValue<Plan> getCurrentPlan();
 
     ObservableValue<Boolean> isPlanning();
+
+    default ExecutableWithParameters getExecutableWithParameters() {
+        return null;
+    }
 
 }

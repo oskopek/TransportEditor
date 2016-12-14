@@ -219,9 +219,17 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot set planner, because no planning session is loaded.");
         }
-        ExecutableWithParameters executableWithParameters = executableParametersCreator.createExecutableWithParameters(
-                2, messages.getString("planner.excreator.executable"),
-                messages.getString("planner.excreator.parameters"), messages.getString("planner.excreator.note"));
+        ExecutableWithParameters existing = null;
+        try {
+            existing = application.getPlanningSession().getPlanner().getExecutableWithParameters();
+        } catch (NullPointerException e) {
+            logger.trace("Got NPE while getting executable params for planner.", e);
+            // best effort, ignore exception
+        }
+        ExecutableWithParameters executableWithParameters = executableParametersCreator
+                .createExecutableWithParameters(2, messages.getString("planner.excreator.executable"),
+                        messages.getString("planner.excreator.parameters"),
+                        messages.getString("planner.excreator.note"), existing);
         if (executableWithParameters != null) {
             application.getPlanningSession().setPlanner(new ExternalPlanner(executableWithParameters));
         }
@@ -232,9 +240,17 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot set validator, because no planning session is loaded.");
         }
-        ExecutableWithParameters executableWithParameters = executableParametersCreator.createExecutableWithParameters(
-                3, messages.getString("validator.excreator.executable"),
-                messages.getString("validator.excreator.parameters"), messages.getString("validator.excreator.note"));
+        ExecutableWithParameters existing = null;
+        try {
+            existing = application.getPlanningSession().getValidator().getExecutableWithParameters();
+        } catch (NullPointerException e) {
+            logger.trace("Got NPE while getting executable params for validator.", e);
+            // best effort, ignore exception
+        }
+        ExecutableWithParameters executableWithParameters = executableParametersCreator
+                .createExecutableWithParameters(3, messages.getString("validator.excreator.executable"),
+                        messages.getString("validator.excreator.parameters"),
+                        messages.getString("validator.excreator.note"), existing);
         if (executableWithParameters != null) {
             application.getPlanningSession().setValidator(new VALValidator(executableWithParameters));
         }

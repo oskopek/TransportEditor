@@ -59,7 +59,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
 
     private synchronized Plan startPlanning(VariableDomain domain, DefaultProblem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
-            String executableCommand = executable.getExecutableCommand();
+            String executableCommand = executable.getExecutable();
             String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn);
@@ -144,6 +144,10 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
     @Override
     public synchronized ObservableValue<Boolean> isPlanning() {
         return plannerProcessProperty.isNotNull();
+    }
+
+    public ExecutableWithParameters getExecutableWithParameters() {
+        return executable;
     }
 
     @Override

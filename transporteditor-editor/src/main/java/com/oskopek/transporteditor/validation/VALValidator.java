@@ -46,7 +46,7 @@ public class VALValidator extends AbstractLogStreamable implements Validator {
 
     private synchronized boolean validate(VariableDomain domain, DefaultProblem problem, Plan plan) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, plan)) {
-            String executableCommand = executable.getExecutableCommand();
+            String executableCommand = executable.getExecutable();
             String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn).redirectErrorStream(true);

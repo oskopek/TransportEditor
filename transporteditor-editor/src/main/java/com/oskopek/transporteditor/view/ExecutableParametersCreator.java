@@ -38,7 +38,7 @@ public class ExecutableParametersCreator {
      * @return the executable with parameters
      */
     public ExecutableWithParameters createExecutableWithParameters(int parameterCount, String executableInstructions,
-            String parameterIntructions, String noteText) {
+            String parameterIntructions, String noteText, ExecutableWithParameters existing) {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();
         BorderPane dialogPane = null;
         try (InputStream is = getClass().getResourceAsStream("ExecutableParametersCreatorPane.fxml")) {
@@ -58,12 +58,17 @@ public class ExecutableParametersCreator {
         executableParametersController.setExecutableSubLabelText(executableInstructions);
         executableParametersController.setParametersSubLabelText(parameterIntructions);
         executableParametersController.setNoteText(noteText);
-
         executableParametersController.enableValidation(
                 executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString).isPresent(),
                 messages.getString("excreator.valid.executable"), parameterString -> List.range(0, parameterCount)
                         .map(i -> "{" + i + "}").forAll(parameterString::contains),
                 messages.getString("excreator.valid.paramcount") + ": " + parameterCount);
+
+        if (existing != null) {
+            executableParametersController.getExecutableArea().setText(existing.getExecutable());
+            executableParametersController.getParametersArea().setText(existing.getParameters());
+        }
+
         stage.setTitle("TransportEditor");
         stage.showAndWait();
         return executableParametersController.getExecutable();

@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.validation;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.LogStreamable;
 
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +34,10 @@ public interface Validator extends LogStreamable {
      */
     default CompletionStage<Boolean> isValidAsync(Domain domain, Problem problem, Plan plan) {
         return CompletableFuture.supplyAsync(() -> isValid(domain, problem, plan));
+    }
+
+    default ExecutableWithParameters getExecutableWithParameters() {
+        return null;
     }
 
 }

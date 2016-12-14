@@ -61,6 +61,10 @@ public class ExecutableParametersController extends AbstractController {
         return executableArea;
     }
 
+    public TextArea getParametersArea() {
+        return parametersArea;
+    }
+
     public void setHeaderText(String headerText) {
         this.headerText.setText(headerText);
     }
