@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<VariableDomain> {
+public class VariableDomainIO implements DataIO<Domain> {
 
     private static final Map<String, Class<? extends Predicate>> predicateNameMap = new HashMap<>();
     private static final Map<String, Class<? extends Function>> functionNameMap = new HashMap<>();
@@ -423,7 +424,7 @@ public class VariableDomainIO implements DataReader<VariableDomain>, DataWriter<
     }
 
     @Override
-    public String serialize(VariableDomain object) throws IllegalArgumentException {
+    public String serialize(Domain object) throws IllegalArgumentException {
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("domain", object);

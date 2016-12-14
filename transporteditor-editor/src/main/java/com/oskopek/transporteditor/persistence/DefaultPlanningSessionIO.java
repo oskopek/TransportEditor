@@ -1,8 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.model.DefaultPlanningSession;
+import com.oskopek.transporteditor.model.PlanningSession;
 
-public class DefaultPlanningSessionIO extends XStreamGenericIO<DefaultPlanningSession>
-        implements DataReader<DefaultPlanningSession>, DataWriter<DefaultPlanningSession> {
+public class DefaultPlanningSessionIO extends XStreamGenericIO<PlanningSession> {
     // intentionally empty
 }

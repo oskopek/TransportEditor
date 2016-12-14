@@ -17,8 +17,8 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
 
     private final ObjectProperty<Path> path = new SimpleObjectProperty<>();
     private final ObjectProperty<Persistable_> object = new SimpleObjectProperty<>();
-    private final ObjectProperty<DataReader<Persistable_>> reader = new SimpleObjectProperty<>();
-    private final ObjectProperty<DataWriter<Persistable_>> writer = new SimpleObjectProperty<>();
+    private final ObjectProperty<DataReader<? extends Persistable_>> reader = new SimpleObjectProperty<>();
+    private final ObjectProperty<DataWriter<? super Persistable_>> writer = new SimpleObjectProperty<>();
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -29,10 +29,10 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     }
 
     protected void clearObject() {
-        newObject(null, writer.get(), reader.get());
+        nonSafeNewObject(null, writer.get(), reader.get());
     }
 
-    public void load(Path path, DataWriter<Persistable_> writer, DataReader<Persistable_> reader)
+    public void load(Path path, DataWriter<? super Persistable_> writer, DataReader<? extends Persistable_> reader)
             throws IllegalArgumentException {
         close();
         this.reader.setValue(reader);
@@ -51,7 +51,13 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         setObject(parsed);
     }
 
-    public void newObject(Persistable_ object, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
+    public void newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+            DataReader<? extends Persistable_> reader) {
+        nonSafeNewObject(object, writer, reader);
+    }
+
+    private void nonSafeNewObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+            DataReader<? extends Persistable_> reader) {
         this.reader.setValue(reader);
         this.writer.setValue(writer);
         setPath(null);
@@ -84,6 +90,11 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     public void close() {
         setObject(null);
         setPath(null);
+    }
+
+    public <IO_ extends DataWriter<? super Persistable_> & DataReader<? extends Persistable_>> void setIO(IO_ io) {
+        this.reader.set(io);
+        this.writer.set(io);
     }
 
     public Path getPath() {

@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.validation;
+package com.oskopek.transporteditor.view;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

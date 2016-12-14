@@ -152,7 +152,8 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     }
 
     @Override
-    public void newObject(Persistable_ object, DataWriter<Persistable_> writer, DataReader<Persistable_> reader) {
+    public void newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+            DataReader<? extends Persistable_> reader) {
         checkForSaveBeforeOverwrite(() -> super.newObject(object, writer, reader));
     }
 

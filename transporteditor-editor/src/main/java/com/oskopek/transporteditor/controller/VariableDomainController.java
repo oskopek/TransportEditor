@@ -3,7 +3,8 @@ package com.oskopek.transporteditor.controller;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
-import com.oskopek.transporteditor.validation.TextAreaValidator;
+import com.oskopek.transporteditor.view.ExecutableParametersCreator;
+import com.oskopek.transporteditor.view.TextAreaValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -158,7 +159,7 @@ public class VariableDomainController extends AbstractController {
     /**
      * Set the dialog (used for reporting double clicks in the table).
      *
-     * @param dialog the dialog wrapper for {@link com.oskopek.transporteditor.view.VariableDomainCreator}
+     * @param dialog the dialog wrapper for {@link ExecutableParametersCreator}
      */
     public void setDialog(Stage dialog) {
         this.dialog = dialog;

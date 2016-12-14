@@ -15,11 +15,12 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.*;
-import com.oskopek.transporteditor.validation.VALValidator;
+import com.oskopek.transporteditor.validation.ValValidator;
 import com.oskopek.transporteditor.view.AlertCreator;
-import com.oskopek.transporteditor.view.EnterStringDialogPaneCreator;
+import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.VariableDomainCreator;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -40,9 +41,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,109 +55,91 @@ import java.util.stream.Collectors;
 @Singleton
 public class RootLayoutController extends AbstractController {
 
+    private final VariableDomainIO domainGuesser = new VariableDomainIO();
     @Inject
-    private EnterStringDialogPaneCreator enterStringDialogPaneCreator;
-
+    private ExecutableParametersCreator executableParametersCreator;
     @Inject
     private VariableDomainCreator variableDomainCreator;
-
     @Inject
-    private transient Logger logger;
-
+    private Logger logger;
     @Inject
-    private transient SaveDiscardDialogPaneCreator creator;
-
+    private SaveDiscardDialogPaneCreator creator;
     @FXML
-    private transient MenuItem fileSetPlannerMenuItem;
-
+    private MenuItem fileSetPlannerMenuItem;
     @FXML
-    private transient MenuItem fileSetValidatorMenuItem;
-
+    private MenuItem fileSetValidatorMenuItem;
     @FXML
-    private transient Menu sessionMenu;
-
+    private Menu sessionMenu;
     @FXML
-    private transient MenuItem sessionNewMenuItem;
-
+    private MenuItem sessionNewMenuItem;
     @FXML
-    private transient MenuItem sessionLoadMenuItem;
-
+    private MenuItem sessionLoadMenuItem;
     @FXML
-    private transient MenuItem sessionSaveMenuItem;
-
+    private MenuItem sessionSaveMenuItem;
     @FXML
-    private transient MenuItem sessionSaveAsMenuItem;
-
+    private MenuItem sessionSaveAsMenuItem;
     @FXML
-    private transient Menu domainMenu;
-
+    private Menu domainMenu;
     @FXML
-    private transient MenuItem domainNewMenuItem;
-
+    private MenuItem domainNewMenuItem;
     @FXML
-    private transient MenuItem domainLoadMenuItem;
-
+    private MenuItem domainLoadMenuItem;
     @FXML
-    private transient MenuItem domainSaveMenuItem;
-
+    private MenuItem domainSaveMenuItem;
     @FXML
-    private transient MenuItem domainSaveAsMenuItem;
-
+    private MenuItem domainSaveAsMenuItem;
     @FXML
-    private transient Menu problemMenu;
-
+    private Menu problemMenu;
     @FXML
-    private transient MenuItem problemNewMenuItem;
-
+    private MenuItem problemNewMenuItem;
     @FXML
-    private transient MenuItem problemLoadMenuItem;
-
+    private MenuItem problemLoadMenuItem;
     @FXML
-    private transient MenuItem problemSaveMenuItem;
-
+    private MenuItem problemSaveMenuItem;
     @FXML
-    private transient MenuItem problemSaveAsMenuItem;
-
+    private MenuItem problemSaveAsMenuItem;
     @FXML
-    private transient Menu planMenu;
-
+    private Menu planMenu;
     @FXML
-    private transient MenuItem planNewMenuItem;
-
+    private MenuItem planNewMenuItem;
     @FXML
-    private transient MenuItem planLoadMenuItem;
-
+    private MenuItem planLoadMenuItem;
     @FXML
-    private transient MenuItem planSaveMenuItem;
-
+    private MenuItem planSaveMenuItem;
     @FXML
-    private transient MenuItem planSaveAsMenuItem;
-
-    private JavaFxOpenedTextObjectHandler<DefaultProblem> problemFileHandler;
-    private JavaFxOpenedTextObjectHandler<DefaultPlanningSession> planningSessionFileHandler;
-    private JavaFxOpenedTextObjectHandler<VariableDomain> domainFileHandler;
+    private MenuItem planSaveAsMenuItem;
+    private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
+    private JavaFxOpenedTextObjectHandler<PlanningSession> planningSessionFileHandler;
+    private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
     private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
+
+    private static DataIO<Plan> createCorrectPlanIO(Domain domain, Problem problem) {
+        if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
+            return new TemporalPlanIO(domain, problem);
+        } else {
+            return new SequentialPlanIO(domain, problem);
+        }
+    }
 
     @FXML
     private void initialize() {
         eventBus.register(this);
 
-        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<DefaultPlanningSession>(application, messages,
+        planningSessionFileHandler = new JavaFxOpenedTextObjectHandler<PlanningSession>(application, messages,
                 creator)
                 .bind(sessionMenu, sessionNewMenuItem, sessionLoadMenuItem, sessionSaveMenuItem, sessionSaveAsMenuItem,
                         null).useXml();
-        domainFileHandler = new JavaFxOpenedTextObjectHandler<VariableDomain>(application, messages, creator)
+        domainFileHandler = new JavaFxOpenedTextObjectHandler<Domain>(application, messages, creator)
                 .bind(domainMenu, domainNewMenuItem, domainLoadMenuItem, domainSaveMenuItem, domainSaveAsMenuItem,
                         planningSessionFileHandler).usePddl();
-        problemFileHandler = new JavaFxOpenedTextObjectHandler<DefaultProblem>(application, messages, creator)
+        problemFileHandler = new JavaFxOpenedTextObjectHandler<Problem>(application, messages, creator)
                 .bind(problemMenu, problemNewMenuItem, problemLoadMenuItem, problemSaveMenuItem, problemSaveAsMenuItem,
                         domainFileHandler).usePddl();
         planFileHandler = new JavaFxOpenedTextObjectHandler<Plan>(application, messages, creator)
                 .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
                         problemFileHandler).useVal();
 
-        // TODO: Be careful with bindings and handlers to not create a memleak
-        application.planningSessionProperty().bind(planningSessionFileHandler.objectProperty());
+        application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
     }
@@ -189,16 +169,27 @@ public class RootLayoutController extends AbstractController {
         if (session != null) {
             Domain domain = session.getDomain();
             if (domain != null) {
-                domainFileHandler.setObject((VariableDomain) domain); // TODO: casting hack
-                session.domainProperty().bind(domainFileHandler.objectProperty());
+                domainFileHandler.setObject(domain);
+                session.domainProperty().bindBidirectional(domainFileHandler.objectProperty());
                 Problem problem = session.getProblem();
                 if (problem != null) {
-                    problemFileHandler.setObject((DefaultProblem) problem); // TODO: casting hack
-                    session.problemProperty().bind(problemFileHandler.objectProperty());
+                    if (application.getPlanningSession().getDomain() == null) {
+                        throw new IllegalStateException(
+                                "Cannot load problem from session, because no domain is loaded.");
+                    }
+                    problemFileHandler.setObject(problem);
+                    problemFileHandler.setIO(new DefaultProblemIO(application.getPlanningSession().getDomain()));
+                    session.problemProperty().bindBidirectional(problemFileHandler.objectProperty());
                     Plan plan = session.getPlan();
                     if (plan != null) {
+                        if (application.getPlanningSession().getProblem() == null) {
+                            throw new IllegalStateException(
+                                    "Cannot load plan from session, because no problem is loaded.");
+                        }
                         planFileHandler.setObject(plan);
-                        session.planProperty().bind(planFileHandler.objectProperty());
+                        planFileHandler.setIO(createCorrectPlanIO(application.getPlanningSession().getDomain(),
+                                application.getPlanningSession().getProblem()));
+                        session.planProperty().bindBidirectional(planFileHandler.objectProperty());
                     }
                 }
             }
@@ -218,33 +209,43 @@ public class RootLayoutController extends AbstractController {
 
     @FXML
     private void handleFileSetPlanner() {
-        PlanningSession session = planningSessionFileHandler.getObject();
-        if (session == null) {
-            throw new IllegalStateException("Cannot set planner on null session.");
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot set planner, because no planning session is loaded.");
         }
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("planner.executable")).showOpenDialog(application.getPrimaryStage()).toString())
-                .toAbsolutePath();
-        if (!Files.isExecutable(path)) {
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
-        } else {
-            session.setPlanner(new ExternalPlanner(path.toAbsolutePath() + " {0} {1}"));
+        ExecutableWithParameters existing = null;
+        try {
+            existing = application.getPlanningSession().getPlanner().getExecutableWithParameters();
+        } catch (NullPointerException e) {
+            logger.trace("Got NPE while getting executable params for planner.", e);
+            // best effort, ignore exception
+        }
+        ExecutableWithParameters executableWithParameters = executableParametersCreator
+                .createExecutableWithParameters(2, messages.getString("planner.excreator.executable"),
+                        messages.getString("planner.excreator.parameters"),
+                        messages.getString("planner.excreator.note"), existing);
+        if (executableWithParameters != null) {
+            application.getPlanningSession().setPlanner(new ExternalPlanner(executableWithParameters));
         }
     }
 
     @FXML
     private void handleFileSetValidator() {
-        PlanningSession session = planningSessionFileHandler.getObject();
-        if (session == null) {
-            throw new IllegalStateException("Cannot set validator on null session.");
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot set validator, because no planning session is loaded.");
         }
-        Path path = Paths.get(JavaFxOpenedTextObjectHandler.buildFileChooser(
-                messages.getString("validator.executable")).showOpenDialog(application.getPrimaryStage()).toString())
-                .toAbsolutePath();
-        if (!Files.isExecutable(path)) {
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("invalid.executable") + ":\n" + path);
-        } else {
-            session.setValidator(new VALValidator(path + " {0} {1}"));
+        ExecutableWithParameters existing = null;
+        try {
+            existing = application.getPlanningSession().getValidator().getExecutableWithParameters();
+        } catch (NullPointerException e) {
+            logger.trace("Got NPE while getting executable params for validator.", e);
+            // best effort, ignore exception
+        }
+        ExecutableWithParameters executableWithParameters = executableParametersCreator
+                .createExecutableWithParameters(3, messages.getString("validator.excreator.executable"),
+                        messages.getString("validator.excreator.parameters"),
+                        messages.getString("validator.excreator.note"), existing);
+        if (executableWithParameters != null) {
+            application.getPlanningSession().setValidator(new ValValidator(executableWithParameters));
         }
     }
 
@@ -257,7 +258,7 @@ public class RootLayoutController extends AbstractController {
         if (domain != null) {
             VariableDomainIO guesser = new VariableDomainIO();
             domainFileHandler.newObject(domain, guesser, guesser);
-            application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+            application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         }
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -267,9 +268,9 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot load domain, because no planning session is loaded.");
         }
-        VariableDomainIO guesser = new VariableDomainIO();
-        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), guesser, guesser);
-        application.getPlanningSession().domainProperty().bind(domainFileHandler.objectProperty());
+
+        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), domainGuesser, domainGuesser);
+        application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -300,7 +301,7 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler.newObject(
                 new DefaultProblem("problem" + new Date().toString(), graph, new HashMap<>(),
                         new HashMap<>()), io, io);
-        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
+        application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -311,7 +312,7 @@ public class RootLayoutController extends AbstractController {
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
         problemFileHandler.loadWithDefaultFileChooser(messages.getString("load.problem"), io, io);
-        application.getPlanningSession().problemProperty().bind(problemFileHandler.objectProperty());
+        application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -339,7 +340,7 @@ public class RootLayoutController extends AbstractController {
         SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
                 application.getPlanningSession().getProblem());
         planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
-        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
 
@@ -350,14 +351,9 @@ public class RootLayoutController extends AbstractController {
         }
         Domain domain = application.getPlanningSession().getDomain();
         Problem problem = application.getPlanningSession().getProblem();
-        if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
-            TemporalPlanIO io = new TemporalPlanIO(domain, problem);
-            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
-        } else {
-            SequentialPlanIO io = new SequentialPlanIO(domain, problem);
-            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
-        }
-        application.getPlanningSession().planProperty().bind(planFileHandler.objectProperty());
+        DataIO<Plan> io = createCorrectPlanIO(domain, problem);
+        planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
+        application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
 
@@ -462,4 +458,5 @@ public class RootLayoutController extends AbstractController {
     private void handleAboutAbout() {
         loadWebResource("root.aboutResource", "root.about", "root.resourceNotAvailableInYourLanguage");
     }
+
 }

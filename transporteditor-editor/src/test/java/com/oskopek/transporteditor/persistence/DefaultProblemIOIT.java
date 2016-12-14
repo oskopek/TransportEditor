@@ -4,12 +4,13 @@ import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.*;
 
 public class DefaultProblemIOIT {
 
@@ -40,6 +41,46 @@ public class DefaultProblemIOIT {
                 Collectors.joining("\n")) + "\n";
     }
 
+    public static void assertP01Sequential(Problem problem) {
+        assertNotNull(problem);
+        assertEquals("transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed",
+                problem.getName());
+        assertEquals(2, problem.getAllPackages().size());
+        assertEquals(2, problem.getAllVehicles().size());
+
+        assertNotNull(problem.getVehicle("truck-2"));
+        assertNotNull(problem.getVehicle("truck-2").getLocation());
+        assertEquals("city-loc-5", problem.getVehicle("truck-2").getLocation().getName());
+
+        assertNotNull(problem.getPackage("package-1"));
+        assertNotNull(problem.getPackage("package-1").getLocation());
+        assertEquals("city-loc-4", problem.getPackage("package-1").getLocation().getName());
+        assertNotNull(problem.getPackage("package-1").getSize());
+        assertEquals(1, problem.getPackage("package-1").getSize().getCost().intValue());
+
+
+        assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
+        assertEquals(2, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
+        assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
+        assertEquals(2, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertNotNull(problem.getVehicle("truck-1").getPackageList());
+        assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
+
+        RoadGraph rg = problem.getRoadGraph();
+        assertNotNull(rg);
+        assertEquals(5, rg.getNodeCount());
+        assertEquals(12, rg.getEdgeCount());
+        Road road = rg.getRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
+        assertNotNull(road);
+        assertNotNull(road.getLength());
+        assertEquals(32, road.getLength().getCost().intValue());
+
+        assertNotNull(problem.getPackage("package-1").getTarget());
+        assertEquals("city-loc-5", problem.getPackage("package-1").getTarget().getName());
+        assertNotNull(problem.getPackage("package-2").getTarget());
+        assertEquals("city-loc-2", problem.getPackage("package-2").getTarget().getName());
+    }
+
     @Test
     public void serializeSequential() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
@@ -62,38 +103,7 @@ public class DefaultProblemIOIT {
     @Test
     public void parseSequential() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
-        assertNotNull(problem);
-        assertEquals("transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed",
-                problem.getName());
-        assertEquals(2, problem.getAllPackages().size());
-        assertEquals(2, problem.getAllVehicles().size());
-
-        assertNotNull(problem.getVehicle("truck-2"));
-        assertNotNull(problem.getVehicle("truck-2").getLocation());
-        assertEquals("city-loc-5", problem.getVehicle("truck-2").getLocation().getName());
-
-        assertNotNull(problem.getPackage("package-1"));
-        assertNotNull(problem.getPackage("package-1").getLocation());
-        assertEquals("city-loc-4", problem.getPackage("package-1").getLocation().getName());
-
-        assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
-        assertEquals(2, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
-        assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
-        assertEquals(2, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
-
-        RoadGraph rg = problem.getRoadGraph();
-        assertNotNull(rg);
-        assertEquals(5, rg.getNodeCount());
-        assertEquals(12, rg.getEdgeCount());
-        Road road = rg.getRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
-        assertNotNull(road);
-        assertNotNull(road.getLength());
-        assertEquals(32, road.getLength().getCost().intValue());
-
-        assertNotNull(problem.getPackage("package-1").getTarget());
-        assertEquals("city-loc-5", problem.getPackage("package-1").getTarget().getName());
-        assertNotNull(problem.getPackage("package-2").getTarget());
-        assertEquals("city-loc-2", problem.getPackage("package-2").getTarget().getName());
+        assertP01Sequential(problem);
     }
 
     @Test
@@ -136,6 +146,8 @@ public class DefaultProblemIOIT {
         assertEquals(100, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
         assertEquals(100, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertNotNull(problem.getVehicle("truck-1").getPackageList());
+        assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
 
         RoadGraph rg = problem.getRoadGraph();
         assertNotNull(rg);
@@ -201,6 +213,8 @@ public class DefaultProblemIOIT {
         assertEquals(3, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
         assertEquals(3, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertNotNull(problem.getVehicle("truck-1").getPackageList());
+        assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
 
         RoadGraph rg = problem.getRoadGraph();
         assertNotNull(rg);

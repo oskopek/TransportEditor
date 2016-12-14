@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class SequentialPlanIO implements DataReader<Plan>, DataWriter<Plan> {
+public class SequentialPlanIO implements DataIO<Plan> {
 
     private final Problem problem;
     private final Domain domain;

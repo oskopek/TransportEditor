@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.persistence;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
@@ -59,6 +60,58 @@ public class VariableDomainIOIT {
         roadGraph.addLocation(new Location("b", 0, 0));
         roadGraph.addRoad(new DefaultRoad("a->b", ActionCost.valueOf(11)), roadGraph.getLocation("a"),
                 roadGraph.getLocation("b"));
+    }
+
+    public static void assertSequentialDomain(Domain parsed) {
+        assertNotNull(parsed);
+
+        assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
+        assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
+        assertNotContains(PddlLabel.Temporal, parsed.getPddlLabels());
+        assertContains(PddlLabel.ActionCost, parsed.getPddlLabels());
+        assertNotContains(PddlLabel.Fuel, parsed.getPddlLabels());
+
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.valueOf(11),
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                        .getCost());
+        assertEquals(ActionCost.valueOf(11),
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                        .getDuration());
+
+        // drive
+        assertContains(new WhoAtWhere(), parsed.getDriveBuilder().getPreconditions());
+        assertContains(new IsRoad(), parsed.getDriveBuilder().getPreconditions());
+        assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
+
+        assertContains(new Not(new WhoAtWhere()), parsed.getDriveBuilder().getEffects());
+        assertContains(new WhoAtWhat(), parsed.getDriveBuilder().getEffects());
+        assertEquals(2, parsed.getDriveBuilder().getEffects().size());
+
+        // pickup
+        assertContains(new WhoAtWhere(), parsed.getPickUpBuilder().getPreconditions());
+        assertContains(new WhatAtWhere(), parsed.getPickUpBuilder().getPreconditions());
+        assertEquals(2, parsed.getPickUpBuilder().getPreconditions().size());
+
+        assertContains(new In(), parsed.getPickUpBuilder().getEffects());
+        assertContains(new Not(new WhatAtWhere()), parsed.getPickUpBuilder().getEffects());
+        assertEquals(2, parsed.getPickUpBuilder().getEffects().size());
+
+        // drop
+        assertContains(new WhoAtWhere(), parsed.getDropBuilder().getPreconditions());
+        assertContains(new In(), parsed.getDropBuilder().getPreconditions());
+        assertEquals(2, parsed.getDropBuilder().getPreconditions().size());
+
+        assertContains(new Not(new In()), parsed.getDropBuilder().getEffects());
+        assertContains(new WhatAtWhere(), parsed.getDropBuilder().getEffects());
+        assertEquals(2, parsed.getDropBuilder().getEffects().size());
+
+        assertNull(parsed.getRefuelBuilder());
+        SequentialDomain sequentialDomain = new SequentialDomain("Transport sequential");
+        assertEquals(sequentialDomain, parsed);
     }
 
     @Before
@@ -152,55 +205,7 @@ public class VariableDomainIOIT {
     @Test
     public void parseSeq() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
-        assertNotNull(parsed);
-
-        assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.Temporal, parsed.getPddlLabels());
-        assertContains(PddlLabel.ActionCost, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.Fuel, parsed.getPddlLabels());
-
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
-                        .getCost());
-        assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
-                        .getDuration());
-
-        // drive
-        assertContains(new WhoAtWhere(), parsed.getDriveBuilder().getPreconditions());
-        assertContains(new IsRoad(), parsed.getDriveBuilder().getPreconditions());
-        assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
-
-        assertContains(new Not(new WhoAtWhere()), parsed.getDriveBuilder().getEffects());
-        assertContains(new WhoAtWhat(), parsed.getDriveBuilder().getEffects());
-        assertEquals(2, parsed.getDriveBuilder().getEffects().size());
-
-        // pickup
-        assertContains(new WhoAtWhere(), parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new WhatAtWhere(), parsed.getPickUpBuilder().getPreconditions());
-        assertEquals(2, parsed.getPickUpBuilder().getPreconditions().size());
-
-        assertContains(new In(), parsed.getPickUpBuilder().getEffects());
-        assertContains(new Not(new WhatAtWhere()), parsed.getPickUpBuilder().getEffects());
-        assertEquals(2, parsed.getPickUpBuilder().getEffects().size());
-
-        // drop
-        assertContains(new WhoAtWhere(), parsed.getDropBuilder().getPreconditions());
-        assertContains(new In(), parsed.getDropBuilder().getPreconditions());
-        assertEquals(2, parsed.getDropBuilder().getPreconditions().size());
-
-        assertContains(new Not(new In()), parsed.getDropBuilder().getEffects());
-        assertContains(new WhatAtWhere(), parsed.getDropBuilder().getEffects());
-        assertEquals(2, parsed.getDropBuilder().getEffects().size());
-
-        assertNull(parsed.getRefuelBuilder());
-        SequentialDomain sequentialDomain = new SequentialDomain("Transport sequential");
-        assertEquals(sequentialDomain, parsed);
+        assertSequentialDomain(parsed);
     }
 
     @Test(expected = IllegalArgumentException.class)

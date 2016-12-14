@@ -4,11 +4,19 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.validation.EmptyValidator;
 import com.oskopek.transporteditor.validation.Validator;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The default implementation of a planning session.
@@ -20,6 +28,24 @@ public class DefaultPlanningSession implements PlanningSession {
     private final ObjectProperty<Domain> domainProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Problem> problemProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
+    private final transient IntegerProperty sessionChange = new SimpleIntegerProperty();
+
+    public DefaultPlanningSession() {
+        setValidator(new EmptyValidator());
+        plannerProperty().addListener(s -> registerChange());
+        validatorProperty().addListener(s -> registerChange());
+        domainProperty().addListener(s -> registerChange());
+        problemProperty().addListener(s -> registerChange());
+        planProperty().addListener(s -> registerChange());
+    }
+
+    private void registerChange() {
+        sessionChangeProperty().setValue(sessionChangeProperty().get() + 1);
+    }
+
+    private synchronized IntegerProperty sessionChangeProperty() {
+        return sessionChange;
+    }
 
     @Override
     public Domain getDomain() {
@@ -97,14 +123,38 @@ public class DefaultPlanningSession implements PlanningSession {
     }
 
     @Override
-    public void startPlanning() {
-        getPlanner().startPlanning(getDomain(), getProblem());
+    public CompletionStage<Plan> startPlanningAsync() {
+        return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
+            if (plan != null) {
+                boolean isValid;
+                try {
+                    isValid = startValidationAsyncInternal(plan).toCompletableFuture().get();
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new IllegalStateException("Could not validate plan.", e);
+                }
+                if (isValid) {
+                    setPlan(plan);
+                }
+            }
+            return CompletableFuture.completedFuture(plan);
+        });
     }
 
     @Override
-    public void stopPlanning() {
-        getPlanner().stopPlanning();
-        getValidator().isValid(getDomain(), getProblem(), getPlanner().getBestPlan());
+    public CompletionStage<Boolean> startValidationAsync() {
+        return startValidationAsyncInternal(getPlan());
+    }
+
+    public void addListener(InvalidationListener listener) {
+        sessionChangeProperty().addListener(listener);
+    }
+
+    public void removeListener(InvalidationListener listener) {
+        sessionChangeProperty().removeListener(listener);
+    }
+
+    private CompletionStage<Boolean> startValidationAsyncInternal(Plan plan) {
+        return getValidator().isValidAsync(getDomain(), getProblem(), plan);
     }
 
     @Override

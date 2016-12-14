@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class ExternalPlannerIOIT {
 
     private static String emptyPlannerContents;
-    private static ExternalPlanner emptyPlanner = new ExternalPlanner("planner.jar -domain {0} -problem {1}");
+    private static ExternalPlanner emptyPlanner = new ExternalPlanner("planner.jar", "-domain {0} -problem {1}");
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -31,7 +31,7 @@ public class ExternalPlannerIOIT {
     public void parseEmpty() throws Exception {
         ExternalPlanner parsed = new ExternalPlannerIO().parse(emptyPlannerContents);
         assertNotNull(parsed);
-        assertNull(parsed.getBestPlan());
+        assertNull(parsed.getCurrentPlan());
         assertEquals(emptyPlanner, parsed);
     }
 }
