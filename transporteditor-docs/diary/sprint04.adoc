@@ -21,7 +21,6 @@ Started working on the domain variant creator dialog.
 
 * Finished domain variant creator dialog (except numeric domains).
 Are they useful at all?
-* TODO: Talk to advisor about multi-agent planning benchmarks, or absence of thereof.
 * Finished external planner and validator dialogs.
 * Added all planning objects to Gantt chart.
 
@@ -29,6 +28,16 @@ Are they useful at all?
 
 * Finished external planner and validator dialogs.
 
+== 2016/12/14
+
+* Finished log viewer dialog.
+* Fixed recursive discard dialog bug.
+* Released sprint04.
+* Sent email requesting meeting.
+
 == 2016/12/??
 
 * Meeting with my advisor.
+** Talk to advisor about multi-agent planning benchmarks, or absence of thereof.
+** Are numerical variants useful at all?
+** Feedback on sprint04 release.
