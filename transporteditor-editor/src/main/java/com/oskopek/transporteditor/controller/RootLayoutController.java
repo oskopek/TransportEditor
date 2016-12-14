@@ -55,88 +55,71 @@ import java.util.stream.Collectors;
 @Singleton
 public class RootLayoutController extends AbstractController {
 
+    private final VariableDomainIO domainGuesser = new VariableDomainIO();
     @Inject
     private ExecutableParametersCreator executableParametersCreator;
-
     @Inject
     private VariableDomainCreator variableDomainCreator;
-
     @Inject
-    private transient Logger logger;
-
+    private Logger logger;
     @Inject
-    private transient SaveDiscardDialogPaneCreator creator;
-
+    private SaveDiscardDialogPaneCreator creator;
     @FXML
-    private transient MenuItem fileSetPlannerMenuItem;
-
+    private MenuItem fileSetPlannerMenuItem;
     @FXML
-    private transient MenuItem fileSetValidatorMenuItem;
-
+    private MenuItem fileSetValidatorMenuItem;
     @FXML
-    private transient Menu sessionMenu;
-
+    private Menu sessionMenu;
     @FXML
-    private transient MenuItem sessionNewMenuItem;
-
+    private MenuItem sessionNewMenuItem;
     @FXML
-    private transient MenuItem sessionLoadMenuItem;
-
+    private MenuItem sessionLoadMenuItem;
     @FXML
-    private transient MenuItem sessionSaveMenuItem;
-
+    private MenuItem sessionSaveMenuItem;
     @FXML
-    private transient MenuItem sessionSaveAsMenuItem;
-
+    private MenuItem sessionSaveAsMenuItem;
     @FXML
-    private transient Menu domainMenu;
-
+    private Menu domainMenu;
     @FXML
-    private transient MenuItem domainNewMenuItem;
-
+    private MenuItem domainNewMenuItem;
     @FXML
-    private transient MenuItem domainLoadMenuItem;
-
+    private MenuItem domainLoadMenuItem;
     @FXML
-    private transient MenuItem domainSaveMenuItem;
-
+    private MenuItem domainSaveMenuItem;
     @FXML
-    private transient MenuItem domainSaveAsMenuItem;
-
+    private MenuItem domainSaveAsMenuItem;
     @FXML
-    private transient Menu problemMenu;
-
+    private Menu problemMenu;
     @FXML
-    private transient MenuItem problemNewMenuItem;
-
+    private MenuItem problemNewMenuItem;
     @FXML
-    private transient MenuItem problemLoadMenuItem;
-
+    private MenuItem problemLoadMenuItem;
     @FXML
-    private transient MenuItem problemSaveMenuItem;
-
+    private MenuItem problemSaveMenuItem;
     @FXML
-    private transient MenuItem problemSaveAsMenuItem;
-
+    private MenuItem problemSaveAsMenuItem;
     @FXML
-    private transient Menu planMenu;
-
+    private Menu planMenu;
     @FXML
-    private transient MenuItem planNewMenuItem;
-
+    private MenuItem planNewMenuItem;
     @FXML
-    private transient MenuItem planLoadMenuItem;
-
+    private MenuItem planLoadMenuItem;
     @FXML
-    private transient MenuItem planSaveMenuItem;
-
+    private MenuItem planSaveMenuItem;
     @FXML
-    private transient MenuItem planSaveAsMenuItem;
-
+    private MenuItem planSaveAsMenuItem;
     private JavaFxOpenedTextObjectHandler<Problem> problemFileHandler;
     private JavaFxOpenedTextObjectHandler<PlanningSession> planningSessionFileHandler;
     private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
     private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
+
+    private static DataIO<Plan> createCorrectPlanIO(Domain domain, Problem problem) {
+        if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
+            return new TemporalPlanIO(domain, problem);
+        } else {
+            return new SequentialPlanIO(domain, problem);
+        }
+    }
 
     @FXML
     private void initialize() {
@@ -156,7 +139,6 @@ public class RootLayoutController extends AbstractController {
                 .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
                         problemFileHandler).useVal();
 
-        // TODO: Be careful with bindings and handlers to not create a memleak
         application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
@@ -191,11 +173,22 @@ public class RootLayoutController extends AbstractController {
                 session.domainProperty().bindBidirectional(domainFileHandler.objectProperty());
                 Problem problem = session.getProblem();
                 if (problem != null) {
+                    if (application.getPlanningSession().getDomain() == null) {
+                        throw new IllegalStateException(
+                                "Cannot load problem from session, because no domain is loaded.");
+                    }
                     problemFileHandler.setObject(problem);
+                    problemFileHandler.setIO(new DefaultProblemIO(application.getPlanningSession().getDomain()));
                     session.problemProperty().bindBidirectional(problemFileHandler.objectProperty());
                     Plan plan = session.getPlan();
                     if (plan != null) {
+                        if (application.getPlanningSession().getProblem() == null) {
+                            throw new IllegalStateException(
+                                    "Cannot load plan from session, because no problem is loaded.");
+                        }
                         planFileHandler.setObject(plan);
+                        planFileHandler.setIO(createCorrectPlanIO(application.getPlanningSession().getDomain(),
+                                application.getPlanningSession().getProblem()));
                         session.planProperty().bindBidirectional(planFileHandler.objectProperty());
                     }
                 }
@@ -275,8 +268,8 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot load domain, because no planning session is loaded.");
         }
-        VariableDomainIO guesser = new VariableDomainIO();
-        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), guesser, guesser);
+
+        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), domainGuesser, domainGuesser);
         application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -358,13 +351,8 @@ public class RootLayoutController extends AbstractController {
         }
         Domain domain = application.getPlanningSession().getDomain();
         Problem problem = application.getPlanningSession().getProblem();
-        if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
-            TemporalPlanIO io = new TemporalPlanIO(domain, problem);
-            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
-        } else {
-            SequentialPlanIO io = new SequentialPlanIO(domain, problem);
-            planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
-        }
+        DataIO<Plan> io = createCorrectPlanIO(domain, problem);
+        planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
         application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
@@ -470,4 +458,5 @@ public class RootLayoutController extends AbstractController {
     private void handleAboutAbout() {
         loadWebResource("root.aboutResource", "root.about", "root.resourceNotAvailableInYourLanguage");
     }
+
 }

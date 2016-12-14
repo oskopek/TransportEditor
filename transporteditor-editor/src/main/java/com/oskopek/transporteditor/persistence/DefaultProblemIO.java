@@ -21,7 +21,7 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DefaultProblemIO implements DataReader<Problem>, DataWriter<Problem> {
+public class DefaultProblemIO implements DataIO<Problem> {
 
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 

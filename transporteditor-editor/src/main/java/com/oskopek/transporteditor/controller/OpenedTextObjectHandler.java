@@ -92,6 +92,11 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         setPath(null);
     }
 
+    public <IO_ extends DataWriter<? super Persistable_> & DataReader<? extends Persistable_>> void setIO(IO_ io) {
+        this.reader.set(io);
+        this.writer.set(io);
+    }
+
     public Path getPath() {
         return path.get();
     }

@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 
-public abstract class XStreamGenericIO<T> implements DataReader<T>, DataWriter<T> {
+public abstract class XStreamGenericIO<T> implements DataIO<T> {
 
     private final XStream xStream;
 

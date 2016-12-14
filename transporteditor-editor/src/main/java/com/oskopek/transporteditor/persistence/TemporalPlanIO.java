@@ -14,7 +14,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TemporalPlanIO implements DataReader<Plan>, DataWriter<Plan> {
+public class TemporalPlanIO implements DataIO<Plan> {
 
     private final Domain domain;
     private final Problem problem;

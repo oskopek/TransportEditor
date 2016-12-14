@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class VariableDomainIO implements DataReader<Domain>, DataWriter<Domain> {
+public class VariableDomainIO implements DataIO<Domain> {
 
     private static final Map<String, Class<? extends Predicate>> predicateNameMap = new HashMap<>();
     private static final Map<String, Class<? extends Function>> functionNameMap = new HashMap<>();
