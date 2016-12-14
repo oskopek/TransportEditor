@@ -59,7 +59,8 @@ public class ExecutableParametersCreator {
         executableParametersController.setParametersSubLabelText(parameterIntructions);
         executableParametersController.setNoteText(noteText);
         executableParametersController.enableValidation(
-                executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString).isPresent(),
+                executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString.trim())
+                        .isPresent(),
                 messages.getString("excreator.valid.executable"), parameterString -> List.range(0, parameterCount)
                         .map(i -> "{" + i + "}").forAll(parameterString::contains),
                 messages.getString("excreator.valid.paramcount") + ": " + parameterCount);

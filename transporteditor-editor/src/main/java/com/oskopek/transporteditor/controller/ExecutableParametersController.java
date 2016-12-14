@@ -86,7 +86,7 @@ public class ExecutableParametersController extends AbstractController {
         executableAreaValid = new ValidationProperty(executableValidationFailed, executableArea);
         parametersAreaValid = new ValidationProperty(parameterValidationFailed, parametersArea);
 
-        Predicate<String> nonEmpty = s -> !s.isEmpty();
+        Predicate<String> nonEmpty = s -> !s.trim().isEmpty();
         executableAreaValid.bind(
                 new TextAreaValidator(executableArea.textProperty(), nonEmpty.and(executableTextValidator)::test)
                         .isValidProperty());
