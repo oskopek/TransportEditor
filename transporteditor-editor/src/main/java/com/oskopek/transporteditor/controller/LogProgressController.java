@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ public class LogProgressController extends AbstractController {
     private Button cancelButton;
     private ButtonBar.ButtonData result;
 
+    private Runnable cancellator;
+
     @FXML
     private void initialize() {
         logArea.setStyle("-fx-border-color: transparent");
@@ -38,9 +41,10 @@ public class LogProgressController extends AbstractController {
     }
 
     public void setProgressConditions(ObservableValue<Boolean> successfullyFinished,
-            ObservableValue<Boolean> cancelAvailable, ObservableValue<Boolean> inProgress) {
-        okButton.disableProperty().bind(successfullyFinished);
-        cancelButton.disableProperty().bind(cancelAvailable);
+            ObservableValue<Boolean> cancelAvailable, ObservableValue<Boolean> inProgress, Runnable cancellator) {
+        this.cancellator = cancellator;
+        okButton.disableProperty().bind(BooleanBinding.booleanExpression(successfullyFinished).not());
+        cancelButton.disableProperty().bind(BooleanBinding.booleanExpression(cancelAvailable).not());
         inProgress.addListener((observable, oldValue, newInProgress) -> {
             if (!newInProgress) {
                 progressBar.setProgress(1.0);
@@ -59,8 +63,16 @@ public class LogProgressController extends AbstractController {
 
     @FXML
     private void handleCancelButton() {
-        result = ButtonBar.ButtonData.CANCEL_CLOSE;
-        dialog.close();
+        if (!cancelButton.isDisabled()) {
+            if (cancellator != null) {
+                appendLog("\nCancelling process...\n");
+                cancellator.run();
+            }
+            result = ButtonBar.ButtonData.CANCEL_CLOSE;
+            dialog.close();
+        } else {
+            throw new IllegalStateException("Cancel button should have been disabled failed!");
+        }
     }
 
     /**
@@ -78,7 +90,7 @@ public class LogProgressController extends AbstractController {
             result = ButtonBar.ButtonData.APPLY;
             dialog.close();
         } else {
-            throw new IllegalStateException("Button should be disabled if validation failed!");
+            throw new IllegalStateException("Ok button should have been disabled failed!");
         }
     }
 

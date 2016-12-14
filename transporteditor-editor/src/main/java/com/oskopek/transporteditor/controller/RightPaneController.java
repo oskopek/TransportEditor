@@ -6,6 +6,8 @@ import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.planner.Planner;
+import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
@@ -117,13 +119,18 @@ public class RightPaneController extends AbstractController {
     private void handlePlan() {
         logger.debug("Starting planning...");
         CompletionStage<Plan> planFuture = application.getPlanningSession().startPlanningAsync();
+        Planner planner = application.getPlanningSession().getPlanner();
         BooleanProperty successful = new SimpleBooleanProperty(false);
         BooleanProperty completed = new SimpleBooleanProperty(false);
         planFuture.thenAcceptAsync(plan -> {
-            logger.trace("Planning finished {}", plan != null);
+            logger.debug("Planning finished. Plan: {}", plan);
             Platform.runLater(() -> {
                 successful.setValue(plan != null);
                 completed.setValue(true);
+                if (plan == null) {
+                    AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
+                            + messages.getString("planner.nullplan"), ButtonType.OK);
+                }
             });
         }).thenRunAsync(() -> {
             logger.trace("EventBus begin");
@@ -136,14 +143,14 @@ public class RightPaneController extends AbstractController {
         }).exceptionally(
                 throwable -> {
                     Platform.runLater(() -> completed.setValue(true));
-                    logger.trace("Planning failed.", throwable);
-            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
+                    logger.debug("Planning failed.", throwable);
+                    AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
                     + throwable.getMessage(), ButtonType.OK);
             return null;
         });
         logger.trace("LogProgress begin");
-        logProgressCreator.createLogProgresDialog(application.getPlanningSession().getPlanner(), successful,
-                successful.not(), completed.not());
+        logProgressCreator.createLogProgressDialog(application.getPlanningSession().getPlanner(), successful,
+                completed.not().or(successful.not()), completed.not(), planner::cancel);
         logger.trace("LogProgress end");
     }
 
@@ -151,6 +158,7 @@ public class RightPaneController extends AbstractController {
     private void handleValidate() {
         logger.debug("Starting validation...");
         CompletionStage<Boolean> validationFuture = application.getPlanningSession().startValidationAsync();
+        Validator validator = application.getPlanningSession().getValidator();
         BooleanProperty successful = new SimpleBooleanProperty(false);
         BooleanProperty completed = new SimpleBooleanProperty(false);
         validationFuture.thenAcceptAsync(isValid -> Platform.runLater(() -> {
@@ -168,9 +176,9 @@ public class RightPaneController extends AbstractController {
             AlertCreator.showAlert(Alert.AlertType.ERROR,
                     messages.getString("validation.failed") + ": " + throwable.getMessage(), ButtonType.CLOSE);
             return null;
-        });
-        logProgressCreator.createLogProgresDialog(application.getPlanningSession().getValidator(), successful,
-                completed.not(), completed.not());
+        }).toCompletableFuture();
+        logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
+                completed.not().or(successful.not()), completed.not(), validator::cancel);
     }
 
     /**

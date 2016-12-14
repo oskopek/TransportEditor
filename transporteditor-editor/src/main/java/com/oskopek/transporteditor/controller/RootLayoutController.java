@@ -196,7 +196,7 @@ public class RootLayoutController extends AbstractController {
                     Plan plan = session.getPlan();
                     if (plan != null) {
                         planFileHandler.setObject(plan);
-                        session.planProperty().bind(planFileHandler.objectProperty());
+                        session.planProperty().bindBidirectional(planFileHandler.objectProperty());
                     }
                 }
             }

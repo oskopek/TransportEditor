@@ -8,7 +8,7 @@ import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
-import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
+import com.oskopek.transporteditor.view.executables.AbstractLogCancellable;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.ExecutableTemporarySerializer;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
@@ -25,8 +25,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
-public class ExternalPlanner extends AbstractLogStreamable implements Planner {
+public class ExternalPlanner extends AbstractLogCancellable implements Planner {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
@@ -73,10 +74,19 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
             }
             CompletableFuture<Integer> retValFuture = CompletableFuture.supplyAsync(() -> {
                 try {
-                    return plannerProcessProperty.get().waitFor();
+                    while (!getKillActiveProcess()) {
+                        boolean finished = plannerProcessProperty.get().waitFor(500, TimeUnit.MILLISECONDS);
+                        if (finished) {
+                            break;
+                        }
+                    }
+                    if (getKillActiveProcess()) {
+                        plannerProcessProperty.get().destroyForcibly().waitFor();
+                    }
                 } catch (InterruptedException e) {
                     throw new IllegalStateException("Planning failed.", e);
                 }
+                return plannerProcessProperty.get().exitValue();
             }).toCompletableFuture();
 
             try (BufferedReader reader = new BufferedReader(
@@ -84,7 +94,7 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
                 String line = reader.readLine();
                 while (line != null && !retValFuture.isDone()) {
                     logger.debug("stderr: {}", line);
-                    log(line);
+                    log("ERROR: " + line);
                     line = reader.readLine();
                 }
             } catch (IOException e) {
@@ -94,30 +104,31 @@ public class ExternalPlanner extends AbstractLogStreamable implements Planner {
             int retVal = Try.of(retValFuture::get)
                     .getOrElseThrow((e) -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
-                throw new IllegalStateException("Planning failed: return value " + retVal + ".");
-            }
-
-            log("");
-            log("Planner output:");
-            StringBuilder planOutput = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
-                String line = reader.readLine();
-                while (line != null) {
-                    logger.debug("stdout: {}", line);
-                    log(line);
-                    planOutput.append(line).append('\n');
-                    line = reader.readLine();
+                logger.warn("Planning failed: return value " + retVal + ".");
+            } else {
+                log("");
+                log("Planner output:");
+                StringBuilder planOutput = new StringBuilder();
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
+                    String line = reader.readLine();
+                    while (line != null) {
+                        logger.debug("stdout: {}", line);
+                        log(line);
+                        planOutput.append(line).append('\n');
+                        line = reader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new IllegalStateException("Error while reading stdout of planner process.", e);
                 }
-            } catch (IOException e) {
-                throw new IllegalStateException("Error while reading stdout of planner process.", e);
+                this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
             }
-
-            this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
         } catch (IOException e) {
+            setKillActiveProcess(false);
             plannerProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain or problem, cannot plan.", e);
         }
+        setKillActiveProcess(false);
         plannerProcessProperty.setValue(null);
         return getCurrentPlan();
     }

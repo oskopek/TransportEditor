@@ -125,14 +125,16 @@ public class DefaultPlanningSession implements PlanningSession {
     @Override
     public CompletionStage<Plan> startPlanningAsync() {
         return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
-            boolean isValid;
-            try {
-                isValid = startValidationAsyncInternal(plan).toCompletableFuture().get();
-            } catch (ExecutionException | InterruptedException e) {
-                throw new IllegalStateException("Could not validate plan.", e);
-            }
-            if (isValid) {
-                setPlan(plan);
+            if (plan != null) {
+                boolean isValid;
+                try {
+                    isValid = startValidationAsyncInternal(plan).toCompletableFuture().get();
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new IllegalStateException("Could not validate plan.", e);
+                }
+                if (isValid) {
+                    setPlan(plan);
+                }
             }
             return CompletableFuture.completedFuture(plan);
         });

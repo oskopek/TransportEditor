@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.model.planner;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.view.executables.Cancellable;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.LogStreamable;
 import javafx.beans.value.ObservableValue;
@@ -10,7 +11,7 @@ import javafx.beans.value.ObservableValue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-public interface Planner extends LogStreamable {
+public interface Planner extends LogStreamable, Cancellable {
 
     default CompletionStage<Plan> startAsync(Domain domain, Problem problem) {
         return CompletableFuture.supplyAsync(() -> startAndWait(domain, problem));
@@ -19,6 +20,11 @@ public interface Planner extends LogStreamable {
     Plan startAndWait(Domain domain, Problem problem);
 
     Plan getCurrentPlan();
+
+    default boolean cancel() {
+        // intentionally empty
+        return false;
+    }
 
     ObservableValue<Plan> currentPlanProperty();
 
