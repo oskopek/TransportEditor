@@ -1,11 +1,11 @@
 package com.oskopek.transporteditor.model.problem;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class RoadGraphTest {
 
@@ -16,29 +16,43 @@ public class RoadGraphTest {
         graph = new RoadGraph("test");
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
-    public void addLocation() throws Exception {
-
+    public void addDuplicateLocation() throws Exception {
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertThatThrownBy(() -> graph.addLocation(new Location("l1", 0, 0)))
+                .hasMessageContaining("already in use");
+        assertThatThrownBy(() -> graph.addLocation(new Location("l1", 0, 2)))
+                .hasMessageContaining("already in use");
     }
 
     @Test
     public void getLocation() throws Exception {
-
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertNotNull(graph.addLocation(new Location("l2", 0, 0)));
+        assertThat(graph.getLocation("l1")).isNotNull();
+        assertThat(graph.getLocation("l2")).isNotNull();
+        assertThat(graph.getLocation("l1")).isNotEqualTo(graph.getLocation("l2"));
+        assertThat(graph.getLocation("l1")).isEqualTo(graph.getLocation("l1"));
     }
 
     @Test
     public void getAllLocations() throws Exception {
-
+        assertThat(graph.getAllLocations()).isEmpty();
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertThat(graph.getAllLocations()).hasSize(1);
+        assertNotNull(graph.addLocation(new Location("l2", 0, 0)));
+        assertThat(graph.getAllLocations()).hasSize(2);
     }
 
     @Test
     public void getAllRoads() throws Exception {
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertNotNull(graph.addLocation(new Location("l2", 0, 0)));
+        assertThat(graph.getAllRoads()).isEmpty();
 
+        Road road1 = new DefaultRoad("road1", ActionCost.valueOf(30));
+        assertNotNull(graph.addRoad(road1, graph.getLocation("l1"), graph.getLocation("l2")));
+        assertThat(graph.getAllRoads()).isNotEmpty().hasSize(1).allMatch(r -> r.getRoad().equals(road1));
     }
 
     @Test
@@ -53,6 +67,11 @@ public class RoadGraphTest {
         assertNotNull(graph.getRoad("road1"));
         assertEquals(road1, graph.getRoad("road1"));
         assertNotNull(graph.getEdge("road1"));
+
+        assertThatThrownBy(() -> graph.addRoad(road1, graph.getLocation("l1"), graph.getLocation("l2")))
+                .hasMessageContaining("already in use");
+        assertThatThrownBy(() -> graph.addRoad(road1, graph.getLocation("l2"), graph.getLocation("l1")))
+                .hasMessageContaining("already in use");
     }
 
     @Test
@@ -74,10 +93,14 @@ public class RoadGraphTest {
 
     @Test
     public void getRoad() throws Exception {
-
+        assertThat(graph.getRoad("road1")).isNull();
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertNotNull(graph.addLocation(new Location("l2", 0, 0)));
+        Road road1 = new DefaultRoad("road1", ActionCost.valueOf(30));
+        assertNotNull(graph.addRoad(road1, graph.getLocation("l1"), graph.getLocation("l2")));
+        assertThat(graph.getRoad("road1"))
+                .matches(r -> r.getLength().getCost() == 30 && r.getName().equals("road1"));
     }
-
-    // TODO: Road graph test
 
     @Test
     public void equalsTest() throws Exception {

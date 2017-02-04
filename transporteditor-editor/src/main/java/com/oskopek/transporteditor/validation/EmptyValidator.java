@@ -4,7 +4,6 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -28,14 +27,7 @@ public final class EmptyValidator extends AbstractLogStreamable implements Valid
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof EmptyValidator)) {
-            return false;
-        }
-        EmptyValidator that = (EmptyValidator) o;
-        return new EqualsBuilder().isEquals();
+        return this == o || o instanceof EmptyValidator;
     }
 
     @Override
