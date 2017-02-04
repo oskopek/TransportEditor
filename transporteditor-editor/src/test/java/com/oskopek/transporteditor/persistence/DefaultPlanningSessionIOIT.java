@@ -5,7 +5,6 @@ import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.validation.EmptyValidator;
 import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.junit.Before;
 import org.junit.Test;
