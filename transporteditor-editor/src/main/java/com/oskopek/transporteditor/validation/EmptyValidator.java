@@ -28,14 +28,7 @@ public final class EmptyValidator extends AbstractLogStreamable implements Valid
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof EmptyValidator)) {
-            return false;
-        }
-        EmptyValidator that = (EmptyValidator) o;
-        return new EqualsBuilder().isEquals();
+        return this == o || o instanceof EmptyValidator;
     }
 
     @Override
