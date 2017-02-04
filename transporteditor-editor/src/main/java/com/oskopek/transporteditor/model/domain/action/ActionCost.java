@@ -1,9 +1,10 @@
 package com.oskopek.transporteditor.model.domain.action;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public final class ActionCost {
+public final class ActionCost implements Comparable<ActionCost> {
 
     private final Integer cost;
 
@@ -55,5 +56,10 @@ public final class ActionCost {
     @Override
     public String toString() {
         return Integer.toString(cost);
+    }
+
+    @Override
+    public int compareTo(ActionCost o) {
+        return new CompareToBuilder().append(cost, o.cost).toComparison();
     }
 }

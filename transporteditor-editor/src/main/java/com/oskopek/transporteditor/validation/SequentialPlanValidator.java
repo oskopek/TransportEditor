@@ -9,6 +9,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.state.PlanState;
 import com.oskopek.transporteditor.model.state.SequentialPlanState;
 import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -47,5 +48,15 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
 
     protected void log(String message) {
         super.log(new Date().toString() + ": " + message + "\n");
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(13, 31).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof SequentialPlanValidator;
     }
 }

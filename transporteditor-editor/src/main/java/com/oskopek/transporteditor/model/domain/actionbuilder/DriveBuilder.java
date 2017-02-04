@@ -34,7 +34,7 @@ public class DriveBuilder
             throw new IllegalArgumentException("What cannot be null.");
         }
 
-        Road road = graph.getRoadBetween(where, what);
+        Road road = graph.getShortestRoadBetween(where, what);
         if (road == null) {
             throw new IllegalArgumentException(
                     "Could not find road \"" + where.getName() + "\" -> \"" + what.getName() + "\".");

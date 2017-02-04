@@ -6,6 +6,7 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.validation.EmptyValidator;
+import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,6 +37,7 @@ public class DefaultPlanningSessionIOIT {
         referenceSession.setProblem(new DefaultProblemIO(referenceSession.getDomain()).parse(problemFileContents));
         referenceSession.setPlan(new SequentialPlanIO(referenceSession.getDomain(), referenceSession.getProblem())
                 .parse(planFileContents));
+        referenceSession.setValidator(new SequentialPlanValidator());
     }
 
     @Test
@@ -90,7 +92,7 @@ public class DefaultPlanningSessionIOIT {
     private void testEqualityGradually(PlanningSession referenceSession, PlanningSession parsed) {
         assertNotNull(parsed);
         assertNull(parsed.getPlanner());
-        assertEquals(new EmptyValidator(), parsed.getValidator());
+        assertEquals(referenceSession.getValidator(), parsed.getValidator());
         assertEquals(referenceSession.getDomain(), parsed.getDomain());
         assertEquals(referenceSession.getProblem(), parsed.getProblem());
         assertEquals(referenceSession.getPlan(), parsed.getPlan());

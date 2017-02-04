@@ -70,7 +70,7 @@ public class DefaultProblemIOIT {
         assertNotNull(rg);
         assertEquals(5, rg.getNodeCount());
         assertEquals(12, rg.getEdgeCount());
-        Road road = rg.getRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
+        Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
         assertNotNull(road);
         assertNotNull(road.getLength());
         assertEquals(32, road.getLength().getCost().intValue());
@@ -153,7 +153,7 @@ public class DefaultProblemIOIT {
         assertNotNull(rg);
         assertEquals(5, rg.getNodeCount());
         assertEquals(12, rg.getEdgeCount());
-        Road road = rg.getRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
+        Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
         assertNotNull(road);
         assertEquals(45, road.getLength().getCost().intValue());
         assertEquals(FuelRoad.class, road.getClass());
@@ -220,7 +220,7 @@ public class DefaultProblemIOIT {
         assertNotNull(rg);
         assertEquals(6, rg.getNodeCount());
         assertEquals(14, rg.getEdgeCount());
-        Road road = rg.getRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
+        Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
         assertNotNull(road);
         assertEquals(45, road.getLength().getCost().intValue());
         assertEquals(FuelRoad.class, road.getClass());

@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.model.problem;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.graphstream.graph.Edge;
@@ -14,12 +13,10 @@ import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.view.Viewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.util.parsing.combinator.testing.Str;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -71,7 +68,10 @@ public class RoadGraph extends MultiGraph implements Graph {
     }
 
     public void removeLocation(Location location) {
-        throw new NotImplementedException("");
+        removeRoads(getAllRoads().filter(re -> re.getFrom().equals(location) || re.getTo().equals(location))
+                .map(r -> r.getRoad().getName()).collect(Collectors.toList()));
+        removeNode(location.getName());
+        removeAttribute(location.getName());
     }
 
     public void removeLocations(Collection<? extends Location> locations) {
@@ -136,7 +136,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         setAttribute(location.getName() + "-station");
     }
 
-    public Road getRoadBetween(Location l1, Location l2) {
+    public Stream<Road> getAllRoadsBetween(Location l1, Location l2) {
         Node n1 = getNode(l1.getName());
         if (n1 == null) {
             logger.debug("Could not find node \"{}\"", l1.getName());
@@ -147,16 +147,23 @@ public class RoadGraph extends MultiGraph implements Graph {
             logger.debug("Could not find node \"{}\"", l2.getName());
             return null;
         }
-        Edge e = n1.getEdgeToward(n2);
-        if (e == null) {
-            logger.debug("Could not find edge between given nodes \"{}\" and \"{}\".", l1.getName(), l2.getName());
-            return null;
-        }
-        return e.getAttribute("road");
+        return n1.getLeavingEdgeSet().stream().filter(edge -> edge.getNode1().equals(n2))
+                .map(edge -> edge.getAttribute("road"));
+    }
+
+    /**
+     * Only a single road is permitted between two nodes in practice, but our model is a bit more flexible.
+     *
+     * @param l1 the from location
+     * @param l2 the to location
+     * @return the shorted road between l1 and l2, or null if no such road exists
+     */
+    public Road getShortestRoadBetween(Location l1, Location l2) {
+        return getAllRoadsBetween(l1, l2).min(Comparator.comparing(Road::getLength)).orElse(null);
     }
 
     public void removeAllRoadsBetween(Location l1, Location l2) {
-        throw new NotImplementedException("");
+        removeRoads(getAllRoadsBetween(l1, l2).map(Road::getName).collect(Collectors.toList()));
     }
 
     public Road getRoad(String name) {
@@ -164,7 +171,12 @@ public class RoadGraph extends MultiGraph implements Graph {
     }
 
     public void removeRoad(String name) {
-        throw new NotImplementedException("");
+        try {
+            removeEdge(name);
+        } catch (NoSuchElementException e) {
+            logger.debug("Caught exception while removing road.", e);
+        }
+        removeAttribute(name);
     }
 
     public void removeRoads(Collection<? extends String> names) {

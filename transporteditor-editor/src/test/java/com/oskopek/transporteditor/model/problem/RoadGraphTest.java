@@ -102,7 +102,7 @@ public class RoadGraphTest {
     }
 
     @Test
-    public void getRoadBetween() throws Exception {
+    public void getAllRoadsBetween() throws Exception {
         Location l1 = new Location("l1", 0, 0);
         Location l2 = new Location("l2", 0, 0);
         assertNotNull(graph.addLocation(l1));
@@ -110,12 +110,11 @@ public class RoadGraphTest {
 
         Road road1 = new DefaultRoad("road1", ActionCost.valueOf(30));
 
-        assertNull(graph.getRoadBetween(l1, l2));
-        assertNull(graph.getRoadBetween(l2, l1));
+        assertThat(graph.getAllRoadsBetween(l1, l2)).isEmpty();
+        assertThat(graph.getAllRoadsBetween(l2, l1)).isEmpty();
         assertNotNull(graph.addRoad(road1, graph.getLocation("l1"), graph.getLocation("l2")));
-        assertNotNull(graph.getRoadBetween(l1, l2));
-        assertEquals(road1, graph.getRoadBetween(l1, l2));
-        assertNull(graph.getRoadBetween(l2, l1));
+        assertThat(graph.getAllRoadsBetween(l1, l2)).isNotNull().hasSize(1).element(0).isEqualTo(road1);
+        assertThat(graph.getAllRoadsBetween(l2, l1)).isEmpty();
     }
 
     @Test
@@ -216,7 +215,8 @@ public class RoadGraphTest {
 
         graph.removeRoad("road1");
         assertThat(graph.getAllLocations()).hasSize(3);
-        assertThat(graph.getAllRoads().collect(Collectors.toList())).hasSize(1).element(0).isEqualTo(road2);
+        assertThat(graph.getAllRoads().map(RoadGraph.RoadEdge::getRoad).collect(Collectors.toList())).hasSize(1)
+                .element(0).isEqualTo(road2);
     }
 
     @Test
@@ -236,7 +236,26 @@ public class RoadGraphTest {
 
         graph.removeAllRoadsBetween(graph.getLocation("l2"), graph.getLocation("l3"));
         assertThat(graph.getAllLocations()).hasSize(3);
-        assertThat(graph.getAllRoads().collect(Collectors.toList())).hasSize(1).element(0).isEqualTo(road1);
+        assertThat(graph.getAllRoads().map(RoadGraph.RoadEdge::getRoad).collect(Collectors.toList())).hasSize(1)
+                .element(0).isEqualTo(road1);
+    }
+
+    @Test
+    public void getShortestRoadBetween() throws Exception {
+        assertNotNull(graph.addLocation(new Location("l1", 0, 0)));
+        assertNotNull(graph.addLocation(new Location("l2", 0, 0)));
+        assertNotNull(graph.addLocation(new Location("l3", 0, 0)));
+
+        Road road1 = new DefaultRoad("road1", ActionCost.valueOf(30));
+        Road road2 = new DefaultRoad("road2", ActionCost.valueOf(30));
+        Road road3 = new FuelRoad("road3", ActionCost.valueOf(15), ActionCost.valueOf(40));
+
+        assertNotNull(graph.addRoad(road1, graph.getLocation("l1"), graph.getLocation("l2")));
+        assertNotNull(graph.addRoad(road2, graph.getLocation("l2"), graph.getLocation("l3")));
+        assertNotNull(graph.addRoad(road3, graph.getLocation("l2"), graph.getLocation("l3")));
+        assertThat(graph.getAllRoads().collect(Collectors.toList())).hasSize(3);
+
+        assertThat(graph.getShortestRoadBetween(graph.getLocation("l2"), graph.getLocation("l3"))).isEqualTo(road3);
     }
 
     @Test

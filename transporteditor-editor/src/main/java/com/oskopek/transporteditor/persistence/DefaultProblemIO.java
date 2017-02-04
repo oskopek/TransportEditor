@@ -56,12 +56,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         .collect(Collectors.toList()));
         Seq<Location> allLocations = object.getRoadGraph().getAllLocations().collect(Array.collector());
         List<Tuple3<Location, Location, Road>> roads = allLocations.crossProduct().map(
-                t -> Tuple.of(t._1, t._2, object.getRoadGraph().getRoadBetween(t._1, t._2))).filter(t -> t._3 != null)
-                .toJavaList();
+                t -> Tuple.of(t._1, t._2, object.getRoadGraph().getShortestRoadBetween(t._1, t._2)))
+                .filter(t -> t._3 != null).toJavaList();
         input.put("roads", roads);
         input.put("petrolLocationList", allLocations.filter(object.getRoadGraph()::hasPetrolStation).toJavaList());
         Optional<Integer> maxCapacityOpt = object.getAllVehicles().stream().map(Vehicle::getMaxCapacity).map(
-                ActionCost::getCost).collect(Collectors.maxBy(Integer::compare));
+                ActionCost::getCost).max(Integer::compare);
         int maxCapacity = 0;
         if (maxCapacityOpt.isPresent()) {
             maxCapacity = maxCapacityOpt.get();
@@ -248,7 +248,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         String toName = fhead.term(1).getText();
                         Location from = parsed.graph().getLocation(fromName);
                         Location to = parsed.graph().getLocation(toName);
-                        Road road = parsed.graph().getRoadBetween(from, to);
+                        Road road = parsed.graph().getShortestRoadBetween(from, to);
                         parsed.graph().putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
                         break;
                     }
