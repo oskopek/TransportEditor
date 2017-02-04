@@ -1,9 +1,11 @@
 package com.oskopek.transporteditor.model.problem;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -12,8 +14,11 @@ import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.view.Viewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -65,6 +70,14 @@ public class RoadGraph extends MultiGraph implements Graph {
         return node;
     }
 
+    public void removeLocation(Location location) {
+        throw new NotImplementedException("");
+    }
+
+    public void removeLocations(Collection<? extends Location> locations) {
+        locations.forEach(this::removeLocation);
+    }
+
     public Location moveLocation(String name, int newX, int newY) {
         Location original = getAttribute(name);
         Location newLocation = new Location(original.getName(), newX, newY);
@@ -104,7 +117,11 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
         removeAttribute(road.getName());
-        removeEdge(road.getName());
+        try {
+            removeEdge(road.getName());
+        } catch (ElementNotFoundException e) {
+            logger.debug("Caught exception while putting road.", e);
+        }
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
         edge.setAttribute("road", road);
@@ -138,8 +155,20 @@ public class RoadGraph extends MultiGraph implements Graph {
         return e.getAttribute("road");
     }
 
+    public void removeAllRoadsBetween(Location l1, Location l2) {
+        throw new NotImplementedException("");
+    }
+
     public Road getRoad(String name) {
         return getAttribute(name);
+    }
+
+    public void removeRoad(String name) {
+        throw new NotImplementedException("");
+    }
+
+    public void removeRoads(Collection<? extends String> names) {
+        names.forEach(this::removeRoad);
     }
 
     @Override
