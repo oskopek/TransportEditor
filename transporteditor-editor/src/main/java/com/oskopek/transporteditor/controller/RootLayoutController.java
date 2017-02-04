@@ -15,6 +15,7 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.persistence.*;
+import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import com.oskopek.transporteditor.validation.ValValidator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
@@ -67,7 +68,7 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private MenuItem fileSetPlannerMenuItem;
     @FXML
-    private MenuItem fileSetValidatorMenuItem;
+    private Menu fileSetValidatorMenu;
     @FXML
     private Menu sessionMenu;
     @FXML
@@ -141,7 +142,7 @@ public class RootLayoutController extends AbstractController {
 
         application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
-        fileSetValidatorMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
+        fileSetValidatorMenu.disableProperty().bind(application.planningSessionProperty().isNull());
     }
 
     /**
@@ -229,9 +230,9 @@ public class RootLayoutController extends AbstractController {
     }
 
     @FXML
-    private void handleFileSetValidator() {
+    private void handleFileSetCustomValidator() {
         if (application.getPlanningSession() == null) {
-            throw new IllegalStateException("Cannot set validator, because no planning session is loaded.");
+            throw new IllegalStateException("Cannot set custom validator, because no planning session is loaded.");
         }
         ExecutableWithParameters existing = null;
         try {
@@ -247,6 +248,14 @@ public class RootLayoutController extends AbstractController {
         if (executableWithParameters != null) {
             application.getPlanningSession().setValidator(new ValValidator(executableWithParameters));
         }
+    }
+
+    @FXML
+    private void handleFileSetSequentialValidator() {
+        if (application.getPlanningSession() == null) {
+            throw new IllegalStateException("Cannot set sequential validator, because no planning session is loaded.");
+        }
+        application.getPlanningSession().setValidator(new SequentialPlanValidator());
     }
 
     @FXML

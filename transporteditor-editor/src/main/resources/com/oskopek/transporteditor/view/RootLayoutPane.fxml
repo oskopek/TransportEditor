@@ -17,8 +17,12 @@
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="fileSetPlannerMenuItem" disable="true" mnemonicParsing="false"
                       onAction="#handleFileSetPlanner" text="%root.setPlanner"/>
-            <MenuItem fx:id="fileSetValidatorMenuItem" disable="true" mnemonicParsing="false"
-                      onAction="#handleFileSetValidator" text="%root.setValidator"/>
+            <Menu fx:id="fileSetValidatorMenu" disable="true" mnemonicParsing="false" text="%root.setValidator">
+                <MenuItem fx:id="fileSetSequentialValidatorMenuItem" mnemonicParsing="false"
+                          onAction="#handleFileSetSequentialValidator" text="%root.setSequentialValidator"/>
+                <MenuItem fx:id="fileSetValidatorMenuItem" mnemonicParsing="false"
+                          onAction="#handleFileSetCustomValidator" text="%root.setCustomValidator"/>
+            </Menu>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem fx:id="fileQuitMenuItem" mnemonicParsing="false" onAction="#handleFileQuit" text="%root.quit"/>
         </Menu>
