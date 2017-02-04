@@ -56,6 +56,8 @@
                       text="%root.saveAs"/>
         </Menu>
         <Menu fx:id="aboutMenu" mnemonicParsing="false" text="%root.help">
+            <MenuItem fx:id="aboutShortcutsMenuItem" mnemonicParsing="false" onAction="#handleAboutShortcuts"
+                      text="%root.shortcutQuickTips"/>
             <MenuItem fx:id="aboutHelpMenuItem" mnemonicParsing="false" onAction="#handleAboutHelp"
                       text="%root.manual"/>
             <MenuItem fx:id="aboutAboutMenuItem" mnemonicParsing="false" onAction="#handleAboutAbout"

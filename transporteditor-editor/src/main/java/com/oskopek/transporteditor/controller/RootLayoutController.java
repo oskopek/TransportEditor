@@ -460,6 +460,16 @@ public class RootLayoutController extends AbstractController {
     }
 
     /**
+     * Menu item: Help->Shortcut quicktips.
+     * Shows a short modal shortcut tip dialog.
+     */
+    @FXML
+    private void handleAboutShortcuts() {
+        loadWebResource("root.shortcutResource", "root.shortcutQuickTips",
+                "root.resourceNotAvailableInYourLanguage");
+    }
+
+    /**
      * Menu item: Help->About.
      * Shows a short modal about dialog.
      */
