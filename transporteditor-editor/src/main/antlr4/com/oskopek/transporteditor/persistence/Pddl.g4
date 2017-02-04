@@ -1,4 +1,5 @@
-// https://github.com/antlr/grammars-v4/blob/master/pddl/Pddl.g4 TODO: License?
+// Grammar is an updated version of https://github.com/antlr/grammars-v4/blob/master/pddl/Pddl.g4
+// Original author:
 /**
  * PDDL grammar for ANTLR v3
  * Zeyn Saigol

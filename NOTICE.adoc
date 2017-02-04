@@ -1,0 +1,24 @@
+= Notice
+
+All libraries imported via Maven are listed automatically in `transporteditor-editor/NOTICE.txt`.
+
+== Pddl Antlr grammar
+
+The Grammar is an updated version of https://github.com/antlr/grammars-v4/blob/master/pddl/Pddl.g4
+
+Original author:
+PDDL grammar for ANTLR v3,
+Zeyn Saigol,
+School of Computer Science,
+University of Birmingham
+
+File: `transporteditor-editor/src/main/antlr4/com/oskopek/transporteditor/persistence/Pddl.g4`
+
+== Interval Tree
+
+The implementation is an updated version of https://github.com/kevinjdolan/intervaltree
+
+Original author:
+Kevin J Dolan
+
+Files in: `transporteditor-editor/src/main/java/com/github/kevinjdolan/intervaltree/`
