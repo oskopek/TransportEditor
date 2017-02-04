@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.persistence;
 
-import com.oskopek.transporteditor.model.domain.PddlLabel;
+import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import javafx.beans.property.*;
 
@@ -14,8 +14,7 @@ public final class VariableDomainBuilder {
 
     private final StringProperty name = new SimpleStringProperty();
 
-    // TODO: Create a domaintype enum?
-    private final ObjectProperty<PddlLabel> domainType = new SimpleObjectProperty<>(PddlLabel.ActionCost);
+    private final ObjectProperty<DomainType> domainType = new SimpleObjectProperty<>(DomainType.Sequential);
 
     private final BooleanProperty fuel = new SimpleBooleanProperty();
     private final BooleanProperty capacity = new SimpleBooleanProperty();
@@ -48,7 +47,7 @@ public final class VariableDomainBuilder {
 
     private String calculateDomainFilename() {
         StringBuilder builder = new StringBuilder("domain-variants").append(File.separator);
-        builder.append(PddlLabel.ActionCost.equals(domainType.get()) ? "sequential" : "temporal");
+        builder.append(domainType.get().toString().toLowerCase());
         builder.append(File.separator).append("domain").append(File.separator).append("domain-");
 
         builder.append(isCapacity() ? "" : "No").append("Cap");
@@ -73,15 +72,15 @@ public final class VariableDomainBuilder {
         return name;
     }
 
-    public PddlLabel getDomainType() {
+    public DomainType getDomainType() {
         return domainType.get();
     }
 
-    public void setDomainType(PddlLabel domainType) {
+    public void setDomainType(DomainType domainType) {
         this.domainType.set(domainType);
     }
 
-    public ObjectProperty<PddlLabel> domainTypeProperty() {
+    public ObjectProperty<DomainType> domainTypeProperty() {
         return domainType;
     }
 

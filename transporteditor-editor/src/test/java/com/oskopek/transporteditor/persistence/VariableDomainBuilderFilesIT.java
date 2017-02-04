@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.test.TestUtils;
@@ -34,10 +35,10 @@ public class VariableDomainBuilderFilesIT {
         for (int i = 0; i < features.size(); i++) {
             indices[i] = i;
         }
-        for (String domainType : Arrays.asList("sequential", "temporal")) {
+        for (DomainType domainType : DomainType.values()) {
             for (javaslang.collection.List<Integer> chosen : javaslang.collection.List.ofAll(indices).combinations()) {
-                String fileName = "domain-variants" + File.separator + domainType + File.separator + "%s"
-                        + File.separator + "%s-";
+                String fileName = "domain-variants" + File.separator + domainType.toString().toLowerCase()
+                        + File.separator + "%s" + File.separator + "%s-";
                 for (int i = 0; i < features.size(); i++) {
                     if (!chosen.contains(i)) {
                         fileName += "No";
