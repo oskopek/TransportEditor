@@ -2,7 +2,6 @@ package com.oskopek.transporteditor.validation;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
-import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -41,7 +40,8 @@ public class SequentialPlanValidatorTest {
 
     @Test
     public void isValidSimpleException() throws Exception {
-        assertThatThrownBy(() -> validator.isValid(domain, problem, plan.toTemporalPlan())).hasMessageContaining("Cannot validate non-sequential plan");
+        assertThatThrownBy(() -> validator.isValid(domain, problem, plan.toTemporalPlan()))
+                .hasMessageContaining("Cannot validate non-sequential plan");
     }
 
     @Test
@@ -51,8 +51,8 @@ public class SequentialPlanValidatorTest {
 
     @Test
     public void isNotValidTruckInInvalidPosition() throws Exception {
-        plan.getActions().set(0, domain.buildPickUp(problem.getVehicle("truck-2"), problem.getRoadGraph().getLocation("city-loc-4"),
-                problem.getPackage("package-1")));
+        plan.getActions().set(0, domain.buildPickUp(problem.getVehicle("truck-2"),
+                problem.getRoadGraph().getLocation("city-loc-4"), problem.getPackage("package-1")));
         assertThat(validator.isValid(domain, problem, plan)).isFalse();
     }
 
@@ -64,8 +64,8 @@ public class SequentialPlanValidatorTest {
 
     @Test
     public void isNotValidPickUpPackageInWrongPlace() throws Exception {
-        plan.getActions().add(3, domain.buildPickUp(problem.getVehicle("truck-1"), problem.getRoadGraph().getLocation("city-loc-5"),
-                problem.getPackage("package-2")));
+        plan.getActions().add(3, domain.buildPickUp(problem.getVehicle("truck-1"),
+                problem.getRoadGraph().getLocation("city-loc-5"), problem.getPackage("package-2")));
         plan.getActions().remove(1);
         assertThat(validator.isValid(domain, problem, plan)).isFalse();
     }
