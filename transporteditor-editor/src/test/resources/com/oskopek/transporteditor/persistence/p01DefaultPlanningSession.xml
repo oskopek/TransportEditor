@@ -2039,5 +2039,5 @@ node.marked {
       </entry>
     </packageMap>
   </problem>
-  <validator class="com.oskopek.transporteditor.validation.EmptyValidator" id="157"/>
+  <validator class="com.oskopek.transporteditor.validation.SequentialPlanValidator" id="157"/>
 </com.oskopek.transporteditor.model.DefaultPlanningSession>
