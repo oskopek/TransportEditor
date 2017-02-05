@@ -67,7 +67,7 @@ public class RoadGraph extends MultiGraph implements Graph {
     public Optional<Point3> calculateCentroid() {
         return getNodeSet().stream().map(Toolkit::nodePosition).map(c -> Tuple.of(c[0], c[1], c[2]))
                 .reduce((t1, t2) -> Tuple.of(t1._1 + t2._1, t1._2 + t2._2, t1._3 + t2._3))
-                .map(t -> Tuple.of(t._1/nodeCount, t._2/nodeCount, t._3/nodeCount))
+                .map(t -> Tuple.of(t._1 / nodeCount, t._2 / nodeCount, t._3 / nodeCount))
                 .map(t -> new Point3(t._1, t._2, t._3));
     }
 
