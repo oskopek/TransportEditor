@@ -11,7 +11,6 @@ import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
-import com.oskopek.transporteditor.model.problem.Vehicle;
 import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;

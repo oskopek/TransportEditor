@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
