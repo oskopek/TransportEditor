@@ -45,11 +45,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>openjfx-monocle</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
@@ -259,7 +254,11 @@
             </properties>
         </profile>
         <profile>
-            <id>ut</id>
+            <id>ut-only</id>
+            <properties>
+                <skipTests>false</skipTests>
+                <skipITs>${skipTests}</skipITs>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -269,6 +268,63 @@
                             <includes>
                                 <include>**/**UT.java</include>
                             </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>ut-only-headless</id>
+            <properties>
+                <skipTests>false</skipTests>
+                <skipITs>${skipTests}</skipITs>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.testfx</groupId>
+                    <artifactId>openjfx-monocle</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/**UT.java</include>
+                            </includes>
+                            <systemProperties>
+                                <property>
+                                    <name>testfx.robot</name>
+                                    <value>glass</value>
+                                </property>
+                                <property>
+                                    <name>testfx.headless</name>
+                                    <value>true</value>
+                                </property>
+                                <property>
+                                    <name>prism.order</name>
+                                    <value>sw</value>
+                                </property>
+                                <property>
+                                    <name>prism.text</name>
+                                    <value>t2k</value>
+                                </property>
+                                <property>
+                                    <name>javafx.awt.headless</name>
+                                    <value>true</value>
+                                </property>
+                                <property>
+                                    <name>glass.platform</name>
+                                    <value>Monocle</value>
+                                </property>
+                                <property>
+                                    <name>monocle.platform</name>
+                                    <value>Headless</value>
+                                </property>
+                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>

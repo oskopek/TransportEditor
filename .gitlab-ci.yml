@@ -1,7 +1,7 @@
 image: maven:3-jdk-8
 
 variables:
-  MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k"
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 cache:
@@ -32,7 +32,7 @@ unittest-job:
   dependencies:
     - build-job
   script:
-    - "mvn package $MAVEN_CLI_OPTS"
+    - "mvn package $MAVEN_CLI_OPTS  -Dcheckstyle.skip=true"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
@@ -43,7 +43,7 @@ integrationtest-job:
   dependencies:
     - build-job
   script:
-    - "mvn verify $MAVEN_CLI_OPTS -Pit"
+    - "mvn verify $MAVEN_CLI_OPTS -Pit -Dcheckstyle.skip=true"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
@@ -54,7 +54,7 @@ uitest-job:
   dependencies:
     - build-job
   script:
-    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut"
+    - "mvn verify $MAVEN_CLI_OPTS -Put-only-headless -Dcheckstyle.skip=true"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:

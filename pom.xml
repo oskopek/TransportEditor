@@ -75,7 +75,7 @@
             <dependency>
                 <groupId>org.testfx</groupId>
                 <artifactId>openjfx-monocle</artifactId>
-                <version>1.8.0_20</version>
+                <version>8u20-b26</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
