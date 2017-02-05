@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -54,7 +55,7 @@ public class LogProgressController extends AbstractController {
     }
 
     public synchronized void appendLog(String logMessage) {
-        logArea.appendText(logMessage);
+        Platform.runLater(() -> logArea.appendText(logMessage));
     }
 
     public void setHeaderText(String headerText) {

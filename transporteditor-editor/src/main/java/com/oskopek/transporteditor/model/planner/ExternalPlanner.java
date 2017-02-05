@@ -22,6 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +67,11 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
             String executableCommand = executable.getExecutable();
             String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath());
-            ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn);
+            String[] splitFilledIn = filledIn.split(" ");
+            List<String> parameters = new ArrayList<>(splitFilledIn.length + 1);
+            parameters.add(executableCommand);
+            parameters.addAll(Arrays.asList(splitFilledIn));
+            ProcessBuilder builder = new ProcessBuilder(parameters);
             try {
                 plannerProcessProperty.set(builder.start());
             } catch (IOException e) {
