@@ -88,19 +88,6 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::planProperty))
                 .or(new IsNullBinding(PlanningSession::validatorProperty));
         validateButton.disableProperty().bind(disableValidateButton);
-        InvalidationListener invalidatePlanButtonBindingListener = s -> {
-            disablePlanButton.invalidate();
-            disableValidateButton.invalidate();
-        };
-        application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
-        application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeListener(invalidatePlanButtonBindingListener);
-            }
-            if (newValue != null) {
-                newValue.addListener(invalidatePlanButtonBindingListener);
-            }
-        });
 
         InvalidableOrBooleanBinding disableGraphChangeButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
@@ -114,6 +101,22 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::problemProperty));
                 //.or(not exactly 2 nodes selected); // TODO OOO when selection is implemented
         addRoadButton.disableProperty().bind(disableAddRoadButton);
+
+        InvalidationListener invalidatePlanButtonBindingListener = s -> {
+            disablePlanButton.invalidate();
+            disableValidateButton.invalidate();
+            disableGraphChangeButton.invalidate();
+            disableAddRoadButton.invalidate();
+        };
+        application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
+        application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeListener(invalidatePlanButtonBindingListener);
+            }
+            if (newValue != null) {
+                newValue.addListener(invalidatePlanButtonBindingListener);
+            }
+        });
     }
 
     @Subscribe
