@@ -30,7 +30,7 @@ public class ApplicationStartupUT extends ApplicationTest {
     }
 
     @Test
-    @Ignore("menu item clicking doesn't work yet")
+    @Ignore("menu item clicking doesn't work yet in non-headless mode")
     public void shouldLoadSession() throws Exception {
         verifyThat("#domainMenu", isDisabled());
         clickOn("#sessionMenu");
@@ -41,7 +41,7 @@ public class ApplicationStartupUT extends ApplicationTest {
     }
 
     @Test
-    @Ignore("menu item clicking doesn't work yet")
+    @Ignore("menu item clicking doesn't work yet in non-headless mode")
     public void shouldCreateNewSession() throws Exception {
         verifyThat("#domainMenu", isDisabled());
         clickOn("#sessionMenu");
