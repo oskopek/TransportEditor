@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.graphstream.algorithm.Toolkit;
+import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.j2dviewer.J2DGraphRenderer;
@@ -79,6 +80,8 @@ public class CenterPaneController extends AbstractController {
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
+        ProxyPipe proxyPipe = viewer.newViewerPipe();
+        proxyPipe.addAttributeSink(graph);
         ViewerPipe mousePipe = viewer.newViewerPipe();
         mousePipe.addViewerListener(new MouseCatcher(graph, viewer.getGraphicGraph()));
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
@@ -86,12 +89,14 @@ public class CenterPaneController extends AbstractController {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                proxyPipe.pump();
                 mousePipe.pump();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                proxyPipe.pump();
                 mousePipe.pump();
             }
         });

@@ -1,13 +1,16 @@
 package com.oskopek.transporteditor.model.problem;
 
+import javaslang.Tuple;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.view.Viewer;
@@ -60,10 +63,19 @@ public class RoadGraph extends MultiGraph implements Graph {
         this.addAttribute("ui.antialias");
     }
 
+    @Deprecated
+    public Optional<Point3> calculateCentroid() {
+        return getNodeSet().stream().map(Toolkit::nodePosition).map(c -> Tuple.of(c[0], c[1], c[2]))
+                .reduce((t1, t2) -> Tuple.of(t1._1 + t2._1, t1._2 + t2._2, t1._3 + t2._3))
+                .map(t -> Tuple.of(t._1/nodeCount, t._2/nodeCount, t._3/nodeCount))
+                .map(t -> new Point3(t._1, t._2, t._3));
+    }
+
     public <T extends Node> T addLocation(Location location) {
         addAttribute(location.getName(), location);
         T node = addNode(location.getName());
         node.addAttribute("ui.label", location.getName());
+        node.addAttribute("xyz", new Point3(location.getxCoordinate(), location.getyCoordinate(), 0));
         return node;
     }
 
