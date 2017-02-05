@@ -246,6 +246,7 @@ public class RightPaneController extends AbstractController {
                     ButtonType.CLOSE);
         } else {
             // TODO OOO get first and second selected location
+            // TODO OOO doesSelectionDetermineNewRoad()
             Location from = null;
             Location to = null;
             graph.addRoad(new DefaultRoad("road" + graph.getEdgeCount(), ActionCost.valueOf(1)), from, to);

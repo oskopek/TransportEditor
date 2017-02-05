@@ -37,20 +37,10 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     public RoadGraph(String id) {
         super(id);
-
-        addDefaultStyling();
+        setDefaultStyling();
     }
 
-    private RoadGraph(String id, boolean strictChecking, boolean autoCreate) {
-        super(id, strictChecking, autoCreate);
-    }
-
-    private RoadGraph(String id, boolean strictChecking, boolean autoCreate, int initialNodeCapacity,
-            int initialEdgeCapacity) {
-        super(id, strictChecking, autoCreate, initialNodeCapacity, initialEdgeCapacity);
-    }
-
-    private void addDefaultStyling() {
+    public void setDefaultStyling() {
         String style;
         try {
             style = String.join("\n",
@@ -58,9 +48,9 @@ public class RoadGraph extends MultiGraph implements Graph {
         } catch (IOException e) {
             throw new IllegalStateException("Could not load graph stylesheet.", e);
         }
-        this.addAttribute("ui.stylesheet", style);
-        //        this.addAttribute("ui.quality");
-        this.addAttribute("ui.antialias");
+        this.setAttribute("ui.stylesheet", style);
+        // this.setAttribute("ui.quality");
+        this.setAttribute("ui.antialias");
     }
 
     @Deprecated

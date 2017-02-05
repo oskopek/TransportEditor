@@ -38,13 +38,12 @@ public class CenterPaneController extends AbstractController {
     @Inject
     private transient Logger logger;
 
-    @Inject
-    private transient ProgressCreator progressCreator;
-
     @FXML
     private transient SwingNode problemGraph;
 
     private transient Viewer viewer;
+
+    private transient RoadGraphSelectionHandler graphSelectionHandler;
 
     @FXML
     private void initialize() {
@@ -77,18 +76,22 @@ public class CenterPaneController extends AbstractController {
             return;
         }
 
+        graph.setDefaultStyling();
+        graphSelectionHandler = new RoadGraphSelectionHandler(graph);
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewerPipe mousePipe = viewer.newViewerPipe();
-        mousePipe.addViewerListener(new MouseCatcher(graph, viewer.getGraphicGraph()));
+        MouseCatcher mouseCatcher = new MouseCatcher(graph, viewer.getGraphicGraph(), graphSelectionHandler);
+        mousePipe.addViewerListener(mouseCatcher);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
         viewPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                mouseCatcher.setControlDown(e.isControlDown());
                 proxyPipe.pump();
                 mousePipe.pump();
             }
@@ -96,6 +99,7 @@ public class CenterPaneController extends AbstractController {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                mouseCatcher.setControlDown(e.isControlDown());
                 proxyPipe.pump();
                 mousePipe.pump();
             }
@@ -148,10 +152,17 @@ public class CenterPaneController extends AbstractController {
         private final Logger logger = LoggerFactory.getLogger(getClass());
         private final RoadGraph roadGraph;
         private final GraphicGraph graph;
+        private boolean controlDown = false;
+        private final RoadGraphSelectionHandler graphSelectionHandler;
 
-        MouseCatcher(RoadGraph roadGraph, GraphicGraph graph) {
+        MouseCatcher(RoadGraph roadGraph, GraphicGraph graph, RoadGraphSelectionHandler graphSelectionHandler) {
             this.roadGraph = roadGraph;
             this.graph = graph;
+            this.graphSelectionHandler = graphSelectionHandler;
+        }
+
+        public void setControlDown(boolean controlDown) {
+            this.controlDown = controlDown;
         }
 
         @Override
@@ -167,6 +178,10 @@ public class CenterPaneController extends AbstractController {
         @Override
         public void buttonReleased(String s) {
             logger.debug("Released node \"{}\"", s);
+            if (controlDown) {
+                logger.debug("Toggle select location: {}", s);
+                graphSelectionHandler.toggleSelectLocation(s); // TODO: toggle select road
+            }
             roadGraph.getAllLocations().forEach(n -> {
                 String name = n.getName();
                 Point3 t3 = Toolkit.nodePointPosition(graph, name);

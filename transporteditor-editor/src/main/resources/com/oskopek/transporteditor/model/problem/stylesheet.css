@@ -1,10 +1,14 @@
 node {
-    size: 30px, 30px;
+    size: 30px;
     fill-color: red;
     text-alignment: at-right;
     text-size: 15;
 }
 
-node.marked {
+node.selected {
+    fill-color: green;
+}
+
+edge.selected {
     fill-color: green;
 }
