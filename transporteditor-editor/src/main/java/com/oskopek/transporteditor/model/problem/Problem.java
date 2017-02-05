@@ -25,8 +25,8 @@ public interface Problem {
 
     Map<String, Package> getPackageMap();
 
-    Problem updateVehicle(String name, Vehicle vehicle);
+    Problem putVehicle(String name, Vehicle vehicle);
 
-    Problem updatePackage(String name, Package pkg);
+    Problem putPackage(String name, Package pkg);
 
 }

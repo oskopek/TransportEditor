@@ -23,7 +23,7 @@ public class PickUp extends DefaultAction<Vehicle, Package> {
         Vehicle vehicle = problemState.getVehicle(vehicleName);
         Package pkg = problemState.getPackage(packageName);
         Package newPackage = pkg.updateLocation(null);
-        return problemState.updateVehicle(vehicleName, vehicle.addPackage(newPackage))
-                .updatePackage(packageName, newPackage);
+        return problemState.putVehicle(vehicleName, vehicle.addPackage(newPackage))
+                .putPackage(packageName, newPackage);
     }
 }

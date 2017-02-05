@@ -25,7 +25,7 @@ public class Drop extends DefaultAction<Vehicle, Package> {
         Package pkg = problemState.getPackage(packageName);
         Location location = problemState.getRoadGraph().getLocation(locationName);
         Package newPackage = pkg.updateLocation(location);
-        return problemState.updateVehicle(vehicleName, vehicle.removePackage(pkg))
-                .updatePackage(packageName, newPackage);
+        return problemState.putVehicle(vehicleName, vehicle.removePackage(pkg))
+                .putPackage(packageName, newPackage);
     }
 }

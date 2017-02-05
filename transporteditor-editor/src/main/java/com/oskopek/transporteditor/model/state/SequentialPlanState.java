@@ -91,12 +91,12 @@ public class SequentialPlanState implements PlanState {
     }
 
     @Override
-    public Problem updateVehicle(String name, Vehicle vehicle) {
-        return problem.updateVehicle(name, vehicle);
+    public Problem putVehicle(String name, Vehicle vehicle) {
+        return problem.putVehicle(name, vehicle);
     }
 
     @Override
-    public Problem updatePackage(String name, Package pkg) {
-        return problem.updatePackage(name, pkg);
+    public Problem putPackage(String name, Package pkg) {
+        return problem.putPackage(name, pkg);
     }
 }

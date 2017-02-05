@@ -5,8 +5,13 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
+import com.oskopek.transporteditor.model.problem.DefaultRoad;
+import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.RoadGraph;
+import com.oskopek.transporteditor.model.problem.Vehicle;
 import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
@@ -52,18 +57,31 @@ public class RightPaneController extends AbstractController {
     @FXML
     private Button validateButton;
 
+    @FXML
+    private Button addLocationButton;
+
+    @FXML
+    private Button addRoadButton;
+
+    @FXML
+    private Button addVehicleButton;
+
+    @FXML
+    private Button addPackageButton;
+
     @Inject
     private EventBus eventBus;
 
     @FXML
     private void initialize() {
         eventBus.register(this);
+        // TODO: Eliminate duplicate creation after binding is changed to be immutable
         InvalidableOrBooleanBinding disablePlanButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::plannerProperty))
                 .or(new IsNullBinding(PlanningSession::domainProperty)).or(
                         new IsNullBinding(PlanningSession::problemProperty));
         planButton.disableProperty().bind(disablePlanButton);
-        // TODO: Eliminate duplicity after binding is immutable
+
         InvalidableOrBooleanBinding disableValidateButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
                 .or(new IsNullBinding(PlanningSession::problemProperty))
@@ -83,6 +101,19 @@ public class RightPaneController extends AbstractController {
                 newValue.addListener(invalidatePlanButtonBindingListener);
             }
         });
+
+        InvalidableOrBooleanBinding disableGraphChangeButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty));
+        addLocationButton.disableProperty().bind(disableGraphChangeButton);
+        addPackageButton.disableProperty().bind(disableGraphChangeButton);
+        addVehicleButton.disableProperty().bind(disableGraphChangeButton);
+
+        InvalidableOrBooleanBinding disableAddRoadButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty));
+                //.or(not exactly 2 nodes selected); // TODO OOO when selection is implemented
+        addRoadButton.disableProperty().bind(disableAddRoadButton);
     }
 
     @Subscribe
@@ -179,6 +210,55 @@ public class RightPaneController extends AbstractController {
         }).toCompletableFuture();
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
                 completed.not().or(successful.not()), completed.not(), validator::cancel);
+    }
+
+    @FXML
+    private void handleAddLocation() {
+        RoadGraph graph = null;
+        try {
+            graph = application.getPlanningSession().getProblem().getRoadGraph();
+        } catch (NullPointerException e) {
+            logger.trace("Tried to get graph, caught NPE along the way.", e);
+        }
+
+        if (graph == null) {
+            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
+                    ButtonType.CLOSE);
+        } else {
+            graph.addLocation(new Location("loc" + graph.getNodeCount()));
+            // TODO OOO Select the added location or open its edit dialog
+        }
+    }
+
+    @FXML
+    private void handleAddRoad() {
+        RoadGraph graph = null;
+        try {
+            graph = application.getPlanningSession().getProblem().getRoadGraph();
+        } catch (NullPointerException e) {
+            logger.trace("Tried to get graph, caught NPE along the way.", e);
+        }
+
+        if (graph == null) {
+            AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
+                    ButtonType.CLOSE);
+        } else {
+            // TODO OOO get first and second selected location
+            Location from = null;
+            Location to = null;
+            graph.addRoad(new DefaultRoad("road" + graph.getEdgeCount(), ActionCost.valueOf(1)), from, to);
+            // TODO OOO Select the added road
+        }
+    }
+
+    @FXML
+    private void handleAddVehicle() {
+        // TODO OOO open add vehicle dialog
+    }
+
+    @FXML
+    private void handleAddPackage() {
+        // TODO OOO open add vehicle dialog
     }
 
     /**

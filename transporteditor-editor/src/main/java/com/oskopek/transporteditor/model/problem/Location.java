@@ -9,6 +9,10 @@ public class Location implements Locatable {
     private final Integer xCoordinate;
     private final Integer yCoordinate;
 
+    public Location(String name) {
+        this(name, 0, 0);
+    }
+
     public Location(String name, Integer xCoordinate, Integer yCoordinate) {
         this.name = name;
         if (xCoordinate == null) {
