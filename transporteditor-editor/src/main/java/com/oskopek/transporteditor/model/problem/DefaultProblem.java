@@ -72,6 +72,10 @@ public class DefaultProblem implements Problem {
         if (locatable != null) {
             return locatable;
         }
+        Road aRoad = getRoadGraph().getRoad(name);
+        if (aRoad != null) {
+            return aRoad;
+        }
         return null;
     }
 

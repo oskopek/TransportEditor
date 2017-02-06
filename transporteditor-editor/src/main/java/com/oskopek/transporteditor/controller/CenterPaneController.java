@@ -4,9 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.UpdatedGraphSelectionHandlerEvent;
-import com.oskopek.transporteditor.model.problem.Location;
-import com.oskopek.transporteditor.model.problem.Road;
-import com.oskopek.transporteditor.model.problem.RoadGraph;
+import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.GraphActionObjectDetailPopupCreator;
 import com.oskopek.transporteditor.view.ProgressCreator;
@@ -16,10 +14,9 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
 import javafx.stage.*;
-import javafx.stage.Popup;
 import javaslang.control.Try;
+import org.graphstream.graph.Node;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
@@ -102,14 +99,6 @@ public class CenterPaneController extends AbstractController {
                         }
                     });
                 logger.trace("Requested focus on SwingNode.");
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    logger.debug("Mouse clicked at {}x{}", e.getX(), e.getY());
-                }
             }
 
             @Override
@@ -205,9 +194,30 @@ public class CenterPaneController extends AbstractController {
                 }
                 element.addAttribute("ui.clicked");
                 selectionHandler.toggleSelectionOnElement(element);
-                popup = graphActionObjectDetailPopupCreator.create();
-                logger.debug("Showing popup at {}x{}", event.getX(), event.getY());
-                Platform.runLater(() -> popup.show(application.getPrimaryStage(), event.getX(), event.getY()));
+
+                if (element instanceof Node) { // TODO: Hack
+                    popup = graphActionObjectDetailPopupCreator.create(graph.getLocation(element.getId()));
+                } else if (element instanceof GraphicSprite) {
+                    String name = element.getId().substring("sprite-".length());
+                    RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
+                    if (roadEdge != null) {
+                        popup = graphActionObjectDetailPopupCreator.create(roadEdge);
+                    } else {
+                        popup = graphActionObjectDetailPopupCreator.tryCreateFromLocatable(name);
+                    }
+                } else {
+                    popup = null;
+                }
+
+                if (popup != null) {
+                    int showAtX = event.getXOnScreen();
+                    int showAtY = event.getYOnScreen() - Math.round((float) popup.getHeight()) - 30;
+                    logger.trace("Showing popup at {}x{}", showAtX, showAtY);
+                    Platform.runLater(() -> popup.show(application.getPrimaryStage(), showAtX, showAtY));
+                }
+            } else if (SwingUtilities.isRightMouseButton(event)) {
+                logger.debug("Mouse right pressed at {}x{}", event.getXOnScreen(), event.getYOnScreen());
+                // TODO: Open edit dialog
             }
         }
 
@@ -223,7 +233,9 @@ public class CenterPaneController extends AbstractController {
             view.freezeElement(element, false);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 element.removeAttribute("ui.clicked");
-                Platform.runLater(() -> popup.hide());
+                if (popup != null) {
+                    Platform.runLater(() -> popup.hide());
+                }
             }
         }
 

@@ -187,6 +187,12 @@ public class RoadGraph extends MultiGraph implements Graph {
         return getAttribute(name);
     }
 
+    public RoadEdge getRoadEdge(String name) {
+        Edge edge = getEdge(name);
+        return RoadEdge.of(edge.getAttribute("road"), getAttribute(edge.getNode0().getId()),
+                getAttribute(edge.getNode0().getId()));
+    }
+
     public void removeRoad(String name) {
         try {
             spriteManager.removeSprite("sprite-" + name);
