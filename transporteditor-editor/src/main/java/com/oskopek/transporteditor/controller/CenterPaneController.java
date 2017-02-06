@@ -8,13 +8,17 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Road;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
+import com.oskopek.transporteditor.view.GraphActionObjectDetailPopupCreator;
 import com.oskopek.transporteditor.view.ProgressCreator;
+import com.oskopek.transporteditor.view.plan.GraphActionObjectDetailPopup;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
+import javafx.stage.*;
+import javafx.stage.Popup;
 import javaslang.control.Try;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -24,6 +28,7 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.util.DefaultMouseManager;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -38,6 +43,9 @@ public class CenterPaneController extends AbstractController {
 
     @Inject
     private transient Logger logger;
+
+    @Inject
+    private transient GraphActionObjectDetailPopupCreator graphActionObjectDetailPopupCreator;
 
     @FXML
     private transient SwingNode problemGraph;
@@ -82,7 +90,7 @@ public class CenterPaneController extends AbstractController {
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
-        viewPanel.setMouseManager(new SpriteUnClickableMouseManager(graphSelectionHandler));
+        viewPanel.setMouseManager(new SpriteUnClickableMouseManager(graphSelectionHandler, graph));
         viewPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -94,6 +102,14 @@ public class CenterPaneController extends AbstractController {
                         }
                     });
                 logger.trace("Requested focus on SwingNode.");
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    logger.debug("Mouse clicked at {}x{}", e.getX(), e.getY());
+                }
             }
 
             @Override
@@ -154,12 +170,16 @@ public class CenterPaneController extends AbstractController {
         });
     }
 
-    private static class SpriteUnClickableMouseManager extends DefaultMouseManager {
+    private class SpriteUnClickableMouseManager extends DefaultMouseManager {
 
+        private final Logger logger = LoggerFactory.getLogger(getClass());
         private final RoadGraphSelectionHandler selectionHandler;
+        private GraphActionObjectDetailPopup popup;
+        private RoadGraph graph;
 
-        SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler) {
+        SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler, RoadGraph graph) {
             this.selectionHandler = selectionHandler;
+            this.graph = graph;
         }
 
         @Override
@@ -185,6 +205,9 @@ public class CenterPaneController extends AbstractController {
                 }
                 element.addAttribute("ui.clicked");
                 selectionHandler.toggleSelectionOnElement(element);
+                popup = graphActionObjectDetailPopupCreator.create();
+                logger.debug("Showing popup at {}x{}", event.getX(), event.getY());
+                Platform.runLater(() -> popup.show(application.getPrimaryStage(), event.getX(), event.getY()));
             }
         }
 
@@ -200,6 +223,7 @@ public class CenterPaneController extends AbstractController {
             view.freezeElement(element, false);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 element.removeAttribute("ui.clicked");
+                Platform.runLater(() -> popup.hide());
             }
         }
 
