@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
+import com.oskopek.transporteditor.event.UpdatedGraphSelectionHandlerEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.Plan;
@@ -28,12 +29,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
+import org.graphstream.graph.Node;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Singleton
 public class RightPaneController extends AbstractController {
@@ -68,8 +72,18 @@ public class RightPaneController extends AbstractController {
     @FXML
     private Button addPackageButton;
 
+    private Optional<RoadGraphSelectionHandler> roadGraphSelectionHandler = Optional.empty();
+
+    private InvalidableOrBooleanBinding disableAddRoadButton;
+
     @Inject
     private EventBus eventBus;
+
+    @Subscribe
+    public void newRoadGraphSelectionHandler(UpdatedGraphSelectionHandlerEvent event) {
+        roadGraphSelectionHandler = Optional.of(event.getValue());
+        disableAddRoadButton.invalidate();
+    }
 
     @FXML
     private void initialize() {
@@ -95,10 +109,11 @@ public class RightPaneController extends AbstractController {
         addPackageButton.disableProperty().bind(disableGraphChangeButton);
         addVehicleButton.disableProperty().bind(disableGraphChangeButton);
 
-        InvalidableOrBooleanBinding disableAddRoadButton = new InvalidableOrBooleanBinding(
+        disableAddRoadButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty));
-                //.or(not exactly 2 nodes selected); // TODO OOO when selection is implemented
+                .or(new IsNullBinding(PlanningSession::problemProperty))
+                .or(new OptionalSelectionBinding<>(() -> roadGraphSelectionHandler,
+                        r -> !r.doesLocationSelectionDeterminePossibleNewRoad()));
         addRoadButton.disableProperty().bind(disableAddRoadButton);
 
         InvalidationListener invalidatePlanButtonBindingListener = s -> {
@@ -227,8 +242,10 @@ public class RightPaneController extends AbstractController {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
                     ButtonType.CLOSE);
         } else {
-            graph.addLocation(new Location("loc" + graph.getNodeCount()));
-            // TODO OOO Select the added location or open its edit dialog
+            String name = "loc" + graph.getNodeCount();
+            Node node = graph.addLocation(new Location(name));
+            roadGraphSelectionHandler.orElseThrow(IllegalStateException::new).selectOnly(node);
+            // TODO OOO open its edit dialog
         }
     }
 
@@ -245,10 +262,18 @@ public class RightPaneController extends AbstractController {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
                     ButtonType.CLOSE);
         } else {
-            // TODO OOO get first and second selected location
-            // TODO OOO doesSelectionDetermineNewRoad()
-            Location from = null;
-            Location to = null;
+            RoadGraphSelectionHandler handler = roadGraphSelectionHandler.orElseThrow(IllegalStateException::new);
+            if (!handler.doesLocationSelectionDeterminePossibleNewRoad()) {
+                throw new IllegalStateException("Can't add new road when selection doesn't determine a road, button shouldn't be enabled.");
+            }
+            if (handler.doesLocationSelectionDetermineExistingRoads()) {
+                AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.road.exists"),
+                        ButtonType.CLOSE);
+                return;
+            }
+
+            Location from = handler.getSelectedLocationList().get(0);
+            Location to = handler.getSelectedLocationList().get(1);
             graph.addRoad(new DefaultRoad("road" + graph.getEdgeCount(), ActionCost.valueOf(1)), from, to);
             // TODO OOO Select the added road
         }
@@ -279,6 +304,22 @@ public class RightPaneController extends AbstractController {
         protected boolean computeValue() {
             return application.getPlanningSessionOptional().map(getter).map(ObjectProperty::isNull).map(
                     BooleanBinding::get).orElse(true);
+        }
+    }
+
+    private static class OptionalSelectionBinding<T> extends BooleanBinding {
+
+        private final Supplier<Optional<T>> supplier;
+        private final Function<T, Boolean> getter;
+
+        OptionalSelectionBinding(Supplier<Optional<T>> supplier, Function<T, Boolean> getter) {
+            this.supplier = supplier;
+            this.getter = getter;
+        }
+
+        @Override
+        protected boolean computeValue() {
+            return supplier.get().map(getter).orElse(true);
         }
     }
 }

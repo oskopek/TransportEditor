@@ -5,7 +5,7 @@ node {
     text-size: 15;
 }
 
-node.selected {
+node:selected {
     fill-color: green;
 }
 
@@ -25,8 +25,6 @@ sprite:clicked {
 }
 */
 
-sprite.selected {
-    size: 10px;
-    fill-color: black;
-    shape: box;
+sprite:selected {
+    fill-color: green;
 }

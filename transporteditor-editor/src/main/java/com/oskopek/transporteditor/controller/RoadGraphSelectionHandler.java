@@ -3,81 +3,106 @@ package com.oskopek.transporteditor.controller;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Road;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
+import javafx.beans.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
+import org.graphstream.graph.Node;
+import org.graphstream.ui.graphicGraph.GraphicSprite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class RoadGraphSelectionHandler {
+public class RoadGraphSelectionHandler implements javafx.beans.Observable {
 
-    private static final String SELECTED = "selected";
+    public static final String SELECTED = "ui.selected";
     private final RoadGraph roadGraph;
-    private final SortedSet<Location> selectedLocations = new TreeSet<>(Comparator.comparing(Location::getName));
-    private final SortedSet<Road> selectedRoads = new TreeSet<>(Comparator.comparing(Road::getName));
+    private final Set<Location> selectedLocations = new TreeSet<>(Comparator.comparing(Location::getName));
+    private final Set<Road> selectedRoads = new TreeSet<>(Comparator.comparing(Road::getName));
+    private final ObservableList<Location> selectedLocationList = FXCollections.observableArrayList();
+    private final ObservableList<Road> selectedRoadList = FXCollections.observableArrayList();
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
     public RoadGraphSelectionHandler(RoadGraph roadGraph) {
         this.roadGraph = roadGraph;
-        populateSetsFromGraph();
+        populateCollectionsFromGraph();
     }
 
-    private void populateSetsFromGraph() {
+    private void populateCollectionsFromGraph() {
         roadGraph.getAllLocations().filter(l -> roadGraph.getNode(l.getName()).hasAttribute(SELECTED))
                 .forEach(selectedLocations::add);
         roadGraph.getAllRoads().map(RoadGraph.RoadEdge::getRoad)
                 .filter(r -> roadGraph.getEdge(r.getName()).hasAttribute(SELECTED)).forEach(selectedRoads::add);
+        selectedLocationList.addAll(selectedLocations);
+        selectedRoadList.addAll(selectedRoads);
     }
 
-    private static <T extends Element, U> void toggleSelectInternal(U original, T object, Set<U> selectedObjList) {
-        boolean newSelected = !object.hasAttribute(SELECTED);
-        if (newSelected) {
-            selectedObjList.add(original);
-            object.addAttribute(SELECTED);
-            object.addAttribute("ui.class", "selected");
+    @Override
+    public void addListener(InvalidationListener listener) {
+        selectedLocationList.addListener(listener);
+        selectedRoadList.addListener(listener);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        selectedLocationList.removeListener(listener);
+        selectedRoadList.removeListener(listener);
+    }
+
+    public boolean doesLocationSelectionDeterminePossibleNewRoad() {
+        return selectedLocationList.size() == 2 && selectedRoadList.size() == 0;
+    }
+
+    public boolean doesLocationSelectionDetermineExistingRoads() {
+        return doesLocationSelectionDeterminePossibleNewRoad()
+                && roadGraph.getAllRoadsBetween(selectedLocationList.get(0), selectedLocationList.get(1)).count() > 0;
+    }
+
+    public List<Location> getSelectedLocationList() {
+        return selectedLocationList;
+    }
+
+    public List<Road> getSelectedRoadList() {
+        return selectedRoadList;
+    }
+
+    public void unSelectAll() {
+        selectedLocations.clear();
+        selectedRoads.clear();
+        selectedLocationList.clear();
+        selectedRoadList.clear();
+        logger.debug("Unselected all.");
+    }
+
+    private static <T> void simultaneousUpdate(Element element, T object, List<T> list, Set<T> set) {
+        if (element.hasAttribute(SELECTED)) {
+            if (set.add(object)) {
+                list.add(object);
+            }
         } else {
-            selectedObjList.remove(original);
-            object.removeAttribute(SELECTED);
-            object.removeAttribute("ui.class");
+            if (set.remove(object)) {
+                list.remove(object);
+            }
         }
     }
 
-    public boolean doesSelectionDetermineNewRoad() {
-        return selectedLocations.size() == 2
-                && roadGraph.getAllRoadsBetween(selectedLocations.first(), selectedLocations.last()).count() == 0;
+    public void updateSelectionOnElement(Element element) { // TODO refactor this according to new custom MouseManager
+        String name = element.getId();
+        if (element instanceof GraphicSprite) {
+            GraphicSprite sprite = (GraphicSprite) element;
+            Edge edge = sprite.getEdgeAttachment();
+            if (edge != null) {
+                simultaneousUpdate(element, roadGraph.getRoad(edge.getId()), selectedRoadList, selectedRoads);
+            }
+        } else if (element instanceof Node) {
+            simultaneousUpdate(element, roadGraph.getLocation(name), selectedLocationList, selectedLocations);
+        }
+        logger.debug("Selected locations ({}) and roads ({})", getSelectedLocationList(), getSelectedRoadList());
     }
 
-    public void toggleSelectLocation(String name) {
-        toggleSelectInternal(roadGraph.getLocation(name), roadGraph.getNode(name), selectedLocations);
-    }
-
-    public void toggleSelectLocation(Location location) {
-        toggleSelectInternal(location, roadGraph.getNode(location.getName()), selectedLocations);
-    }
-
-    public void toggleSelectRoad(String name) {
-        toggleSelectInternal(roadGraph.getRoad(name), roadGraph.getEdge(name), selectedRoads);
-    }
-
-    public void toggleSelectRoad(Road road) {
-        toggleSelectInternal(road, roadGraph.getEdge(road.getName()), selectedRoads);
-    }
-
-    public void unSelectAllLocations() {
-        selectedLocations.forEach(this::toggleSelectLocation);
-        selectedLocations.clear();
-    }
-    public void unSelectAllRoads() {
-        selectedRoads.forEach(this::toggleSelectRoad);
-        selectedRoads.clear();
-    }
-    public void unselectAll() {
-        unSelectAllLocations();
-        unSelectAllRoads();
-    }
-
-    public SortedSet<Location> getSelectedLocations() {
-        return selectedLocations;
-    }
-
-    public SortedSet<Road> getSelectedRoads() {
-        return selectedRoads;
+    public void updateSelectionOnElements(Iterable<? extends Element> elements) {
+        elements.forEach(this::updateSelectionOnElement);
     }
 }
