@@ -82,7 +82,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         removeAttribute(location.getName());
     }
 
-    public void removeLocations(Collection<? extends Location> locations) {
+    public void removeLocations(Iterable<? extends Location> locations) {
         locations.forEach(this::removeLocation);
     }
 
@@ -197,7 +197,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         removeAttribute(name);
     }
 
-    public void removeRoads(Collection<? extends String> names) {
+    public void removeRoads(Iterable<? extends String> names) {
         names.forEach(this::removeRoad);
     }
 

@@ -4,6 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.UpdatedGraphSelectionHandlerEvent;
+import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.model.problem.Road;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.ProgressCreator;
@@ -13,6 +15,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import javaslang.control.Try;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
@@ -25,8 +28,9 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Singleton
@@ -62,17 +66,12 @@ public class CenterPaneController extends AbstractController {
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
         Platform.runLater(() -> problemGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
 
-        RoadGraph graph = null;
-        try {
-            graph = application.getPlanningSession().getProblem().getRoadGraph();
-        } catch (NullPointerException e) {
-            logger.trace("Could not get graph for redrawing, got a NPE along the way.", e);
-        }
-
+        RoadGraph graph = Try.of(() -> application.getPlanningSession().getProblem().getRoadGraph())
+                .onFailure(e -> logger.trace("Could not get graph for redrawing, got a NPE along the way.", e))
+                .getOrElse((RoadGraph) null);
         if (graph == null) {
             return;
         }
-
         graph.setDefaultStyling();
 
         disposeGraphViewer(null);
@@ -86,11 +85,33 @@ public class CenterPaneController extends AbstractController {
         viewPanel.setMouseManager(new SpriteUnClickableMouseManager(graphSelectionHandler));
         viewPanel.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                Platform.runLater(() -> {
+                        problemGraph.requestFocus();
+                        if (problemGraph.getContent() != null) {
+                            problemGraph.getContent().requestFocus();
+                        }
+                    });
+                logger.trace("Requested focus on SwingNode.");
+            }
+
+            @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 proxyPipe.pump();
             }
         });
+
+        viewPanel.registerKeyboardAction(e -> graphSelectionHandler.unSelectAll(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_FOCUSED);
+        viewPanel.registerKeyboardAction(e -> {
+            List<Road> selectedRoads = new ArrayList<>(graphSelectionHandler.getSelectedRoadList());
+            List<Location> selectedLocations = new ArrayList<>(graphSelectionHandler.getSelectedLocationList());
+            graph.removeLocations(selectedLocations);
+            graph.removeRoads(selectedRoads.stream().map(Road::getName)::iterator);
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
+
         Platform.runLater(() -> {
             problemGraph.setContent(viewPanel);
             problemGraph.setDisable(false);
