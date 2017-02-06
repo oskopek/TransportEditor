@@ -29,6 +29,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
+import javaslang.control.Try;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.slf4j.Logger;
 
@@ -76,12 +78,18 @@ public class RightPaneController extends AbstractController {
 
     private InvalidableOrBooleanBinding disableAddRoadButton;
 
+    private InvalidationListener graphSelectionChangedListener = e -> disableAddRoadButton.invalidate();
+
     @Inject
     private EventBus eventBus;
 
     @Subscribe
     public void newRoadGraphSelectionHandler(UpdatedGraphSelectionHandlerEvent event) {
+        if (roadGraphSelectionHandler.isPresent()) {
+            roadGraphSelectionHandler.get().removeListener(graphSelectionChangedListener);
+        }
         roadGraphSelectionHandler = Optional.of(event.getValue());
+        roadGraphSelectionHandler.get().addListener(graphSelectionChangedListener);
         disableAddRoadButton.invalidate();
     }
 
@@ -245,7 +253,6 @@ public class RightPaneController extends AbstractController {
             String name = "loc" + graph.getNodeCount();
             Node node = graph.addLocation(new Location(name));
             roadGraphSelectionHandler.orElseThrow(IllegalStateException::new).selectOnly(node);
-            // TODO OOO open its edit dialog
         }
     }
 
@@ -264,7 +271,8 @@ public class RightPaneController extends AbstractController {
         } else {
             RoadGraphSelectionHandler handler = roadGraphSelectionHandler.orElseThrow(IllegalStateException::new);
             if (!handler.doesLocationSelectionDeterminePossibleNewRoad()) {
-                throw new IllegalStateException("Can't add new road when selection doesn't determine a road, button shouldn't be enabled.");
+                throw new IllegalStateException("Can't add new road when selection doesn't determine a road,"
+                        + " button shouldn't be enabled.");
             }
             if (handler.doesLocationSelectionDetermineExistingRoads()) {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.road.exists"),
@@ -274,8 +282,11 @@ public class RightPaneController extends AbstractController {
 
             Location from = handler.getSelectedLocationList().get(0);
             Location to = handler.getSelectedLocationList().get(1);
-            graph.addRoad(new DefaultRoad("road" + graph.getEdgeCount(), ActionCost.valueOf(1)), from, to);
-            // TODO OOO Select the added road
+            Edge edge = graph.addRoad(new DefaultRoad("road" + graph.getEdgeCount(), ActionCost.valueOf(1)), from, to);
+            Platform.runLater(() -> {
+                Try.run(() -> Thread.sleep(100)).get(); // TODO: Hack - needs to happen later
+                handler.selectOnly(edge);
+            });
         }
     }
 

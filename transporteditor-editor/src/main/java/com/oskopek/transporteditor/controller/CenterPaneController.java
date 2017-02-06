@@ -13,7 +13,6 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import org.graphstream.graph.Element;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
@@ -75,11 +74,12 @@ public class CenterPaneController extends AbstractController {
         }
 
         graph.setDefaultStyling();
-        graphSelectionHandler = new RoadGraphSelectionHandler(graph);
-        eventBus.post(new UpdatedGraphSelectionHandlerEvent(graphSelectionHandler));
+
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
+        graphSelectionHandler = new RoadGraphSelectionHandler(graph, viewer.getGraphicGraph());
+        eventBus.post(new UpdatedGraphSelectionHandlerEvent(graphSelectionHandler));
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
@@ -136,9 +136,8 @@ public class CenterPaneController extends AbstractController {
     private static class SpriteUnClickableMouseManager extends DefaultMouseManager {
 
         private final RoadGraphSelectionHandler selectionHandler;
-        private static final String SELECTED = RoadGraphSelectionHandler.SELECTED;
 
-        public SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler) {
+        SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler) {
             this.selectionHandler = selectionHandler;
         }
 
@@ -147,20 +146,13 @@ public class CenterPaneController extends AbstractController {
             view.requestFocus();
             // un-select all
             if (!event.isShiftDown()) {
-                unSelectAll();
+                selectionHandler.unSelectAll();
             }
-        }
-
-        private void unSelectAll() {
-            selectionHandler.unSelectAll();
-            graph.forEach(this::removeSelectedAttribute);
-            graph.getSpriteIterator().forEachRemaining(this::removeSelectedAttribute);
         }
 
         @Override
         protected void mouseButtonRelease(MouseEvent event, Iterable<GraphicElement> elementsInArea) {
-            elementsInArea.forEach(this::toggleSelectedAttribute);
-            selectionHandler.updateSelectionOnElements(elementsInArea);
+            selectionHandler.toggleSelectionOnElements(elementsInArea);
         }
 
         @Override
@@ -168,11 +160,10 @@ public class CenterPaneController extends AbstractController {
             view.freezeElement(element, true);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 if (!event.isShiftDown()) {
-                    unSelectAll();
+                    selectionHandler.unSelectAll();
                 }
-                toggleSelectedAttribute(element);
                 element.addAttribute("ui.clicked");
-                selectionHandler.updateSelectionOnElement(element);
+                selectionHandler.toggleSelectionOnElement(element);
             }
         }
 
@@ -191,20 +182,6 @@ public class CenterPaneController extends AbstractController {
             }
         }
 
-        private void removeSelectedAttribute(Element element) {
-            element.removeAttribute(SELECTED);
-        }
 
-        private void addSelectedAttribute(Element element) {
-            element.addAttribute(SELECTED);
-        }
-
-        private void toggleSelectedAttribute(Element element) {
-            if (element.hasAttribute(SELECTED)) {
-                removeSelectedAttribute(element);
-            } else {
-                addSelectedAttribute(element);
-            }
-        }
     }
 }

@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,16 +18,18 @@ import java.util.*;
 
 public class RoadGraphSelectionHandler implements javafx.beans.Observable {
 
-    public static final String SELECTED = "ui.selected";
+    private static final String SELECTED = "ui.selected";
     private final RoadGraph roadGraph;
+    private final GraphicGraph graphicGraph;
     private final Set<Location> selectedLocations = new TreeSet<>(Comparator.comparing(Location::getName));
     private final Set<Road> selectedRoads = new TreeSet<>(Comparator.comparing(Road::getName));
     private final ObservableList<Location> selectedLocationList = FXCollections.observableArrayList();
     private final ObservableList<Road> selectedRoadList = FXCollections.observableArrayList();
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
-    public RoadGraphSelectionHandler(RoadGraph roadGraph) {
+    public RoadGraphSelectionHandler(RoadGraph roadGraph, GraphicGraph graphicGraph) {
         this.roadGraph = roadGraph;
+        this.graphicGraph = graphicGraph;
         populateCollectionsFromGraph();
     }
 
@@ -51,6 +54,16 @@ public class RoadGraphSelectionHandler implements javafx.beans.Observable {
         selectedRoadList.removeListener(listener);
     }
 
+    public void selectOnly(Node node) {
+        unSelectAll();
+        toggleSelectionOnElement(node);
+    }
+
+    public void selectOnly(Edge edge) {
+        unSelectAll();
+        toggleSelectionOnElement(graphicGraph.getSprite("sprite-" + edge.getId()));
+    }
+
     public boolean doesLocationSelectionDeterminePossibleNewRoad() {
         return selectedLocationList.size() == 2 && selectedRoadList.size() == 0;
     }
@@ -69,11 +82,26 @@ public class RoadGraphSelectionHandler implements javafx.beans.Observable {
     }
 
     public void unSelectAll() {
+        graphicGraph.forEach(RoadGraphSelectionHandler::removeSelectedAttribute);
+        graphicGraph.getSpriteIterator().forEachRemaining(RoadGraphSelectionHandler::removeSelectedAttribute);
+
         selectedLocations.clear();
         selectedRoads.clear();
         selectedLocationList.clear();
         selectedRoadList.clear();
-        logger.debug("Unselected all.");
+        logger.trace("Unselected all.");
+    }
+
+    private static void removeSelectedAttribute(Element element) {
+        element.removeAttribute(SELECTED);
+    }
+
+    private static void toggleSelectedAttribute(Element element) {
+        if (element.hasAttribute(SELECTED)) {
+            removeSelectedAttribute(element);
+        } else {
+            element.addAttribute(SELECTED);
+        }
     }
 
     private static <T> void simultaneousUpdate(Element element, T object, List<T> list, Set<T> set) {
@@ -88,7 +116,8 @@ public class RoadGraphSelectionHandler implements javafx.beans.Observable {
         }
     }
 
-    public void updateSelectionOnElement(Element element) { // TODO refactor this according to new custom MouseManager
+    public void toggleSelectionOnElement(Element element) {
+        toggleSelectedAttribute(element);
         String name = element.getId();
         if (element instanceof GraphicSprite) {
             GraphicSprite sprite = (GraphicSprite) element;
@@ -99,10 +128,10 @@ public class RoadGraphSelectionHandler implements javafx.beans.Observable {
         } else if (element instanceof Node) {
             simultaneousUpdate(element, roadGraph.getLocation(name), selectedLocationList, selectedLocations);
         }
-        logger.debug("Selected locations ({}) and roads ({})", getSelectedLocationList(), getSelectedRoadList());
+        logger.trace("Selected locations ({}) and roads ({})", getSelectedLocationList(), getSelectedRoadList());
     }
 
-    public void updateSelectionOnElements(Iterable<? extends Element> elements) {
-        elements.forEach(this::updateSelectionOnElement);
+    public void toggleSelectionOnElements(Iterable<? extends Element> elements) {
+        elements.forEach(this::toggleSelectionOnElement);
     }
 }

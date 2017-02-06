@@ -15,16 +15,16 @@ sprite {
     shape: box;
 }
 
-/* TODO: Use this later
+sprite:selected {
+    fill-color: green;
+}
+
+/*
 node:clicked {
     fill-color: blue;
 }
 
 sprite:clicked {
-    fill-color: red;
+    fill-color: blue;
 }
 */
-
-sprite:selected {
-    fill-color: green;
-}
