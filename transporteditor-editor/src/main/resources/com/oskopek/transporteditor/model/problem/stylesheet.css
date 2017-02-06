@@ -9,6 +9,24 @@ node.selected {
     fill-color: green;
 }
 
-edge.selected {
-    fill-color: green;
+sprite {
+    size: 10px;
+    fill-color: black;
+    shape: box;
+}
+
+/* TODO: Use this later
+node:clicked {
+    fill-color: blue;
+}
+
+sprite:clicked {
+    fill-color: red;
+}
+*/
+
+sprite.selected {
+    size: 10px;
+    fill-color: black;
+    shape: box;
 }

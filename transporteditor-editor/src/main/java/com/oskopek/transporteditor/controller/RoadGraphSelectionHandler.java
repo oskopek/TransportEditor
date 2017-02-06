@@ -40,8 +40,8 @@ public class RoadGraphSelectionHandler {
     }
 
     public boolean doesSelectionDetermineNewRoad() {
-        return selectedLocations.size() == 2 &&
-                roadGraph.getAllRoadsBetween(selectedLocations.first(), selectedLocations.last()).count() == 0;
+        return selectedLocations.size() == 2
+                && roadGraph.getAllRoadsBetween(selectedLocations.first(), selectedLocations.last()).count() == 0;
     }
 
     public void toggleSelectLocation(String name) {

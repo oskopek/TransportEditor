@@ -13,6 +13,8 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.Layouts;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.view.Viewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ import java.util.stream.Stream;
  * Wrapper interface around a GraphStream graph type.
  */
 public class RoadGraph extends MultiGraph implements Graph {
+
+    private transient SpriteManager spriteManager;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -51,6 +55,8 @@ public class RoadGraph extends MultiGraph implements Graph {
         this.setAttribute("ui.stylesheet", style);
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
+        spriteManager = new SpriteManager(this);
+        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addSprite);
     }
 
     @Deprecated
@@ -110,9 +116,16 @@ public class RoadGraph extends MultiGraph implements Graph {
         return stream.build();
     }
 
+    private void addSprite(Edge edge) {
+        Sprite sprite = spriteManager.addSprite("sprite-" + edge.getId());
+        sprite.attachToEdge(edge.getId());
+        sprite.setPosition(0.5);
+    }
+
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
+        addSprite(edge);
         edge.setAttribute("road", road);
         return edge;
     }
@@ -120,12 +133,14 @@ public class RoadGraph extends MultiGraph implements Graph {
     public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
         removeAttribute(road.getName());
         try {
+            spriteManager.removeSprite("sprite-" + road.getName());
             removeEdge(road.getName());
         } catch (ElementNotFoundException e) {
             logger.debug("Caught exception while putting road.", e);
         }
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
+        addSprite(edge);
         edge.setAttribute("road", road);
         return edge;
     }
@@ -174,6 +189,7 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     public void removeRoad(String name) {
         try {
+            spriteManager.removeSprite("sprite-" + name);
             removeEdge(name);
         } catch (NoSuchElementException e) {
             logger.debug("Caught exception while removing road.", e);

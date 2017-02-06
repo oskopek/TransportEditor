@@ -15,12 +15,16 @@ import javafx.stage.Stage;
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
+import org.graphstream.ui.graphicGraph.GraphicSprite;
 import org.graphstream.ui.j2dviewer.J2DGraphRenderer;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
+import org.graphstream.ui.view.util.DefaultMouseManager;
+import org.graphstream.ui.view.util.MouseManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,14 +87,26 @@ public class CenterPaneController extends AbstractController {
         viewer = graph.display(true);
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
-        ViewerPipe mousePipe = viewer.newViewerPipe();
+        MousePipe mousePipe = new MousePipe("mousePipe", viewer.newViewerPipe());
         MouseCatcher mouseCatcher = new MouseCatcher(graph, viewer.getGraphicGraph(), graphSelectionHandler);
         mousePipe.addViewerListener(mouseCatcher);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
+        viewPanel.setMouseManager(new SpriteUnclickableMouseManager());
         viewPanel.addMouseListener(new MouseAdapter() {
+
+            private double xFrom, yFrom, xTo, yTo;
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+
+            }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                xFrom = e.getX();
+                yFrom = e.getY();
                 mouseCatcher.setControlDown(e.isControlDown());
                 proxyPipe.pump();
                 mousePipe.pump();
@@ -99,6 +115,10 @@ public class CenterPaneController extends AbstractController {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                xTo = e.getX();
+                yTo = e.getY();
+                logger.debug("From: {}x{} -> {}x{}", xFrom, yFrom, xTo, yTo);
+                logger.debug("Selected elements: {}", viewPanel.allNodesOrSpritesIn(xFrom, yFrom, xTo, yTo));
                 mouseCatcher.setControlDown(e.isControlDown());
                 proxyPipe.pump();
                 mousePipe.pump();
@@ -146,6 +166,15 @@ public class CenterPaneController extends AbstractController {
         });
     }
 
+    private static class SpriteUnclickableMouseManager extends DefaultMouseManager {
+        @Override
+        protected void elementMoving(GraphicElement element, MouseEvent event) {
+            if (!(element instanceof GraphicSprite)) {
+                super.elementMoving(element, event);
+            }
+        }
+    }
+
     private static class MouseCatcher implements ViewerListener {
 
         private static final Function<Double, Integer> convertToInt = x -> (int) (x * 1000);
@@ -188,6 +217,33 @@ public class CenterPaneController extends AbstractController {
                 roadGraph.moveLocation(name, convertToInt.apply(t3.x), convertToInt.apply(t3.y));
             });
         }
+    }
+
+    private static class MousePipe extends ViewerPipe {
+        MousePipe(String id, ProxyPipe pipeIn) {
+            super(id, pipeIn);
+        }
+
+        @Override
+        public void edgeAttributeAdded(String sourceId, long timeId, String edgeId, String attribute, Object value) {
+            sendEdgeAttributeAdded(sourceId, timeId, edgeId, attribute, value);
+            if ("ui.clicked".equals(attribute)) {
+                for (ViewerListener listener : viewerListeners) {
+                    listener.buttonPushed(edgeId);
+                }
+            }
+        }
+
+        public void edgeAttributeRemoved(String sourceId, long timeId, String edgeId, String attribute) {
+            sendEdgeAttributeRemoved(sourceId, timeId, edgeId, attribute);
+            if ("ui.clicked".equals(attribute)) {
+                for (ViewerListener listener : viewerListeners) {
+                    listener.buttonReleased(edgeId);
+                }
+            }
+        }
+
+
     }
 
 }
