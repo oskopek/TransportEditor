@@ -15,4 +15,21 @@ public interface DataReader<Persistable_> {
      * @throws IllegalArgumentException if the contents cannot be parsed
      */
     Persistable_ parse(String contents) throws IllegalArgumentException;
+
+    /**
+     * Parse a persistable object from a string with proper type casting.
+     *
+     * @param contents the string representation of the persistable
+     * @param clazz the class to cast to
+     * @return an initialized instance of the persistable object
+     * @throws IllegalArgumentException if the contents cannot be parsed or if a class cast exception occurred
+     */
+    default Persistable_ parse(String contents, Class<? extends Persistable_> clazz) throws IllegalArgumentException {
+        try {
+            return clazz.cast(parse(contents));
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException(
+                    "Could not parse contents. " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
+        }
+    }
 }

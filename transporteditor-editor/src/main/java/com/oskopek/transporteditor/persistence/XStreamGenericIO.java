@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 
-public abstract class XStreamGenericIO<T> implements DataIO<T> {
+public abstract class XStreamGenericIO<Persistable_> implements DataIO<Persistable_> {
 
     private final XStream xStream;
 
@@ -15,15 +15,15 @@ public abstract class XStreamGenericIO<T> implements DataIO<T> {
     }
 
     @Override
-    public <T1 extends T> String serialize(T1 object) throws IllegalArgumentException {
+    public <T extends Persistable_> String serialize(T object) throws IllegalArgumentException {
         return xStream.toXML(object);
     }
 
     @Override
-    public T parse(String contents) throws IllegalArgumentException {
+    public Persistable_ parse(String contents, Class<? extends Persistable_> clazz) throws IllegalArgumentException {
         try {
-            return (T) xStream.fromXML(contents);
-        } catch (XStreamException e) {
+            return clazz.cast(xStream.fromXML(contents));
+        } catch (ClassCastException | XStreamException e) {
             throw new IllegalArgumentException(
                     "Could not parse XML. " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
         }

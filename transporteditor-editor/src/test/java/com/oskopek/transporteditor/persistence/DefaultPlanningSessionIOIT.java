@@ -11,12 +11,14 @@ import org.junit.Test;
 
 import static com.oskopek.transporteditor.test.TestUtils.readAllConcatenatedLines;
 import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class DefaultPlanningSessionIOIT {
 
     private static DefaultPlanningSessionIO defaultPlanningSessionIO;
     private static String emptySessionFileContents;
     private static String p01SessionContents;
+    private static String emptyPlannerContents;
     private static String domainFileContents;
     private static String problemFileContents;
     private static String planFileContents;
@@ -27,6 +29,7 @@ public class DefaultPlanningSessionIOIT {
         emptySessionFileContents = readAllConcatenatedLines(
                 getClass().getResourceAsStream("emptyDefaultPlanningSession.xml"));
         p01SessionContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01DefaultPlanningSession.xml"));
+        emptyPlannerContents = readAllConcatenatedLines(getClass().getResourceAsStream("emptyExternalPlanner.xml"));
         domainFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("variableDomainSeq.pddl"));
         problemFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01SeqProblem.pddl"));
         planFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01SeqPlan.val"));
@@ -86,6 +89,14 @@ public class DefaultPlanningSessionIOIT {
         DefaultProblemIOIT.assertP01Sequential(problem);
         Plan plan = parsed.getPlan();
         assertEquals(plan, SequentialPlanIOIT.P01SequentialPlan(problem));
+    }
+
+    @Test
+    public void testParseFailsForExternalPlanner() throws Exception {
+        assertThatThrownBy(() -> defaultPlanningSessionIO.parse(emptyPlannerContents, PlanningSession.class))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
+        assertThatThrownBy(() -> defaultPlanningSessionIO.parse(emptyPlannerContents))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
     }
 
     private void testEqualityGradually(PlanningSession referenceSession, PlanningSession parsed) {
