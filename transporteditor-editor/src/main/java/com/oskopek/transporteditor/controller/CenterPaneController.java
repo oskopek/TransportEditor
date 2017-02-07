@@ -79,6 +79,9 @@ public class CenterPaneController extends AbstractController {
         }
         graph.setDefaultStyling();
 
+        // TODO: move this to appropriate listener and possibly refactor
+        graph.redrawActionObjectSprites(application.getPlanningSession().getProblem());
+
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);

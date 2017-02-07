@@ -116,6 +116,16 @@ public class RoadGraph extends MultiGraph implements Graph {
         return stream.build();
     }
 
+    private void removeAllActionObjectSprites() {
+        setDefaultStyling(); // TODO: Hack
+    }
+
+    public void redrawActionObjectSprites(Problem problem) {
+        removeAllActionObjectSprites();
+        problem.getAllPackages().forEach(this::addPackageSprite);
+        problem.getAllVehicles().forEach(this::addVehicleSprite);
+    }
+
     private SpriteBuilder<Sprite> addSprite(String name) {
         return new SpriteBuilder<>(spriteManager, name, Sprite.class);
     }
@@ -126,6 +136,30 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     private void addEdgeSprite(Edge edge) {
         addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
+    }
+
+    private SpriteBuilder addPackageSprite(Package pkg) {
+        return addSprite(pkg.getName()).setClass("package");
+    }
+
+    public void addPackageSprite(Package pkg, Location location) {
+        addPackageSprite(pkg).attachTo((Node) getNode(location.getName()));
+    }
+
+    public void addPackageSprite(Package pkg, Road road, double percentage) {
+        addPackageSprite(pkg).attachTo(getEdge(road.getName())).setPosition(percentage);
+    }
+
+    private SpriteBuilder addVehicleSprite(Vehicle vehicle) {
+        return addSprite(vehicle.getName()).setClass("vehicle");
+    }
+
+    public void addVehicleSprite(Vehicle vehicle, Location location) {
+        addVehicleSprite(vehicle).attachTo((Node) getNode(location.getName()));
+    }
+
+    public void addVehicleSprite(Vehicle vehicle, Road road, double percentage) {
+        addVehicleSprite(vehicle).attachTo(getEdge(road.getName())).setPosition(percentage);
     }
 
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {

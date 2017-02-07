@@ -28,6 +28,11 @@ public class SpriteBuilder<T extends Sprite> {
         return this;
     }
 
+    public SpriteBuilder setClass(String cssClass) {
+        sprite.setAttribute("ui.class", cssClass);
+        return this;
+    }
+
     public T build() {
         return sprite;
     }

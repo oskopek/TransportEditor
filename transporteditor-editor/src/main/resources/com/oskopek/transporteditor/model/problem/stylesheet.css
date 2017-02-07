@@ -19,6 +19,18 @@ sprite:selected {
     fill-color: green;
 }
 
+sprite.package {
+    size: 6px;
+    fill-color: blue;
+    shape: box; /* TODO: find a nice image for this? */
+}
+
+sprite.vehicle {
+    size: 6px;
+    fill-color: blue;
+    shape: box; /* TODO: find a nice image for this? */
+}
+
 /*
 node:clicked {
     fill-color: blue;
