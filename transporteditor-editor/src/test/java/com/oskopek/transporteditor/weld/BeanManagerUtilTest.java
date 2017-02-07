@@ -1,27 +1,28 @@
 package com.oskopek.transporteditor.weld;
 
-import com.oskopek.transporteditor.test.TestUtils;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.Test;
 
 import javax.enterprise.inject.spi.CDI;
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
 
 public class BeanManagerUtilTest {
 
-    private final Runnable getCurrentCDI = CDI::current;
+    private final Supplier<CDI<?>> getCurrentCDI = CDI::current;
 
     @Test
     public void createBeanInstanceWithNoCDI() throws Exception {
-        assertTrue(TestUtils.isThrown(getCurrentCDI, IllegalStateException.class));
+        assertThatThrownBy(getCurrentCDI::get).isInstanceOf(IllegalStateException.class);
         assertNotNull(BeanManagerUtil.createBeanInstance(FXMLLoaderProducer.class));
-        assertTrue(TestUtils.isThrown(getCurrentCDI, IllegalStateException.class));
+        assertThatThrownBy(getCurrentCDI::get).isInstanceOf(IllegalStateException.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createBeanInstanceOfIllegalTypeNoCDI() throws Exception {
-        assertTrue(TestUtils.isThrown(getCurrentCDI, IllegalStateException.class));
+        assertThatThrownBy(getCurrentCDI::get).isInstanceOf(IllegalStateException.class);
         BeanManagerUtil.createBeanInstance(Serializable.class);
     }
 

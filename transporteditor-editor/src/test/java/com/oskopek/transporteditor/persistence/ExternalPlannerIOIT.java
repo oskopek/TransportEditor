@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.BeforeClass;
@@ -18,10 +19,10 @@ public class ExternalPlannerIOIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        emptyPlannerContents = TestUtils.readAllLines(
+        emptyPlannerContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("emptyExternalPlanner.xml")).stream().collect(
                 Collectors.joining("\n"));
-        sessionContents = TestUtils.readAllLines(
+        sessionContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("emptyDefaultPlanningSession.xml")).stream().collect(
                 Collectors.joining("\n"));
     }

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.oskopek.transporteditor.test.TestUtils.assertContains;
 import static com.oskopek.transporteditor.test.TestUtils.assertNotContains;
-import static com.oskopek.transporteditor.test.TestUtils.readAllLines;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;

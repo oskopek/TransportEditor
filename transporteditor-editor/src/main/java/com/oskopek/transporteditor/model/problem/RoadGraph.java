@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.model.problem;
 
+import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.view.SpriteBuilder;
 import javaslang.Tuple;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.graphstream.algorithm.Toolkit;
@@ -48,8 +48,7 @@ public class RoadGraph extends MultiGraph implements Graph {
     public void setDefaultStyling() {
         String style;
         try {
-            style = String.join("\n",
-                    (List<String>) IOUtils.readLines(getClass().getResourceAsStream("stylesheet.css"), "UTF-8"));
+            style = String.join("\n", IOUtils.concatReadAllLines(getClass().getResourceAsStream("stylesheet.css")));
         } catch (IOException e) {
             throw new IllegalStateException("Could not load graph stylesheet.", e);
         }
@@ -121,6 +120,10 @@ public class RoadGraph extends MultiGraph implements Graph {
         return new SpriteBuilder<>(spriteManager, name, Sprite.class);
     }
 
+    private void removeSprite(String name) {
+        spriteManager.removeSprite("sprite-" + name);
+    }
+
     private void addEdgeSprite(Edge edge) {
         addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
     }
@@ -136,7 +139,7 @@ public class RoadGraph extends MultiGraph implements Graph {
     public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
         removeAttribute(road.getName());
         try {
-            spriteManager.removeSprite("sprite-" + road.getName());
+            removeSprite(road.getName());
             removeEdge(road.getName());
         } catch (ElementNotFoundException e) {
             logger.debug("Caught exception while putting road.", e);
@@ -194,7 +197,7 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     public void removeRoad(String name) {
         try {
-            spriteManager.removeSprite("sprite-" + name);
+            removeSprite(name);
             removeEdge(name);
         } catch (NoSuchElementException e) {
             logger.debug("Caught exception while removing road.", e);

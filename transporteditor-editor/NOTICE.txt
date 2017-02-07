@@ -1,5 +1,5 @@
 
-Lists of 40 third-party dependencies.
+Lists of 39 third-party dependencies.
      (Bouncy Castle License) Legion of the Bouncy Castle Java Cryptography APIs (bouncycastle:bcmail-jdk14:138 - http://www.bouncycastle.org/java.html)
      (Bouncy Castle License) Legion of the Bouncy Castle Java Cryptography APIs (bouncycastle:bcprov-jdk14:138 - http://www.bouncycastle.org/java.html)
      (Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Classic Module (ch.qos.logback:logback-classic:1.1.7 - http://logback.qos.ch/logback-classic)
@@ -11,7 +11,6 @@ Lists of 40 third-party dependencies.
      (Mozilla Public License) iText, a Free Java-PDF library (com.lowagie:itext:2.1.5 - http://www.lowagie.com/iText/)
      (BSD style) XStream Core (com.thoughtworks.xstream:xstream:1.4.8 - http://codehaus.org/xstream-parent/xstream/)
      (Apache License, Version 2.0) Apache Commons Codec (commons-codec:commons-codec:1.10 - http://commons.apache.org/proper/commons-codec/)
-     (The Apache Software License, Version 2.0) Commons IO (commons-io:commons-io:1.4 - http://commons.apache.org/io/)
      (The Apache Software License, Version 2.0) Javaslang (io.javaslang:javaslang:2.0.5 - http://javaslang.io)
      (The Apache Software License, Version 2.0) Javaslang Match (io.javaslang:javaslang-match:2.0.5 - http://javaslang.io)
      (Eclipse Public License 1.0) JUnit (junit:junit:4.12 - http://junit.org)

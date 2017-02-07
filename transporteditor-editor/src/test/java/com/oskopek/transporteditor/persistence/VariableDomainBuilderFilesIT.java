@@ -3,7 +3,7 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
-import com.oskopek.transporteditor.test.TestUtils;
+import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
 import static org.junit.Assert.*;
 import org.junit.Assume;
 import org.junit.Before;
@@ -64,12 +64,12 @@ public class VariableDomainBuilderFilesIT {
         String problemFile = String.format(fileName, "problem", "p01");
 
         VariableDomain domain = domainIO
-                .parse(TestUtils.readAllConcatenatedLines(getClass().getResourceAsStream(domainFile)));
+                .parse(concatReadAllLines(getClass().getResourceAsStream(domainFile)));
         assertNotNull(domain);
 
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
         DefaultProblem problem = problemIO
-                .parse(TestUtils.readAllConcatenatedLines(getClass().getResourceAsStream(problemFile)));
+                .parse(concatReadAllLines(getClass().getResourceAsStream(problemFile)));
         assertNotNull(problem);
     }
 

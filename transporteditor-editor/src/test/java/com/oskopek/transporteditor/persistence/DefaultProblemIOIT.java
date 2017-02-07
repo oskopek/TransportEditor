@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -23,20 +24,20 @@ public class DefaultProblemIOIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception { // TODO: Netbenefit parse/ser test
-        variableDomainTemp = new VariableDomainIO().parse(TestUtils.readAllLines(
+        variableDomainTemp = new VariableDomainIO().parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainTemp.pddl")).stream()
                 .collect(Collectors.joining("\n")));
-        variableDomainNum = new VariableDomainIO().parse(TestUtils.readAllLines(
+        variableDomainNum = new VariableDomainIO().parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainNum.pddl")).stream()
                 .collect(Collectors.joining("\n")));
         sequentialDomain = new SequentialDomain("seq");
-        seqProblemFileContents = TestUtils.readAllLines(
+        seqProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01SeqProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
-        tempProblemFileContents = TestUtils.readAllLines(
+        tempProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
-        numProblemFileContents = TestUtils.readAllLines(
+        numProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01NetProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
     }

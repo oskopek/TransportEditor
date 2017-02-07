@@ -3,15 +3,7 @@ package com.oskopek.transporteditor.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -53,49 +45,6 @@ public final class TestUtils {
         }
     }
 
-    /**
-     * Checks if an instance (could be a subclass) of a given {@link Throwable} was thrown.
-     * If not, returns false and logs the exception at the {@code debug} level. Does not rethrow.
-     *
-     * @param runnable the code to run (runs in the same thread as this method)
-     * @param throwable the throwable to check for
-     * @return true iff a {@link Throwable} that is an instance of the given {@code throwable} was thrown
-     */
-    public static boolean isThrown(Runnable runnable, Class<? extends Throwable> throwable) {
-        try {
-            runnable.run();
-        } catch (Throwable t) {
-            logger.debug("isThrown expecting {}, caught {}", throwable, t.getClass());
-            if (throwable.isInstance(t)) {
-                return true;
-            }
-            logger.debug("Throwable detail: {}", t.toString());
-        }
-        return false;
-    }
 
-    public static String readAllConcatenatedLines(InputStream stream) {
-        return readAllLines(stream).stream().collect(Collectors.joining("\n")) + "\n";
-    }
-
-    public static List<String> readAllLines(InputStream stream) {
-        return readAllLines(stream, Charset.forName("UTF-8"));
-    }
-
-    public static List<String> readAllLines(InputStream stream, Charset charset) {
-        List<String> lines = new ArrayList<>();
-        if (stream == null) {
-            return lines;
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset))) {
-            String buffer;
-            while ((buffer = reader.readLine()) != null) {
-                lines.add(buffer);
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("An error occurred during reading lines.", e);
-        }
-        return lines;
-    }
 
 }

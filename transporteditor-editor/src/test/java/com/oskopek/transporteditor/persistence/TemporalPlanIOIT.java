@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,18 +20,18 @@ public class TemporalPlanIOIT {
     private String p01TemporalPlanContents;
 
     @BeforeClass
-    public static void setUpClass() {
-        temporalDomain = new VariableDomainIO().parse(TestUtils.readAllLines(
+    public static void setUpClass() throws Exception {
+        temporalDomain = new VariableDomainIO().parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainTemp.pddl")).stream()
                 .collect(Collectors.joining("\n")));
-        p01Temporal = new DefaultProblemIO(temporalDomain).parse(TestUtils.readAllLines(
+        p01Temporal = new DefaultProblemIO(temporalDomain).parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream()
                 .collect(Collectors.joining("\n")));
     }
 
     @Before
     public void setUp() throws Exception {
-        p01TemporalPlanContents = TestUtils.readAllLines(
+        p01TemporalPlanContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempPlan.val")).stream().collect(
                 Collectors.joining("\n"));
     }
