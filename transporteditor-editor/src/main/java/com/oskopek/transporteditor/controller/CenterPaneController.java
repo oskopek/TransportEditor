@@ -3,13 +3,16 @@ package com.oskopek.transporteditor.controller;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
-import com.oskopek.transporteditor.event.UpdatedGraphSelectionHandlerEvent;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.GraphActionObjectDetailPopupCreator;
 import com.oskopek.transporteditor.view.ProgressCreator;
 import com.oskopek.transporteditor.view.plan.GraphActionObjectDetailPopup;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -49,11 +52,33 @@ public class CenterPaneController extends AbstractController {
 
     private transient Viewer viewer;
 
-    private transient RoadGraphSelectionHandler graphSelectionHandler;
+    private transient ObjectProperty<RoadGraphSelectionHandler> graphSelectionHandler = new SimpleObjectProperty<>();
+
+    private BooleanProperty locked = new SimpleBooleanProperty(false);
 
     @FXML
     private void initialize() {
         eventBus.register(this);
+    }
+
+    public boolean isLocked() {
+        return locked.get();
+    }
+
+    public BooleanProperty lockedProperty() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked.set(locked);
+    }
+
+    public RoadGraphSelectionHandler getGraphSelectionHandler() {
+        return graphSelectionHandler.get();
+    }
+
+    public ObjectProperty<RoadGraphSelectionHandler> graphSelectionHandlerProperty() {
+        return graphSelectionHandler;
     }
 
     @Subscribe
@@ -69,6 +94,7 @@ public class CenterPaneController extends AbstractController {
 
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
+        locked.setValue(false);
         Platform.runLater(() -> problemGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
 
         RoadGraph graph = Try.of(() -> application.getPlanningSession().getProblem().getRoadGraph())
@@ -85,12 +111,11 @@ public class CenterPaneController extends AbstractController {
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
-        graphSelectionHandler = new RoadGraphSelectionHandler(graph, viewer.getGraphicGraph());
-        eventBus.post(new UpdatedGraphSelectionHandlerEvent(graphSelectionHandler));
+        graphSelectionHandler.setValue(new RoadGraphSelectionHandler(graph, viewer.getGraphicGraph()));
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
-        viewPanel.setMouseManager(new SpriteUnClickableMouseManager(graphSelectionHandler, graph));
+        viewPanel.setMouseManager(new SpriteUnClickableMouseManager(getGraphSelectionHandler(), graph));
         viewPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -111,11 +136,11 @@ public class CenterPaneController extends AbstractController {
             }
         });
 
-        viewPanel.registerKeyboardAction(e -> graphSelectionHandler.unSelectAll(),
+        viewPanel.registerKeyboardAction(e -> getGraphSelectionHandler().unSelectAll(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_FOCUSED);
         viewPanel.registerKeyboardAction(e -> {
-            List<Road> selectedRoads = new ArrayList<>(graphSelectionHandler.getSelectedRoadList());
-            List<Location> selectedLocations = new ArrayList<>(graphSelectionHandler.getSelectedLocationList());
+            List<Road> selectedRoads = new ArrayList<>(getGraphSelectionHandler().getSelectedRoadList());
+            List<Location> selectedLocations = new ArrayList<>(getGraphSelectionHandler().getSelectedLocationList());
             graph.removeLocations(selectedLocations);
             graph.removeRoads(selectedRoads.stream().map(Road::getName)::iterator);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
@@ -176,6 +201,9 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonPress(MouseEvent event) {
+            if (locked.get()) {
+                return;
+            }
             view.requestFocus();
             // un-select all
             if (!event.isShiftDown()) {
@@ -185,11 +213,17 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonRelease(MouseEvent event, Iterable<GraphicElement> elementsInArea) {
+            if (locked.get()) {
+                return;
+            }
             selectionHandler.toggleSelectionOnElements(elementsInArea);
         }
 
         @Override
         protected void mouseButtonPressOnElement(GraphicElement element, MouseEvent event) {
+            if (locked.get()) {
+                return;
+            }
             view.freezeElement(element, true);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 if (!event.isShiftDown()) {
@@ -226,6 +260,9 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void elementMoving(GraphicElement element, MouseEvent event) {
+            if (locked.get()) {
+                return;
+            }
             if (!(element instanceof GraphicSprite)) {
                 super.elementMoving(element, event); // prevents sprites from being moved
             }
@@ -233,6 +270,9 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonReleaseOffElement(GraphicElement element, MouseEvent event) {
+            if (locked.get()) {
+                return;
+            }
             view.freezeElement(element, false);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 element.removeAttribute("ui.clicked");
@@ -242,7 +282,5 @@ public class CenterPaneController extends AbstractController {
             }
             // TODO: Update location in graph using moveLocation
         }
-
-
     }
 }

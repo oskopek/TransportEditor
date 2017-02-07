@@ -50,6 +50,9 @@
                                 text="%add.vehicle" HBox.hgrow="ALWAYS"/>
                         <Button fx:id="addPackageButton" disable="true" maxWidth="1.7976931348623157E308"
                                 onAction="#handleAddPackage" text="%add.package" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="lockButton" disable="true" maxWidth="1.7976931348623157E308"
+                                onAction="#handleLockToggle" text="%lock" HBox.hgrow="ALWAYS"
+                                style="-fx-text-fill: red;" />
                     </children>
                 </HBox>
             </children>

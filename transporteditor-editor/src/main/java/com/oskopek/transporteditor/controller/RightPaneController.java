@@ -4,7 +4,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
-import com.oskopek.transporteditor.event.UpdatedGraphSelectionHandlerEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.Plan;
@@ -74,35 +73,28 @@ public class RightPaneController extends AbstractController {
     @FXML
     private Button addPackageButton;
 
-    private Optional<RoadGraphSelectionHandler> roadGraphSelectionHandler = Optional.empty();
+    @FXML
+    private Button lockButton;
 
-    private InvalidableOrBooleanBinding disableAddRoadButton;
-
-    private InvalidationListener graphSelectionChangedListener = e -> disableAddRoadButton.invalidate();
+    @Inject
+    private CenterPaneController centerPaneController;
 
     @Inject
     private EventBus eventBus;
-
-    @Subscribe
-    public void newRoadGraphSelectionHandler(UpdatedGraphSelectionHandlerEvent event) {
-        if (roadGraphSelectionHandler.isPresent()) {
-            roadGraphSelectionHandler.get().removeListener(graphSelectionChangedListener);
-        }
-        roadGraphSelectionHandler = Optional.of(event.getValue());
-        roadGraphSelectionHandler.get().addListener(graphSelectionChangedListener);
-        disableAddRoadButton.invalidate();
-    }
 
     @FXML
     private void initialize() {
         eventBus.register(this);
         // TODO: Eliminate duplicate creation after binding is changed to be immutable
+
+        // Disable plan button condition
         InvalidableOrBooleanBinding disablePlanButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::plannerProperty))
                 .or(new IsNullBinding(PlanningSession::domainProperty)).or(
                         new IsNullBinding(PlanningSession::problemProperty));
         planButton.disableProperty().bind(disablePlanButton);
 
+        // Disable validate button condition
         InvalidableOrBooleanBinding disableValidateButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
                 .or(new IsNullBinding(PlanningSession::problemProperty))
@@ -110,23 +102,53 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::validatorProperty));
         validateButton.disableProperty().bind(disableValidateButton);
 
-        InvalidableOrBooleanBinding disableGraphChangeButton = new InvalidableOrBooleanBinding(
+        // disable lock button condition
+        InvalidableOrBooleanBinding disableLockButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
                 .or(new IsNullBinding(PlanningSession::problemProperty));
+        lockButton.disableProperty().bind(disableLockButton);
+
+        // Disable graph changes (addLocation, addPackage, addVehicle) button condition
+        InvalidableOrBooleanBinding disableGraphChangeButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty))
+                .or(new BooleanBinding() {
+                    @Override
+                    protected boolean computeValue() {
+                        return centerPaneController.isLocked();
+                    }
+                });
+        centerPaneController.lockedProperty().addListener(e -> disableGraphChangeButton.invalidate());
         addLocationButton.disableProperty().bind(disableGraphChangeButton);
         addPackageButton.disableProperty().bind(disableGraphChangeButton);
         addVehicleButton.disableProperty().bind(disableGraphChangeButton);
 
-        disableAddRoadButton = new InvalidableOrBooleanBinding(
+        // Disable graph changes (addRoad) button condition
+        InvalidableOrBooleanBinding disableAddRoadButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
                 .or(new IsNullBinding(PlanningSession::problemProperty))
-                .or(new OptionalSelectionBinding<>(() -> roadGraphSelectionHandler,
+                .or(new OptionalSelectionBinding<>(
+                        () -> Optional.ofNullable(centerPaneController.getGraphSelectionHandler()),
                         r -> !r.doesLocationSelectionDeterminePossibleNewRoad()));
         addRoadButton.disableProperty().bind(disableAddRoadButton);
 
+        // Update disable AddRoad button
+        InvalidationListener graphSelectionChangedListener = e -> disableAddRoadButton.invalidate();
+        centerPaneController.graphSelectionHandlerProperty().addListener(graphSelectionChangedListener);
+        centerPaneController.graphSelectionHandlerProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeListener(graphSelectionChangedListener);
+            }
+            if (newValue != null) {
+                newValue.addListener(graphSelectionChangedListener);
+            }
+        });
+
+        // Update disable planButton, validateButton, lockButton, graphChange and addRoad buttons on session change
         InvalidationListener invalidatePlanButtonBindingListener = s -> {
             disablePlanButton.invalidate();
             disableValidateButton.invalidate();
+            disableLockButton.invalidate();
             disableGraphChangeButton.invalidate();
             disableAddRoadButton.invalidate();
         };
@@ -252,7 +274,7 @@ public class RightPaneController extends AbstractController {
         } else {
             String name = "loc" + graph.getNodeCount();
             Node node = graph.addLocation(new Location(name));
-            roadGraphSelectionHandler.orElseThrow(IllegalStateException::new).selectOnly(node);
+            centerPaneController.getGraphSelectionHandler().selectOnly(node);
         }
     }
 
@@ -269,7 +291,7 @@ public class RightPaneController extends AbstractController {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
                     ButtonType.CLOSE);
         } else {
-            RoadGraphSelectionHandler handler = roadGraphSelectionHandler.orElseThrow(IllegalStateException::new);
+            RoadGraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
             if (!handler.doesLocationSelectionDeterminePossibleNewRoad()) {
                 throw new IllegalStateException("Can't add new road when selection doesn't determine a road,"
                         + " button shouldn't be enabled.");
@@ -298,6 +320,19 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void handleAddPackage() {
         // TODO OOO open add vehicle dialog
+    }
+
+    @FXML
+    private void handleLockToggle() {
+        boolean newLocked = !centerPaneController.isLocked();
+        centerPaneController.setLocked(newLocked);
+        if (newLocked) {
+            lockButton.setText(messages.getString("unlock"));
+            lockButton.setStyle("-fx-text-fill: green;");
+        } else {
+            lockButton.setText(messages.getString("lock"));
+            lockButton.setStyle("-fx-text-fill: red;");
+        }
     }
 
     /**
