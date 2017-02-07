@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.model.problem;
 
+import com.oskopek.transporteditor.view.SpriteBuilder;
 import javaslang.Tuple;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -56,7 +57,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
         spriteManager = new SpriteManager(this);
-        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addSprite);
+        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
     }
 
     @Deprecated
@@ -116,16 +117,18 @@ public class RoadGraph extends MultiGraph implements Graph {
         return stream.build();
     }
 
-    private void addSprite(Edge edge) {
-        Sprite sprite = spriteManager.addSprite("sprite-" + edge.getId());
-        sprite.attachToEdge(edge.getId());
-        sprite.setPosition(0.5);
+    private SpriteBuilder<Sprite> addSprite(String name) {
+        return new SpriteBuilder<>(spriteManager, name, Sprite.class);
+    }
+
+    private void addEdgeSprite(Edge edge) {
+        addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
     }
 
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
-        addSprite(edge);
+        addEdgeSprite(edge);
         edge.setAttribute("road", road);
         return edge;
     }
@@ -138,11 +141,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         } catch (ElementNotFoundException e) {
             logger.debug("Caught exception while putting road.", e);
         }
-        addAttribute(road.getName(), road);
-        T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
-        addSprite(edge);
-        edge.setAttribute("road", road);
-        return edge;
+        return addRoad(road, from, to);
     }
 
     public boolean hasPetrolStation(Location location) {
