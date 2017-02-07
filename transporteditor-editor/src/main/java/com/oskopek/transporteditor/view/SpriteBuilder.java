@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.view;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
+import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 
@@ -25,6 +26,11 @@ public class SpriteBuilder<T extends Sprite> {
 
     public SpriteBuilder setPosition(double percentage) {
         sprite.setPosition(percentage);
+        return this;
+    }
+
+    public SpriteBuilder setPosition(double radiusPx, double degrees) {
+        sprite.setPosition(StyleConstants.Units.PX, radiusPx, 0, degrees);
         return this;
     }
 

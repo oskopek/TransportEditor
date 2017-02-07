@@ -240,6 +240,7 @@ public class CenterPaneController extends AbstractController {
                     Platform.runLater(() -> popup.hide());
                 }
             }
+            // TODO: Update location in graph using moveLocation
         }
 
 

@@ -20,13 +20,16 @@ sprite:selected {
 }
 
 sprite.package {
-    size: 6px;
-    fill-color: blue;
+    size: 10px;
+    fill-color: #a843ff;
     shape: box; /* TODO: find a nice image for this? */
+    /*stroke-width: 1px;
+    stroke-mode: plain;
+    stroke-color: black;*/
 }
 
 sprite.vehicle {
-    size: 6px;
+    size: 10px;
     fill-color: blue;
     shape: box; /* TODO: find a nice image for this? */
 }

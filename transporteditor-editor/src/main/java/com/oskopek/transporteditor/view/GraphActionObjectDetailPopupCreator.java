@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.view;
 
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.view.plan.GraphActionObjectDetailPopup;
@@ -68,8 +69,14 @@ public final class GraphActionObjectDetailPopupCreator {
         info.put("Name", vehicle.getName());
         info.put("Cur. capacity", vehicle.getCurCapacity().getCost() + "");
         info.put("Max. capacity", vehicle.getMaxCapacity().getCost() + "");
-        info.put("Fuel cur. capacity", vehicle.getCurFuelCapacity().getCost() + "");
-        info.put("Fuel max. capacity", vehicle.getMaxFuelCapacity().getCost() + "");
+        ActionCost curFuelCapacity = vehicle.getCurFuelCapacity();
+        if (curFuelCapacity != null) {
+            info.put("Fuel cur. capacity", curFuelCapacity.getCost() + "");
+        }
+        ActionCost maxFuelCapacity = vehicle.getCurFuelCapacity();
+        if (maxFuelCapacity != null) {
+            info.put("Fuel max. capacity", vehicle.getMaxFuelCapacity().getCost() + "");
+        }
         info.put("Package list", vehicle.getPackageList().toString());
         return new GraphActionObjectDetailPopup(info);
     }
