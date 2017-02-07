@@ -1,18 +1,20 @@
 package com.oskopek.transporteditor.view.plan;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.PopupControl;
 import javafx.scene.layout.*;
+import org.controlsfx.control.PopOver;
 
 import java.util.Map;
 
-public class GraphActionObjectDetailPopup extends PopupControl {
+public class GraphActionObjectDetailPopup extends PopOver {
 
     private final Map<String, String> info;
 
     public GraphActionObjectDetailPopup(Map<String, String> info) {
         this.info = info;
         regenerateBox();
+        setAutoHide(false);
+        setArrowLocation(ArrowLocation.BOTTOM_CENTER);
     }
 
     private void regenerateBox() {
@@ -41,12 +43,8 @@ public class GraphActionObjectDetailPopup extends PopupControl {
             gridPane.getColumnConstraints().add(columnConstraints);
         }
 
-        gridPane.setStyle("-fx-background-color: gold; -fx-opacity: 0.9; -fx-border-width: 3px; -fx-border-insets: 0px;"
-                + " -fx-border-style: solid; -fx-border-color: black; -fx-padding: 2px;");
-        gridPane.applyCss();
-        gridPane.layout();
-        super.getContent().clear();
-        super.getContent().add(gridPane);
+        gridPane.setStyle("-fx-padding: 5px;");
+        setContentNode(gridPane);
     }
 
     public GraphActionObjectDetailPopup putInfo(String key, String val) {

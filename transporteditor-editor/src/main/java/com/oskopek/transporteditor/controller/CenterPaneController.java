@@ -248,9 +248,9 @@ public class CenterPaneController extends AbstractController {
 
                 if (popup != null) {
                     int showAtX = event.getXOnScreen();
-                    int showAtY = event.getYOnScreen() - Math.round((float) popup.getHeight()) - 30;
+                    int showAtY = event.getYOnScreen() - 10;
                     logger.trace("Showing popup at {}x{}", showAtX, showAtY);
-                    Platform.runLater(() -> popup.show(application.getPrimaryStage(), showAtX, showAtY));
+                    Platform.runLater(() -> popup.show(problemGraph, showAtX, showAtY));
                 }
             } else if (SwingUtilities.isRightMouseButton(event)) {
                 logger.debug("Mouse right pressed at {}x{}", event.getXOnScreen(), event.getYOnScreen());
