@@ -11,7 +11,7 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
         // intentionally empty
     }
 
-    @FieldLocalization(backup = "X")
+    @FieldLocalization(key = "location.X")
     public Integer getxCoordinate() {
         return xCoordinate;
     }
@@ -20,7 +20,7 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
         this.xCoordinate = xCoordinate;
     }
 
-    @FieldLocalization(backup = "Y")
+    @FieldLocalization(key = "location.Y")
     public Integer getyCoordinate() {
         return yCoordinate;
     }

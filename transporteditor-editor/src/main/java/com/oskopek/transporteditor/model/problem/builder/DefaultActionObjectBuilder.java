@@ -10,7 +10,7 @@ public class DefaultActionObjectBuilder<T extends DefaultActionObject> implement
         // intentionally empty
     }
 
-    @FieldLocalization(key = "vdcreator.name", priority = 0)
+    @FieldLocalization(key = "name", priority = 0)
     public String getName() {
         return name;
     }

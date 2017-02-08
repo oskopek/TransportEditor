@@ -9,8 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldLocalization {
 
-    String key() default "";
-    String backup() default "";
+    String key();
     int priority() default 5;
 
 }

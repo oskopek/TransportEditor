@@ -240,7 +240,8 @@ public class CenterPaneController extends AbstractController {
                     if (roadEdge != null) {
                         popup = graphActionObjectDetailPopupCreator.create(roadEdge);
                     } else {
-                        popup = graphActionObjectDetailPopupCreator.tryCreateFromLocatable(name);
+                        popup = graphActionObjectDetailPopupCreator.tryCreateFromLocatable(
+                                application.getPlanningSession().getProblem(), name);
                     }
                 } else {
                     popup = null;
