@@ -1,12 +1,17 @@
 package com.oskopek.transporteditor.model.problem.builder;
 
 import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
 import javafx.collections.ObservableList;
 import static org.assertj.core.api.Assertions.*;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.BeanPropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.ResourceBundle;
 
 public class LocationBuilderTest {
 
@@ -43,6 +48,28 @@ public class LocationBuilderTest {
         builder.from(new Location("test", 0, 1));
         ObservableList<PropertySheet.Item> properties = BeanPropertyUtils.getProperties(builder);
         PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("xCoordinate")).findAny()
+                .orElseThrow(IllegalStateException::new);
+        assertThat(xCoordinate).isNotNull();
+        xCoordinate.setValue(1);
+        assertThat(builder.build()).isEqualTo(new Location("test", 1, 1));
+    }
+
+    @Test
+    public void testLocalizableBeanMethodsEdit() throws Exception {
+        builder.from(new Location("test", 0, 1));
+        ObservableList<PropertySheet.Item> properties
+                = LocalizableSortableBeanPropertyUtils.getProperties(builder, new ResourceBundle() {
+            @Override
+            protected Object handleGetObject(String key) {
+                return key;
+            }
+
+            @Override
+            public Enumeration<String> getKeys() {
+                return Collections.emptyEnumeration();
+            }
+        });
+        PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("location.X")).findAny()
                 .orElseThrow(IllegalStateException::new);
         assertThat(xCoordinate).isNotNull();
         xCoordinate.setValue(1);

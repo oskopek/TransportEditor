@@ -6,11 +6,11 @@ import org.controlsfx.control.PopOver;
 
 import java.util.Map;
 
-public class GraphActionObjectDetailPopup extends PopOver {
+public class ActionObjectDetailPopup extends PopOver {
 
     private final Map<String, String> info;
 
-    public GraphActionObjectDetailPopup(Map<String, String> info) {
+    public ActionObjectDetailPopup(Map<String, String> info) {
         this.info = info;
         regenerateBox();
         setAutoHide(false);
@@ -47,13 +47,13 @@ public class GraphActionObjectDetailPopup extends PopOver {
         setContentNode(gridPane);
     }
 
-    public GraphActionObjectDetailPopup putInfo(String key, String val) {
+    public ActionObjectDetailPopup putInfo(String key, String val) {
         info.put(key, val);
         regenerateBox();
         return this;
     }
 
-    public GraphActionObjectDetailPopup putAllInfo(Map<String, String> map) {
+    public ActionObjectDetailPopup putAllInfo(Map<String, String> map) {
         info.putAll(map);
         regenerateBox();
         return this;

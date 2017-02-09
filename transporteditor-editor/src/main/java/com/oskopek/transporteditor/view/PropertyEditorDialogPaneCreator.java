@@ -1,44 +1,36 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.model.problem.Location;
-import com.oskopek.transporteditor.model.problem.builder.LocationBuilder;
+import com.oskopek.transporteditor.model.problem.builder.ActionObjectBuilder;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.PropertySheet;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 @Singleton
-public class PropertyEditorDialogPaneCreator {
+public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer<Supplier<Alert>> {
 
     @Inject
     private ResourceBundle messages;
 
-    @Inject
-    private transient Logger logger;
-
-    public Stage edit(Location location) {
-        LocationBuilder builder = new LocationBuilder();
-        builder.from(location);
+    @Override
+    protected Supplier<Alert> createInternal(ActionObjectBuilder<?> builder) {
         ObservableList<PropertySheet.Item> properties
                 = LocalizableSortableBeanPropertyUtils.getProperties(builder, messages);
-        return createFromSheet(properties);
-    }
+        BorderPane pane = new BorderPane();
+        pane.setCenter(new PropertySheet(properties));
 
-    private Stage createFromSheet(ObservableList<PropertySheet.Item> items) {
-        DialogPane dialogPane = new DialogPane();
-        dialogPane.setContent(new PropertySheet(items));
-        dialogPane.getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CANCEL);
-
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setScene(new Scene(dialogPane));
-        return stage;
+        return () -> {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle(messages.getString("edit"));
+            alert.getDialogPane().setContent(pane);
+            alert.getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CANCEL);
+            return alert;
+        }; // TODO: Update immutable stuff back
     }
 }

@@ -4,10 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.problem.*;
-import com.oskopek.transporteditor.view.AlertCreator;
-import com.oskopek.transporteditor.view.GraphActionObjectDetailPopupCreator;
-import com.oskopek.transporteditor.view.ProgressCreator;
-import com.oskopek.transporteditor.view.plan.GraphActionObjectDetailPopup;
+import com.oskopek.transporteditor.view.*;
+import com.oskopek.transporteditor.view.plan.ActionObjectDetailPopup;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -37,6 +35,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 @Singleton
 public class CenterPaneController extends AbstractController {
@@ -45,7 +44,10 @@ public class CenterPaneController extends AbstractController {
     private transient Logger logger;
 
     @Inject
-    private transient GraphActionObjectDetailPopupCreator graphActionObjectDetailPopupCreator;
+    private transient ActionObjectDetailPopupCreator actionObjectDetailPopupCreator;
+
+    @Inject
+    private transient PropertyEditorDialogPaneCreator propertyEditorDialogPaneCreator;
 
     @FXML
     private transient SwingNode problemGraph;
@@ -191,7 +193,7 @@ public class CenterPaneController extends AbstractController {
 
         private final Logger logger = LoggerFactory.getLogger(getClass());
         private final RoadGraphSelectionHandler selectionHandler;
-        private GraphActionObjectDetailPopup popup;
+        private ActionObjectDetailPopup popup;
         private RoadGraph graph;
 
         SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler, RoadGraph graph) {
@@ -232,30 +234,30 @@ public class CenterPaneController extends AbstractController {
                 element.addAttribute("ui.clicked");
                 selectionHandler.toggleSelectionOnElement(element);
 
-                if (element instanceof Node) { // TODO: Hack
-                    popup = graphActionObjectDetailPopupCreator.create(graph.getLocation(element.getId()));
-                } else if (element instanceof GraphicSprite) {
-                    String name = element.getId().substring("sprite-".length());
-                    RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
-                    if (roadEdge != null) {
-                        popup = graphActionObjectDetailPopupCreator.create(roadEdge);
-                    } else {
-                        popup = graphActionObjectDetailPopupCreator.tryCreateFromLocatable(
-                                application.getPlanningSession().getProblem(), name);
-                    }
-                } else {
-                    popup = null;
-                }
-
+                popup = createResponse(element, actionObjectDetailPopupCreator);
                 if (popup != null) {
                     int showAtX = event.getXOnScreen();
                     int showAtY = event.getYOnScreen() - 10;
                     logger.trace("Showing popup at {}x{}", showAtX, showAtY);
                     Platform.runLater(() -> popup.show(problemGraph, showAtX, showAtY));
                 }
-            } else if (SwingUtilities.isRightMouseButton(event)) {
-                logger.debug("Mouse right pressed at {}x{}", event.getXOnScreen(), event.getYOnScreen());
-                // TODO: Open edit dialog
+            }
+        }
+
+        private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<T> creator) {
+            if (element instanceof Node) { // TODO: Hack
+                return creator.create(graph.getLocation(element.getId()));
+            } else if (element instanceof GraphicSprite) {
+                String name = element.getId().substring("sprite-".length());
+                RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
+                if (roadEdge != null) {
+                    return creator.create(roadEdge);
+                } else {
+                    return creator.tryCreateFromLocatable(
+                            application.getPlanningSession().getProblem(), name);
+                }
+            } else {
+                return null;
             }
         }
 
@@ -280,7 +282,11 @@ public class CenterPaneController extends AbstractController {
                 if (popup != null) {
                     Platform.runLater(() -> popup.hide());
                 }
+            } else if (SwingUtilities.isRightMouseButton(event)) {
+                Supplier<Alert> editDialog = createResponse(element, propertyEditorDialogPaneCreator);
+                Platform.runLater(() -> editDialog.get().showAndWait());
             }
+
             // TODO: Update location in graph using moveLocation
         }
     }
