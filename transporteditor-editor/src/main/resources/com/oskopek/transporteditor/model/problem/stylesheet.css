@@ -23,9 +23,7 @@ sprite.package {
     size: 10px;
     fill-color: #a843ff;
     shape: box; /* TODO: find a nice image for this? */
-    /*stroke-width: 1px;
-    stroke-mode: plain;
-    stroke-color: black;*/
+
 }
 
 sprite.vehicle {
@@ -34,12 +32,14 @@ sprite.vehicle {
     shape: box; /* TODO: find a nice image for this? */
 }
 
-/*
 node:clicked {
-    fill-color: blue;
+    stroke-width: 3px;
+    stroke-mode: plain;
+    stroke-color: black;
 }
 
 sprite:clicked {
-    fill-color: blue;
+    stroke-width: 3px;
+    stroke-mode: plain;
+    stroke-color: black;
 }
-*/

@@ -228,18 +228,20 @@ public class CenterPaneController extends AbstractController {
             }
             view.freezeElement(element, true);
             if (SwingUtilities.isLeftMouseButton(event)) {
-                if (!event.isShiftDown()) {
-                    selectionHandler.unSelectAll();
-                }
                 element.addAttribute("ui.clicked");
-                selectionHandler.toggleSelectionOnElement(element);
 
-                popup = createResponse(element, actionObjectDetailPopupCreator);
-                if (popup != null) {
-                    int showAtX = event.getXOnScreen();
-                    int showAtY = event.getYOnScreen() - 10;
-                    logger.trace("Showing popup at {}x{}", showAtX, showAtY);
-                    Platform.runLater(() -> popup.show(problemGraph, showAtX, showAtY));
+                if (event.isShiftDown()) {
+                    selectionHandler.toggleSelectionOnElement(element);
+                } else {
+                    selectionHandler.unSelectAll();
+
+                    popup = createResponse(element, actionObjectDetailPopupCreator);
+                    if (popup != null) {
+                        int showAtX = event.getXOnScreen();
+                        int showAtY = event.getYOnScreen() - 15;
+                        logger.trace("Showing popup at {}x{}", showAtX, showAtY);
+                        Platform.runLater(() -> popup.show(problemGraph, showAtX, showAtY));
+                    }
                 }
             }
         }
@@ -266,8 +268,15 @@ public class CenterPaneController extends AbstractController {
             if (locked.get()) {
                 return;
             }
+            if (SwingUtilities.isRightMouseButton(event)) {
+                return; // do not let user move elements with right mouse button
+            }
             if (!(element instanceof GraphicSprite)) {
                 super.elementMoving(element, event); // prevents sprites from being moved
+            }
+            if (popup != null) {
+                element.removeAttribute("ui.clicked");
+                Platform.runLater(() -> popup.hide());
             }
         }
 
