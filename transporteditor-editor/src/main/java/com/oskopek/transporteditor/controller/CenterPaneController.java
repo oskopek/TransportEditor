@@ -246,17 +246,19 @@ public class CenterPaneController extends AbstractController {
             }
         }
 
-        private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<T> creator) {
+        private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
             if (element instanceof Node) { // TODO: Hack
-                return creator.create(graph.getLocation(element.getId()));
+                Location oldLocation = graph.getLocation(element.getId());
+                return creator.create(oldLocation, newLocation -> graph.changeLocation(oldLocation, newLocation));
             } else if (element instanceof GraphicSprite) {
                 String name = element.getId().substring("sprite-".length());
                 RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
                 if (roadEdge != null) {
-                    return creator.create(roadEdge);
+                    return creator.create(roadEdge, newRoad -> graph.putRoad(newRoad, roadEdge.getFrom(),
+                            roadEdge.getTo()));
                 } else {
-                    return creator.tryCreateFromLocatable(
-                            application.getPlanningSession().getProblem(), name);
+                    return creator.tryCreateFromLocatable(application.getPlanningSession().getProblem(), name,
+                            problem -> application.getPlanningSession().setProblem(problem));
                 }
             } else {
                 return null;
@@ -292,11 +294,11 @@ public class CenterPaneController extends AbstractController {
                     Platform.runLater(() -> popup.hide());
                 }
             } else if (SwingUtilities.isRightMouseButton(event)) {
-                Supplier<Alert> editDialog = createResponse(element, propertyEditorDialogPaneCreator);
-                Platform.runLater(() -> editDialog.get().showAndWait());
+                Supplier<Void> editDialog = createResponse(element, propertyEditorDialogPaneCreator);
+                Platform.runLater(editDialog::get);
             }
 
-            // TODO: Update location in graph using moveLocation
+            // TODO: Update location in graph using moveLocation on drag
         }
     }
 }

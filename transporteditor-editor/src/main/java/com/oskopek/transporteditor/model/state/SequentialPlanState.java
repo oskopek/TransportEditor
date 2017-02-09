@@ -99,4 +99,14 @@ public class SequentialPlanState implements PlanState {
     public Problem putPackage(String name, Package pkg) {
         return problem.putPackage(name, pkg);
     }
+
+    @Override
+    public Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle) {
+        return problem.changeVehicle(oldVehicle, newVehicle);
+    }
+
+    @Override
+    public Problem changePackage(Package oldPackage, Package newPackage) {
+        return problem.changePackage(oldPackage, newPackage);
+    }
 }

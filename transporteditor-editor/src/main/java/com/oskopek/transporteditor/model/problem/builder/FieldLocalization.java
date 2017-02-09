@@ -11,5 +11,6 @@ public @interface FieldLocalization {
 
     String key();
     int priority() default 5;
+    Class<?> editor() default Void.class;
 
 }

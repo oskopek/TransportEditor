@@ -114,6 +114,16 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
+    public Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle) {
+        throw new UnsupportedOperationException("NIY");
+    }
+
+    @Override
+    public Problem changePackage(Package oldPackage, Package newPackage) {
+        throw new UnsupportedOperationException("NIY");
+    }
+
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
                 packageMap).toHashCode();

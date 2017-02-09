@@ -2,6 +2,8 @@ package com.oskopek.transporteditor.model.problem.builder;
 
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import static org.assertj.core.api.Assertions.*;
 import org.controlsfx.control.PropertySheet;
@@ -74,6 +76,20 @@ public class LocationBuilderTest {
         assertThat(xCoordinate).isNotNull();
         xCoordinate.setValue(1);
         assertThat(builder.build()).isEqualTo(new Location("test", 1, 1));
+    }
+
+    @Test
+    public void testBeanMethodsEditWithUpdate() throws Exception {
+        ObjectProperty<Location> locationProp = new SimpleObjectProperty<>(new Location("test", 0, 1));
+        builder.from(locationProp.get(), locationProp::setValue);
+        ObservableList<PropertySheet.Item> properties = BeanPropertyUtils.getProperties(builder);
+        PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("xCoordinate")).findAny()
+                .orElseThrow(IllegalStateException::new);
+        assertThat(xCoordinate).isNotNull();
+        xCoordinate.setValue(1);
+        assertThat(locationProp.get()).isEqualTo(new Location("test", 0, 1));
+        builder.update();
+        assertThat(locationProp.get()).isEqualTo(new Location("test", 1, 1));
     }
 
 }

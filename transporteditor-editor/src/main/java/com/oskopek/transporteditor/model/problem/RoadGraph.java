@@ -97,6 +97,10 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return original;
     }
 
+    public Location changeLocation(Location oldLocation, Location newLocation) {
+        throw new UnsupportedOperationException("NIY");
+    }
+
     public Location getLocation(String name) {
         return getAttribute(name);
     }

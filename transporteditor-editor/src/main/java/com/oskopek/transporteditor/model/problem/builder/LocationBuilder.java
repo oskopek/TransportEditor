@@ -34,6 +34,7 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
         return new Location(getName(), getxCoordinate(), getyCoordinate());
     }
 
+    @Override
     public void from(Location location) {
         super.from(location);
         setxCoordinate(location.getxCoordinate());

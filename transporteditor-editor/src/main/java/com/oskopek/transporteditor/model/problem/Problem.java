@@ -29,4 +29,8 @@ public interface Problem {
 
     Problem putPackage(String name, Package pkg);
 
+    Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle);
+
+    Problem changePackage(Package oldPackage, Package newPackage);
+
 }
