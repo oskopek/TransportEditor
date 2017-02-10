@@ -227,9 +227,8 @@ public class CenterPaneController extends AbstractController {
                 return;
             }
             view.freezeElement(element, true);
+            element.addAttribute("ui.clicked");
             if (SwingUtilities.isLeftMouseButton(event)) {
-                element.addAttribute("ui.clicked");
-
                 if (event.isShiftDown()) {
                     selectionHandler.toggleSelectionOnElement(element);
                 } else {
@@ -288,8 +287,8 @@ public class CenterPaneController extends AbstractController {
                 return;
             }
             view.freezeElement(element, false);
+            element.removeAttribute("ui.clicked");
             if (SwingUtilities.isLeftMouseButton(event)) {
-                element.removeAttribute("ui.clicked");
                 if (popup != null) {
                     Platform.runLater(() -> popup.hide());
                 }
