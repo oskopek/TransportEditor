@@ -29,8 +29,23 @@ public interface Problem {
 
     Problem putPackage(String name, Package pkg);
 
-    Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle);
+    Problem putLocation(String name, Location location);
 
-    Problem changePackage(Package oldPackage, Package newPackage);
+    Problem changeActionObjectName(ActionObject actionObject, String newName);
+
+    default Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle) {
+        String newName = newVehicle.getName();
+        return changeActionObjectName(oldVehicle, newName).putVehicle(newName, newVehicle);
+    }
+
+    default Problem changePackage(Package oldPackage, Package newPackage) {
+        String newName = newPackage.getName();
+        return changeActionObjectName(oldPackage, newName).putPackage(newName, newPackage);
+    }
+
+    default Problem changeLocation(Location oldLocation, Location newLocation) {
+        String newName = newLocation.getName();
+        return changeActionObjectName(oldLocation, newName).putLocation(newName, newLocation);
+    }
 
 }

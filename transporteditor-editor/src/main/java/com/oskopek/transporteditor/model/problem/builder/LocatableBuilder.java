@@ -20,4 +20,10 @@ public class LocatableBuilder<T extends DefaultActionObject & Locatable> extends
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    @Override
+    public void from(T instance) {
+        super.from(instance);
+        setLocation(instance.getLocation());
+    }
 }

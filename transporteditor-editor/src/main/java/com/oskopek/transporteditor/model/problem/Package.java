@@ -28,6 +28,11 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
     }
 
     @Override
+    public Package updateName(String newName) {
+        return new Package(newName, getLocation(), getTarget(), getSize());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

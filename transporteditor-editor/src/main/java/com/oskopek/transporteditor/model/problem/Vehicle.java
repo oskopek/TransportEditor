@@ -54,6 +54,12 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         return packageList;
     }
 
+    @Override
+    public Vehicle updateName(String newName) {
+        return new Vehicle(newName, getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+                getMaxFuelCapacity(), getPackageList());
+    }
+
     public Vehicle updateCurFuelCapacity(ActionCost curFuelCapacity) {
         return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), curFuelCapacity,
                 getMaxFuelCapacity(), getPackageList());
@@ -62,6 +68,10 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     public Vehicle updateLocation(Location location) {
         return new Vehicle(getName(), location, getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
                 getMaxFuelCapacity(), getPackageList());
+    }
+
+    public Vehicle changePackage(Package oldPackage, Package newPackage) {
+        return removePackage(oldPackage).addPackage(newPackage);
     }
 
     public Vehicle addPackage(Package pkg) {

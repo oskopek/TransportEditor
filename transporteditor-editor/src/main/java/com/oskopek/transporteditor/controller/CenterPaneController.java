@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.controller;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
+import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.view.*;
 import com.oskopek.transporteditor.view.plan.ActionObjectDetailPopup;
@@ -35,6 +36,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Singleton
@@ -141,8 +143,10 @@ public class CenterPaneController extends AbstractController {
         viewPanel.registerKeyboardAction(e -> getGraphSelectionHandler().unSelectAll(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_FOCUSED);
         viewPanel.registerKeyboardAction(e -> {
+            // TODO: Handle sprites
             List<Road> selectedRoads = new ArrayList<>(getGraphSelectionHandler().getSelectedRoadList());
             List<Location> selectedLocations = new ArrayList<>(getGraphSelectionHandler().getSelectedLocationList());
+            graphSelectionHandler.get().unSelectAll();
             graph.removeLocations(selectedLocations);
             graph.removeRoads(selectedRoads.stream().map(Road::getName)::iterator);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
@@ -246,9 +250,16 @@ public class CenterPaneController extends AbstractController {
         }
 
         private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
+            Consumer<Problem> problemUpdater = problem -> {
+                application.getPlanningSession().setProblem(problem);
+                // TODO: Hack
+                application.getPlanningSession().getProblem().getRoadGraph().redrawActionObjectSprites(problem);
+            };
+            PlanningSession session = application.getPlanningSession();
             if (element instanceof Node) { // TODO: Hack
                 Location oldLocation = graph.getLocation(element.getId());
-                return creator.create(oldLocation, newLocation -> graph.changeLocation(oldLocation, newLocation));
+                return creator.create(oldLocation, newLocation -> problemUpdater.accept(session.getProblem()
+                        .changeLocation(oldLocation, newLocation)));
             } else if (element instanceof GraphicSprite) {
                 String name = element.getId().substring("sprite-".length());
                 RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
@@ -257,7 +268,7 @@ public class CenterPaneController extends AbstractController {
                             roadEdge.getTo()));
                 } else {
                     return creator.tryCreateFromLocatable(application.getPlanningSession().getProblem(), name,
-                            problem -> application.getPlanningSession().setProblem(problem));
+                            problemUpdater);
                 }
             } else {
                 return null;

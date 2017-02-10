@@ -18,7 +18,8 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
         // intentionally empty
     }
 
-    @FieldLocalization(key = "vehicle.curcapacity", priority = 3)
+    // TODO: Set automatically maxFuelCapacity - packageSizeSum
+    @FieldLocalization(key = "vehicle.curcapacity", priority = 3, editable = false)
     public ActionCost getCurCapacity() {
         return curCapacity;
     }
@@ -36,7 +37,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
         this.maxCapacity = maxCapacity;
     }
 
-    @FieldLocalization(key = "vehicle.curfuelcapacity", priority = 4)
+    @FieldLocalization(key = "vehicle.curfuelcapacity", priority = 4) // TODO: Validate to be max maxFuelCapacity
     public ActionCost getCurFuelCapacity() {
         return curFuelCapacity;
     }
@@ -54,7 +55,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
         this.maxFuelCapacity = maxFuelCapacity;
     }
 
-    @FieldLocalization(key = "vehicle.packagelist")
+    @FieldLocalization(key = "vehicle.packagelist", editable = false)
     public List<Package> getPackageList() {
         return packageList;
     }

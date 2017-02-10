@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.PropertySheet;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -20,13 +21,18 @@ public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer
     @Inject
     private ResourceBundle messages;
 
+    @Inject
+    @Named("mainApp")
+    private TransportEditorApplication application;
+
     @Override
     protected Supplier<Void> createInternal(ActionObjectBuilder<?> builder) {
         ObservableList<PropertySheet.Item> properties
                 = LocalizableSortableBeanPropertyUtils.getProperties(builder, messages);
         BorderPane pane = new BorderPane();
         PropertySheet sheet = new PropertySheet(properties);
-        sheet.setPropertyEditorFactory(new ActionObjectPropertyEditorFactory());
+        sheet.setPropertyEditorFactory(new ActionObjectPropertyEditorFactory(application.getPlanningSession()
+                .getProblem().getRoadGraph()));
         pane.setCenter(sheet);
 
         return () -> {

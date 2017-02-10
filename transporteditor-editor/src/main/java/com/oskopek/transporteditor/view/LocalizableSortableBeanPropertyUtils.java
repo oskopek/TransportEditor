@@ -36,11 +36,17 @@ public final class LocalizableSortableBeanPropertyUtils {
 
         Stream<PropertySheet.Item> stream = Stream.of(beanInfo.getPropertyDescriptors()).filter(test)
                 .map(pd -> Tuple.of(pd, pd.getReadMethod().getAnnotation(FieldLocalization.class)))
-                .map(t -> Tuple.of(t._1, t._2.priority(), messages.getString(t._2.key())))
+                .map(t -> Tuple.of(t._1, t._2.priority(), messages.getString(t._2.key()), t._2.editable(),
+                        t._2.editor()))
                 .sorted((t1, t2) -> new CompareToBuilder().append(t1._2, t2._2).append(t1._3, t2._3).toComparison())
                 .map(tuple -> {
                     tuple._1.setName(tuple._3);
-                    return new BeanProperty(bean, tuple._1);
+                    if (!Void.class.equals(tuple._5)) {
+                        tuple._1.setPropertyEditorClass(tuple._5);
+                    }
+                    BeanProperty property = new BeanProperty(bean, tuple._1);
+                    property.setEditable(tuple._4 && property.isEditable());
+                    return property;
                 });
         return FXCollections.observableList(stream.filter(p -> p.getValue() != null).toJavaList());
     }

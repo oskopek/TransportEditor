@@ -13,7 +13,7 @@ public class DefaultActionObjectBuilder<T extends DefaultActionObject> implement
         // intentionally empty
     }
 
-    @FieldLocalization(key = "name", priority = 0)
+    @FieldLocalization(key = "name", priority = 0, editable = false) // TODO: is non-editable reasonable?
     public String getName() {
         return name;
     }

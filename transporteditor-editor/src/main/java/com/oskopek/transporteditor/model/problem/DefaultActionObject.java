@@ -13,6 +13,11 @@ public class DefaultActionObject implements ActionObject {
     }
 
     @Override
+    public DefaultActionObject updateName(String newName) {
+        return new DefaultActionObject(newName);
+    }
+
+    @Override
     public String getName() {
         return name;
     }

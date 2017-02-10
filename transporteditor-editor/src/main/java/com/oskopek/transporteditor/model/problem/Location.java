@@ -25,6 +25,11 @@ public class Location extends DefaultActionObject implements Locatable {
     }
 
     @Override
+    public Location updateName(String newName) {
+        return new Location(newName, getxCoordinate(), getyCoordinate());
+    }
+
+    @Override
     public Location getLocation() {
         return this;
     }
