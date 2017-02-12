@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LocationBuilderTest {
@@ -49,6 +50,7 @@ public class LocationBuilderTest {
     public void testBeanMethodsEdit() throws Exception {
         builder.from(new Location("test", 0, 1));
         ObservableList<PropertySheet.Item> properties = BeanPropertyUtils.getProperties(builder);
+        assertThat(properties).hasSize(3);
         PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("xCoordinate")).findAny()
                 .orElseThrow(IllegalStateException::new);
         assertThat(xCoordinate).isNotNull();
@@ -71,6 +73,8 @@ public class LocationBuilderTest {
                 return Collections.emptyEnumeration();
             }
         });
+        assertThat(properties).hasSize(3);
+        assertThat(properties).allMatch(Objects::nonNull);
         PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("location.X")).findAny()
                 .orElseThrow(IllegalStateException::new);
         assertThat(xCoordinate).isNotNull();

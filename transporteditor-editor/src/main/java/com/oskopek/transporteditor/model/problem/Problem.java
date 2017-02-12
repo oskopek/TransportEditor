@@ -31,6 +31,12 @@ public interface Problem {
 
     Problem putLocation(String name, Location location);
 
+    Problem removeVehicle(String name);
+
+    Problem removePackage(String name);
+
+    Problem removeLocation(String name);
+
     Problem changeActionObjectName(ActionObject actionObject, String newName);
 
     default Problem changeVehicle(Vehicle oldVehicle, Vehicle newVehicle) {

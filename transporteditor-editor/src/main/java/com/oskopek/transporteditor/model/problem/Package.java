@@ -27,6 +27,10 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
         return new Package(getName(), location, getTarget(), getSize());
     }
 
+    public Package updateTarget(Location target) {
+        return new Package(getName(), getLocation(), target, getSize());
+    }
+
     @Override
     public Package updateName(String newName) {
         return new Package(newName, getLocation(), getTarget(), getSize());

@@ -22,7 +22,7 @@ public class ActionObjectPropertyEditorFactory extends DefaultPropertyEditorFact
     public PropertyEditor<?> call(PropertySheet.Item item) {
         if (Location.class.isAssignableFrom(item.getType())) {
             return Editors.createChoiceEditor(item, graph.getAllLocations().collect(Collectors.toList()));
-        } else if (ActionCost.class.isAssignableFrom(item.getType())) {
+        } else if (ActionCost.class.isAssignableFrom(item.getType()) && item.isEditable()) {
             return new ActionCostEditor(item);
         }
         return super.call(item);

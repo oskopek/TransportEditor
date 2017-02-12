@@ -165,6 +165,26 @@ public class DefaultProblem implements Problem {
 //        }
     }
 
+    @Override
+    public Problem removeVehicle(String name) {
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
+        newVehicleMap.remove(name);
+        return new DefaultProblem(getName(), getRoadGraph(), newVehicleMap, getPackageMap());
+    }
+
+    @Override
+    public Problem removePackage(String name) {
+        Map<String, Package> newPackageMap = new HashMap<>(getPackageMap());
+        newPackageMap.remove(name);
+        return new DefaultProblem(getName(), getRoadGraph(), getVehicleMap(), newPackageMap);
+    }
+
+    @Override
+    public Problem removeLocation(String name) {
+        getRoadGraph().removeLocation(getRoadGraph().getLocation(name));
+        return new DefaultProblem(this);
+    }
+
     // TODO: Handle sprites correctly
     @Override
     public Problem putLocation(String name, Location location) {

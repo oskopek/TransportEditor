@@ -60,7 +60,6 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
         spriteManager = new SpriteManager(this);
-        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
     }
 
     @Deprecated
@@ -125,11 +124,16 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         vehicleDegreeDelta = 0d;
         vehicleRadius = 25d;
         packageRadius = 25d;
+        List<String> spriteNames = new ArrayList<>(spriteManager.getSpriteCount());
+        spriteManager.sprites().forEach(s -> spriteNames.add(s.getId()));
+        spriteNames.forEach(s -> spriteManager.removeSprite(s));
+        spriteManager.detach();
         setDefaultStyling(); // TODO: Hack
     }
 
     public void redrawActionObjectSprites(Problem problem) {
         removeAllActionObjectSprites();
+        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
         problem.getAllPackages().forEach(p -> addPackageSprite(p, p.getLocation()));
         problem.getAllVehicles().forEach(v -> addVehicleSprite(v, v.getLocation()));
     }
@@ -157,12 +161,18 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
             packageDegreeDelta %= 180d;
         }
 
-        addPackageSprite(pkg).attachTo((Node) getNode(location.getName())).setPosition(packageRadius,
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(packageRadius,
                 180d + packageDegreeDelta);
+        if (location != null) {
+            sprite.attachTo((Node) getNode(location.getName()));
+        }
     }
 
     public void addPackageSprite(Package pkg, Road road, double percentage) {
-        addPackageSprite(pkg).attachTo((Edge) getEdge(road.getName())).setPosition(percentage);
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(percentage);
+        if (road != null) {
+            sprite.attachTo((Edge) getEdge(road.getName()));
+        }
     }
 
     private SpriteBuilder addVehicleSprite(Vehicle vehicle) {
@@ -175,12 +185,17 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
             vehicleRadius += 12d;
             vehicleDegreeDelta %= 180d;
         }
-        addVehicleSprite(vehicle).attachTo((Node) getNode(location.getName())).setPosition(vehicleRadius,
-                vehicleDegreeDelta);
+        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(vehicleRadius, vehicleDegreeDelta);
+        if (location != null) {
+            sprite.attachTo((Node) getNode(location.getName()));
+        }
     }
 
     public void addVehicleSprite(Vehicle vehicle, Road road, double percentage) {
-        addVehicleSprite(vehicle).attachTo((Edge) getEdge(road.getName())).setPosition(percentage);
+        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(percentage);
+        if (road != null) {
+            sprite.attachTo((Edge) getEdge(road.getName()));
+        }
     }
 
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {

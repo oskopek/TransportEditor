@@ -109,4 +109,19 @@ public class SequentialPlanState implements PlanState {
     public Problem putLocation(String name, Location location) {
         return problem.putLocation(name, location);
     }
+
+    @Override
+    public Problem removeVehicle(String name) {
+        return problem.removeVehicle(name);
+    }
+
+    @Override
+    public Problem removePackage(String name) {
+        return problem.removePackage(name);
+    }
+
+    @Override
+    public Problem removeLocation(String name) {
+        return problem.removeLocation(name);
+    }
 }

@@ -30,7 +30,7 @@ public final class ActionObjectDetailPopupCreator extends ActionObjectBuilderCon
 
     private LinkedHashMap<String, String> convertToInfoMap(List<PropertySheet.Item> items) {
         LinkedHashMap<String, String> info = new LinkedHashMap<>(items.size());
-        items.forEach(item -> info.put(item.getName(), item.getValue().toString()));
+        items.forEach(item -> info.put(item.getName(), item.getValue() == null ? "null" : item.getValue().toString()));
         return info;
     }
 

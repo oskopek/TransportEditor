@@ -5,13 +5,11 @@ import com.oskopek.transporteditor.event.DisposeGraphViewerEvent;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.problem.*;
+import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.view.*;
 import com.oskopek.transporteditor.view.plan.ActionObjectDetailPopup;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -21,6 +19,7 @@ import javaslang.control.Try;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.ui.graphicGraph.GraphicElement;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
 import org.graphstream.ui.j2dviewer.J2DGraphRenderer;
 import org.graphstream.ui.swingViewer.ViewPanel;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Singleton
 public class CenterPaneController extends AbstractController {
@@ -56,7 +56,7 @@ public class CenterPaneController extends AbstractController {
 
     private transient Viewer viewer;
 
-    private transient ObjectProperty<RoadGraphSelectionHandler> graphSelectionHandler = new SimpleObjectProperty<>();
+    private transient ObjectProperty<GraphSelectionHandler> graphSelectionHandler = new SimpleObjectProperty<>();
 
     private BooleanProperty locked = new SimpleBooleanProperty(false);
 
@@ -77,12 +77,16 @@ public class CenterPaneController extends AbstractController {
         this.locked.set(locked);
     }
 
-    public RoadGraphSelectionHandler getGraphSelectionHandler() {
+    public GraphSelectionHandler getGraphSelectionHandler() {
         return graphSelectionHandler.get();
     }
 
-    public ObjectProperty<RoadGraphSelectionHandler> graphSelectionHandlerProperty() {
+    public ReadOnlyObjectProperty<GraphSelectionHandler> graphSelectionHandlerProperty() {
         return graphSelectionHandler;
+    }
+
+    public void refreshGraphSelectionHandler() {
+        graphSelectionHandler.get().setProblem(application.getPlanningSession().getProblem());
     }
 
     @Subscribe
@@ -110,12 +114,14 @@ public class CenterPaneController extends AbstractController {
         graph.setDefaultStyling();
 
         // TODO: move this to appropriate listener and possibly refactor
-        graph.redrawActionObjectSprites(application.getPlanningSession().getProblem());
+        Problem problem = application.getPlanningSession().getProblem();
+        graph.redrawActionObjectSprites(problem);
 
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
-        graphSelectionHandler.setValue(new RoadGraphSelectionHandler(graph, viewer.getGraphicGraph()));
+        GraphicGraph graphicGraph = viewer.getGraphicGraph();
+        graphSelectionHandler.setValue(new GraphSelectionHandler(problem, graphicGraph));
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
@@ -143,12 +149,47 @@ public class CenterPaneController extends AbstractController {
         viewPanel.registerKeyboardAction(e -> getGraphSelectionHandler().unSelectAll(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_FOCUSED);
         viewPanel.registerKeyboardAction(e -> {
-            // TODO: Handle sprites
             List<Road> selectedRoads = new ArrayList<>(getGraphSelectionHandler().getSelectedRoadList());
             List<Location> selectedLocations = new ArrayList<>(getGraphSelectionHandler().getSelectedLocationList());
+            List<Package> selectedPackages = new ArrayList<>(getGraphSelectionHandler().getSelectedPackageList());
+            List<Vehicle> selectedVehicles = new ArrayList<>(getGraphSelectionHandler().getSelectedVehicleList());
+
             graphSelectionHandler.get().unSelectAll();
-            graph.removeLocations(selectedLocations);
-            graph.removeRoads(selectedRoads.stream().map(Road::getName)::iterator);
+
+            Problem newProblem = application.getPlanningSession().getProblem();
+            newProblem.getRoadGraph().removeRoads(selectedRoads.stream().map(Road::getName)::iterator);
+            newProblem.getRoadGraph().removeLocations(selectedLocations);
+
+            for (Package pkg : selectedPackages) {
+                newProblem = newProblem.removePackage(pkg.getName());
+            }
+            for (Vehicle vehicle : selectedVehicles) {
+                newProblem = newProblem.removeVehicle(vehicle.getName());
+            }
+
+            List<Package> conflictingPackages = newProblem.getAllPackages().stream()
+                    .filter(p -> selectedLocations.contains(p.getLocation())).collect(Collectors.toList());
+            List<Package> conflictingPackagesTarget = newProblem.getAllPackages().stream()
+                    .filter(p -> selectedLocations.contains(p.getTarget())).collect(Collectors.toList());
+            List<Vehicle> conflictingVehicles = newProblem.getAllVehicles().stream()
+                    .filter(p -> selectedLocations.contains(p.getLocation())).collect(Collectors.toList());
+
+            if (newProblem.getRoadGraph().getNodeCount() <= 0) {
+                newProblem.getRoadGraph().addLocation(new Location("location0"));
+            }
+
+            Location newLoc = newProblem.getRoadGraph().getAllLocations().findAny().get();
+            for (Package pkg : conflictingPackages) {
+                newProblem = newProblem.changePackage(pkg, pkg.updateLocation(newLoc));
+            }
+            for (Package pkg : conflictingPackagesTarget) {
+                newProblem = newProblem.changePackage(pkg, pkg.updateTarget(newLoc));
+            }
+            for (Vehicle vehicle : conflictingVehicles) {
+                newProblem = newProblem.changeVehicle(vehicle, vehicle.updateLocation(newLoc));
+            }
+            application.getPlanningSession().setProblem(newProblem);
+            graph.redrawActionObjectSprites(newProblem);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         Platform.runLater(() -> {
@@ -196,11 +237,11 @@ public class CenterPaneController extends AbstractController {
     private class SpriteUnClickableMouseManager extends DefaultMouseManager {
 
         private final Logger logger = LoggerFactory.getLogger(getClass());
-        private final RoadGraphSelectionHandler selectionHandler;
+        private final GraphSelectionHandler selectionHandler;
         private ActionObjectDetailPopup popup;
         private RoadGraph graph;
 
-        SpriteUnClickableMouseManager(RoadGraphSelectionHandler selectionHandler, RoadGraph graph) {
+        SpriteUnClickableMouseManager(GraphSelectionHandler selectionHandler, RoadGraph graph) {
             this.selectionHandler = selectionHandler;
             this.graph = graph;
         }
