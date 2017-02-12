@@ -149,7 +149,7 @@ public class DefaultProblem implements Problem {
 //            return new DefaultProblem(getName(), getRoadGraph(), newVehicleMap, getPackageMap());
 //        } else if (actionObject instanceof Location) {
 //            throw new UnsupportedOperationException("Changing location names is not supported.");
-//        } else if (actionObject instanceof Road) { // TODO OOO: Should this be immutable too? Yes!
+//        } else if (actionObject instanceof Road) { // TODO: Should this be immutable too? Yes!
 //            RoadGraph.RoadEdge edge = getRoadGraph().getRoadEdge(actionObject.getName());
 //            getRoadGraph().removeRoad(actionObject.getName());
 //            if (actionObject instanceof FuelRoad) {
@@ -165,7 +165,7 @@ public class DefaultProblem implements Problem {
 //        }
     }
 
-    // TODO OOO: Handle sprites correctly
+    // TODO: Handle sprites correctly
     @Override
     public Problem putLocation(String name, Location location) {
         getRoadGraph().moveLocation(name, location.getxCoordinate(), location.getyCoordinate());

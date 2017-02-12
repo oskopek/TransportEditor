@@ -54,7 +54,7 @@ uitest-job:
   dependencies:
     - build-job
   script:
-    - "mvn verify $MAVEN_CLI_OPTS -Put-only-headless -Dcheckstyle.skip=true"
+    - "mvn verify $MAVEN_CLI_OPTS -Put-only-headless -Dcheckstyle.skip=true -Dtestfx.robot=glass -Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
