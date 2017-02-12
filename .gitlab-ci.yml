@@ -60,22 +60,22 @@ integrationtest-job:
 #    paths:
 #      - transporteditor-editor/target/
 
-uitest-headful-job:
-  stage: test
-  dependencies:
-    - build-job
-  before_script:
-    - apt-get update
-    - apt-get install -y xvfb
-    - "export DISPLAY=:99.0"
-    - "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &"
-    - sleep 3 # give xvfb some time to start
-  script:
-    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only -Dcheckstyle.skip=true"
-    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
-  artifacts:
-    paths:
-      - transporteditor-editor/target/
+#uitest-headful-job:
+#  stage: test
+#  dependencies:
+#    - build-job
+#  before_script:
+#    - apt-get update
+#    - apt-get install -y xvfb
+#    - "export DISPLAY=:99.0"
+#    - "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &"
+#    - sleep 3 # give xvfb some time to start
+#  script:
+#    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only -Dcheckstyle.skip=true"
+#    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+#  artifacts:
+#    paths:
+#      - transporteditor-editor/target/
 
 deploy-job:
   stage: deploy
