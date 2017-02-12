@@ -27,6 +27,14 @@
 |(When 2 locations selected) add a road from the first to the second
 
 |-
+|+Vehicle button
+|(When 1 location selected) add a vehicle at the first selected location
+
+|-
+|+Package button
+|(When 2 locations selected) add a package at the first selected location with a target at the second location
+
+|-
 |Right click
 |Show element detail edit menu
 
