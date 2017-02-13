@@ -18,8 +18,8 @@ public final class SequentialPlanList {
     }
 
     public static TableView<TemporalPlanAction> build(Plan plan) {
-        List<TemporalPlanAction> actionList = Stream.ofAll(plan.getTemporalPlanActions()).sortBy(
-                TemporalPlanAction::getEndTimestamp).sortBy(TemporalPlanAction::getStartTimestamp).toJavaList();
+        List<TemporalPlanAction> actionList = Stream.ofAll(plan.getTemporalPlanActions())
+                .sortBy(TemporalPlanAction::getEndTimestamp).sortBy(TemporalPlanAction::getStartTimestamp).toJavaList();
         TableView<TemporalPlanAction> tableView = new TableView<>(FXCollections.observableList(actionList));
 
         TableColumn<TemporalPlanAction, Number> startColumn = new TableColumn<>("Start");

@@ -27,6 +27,9 @@ public final class TemporalPlanGanttChart extends GanttChart {
         colorMap = javaslang.collection.HashMap.of("drive", Color.BLUE).put("pick-up", Color.GREEN).put("refuel",
                 Color.VIOLET).put("drop", Color.RED).toJavaMap();
         setData(FXCollections.observableList(computeData()));
+        double minWidth = temporalPlanActionSet.stream().map(TemporalPlanAction::getEndTimestamp)
+                .max(Integer::compareTo).map(Double::valueOf).map(d -> d * 10).orElse(0d);
+        setMinWidth(Math.max(minWidth, 300d));
     }
 
     public static TemporalPlanGanttChart build(Plan plan) {
