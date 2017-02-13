@@ -124,6 +124,7 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public CompletionStage<Plan> startPlanningAsync() {
+        setPlan(null);
         return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
             if (plan != null) {
                 boolean isValid;

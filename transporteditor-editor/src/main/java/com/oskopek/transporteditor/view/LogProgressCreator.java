@@ -7,6 +7,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,6 +54,11 @@ public class LogProgressCreator {
         logProgressController.setHeaderText(messages.getString("logprogress.title"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(dialogPane));
+        stage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (KeyCode.ESCAPE.equals(event.getCode()) && !inProgress.getValue()) {
+                stage.close();
+            }
+        });
         logProgressController.setDialog(stage);
         LogListener logListener = logProgressController::appendLog;
         logStreamable.subscribe(logListener);

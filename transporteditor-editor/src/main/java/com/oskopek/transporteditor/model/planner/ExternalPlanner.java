@@ -107,6 +107,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
                     .getOrElseThrow((e) -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
                 logger.warn("Planning failed: return value " + retVal + ".");
+                bestPlan.setValue(null);
             } else {
                 log("");
                 log("Planner output:");

@@ -276,7 +276,7 @@ public class RightPaneController extends AbstractController {
         });
         logger.trace("LogProgress begin");
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getPlanner(), successful,
-                completed.not().or(successful.not()), completed.not(), planner::cancel);
+                completed.not(), completed.not(), planner::cancel);
         logger.trace("LogProgress end");
     }
 
