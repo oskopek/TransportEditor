@@ -179,6 +179,7 @@ public class RootLayoutController extends AbstractController {
             Domain domain = session.getDomain();
             if (domain != null) {
                 domainFileHandler.setObject(domain);
+                domainFileHandler.setIO(new VariableDomainIO());
                 session.domainProperty().bindBidirectional(domainFileHandler.objectProperty());
                 Problem problem = session.getProblem();
                 if (problem != null) {
@@ -314,9 +315,9 @@ public class RootLayoutController extends AbstractController {
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
         RoadGraph graph = new RoadGraph("graph");
-        graph.addLocation(new Location("Loc0", 0, 0));
+        graph.addLocation(new Location("loc0", 0, 0));
         problemFileHandler.newObject(
-                new DefaultProblem("problem" + new Date().toString(), graph, new HashMap<>(),
+                new DefaultProblem("problem" + new Date().getTime(), graph, new HashMap<>(),
                         new HashMap<>()), io, io);
         application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
