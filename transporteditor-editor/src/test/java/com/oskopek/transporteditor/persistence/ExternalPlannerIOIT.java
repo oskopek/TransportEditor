@@ -38,7 +38,11 @@ public class ExternalPlannerIOIT {
         ExternalPlanner parsed = new ExternalPlannerIO().parse(emptyPlannerContents);
         assertNotNull(parsed);
         assertNull(parsed.getCurrentPlan());
+        assertEquals(emptyPlanner.getCurrentPlan(), parsed.getCurrentPlan());
         assertEquals(emptyPlanner, parsed);
+        assertEquals(emptyPlanner.getLogListenerListUnmodifiable(), parsed.getLogListenerListUnmodifiable());
+        assertNotNull(parsed.isPlanning());
+        assertFalse(parsed.isPlanning().getValue());
     }
 
     @Test

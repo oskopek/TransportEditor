@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractLogStreamable implements LogStreamable {
 
-    private transient ObservableList<LogListener> logListenerList;
+    private final transient ObservableList<LogListener> logListenerList;
 
     public AbstractLogStreamable() {
         this.logListenerList = FXCollections.observableArrayList();
@@ -40,11 +40,6 @@ public abstract class AbstractLogStreamable implements LogStreamable {
     @Override
     public void unsubscribe(LogListener listener) {
         getLogListenerList().remove(listener);
-    }
-
-    protected Object readResolve() {
-        logListenerList = FXCollections.observableArrayList();
-        return this;
     }
 
 }

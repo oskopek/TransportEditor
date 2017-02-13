@@ -32,8 +32,8 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
-    private transient ObjectProperty<Process> plannerProcessProperty = new SimpleObjectProperty<>();
-    private transient ObjectProperty<Plan> bestPlan = new SimpleObjectProperty<>();
+    private final transient ObjectProperty<Process> plannerProcessProperty = new SimpleObjectProperty<>();
+    private final transient ObjectProperty<Plan> bestPlan = new SimpleObjectProperty<>();
 
     /**
      * Assumes stdout as plan, stderr for status updates.
@@ -56,10 +56,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
     }
 
     protected Object readResolve() {
-        super.readResolve();
-        bestPlan = new SimpleObjectProperty<>();
-        plannerProcessProperty = new SimpleObjectProperty<>();
-        return this;
+        return new ExternalPlanner(getExecutableWithParameters());
     }
 
     private synchronized Plan startPlanning(Domain domain, Problem problem) {

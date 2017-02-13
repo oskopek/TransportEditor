@@ -208,9 +208,9 @@
           <com.oskopek.transporteditor.model.problem.Location reference="46"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-4]-&gt;Loc[city-loc-1]</string>
+          <string>city-loc-4-&gt;city-loc-1</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="58">
-            <name>Loc[city-loc-4]-&gt;Loc[city-loc-1]</name>
+            <name>city-loc-4-&gt;city-loc-1</name>
             <length id="59">
               <cost>28</cost>
             </length>
@@ -221,9 +221,9 @@
           <com.oskopek.transporteditor.model.problem.Location reference="42"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-3]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-3-&gt;city-loc-5</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="60">
-            <name>Loc[city-loc-3]-&gt;Loc[city-loc-5]</name>
+            <name>city-loc-3-&gt;city-loc-5</name>
             <length id="61">
               <cost>24</cost>
             </length>
@@ -243,9 +243,9 @@
           <com.oskopek.transporteditor.model.problem.Location reference="38"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-3]</string>
+          <string>city-loc-5-&gt;city-loc-3</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="63">
-            <name>Loc[city-loc-5]-&gt;Loc[city-loc-3]</name>
+            <name>city-loc-5-&gt;city-loc-3</name>
             <length id="64">
               <cost>24</cost>
             </length>
@@ -265,61 +265,61 @@ node.marked {
 }</string>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-4]</string>
+          <string>city-loc-5-&gt;city-loc-4</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="65">
-            <name>Loc[city-loc-5]-&gt;Loc[city-loc-4]</name>
+            <name>city-loc-5-&gt;city-loc-4</name>
             <length id="66">
               <cost>32</cost>
             </length>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-1]</string>
+          <string>city-loc-5-&gt;city-loc-1</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="67">
-            <name>Loc[city-loc-5]-&gt;Loc[city-loc-1]</name>
+            <name>city-loc-5-&gt;city-loc-1</name>
             <length id="68">
               <cost>35</cost>
             </length>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-2]</string>
+          <string>city-loc-5-&gt;city-loc-2</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="69">
-            <name>Loc[city-loc-5]-&gt;Loc[city-loc-2]</name>
+            <name>city-loc-5-&gt;city-loc-2</name>
             <length reference="52"/>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-2]-&gt;Loc[city-loc-3]</string>
+          <string>city-loc-2-&gt;city-loc-3</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="70">
-            <name>Loc[city-loc-2]-&gt;Loc[city-loc-3]</name>
+            <name>city-loc-2-&gt;city-loc-3</name>
             <length id="71">
               <cost>30</cost>
             </length>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-2]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-2-&gt;city-loc-5</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="72">
-            <name>Loc[city-loc-2]-&gt;Loc[city-loc-5]</name>
+            <name>city-loc-2-&gt;city-loc-5</name>
             <length id="73">
               <cost>18</cost>
             </length>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-1]-&gt;Loc[city-loc-4]</string>
+          <string>city-loc-1-&gt;city-loc-4</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="74">
-            <name>Loc[city-loc-1]-&gt;Loc[city-loc-4]</name>
+            <name>city-loc-1-&gt;city-loc-4</name>
             <length id="75">
               <cost>28</cost>
             </length>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-3]-&gt;Loc[city-loc-2]</string>
+          <string>city-loc-3-&gt;city-loc-2</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="76">
-            <name>Loc[city-loc-3]-&gt;Loc[city-loc-2]</name>
+            <name>city-loc-3-&gt;city-loc-2</name>
             <length id="77">
               <cost>30</cost>
             </length>
@@ -330,16 +330,16 @@ node.marked {
           <boolean>true</boolean>
         </entry>
         <entry>
-          <string>Loc[city-loc-4]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-4-&gt;city-loc-5</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="78">
-            <name>Loc[city-loc-4]-&gt;Loc[city-loc-5]</name>
+            <name>city-loc-4-&gt;city-loc-5</name>
             <length reference="49"/>
           </com.oskopek.transporteditor.model.problem.DefaultRoad>
         </entry>
         <entry>
-          <string>Loc[city-loc-1]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-1-&gt;city-loc-5</string>
           <com.oskopek.transporteditor.model.problem.DefaultRoad id="79">
-            <name>Loc[city-loc-1]-&gt;Loc[city-loc-5]</name>
+            <name>city-loc-1-&gt;city-loc-5</name>
             <length id="80">
               <cost>35</cost>
             </length>
@@ -391,7 +391,7 @@ node.marked {
             <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
             <edges id="94">
               <org.graphstream.graph.implementations.AbstractEdge id="95">
-                <id>Loc[city-loc-4]-&gt;Loc[city-loc-1]</id>
+                <id>city-loc-4-&gt;city-loc-1</id>
                 <index>6</index>
                 <attributes id="96">
                   <entry>
@@ -411,7 +411,7 @@ node.marked {
                   <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                   <edges id="99">
                     <org.graphstream.graph.implementations.AbstractEdge id="100">
-                      <id>Loc[city-loc-1]-&gt;Loc[city-loc-4]</id>
+                      <id>city-loc-1-&gt;city-loc-4</id>
                       <index>0</index>
                       <attributes id="101">
                         <entry>
@@ -425,7 +425,7 @@ node.marked {
                       <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                     </org.graphstream.graph.implementations.AbstractEdge>
                     <org.graphstream.graph.implementations.AbstractEdge id="102">
-                      <id>Loc[city-loc-5]-&gt;Loc[city-loc-4]</id>
+                      <id>city-loc-5-&gt;city-loc-4</id>
                       <index>11</index>
                       <attributes id="103">
                         <entry>
@@ -445,7 +445,7 @@ node.marked {
                         <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                         <edges id="106">
                           <org.graphstream.graph.implementations.AbstractEdge id="107">
-                            <id>Loc[city-loc-1]-&gt;Loc[city-loc-5]</id>
+                            <id>city-loc-1-&gt;city-loc-5</id>
                             <index>1</index>
                             <attributes id="108">
                               <entry>
@@ -459,7 +459,7 @@ node.marked {
                             <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
                           <org.graphstream.graph.implementations.AbstractEdge id="109">
-                            <id>Loc[city-loc-2]-&gt;Loc[city-loc-5]</id>
+                            <id>city-loc-2-&gt;city-loc-5</id>
                             <index>3</index>
                             <attributes id="110">
                               <entry>
@@ -479,7 +479,7 @@ node.marked {
                               <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                               <edges id="113">
                                 <org.graphstream.graph.implementations.AbstractEdge id="114">
-                                  <id>Loc[city-loc-3]-&gt;Loc[city-loc-2]</id>
+                                  <id>city-loc-3-&gt;city-loc-2</id>
                                   <index>4</index>
                                   <attributes id="115">
                                     <entry>
@@ -499,7 +499,7 @@ node.marked {
                                     <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                                     <edges id="118">
                                       <org.graphstream.graph.implementations.AbstractEdge id="119">
-                                        <id>Loc[city-loc-2]-&gt;Loc[city-loc-3]</id>
+                                        <id>city-loc-2-&gt;city-loc-3</id>
                                         <index>2</index>
                                         <attributes id="120">
                                           <entry>
@@ -513,7 +513,7 @@ node.marked {
                                         <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                                       </org.graphstream.graph.implementations.AbstractEdge>
                                       <org.graphstream.graph.implementations.AbstractEdge id="121">
-                                        <id>Loc[city-loc-5]-&gt;Loc[city-loc-3]</id>
+                                        <id>city-loc-5-&gt;city-loc-3</id>
                                         <index>10</index>
                                         <attributes id="122">
                                           <entry>
@@ -527,7 +527,7 @@ node.marked {
                                         <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                                       </org.graphstream.graph.implementations.AbstractEdge>
                                       <org.graphstream.graph.implementations.AbstractEdge id="123">
-                                        <id>Loc[city-loc-3]-&gt;Loc[city-loc-5]</id>
+                                        <id>city-loc-3-&gt;city-loc-5</id>
                                         <index>5</index>
                                         <attributes id="124">
                                           <entry>
@@ -579,7 +579,7 @@ node.marked {
                                   <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                                 </org.graphstream.graph.implementations.AbstractEdge>
                                 <org.graphstream.graph.implementations.AbstractEdge id="128">
-                                  <id>Loc[city-loc-5]-&gt;Loc[city-loc-2]</id>
+                                  <id>city-loc-5-&gt;city-loc-2</id>
                                   <index>9</index>
                                   <attributes id="129">
                                     <entry>
@@ -633,7 +633,7 @@ node.marked {
                           </org.graphstream.graph.implementations.AbstractEdge>
                           <org.graphstream.graph.implementations.AbstractEdge reference="123"/>
                           <org.graphstream.graph.implementations.AbstractEdge id="133">
-                            <id>Loc[city-loc-4]-&gt;Loc[city-loc-5]</id>
+                            <id>city-loc-4-&gt;city-loc-5</id>
                             <index>7</index>
                             <attributes id="134">
                               <entry>
@@ -647,7 +647,7 @@ node.marked {
                             <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="55"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
                           <org.graphstream.graph.implementations.AbstractEdge id="135">
-                            <id>Loc[city-loc-5]-&gt;Loc[city-loc-1]</id>
+                            <id>city-loc-5-&gt;city-loc-1</id>
                             <index>8</index>
                             <attributes id="136">
                               <entry>
@@ -805,51 +805,51 @@ node.marked {
       </nodeMap>
       <edgeMap id="148">
         <entry>
-          <string>Loc[city-loc-2]-&gt;Loc[city-loc-3]</string>
+          <string>city-loc-2-&gt;city-loc-3</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="119"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-2]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-2-&gt;city-loc-5</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="109"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-4]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-4-&gt;city-loc-5</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="133"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-4]-&gt;Loc[city-loc-1]</string>
+          <string>city-loc-4-&gt;city-loc-1</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="95"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-1]</string>
+          <string>city-loc-5-&gt;city-loc-1</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="135"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-1]-&gt;Loc[city-loc-4]</string>
+          <string>city-loc-1-&gt;city-loc-4</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="100"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-3]-&gt;Loc[city-loc-2]</string>
+          <string>city-loc-3-&gt;city-loc-2</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="114"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-1]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-1-&gt;city-loc-5</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="107"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-3]</string>
+          <string>city-loc-5-&gt;city-loc-3</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="121"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-2]</string>
+          <string>city-loc-5-&gt;city-loc-2</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="128"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-5]-&gt;Loc[city-loc-4]</string>
+          <string>city-loc-5-&gt;city-loc-4</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="102"/>
         </entry>
         <entry>
-          <string>Loc[city-loc-3]-&gt;Loc[city-loc-5]</string>
+          <string>city-loc-3-&gt;city-loc-5</string>
           <org.graphstream.graph.implementations.AbstractEdge reference="123"/>
         </entry>
       </edgeMap>
