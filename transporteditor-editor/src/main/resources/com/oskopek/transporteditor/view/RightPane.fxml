@@ -32,6 +32,13 @@
                         <Font size="18.0"/>
                     </font>
                 </Button>
+                <Button fx:id="redrawButton" disable="true" maxWidth="1.7976931348623157E308"
+                        onAction="#handleRedraw" text="%redraw" HBox.hgrow="ALWAYS" GridPane.columnIndex="4"
+                        GridPane.rowIndex="0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
                 <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
                       GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <children>
@@ -43,7 +50,7 @@
                     </children>
                 </HBox>
                 <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
-                      GridPane.columnIndex="2" GridPane.rowIndex="2">
+                      GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.columnSpan="3">
                     <children>
                         <Button fx:id="addVehicleButton" disable="true" maxWidth="1.7976931348623157E308"
                                 onAction="#handleAddVehicle"
@@ -64,7 +71,9 @@
             <columnConstraints>
                 <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
                 <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
-                <ColumnConstraints minWidth="200.0" prefWidth="300.0"/>
+                <ColumnConstraints minWidth="150.0" prefWidth="200.0"/>
+                <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
             </columnConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

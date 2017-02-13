@@ -62,6 +62,9 @@ public class RightPaneController extends AbstractController {
     private Button validateButton;
 
     @FXML
+    private Button redrawButton;
+
+    @FXML
     private Button addLocationButton;
 
     @FXML
@@ -121,6 +124,19 @@ public class RightPaneController extends AbstractController {
         centerPaneController.lockedProperty().addListener(e -> disableAddLocationButton.invalidate());
         addLocationButton.disableProperty().bind(disableAddLocationButton);
 
+        // Disable redraw button condition
+        InvalidableOrBooleanBinding disableRedrawButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull())
+                .or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty))
+                .or(new BooleanBinding() {
+                    @Override
+                    protected boolean computeValue() {
+                        return centerPaneController.isLocked();
+                    }
+                });
+        redrawButton.disableProperty().bind(disableRedrawButton);
+
         // Disable graph changes (addVehicle) button condition
         InvalidableOrBooleanBinding disableAddVehicleButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
@@ -134,7 +150,6 @@ public class RightPaneController extends AbstractController {
                         return centerPaneController.isLocked();
                     }
                 });
-        centerPaneController.lockedProperty().addListener(e -> disableAddVehicleButton.invalidate());
         addVehicleButton.disableProperty().bind(disableAddVehicleButton);
 
         // Disable graph changes (addRoad and addPackage) button condition
@@ -152,6 +167,13 @@ public class RightPaneController extends AbstractController {
                 });
         addRoadButton.disableProperty().bind(disableAddRoadButton);
         addPackageButton.disableProperty().bind(disableAddRoadButton);
+
+        centerPaneController.lockedProperty().addListener(e -> {
+            disableAddLocationButton.invalidate();
+            disableAddVehicleButton.invalidate();
+            disableAddRoadButton.invalidate();
+            disableRedrawButton.invalidate();
+        });
 
         // Update disable AddRoad and AddVehicle button
         InvalidationListener graphSelectionChangedListener = e -> {
@@ -172,6 +194,7 @@ public class RightPaneController extends AbstractController {
         InvalidationListener invalidatePlanButtonBindingListener = s -> {
             disablePlanButton.invalidate();
             disableValidateButton.invalidate();
+            disableRedrawButton.invalidate();
             disableLockButton.invalidate();
             disableAddVehicleButton.invalidate();
             disableAddRoadButton.invalidate();
@@ -282,6 +305,12 @@ public class RightPaneController extends AbstractController {
         }).toCompletableFuture();
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
                 completed.not().or(successful.not()), completed.not(), validator::cancel);
+    }
+
+    @FXML
+    private void handleRedraw() {
+        logger.debug("Starting redraw...");
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
