@@ -306,7 +306,7 @@ public class RightPaneController extends AbstractController {
             return null;
         }).toCompletableFuture();
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
-                completed.not().or(successful.not()), completed.not(), validator::cancel);
+                completed.not(), completed.not(), validator::cancel);
     }
 
     @FXML

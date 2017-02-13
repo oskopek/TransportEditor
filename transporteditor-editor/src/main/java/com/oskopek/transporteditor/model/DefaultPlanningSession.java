@@ -135,6 +135,8 @@ public class DefaultPlanningSession implements PlanningSession {
                 }
                 if (isValid) {
                     setPlan(plan);
+                } else {
+                    throw new IllegalStateException("Resulting plan was invalid.");
                 }
             }
             return CompletableFuture.completedFuture(plan);

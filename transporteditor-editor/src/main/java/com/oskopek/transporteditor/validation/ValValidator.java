@@ -6,9 +6,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.view.executables.AbstractLogCancellable;
 import com.oskopek.transporteditor.view.executables.ExecutableTemporarySerializer;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javaslang.control.Try;
 import org.slf4j.Logger;
@@ -30,8 +28,7 @@ public class ValValidator extends AbstractLogCancellable implements Validator {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
-    private final transient BooleanProperty killActiveProcess = new SimpleBooleanProperty(false);
-    private transient ObjectProperty<Process> validatorProcessProperty = new SimpleObjectProperty<>();
+    private final transient ObjectProperty<Process> validatorProcessProperty = new SimpleObjectProperty<>();
 
     public ValValidator(ExecutableWithParameters executable) {
         String parameters = executable.getParameters();
