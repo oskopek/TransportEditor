@@ -59,6 +59,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         this.setAttribute("ui.stylesheet", style);
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
+        getAllLocations().forEach(this::setPetrolStationStyle);
         spriteManager = new SpriteManager(this);
     }
 
@@ -92,6 +93,13 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
     public Location moveLocation(String name, int newX, int newY) {
         Location original = getAttribute(name);
         Location newLocation = new Location(original.getName(), newX, newY);
+        setAttribute(newLocation.getName(), newLocation);
+        return original;
+    }
+
+    public Location setPetrolStation(String locationName, boolean hasPetrolStation) {
+        Location original = getAttribute(locationName);
+        Location newLocation = original.updateHasPetrolStation(hasPetrolStation);
         setAttribute(newLocation.getName(), newLocation);
         return original;
     }
@@ -198,6 +206,15 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    private void setPetrolStationStyle(Location location) {
+        Node node = getNode(location.getName());
+        if (location.hasPetrolStation()) {
+            node.addAttribute("ui.class", "petrol");
+        } else {
+            node.setAttribute("ui.class", "");
+        }
+    }
+
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
@@ -215,14 +232,6 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
             logger.debug("Caught exception while putting road.", e);
         }
         return addRoad(road, from, to);
-    }
-
-    public boolean hasPetrolStation(Location location) {
-        return hasAttribute(location.getName() + "-station");
-    }
-
-    public void setPetrolStation(Location location) {
-        setAttribute(location.getName() + "-station");
     }
 
     public Stream<Road> getAllRoadsBetween(Location l1, Location l2) {
@@ -265,7 +274,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
             return null;
         }
         return RoadEdge.of(edge.getAttribute("road"), getAttribute(edge.getNode0().getId()),
-                getAttribute(edge.getNode0().getId()));
+                getAttribute(edge.getNode1().getId()));
     }
 
     public void removeRoad(String name) {

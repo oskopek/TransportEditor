@@ -180,16 +180,16 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
-    public Problem removeLocation(String name) {
+    public Problem removeLocation(String name) { // TODO: Should this be immutable too?
         getRoadGraph().removeLocation(getRoadGraph().getLocation(name));
-        return new DefaultProblem(this);
+        return this;
     }
 
-    // TODO: Handle sprites correctly
     @Override
-    public Problem putLocation(String name, Location location) {
+    public Problem putLocation(String name, Location location) { // TODO: Should this be immutable too?
         getRoadGraph().moveLocation(name, location.getxCoordinate(), location.getyCoordinate());
-        return new DefaultProblem(this);
+        getRoadGraph().setPetrolStation(name, location.getPetrolStation());
+        return this;
     }
 
     @Override

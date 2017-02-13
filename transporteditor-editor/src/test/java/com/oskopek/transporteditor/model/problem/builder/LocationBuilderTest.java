@@ -43,14 +43,14 @@ public class LocationBuilderTest {
     public void testBeanMethods() throws Exception {
         builder.from(new Location("test", 0, 1));
         ObservableList<PropertySheet.Item> properties = BeanPropertyUtils.getProperties(builder);
-        assertThat(properties).hasSize(3).allMatch(PropertySheet.Item::isEditable);
+        assertThat(properties).hasSize(4).allMatch(PropertySheet.Item::isEditable);
     }
 
     @Test
     public void testBeanMethodsEdit() throws Exception {
         builder.from(new Location("test", 0, 1));
         ObservableList<PropertySheet.Item> properties = BeanPropertyUtils.getProperties(builder);
-        assertThat(properties).hasSize(3);
+        assertThat(properties).hasSize(4);
         PropertySheet.Item xCoordinate = properties.stream().filter(i -> i.getName().equals("xCoordinate")).findAny()
                 .orElseThrow(IllegalStateException::new);
         assertThat(xCoordinate).isNotNull();

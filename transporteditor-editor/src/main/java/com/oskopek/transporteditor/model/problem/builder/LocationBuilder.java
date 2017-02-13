@@ -6,6 +6,7 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
 
     private Integer xCoordinate;
     private Integer yCoordinate;
+    private Boolean petrolStation;
 
     public LocationBuilder() {
         // intentionally empty
@@ -29,9 +30,18 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
         this.yCoordinate = yCoordinate;
     }
 
+    @FieldLocalization(key = "petrolstation", priority = 6)
+    public Boolean getPetrolStation() {
+        return petrolStation;
+    }
+
+    public void setPetrolStation(Boolean petrolStation) {
+        this.petrolStation = petrolStation;
+    }
+
     @Override
     public Location build() {
-        return new Location(getName(), getxCoordinate(), getyCoordinate());
+        return new Location(getName(), getxCoordinate(), getyCoordinate(), getPetrolStation());
     }
 
     @Override
@@ -39,5 +49,6 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
         super.from(location);
         setxCoordinate(location.getxCoordinate());
         setyCoordinate(location.getyCoordinate());
+        setPetrolStation(location.getPetrolStation());
     }
 }

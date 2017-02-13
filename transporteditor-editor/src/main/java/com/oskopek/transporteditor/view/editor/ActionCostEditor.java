@@ -1,34 +1,39 @@
 package com.oskopek.transporteditor.view.editor;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
-import javafx.scene.Node;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import org.controlsfx.control.PropertySheet;
-import org.controlsfx.property.editor.PropertyEditor;
+import org.controlsfx.property.editor.AbstractPropertyEditor;
 
-public class ActionCostEditor implements PropertyEditor<ActionCost> {
+public class ActionCostEditor extends AbstractPropertyEditor<ActionCost, Spinner<Integer>> {
 
-    private final Spinner<Integer> editor;
+    private ObjectProperty<ActionCost> actionCostObservableValue;
 
     public ActionCostEditor(PropertySheet.Item item) {
-        this.editor = new Spinner<>();
+        super(item, new Spinner<>());
+        if (actionCostObservableValue == null) {
+            actionCostObservableValue = new SimpleObjectProperty<>();
+        }
+        getEditor().valueProperty().addListener(
+                (observable, oldValue, newValue) -> actionCostObservableValue.setValue(ActionCost.valueOf(newValue)));
         setValue((ActionCost) item.getValue());
     }
 
     @Override
-    public Node getEditor() {
-        return editor;
-    }
-
-    @Override
-    public ActionCost getValue() {
-        return ActionCost.valueOf(editor.getValue());
+    protected ObservableValue<ActionCost> getObservableValue() {
+        if (actionCostObservableValue == null) {
+            actionCostObservableValue = new SimpleObjectProperty<>();
+        }
+        return actionCostObservableValue;
     }
 
     @Override
     public void setValue(ActionCost value) {
-        editor.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE,
+        getEditor().setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE,
                 value.getCost()));
     }
 }

@@ -115,7 +115,6 @@ public class CenterPaneController extends AbstractController {
 
         // TODO: move this to appropriate listener and possibly refactor
         Problem problem = application.getPlanningSession().getProblem();
-        graph.redrawActionObjectSprites(problem);
 
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
@@ -189,7 +188,7 @@ public class CenterPaneController extends AbstractController {
                 newProblem = newProblem.changeVehicle(vehicle, vehicle.updateLocation(newLoc));
             }
             application.getPlanningSession().setProblem(newProblem);
-            graph.redrawActionObjectSprites(newProblem);
+            newProblem.getRoadGraph().redrawActionObjectSprites(newProblem);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         Platform.runLater(() -> {
@@ -216,6 +215,7 @@ public class CenterPaneController extends AbstractController {
                         throw new IllegalStateException("Sleep broken.", e);
                     }
                     logger.debug("Killing spring layout early ({}ms).", total);
+                    graph.redrawActionObjectSprites(problem);
                     return null;
                 }
             };

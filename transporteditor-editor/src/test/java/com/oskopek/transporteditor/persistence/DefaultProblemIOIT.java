@@ -75,6 +75,10 @@ public class DefaultProblemIOIT {
         assertNotNull(road);
         assertNotNull(road.getLength());
         assertEquals(32, road.getLength().getCost().intValue());
+        for (int i = 1; i <= 5; i++) {
+            assertNull(rg.getLocation("city-loc-" + i).getPetrolStation());
+            assertFalse(rg.getLocation("city-loc-" + i).hasPetrolStation());
+        }
 
         assertNotNull(problem.getPackage("package-1").getTarget());
         assertEquals("city-loc-5", problem.getPackage("package-1").getTarget().getName());
@@ -161,6 +165,12 @@ public class DefaultProblemIOIT {
         FuelRoad fuelRoad = (FuelRoad) road;
         assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
         assertEquals(45, fuelRoad.getLength().getCost().intValue());
+        assertNotNull(rg.getLocation("city-loc-1").getPetrolStation());
+        assertTrue(rg.getLocation("city-loc-1").hasPetrolStation());
+        for (int i = 2; i <= 5; i++) {
+            assertNotNull(rg.getLocation("city-loc-" + i).getPetrolStation());
+            assertFalse(rg.getLocation("city-loc-" + i).hasPetrolStation());
+        }
 
         assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
         Vehicle truck1 = problem.getVehicle("truck-1");

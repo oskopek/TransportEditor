@@ -59,7 +59,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 t -> Tuple.of(t._1, t._2, object.getRoadGraph().getShortestRoadBetween(t._1, t._2)))
                 .filter(t -> t._3 != null).toJavaList();
         input.put("roads", roads);
-        input.put("petrolLocationList", allLocations.filter(object.getRoadGraph()::hasPetrolStation).toJavaList());
+        input.put("petrolLocationList", allLocations.filter(Location::hasPetrolStation).toJavaList());
         Optional<Integer> maxCapacityOpt = object.getAllVehicles().stream().map(Vehicle::getMaxCapacity).map(
                 ActionCost::getCost).max(Integer::compare);
         int maxCapacity = 0;
@@ -120,7 +120,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
 
                 if ("has-petrol-station".equals(predicate)) {
-                    parsed.graph().setPetrolStation(parsed.graph().getLocation(arg1));
+                    parsed.graph().setPetrolStation(arg1, true);
                     continue;
                 } else if ("ready-loading".equals(predicate)) {
                     // ignore predicate for now
@@ -273,7 +273,8 @@ public class DefaultProblemIO implements DataIO<Problem> {
                     parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.valueOf(1)));
                     break;
                 case "location":
-                    parsed.graph().addLocation(new Location(objectName, 0, 0));
+                    parsed.graph().addLocation(new Location(objectName, 0, 0,
+                            domain.getPddlLabels().contains(PddlLabel.Fuel) ? false : null));
                     break;
                 case "capacity-number":
                     String[] split = objectName.split("-");

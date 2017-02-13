@@ -5,6 +5,10 @@ node {
     text-size: 15;
 }
 
+node.petrol {
+    fill-color: brown;
+}
+
 node:selected {
     fill-color: green;
 }
