@@ -219,9 +219,10 @@ public class CenterPaneController extends AbstractController {
                     return null;
                 }
             };
-            Stage progressDialog = ProgressCreator.showProgress(springLayoutEarlyTermination::progressProperty,
+            Stage progressDialog = ProgressCreator.buildProgress(springLayoutEarlyTermination::progressProperty,
                     messages.getString("progress.pleaseWait"));
             application.centerInPrimaryStage(progressDialog, -50, -50);
+            progressDialog.show();
             springLayoutEarlyTermination.setOnFailed(event -> {
                 progressDialog.close();
                 AlertCreator.showAlert(Alert.AlertType.ERROR,
