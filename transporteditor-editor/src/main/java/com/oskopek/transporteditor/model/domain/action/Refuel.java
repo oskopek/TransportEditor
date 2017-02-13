@@ -20,6 +20,6 @@ public class Refuel extends DefaultAction<Vehicle, PlaceholderActionObject> {
     public Problem apply(Domain domain, Problem problemState) {
         String name = this.getWho().getName();
         Vehicle vehicle = problemState.getVehicle(name);
-        return problemState.updateVehicle(name, vehicle.updateCurFuelCapacity(vehicle.getMaxFuelCapacity()));
+        return problemState.putVehicle(name, vehicle.updateCurFuelCapacity(vehicle.getMaxFuelCapacity()));
     }
 }

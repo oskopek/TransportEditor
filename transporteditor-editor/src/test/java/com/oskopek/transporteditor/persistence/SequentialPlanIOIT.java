@@ -6,7 +6,7 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
-import com.oskopek.transporteditor.test.TestUtils;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class SequentialPlanIOIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        P01SequentialPlanFileContents = TestUtils.readAllLines(
+        P01SequentialPlanFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream(sequentialPlanFile)).stream().collect(
                 Collectors.joining("\n"));
     }

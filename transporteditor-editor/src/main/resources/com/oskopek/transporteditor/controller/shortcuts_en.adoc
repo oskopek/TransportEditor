@@ -7,31 +7,43 @@
 |Effect
 
 |-
-|Hover mouse
-|Show popup details of object
+|Left click + drag
+|Move element
 
 |-
 |Left click
-|Single-element select
+|Show popup details of element
+
+|Shift
+|Left click
+|Element de/select
+
+|-
+|Left click + drag
+|Multi-element de/select
+
+|-
+|+Road button
+|(When 2 locations selected) add a road from the first to the second
+
+|-
+|+Vehicle button
+|(When 1 location selected) add a vehicle at the first selected location
+
+|-
+|+Package button
+|(When 2 locations selected) add a package at the first selected location with a target at the second location
 
 |-
 |Right click
-|Show drop down detail menu of object
+|Show element detail edit menu
 
 |Esc
 |-
-|De-select
-
-|Ctrl
-|Left click
-|Multi-element select
+|De-select all
 
 |Delete
 |-
-|Delete selected element(s)
-
-|-
-|Left click on +Road button
-|(When 2 locations selected) add a road from the first to the second
+|Delete selected elements
 
 |===

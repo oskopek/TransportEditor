@@ -3,31 +3,45 @@ package com.oskopek.transporteditor.model.problem;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Location implements Locatable {
+public class Location extends DefaultActionObject implements Locatable {
 
-    private final String name;
     private final Integer xCoordinate;
     private final Integer yCoordinate;
+    private final Boolean petrolStation;
+
+    public Location(String name) {
+        this(name, 0, 0);
+    }
 
     public Location(String name, Integer xCoordinate, Integer yCoordinate) {
-        this.name = name;
+        this(name, xCoordinate, yCoordinate, null);
+    }
+
+    public Location(String name, Integer xCoordinate, Integer yCoordinate, Boolean petrolStation) {
+        super(name);
+        this.xCoordinate = xCoordinate;
         if (xCoordinate == null) {
             throw new IllegalArgumentException("xCoordinate cannot be null.");
         }
-        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
         if (yCoordinate == null) {
             throw new IllegalArgumentException("xCoordinate cannot be null.");
         }
-        this.yCoordinate = yCoordinate;
+        this.petrolStation = petrolStation;
+    }
+
+    @Override
+    public Location updateName(String newName) {
+        return new Location(newName, getxCoordinate(), getyCoordinate(), getPetrolStation());
+    }
+
+    public Location updateHasPetrolStation(boolean hasPetrolStation) {
+        return new Location(getName(), getxCoordinate(), getyCoordinate(), hasPetrolStation);
     }
 
     @Override
     public Location getLocation() {
         return this;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getxCoordinate() {
@@ -38,10 +52,18 @@ public class Location implements Locatable {
         return yCoordinate;
     }
 
+    public boolean hasPetrolStation() {
+        return petrolStation != null && petrolStation;
+    }
+
+    public Boolean getPetrolStation() {
+        return petrolStation;
+    }
+
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getxCoordinate()).append(getyCoordinate())
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getName())
+                .append(getxCoordinate()).append(getyCoordinate()).append(getPetrolStation()).toHashCode();
     }
 
     @Override
@@ -49,15 +71,13 @@ public class Location implements Locatable {
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof Location)) {
             return false;
         }
-
         Location location = (Location) o;
-
-        return new EqualsBuilder().append(getName(), location.getName()).append(getxCoordinate(),
-                location.getxCoordinate()).append(getyCoordinate(), location.getyCoordinate()).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(getxCoordinate(), location.getxCoordinate())
+                .append(getyCoordinate(), location.getyCoordinate())
+                .append(getPetrolStation(), location.getPetrolStation()).isEquals();
     }
 
     @Override

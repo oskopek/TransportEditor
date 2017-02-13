@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.model.domain.DomainType;
-import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
@@ -108,9 +107,9 @@ public class VariableDomainController extends AbstractController {
         domainBuilder.nameProperty().bind(nameField.textProperty());
 
         sequentialRadio.setToggleGroup(group);
-        sequentialRadio.setUserData(PddlLabel.ActionCost);
+        sequentialRadio.setUserData(DomainType.Sequential);
         temporalRadio.setToggleGroup(group);
-        temporalRadio.setUserData(PddlLabel.Temporal);
+        temporalRadio.setUserData(DomainType.Temporal);
         group.selectedToggleProperty().addListener(
                 e -> domainBuilder.setDomainType((DomainType) group.getSelectedToggle().getUserData()));
 

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112"
       fx:controller="com.oskopek.transporteditor.controller.RootLayoutController">
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
         <Menu fx:id="sessionMenu" mnemonicParsing="false" text="%root.session">
             <MenuItem fx:id="sessionNewMenuItem" mnemonicParsing="false" onAction="#handleSessionNew" text="%root.new"/>
             <MenuItem fx:id="sessionLoadMenuItem" mnemonicParsing="false" onAction="#handleSessionLoad"
@@ -64,7 +64,7 @@
                       text="%root.about"/>
         </Menu>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane VBox.vgrow="ALWAYS">
         <SplitPane dividerPositions="0.60" prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                    AnchorPane.topAnchor="0.0">

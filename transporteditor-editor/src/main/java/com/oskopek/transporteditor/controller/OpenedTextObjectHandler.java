@@ -51,17 +51,18 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         setObject(parsed);
     }
 
-    public void newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+    public boolean newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
             DataReader<? extends Persistable_> reader) {
-        nonSafeNewObject(object, writer, reader);
+        return nonSafeNewObject(object, writer, reader);
     }
 
-    private void nonSafeNewObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+    private boolean nonSafeNewObject(Persistable_ object, DataWriter<? super Persistable_> writer,
             DataReader<? extends Persistable_> reader) {
         this.reader.setValue(reader);
         this.writer.setValue(writer);
         setPath(null);
         setObject(object);
+        return true;
     }
 
     public void save() {

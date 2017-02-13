@@ -1,10 +1,49 @@
 node {
-    size: 30px, 30px;
+    size: 30px;
     fill-color: red;
     text-alignment: at-right;
     text-size: 15;
 }
 
-node.marked {
+node.petrol {
+    fill-color: brown;
+}
+
+node:selected {
     fill-color: green;
+}
+
+sprite {
+    size: 10px;
+    fill-color: black;
+    shape: box;
+}
+
+sprite:selected {
+    fill-color: green;
+}
+
+sprite.package {
+    size: 10px;
+    fill-color: #a843ff;
+    shape: box; /* TODO: find a nice image for this? */
+
+}
+
+sprite.vehicle {
+    size: 10px;
+    fill-color: blue;
+    shape: box; /* TODO: find a nice image for this? */
+}
+
+node:clicked {
+    stroke-width: 3px;
+    stroke-mode: plain;
+    stroke-color: black;
+}
+
+sprite:clicked {
+    stroke-width: 3px;
+    stroke-mode: plain;
+    stroke-color: black;
 }

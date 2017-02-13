@@ -17,6 +17,11 @@ public class FuelRoad extends DefaultRoad {
         this.fuelCost = fuelCost;
     }
 
+    @Override
+    public FuelRoad updateName(String newName) {
+        return new FuelRoad(newName, getLength(), getFuelCost());
+    }
+
     public static FuelRoad build(Road road, ActionCost fuelCost) {
         return new FuelRoad(road.getName(), road.getLength(), fuelCost);
     }

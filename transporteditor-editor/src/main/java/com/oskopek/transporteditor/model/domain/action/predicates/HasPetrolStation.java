@@ -8,6 +8,6 @@ public class HasPetrolStation extends DefaultPredicate {
     @Override
     public boolean isValidInternal(Problem state, Action action) {
         String locationName = action.getWhere().getName();
-        return state.getRoadGraph().getNode(locationName).hasAttribute("has-petrol-station");
+        return state.getRoadGraph().getLocation(locationName).getPetrolStation();
     }
 }

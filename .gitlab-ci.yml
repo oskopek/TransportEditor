@@ -1,8 +1,8 @@
 image: maven:3-jdk-8
 
 variables:
-  MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository"
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -Pit"
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 cache:
   paths:
@@ -32,7 +32,7 @@ unittest-job:
   dependencies:
     - build-job
   script:
-    - "mvn package $MAVEN_CLI_OPTS"
+    - "mvn package $MAVEN_CLI_OPTS  -Dcheckstyle.skip=true"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
@@ -43,15 +43,43 @@ integrationtest-job:
   dependencies:
     - build-job
   script:
-    - "mvn verify $MAVEN_CLI_OPTS"
+    - "mvn verify $MAVEN_CLI_OPTS -Pit -Dcheckstyle.skip=true"
     - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
       - transporteditor-editor/target/
 
+#uitest-headless-job:
+#  stage: test
+#  dependencies:
+#    - build-job
+#  script:
+#    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only-headless -Dcheckstyle.skip=true"
+#    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+#  artifacts:
+#    paths:
+#      - transporteditor-editor/target/
+
+#uitest-headful-job:
+#  stage: test
+#  dependencies:
+#    - build-job
+#  before_script:
+#    - apt-get update
+#    - apt-get install -y xvfb
+#    - "export DISPLAY=:99.0"
+#    - "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &"
+#    - sleep 3 # give xvfb some time to start
+#  script:
+#    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only -Dcheckstyle.skip=true"
+#    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+#  artifacts:
+#    paths:
+#      - transporteditor-editor/target/
+
 deploy-job:
   stage: deploy
-  script: 
+  script:
     - "true"
   artifacts:
     paths:

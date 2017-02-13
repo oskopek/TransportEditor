@@ -91,12 +91,37 @@ public class SequentialPlanState implements PlanState {
     }
 
     @Override
-    public Problem updateVehicle(String name, Vehicle vehicle) {
-        return problem.updateVehicle(name, vehicle);
+    public Problem putVehicle(String name, Vehicle vehicle) {
+        return problem.putVehicle(name, vehicle);
     }
 
     @Override
-    public Problem updatePackage(String name, Package pkg) {
-        return problem.updatePackage(name, pkg);
+    public Problem putPackage(String name, Package pkg) {
+        return problem.putPackage(name, pkg);
+    }
+
+    @Override
+    public Problem changeActionObjectName(ActionObject actionObject, String newName) {
+        return problem.changeActionObjectName(actionObject, newName);
+    }
+
+    @Override
+    public Problem putLocation(String name, Location location) {
+        return problem.putLocation(name, location);
+    }
+
+    @Override
+    public Problem removeVehicle(String name) {
+        return problem.removeVehicle(name);
+    }
+
+    @Override
+    public Problem removePackage(String name) {
+        return problem.removePackage(name);
+    }
+
+    @Override
+    public Problem removeLocation(String name) {
+        return problem.removeLocation(name);
     }
 }

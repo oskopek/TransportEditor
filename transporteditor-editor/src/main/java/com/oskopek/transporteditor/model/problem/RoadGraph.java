@@ -1,15 +1,21 @@
 package com.oskopek.transporteditor.model.problem;
 
-import org.apache.commons.io.IOUtils;
+import com.oskopek.transporteditor.persistence.IOUtils;
+import com.oskopek.transporteditor.view.SpriteBuilder;
+import javaslang.Tuple;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.Layouts;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.view.Viewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +28,13 @@ import java.util.stream.Stream;
 /**
  * Wrapper interface around a GraphStream graph type.
  */
-public class RoadGraph extends MultiGraph implements Graph {
+public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor GUI out of this
+
+    private transient SpriteManager spriteManager;
+    private transient double packageDegreeDelta;
+    private transient double vehicleDegreeDelta;
+    private transient double vehicleRadius;
+    private transient double packageRadius;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -34,36 +46,36 @@ public class RoadGraph extends MultiGraph implements Graph {
 
     public RoadGraph(String id) {
         super(id);
-
-        addDefaultStyling();
+        setDefaultStyling();
     }
 
-    private RoadGraph(String id, boolean strictChecking, boolean autoCreate) {
-        super(id, strictChecking, autoCreate);
-    }
-
-    private RoadGraph(String id, boolean strictChecking, boolean autoCreate, int initialNodeCapacity,
-            int initialEdgeCapacity) {
-        super(id, strictChecking, autoCreate, initialNodeCapacity, initialEdgeCapacity);
-    }
-
-    private void addDefaultStyling() {
+    public void setDefaultStyling() {
         String style;
         try {
-            style = String.join("\n",
-                    (List<String>) IOUtils.readLines(getClass().getResourceAsStream("stylesheet.css"), "UTF-8"));
+            style = String.join("\n", IOUtils.concatReadAllLines(getClass().getResourceAsStream("stylesheet.css")));
         } catch (IOException e) {
             throw new IllegalStateException("Could not load graph stylesheet.", e);
         }
-        this.addAttribute("ui.stylesheet", style);
-        //        this.addAttribute("ui.quality");
-        this.addAttribute("ui.antialias");
+        this.setAttribute("ui.stylesheet", style);
+        // this.setAttribute("ui.quality");
+        this.setAttribute("ui.antialias");
+        getAllLocations().forEach(this::setPetrolStationStyle);
+        spriteManager = new SpriteManager(this);
+    }
+
+    @Deprecated
+    public Optional<Point3> calculateCentroid() {
+        return getNodeSet().stream().map(Toolkit::nodePosition).map(c -> Tuple.of(c[0], c[1], c[2]))
+                .reduce((t1, t2) -> Tuple.of(t1._1 + t2._1, t1._2 + t2._2, t1._3 + t2._3))
+                .map(t -> Tuple.of(t._1 / nodeCount, t._2 / nodeCount, t._3 / nodeCount))
+                .map(t -> new Point3(t._1, t._2, t._3));
     }
 
     public <T extends Node> T addLocation(Location location) {
         addAttribute(location.getName(), location);
         T node = addNode(location.getName());
         node.addAttribute("ui.label", location.getName());
+        node.addAttribute("xyz", new Point3(location.getxCoordinate(), location.getyCoordinate(), 0));
         return node;
     }
 
@@ -74,13 +86,20 @@ public class RoadGraph extends MultiGraph implements Graph {
         removeAttribute(location.getName());
     }
 
-    public void removeLocations(Collection<? extends Location> locations) {
+    public void removeLocations(Iterable<? extends Location> locations) {
         locations.forEach(this::removeLocation);
     }
 
     public Location moveLocation(String name, int newX, int newY) {
         Location original = getAttribute(name);
         Location newLocation = new Location(original.getName(), newX, newY);
+        setAttribute(newLocation.getName(), newLocation);
+        return original;
+    }
+
+    public Location setPetrolStation(String locationName, boolean hasPetrolStation) {
+        Location original = getAttribute(locationName);
+        Location newLocation = original.updateHasPetrolStation(hasPetrolStation);
         setAttribute(newLocation.getName(), newLocation);
         return original;
     }
@@ -108,9 +127,98 @@ public class RoadGraph extends MultiGraph implements Graph {
         return stream.build();
     }
 
+    private void removeAllActionObjectSprites() {
+        packageDegreeDelta = 0d;
+        vehicleDegreeDelta = 0d;
+        vehicleRadius = 25d;
+        packageRadius = 25d;
+        List<String> spriteNames = new ArrayList<>(spriteManager.getSpriteCount());
+        spriteManager.sprites().forEach(s -> spriteNames.add(s.getId()));
+        spriteNames.forEach(s -> spriteManager.removeSprite(s));
+        spriteManager.detach();
+        setDefaultStyling(); // TODO: Hack
+    }
+
+    public void redrawActionObjectSprites(Problem problem) {
+        removeAllActionObjectSprites();
+        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
+        problem.getAllPackages().forEach(p -> addPackageSprite(p, p.getLocation()));
+        problem.getAllVehicles().forEach(v -> addVehicleSprite(v, v.getLocation()));
+    }
+
+    private SpriteBuilder<Sprite> addSprite(String name) {
+        return new SpriteBuilder<>(spriteManager, "sprite-" + name, Sprite.class);
+    }
+
+    private void removeSprite(String name) {
+        spriteManager.removeSprite("sprite-" + name);
+    }
+
+    private void addEdgeSprite(Edge edge) {
+        addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
+    }
+
+    private SpriteBuilder addPackageSprite(Package pkg) {
+        return addSprite(pkg.getName()).setClass("package");
+    }
+
+    public void addPackageSprite(Package pkg, Location location) {
+        packageDegreeDelta += 25d;
+        if (packageDegreeDelta > 180d) {
+            packageRadius += 12d;
+            packageDegreeDelta %= 180d;
+        }
+
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(packageRadius,
+                180d + packageDegreeDelta);
+        if (location != null) {
+            sprite.attachTo((Node) getNode(location.getName()));
+        }
+    }
+
+    public void addPackageSprite(Package pkg, Road road, double percentage) {
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(percentage);
+        if (road != null) {
+            sprite.attachTo((Edge) getEdge(road.getName()));
+        }
+    }
+
+    private SpriteBuilder addVehicleSprite(Vehicle vehicle) {
+        return addSprite(vehicle.getName()).setClass("vehicle");
+    }
+
+    public void addVehicleSprite(Vehicle vehicle, Location location) {
+        vehicleDegreeDelta += 25d;
+        if (vehicleDegreeDelta > 180d) {
+            vehicleRadius += 12d;
+            vehicleDegreeDelta %= 180d;
+        }
+        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(vehicleRadius, vehicleDegreeDelta);
+        if (location != null) {
+            sprite.attachTo((Node) getNode(location.getName()));
+        }
+    }
+
+    public void addVehicleSprite(Vehicle vehicle, Road road, double percentage) {
+        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(percentage);
+        if (road != null) {
+            sprite.attachTo((Edge) getEdge(road.getName()));
+        }
+    }
+
+    private void setPetrolStationStyle(Location location) {
+        Node node = getNode(location.getName());
+        if (location.hasPetrolStation()) {
+            node.addAttribute("ui.class", "petrol");
+        } else {
+            node.setAttribute("ui.class", "");
+        }
+    }
+
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
+        addEdgeSprite(edge);
         edge.setAttribute("road", road);
         return edge;
     }
@@ -118,22 +226,12 @@ public class RoadGraph extends MultiGraph implements Graph {
     public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
         removeAttribute(road.getName());
         try {
+            removeSprite(road.getName());
             removeEdge(road.getName());
         } catch (ElementNotFoundException e) {
             logger.debug("Caught exception while putting road.", e);
         }
-        addAttribute(road.getName(), road);
-        T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
-        edge.setAttribute("road", road);
-        return edge;
-    }
-
-    public boolean hasPetrolStation(Location location) {
-        return hasAttribute(location.getName() + "-station");
-    }
-
-    public void setPetrolStation(Location location) {
-        setAttribute(location.getName() + "-station");
+        return addRoad(road, from, to);
     }
 
     public Stream<Road> getAllRoadsBetween(Location l1, Location l2) {
@@ -170,8 +268,18 @@ public class RoadGraph extends MultiGraph implements Graph {
         return getAttribute(name);
     }
 
+    public RoadEdge getRoadEdge(String name) {
+        Edge edge = getEdge(name);
+        if (edge == null) {
+            return null;
+        }
+        return RoadEdge.of(edge.getAttribute("road"), getAttribute(edge.getNode0().getId()),
+                getAttribute(edge.getNode1().getId()));
+    }
+
     public void removeRoad(String name) {
         try {
+            removeSprite(name);
             removeEdge(name);
         } catch (NoSuchElementException e) {
             logger.debug("Caught exception while removing road.", e);
@@ -179,7 +287,7 @@ public class RoadGraph extends MultiGraph implements Graph {
         removeAttribute(name);
     }
 
-    public void removeRoads(Collection<? extends String> names) {
+    public void removeRoads(Iterable<? extends String> names) {
         names.forEach(this::removeRoad);
     }
 

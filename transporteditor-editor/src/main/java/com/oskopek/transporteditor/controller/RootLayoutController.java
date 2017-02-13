@@ -157,14 +157,22 @@ public class RootLayoutController extends AbstractController {
     @FXML
     private void handleSessionNew() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
-        planningSessionFileHandler.newObject(new DefaultPlanningSession(), io, io);
+        boolean overwritten = planningSessionFileHandler.newObject(new DefaultPlanningSession(), io, io);
+        if (!overwritten) {
+            return;
+        }
         eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
-        planningSessionFileHandler.loadWithDefaultFileChooser(messages.getString("load.planningSession"), io, io);
+        boolean overwritten = planningSessionFileHandler.loadWithDefaultFileChooser(
+                messages.getString("load.planningSession"), io, io);
+
+        if (!overwritten) {
+            return;
+        }
 
         PlanningSession session = application.getPlanningSession();
         if (session != null) {

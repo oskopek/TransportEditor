@@ -8,4 +8,5 @@
     <suppress checks="Javadoc.*" files=".*Test.java"/>
     <suppress checks="Javadoc.*" files=".*IT.java"/>
     <suppress checks=".*" files="antlr4.*.java"/>
+    <suppress checks=".*" files="target/.*"/>
 </suppressions>

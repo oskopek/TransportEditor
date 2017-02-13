@@ -32,6 +32,6 @@ public class Drive extends DefaultAction<Vehicle, Location> {
             curFuelCapacity = curFuelCapacity.subtract(this.fuelCost);
         }
         return problemState
-                .updateVehicle(name, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(destination));
+                .putVehicle(name, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(destination));
     }
 }

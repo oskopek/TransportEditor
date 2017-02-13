@@ -101,20 +101,22 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         return this;
     }
 
-    public void checkForSaveBeforeOverwrite(Runnable overwritingAction) {
+    public boolean checkForSaveBeforeOverwrite(Runnable overwritingAction) {
         if (!isChangedSinceLastSave()) {
             overwritingAction.run();
-            return;
+            return true;
         }
         Optional<ButtonType> button = creator.show(messages.getString("shouldSave"));
         ButtonBar.ButtonData result;
         if (button.isPresent()) {
             result = button.get().getButtonData();
         } else {
-            return;
+            return false;
         }
 
-        if (ButtonBar.ButtonData.YES.equals(result)) {
+        if (ButtonBar.ButtonData.CANCEL_CLOSE.equals(result)) {
+            return false;
+        } else if (ButtonBar.ButtonData.YES.equals(result)) {
             save();
             if (!isChangedSinceLastSave()) {
                 overwritingAction.run();
@@ -131,11 +133,12 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         } else if (ButtonBar.ButtonData.NO.equals(result)) {
             overwritingAction.run();
         }
+        return true;
     }
 
-    public void loadWithDefaultFileChooser(String title, DataWriter<Persistable_> writer,
+    public boolean loadWithDefaultFileChooser(String title, DataWriter<Persistable_> writer,
             DataReader<Persistable_> reader) {
-        checkForSaveBeforeOverwrite(() -> {
+        return checkForSaveBeforeOverwrite(() -> {
             Path path = openFileWithDefaultFileChooser(title);
             if (path == null) {
                 return;
@@ -152,9 +155,9 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     }
 
     @Override
-    public void newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
+    public boolean newObject(Persistable_ object, DataWriter<? super Persistable_> writer,
             DataReader<? extends Persistable_> reader) {
-        checkForSaveBeforeOverwrite(() -> super.newObject(object, writer, reader));
+        return checkForSaveBeforeOverwrite(() -> super.newObject(object, writer, reader));
     }
 
     @Override

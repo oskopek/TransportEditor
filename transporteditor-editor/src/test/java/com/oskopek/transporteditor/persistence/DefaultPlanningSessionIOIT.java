@@ -5,18 +5,20 @@ import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
 import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.oskopek.transporteditor.test.TestUtils.readAllConcatenatedLines;
 import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class DefaultPlanningSessionIOIT {
 
     private static DefaultPlanningSessionIO defaultPlanningSessionIO;
     private static String emptySessionFileContents;
     private static String p01SessionContents;
+    private static String emptyPlannerContents;
     private static String domainFileContents;
     private static String problemFileContents;
     private static String planFileContents;
@@ -24,12 +26,13 @@ public class DefaultPlanningSessionIOIT {
 
     @Before
     public void setUp() throws Exception {
-        emptySessionFileContents = readAllConcatenatedLines(
+        emptySessionFileContents = concatReadAllLines(
                 getClass().getResourceAsStream("emptyDefaultPlanningSession.xml"));
-        p01SessionContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01DefaultPlanningSession.xml"));
-        domainFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("variableDomainSeq.pddl"));
-        problemFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01SeqProblem.pddl"));
-        planFileContents = readAllConcatenatedLines(getClass().getResourceAsStream("p01SeqPlan.val"));
+        p01SessionContents = concatReadAllLines(getClass().getResourceAsStream("p01DefaultPlanningSession.xml"));
+        emptyPlannerContents = concatReadAllLines(getClass().getResourceAsStream("emptyExternalPlanner.xml"));
+        domainFileContents = concatReadAllLines(getClass().getResourceAsStream("variableDomainSeq.pddl"));
+        problemFileContents = concatReadAllLines(getClass().getResourceAsStream("p01SeqProblem.pddl"));
+        planFileContents = concatReadAllLines(getClass().getResourceAsStream("p01SeqPlan.val"));
         defaultPlanningSessionIO = new DefaultPlanningSessionIO();
         referenceSession = new DefaultPlanningSession();
         referenceSession.setDomain(new VariableDomainIO().parse(domainFileContents));
@@ -86,6 +89,14 @@ public class DefaultPlanningSessionIOIT {
         DefaultProblemIOIT.assertP01Sequential(problem);
         Plan plan = parsed.getPlan();
         assertEquals(plan, SequentialPlanIOIT.P01SequentialPlan(problem));
+    }
+
+    @Test
+    public void testParseFailsForExternalPlanner() throws Exception {
+        assertThatThrownBy(() -> defaultPlanningSessionIO.parse(emptyPlannerContents, PlanningSession.class))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
+        assertThatThrownBy(() -> defaultPlanningSessionIO.parse(emptyPlannerContents))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
     }
 
     private void testEqualityGradually(PlanningSession referenceSession, PlanningSession parsed) {
