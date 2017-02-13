@@ -148,7 +148,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
             } catch (IllegalArgumentException e) {
                 // swallow exception
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("load.failed") + ". " + e.getMessage(),
-                        ButtonType.OK);
+                        a -> application.centerInPrimaryStage(a, -200, -100), ButtonType.OK);
             }
         });
 

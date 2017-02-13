@@ -24,6 +24,10 @@ public class EnterStringDialogPaneCreator {
     @Named("fxmlloader")
     private Instance<FXMLLoader> fxmlLoader;
 
+    @Inject
+    @Named("mainApp")
+    private TransportEditorApplication application;
+
     /**
      * Create the dialog for entering a String.
      *
@@ -36,7 +40,8 @@ public class EnterStringDialogPaneCreator {
         try (InputStream is = getClass().getResourceAsStream("EnterStringDialogPane.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
-            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
+            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(),
+                    a -> application.centerInPrimaryStage(a, -200, -50), e);
         }
         dialogPane.setHeaderText(prompt);
         EnterStringController enterStringController = fxmlLoader.getController();
@@ -45,6 +50,7 @@ public class EnterStringDialogPaneCreator {
         dialog.setDialogPane(dialogPane);
         enterStringController.setDialog(dialog);
         dialog.setTitle("TransportEditor");
+        application.centerInPrimaryStage(dialog, -100, -150);
         dialog.setOnShown(event -> enterStringController.getTextField().requestFocus());
         return enterStringController;
     }

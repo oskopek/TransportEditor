@@ -405,8 +405,8 @@ public class RootLayoutController extends AbstractController {
         webView.setContextMenuEnabled(false);
         String resourceHtml = readResourceToString(messages.getString(resourceName));
         if (resourceHtml == null) {
-            AlertCreator.showAlert(Alert.AlertType.WARNING,
-                    messages.getString(errorResourceName));
+            AlertCreator.showAlert(Alert.AlertType.WARNING, messages.getString(errorResourceName),
+                    a -> application.centerInPrimaryStage(a, -200, -50));
             return;
         }
 

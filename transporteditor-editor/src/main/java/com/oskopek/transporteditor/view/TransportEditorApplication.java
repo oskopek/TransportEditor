@@ -13,8 +13,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javaslang.control.Try;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
@@ -148,6 +151,28 @@ public class TransportEditorApplication extends Application {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    private Point2D getTopLeft() {
+        return new Point2D(getPrimaryStage().getX(), getPrimaryStage().getY());
+    }
+
+    private Point2D getBottomRight() {
+        return new Point2D(getPrimaryStage().getWidth(), getPrimaryStage().getHeight());
+    }
+
+    public void centerInPrimaryStage(Window window, double xBias, double yBias) {
+        Point2D topLeft = getTopLeft();
+        Point2D bottomRight = getBottomRight();
+        window.setX(topLeft.getX() + bottomRight.getX() / 2d + xBias);
+        window.setY(topLeft.getY() + bottomRight.getY() / 2d + yBias);
+    }
+
+    public void centerInPrimaryStage(Dialog<?> window, double xBias, double yBias) {
+        Point2D topLeft = getTopLeft();
+        Point2D bottomRight = getBottomRight();
+        window.setX(topLeft.getX() + bottomRight.getX() / 2d + xBias);
+        window.setY(topLeft.getY() + bottomRight.getY() / 2d + yBias);
     }
 
     /**

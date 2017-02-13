@@ -25,6 +25,7 @@ public final class ProgressCreator {
 
     /**
      * A util method to display a blocking progress pop-up with the given parameters.
+     * <strong>You have to position it yourself.</strong>
      *
      * @param progressObservable the observable object that gives us the progress
      * @param message the message to display while waiting

@@ -34,6 +34,10 @@ public class LogProgressCreator {
     @Inject
     private ResourceBundle messages;
 
+    @Inject
+    @Named("mainApp")
+    private TransportEditorApplication application;
+
     /**
      * Create the dialog for showing log messages and progress.
      *
@@ -46,7 +50,8 @@ public class LogProgressCreator {
         try (InputStream is = getClass().getResourceAsStream("LogProgressViewer.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
-            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
+            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(),
+                    a -> application.centerInPrimaryStage(a, -200, -50), e);
         }
         LogProgressController logProgressController = fxmlLoader.getController();
 
@@ -64,6 +69,7 @@ public class LogProgressCreator {
         logStreamable.subscribe(logListener);
         logProgressController.setProgressConditions(successfullyFinished, cancelAvailable, inProgress, cancellator);
         stage.setTitle("TransportEditor");
+        application.centerInPrimaryStage(stage, -200, -250);
         stage.showAndWait();
         logStreamable.unsubscribe(logListener);
         return ButtonBar.ButtonData.OK_DONE.equals(logProgressController.getResult());

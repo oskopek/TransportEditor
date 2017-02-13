@@ -255,7 +255,8 @@ public class RightPaneController extends AbstractController {
                 completed.setValue(true);
                 if (plan == null) {
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                            + messages.getString("planner.nullplan"), ButtonType.OK);
+                            + messages.getString("planner.nullplan"),
+                            a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
                 }
             });
         }).thenRunAsync(() -> {
@@ -271,7 +272,7 @@ public class RightPaneController extends AbstractController {
                     Platform.runLater(() -> completed.setValue(true));
                     logger.debug("Planning failed.", throwable);
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                    + throwable.getMessage(), ButtonType.OK);
+                    + throwable.getMessage(), a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
             return null;
         });
         logger.trace("LogProgress begin");
@@ -292,15 +293,16 @@ public class RightPaneController extends AbstractController {
             if (isValid) {
                 successful.setValue(true);
                 AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -50, -50), ButtonType.CLOSE);
             } else {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -50, -50), ButtonType.CLOSE);
             }
         })).exceptionally(throwable -> {
             Platform.runLater(() -> completed.setValue(true));
             AlertCreator.showAlert(Alert.AlertType.ERROR,
-                    messages.getString("validation.failed") + ": " + throwable.getMessage(), ButtonType.CLOSE);
+                    messages.getString("validation.failed") + ": " + throwable.getMessage(),
+                    a -> application.centerInPrimaryStage(a, -150, -50), ButtonType.CLOSE);
             return null;
         }).toCompletableFuture();
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
@@ -324,7 +326,7 @@ public class RightPaneController extends AbstractController {
 
         if (graph == null) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
-                    ButtonType.CLOSE);
+                    a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
         } else {
             String name = "loc" + graph.getNodeCount();
             while (graph.getLocation(name) != null) {
@@ -346,7 +348,7 @@ public class RightPaneController extends AbstractController {
 
         if (graph == null) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
-                    ButtonType.CLOSE);
+                    a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
         } else {
             GraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
             if (!handler.doesSelectionDeterminePossibleNewRoad()) {
@@ -355,7 +357,7 @@ public class RightPaneController extends AbstractController {
             }
             if (handler.doesSelectionDetermineExistingRoads()) {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.road.exists"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
                 return;
             }
 

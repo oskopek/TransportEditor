@@ -48,7 +48,8 @@ class TransportEditorApplicationStarter {
         try (InputStream is = getClass().getResourceAsStream("RootLayoutPane.fxml")) {
             rootLayout = fxmlLoader.load(is);
         } catch (IOException e) {
-            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
+            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(),
+                    a -> application.centerInPrimaryStage(a, -200, -50), e);
         }
         Scene scene = new Scene(rootLayout);
         Platform.runLater(() -> {
