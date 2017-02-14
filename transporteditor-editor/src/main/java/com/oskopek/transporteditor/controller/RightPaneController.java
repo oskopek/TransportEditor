@@ -7,6 +7,7 @@ import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
@@ -23,12 +24,14 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.WeakListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javaslang.control.Try;
+import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.slf4j.Logger;
@@ -55,6 +58,8 @@ public class RightPaneController extends AbstractController {
 
     @FXML
     private ScrollPane ganttPlanTabScrollPane;
+
+    private TableFilter<TemporalPlanAction> actionTableFilter;
 
     @FXML
     private Button planButton;
@@ -236,8 +241,12 @@ public class RightPaneController extends AbstractController {
                 linearPlanTabScrollPane.setContent(null);
                 ganttPlanTabScrollPane.setContent(null);
             } else {
-                linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
-                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()));
+                actionTableFilter = SequentialPlanList.build(plan.toTemporalPlan());
+                actionTableFilter.getFilteredList().addListener(new WeakListChangeListener<>(
+                        c -> ganttPlanTabScrollPane.setContent(
+                                TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()))));
+                linearPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()));
             }
         });
     }

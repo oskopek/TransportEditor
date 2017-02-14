@@ -8,7 +8,9 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javaslang.collection.Stream;
+import org.controlsfx.control.table.TableFilter;
 
+import java.util.Collection;
 import java.util.List;
 
 public final class SequentialPlanList {
@@ -17,9 +19,13 @@ public final class SequentialPlanList {
         // intentionally empty
     }
 
-    public static TableView<TemporalPlanAction> build(Plan plan) {
-        List<TemporalPlanAction> actionList = Stream.ofAll(plan.getTemporalPlanActions())
-                .sortBy(TemporalPlanAction::getEndTimestamp).sortBy(TemporalPlanAction::getStartTimestamp).toJavaList();
+    public static TableFilter<TemporalPlanAction> build(Plan plan) {
+        return SequentialPlanList.build(plan.getTemporalPlanActions());
+    }
+
+    public static TableFilter<TemporalPlanAction> build(Collection<TemporalPlanAction> actions) {
+        List<TemporalPlanAction> actionList = Stream.ofAll(actions).sortBy(TemporalPlanAction::getEndTimestamp)
+                .sortBy(TemporalPlanAction::getStartTimestamp).toJavaList();
         TableView<TemporalPlanAction> tableView = new TableView<>(FXCollections.observableList(actionList));
 
         TableColumn<TemporalPlanAction, Number> startColumn = new TableColumn<>("Start");
@@ -43,7 +49,8 @@ public final class SequentialPlanList {
                         : param.getValue().getAction().getWhat().getName()));
 
         tableView.getColumns().setAll(startColumn, endColumn, actionColumn, whoColumn, whereColumn, whatColumn);
-        return tableView;
+        tableView.getColumns().forEach(c -> c.setSortable(false));
+        return TableFilter.forTableView(tableView).lazy(true).apply();
     }
 
 }

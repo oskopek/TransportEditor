@@ -33,7 +33,11 @@ public final class TemporalPlanGanttChart extends GanttChart {
     }
 
     public static TemporalPlanGanttChart build(Plan plan) {
-        return new TemporalPlanGanttChart(plan.getTemporalPlanActions());
+        return TemporalPlanGanttChart.build(plan.getTemporalPlanActions());
+    }
+
+    public static TemporalPlanGanttChart build(Collection<TemporalPlanAction> actions) {
+        return new TemporalPlanGanttChart(actions);
     }
 
     private List<Series<Number, String>> computeData() {
