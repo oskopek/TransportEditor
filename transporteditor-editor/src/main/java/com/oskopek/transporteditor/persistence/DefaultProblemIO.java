@@ -119,171 +119,179 @@ public class DefaultProblemIO implements DataIO<Problem> {
     private void parseInit(PddlParser.InitContext initContext, ParsedProblemContainer parsed) {
         for (PddlParser.InitElContext initElContext : initContext.initEl()) {
             if (initElContext.nameLiteral() != null) {
-                String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
-                String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
-
-                if ("has-petrol-station".equals(predicate)) {
-                    if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                        logger.debug("Fuel fuel-related predicate ({}) in non-fuel domain, skipping.", predicate);
-                        continue;
-                    }
-                    parsed.graph().setPetrolStation(arg1, true);
-                    continue;
-                } else if ("ready-loading".equals(predicate)) {
-                    // ignore predicate for now
-                    continue;
-                }
-
-                String arg2 = initElContext.nameLiteral().atomicNameFormula().NAME(1).getText();
-                switch (predicate) {
-                    case "at": {
-                        Vehicle vehicle = parsed.vehicleMap().get(arg1);
-                        if (vehicle != null) {
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), parsed.graph().getLocation(arg2),
-                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList());
-                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
-                            break;
-                        }
-                        Package pkg = parsed.packageMap().get(arg1);
-                        if (pkg != null) {
-                            Package newpkg = new Package(pkg.getName(), parsed.graph().getLocation(arg2),
-                                    pkg.getTarget(),
-                                    pkg.getSize());
-                            parsed.packageMap().put(newpkg.getName(), newpkg);
-                            break;
-                        }
-                        break;
-                    }
-                    case "capacity": {
-                        Vehicle vehicle = parsed.vehicleMap().get(arg1);
-                        if (vehicle != null) {
-                            ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                                    capacity, vehicle.getPackageList());
-                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
-                            break;
-                        }
-                        break;
-                    }
-                    case "road": {
-                        Location from = parsed.graph().getLocation(arg1);
-                        Location to = parsed.graph().getLocation(arg2);
-                        Road road;
-                        if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                            road = FuelRoad.build(from, to);
-                        } else {
-                            road = DefaultRoad.build(from, to);
-                        }
-                        parsed.graph().addRoad(road, from, to);
-                        break;
-                    }
-                    default:
-                        break; // ignore other predicates
-                }
+                parsePredicate(initElContext, parsed);
             }
             if (initElContext.fHead() != null) {
-                PddlParser.FHeadContext fhead = initElContext.fHead();
-                int number = Integer.parseInt(initElContext.NUMBER().getText());
-                PddlParser.FunctionSymbolContext functionSymbol = fhead.functionSymbol();
-                if (functionSymbol == null) {
-                    continue;
-                }
-                switch (functionSymbol.getText()) {
-                    case "road-length": {
-                        String fromName = fhead.term(0).getText();
-                        String toName = fhead.term(1).getText();
-                        Location from = parsed.graph().getLocation(fromName);
-                        Location to = parsed.graph().getLocation(toName);
-                        Road newRoad = parsed.graph().getShortestRoadBetween(from, to)
-                                .updateLength(ActionCost.valueOf(number));
-                        parsed.graph().putRoad(newRoad, from, to);
-                        break;
-                    }
-                    case "package-size": {
-                        String packageName = fhead.term(0).getText();
-                        Package pkg = parsed.packageMap().get(packageName);
-                        if (pkg != null) {
-                            ActionCost size = ActionCost.valueOf(number);
-                            Package newPackage = new Package(pkg.getName(), pkg.getLocation(), pkg.getTarget(), size);
-                            parsed.packageMap().put(newPackage.getName(), newPackage);
-                            break;
-                        }
-                        break;
-                    }
-                    case "capacity": {
-                        String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
-                        if (vehicle != null) {
-                            ActionCost capacity = ActionCost.valueOf(number);
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                                    capacity, vehicle.getPackageList());
-                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
-                            break;
-                        }
-                        break;
-                    }
-                    case "fuel-left": {
-                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
-                                    functionSymbol.getText());
-                            break;
-                        }
-                        String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
-                        if (vehicle != null) {
-                            ActionCost fuelLeft = ActionCost.valueOf(number);
-                            ActionCost fuelMax = null;
-                            if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelMax = vehicle.getMaxFuelCapacity();
-                            }
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
-                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                                    fuelLeft, fuelMax, vehicle.getPackageList());
-                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
-                            break;
-                        }
-                        break;
-                    }
-                    case "fuel-max": {
-                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
-                                    functionSymbol.getText());
-                            break;
-                        }
-                        String vehicleName = fhead.term(0).getText();
-                        Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
-                        if (vehicle != null) {
-                            ActionCost fuelMax = ActionCost.valueOf(number);
-                            ActionCost fuelLeft = null;
-                            if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
-                                fuelLeft = vehicle.getCurFuelCapacity();
-                            }
-                            Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
-                                    vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                                    fuelLeft, fuelMax, vehicle.getPackageList());
-                            parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
-                            break;
-                        }
-                        break;
-                    }
-                    case "fuel-demand": {
-                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
-                                    functionSymbol.getText());
-                            break;
-                        }
-                        String fromName = fhead.term(0).getText();
-                        String toName = fhead.term(1).getText();
-                        Location from = parsed.graph().getLocation(fromName);
-                        Location to = parsed.graph().getLocation(toName);
-                        Road road = parsed.graph().getShortestRoadBetween(from, to);
-                        parsed.graph().putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
-                        break;
-                    }
-                    default:
-                        break; // ignore other functions
-                }
+                parseFunction(initElContext, parsed);
             }
+        }
+    }
+
+    private void parsePredicate(PddlParser.InitElContext initElContext, ParsedProblemContainer parsed) {
+        String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
+        String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
+
+        if ("has-petrol-station".equals(predicate)) {
+            if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                logger.debug("Fuel fuel-related predicate ({}) in non-fuel domain, skipping.", predicate);
+                return;
+            }
+            parsed.graph().setPetrolStation(arg1, true);
+            return;
+        } else if ("ready-loading".equals(predicate)) {
+            // ignore predicate for now
+            return;
+        }
+
+        String arg2 = initElContext.nameLiteral().atomicNameFormula().NAME(1).getText();
+        switch (predicate) {
+            case "at": {
+                Vehicle vehicle = parsed.vehicleMap().get(arg1);
+                if (vehicle != null) {
+                    Vehicle newVehicle = new Vehicle(vehicle.getName(), parsed.graph().getLocation(arg2),
+                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList());
+                    parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
+                    break;
+                }
+                Package pkg = parsed.packageMap().get(arg1);
+                if (pkg != null) {
+                    Package newpkg = new Package(pkg.getName(), parsed.graph().getLocation(arg2),
+                            pkg.getTarget(),
+                            pkg.getSize());
+                    parsed.packageMap().put(newpkg.getName(), newpkg);
+                    break;
+                }
+                break;
+            }
+            case "capacity": {
+                Vehicle vehicle = parsed.vehicleMap().get(arg1);
+                if (vehicle != null) {
+                    ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
+                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
+                            capacity, vehicle.getPackageList());
+                    parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
+                    break;
+                }
+                break;
+            }
+            case "road": {
+                Location from = parsed.graph().getLocation(arg1);
+                Location to = parsed.graph().getLocation(arg2);
+                Road road;
+                if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                    road = FuelRoad.build(from, to);
+                } else {
+                    road = DefaultRoad.build(from, to);
+                }
+                parsed.graph().addRoad(road, from, to);
+                break;
+            }
+            default:
+                break; // ignore other predicates
+        }
+    }
+
+    private void parseFunction(PddlParser.InitElContext initElContext, ParsedProblemContainer parsed) {
+        PddlParser.FHeadContext fhead = initElContext.fHead();
+        int number = Integer.parseInt(initElContext.NUMBER().getText());
+        PddlParser.FunctionSymbolContext functionSymbol = fhead.functionSymbol();
+        if (functionSymbol == null) {
+            return;
+        }
+        switch (functionSymbol.getText()) {
+            case "road-length": {
+                String fromName = fhead.term(0).getText();
+                String toName = fhead.term(1).getText();
+                Location from = parsed.graph().getLocation(fromName);
+                Location to = parsed.graph().getLocation(toName);
+                Road newRoad = parsed.graph().getShortestRoadBetween(from, to)
+                        .updateLength(ActionCost.valueOf(number));
+                parsed.graph().putRoad(newRoad, from, to);
+                break;
+            }
+            case "package-size": {
+                String packageName = fhead.term(0).getText();
+                Package pkg = parsed.packageMap().get(packageName);
+                if (pkg != null) {
+                    ActionCost size = ActionCost.valueOf(number);
+                    Package newPackage = new Package(pkg.getName(), pkg.getLocation(), pkg.getTarget(), size);
+                    parsed.packageMap().put(newPackage.getName(), newPackage);
+                    break;
+                }
+                break;
+            }
+            case "capacity": {
+                String vehicleName = fhead.term(0).getText();
+                Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
+                if (vehicle != null) {
+                    ActionCost capacity = ActionCost.valueOf(number);
+                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
+                            capacity, vehicle.getPackageList());
+                    parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
+                    break;
+                }
+                break;
+            }
+            case "fuel-left": {
+                if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                    logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                            functionSymbol.getText());
+                    break;
+                }
+                String vehicleName = fhead.term(0).getText();
+                Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
+                if (vehicle != null) {
+                    ActionCost fuelLeft = ActionCost.valueOf(number);
+                    ActionCost fuelMax = null;
+                    if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
+                        fuelMax = vehicle.getMaxFuelCapacity();
+                    }
+                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
+                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
+                            fuelLeft, fuelMax, vehicle.getPackageList());
+                    parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
+                    break;
+                }
+                break;
+            }
+            case "fuel-max": {
+                if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                    logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                            functionSymbol.getText());
+                    break;
+                }
+                String vehicleName = fhead.term(0).getText();
+                Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
+                if (vehicle != null) {
+                    ActionCost fuelMax = ActionCost.valueOf(number);
+                    ActionCost fuelLeft = null;
+                    if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
+                        fuelLeft = vehicle.getCurFuelCapacity();
+                    }
+                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
+                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
+                            fuelLeft, fuelMax, vehicle.getPackageList());
+                    parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
+                    break;
+                }
+                break;
+            }
+            case "fuel-demand": {
+                if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                    logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                            functionSymbol.getText());
+                    break;
+                }
+                String fromName = fhead.term(0).getText();
+                String toName = fhead.term(1).getText();
+                Location from = parsed.graph().getLocation(fromName);
+                Location to = parsed.graph().getLocation(toName);
+                Road road = parsed.graph().getShortestRoadBetween(from, to);
+                parsed.graph().putRoad(FuelRoad.build(road, ActionCost.valueOf(number)), from, to);
+                break;
+            }
+            default:
+                break; // ignore other functions
         }
     }
 
