@@ -50,6 +50,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
 
         return objs.map((actionObject, temporalPlanActions) -> {
             XYChart.Series<Number, String> series = new Series<>();
+            series.setName(actionObject.getName());
             temporalPlanActions.forEach(t -> {
                 Color color = colorMap.get(t.getAction().getName());
                 if (color == null) {
@@ -59,7 +60,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
                         new ExtraValue(color, t.getStartTimestamp(), t.getEndTimestamp())));
             });
             return Tuple.of(actionObject, series);
-        }).values().toJavaList();
+        }).values().sortBy(Series::getName).reverseIterator().toJavaList();
     }
 
 }
