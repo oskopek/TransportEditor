@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Location;
 import javafx.collections.FXCollections;
@@ -18,7 +17,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
     private final Map<String, Color> colorMap;
     private final Color defaultColor = Color.BLACK;
 
-    private TemporalPlanGanttChart(Collection<TemporalPlanAction> actions) {
+    private TemporalPlanGanttChart(Collection<? extends TemporalPlanAction> actions) {
         super("Time", "Action Object");
         this.temporalPlanActionSet = Collections.unmodifiableSet(new HashSet<>(actions));
 
@@ -32,11 +31,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
         setMinWidth(Math.max(minWidth, 300d));
     }
 
-    public static TemporalPlanGanttChart build(Plan plan) {
-        return TemporalPlanGanttChart.build(plan.getTemporalPlanActions());
-    }
-
-    public static TemporalPlanGanttChart build(Collection<TemporalPlanAction> actions) {
+    public static TemporalPlanGanttChart build(Collection<? extends TemporalPlanAction> actions) {
         return new TemporalPlanGanttChart(actions);
     }
 

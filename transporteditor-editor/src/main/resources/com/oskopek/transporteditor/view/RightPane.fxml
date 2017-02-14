@@ -9,8 +9,11 @@
     <center>
         <TabPane fx:id="planTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                  tabClosingPolicy="UNAVAILABLE">
-            <Tab fx:id="linearPlanTab" text="Linear">
-                <ScrollPane fx:id="linearPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
+            <Tab fx:id="temporalPlanTab" text="Temporal">
+                <ScrollPane fx:id="temporalPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
+            </Tab>
+            <Tab fx:id="sequentialPlanTab" text="Sequential">
+                <ScrollPane fx:id="sequentialPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
             </Tab>
             <Tab fx:id="ganttPlanTab" text="Gantt">
                 <ScrollPane fx:id="ganttPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>

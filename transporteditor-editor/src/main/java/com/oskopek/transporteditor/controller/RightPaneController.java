@@ -16,7 +16,8 @@ import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
-import com.oskopek.transporteditor.view.plan.SequentialPlanList;
+import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
+import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -24,12 +25,9 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.WeakListChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
@@ -54,12 +52,29 @@ public class RightPaneController extends AbstractController {
     private LogProgressCreator logProgressCreator;
 
     @FXML
-    private ScrollPane linearPlanTabScrollPane;
+    private TabPane planTabPane;
+
+    @FXML
+    private Tab temporalPlanTab;
+
+    @FXML
+    private Tab sequentialPlanTab;
+
+    @FXML
+    private Tab ganttPlanTab;
+
+    @FXML
+    private ScrollPane sequentialPlanTabScrollPane;
+
+    @FXML
+    private ScrollPane temporalPlanTabScrollPane;
 
     @FXML
     private ScrollPane ganttPlanTabScrollPane;
 
     private TableFilter<TemporalPlanAction> actionTableFilter;
+
+    private ListChangeListener<? super TemporalPlanAction> lastChangeListener;
 
     @FXML
     private Button planButton;
@@ -237,16 +252,43 @@ public class RightPaneController extends AbstractController {
                 logger.trace("Tried to redraw plans, caught NPE along the way.", e);
             }
 
+            if (actionTableFilter != null) {
+                actionTableFilter.getFilteredList().removeListener(lastChangeListener);
+                lastChangeListener = null;
+                actionTableFilter = null;
+            }
+
             if (plan == null) {
-                linearPlanTabScrollPane.setContent(null);
+                temporalPlanTabScrollPane.setContent(null);
                 ganttPlanTabScrollPane.setContent(null);
+                sequentialPlanTabScrollPane.setContent(null);
+
+                sequentialPlanTab.setDisable(false);
+                temporalPlanTab.setDisable(false);
+                planTabPane.setDisable(true);
             } else {
-                actionTableFilter = SequentialPlanList.build(plan.toTemporalPlan());
-                actionTableFilter.getFilteredList().addListener(new WeakListChangeListener<>(
-                        c -> ganttPlanTabScrollPane.setContent(
-                                TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()))));
-                linearPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                planTabPane.setDisable(false);
+                boolean isDomainTemporal = application.getPlanningSession().getDomain().getPddlLabels()
+                        .contains(PddlLabel.Temporal);
+                sequentialPlanTab.setDisable(isDomainTemporal);
+                temporalPlanTab.setDisable(!isDomainTemporal);
+
+                if (isDomainTemporal) {
+                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions());
+                    temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                    sequentialPlanTabScrollPane.setContent(null);
+                    planTabPane.getSelectionModel().select(temporalPlanTab);
+                } else {
+                    actionTableFilter = SequentialPlanTable.build(plan.getTemporalPlanActions());
+                    sequentialPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                    temporalPlanTabScrollPane.setContent(null);
+                    planTabPane.getSelectionModel().select(sequentialPlanTab);
+                }
+
+                lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(c.getList()));
+                actionTableFilter.getFilteredList().addListener(lastChangeListener);
                 ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()));
+
             }
         });
     }
