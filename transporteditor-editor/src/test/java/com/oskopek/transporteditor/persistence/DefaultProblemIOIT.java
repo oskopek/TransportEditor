@@ -1,5 +1,7 @@
 package com.oskopek.transporteditor.persistence;
 
+import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
@@ -9,16 +11,20 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class DefaultProblemIOIT {
 
     private static VariableDomain variableDomainTemp;
     private static SequentialDomain sequentialDomain;
+    private static VariableDomain variableDomainFuelSeq;
     private static VariableDomain variableDomainNum;
     private static String seqProblemFileContents;
+    private static String fuelSeqProblemFileContents;
     private static String tempProblemFileContents;
     private static String numProblemFileContents;
 
@@ -30,9 +36,15 @@ public class DefaultProblemIOIT {
         variableDomainNum = new VariableDomainIO().parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainNum.pddl")).stream()
                 .collect(Collectors.joining("\n")));
+        variableDomainFuelSeq = new VariableDomainIO().parse(readAllLines(
+                VariableDomainIOIT.class.getResourceAsStream("variableDomainFuelSeq.pddl")).stream()
+                .collect(Collectors.joining("\n")));
         sequentialDomain = new SequentialDomain("seq");
         seqProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01SeqProblem.pddl")).stream().collect(
+                Collectors.joining("\n")) + "\n";
+        fuelSeqProblemFileContents = readAllLines(
+                VariableDomainIOIT.class.getResourceAsStream("p01FuelSeqProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
         tempProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream().collect(
@@ -42,7 +54,7 @@ public class DefaultProblemIOIT {
                 Collectors.joining("\n")) + "\n";
     }
 
-    public static void assertP01Sequential(Problem problem) {
+    public static void assertP01Sequential(Domain domain, Problem problem) {
         assertNotNull(problem);
         assertEquals("transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed",
                 problem.getName());
@@ -76,7 +88,11 @@ public class DefaultProblemIOIT {
         assertNotNull(road.getLength());
         assertEquals(32, road.getLength().getCost().intValue());
         for (int i = 1; i <= 5; i++) {
-            assertNull(rg.getLocation("city-loc-" + i).getPetrolStation());
+            if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                assertNotNull(rg.getLocation("city-loc-" + i).getPetrolStation());
+            } else {
+                assertNull(rg.getLocation("city-loc-" + i).getPetrolStation());
+            }
             assertFalse(rg.getLocation("city-loc-" + i).hasPetrolStation());
         }
 
@@ -108,7 +124,30 @@ public class DefaultProblemIOIT {
     @Test
     public void parseSequential() throws Exception {
         DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
-        assertP01Sequential(problem);
+        assertP01Sequential(sequentialDomain, problem);
+    }
+
+    @Test
+    public void parseFuelSequentialWithFuel() throws Exception {
+        assertThat(variableDomainFuelSeq.getPddlLabels()).contains(PddlLabel.Fuel);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainFuelSeq).parse(fuelSeqProblemFileContents);
+        assertP01Sequential(variableDomainFuelSeq, problem);
+        assertThat(problem.getRoadGraph().getAllLocations()).allMatch(l -> !l.hasPetrolStation());
+        assertThat(problem.getRoadGraph().getAllRoads().map(RoadGraph.RoadEdge::getRoad).map(Object::getClass))
+                .allMatch(FuelRoad.class::equals);
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() != null)
+                .allMatch(v -> v.getMaxFuelCapacity() != null);
+    }
+
+    @Test
+    public void parseSequentialWithFuel() throws Exception {
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(fuelSeqProblemFileContents);
+        assertP01Sequential(sequentialDomain, problem);
+        assertThat(problem.getRoadGraph().getAllLocations().map(Location::getPetrolStation)).allMatch(Objects::isNull);
+        assertThat(problem.getRoadGraph().getAllRoads().map(RoadGraph.RoadEdge::getRoad).map(Object::getClass))
+                .allMatch(DefaultRoad.class::equals);
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() == null)
+                .allMatch(v -> v.getMaxFuelCapacity() == null);
     }
 
     @Test

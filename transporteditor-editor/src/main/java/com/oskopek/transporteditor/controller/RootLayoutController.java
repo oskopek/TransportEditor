@@ -329,9 +329,14 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getDomain() == null) {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
-        DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        Domain domain = application.getPlanningSession().getDomain();
+        DefaultProblemIO io = new DefaultProblemIO(domain);
         RoadGraph graph = new RoadGraph("graph");
-        graph.addLocation(new Location("loc0", 0, 0));
+        Location location = new Location("loc0", 0, 0, null);
+        if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+            location = location.updateHasPetrolStation(false);
+        }
+        graph.addLocation(location);
 
         boolean overwritten = problemFileHandler.newObject(new DefaultProblem("problem" + new Date().getTime(),
                 graph, new HashMap<>(), new HashMap<>()), io, io);

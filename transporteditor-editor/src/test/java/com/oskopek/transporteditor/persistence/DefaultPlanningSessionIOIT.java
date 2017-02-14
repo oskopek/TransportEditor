@@ -72,7 +72,7 @@ public class DefaultPlanningSessionIOIT {
         VariableDomainIOIT.setUpClass();
         VariableDomainIOIT.assertSequentialDomain(domain);
         Problem problem = parsed.getProblem();
-        DefaultProblemIOIT.assertP01Sequential(problem);
+        DefaultProblemIOIT.assertP01Sequential(domain, problem);
         Plan plan = parsed.getPlan();
         assertEquals(plan, SequentialPlanIOIT.P01SequentialPlan(problem));
     }
@@ -86,7 +86,7 @@ public class DefaultPlanningSessionIOIT {
         VariableDomainIOIT.setUpClass();
         VariableDomainIOIT.assertSequentialDomain(domain);
         Problem problem = parsed.getProblem();
-        DefaultProblemIOIT.assertP01Sequential(problem);
+        DefaultProblemIOIT.assertP01Sequential(domain, problem);
         Plan plan = parsed.getPlan();
         assertEquals(plan, SequentialPlanIOIT.P01SequentialPlan(problem));
     }

@@ -22,6 +22,11 @@ public class FuelRoad extends DefaultRoad {
         return new FuelRoad(newName, getLength(), getFuelCost());
     }
 
+    @Override
+    public FuelRoad updateLength(ActionCost length) {
+        return new FuelRoad(getName(), length, getFuelCost());
+    }
+
     public static FuelRoad build(Road road, ActionCost fuelCost) {
         return new FuelRoad(road.getName(), road.getLength(), fuelCost);
     }
@@ -35,7 +40,7 @@ public class FuelRoad extends DefaultRoad {
     }
 
     public static FuelRoad build(Location from, Location to, ActionCost length, ActionCost fuelCost) {
-        return new FuelRoad(from + "->" + to, length, fuelCost);
+        return new FuelRoad(from.getName() + "->" + to.getName(), length, fuelCost);
     }
 
     public ActionCost getFuelCost() {

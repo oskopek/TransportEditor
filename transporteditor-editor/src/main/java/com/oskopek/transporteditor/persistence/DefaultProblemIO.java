@@ -15,6 +15,8 @@ import javaslang.collection.Array;
 import javaslang.collection.Seq;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 
 public class DefaultProblemIO implements DataIO<Problem> {
 
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
     static {
@@ -120,6 +123,10 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
 
                 if ("has-petrol-station".equals(predicate)) {
+                    if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                        logger.debug("Fuel fuel-related predicate ({}) in non-fuel domain, skipping.", predicate);
+                        continue;
+                    }
                     parsed.graph().setPetrolStation(arg1, true);
                     continue;
                 } else if ("ready-loading".equals(predicate)) {
@@ -161,7 +168,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
                     case "road": {
                         Location from = parsed.graph().getLocation(arg1);
                         Location to = parsed.graph().getLocation(arg2);
-                        Road road = DefaultRoad.build(from, to);
+                        Road road;
+                        if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                            road = FuelRoad.build(from, to);
+                        } else {
+                            road = DefaultRoad.build(from, to);
+                        }
                         parsed.graph().addRoad(road, from, to);
                         break;
                     }
@@ -182,7 +194,8 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         String toName = fhead.term(1).getText();
                         Location from = parsed.graph().getLocation(fromName);
                         Location to = parsed.graph().getLocation(toName);
-                        Road newRoad = DefaultRoad.build(from, to, ActionCost.valueOf(number));
+                        Road newRoad = parsed.graph().getShortestRoadBetween(from, to)
+                                .updateLength(ActionCost.valueOf(number));
                         parsed.graph().putRoad(newRoad, from, to);
                         break;
                     }
@@ -210,6 +223,11 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         break;
                     }
                     case "fuel-left": {
+                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                                    functionSymbol.getText());
+                            break;
+                        }
                         String vehicleName = fhead.term(0).getText();
                         Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                         if (vehicle != null) {
@@ -227,6 +245,11 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         break;
                     }
                     case "fuel-max": {
+                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                                    functionSymbol.getText());
+                            break;
+                        }
                         String vehicleName = fhead.term(0).getText();
                         Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                         if (vehicle != null) {
@@ -244,6 +267,11 @@ public class DefaultProblemIO implements DataIO<Problem> {
                         break;
                     }
                     case "fuel-demand": {
+                        if (!domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+                            logger.debug("Fuel fuel-related function ({}) in non-fuel domain, skipping.",
+                                    functionSymbol.getText());
+                            break;
+                        }
                         String fromName = fhead.term(0).getText();
                         String toName = fhead.term(1).getText();
                         Location from = parsed.graph().getLocation(fromName);

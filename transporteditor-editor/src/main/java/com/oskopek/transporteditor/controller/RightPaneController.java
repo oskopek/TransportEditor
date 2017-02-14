@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
@@ -332,7 +333,12 @@ public class RightPaneController extends AbstractController {
             while (graph.getLocation(name) != null) {
                 name += "-1";
             }
-            Node node = graph.addLocation(new Location(name));
+            Node node;
+            if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+                node = graph.addLocation(new Location(name, 0, 0, false));
+            } else {
+                node = graph.addLocation(new Location(name, 0, 0, null));
+            }
             centerPaneController.getGraphSelectionHandler().selectOnly(node);
         }
     }
@@ -367,7 +373,14 @@ public class RightPaneController extends AbstractController {
             }
             Location from = handler.getSelectedLocationList().get(0);
             Location to = handler.getSelectedLocationList().get(1);
-            Edge edge = graph.addRoad(new DefaultRoad(name, ActionCost.valueOf(1)), from, to);
+
+            Edge edge;
+            if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+                edge = graph.addRoad(new FuelRoad(name, ActionCost.valueOf(1)), from, to);
+            } else {
+                edge = graph.addRoad(new DefaultRoad(name, ActionCost.valueOf(1)), from, to);
+            }
+
             Platform.runLater(() -> {
                 Try.run(() -> Thread.sleep(100)).get(); // TODO: Hack - needs to happen later
                 centerPaneController.getGraphSelectionHandler().selectOnly(edge);
@@ -384,7 +397,15 @@ public class RightPaneController extends AbstractController {
         }
         GraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
         Location at = handler.getSelectedLocationList().get(0);
-        Vehicle vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+
+        Vehicle vehicle;
+        if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), ActionCost.valueOf(0),
+                    ActionCost.valueOf(0), new ArrayList<>());
+        } else {
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+        }
+
         problem = problem.putVehicle(name, vehicle);
         application.getPlanningSession().setProblem(problem);
         centerPaneController.refreshGraphSelectionHandler();

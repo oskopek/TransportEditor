@@ -22,6 +22,11 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     }
 
     @Override
+    public DefaultRoad updateLength(ActionCost length) {
+        return new DefaultRoad(getName(), length);
+    }
+
+    @Override
     public DefaultRoad updateName(String newName) {
         return new DefaultRoad(newName, getLength());
     }
