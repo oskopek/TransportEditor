@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="300" prefWidth="400" xmlns="http://javafx.com/javafx/8.0.112"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="400" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.112"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
         <TabPane fx:id="planTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -26,20 +26,20 @@
                 <Button fx:id="planButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handlePlan"
                         text="%plan" GridPane.columnIndex="0" GridPane.rowIndex="0" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="15.0"/>
                     </font>
                 </Button>
                 <Button fx:id="validateButton" disable="true" maxWidth="1.7976931348623157E308"
                         onAction="#handleValidate" text="%validate" GridPane.columnIndex="2" GridPane.rowIndex="0"
                         HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="15.0"/>
                     </font>
                 </Button>
                 <Button fx:id="redrawButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handleRedraw"
                         text="%redraw" GridPane.columnIndex="4" GridPane.rowIndex="0" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="15.0"/>
                     </font>
                 </Button>
                 <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
@@ -70,11 +70,11 @@
                 <RowConstraints minHeight="25.0" prefHeight="25.0"/>
             </rowConstraints>
             <columnConstraints>
-                <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="500.0"/>
                 <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
-                <ColumnConstraints minWidth="150.0" prefWidth="200.0"/>
+                <ColumnConstraints minWidth="150.0" prefWidth="500.0"/>
                 <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
-                <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="500.0"/>
             </columnConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
