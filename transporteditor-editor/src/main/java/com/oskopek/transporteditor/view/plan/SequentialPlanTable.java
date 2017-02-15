@@ -3,8 +3,12 @@ package com.oskopek.transporteditor.view.plan;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import impl.org.controlsfx.table.ColumnFilter;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -60,16 +64,26 @@ public final class SequentialPlanTable {
         List<TemporalPlanAction> temporalPlanActions
                 = new ArrayList<>(new SequentialPlan(actionList).getTemporalPlanActionsList());
         TableView<TemporalPlanAction> tableView = new TableView<>(FXCollections.observableList(temporalPlanActions));
+        BooleanProperty isFilteredProperty = new SimpleBooleanProperty(false);
 
         TableColumn<TemporalPlanAction, String> dragColumn = new TableColumn<>();
         dragColumn.cellValueFactoryProperty().setValue(param -> new ReadOnlyStringWrapper("☰"));
         Callback<TableColumn<TemporalPlanAction, String>, TableCell<TemporalPlanAction, String>> dragCellFactory
                 = dragColumn.getCellFactory();
+        String dragCellStyle = "-fx-alignment: CENTER;";
         dragColumn.cellFactoryProperty().setValue(tableColumn -> {
             TableCell<TemporalPlanAction, String> cell = dragCellFactory.call(tableColumn);
-            cell.setStyle("-fx-alignment: CENTER;");
+            cell.setStyle(dragCellStyle);
+            isFilteredProperty.addListener((observable, oldValue, newValue) -> {
+                if (newValue) { // visualize disabling drag when table is filtered
+                    cell.setStyle(dragCellStyle + " -fx-text-fill: red;");
+                } else {
+                    cell.setStyle(dragCellStyle);
+                }
+            });
             return cell;
         });
+
         TableColumn<TemporalPlanAction, String> actionColumn = new TableColumn<>("Action");
         actionColumn.cellValueFactoryProperty().setValue(
                 param -> new ReadOnlyStringWrapper(param.getValue().getAction().getName()));
@@ -86,9 +100,25 @@ public final class SequentialPlanTable {
 
         tableView.setRowFactory(view -> {
             TableRow<TemporalPlanAction> row = new TableRow<>();
-            row.setOnDragDetected(tableDragDetected.apply(row));
-            row.setOnDragOver(tableDragOver.apply(row));
+            row.setOnDragDetected(event -> {
+                if (isFilteredProperty.get()) {
+                    logger.trace("Ignoring drag dropped, table is filtered.");
+                    return;
+                }
+                tableDragDetected.apply(row).handle(event);
+            });
+            row.setOnDragOver(event -> {
+                if (isFilteredProperty.get()) {
+                    logger.trace("Ignoring drag dropped, table is filtered.");
+                    return;
+                }
+                tableDragOver.apply(row).handle(event);
+            });
             row.setOnDragDropped(event -> {
+                if (isFilteredProperty.get()) {
+                    logger.trace("Ignoring drag dropped, table is filtered.");
+                    return;
+                }
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasContent(serializedMimeType)) {
                     int draggedIndex = (Integer) dragboard.getContent(serializedMimeType);
@@ -113,7 +143,15 @@ public final class SequentialPlanTable {
         tableView.getColumns().setAll(dragColumn, actionColumn, whoColumn, whereColumn, whatColumn);
         tableView.getColumns().forEach(c -> c.setSortable(false));
         tableView.setEditable(false);
-        return TableFilter.forTableView(tableView).lazy(true).apply();
+        TableFilter<TemporalPlanAction> tableFilter = TableFilter.forTableView(tableView).lazy(true).apply();
+        tableFilter.getFilteredList().addListener((ListChangeListener<? super TemporalPlanAction>)
+                observable -> {
+                    boolean isFiltered = tableFilter.getColumnFilters().stream().map(ColumnFilter::hasUnselections)
+                            .reduce(Boolean.FALSE, Boolean::logicalOr);
+                    logger.trace("Table is filtered: {}", isFiltered);
+                    isFilteredProperty.setValue(isFiltered);
+                });
+        return tableFilter;
     }
 
 }
