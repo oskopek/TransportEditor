@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import impl.org.controlsfx.table.ColumnFilter;

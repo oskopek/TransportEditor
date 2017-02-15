@@ -278,7 +278,6 @@ public class RightPaneController extends AbstractController {
                 if (isDomainTemporal) {
                     actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) -> {
                         application.getPlanningSession().setPlan(new TemporalPlan(list));
-                        eventBus.post(new PlanningFinishedEvent());
                     });
                     temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
                     sequentialPlanTabScrollPane.setContent(null);

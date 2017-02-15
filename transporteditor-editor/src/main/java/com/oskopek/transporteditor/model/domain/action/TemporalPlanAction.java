@@ -16,6 +16,11 @@ public class TemporalPlanAction {
         this.endTimestamp = endTimestamp;
     }
 
+    public TemporalPlanAction updateStartTimestampSmart(Integer startTimestamp) {
+        return new TemporalPlanAction(getAction(), startTimestamp,
+                startTimestamp + getAction().getDuration().getCost());
+    }
+
     public Integer getStartTimestamp() {
         return startTimestamp;
     }

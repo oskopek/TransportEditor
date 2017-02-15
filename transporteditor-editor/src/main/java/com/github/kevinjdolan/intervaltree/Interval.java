@@ -13,6 +13,9 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
     private Type data;
 
     public Interval(long start, long end, Type data) {
+        if (start > end) {
+            throw new IllegalArgumentException("Interval start cannot be later than end.");
+        }
         this.start = start;
         this.end = end;
         this.data = data;
