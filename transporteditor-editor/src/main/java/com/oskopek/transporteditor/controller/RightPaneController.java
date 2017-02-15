@@ -10,6 +10,7 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
@@ -275,7 +276,10 @@ public class RightPaneController extends AbstractController {
                 temporalPlanTab.setDisable(!isDomainTemporal);
 
                 if (isDomainTemporal) {
-                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions());
+                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) -> {
+                        application.getPlanningSession().setPlan(new TemporalPlan(list));
+                        eventBus.post(new PlanningFinishedEvent());
+                    });
                     temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
                     sequentialPlanTabScrollPane.setContent(null);
                     planTabPane.getSelectionModel().select(temporalPlanTab);

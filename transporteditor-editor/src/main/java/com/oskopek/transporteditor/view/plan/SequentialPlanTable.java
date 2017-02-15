@@ -5,10 +5,7 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import impl.org.controlsfx.table.ColumnFilter;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -99,9 +96,9 @@ public final class SequentialPlanTable {
         whatColumn.cellValueFactoryProperty().setValue(param -> new ReadOnlyStringWrapper(
                 param.getValue().getAction().getWhat() == null ? ""
                         : param.getValue().getAction().getWhat().getName()));
-        TableColumn<TemporalPlanAction, ActionCost> durationColumn = new TableColumn<>("Duration");
+        TableColumn<TemporalPlanAction, Number> durationColumn = new TableColumn<>("Duration");
         durationColumn.cellValueFactoryProperty().setValue(
-                param -> new ReadOnlyObjectWrapper<>(param.getValue().getAction().getDuration()));
+                param -> new ReadOnlyIntegerWrapper(param.getValue().getAction().getDuration().getCost()));
 
         tableView.setRowFactory(view -> {
             TableRow<TemporalPlanAction> row = new TableRow<>();
