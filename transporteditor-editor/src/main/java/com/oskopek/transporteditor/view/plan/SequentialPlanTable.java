@@ -1,10 +1,12 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import impl.org.controlsfx.table.ColumnFilter;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -97,6 +99,9 @@ public final class SequentialPlanTable {
         whatColumn.cellValueFactoryProperty().setValue(param -> new ReadOnlyStringWrapper(
                 param.getValue().getAction().getWhat() == null ? ""
                         : param.getValue().getAction().getWhat().getName()));
+        TableColumn<TemporalPlanAction, ActionCost> durationColumn = new TableColumn<>("Duration");
+        durationColumn.cellValueFactoryProperty().setValue(
+                param -> new ReadOnlyObjectWrapper<>(param.getValue().getAction().getDuration()));
 
         tableView.setRowFactory(view -> {
             TableRow<TemporalPlanAction> row = new TableRow<>();
@@ -140,7 +145,7 @@ public final class SequentialPlanTable {
             return row;
         });
 
-        tableView.getColumns().setAll(dragColumn, actionColumn, whoColumn, whereColumn, whatColumn);
+        tableView.getColumns().setAll(dragColumn, actionColumn, whoColumn, whereColumn, whatColumn, durationColumn);
         tableView.getColumns().forEach(c -> c.setSortable(false));
         tableView.setEditable(false);
         TableFilter<TemporalPlanAction> tableFilter = TableFilter.forTableView(tableView).lazy(true).apply();
