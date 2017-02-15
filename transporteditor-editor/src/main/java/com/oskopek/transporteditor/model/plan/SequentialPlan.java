@@ -5,10 +5,7 @@ import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class SequentialPlan implements Plan {
 
@@ -29,7 +26,11 @@ public final class SequentialPlan implements Plan {
 
     @Override
     public Set<TemporalPlanAction> getTemporalPlanActions() {
-        Set<TemporalPlanAction> set = new HashSet<>();
+        return new HashSet<>(getTemporalPlanActionsList());
+    }
+
+    public List<TemporalPlanAction> getTemporalPlanActionsList() {
+        List<TemporalPlanAction> temporalActions = new ArrayList<>();
         int i = 0;
         for (Action action : actionList) {
             int begin = i;
@@ -37,9 +38,9 @@ public final class SequentialPlan implements Plan {
                 throw new IllegalStateException("Action duration cannot be null: " + action);
             }
             i += action.getDuration().getCost();
-            set.add(new TemporalPlanAction(action, begin, i));
+            temporalActions.add(new TemporalPlanAction(action, begin, i));
         }
-        return set;
+        return temporalActions;
     }
 
     @Override

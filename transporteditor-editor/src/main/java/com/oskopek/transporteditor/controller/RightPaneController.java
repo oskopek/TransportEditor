@@ -9,6 +9,7 @@ import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
@@ -234,15 +235,15 @@ public class RightPaneController extends AbstractController {
 
     @Subscribe
     public void redrawPlans(GraphUpdatedEvent event) {
-        redrawPlansInternal();
+        redrawPlansInternal(null);
     }
 
     @Subscribe
     public void redrawPlans(PlanningFinishedEvent event) {
-        redrawPlansInternal();
+        redrawPlansInternal(event.getSelectRow());
     }
 
-    private void redrawPlansInternal() {
+    private void redrawPlansInternal(Integer selectedRow) {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
             Plan plan = null;
@@ -279,10 +280,17 @@ public class RightPaneController extends AbstractController {
                     sequentialPlanTabScrollPane.setContent(null);
                     planTabPane.getSelectionModel().select(temporalPlanTab);
                 } else {
-                    actionTableFilter = SequentialPlanTable.build(plan.getTemporalPlanActions());
+                    actionTableFilter = SequentialPlanTable.build(plan.getActions(), (list, index) -> {
+                        application.getPlanningSession().setPlan(new SequentialPlan(list));
+                        eventBus.post(new PlanningFinishedEvent(index));
+                    });
                     sequentialPlanTabScrollPane.setContent(actionTableFilter.getTableView());
                     temporalPlanTabScrollPane.setContent(null);
                     planTabPane.getSelectionModel().select(sequentialPlanTab);
+                }
+
+                if (selectedRow != null) {
+                    actionTableFilter.getTableView().getSelectionModel().select(selectedRow);
                 }
 
                 lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(c.getList()));
