@@ -3,7 +3,11 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.Domain;
+import com.oskopek.transporteditor.model.domain.action.Action;
+import com.oskopek.transporteditor.model.domain.action.Refuel;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
 import com.oskopek.transporteditor.validation.SequentialPlanValidator;
@@ -12,6 +16,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.*;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class DefaultPlanningSessionIOIT {
 
@@ -97,6 +104,25 @@ public class DefaultPlanningSessionIOIT {
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
         assertThatThrownBy(() -> defaultPlanningSessionIO.parse(emptyPlannerContents))
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Could not parse");
+    }
+
+    @Test
+    public void testSerializeTemporalPlan() throws Exception {
+        PlanningSession session = new DefaultPlanningSession();
+        Action emptyRefuel = new Refuel(null, null, Collections.emptyList(), Collections.emptyList(), null, null);
+        TemporalPlan plan = new TemporalPlan(Arrays.asList(
+                new TemporalPlanAction(emptyRefuel, 0, 1),
+                new TemporalPlanAction(emptyRefuel, 0, 5)
+        ));
+        session.setPlan(plan);
+        String serialized = defaultPlanningSessionIO.serialize(session);
+        assertThat(serialized).containsIgnoringCase("refuel");
+        assertThat(serialized).containsIgnoringCase("startTimestamp");
+        assertThat(serialized).doesNotContain("head");
+        assertThat(serialized).doesNotContain("inSync");
+        assertThat(serialized).doesNotContain("<size>");
+        PlanningSession parsed = defaultPlanningSessionIO.parse(serialized);
+        assertThat(parsed.getPlan()).isNotNull().isEqualTo(plan);
     }
 
     private void testEqualityGradually(PlanningSession referenceSession, PlanningSession parsed) {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,37 +19,49 @@ import java.util.stream.Collectors;
  */
 public class IntervalTree<Type> {
 
-    private IntervalNode<Type> head;
-    private List<Interval<Type>> intervalList;
-    private boolean inSync;
-    private int size;
+    private transient IntervalNode<Type> head;
+    private final List<Interval<Type>> intervalList;
+    private transient boolean inSync;
+    private transient int size;
 
     /**
-     * Instantiate a new interval tree with no intervals
+     * Instantiate a new interval tree with no intervals.
      */
-    public IntervalTree() {
-        this.head = new IntervalNode<>();
-        this.intervalList = new ArrayList<>();
-        this.inSync = true;
-        this.size = 0;
+    protected IntervalTree() {
+        this(Collections.emptyList());
     }
 
     /**
-     * Instantiate and build an interval tree with a preset list of intervals
+     * Instantiate and build an interval tree with a preset list of intervals.
      *
      * @param intervalList the list of intervals to use
      */
-    public IntervalTree(List<Interval<Type>> intervalList) {
+    protected IntervalTree(List<Interval<Type>> intervalList) {
         this.head = new IntervalNode<>(intervalList);
-        this.intervalList = new ArrayList<>();
-        this.intervalList.addAll(intervalList);
+        this.intervalList = new ArrayList<>(intervalList);
         this.inSync = true;
         this.size = intervalList.size();
     }
 
     /**
-     * Perform a stabbing query, returning the associated data
-     * Will rebuild the tree if out of sync
+     * Instantiate a new interval tree with no intervals.
+     */
+    public static <Type_> IntervalTree<Type_> empty() {
+        return new IntervalTree<>();
+    }
+
+    /**
+     * Instantiate and build an interval tree with a preset list of intervals.
+     *
+     * @param intervalList the list of intervals to use
+     */
+    public static <Type_> IntervalTree<Type_> of(List<Interval<Type_>> intervalList) {
+        return new IntervalTree<>(intervalList);
+    }
+
+    /**
+     * Perform a stabbing query, returning the associated data.
+     * Will rebuild the tree if out of sync.
      *
      * @param time the time to stab
      */
@@ -174,13 +187,10 @@ public class IntervalTree<Type> {
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof IntervalTree)) {
             return false;
         }
-
         IntervalTree<?> that = (IntervalTree<?>) o;
-
         return new EqualsBuilder().append(intervalList, that.intervalList).isEquals();
     }
 

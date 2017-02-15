@@ -1,5 +1,8 @@
 package com.github.kevinjdolan.intervaltree;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * The Interval class maintains an interval with some associated data
  *
@@ -80,4 +83,21 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Interval)) {
+            return false;
+        }
+        Interval<?> interval = (Interval<?>) o;
+        return new EqualsBuilder().append(getStart(), interval.getStart()).append(getEnd(), interval.getEnd()).append(
+                getData(), interval.getData()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getStart()).append(getEnd()).append(getData()).toHashCode();
+    }
 }
