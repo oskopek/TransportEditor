@@ -18,17 +18,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Reader and writer for {@link SequentialPlan} to and from the VAL format (supports only Transport domain plans).
+ * Uses regexps for parsing.
+ */
 public class SequentialPlanIO implements DataIO<Plan> {
 
     private final Problem problem;
     private final Domain domain;
     private PlanState planState;
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the associated domain
+     * @param problem  the associated problem
+     */
     public SequentialPlanIO(Domain domain, Problem problem) {
         this.domain = domain;
         this.problem = problem;
     }
 
+    /**
+     * Util method for serializing an action to a VAL-format plan line. Does not handle time.
+     *
+     * @param action the action to serialize
+     * @return a string builder containing the serialized action (without a closing parenthesis).
+     */
     static StringBuilder serializeActionSimple(Action action) {
         StringBuilder str = new StringBuilder();
         String whoName = action.getWho().getName();
@@ -48,6 +64,16 @@ public class SequentialPlanIO implements DataIO<Plan> {
         return str;
     }
 
+    /**
+     * Util method for parsing an action from a VAL-format plan line. Does not handle time.
+     *
+     * @param domain the domain to parse to
+     * @param problem the problem to parse to
+     * @param line the line to parse
+     * @return the parsed action
+     * @throws IllegalArgumentException if an error during parsing occurs
+     * @throws IllegalStateException if a refuel action occurs in a fuel-less domain
+     */
     static Action parsePlanAction(Domain domain, Problem problem, String line) {
         Pattern actionPattern = Pattern.compile("\\((([-a-zA-Z0-9]+ )+([-a-zA-Z0-9]+))\\)");
         Matcher matcher = actionPattern.matcher(line);
@@ -88,6 +114,13 @@ public class SequentialPlanIO implements DataIO<Plan> {
         }
     }
 
+    /**
+     * Internal capacity-aware action serialization.
+     *
+     * @param action the action to serialize
+     * @param capacity true iff the action changes capacity of the vehicle
+     * @return the serialized VAL-format plan action line
+     */
     private String serializeAction(Action action, boolean capacity) {
         StringBuilder str = serializeActionSimple(action);
         if (capacity) {
@@ -105,7 +138,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
     }
 
     @Override
-    public synchronized String serialize(Plan plan) throws IllegalArgumentException {
+    public synchronized String serialize(Plan plan) {
         StringBuilder builder = new StringBuilder();
         planState = new SequentialPlanState(domain, problem);
         for (Action action : plan.getActions()) {
@@ -121,7 +154,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
     }
 
     @Override
-    public SequentialPlan parse(String contents) throws IllegalArgumentException {
+    public SequentialPlan parse(String contents) {
         List<Action> actions = Arrays.stream(contents.split("\n")).map(s -> {
             int index = s.indexOf(';');
             return index >= 0 ? s.substring(0, index) : s;

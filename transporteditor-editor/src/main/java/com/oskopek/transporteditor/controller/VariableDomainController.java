@@ -118,6 +118,8 @@ public class VariableDomainController extends AbstractController {
         domainBuilder.numericProperty().bind(numericCheck.selectedProperty());
 
         // TODO: Metric and goal parsing
+        // domainBuilder.goalTextProperty().bind(goalArea.textProperty());
+        // domainBuilder.metricTextProperty().bind(metricArea.textProperty());
 
         numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull());

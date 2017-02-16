@@ -29,6 +29,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Reader and writer for {@link VariableDomain} to and from PDDL (supports only Transport domains).
+ * Uses a Freemarker template internally for serialization and ANTLR/regexps for deserialization.
+ */
 public class VariableDomainIO implements DataIO<Domain> {
 
     private static final Map<String, Class<? extends Predicate>> predicateNameMap = new HashMap<>();
@@ -62,57 +66,87 @@ public class VariableDomainIO implements DataIO<Domain> {
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 
+    /**
+     * Parse the {@code (domain ...)} context for a domain name using.
+     *
+     * @param contents contents of the PDDL file
+     * @return the parsed name
+     */
     private static String parseName(String contents) {
         return contents.split("\n")[0].replaceAll(";", "").trim();
     }
 
+    /**
+     * Returns lines split by {@code \n}, without empty lines, comments and not containing trailing
+     * or leading whitespace.
+     *
+     * @param contents contents of the PDDL file
+     * @return the normalized string
+     */
     private static Stream<String> normalizeInput(String contents) {
         String[] lines = contents.split("\n");
         return Arrays.stream(lines).map(String::trim).map(s -> s.replaceFirst(";.*", "")).filter(s -> !s.isEmpty());
     }
 
+    /**
+     * Parses predicates from the {@code (:predicates ...)} context.
+     *
+     * @param contents contents of the PDDL file
+     * @return map of predicate names to predicate classes
+     */
     private static Map<String, Class<? extends Predicate>> parsePredicates(String contents) {
-        List<String> predicates = new ArrayList<>();
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
-
         String individualPredicateRegex = "\\(([-a-zA-Z]+)[^)]*\\)";
-        Pattern predicatePattern = Pattern.compile("\\(:predicates(" + individualPredicateRegex + ")*\\)");
-        Pattern individualPredicatePattern = Pattern.compile(individualPredicateRegex);
-
-        Matcher predGrpMatcher = predicatePattern.matcher(normalized);
-        if (predGrpMatcher.find()) {
-            String predicateGrp = predGrpMatcher.group(0);
-            Matcher predMatcher = individualPredicatePattern.matcher(predicateGrp);
-            while (predMatcher.find()) {
-                predicates.add(predMatcher.group(1));
-            }
-        }
-
-        return predicates.stream().filter(p -> !"capacity-predecessor".equals(p)).collect(
-                Collectors.toMap(p -> p, predicateNameMap::get));
+        String predicateRegex = "\\(:predicates(" + individualPredicateRegex + ")*\\)";
+        return parseElements(normalized, individualPredicateRegex, predicateRegex).stream()
+                .filter(p -> !"capacity-predecessor".equals(p))
+                .collect(Collectors.toMap(p -> p, predicateNameMap::get));
     }
 
+    /**
+     * Parses functions from the {@code (:functions ...)} context.
+     *
+     * @param contents contents of the PDDL file
+     * @return map of function names to function classes
+     */
     private static Map<String, Class<? extends Function>> parseFunctions(String contents) {
-        List<String> functions = new ArrayList<>();
-
         String normalized = normalizeInput(contents).map(s -> s.replaceAll("\\s+", "")).collect(Collectors.joining(""));
-
         String individualFunctionRegex = "\\(([-a-zA-Z]+)[^)]*\\)(-[-a-zA-Z]+)?";
-        Pattern functionPattern = Pattern.compile("\\(:functions(" + individualFunctionRegex + ")*\\)");
-        Pattern individualFunctionPattern = Pattern.compile(individualFunctionRegex);
-
-        Matcher funcGrpMatcher = functionPattern.matcher(normalized);
-        if (funcGrpMatcher.find()) {
-            String funcGrp = funcGrpMatcher.group(0);
-            Matcher funcMatcher = individualFunctionPattern.matcher(funcGrp);
-            while (funcMatcher.find()) {
-                functions.add(funcMatcher.group(1));
-            }
-        }
-
-        return functions.stream().collect(Collectors.toMap(f -> f, functionNameMap::get));
+        String functionRegex = "\\(:functions(" + individualFunctionRegex + ")*\\)";
+        return parseElements(normalized, individualFunctionRegex, functionRegex).stream()
+                .collect(Collectors.toMap(f -> f, functionNameMap::get));
     }
 
+    /**
+     * Parses PDDL elements from a context using the given regexps.
+     * Used for {@link #parseFunctions(String)} and {@link #parsePredicates(String)}.
+     *
+     * @param normalized normalized contents of the PDDL file
+     * @param individualElementRegex the regex for an individual element
+     * @param elementsRegex the regex for a group of individual elements
+     * @return list of element names
+     */
+    private static List<String> parseElements(String normalized, String individualElementRegex, String elementsRegex) {
+        List<String> elements = new ArrayList<>();
+        Pattern elementsPattern = Pattern.compile(elementsRegex);
+        Pattern individualElementPattern = Pattern.compile(individualElementRegex);
+        Matcher elementGroupMatcher = elementsPattern.matcher(normalized);
+        if (elementGroupMatcher.find()) {
+            String elementGroup = elementGroupMatcher.group(0);
+            Matcher elementMatcher = individualElementPattern.matcher(elementGroup);
+            while (elementMatcher.find()) {
+                elements.add(elementMatcher.group(1));
+            }
+        }
+        return elements;
+    }
+
+    /**
+     * Parses PDDL labels (features it has) from the contents.
+     *
+     * @param contents contents of the PDDL file
+     * @return set of PDDL labels for the domain
+     */
     private static Set<PddlLabel> parsePddlLabels(String contents) {
         Set<PddlLabel> pddlLabels = new HashSet<>();
         if (contents.contains(":action-costs")) {
@@ -130,11 +164,13 @@ public class VariableDomainIO implements DataIO<Domain> {
         return pddlLabels;
     }
 
-    private static DriveBuilder parseDriveBuilder(PddlParser.StructureDefContext context) {
-        PartialBuilder builder = parseGenericBuilder(context);
-        return new DriveBuilder(builder.getPreconditions(), builder.getEffects());
-    }
-
+    /**
+     * Parses effects from the {@code (:action ... :effect (...) ...)} context list.
+     *
+     * @param cEffectContextList the context list to parse
+     * @param effects the effects list to populate
+     * @return optional cost towards the general total cost associated with applying the effects
+     */
     private static ActionCost parseEffects(List<PddlParser.CEffectContext> cEffectContextList,
             List<Predicate> effects) {
         Optional<Integer> optionalCost = Optional.empty();
@@ -154,9 +190,15 @@ public class VariableDomainIO implements DataIO<Domain> {
                 }
             }
         }
-        return ActionCost.valueOf(optionalCost.isPresent() ? optionalCost.get() : 0);
+        return ActionCost.valueOf(optionalCost.orElse(0));
     }
 
+    /**
+     * Optional wrapper around {@link Integer#parseInt(String)}.
+     *
+     * @param value the string value to parse
+     * @return empty if result couldn't be parsed due to to {@link NumberFormatException}, else optional of the value
+     */
     private static Optional<Integer> tryParseInteger(String value) {
         Optional<Integer> result = Optional.empty();
         try {
@@ -167,6 +209,12 @@ public class VariableDomainIO implements DataIO<Domain> {
         return result;
     }
 
+    /**
+     * Parse the {@code (predicate-name ?var1 ?var2 ...)} context. Handles negation.
+     *
+     * @param goalDescContext the context to parse
+     * @return the parsed predicate
+     */
     private static Predicate parsePredicate(PddlParser.GoalDescContext goalDescContext) {
         if (goalDescContext.getText().startsWith("(not")) {
             Predicate parsed = parsePredicate(goalDescContext.goalDesc(0));
@@ -181,6 +229,12 @@ public class VariableDomainIO implements DataIO<Domain> {
         return parseAtomicTermFormula(goalDescContext.atomicTermFormula());
     }
 
+    /**
+     * Parse the {@code (atomic-formula ?var1 ?var2 ...)} context. Doesn't handle negation.
+     *
+     * @param atomicTermFormulaContext the context to parse
+     * @return the parsed predicate
+     */
     private static Predicate parseAtomicTermFormula(PddlParser.AtomicTermFormulaContext atomicTermFormulaContext) {
         String goalDescName = atomicTermFormulaContext.predicate().getText();
         Predicate parsed = null;
@@ -244,11 +298,24 @@ public class VariableDomainIO implements DataIO<Domain> {
         return parsed;
     }
 
+    /**
+     * Parses preconditions from the {@code (:action ... :precondition (...) ...)} context list.
+     *
+     * @param goalDescContextList the context list to parse
+     * @return the list of parsed predicates
+     */
     private static List<Predicate> parsePreconditions(List<PddlParser.GoalDescContext> goalDescContextList) {
-        return goalDescContextList.stream().map(VariableDomainIO::parsePredicate).filter(predicate -> predicate != null)
+        return goalDescContextList.stream().map(VariableDomainIO::parsePredicate).filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Parses conditions from the {@code (:action ... :condition (...) ...)} context list.
+     * Temporal version of {@link #parsePreconditions(List)}.
+     *
+     * @param daGDContextList the context list to parse
+     * @return the list of parsed predicates
+     */
     private static List<Predicate> parseConditions(List<PddlParser.DaGDContext> daGDContextList) {
         List<Predicate> predicates = new ArrayList<>();
         for (PddlParser.TimedGDContext timedGDContext : daGDContextList.stream().map(m -> m.prefTimedGD().timedGD())
@@ -281,6 +348,13 @@ public class VariableDomainIO implements DataIO<Domain> {
         return predicates;
     }
 
+    /**
+     * Parses temporal effects from the {@code (:action ... :effect (...) ...)} context list.
+     * Temporal version of {@link #parseEffects(List, List)}.
+     *
+     * @param daEffectContextList the context list to parse
+     * @param effects the effects list to populate
+     */
     private static void parseTemporalEffects(List<PddlParser.DaEffectContext> daEffectContextList,
             List<Predicate> effects) {
         for (PddlParser.TimedEffectContext timedEffectContext : daEffectContextList.stream().map(
@@ -310,6 +384,12 @@ public class VariableDomainIO implements DataIO<Domain> {
         }
     }
 
+    /**
+     * Parses a partial action builder from the {@code (:action ...)} context.
+     *
+     * @param context the context to parse
+     * @return the partial action builder
+     */
     private static PartialBuilder parseGenericBuilder(PddlParser.StructureDefContext context) {
         if (context == null) {
             return null;
@@ -339,21 +419,49 @@ public class VariableDomainIO implements DataIO<Domain> {
             duration = ActionCost.valueOf(1);
         }
         return new PartialBuilder(preconditions, effects, cost, duration);
-
     }
 
+    /**
+     * Parses a drive action builder from the {@code (:action drive ...)} context.
+     *
+     * @param context the context to parse
+     * @return the parsed drive builder
+     */
+    private static DriveBuilder parseDriveBuilder(PddlParser.StructureDefContext context) {
+        PartialBuilder builder = parseGenericBuilder(context);
+        return new DriveBuilder(builder.getPreconditions(), builder.getEffects());
+    }
+
+    /**
+     * Parses a drop action builder from the {@code (:action drop ...)} context.
+     *
+     * @param context the context to parse
+     * @return the parsed drop builder
+     */
     private static DropBuilder parseDropBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
         return new DropBuilder(builder.getPreconditions(), builder.getEffects(), builder.getCost(),
                 builder.getDuration());
     }
 
+    /**
+     * Parses a pick-up action builder from the {@code (:action pick-up ...)} context.
+     *
+     * @param context the context to parse
+     * @return the parsed pick-up builder
+     */
     private static PickUpBuilder parsePickUpBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
         return new PickUpBuilder(builder.getPreconditions(), builder.getEffects(), builder.getCost(),
                 builder.getDuration());
     }
 
+    /**
+     * Parses a refuel action builder from the {@code (:action refuel ...)} context.
+     *
+     * @param context the context to parse
+     * @return the parsed refuel builder or null for a no fuel domain
+     */
     private static RefuelBuilder parseRefuelBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
         if (builder == null) {
@@ -364,7 +472,7 @@ public class VariableDomainIO implements DataIO<Domain> {
     }
 
     @Override
-    public VariableDomain parse(String contents) throws IllegalArgumentException {
+    public VariableDomain parse(String contents) {
         String name = parseName(contents);
         Map<String, Class<? extends Predicate>> predicates = parsePredicates(contents);
         Map<String, Class<? extends Function>> functions = parseFunctions(contents);
@@ -424,7 +532,7 @@ public class VariableDomainIO implements DataIO<Domain> {
     }
 
     @Override
-    public String serialize(Domain object) throws IllegalArgumentException {
+    public String serialize(Domain object) {
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("domain", object);
@@ -448,17 +556,24 @@ public class VariableDomainIO implements DataIO<Domain> {
         return writer.toString().replaceAll("\\r\\n", "\n");
     }
 
+    /**
+     * A mutable action builder builder class. Used during parsing individual properties of action builders.
+     */
     private static final class PartialBuilder {
 
-        final List<Predicate> preconditions;
-        final List<Predicate> effects;
-        final ActionCost cost;
-        final ActionCost duration;
+        private final List<Predicate> preconditions;
+        private final List<Predicate> effects;
+        private final ActionCost cost;
+        private final ActionCost duration;
 
-        PartialBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost) {
-            this(preconditions, effects, cost, ActionCost.valueOf(1));
-        }
-
+        /**
+         * Default constructor.
+         *
+         * @param preconditions the preconditions
+         * @param effects the effects
+         * @param cost the cost
+         * @param duration the duration
+         */
         PartialBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost,
                 ActionCost duration) {
             this.preconditions = preconditions;
@@ -467,18 +582,38 @@ public class VariableDomainIO implements DataIO<Domain> {
             this.duration = duration;
         }
 
+        /**
+         * Get the preconditions.
+         *
+         * @return the preconditions
+         */
         public List<Predicate> getPreconditions() {
             return preconditions;
         }
 
+        /**
+         * Get the effects.
+         *
+         * @return the effects
+         */
         public List<Predicate> getEffects() {
             return effects;
         }
 
+        /**
+         * Get the cost.
+         *
+         * @return the cost
+         */
         public ActionCost getCost() {
             return cost;
         }
 
+        /**
+         * Get the duration.
+         *
+         * @return the duration
+         */
         public ActionCost getDuration() {
             return duration;
         }
@@ -494,13 +629,10 @@ public class VariableDomainIO implements DataIO<Domain> {
             if (this == o) {
                 return true;
             }
-
             if (!(o instanceof PartialBuilder)) {
                 return false;
             }
-
             PartialBuilder that = (PartialBuilder) o;
-
             return new EqualsBuilder().append(getPreconditions(), that.getPreconditions()).append(getEffects(),
                     that.getEffects()).append(getCost(), that.getCost()).append(getDuration(), that.getDuration())
                     .isEquals();

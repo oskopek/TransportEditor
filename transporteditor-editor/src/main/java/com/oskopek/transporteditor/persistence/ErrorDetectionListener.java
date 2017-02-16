@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.BitSet;
 
+/**
+ * Single use listener (for one parsing session) that checks if a syntax error occurred and logs each error.
+ *
+ * @see #syntaxError(Recognizer, Object, int, int, String, RecognitionException)
+ */
 public class ErrorDetectionListener implements ANTLRErrorListener {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -18,14 +23,29 @@ public class ErrorDetectionListener implements ANTLRErrorListener {
     private Exception reason = null;
     private String reasonString = null;
 
+    /**
+     * Check if the listener observed a syntax error.
+     *
+     * @return true iff at least one syntax error occurred
+     */
     public synchronized boolean isFail() {
         return fail;
     }
 
+    /**
+     * Get the {@link RecognitionException} that was the reason for failure (from ANTLR).
+     *
+     * @return the reason
+     */
     public Exception getReason() {
         return reason;
     }
 
+    /**
+     * Get the reason message of the error (from ANTLR).
+     *
+     * @return the reason string
+     */
     public String getReasonString() {
         return reasonString;
     }

@@ -23,6 +23,10 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Reader and writer for {@link DefaultProblem} to and from PDDL (supports only Transport domains).
+ * Uses a Freemarker template internally for serialization and ANTLR for deserialization.
+ */
 public class DefaultProblemIO implements DataIO<Problem> {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
@@ -37,12 +41,17 @@ public class DefaultProblemIO implements DataIO<Problem> {
 
     private final Domain domain;
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the domain of the problem read and written
+     */
     public DefaultProblemIO(Domain domain) {
         this.domain = domain;
     }
 
     @Override
-    public String serialize(Problem object) throws IllegalArgumentException {
+    public String serialize(Problem object) {
         Map<String, Object> input = new HashMap<>();
         input.put("date", new Date());
         input.put("title", object.getName().replaceFirst("transport-", ""));
@@ -91,7 +100,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
     }
 
     @Override
-    public DefaultProblem parse(String contents) throws IllegalArgumentException {
+    public DefaultProblem parse(String contents) {
         PddlParser parser = new PddlParser(new CommonTokenStream(new PddlLexer(new ANTLRInputStream(contents))));
         ErrorDetectionListener listener = new ErrorDetectionListener();
         parser.addErrorListener(listener);
@@ -116,6 +125,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         return new DefaultProblem(parsed.name(), parsed.graph(), parsed.vehicleMap(), parsed.packageMap());
     }
 
+    /**
+     * Parse the {@code (:init ...)} context.
+     *
+     * @param initContext the context to parse
+     * @param parsed intermediate problem properties aggregator
+     */
     private void parseInit(PddlParser.InitContext initContext, ParsedProblemContainer parsed) {
         for (PddlParser.InitElContext initElContext : initContext.initEl()) {
             if (initElContext.nameLiteral() != null) {
@@ -127,6 +142,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         }
     }
 
+    /**
+     * Parse a predicate of the {@code (:init ...)} context.
+     *
+     * @param initElContext the context to parse
+     * @param parsed intermediate problem properties aggregator
+     */
     private void parsePredicate(PddlParser.InitElContext initElContext, ParsedProblemContainer parsed) {
         String predicate = initElContext.nameLiteral().atomicNameFormula().predicate().getText();
         String arg1 = initElContext.nameLiteral().atomicNameFormula().NAME(0).getText();
@@ -191,6 +212,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         }
     }
 
+    /**
+     * Parse a function of the {@code (:init ...)} context.
+     *
+     * @param initElContext the context to parse
+     * @param parsed intermediate problem properties aggregator
+     */
     private void parseFunction(PddlParser.InitElContext initElContext, ParsedProblemContainer parsed) {
         PddlParser.FHeadContext fhead = initElContext.fHead();
         int number = Integer.parseInt(initElContext.NUMBER().getText());
@@ -295,6 +322,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         }
     }
 
+    /**
+     * Parse the {@code (:objects ...)} context.
+     *
+     * @param objectDecl the context to parse
+     * @param parsed intermediate problem properties aggregator
+     */
     private void parseObjectDecl(PddlParser.ObjectDeclContext objectDecl, ParsedProblemContainer parsed) {
         int maxCapacity = -1;
         for (PddlParser.SingleTypeNameListContext typeNameListContext : objectDecl.typedNameList()
@@ -328,6 +361,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         }
     }
 
+    /**
+     * Parse the {@code (:goal ...)} context.
+     *
+     * @param goalContext the context to parse
+     * @param parsed intermediate problem properties aggregator
+     */
     private void parseGoalDescContext(PddlParser.GoalContext goalContext, ParsedProblemContainer parsed) {
         for (PddlParser.GoalDescContext goalDescContext : goalContext.goalDesc().goalDesc()) { // we add 'and' implictly
             String predicate = goalDescContext.atomicTermFormula().predicate().getText();
@@ -350,6 +389,9 @@ public class DefaultProblemIO implements DataIO<Problem> {
         }
     }
 
+    /**
+     * A mutable {@link Problem} builder utility class, used for intermediate data during parsing.
+     */
     private static final class ParsedProblemContainer {
 
         private final String name;
@@ -357,23 +399,48 @@ public class DefaultProblemIO implements DataIO<Problem> {
         private final Map<String, Package> packageMap = new HashMap<>();
         private final RoadGraph graph;
 
+        /**
+         * Default constructor. Initializes the graph.
+         *
+         * @param name the name of the problem
+         */
         ParsedProblemContainer(String name) {
             this.name = name;
             graph = new RoadGraph(name + "_graph");
         }
 
+        /**
+         * Get the name.
+         *
+         * @return the name
+         */
         public String name() {
             return name;
         }
 
+        /**
+         * Get the vehicle map.
+         *
+         * @return the vehicle map
+         */
         public Map<String, Vehicle> vehicleMap() {
             return vehicleMap;
         }
 
+        /**
+         * Get the package map.
+         *
+         * @return the package map
+         */
         public Map<String, Package> packageMap() {
             return packageMap;
         }
 
+        /**
+         * Get the graph.
+         *
+         * @return the graph
+         */
         public RoadGraph graph() {
             return graph;
         }
