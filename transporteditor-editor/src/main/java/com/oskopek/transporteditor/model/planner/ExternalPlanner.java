@@ -6,10 +6,7 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
-import com.oskopek.transporteditor.view.executables.AbstractLogCancellable;
-import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
-import com.oskopek.transporteditor.view.executables.ExecutableTemporarySerializer;
-import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
+import com.oskopek.transporteditor.view.executables.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -28,6 +25,16 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A thin wrapper around an external executable planner for any Transport domain
+ * variant representable in PDDL.
+ * <p>
+ * First exports the domain and problem to a PDDL file, then runs the executable on that and parses the exported plan
+ * from stdout. Uses a Process. Logs the process' stderr via
+ * {@link com.oskopek.transporteditor.view.executables.AbstractLogStreamable#log(String)}.
+ * Returns a success iff the process exits with a 0 return code. And the plan is parsable from stdout.
+ * Is cancellable via {@link Cancellable#cancel()}.
+ */
 public class ExternalPlanner extends AbstractLogCancellable implements Planner {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
@@ -38,7 +45,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
     /**
      * Assumes stdout as plan, stderr for status updates.
      * <p>
-     * {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
      *
      * @param executableString an executable in the system path or an executable file
      * @param parameters in the format: "... {0} ... {1} ..."
@@ -47,6 +54,14 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         this(new DefaultExecutableWithParameters(executableString, parameters));
     }
 
+    /**
+     * Assumes stdout as plan, stderr for status updates.
+     * <p>
+     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     *
+     * @param executable an executable with correct parameter templates
+     * @throws IllegalArgumentException if the parameter templates are wrong
+     */
     public ExternalPlanner(ExecutableWithParameters executable) {
         String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
@@ -55,10 +70,23 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         this.executable = executable;
     }
 
+    /**
+     * Deserialization helper method.
+     *
+     * @return a new immutable external planner with correctly initialized transient fields
+     */
     protected Object readResolve() {
         return new ExternalPlanner(getExecutableWithParameters());
     }
 
+    /**
+     * Run the external planning process and supply the cancellation option.
+     *
+     * @param domain the domain to plan with
+     * @param problem the problem to plan
+     * @return the computed plan, or null in case of an error
+     * @throws IllegalStateException if an error occurred during planning
+     */
     private synchronized Plan startPlanning(Domain domain, Problem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             String executableCommand = executable.getExecutable();
@@ -136,7 +164,18 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         return getCurrentPlan();
     }
 
-    private Plan tryParsePlan(Domain domain, Problem problem, String planContents) {
+    /**
+     * Tries to parse a plan based on its string representation. A util method to differentiate between temporal
+     * and sequential plans and delegating. Used for parsing stdout of external planners.
+     *
+     * @param domain the domain that was planned with
+     * @param problem the problem that was planned
+     * @param planContents the contents to parse
+     * @return the parsed plan, or null in case of an error
+     * @see TemporalPlanIO
+     * @see SequentialPlanIO
+     */
+    private static Plan tryParsePlan(Domain domain, Problem problem, String planContents) {
         if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
             return new TemporalPlanIO(domain, problem).parse(planContents);
         } else {
@@ -167,6 +206,7 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
         return plannerProcessProperty.isNotNull();
     }
 
+    @Override
     public ExecutableWithParameters getExecutableWithParameters() {
         return executable;
     }
