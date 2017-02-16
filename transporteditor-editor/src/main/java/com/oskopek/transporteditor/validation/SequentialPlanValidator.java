@@ -27,6 +27,14 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
         return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
     }
 
+    /**
+     * Runs the validation and reports the results.
+     *
+     * @param domain the domain to validate against
+     * @param problem the problem to validate against
+     * @param plan the sequential plan to validate
+     * @return true iff the plan is valid in the domain according to this validator
+     */
     public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
         PlanState state = new SequentialPlanState(domain, problem);
@@ -46,6 +54,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
         return true;
     }
 
+    @Override
     protected void log(String message) {
         super.log(new Date().toString() + ": " + message + "\n");
     }
