@@ -3,7 +3,7 @@ package com.oskopek.transporteditor.validation;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.view.executables.AbstractLogCancellable;
+import com.oskopek.transporteditor.view.executables.CancellableLogStreamable;
 import com.oskopek.transporteditor.view.executables.Cancellable;
 import com.oskopek.transporteditor.view.executables.ExecutableTemporarySerializer;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * {@link com.oskopek.transporteditor.view.executables.AbstractLogStreamable#log(String)}.
  * Returns true iff the process exits with a 0 return code. Is cancellable via {@link Cancellable#cancel()}.
  */
-public class ValValidator extends AbstractLogCancellable implements Validator {
+public class ValValidator extends CancellableLogStreamable implements Validator {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
@@ -84,13 +84,13 @@ public class ValValidator extends AbstractLogCancellable implements Validator {
             }
             CompletableFuture<Integer> retValFuture = CompletableFuture.supplyAsync(() -> {
                 try {
-                    while (!getKillActiveProcess()) {
+                    while (!shouldCancel()) {
                         boolean finished = validatorProcessProperty.get().waitFor(500, TimeUnit.MILLISECONDS);
                         if (finished) {
                             break;
                         }
                     }
-                    if (getKillActiveProcess()) {
+                    if (shouldCancel()) {
                         validatorProcessProperty.get().destroyForcibly().waitFor();
                     }
                 } catch (InterruptedException e) {
@@ -117,11 +117,11 @@ public class ValValidator extends AbstractLogCancellable implements Validator {
                 logger.debug("Validation failed: return value {}.", retVal);
             }
             validatorProcessProperty.setValue(null);
-            setKillActiveProcess(false);
+            setShouldCancel(false);
             return retVal == 0;
         } catch (IOException e) {
             validatorProcessProperty.setValue(null);
-            setKillActiveProcess(false);
+            setShouldCancel(false);
             throw new IllegalStateException("Failed to persist domain, problem or plan - cannot validate.", e);
         }
     }

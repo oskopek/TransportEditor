@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * Returns a success iff the process exits with a 0 return code. And the plan is parsable from stdout.
  * Is cancellable via {@link Cancellable#cancel()}.
  */
-public class ExternalPlanner extends AbstractLogCancellable implements Planner {
+public class ExternalPlanner extends CancellableLogStreamable implements Planner {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
@@ -104,13 +104,13 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
             }
             CompletableFuture<Integer> retValFuture = CompletableFuture.supplyAsync(() -> {
                 try {
-                    while (!getKillActiveProcess()) {
+                    while (!shouldCancel()) {
                         boolean finished = plannerProcessProperty.get().waitFor(500, TimeUnit.MILLISECONDS);
                         if (finished) {
                             break;
                         }
                     }
-                    if (getKillActiveProcess()) {
+                    if (shouldCancel()) {
                         plannerProcessProperty.get().destroyForcibly().waitFor();
                     }
                 } catch (InterruptedException e) {
@@ -155,11 +155,11 @@ public class ExternalPlanner extends AbstractLogCancellable implements Planner {
                 this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
             }
         } catch (IOException e) {
-            setKillActiveProcess(false);
+            setShouldCancel(false);
             plannerProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain or problem, cannot plan.", e);
         }
-        setKillActiveProcess(false);
+        setShouldCancel(false);
         plannerProcessProperty.setValue(null);
         return getCurrentPlan();
     }
