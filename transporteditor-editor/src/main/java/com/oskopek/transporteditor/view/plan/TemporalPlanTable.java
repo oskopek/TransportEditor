@@ -19,19 +19,41 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Filterable {@link TableView} of {@link TemporalPlanAction}s with editable start times, used for visualizing
+ * {@link com.oskopek.transporteditor.model.plan.TemporalPlan}s.
+ */
 public final class TemporalPlanTable {
 
     private static final transient Logger logger = LoggerFactory.getLogger(TemporalPlanTable.class);
 
+    /**
+     * Empty constructor.
+     */
     private TemporalPlanTable() {
         // intentionally empty
     }
 
+    /**
+     * Defines the sorting order of the tables actions.
+     *
+     * @param actionList the action list to sort.
+     * @return an observable sorted list transformed from the input
+     */
     private static ObservableList<TemporalPlanAction> sort(List<TemporalPlanAction> actionList) {
         return new ObservableListWrapper<>(Stream.ofAll(actionList).sortBy(TemporalPlanAction::getEndTimestamp)
                 .sortBy(TemporalPlanAction::getStartTimestamp).toJavaList());
     }
 
+    /**
+     * Build the filtered and partially editable table. Calls the updatePlan callback when a new plan is created and
+     * doesn't expect to be disposed afterwards, reorders itself after changes to start times. Uses internal validation
+     * for correct time inputs.
+     *
+     * @param actions the temporal actions to display
+     * @param updatePlan the plan update callback
+     * @return the {@link TableFilter} controlsfx widget with a backing table
+     */
     public static TableFilter<TemporalPlanAction> build(Collection<TemporalPlanAction> actions,
             Consumer<Collection<TemporalPlanAction>> updatePlan) {
         List<TemporalPlanAction> actionList = new ArrayList<>(actions);

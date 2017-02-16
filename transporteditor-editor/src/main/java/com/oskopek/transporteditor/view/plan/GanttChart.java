@@ -7,6 +7,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,16 +21,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A horizontal Gantt chart extension of {@link XYChart} with discrete time steps and auto-layout.
+ */
 public class GanttChart extends XYChart<Number, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final int BLOCK_HEIGHT;
 
+    /**
+     * Default constructor with 10 blockHeight.
+     *
+     * @param xLabel the x axis label
+     * @param yLabel the y axis label
+     */
     public GanttChart(String xLabel, String yLabel) {
         this(xLabel, yLabel, 10);
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param xLabel the x axis label
+     * @param yLabel the y axis label
+     * @param blockHeight the height of blocks
+     */
     public GanttChart(String xLabel, String yLabel, int blockHeight) {
         super(new NumberAxis(), new CategoryAxis());
         this.BLOCK_HEIGHT = blockHeight;
@@ -82,7 +99,6 @@ public class GanttChart extends XYChart<Number, String> {
         if (yAxis.isAutoRanging()) {
             yData = new ArrayList<>();
         }
-
         for (Series<Number, String> series : getData()) {
             for (Data<Number, String> data : series.getData()) {
                 if (xData != null) {
@@ -94,7 +110,6 @@ public class GanttChart extends XYChart<Number, String> {
                 }
             }
         }
-
         if (xData != null) {
             xAxis.invalidateRange(xData);
         }
@@ -152,44 +167,92 @@ public class GanttChart extends XYChart<Number, String> {
         }
     }
 
-    private Node createBlock(final Data<Number, String> item) {
+    /**
+     * Create the actual displayable {@link Node} for a given data item.
+     *
+     * @param item the item to display
+     * @return the node that will be displayed
+     */
+    private static Node createBlock(final Data<Number, String> item) {
         if (item.getNode() == null) {
             Pane block = new StackPane();
             block.setBackground(new Background(
                     new BackgroundFill(((ExtraValue) item.getExtraValue()).getColor(), CornerRadii.EMPTY,
                             Insets.EMPTY)));
+            String tooltipText = ((ExtraValue) item.getExtraValue()).getTooltipText();
+            if (tooltipText != null && !tooltipText.isEmpty()) {
+                Tooltip.install(block, new Tooltip(tooltipText));
+            }
             item.setNode(block);
         }
         return item.getNode();
     }
 
+    /**
+     * Data object to be displayed in the chart.
+     */
     protected static class ExtraValue {
 
         private final Color color;
         private final Number from;
         private final Number to;
+        private final String tooltipText;
 
-        public ExtraValue(Color color, Number from, Number to) {
+        /**
+         * Default constructor.
+         *
+         * @param color the color
+         * @param from the from time
+         * @param to the to time
+         * @param tooltipText the tooltipText
+         */
+        protected ExtraValue(Color color, Number from, Number to, String tooltipText) {
             this.color = color;
             this.from = from;
             this.to = to;
+            this.tooltipText = tooltipText;
         }
 
+        /**
+         * Get the color.
+         *
+         * @return the color
+         */
         public Color getColor() {
             return color;
         }
 
+        /**
+         * Get the from time.
+         *
+         * @return the from time
+         */
         public Number getFrom() {
             return from;
         }
 
+        /**
+         * Get the to time.
+         *
+         * @return the to time
+         */
         public Number getTo() {
             return to;
         }
 
+        /**
+         * Get the action.
+         *
+         * @return the action
+         */
+        public String getTooltipText() {
+            return tooltipText;
+        }
+
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getColor()).append(getFrom()).append(getTo()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(getColor()).append(getFrom()).append(getTo())
+                    .append(tooltipText).toHashCode();
         }
 
         @Override
@@ -202,12 +265,13 @@ public class GanttChart extends XYChart<Number, String> {
             }
             ExtraValue that = (ExtraValue) o;
             return new EqualsBuilder().append(getColor(), that.getColor()).append(getFrom(), that.getFrom())
-                    .append(getTo(), that.getTo()).isEquals();
+                    .append(getTo(), that.getTo()).append(getTooltipText(), that.getTooltipText()).isEquals();
         }
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this).append("color", color).append("from", from).append("to", to).toString();
+            return new ToStringBuilder(this).append("color", color).append("from", from).append("to", to)
+                    .append("tooltipText", tooltipText).toString();
         }
     }
 }

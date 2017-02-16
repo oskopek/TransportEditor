@@ -40,10 +40,10 @@ public class SequentialPlanIO implements DataIO<Plan> {
     }
 
     /**
-     * Util method for serializing an action to a VAL-format plan line. Does not handle time.
+     * Util method for serializing an action to a VAL-format plan line. Does not handle time or capacities.
      *
      * @param action the action to serialize
-     * @return a string builder containing the serialized action (without a closing parenthesis).
+     * @return a string builder containing the serialized action (without a closing parenthesis)
      */
     static StringBuilder serializeActionSimple(Action action) {
         StringBuilder str = new StringBuilder();
@@ -62,6 +62,17 @@ public class SequentialPlanIO implements DataIO<Plan> {
             throw new IllegalArgumentException("Not recognized action: " + action);
         }
         return str;
+    }
+
+    /**
+     * Util method for serializing an action to a VAL-like format plan line. Does not handle time or capacities.
+     * Is only <strong>informative</strong>.
+     *
+     * @param action the action to serialize
+     * @return a string containing the approximately serialized action
+     */
+    public static String toApproximateValFormat(Action action) {
+        return serializeActionSimple(action).append(')').toString();
     }
 
     /**

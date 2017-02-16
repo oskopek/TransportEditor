@@ -20,7 +20,7 @@ import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
 import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
-import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
+import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
@@ -296,9 +296,9 @@ public class RightPaneController extends AbstractController {
                     actionTableFilter.getTableView().getSelectionModel().select(selectedRow);
                 }
 
-                lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(c.getList()));
+                lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(c.getList()));
                 actionTableFilter.getFilteredList().addListener(lastChangeListener);
-                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()));
+                ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(actionTableFilter.getFilteredList()));
 
             }
         });

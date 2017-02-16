@@ -6,10 +6,18 @@ import org.controlsfx.control.PopOver;
 
 import java.util.Map;
 
+/**
+ * Popup for displaying in-graph action object property values.
+ */
 public class ActionObjectDetailPopup extends PopOver {
 
     private final Map<String, String> info;
 
+    /**
+     * Default constructor.
+     *
+     * @param info the info to display (name -> value map)
+     */
     public ActionObjectDetailPopup(Map<String, String> info) {
         this.info = info;
         regenerateBox();
@@ -17,6 +25,9 @@ public class ActionObjectDetailPopup extends PopOver {
         setArrowLocation(ArrowLocation.BOTTOM_CENTER);
     }
 
+    /**
+     * Regenerate the actual content node.
+     */
     private void regenerateBox() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(5d);
@@ -47,12 +58,25 @@ public class ActionObjectDetailPopup extends PopOver {
         setContentNode(gridPane);
     }
 
+    /**
+     * Update the backing information and regenerate the popup (not necessarily shown after regenerated).
+     *
+     * @param key the key to add
+     * @param val the value to add
+     * @return this
+     */
     public ActionObjectDetailPopup putInfo(String key, String val) {
         info.put(key, val);
         regenerateBox();
         return this;
     }
 
+    /**
+     * Update the backing information and regenerate the popup (not necessarily shown after regenerated).
+     *
+     * @param map the map tu put all entries from
+     * @return this
+     */
     public ActionObjectDetailPopup putAllInfo(Map<String, String> map) {
         info.putAll(map);
         regenerateBox();
