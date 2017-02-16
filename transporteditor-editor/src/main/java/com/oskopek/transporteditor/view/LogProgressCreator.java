@@ -41,6 +41,11 @@ public class LogProgressCreator {
     /**
      * Create the dialog for showing log messages and progress.
      *
+     * @param logStreamable the streamable to get logs from
+     * @param successfullyFinished true iff we finished and the result was a success
+     * @param cancelAvailable true if cancelling is a possibility (should be false after end of process)
+     * @param inProgress true iff we process is in progress
+     * @param cancellator the callback to run when we want to cancel the running process
      * @return true iff the process completed successfully
      */
     public boolean createLogProgressDialog(LogStreamable logStreamable, ObservableValue<Boolean> successfullyFinished,

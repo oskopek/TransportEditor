@@ -39,7 +39,7 @@ class TransportEditorApplicationStarter {
     /**
      * Initializes the root layout.
      *
-     * @param primaryStage the primaryStage delegated from the {@link javafx.application.Application} that calls us
+     * @param primaryStage the primaryStage delegated from the {@link TransportEditorApplication} that calls us
      */
     private void initRootLayout(@Observes @StartupStage Stage primaryStage) {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();

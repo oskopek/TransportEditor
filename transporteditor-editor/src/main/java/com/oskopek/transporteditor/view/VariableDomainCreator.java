@@ -17,7 +17,8 @@ import java.io.InputStream;
 import java.util.ResourceBundle;
 
 /**
- * Dialog for entering a String. Creates a DialogPane encapsulated in it's controller.
+ * Dialog for creating a {@link VariableDomain}. Creates a DialogPane, shows it and waits.
+ * Uses {@link com.oskopek.transporteditor.persistence.VariableDomainBuilder} to back itself.
  */
 @Singleton
 public class VariableDomainCreator {
@@ -36,7 +37,7 @@ public class VariableDomainCreator {
     /**
      * Create the dialog for creating a domain.
      *
-     * @return the variable domain created from the user's settings
+     * @return the variable domain created from the user's choices
      */
     public VariableDomain createDomainInDialog() {
         FXMLLoader fxmlLoader = this.fxmlLoader.get();

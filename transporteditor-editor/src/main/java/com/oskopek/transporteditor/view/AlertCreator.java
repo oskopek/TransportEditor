@@ -45,6 +45,7 @@ public final class AlertCreator {
      *
      * @param alertType the type of the alert
      * @param message the message to display
+     * @param centerFunction the function to center the created alert window
      * @param buttonTypes the buttons to show
      * @return true iff the result is accepted via {@link #isAffirmative(ButtonType)}
      */
@@ -63,6 +64,7 @@ public final class AlertCreator {
      *
      * @param alertType the type of the alert
      * @param message the message to display
+     * @param centerFunction the function to center the created alert window
      * @param buttonTypes the buttons to show
      * @return a completable future for appending tasks to be run after the alert is closed
      * @see Alert
@@ -80,6 +82,7 @@ public final class AlertCreator {
      *
      * @param alertType the type of the alert
      * @param message the message to display
+     * @param centerFunction the function to center the created alert window
      * @param buttonTypes the buttons to show
      * @see Alert
      */
@@ -93,6 +96,7 @@ public final class AlertCreator {
      * Throws IllegalStateException throws a wrapper exception around {@code e} in the javafx thread
      *
      * @param messages the message to show in the alert
+     * @param centerFunction the function to center the created alert window
      * @param e the exception to throw
      */
     public static void handleLoadLayoutError(ResourceBundle messages, Consumer<Alert> centerFunction, IOException e) {
