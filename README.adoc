@@ -1,4 +1,4 @@
-= Bachelor thesis
+= TransportEditor
 
 image:https://gitlab.com/oskopek/TransportEditor/badges/master/build.svg["GitLab Build Status", link="https://gitlab.com/oskopek/TransportEditor/commits/master"]
 image:https://gitlab.com/oskopek/TransportEditor/badges/master/coverage.svg["GitLab Coverage Report", link="https://gitlab.com/oskopek/TransportEditor/commits/master"]
@@ -8,11 +8,8 @@ My Bachelor thesis and individual software project, TransportEditor.
 
 TransportEditor aims to be a problem editor and plan visualizer for the Transport domain from the IPC 2008. The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch.
 
-////
-// TODO: Screenshot
 === Screenshot
-image:docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
-////
+image:transporteditor-editor/docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
 
 === Getting help
 

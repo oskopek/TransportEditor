@@ -12,11 +12,6 @@ Bachelor thesis and individual software project, TransportEditor.
 
 TransportEditor aims to be a problem editor and plan visualizer for the Transport domain from the IPC 2008. The goal is to create an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch.
 
-////
-=== Screenshot
-image:docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
-////
-
 == Getting help
 
 *For users looking for help*: a manual describing all possible features of TransportEditor is available in the app itself:
