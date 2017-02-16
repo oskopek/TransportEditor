@@ -9,6 +9,9 @@ public class DefaultActionObject implements ActionObject {
     private final String name;
 
     public DefaultActionObject(String name) {
+        if (name == null || !name.equals(name.toLowerCase())) {
+            throw new IllegalArgumentException("Name of action objects has to be lower case and non null.");
+        }
         this.name = name;
     }
 

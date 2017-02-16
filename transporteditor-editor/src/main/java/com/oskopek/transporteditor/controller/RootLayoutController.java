@@ -159,6 +159,7 @@ public class RootLayoutController extends AbstractController {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
         boolean overwritten = planningSessionFileHandler.newObject(new DefaultPlanningSession(), io, io);
         if (!overwritten) {
+            logger.debug("Not overwritten, returning");
             return;
         }
         eventBus.post(new GraphUpdatedEvent());
@@ -169,8 +170,8 @@ public class RootLayoutController extends AbstractController {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
         boolean overwritten = planningSessionFileHandler.loadWithDefaultFileChooser(
                 messages.getString("load.planningSession"), io, io);
-
         if (!overwritten) {
+            logger.debug("Not overwritten, returning");
             return;
         }
 
@@ -179,6 +180,7 @@ public class RootLayoutController extends AbstractController {
             Domain domain = session.getDomain();
             if (domain != null) {
                 domainFileHandler.setObject(domain);
+                domainFileHandler.setIO(new VariableDomainIO());
                 session.domainProperty().bindBidirectional(domainFileHandler.objectProperty());
                 Problem problem = session.getProblem();
                 if (problem != null) {
@@ -272,11 +274,20 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new domain, because no planning session is loaded.");
         }
         VariableDomain domain = variableDomainCreator.createDomainInDialog();
-        if (domain != null) {
-            VariableDomainIO guesser = new VariableDomainIO();
-            domainFileHandler.newObject(domain, guesser, guesser);
-            application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
+        if (domain == null) {
+            logger.debug("Not overwritten, returning");
+            return;
         }
+
+        VariableDomainIO guesser = new VariableDomainIO();
+
+        boolean overwritten = domainFileHandler.newObject(domain, guesser, guesser);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
+        application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
 
@@ -286,7 +297,13 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot load domain, because no planning session is loaded.");
         }
 
-        domainFileHandler.loadWithDefaultFileChooser(messages.getString("load.domain"), domainGuesser, domainGuesser);
+        boolean overwritten = domainFileHandler
+                .loadWithDefaultFileChooser(messages.getString("load.domain"), domainGuesser, domainGuesser);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
         application.getPlanningSession().domainProperty().bindBidirectional(domainFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -312,12 +329,22 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getDomain() == null) {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
-        DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        Domain domain = application.getPlanningSession().getDomain();
+        DefaultProblemIO io = new DefaultProblemIO(domain);
         RoadGraph graph = new RoadGraph("graph");
-        graph.addLocation(new Location("Loc0", 0, 0));
-        problemFileHandler.newObject(
-                new DefaultProblem("problem" + new Date().toString(), graph, new HashMap<>(),
-                        new HashMap<>()), io, io);
+        Location location = new Location("loc0", 0, 0, null);
+        if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+            location = location.updateHasPetrolStation(false);
+        }
+        graph.addLocation(location);
+
+        boolean overwritten = problemFileHandler.newObject(new DefaultProblem("problem" + new Date().getTime(),
+                graph, new HashMap<>(), new HashMap<>()), io, io);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
         application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -328,7 +355,14 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot load problem, because no domain is loaded.");
         }
         DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
-        problemFileHandler.loadWithDefaultFileChooser(messages.getString("load.problem"), io, io);
+
+        boolean overwritten = problemFileHandler.loadWithDefaultFileChooser(
+                messages.getString("load.problem"), io, io);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
         application.getPlanningSession().problemProperty().bindBidirectional(problemFileHandler.objectProperty());
         eventBus.post(new GraphUpdatedEvent());
     }
@@ -356,7 +390,13 @@ public class RootLayoutController extends AbstractController {
         }
         SequentialPlanIO io = new SequentialPlanIO(application.getPlanningSession().getDomain(),
                 application.getPlanningSession().getProblem());
-        planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
+
+        boolean overwritten = planFileHandler.newObject(new SequentialPlan(new ArrayList<>()), io, io);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
         application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
@@ -369,7 +409,13 @@ public class RootLayoutController extends AbstractController {
         Domain domain = application.getPlanningSession().getDomain();
         Problem problem = application.getPlanningSession().getProblem();
         DataIO<Plan> io = createCorrectPlanIO(domain, problem);
-        planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
+
+        boolean overwritten = planFileHandler.loadWithDefaultFileChooser(messages.getString("load.plan"), io, io);
+        if (!overwritten) {
+            logger.debug("Not overwritten, returning");
+            return;
+        }
+
         application.getPlanningSession().planProperty().bindBidirectional(planFileHandler.objectProperty());
         eventBus.post(new PlanningFinishedEvent());
     }
@@ -404,8 +450,8 @@ public class RootLayoutController extends AbstractController {
         webView.setContextMenuEnabled(false);
         String resourceHtml = readResourceToString(messages.getString(resourceName));
         if (resourceHtml == null) {
-            AlertCreator.showAlert(Alert.AlertType.WARNING,
-                    messages.getString(errorResourceName));
+            AlertCreator.showAlert(Alert.AlertType.WARNING, messages.getString(errorResourceName),
+                    a -> application.centerInPrimaryStage(a, -200, -50));
             return;
         }
 

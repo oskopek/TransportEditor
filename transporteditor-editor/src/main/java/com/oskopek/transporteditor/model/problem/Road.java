@@ -6,4 +6,6 @@ public interface Road extends ActionObject {
 
     ActionCost getLength();
 
+    Road updateLength(ActionCost length);
+
 }

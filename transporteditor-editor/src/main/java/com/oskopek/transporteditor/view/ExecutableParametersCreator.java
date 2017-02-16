@@ -31,6 +31,10 @@ public class ExecutableParametersCreator {
     @Inject
     private ResourceBundle messages;
 
+    @Inject
+    @Named("mainApp")
+    private TransportEditorApplication application;
+
     /**
      * Create the dialog for creating a executable with parameters.
      *
@@ -44,7 +48,8 @@ public class ExecutableParametersCreator {
         try (InputStream is = getClass().getResourceAsStream("ExecutableParametersCreatorPane.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
-            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
+            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(),
+                    a -> application.centerInPrimaryStage(a, -200, -50), e);
         }
         dialogPane.getStylesheets().add(getClass().getResource("validation.css").toExternalForm());
         ExecutableParametersController executableParametersController = fxmlLoader.getController();
@@ -76,6 +81,7 @@ public class ExecutableParametersCreator {
         }
 
         stage.setTitle("TransportEditor");
+        application.centerInPrimaryStage(stage, -200, -250);
         stage.showAndWait();
         return executableParametersController.getExecutable();
     }

@@ -25,6 +25,10 @@ public class SaveDiscardDialogPaneCreator {
     @Named("fxmlloader")
     private Instance<FXMLLoader> fxmlLoader;
 
+    @Inject
+    @Named("mainApp")
+    private TransportEditorApplication application;
+
     /**
      * Create the dialog for entering a String.
      *
@@ -37,7 +41,8 @@ public class SaveDiscardDialogPaneCreator {
         try (InputStream is = getClass().getResourceAsStream("SaveDiscardDialogPane.fxml")) {
             dialogPane = fxmlLoader.load(is);
         } catch (IOException e) {
-            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(), e);
+            AlertCreator.handleLoadLayoutError(fxmlLoader.getResources(),
+                    a -> application.centerInPrimaryStage(a, -200, -50), e);
         }
         dialogPane.setHeaderText(prompt);
         SaveDiscardController saveDiscardController = fxmlLoader.getController();
@@ -45,6 +50,7 @@ public class SaveDiscardDialogPaneCreator {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setDialogPane(dialogPane);
         saveDiscardController.setDialog(dialog);
+        application.centerInPrimaryStage(dialog, -200, -250);
         dialog.setTitle("TransportEditor");
         return saveDiscardController.getDialog().showAndWait();
     }

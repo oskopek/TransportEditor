@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class TemporalPlan implements Plan {
 
-    private final IntervalTree<TemporalPlanAction> actionIntervalTree = new IntervalTree<>();
+    private final IntervalTree<TemporalPlanAction> actionIntervalTree = IntervalTree.empty();
 
     public TemporalPlan(Collection<TemporalPlanAction> planActions) {
         planActions.forEach(

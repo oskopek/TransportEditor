@@ -40,6 +40,7 @@ public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer
             alert.setTitle(messages.getString("edit"));
             alert.getDialogPane().setContent(pane);
             alert.getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CANCEL);
+            application.centerInPrimaryStage(alert, -100, -150);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && ButtonType.APPLY.equals(result.get())) {
                 builder.update();

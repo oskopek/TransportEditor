@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Location;
 import javafx.collections.FXCollections;
@@ -18,7 +17,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
     private final Map<String, Color> colorMap;
     private final Color defaultColor = Color.BLACK;
 
-    private TemporalPlanGanttChart(Collection<TemporalPlanAction> actions) {
+    private TemporalPlanGanttChart(Collection<? extends TemporalPlanAction> actions) {
         super("Time", "Action Object");
         this.temporalPlanActionSet = Collections.unmodifiableSet(new HashSet<>(actions));
 
@@ -27,10 +26,13 @@ public final class TemporalPlanGanttChart extends GanttChart {
         colorMap = javaslang.collection.HashMap.of("drive", Color.BLUE).put("pick-up", Color.GREEN).put("refuel",
                 Color.VIOLET).put("drop", Color.RED).toJavaMap();
         setData(FXCollections.observableList(computeData()));
+        double minWidth = temporalPlanActionSet.stream().map(TemporalPlanAction::getEndTimestamp)
+                .max(Integer::compareTo).map(Double::valueOf).map(d -> d * 10).orElse(0d);
+        setMinWidth(Math.max(minWidth, 300d));
     }
 
-    public static TemporalPlanGanttChart build(Plan plan) {
-        return new TemporalPlanGanttChart(plan.getTemporalPlanActions());
+    public static TemporalPlanGanttChart build(Collection<? extends TemporalPlanAction> actions) {
+        return new TemporalPlanGanttChart(actions);
     }
 
     private List<Series<Number, String>> computeData() {
@@ -43,6 +45,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
 
         return objs.map((actionObject, temporalPlanActions) -> {
             XYChart.Series<Number, String> series = new Series<>();
+            series.setName(actionObject.getName());
             temporalPlanActions.forEach(t -> {
                 Color color = colorMap.get(t.getAction().getName());
                 if (color == null) {
@@ -52,7 +55,7 @@ public final class TemporalPlanGanttChart extends GanttChart {
                         new ExtraValue(color, t.getStartTimestamp(), t.getEndTimestamp())));
             });
             return Tuple.of(actionObject, series);
-        }).values().toJavaList();
+        }).values().sortBy(Series::getName).reverseIterator().toJavaList();
     }
 
 }

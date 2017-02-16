@@ -18,7 +18,12 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     }
 
     public static DefaultRoad build(Location from, Location to, ActionCost length) {
-        return new DefaultRoad(from + "->" + to, length);
+        return new DefaultRoad(from.getName() + "->" + to.getName(), length);
+    }
+
+    @Override
+    public DefaultRoad updateLength(ActionCost length) {
+        return new DefaultRoad(getName(), length);
     }
 
     @Override

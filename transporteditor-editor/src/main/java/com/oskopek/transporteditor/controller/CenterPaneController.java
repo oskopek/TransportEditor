@@ -219,12 +219,15 @@ public class CenterPaneController extends AbstractController {
                     return null;
                 }
             };
-            Stage progressDialog = ProgressCreator.showProgress(springLayoutEarlyTermination::progressProperty,
+            Stage progressDialog = ProgressCreator.buildProgress(springLayoutEarlyTermination::progressProperty,
                     messages.getString("progress.pleaseWait"));
+            application.centerInPrimaryStage(progressDialog, -50, -50);
+            progressDialog.show();
             springLayoutEarlyTermination.setOnFailed(event -> {
                 progressDialog.close();
                 AlertCreator.showAlert(Alert.AlertType.ERROR,
-                        messages.getString("root.failedToLayoutGraph") + ":\n\n" + event.getSource().getException());
+                        messages.getString("root.failedToLayoutGraph") + ":\n\n" + event.getSource().getException(),
+                        a -> application.centerInPrimaryStage(a, -200, -50));
             });
             springLayoutEarlyTermination.setOnSucceeded(event -> {
                 progressDialog.close();

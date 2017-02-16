@@ -3,16 +3,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="300" prefWidth="400" xmlns="http://javafx.com/javafx/8.0.112"
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="400" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.112"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
-        <TabPane fx:id="planTabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab fx:id="linearPlanTab" text="Linear">
-                <ScrollPane fx:id="linearPlanTabScrollPane"/>
+        <TabPane fx:id="planTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                 tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="temporalPlanTab" text="Temporal">
+                <ScrollPane fx:id="temporalPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
+            </Tab>
+            <Tab fx:id="sequentialPlanTab" text="Sequential">
+                <ScrollPane fx:id="sequentialPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
             </Tab>
             <Tab fx:id="ganttPlanTab" text="Gantt">
-                <ScrollPane fx:id="ganttPlanTabScrollPane"/>
+                <ScrollPane fx:id="ganttPlanTabScrollPane" fitToHeight="true" fitToWidth="true"/>
             </Tab>
         </TabPane>
     </center>
@@ -20,39 +24,43 @@
         <GridPane prefHeight="30.0" prefWidth="Infinity" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="planButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handlePlan"
-                        text="%plan" HBox.hgrow="ALWAYS" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        text="%plan" GridPane.columnIndex="0" GridPane.rowIndex="0" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="15.0"/>
                     </font>
                 </Button>
                 <Button fx:id="validateButton" disable="true" maxWidth="1.7976931348623157E308"
-                        onAction="#handleValidate" text="%validate" HBox.hgrow="ALWAYS" GridPane.columnIndex="2"
-                        GridPane.rowIndex="0">
+                        onAction="#handleValidate" text="%validate" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                        HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="15.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="redrawButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handleRedraw"
+                        text="%redraw" GridPane.columnIndex="4" GridPane.rowIndex="0" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font size="15.0"/>
                     </font>
                 </Button>
                 <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
                       GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <children>
                         <Button fx:id="addLocationButton" disable="true" maxWidth="1.7976931348623157E308"
-                                onAction="#handleAddLocation"
-                                text="%add.location" HBox.hgrow="ALWAYS"/>
+                                onAction="#handleAddLocation" text="%add.location" HBox.hgrow="ALWAYS"/>
                         <Button fx:id="addRoadButton" disable="true" maxWidth="1.7976931348623157E308"
                                 onAction="#handleAddRoad" text="%add.road" HBox.hgrow="ALWAYS"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
-                      GridPane.columnIndex="2" GridPane.rowIndex="2">
+                      GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
                     <children>
                         <Button fx:id="addVehicleButton" disable="true" maxWidth="1.7976931348623157E308"
-                                onAction="#handleAddVehicle"
-                                text="%add.vehicle" HBox.hgrow="ALWAYS"/>
+                                onAction="#handleAddVehicle" text="%add.vehicle" HBox.hgrow="ALWAYS"/>
                         <Button fx:id="addPackageButton" disable="true" maxWidth="1.7976931348623157E308"
                                 onAction="#handleAddPackage" text="%add.package" HBox.hgrow="ALWAYS"/>
                         <Button fx:id="lockButton" disable="true" maxWidth="1.7976931348623157E308"
-                                onAction="#handleLockToggle" text="%lock" HBox.hgrow="ALWAYS"
-                                style="-fx-text-fill: red;" />
+                                onAction="#handleLockToggle" style="-fx-text-fill: red;" text="%lock"
+                                HBox.hgrow="ALWAYS"/>
                     </children>
                 </HBox>
             </children>
@@ -62,9 +70,11 @@
                 <RowConstraints minHeight="25.0" prefHeight="25.0"/>
             </rowConstraints>
             <columnConstraints>
-                <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="500.0"/>
                 <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
-                <ColumnConstraints minWidth="200.0" prefWidth="300.0"/>
+                <ColumnConstraints minWidth="150.0" prefWidth="500.0"/>
+                <ColumnConstraints minWidth="5.0" prefWidth="5.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="500.0"/>
             </columnConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

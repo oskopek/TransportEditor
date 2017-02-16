@@ -314,6 +314,21 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
                 .toHashCode();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RoadGraph)) {
+            return false;
+        }
+        RoadGraph that = (RoadGraph) o;
+        return new EqualsBuilder()
+                .append(getAllLocations().toArray(), that.getAllLocations().toArray())
+                .append(getAllRoads().toArray(), that.getAllRoads().toArray())
+                .isEquals();
+    }
+
     public static final class RoadEdge {
 
         private final Road road;
@@ -365,21 +380,6 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         public String toString() {
             return "RoadEdge{" + "road=" + road + ", from=" + from + ", to=" + to + '}';
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof RoadGraph)) {
-            return false;
-        }
-        RoadGraph that = (RoadGraph) o;
-        return new EqualsBuilder()
-                .append(getAllLocations().toArray(), that.getAllLocations().toArray())
-                .append(getAllRoads().toArray(), that.getAllRoads().toArray())
-                .isEquals();
     }
 
 }

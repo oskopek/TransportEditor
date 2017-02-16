@@ -197,15 +197,12 @@ public class GanttChart extends XYChart<Number, String> {
             if (this == o) {
                 return true;
             }
-
             if (!(o instanceof ExtraValue)) {
                 return false;
             }
-
             ExtraValue that = (ExtraValue) o;
-
-            return new EqualsBuilder().append(getColor(), that.getColor()).append(getFrom(), that.getFrom()).append(
-                    getTo(), that.getTo()).isEquals();
+            return new EqualsBuilder().append(getColor(), that.getColor()).append(getFrom(), that.getFrom())
+                    .append(getTo(), that.getTo()).isEquals();
         }
 
         @Override

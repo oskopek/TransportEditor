@@ -124,6 +124,7 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public CompletionStage<Plan> startPlanningAsync() {
+        setPlan(null);
         return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
             if (plan != null) {
                 boolean isValid;
@@ -134,6 +135,8 @@ public class DefaultPlanningSession implements PlanningSession {
                 }
                 if (isValid) {
                     setPlan(plan);
+                } else {
+                    throw new IllegalStateException("Resulting plan was invalid.");
                 }
             }
             return CompletableFuture.completedFuture(plan);

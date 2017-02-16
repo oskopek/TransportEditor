@@ -5,8 +5,12 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
+import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
@@ -14,7 +18,8 @@ import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
-import com.oskopek.transporteditor.view.plan.SequentialPlanList;
+import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
+import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalPlanGanttChart;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -22,12 +27,11 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javaslang.control.Try;
+import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.slf4j.Logger;
@@ -50,16 +54,38 @@ public class RightPaneController extends AbstractController {
     private LogProgressCreator logProgressCreator;
 
     @FXML
-    private ScrollPane linearPlanTabScrollPane;
+    private TabPane planTabPane;
+
+    @FXML
+    private Tab temporalPlanTab;
+
+    @FXML
+    private Tab sequentialPlanTab;
+
+    @FXML
+    private Tab ganttPlanTab;
+
+    @FXML
+    private ScrollPane sequentialPlanTabScrollPane;
+
+    @FXML
+    private ScrollPane temporalPlanTabScrollPane;
 
     @FXML
     private ScrollPane ganttPlanTabScrollPane;
+
+    private TableFilter<TemporalPlanAction> actionTableFilter;
+
+    private ListChangeListener<? super TemporalPlanAction> lastChangeListener;
 
     @FXML
     private Button planButton;
 
     @FXML
     private Button validateButton;
+
+    @FXML
+    private Button redrawButton;
 
     @FXML
     private Button addLocationButton;
@@ -121,6 +147,19 @@ public class RightPaneController extends AbstractController {
         centerPaneController.lockedProperty().addListener(e -> disableAddLocationButton.invalidate());
         addLocationButton.disableProperty().bind(disableAddLocationButton);
 
+        // Disable redraw button condition
+        InvalidableOrBooleanBinding disableRedrawButton = new InvalidableOrBooleanBinding(
+                application.planningSessionProperty().isNull())
+                .or(new IsNullBinding(PlanningSession::domainProperty))
+                .or(new IsNullBinding(PlanningSession::problemProperty))
+                .or(new BooleanBinding() {
+                    @Override
+                    protected boolean computeValue() {
+                        return centerPaneController.isLocked();
+                    }
+                });
+        redrawButton.disableProperty().bind(disableRedrawButton);
+
         // Disable graph changes (addVehicle) button condition
         InvalidableOrBooleanBinding disableAddVehicleButton = new InvalidableOrBooleanBinding(
                 application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
@@ -134,7 +173,6 @@ public class RightPaneController extends AbstractController {
                         return centerPaneController.isLocked();
                     }
                 });
-        centerPaneController.lockedProperty().addListener(e -> disableAddVehicleButton.invalidate());
         addVehicleButton.disableProperty().bind(disableAddVehicleButton);
 
         // Disable graph changes (addRoad and addPackage) button condition
@@ -152,6 +190,13 @@ public class RightPaneController extends AbstractController {
                 });
         addRoadButton.disableProperty().bind(disableAddRoadButton);
         addPackageButton.disableProperty().bind(disableAddRoadButton);
+
+        centerPaneController.lockedProperty().addListener(e -> {
+            disableAddLocationButton.invalidate();
+            disableAddVehicleButton.invalidate();
+            disableAddRoadButton.invalidate();
+            disableRedrawButton.invalidate();
+        });
 
         // Update disable AddRoad and AddVehicle button
         InvalidationListener graphSelectionChangedListener = e -> {
@@ -172,6 +217,7 @@ public class RightPaneController extends AbstractController {
         InvalidationListener invalidatePlanButtonBindingListener = s -> {
             disablePlanButton.invalidate();
             disableValidateButton.invalidate();
+            disableRedrawButton.invalidate();
             disableLockButton.invalidate();
             disableAddVehicleButton.invalidate();
             disableAddRoadButton.invalidate();
@@ -190,15 +236,15 @@ public class RightPaneController extends AbstractController {
 
     @Subscribe
     public void redrawPlans(GraphUpdatedEvent event) {
-        redrawPlansInternal();
+        redrawPlansInternal(null);
     }
 
     @Subscribe
     public void redrawPlans(PlanningFinishedEvent event) {
-        redrawPlansInternal();
+        redrawPlansInternal(event.getSelectRow());
     }
 
-    private void redrawPlansInternal() {
+    private void redrawPlansInternal(Integer selectedRow) {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
             Plan plan = null;
@@ -208,12 +254,52 @@ public class RightPaneController extends AbstractController {
                 logger.trace("Tried to redraw plans, caught NPE along the way.", e);
             }
 
+            if (actionTableFilter != null) {
+                actionTableFilter.getFilteredList().removeListener(lastChangeListener);
+                lastChangeListener = null;
+                actionTableFilter = null;
+            }
+
             if (plan == null) {
-                linearPlanTabScrollPane.setContent(null);
+                temporalPlanTabScrollPane.setContent(null);
                 ganttPlanTabScrollPane.setContent(null);
+                sequentialPlanTabScrollPane.setContent(null);
+
+                sequentialPlanTab.setDisable(false);
+                temporalPlanTab.setDisable(false);
+                planTabPane.setDisable(true);
             } else {
-                linearPlanTabScrollPane.setContent(SequentialPlanList.build(plan.toTemporalPlan()));
-                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(plan.toTemporalPlan()));
+                planTabPane.setDisable(false);
+                boolean isDomainTemporal = application.getPlanningSession().getDomain().getPddlLabels()
+                        .contains(PddlLabel.Temporal);
+                sequentialPlanTab.setDisable(isDomainTemporal);
+                temporalPlanTab.setDisable(!isDomainTemporal);
+
+                if (isDomainTemporal) {
+                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) -> {
+                        application.getPlanningSession().setPlan(new TemporalPlan(list));
+                    });
+                    temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                    sequentialPlanTabScrollPane.setContent(null);
+                    planTabPane.getSelectionModel().select(temporalPlanTab);
+                } else {
+                    actionTableFilter = SequentialPlanTable.build(plan.getActions(), (list, index) -> {
+                        application.getPlanningSession().setPlan(new SequentialPlan(list));
+                        eventBus.post(new PlanningFinishedEvent(index));
+                    });
+                    sequentialPlanTabScrollPane.setContent(actionTableFilter.getTableView());
+                    temporalPlanTabScrollPane.setContent(null);
+                    planTabPane.getSelectionModel().select(sequentialPlanTab);
+                }
+
+                if (selectedRow != null) {
+                    actionTableFilter.getTableView().getSelectionModel().select(selectedRow);
+                }
+
+                lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(c.getList()));
+                actionTableFilter.getFilteredList().addListener(lastChangeListener);
+                ganttPlanTabScrollPane.setContent(TemporalPlanGanttChart.build(actionTableFilter.getFilteredList()));
+
             }
         });
     }
@@ -232,7 +318,8 @@ public class RightPaneController extends AbstractController {
                 completed.setValue(true);
                 if (plan == null) {
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                            + messages.getString("planner.nullplan"), ButtonType.OK);
+                            + messages.getString("planner.nullplan"),
+                            a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
                 }
             });
         }).thenRunAsync(() -> {
@@ -248,12 +335,12 @@ public class RightPaneController extends AbstractController {
                     Platform.runLater(() -> completed.setValue(true));
                     logger.debug("Planning failed.", throwable);
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                    + throwable.getMessage(), ButtonType.OK);
+                    + throwable.getMessage(), a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
             return null;
         });
         logger.trace("LogProgress begin");
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getPlanner(), successful,
-                completed.not().or(successful.not()), completed.not(), planner::cancel);
+                completed.not(), completed.not(), planner::cancel);
         logger.trace("LogProgress end");
     }
 
@@ -269,19 +356,26 @@ public class RightPaneController extends AbstractController {
             if (isValid) {
                 successful.setValue(true);
                 AlertCreator.showAlert(Alert.AlertType.INFORMATION, messages.getString("validation.valid"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -50, -50), ButtonType.CLOSE);
             } else {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("validation.invalid"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -50, -50), ButtonType.CLOSE);
             }
         })).exceptionally(throwable -> {
             Platform.runLater(() -> completed.setValue(true));
             AlertCreator.showAlert(Alert.AlertType.ERROR,
-                    messages.getString("validation.failed") + ": " + throwable.getMessage(), ButtonType.CLOSE);
+                    messages.getString("validation.failed") + ": " + throwable.getMessage(),
+                    a -> application.centerInPrimaryStage(a, -150, -50), ButtonType.CLOSE);
             return null;
         }).toCompletableFuture();
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getValidator(), successful,
-                completed.not().or(successful.not()), completed.not(), validator::cancel);
+                completed.not(), completed.not(), validator::cancel);
+    }
+
+    @FXML
+    private void handleRedraw() {
+        logger.debug("Starting redraw...");
+        eventBus.post(new GraphUpdatedEvent());
     }
 
     @FXML
@@ -295,13 +389,18 @@ public class RightPaneController extends AbstractController {
 
         if (graph == null) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
-                    ButtonType.CLOSE);
+                    a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
         } else {
             String name = "loc" + graph.getNodeCount();
             while (graph.getLocation(name) != null) {
                 name += "-1";
             }
-            Node node = graph.addLocation(new Location(name));
+            Node node;
+            if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+                node = graph.addLocation(new Location(name, 0, 0, false));
+            } else {
+                node = graph.addLocation(new Location(name, 0, 0, null));
+            }
             centerPaneController.getGraphSelectionHandler().selectOnly(node);
         }
     }
@@ -317,7 +416,7 @@ public class RightPaneController extends AbstractController {
 
         if (graph == null) {
             AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.nograph"),
-                    ButtonType.CLOSE);
+                    a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
         } else {
             GraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
             if (!handler.doesSelectionDeterminePossibleNewRoad()) {
@@ -326,7 +425,7 @@ public class RightPaneController extends AbstractController {
             }
             if (handler.doesSelectionDetermineExistingRoads()) {
                 AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("add.road.exists"),
-                        ButtonType.CLOSE);
+                        a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.CLOSE);
                 return;
             }
 
@@ -336,7 +435,14 @@ public class RightPaneController extends AbstractController {
             }
             Location from = handler.getSelectedLocationList().get(0);
             Location to = handler.getSelectedLocationList().get(1);
-            Edge edge = graph.addRoad(new DefaultRoad(name, ActionCost.valueOf(1)), from, to);
+
+            Edge edge;
+            if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+                edge = graph.addRoad(new FuelRoad(name, ActionCost.valueOf(1)), from, to);
+            } else {
+                edge = graph.addRoad(new DefaultRoad(name, ActionCost.valueOf(1)), from, to);
+            }
+
             Platform.runLater(() -> {
                 Try.run(() -> Thread.sleep(100)).get(); // TODO: Hack - needs to happen later
                 centerPaneController.getGraphSelectionHandler().selectOnly(edge);
@@ -353,7 +459,15 @@ public class RightPaneController extends AbstractController {
         }
         GraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
         Location at = handler.getSelectedLocationList().get(0);
-        Vehicle vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+
+        Vehicle vehicle;
+        if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), ActionCost.valueOf(0),
+                    ActionCost.valueOf(0), new ArrayList<>());
+        } else {
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+        }
+
         problem = problem.putVehicle(name, vehicle);
         application.getPlanningSession().setProblem(problem);
         centerPaneController.refreshGraphSelectionHandler();

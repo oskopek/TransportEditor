@@ -24,13 +24,14 @@ public final class ProgressCreator {
     }
 
     /**
-     * A util method to display a blocking progress pop-up with the given parameters.
+     * A util method to build a blocking progress pop-up with the given parameters.
+     * <strong>You have to position and show it yourself.</strong>
      *
      * @param progressObservable the observable object that gives us the progress
      * @param message the message to display while waiting
      * @return the stage of the opened dialog with the progress bar
      */
-    public static Stage showProgress(ProgressObservable progressObservable, String message) {
+    public static Stage buildProgress(ProgressObservable progressObservable, String message) {
         Stage dialogStage = new Stage();
         ProgressBar progressBar = new ProgressBar();
 
@@ -51,7 +52,6 @@ public final class ProgressCreator {
         dialogStage.setScene(scene);
         dialogStage.toFront();
         dialogStage.setOnCloseRequest(Event::consume); // prevent closing of the dialog window
-        dialogStage.show();
         return dialogStage;
     }
 }
