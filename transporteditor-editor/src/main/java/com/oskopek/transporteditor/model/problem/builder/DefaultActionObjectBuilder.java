@@ -4,27 +4,40 @@ import com.oskopek.transporteditor.model.problem.DefaultActionObject;
 
 import java.util.function.Consumer;
 
-public class DefaultActionObjectBuilder<T extends DefaultActionObject> implements ActionObjectBuilder<T> {
+/**
+ * Action object builder for {@link DefaultActionObject}s.
+ *
+ * @param <T> the type of the action object
+ */
+public abstract class DefaultActionObjectBuilder<T extends DefaultActionObject> implements ActionObjectBuilder<T> {
 
     private String name;
     private Consumer<? super T> updateFunction;
 
+    /**
+     * Default constructor.
+     */
     public DefaultActionObjectBuilder() {
         // intentionally empty
     }
 
+    /**
+     * Get the name.
+     *
+     * @return the name
+     */
     @FieldLocalization(key = "name", priority = 0, editable = false) // TODO: is non-editable reasonable?
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name.
+     *
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public T build() {
-        return (T) new DefaultActionObject(getName());
     }
 
     @Override
@@ -33,8 +46,8 @@ public class DefaultActionObjectBuilder<T extends DefaultActionObject> implement
     }
 
     @Override
-    public void from(T instance, Consumer<? super T> updateFunction) {
-        this.updateFunction = updateFunction;
+    public void from(T instance, Consumer<? super T> updateCallback) {
+        this.updateFunction = updateCallback;
         from(instance);
     }
 

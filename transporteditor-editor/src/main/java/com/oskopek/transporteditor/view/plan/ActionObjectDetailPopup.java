@@ -16,7 +16,7 @@ public class ActionObjectDetailPopup extends PopOver {
     /**
      * Default constructor.
      *
-     * @param info the info to display (name -> value map)
+     * @param info the info to display ({@code name -> value} map)
      */
     public ActionObjectDetailPopup(Map<String, String> info) {
         this.info = info;
