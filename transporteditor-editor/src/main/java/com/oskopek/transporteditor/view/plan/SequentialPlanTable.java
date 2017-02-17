@@ -75,7 +75,7 @@ public final class SequentialPlanTable {
             BiConsumer<List<Action>, Integer> updatePlan) {
         List<Action> actionList = new ArrayList<>(actions);
         List<TemporalPlanAction> temporalPlanActions
-                = new ArrayList<>(new SequentialPlan(actionList).getTemporalPlanActionsList());
+                = new ArrayList<>(new SequentialPlan(actionList).getTemporalPlanActions());
         TableView<TemporalPlanAction> tableView = new TableView<>(FXCollections.observableList(temporalPlanActions));
         BooleanProperty isFilteredProperty = new SimpleBooleanProperty(false);
 

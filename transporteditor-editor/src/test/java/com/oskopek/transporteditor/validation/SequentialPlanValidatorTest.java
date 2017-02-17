@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.validation;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.SequentialPlanIOIT;
@@ -40,7 +41,7 @@ public class SequentialPlanValidatorTest {
 
     @Test
     public void isValidSimpleException() throws Exception {
-        assertThatThrownBy(() -> validator.isValid(domain, problem, plan.toTemporalPlan()))
+        assertThatThrownBy(() -> validator.isValid(domain, problem, new TemporalPlan(plan.getTemporalPlanActions())))
                 .hasMessageContaining("Cannot validate non-sequential plan");
     }
 

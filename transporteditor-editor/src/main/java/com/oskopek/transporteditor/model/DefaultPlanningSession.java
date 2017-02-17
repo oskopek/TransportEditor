@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -30,6 +31,9 @@ public class DefaultPlanningSession implements PlanningSession {
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
     private final transient IntegerProperty sessionChange = new SimpleIntegerProperty();
 
+    /**
+     * Default constructor.
+     */
     public DefaultPlanningSession() {
         setValidator(new EmptyValidator());
         plannerProperty().addListener(s -> registerChange());
@@ -39,10 +43,18 @@ public class DefaultPlanningSession implements PlanningSession {
         planProperty().addListener(s -> registerChange());
     }
 
+    /**
+     * Register a change made to the session.
+     */
     private void registerChange() {
         sessionChangeProperty().setValue(sessionChangeProperty().get() + 1);
     }
 
+    /**
+     * Session change property. Used for determining if a save as is needed.
+     *
+     * @return the session change property
+     */
     private synchronized IntegerProperty sessionChangeProperty() {
         return sessionChange;
     }
@@ -124,8 +136,12 @@ public class DefaultPlanningSession implements PlanningSession {
 
     @Override
     public CompletionStage<Plan> startPlanningAsync() {
+        Planner planner = getPlanner();
+        if (planner == null) {
+            throw new IllegalStateException("Cannot plan with null planner.");
+        }
         setPlan(null);
-        return getPlanner().startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
+        return planner.startAsync(getDomain(), getProblem()).thenComposeAsync(plan -> {
             if (plan != null) {
                 boolean isValid;
                 try {
@@ -148,16 +164,30 @@ public class DefaultPlanningSession implements PlanningSession {
         return startValidationAsyncInternal(getPlan());
     }
 
+    @Override
     public void addListener(InvalidationListener listener) {
         sessionChangeProperty().addListener(listener);
     }
 
+    @Override
     public void removeListener(InvalidationListener listener) {
         sessionChangeProperty().removeListener(listener);
     }
 
+    /**
+     * Internal util method for starting async validation on the {@link #getValidator()}.
+     *
+     * @param plan the plan to validate
+     * @return a promise of a boolean determining the validity
+     * @see Validator#isValidAsync(Domain, Problem, Plan)
+     * @throws IllegalStateException if validator is null
+     */
     private CompletionStage<Boolean> startValidationAsyncInternal(Plan plan) {
-        return getValidator().isValidAsync(getDomain(), getProblem(), plan);
+        Validator validator = getValidator();
+        if (validator == null) {
+            throw new IllegalStateException("Cannot validate with null validator.");
+        }
+        return validator.isValidAsync(getDomain(), getProblem(), plan);
     }
 
     @Override
@@ -171,15 +201,18 @@ public class DefaultPlanningSession implements PlanningSession {
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof DefaultPlanningSession)) {
             return false;
         }
-
         DefaultPlanningSession session = (DefaultPlanningSession) o;
-
         return new EqualsBuilder().append(getPlanner(), session.getPlanner()).append(getValidator(),
                 session.getValidator()).append(getDomain(), session.getDomain()).append(getProblem(),
                 session.getProblem()).append(getPlan(), session.getPlan()).isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("domain", getDomain()).append("problem", getProblem()).append("plan",
+                getPlan()).append("planner", getPlanner()).append("validator", getValidator()).toString();
     }
 }

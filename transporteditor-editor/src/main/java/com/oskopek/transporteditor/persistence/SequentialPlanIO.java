@@ -26,7 +26,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
 
     private final Problem problem;
     private final Domain domain;
-    private PlanState planState;
+    private SequentialPlanState planState;
 
     /**
      * Default constructor.
