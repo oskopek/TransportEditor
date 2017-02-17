@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * A {@link PlanState} implementation for sequential domains.
+ */
 public class SequentialPlanState implements PlanState {
 
     private final Domain origDomain;
@@ -17,6 +20,11 @@ public class SequentialPlanState implements PlanState {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private Problem problem;
 
+    /**
+     * Default constructor.
+     * @param domain the domain
+     * @param problem the problem
+     */
     public SequentialPlanState(Domain domain, Problem problem) {
         this.origDomain = domain;
         this.origProblem = problem;
@@ -53,6 +61,21 @@ public class SequentialPlanState implements PlanState {
     @Override
     public Vehicle getVehicle(String name) {
         return problem.getVehicle(name);
+    }
+
+    /**
+     * Utility method for getting a vehicle by its name.
+     *
+     * @param name the name of the vehicle to get
+     * @return the vehicle
+     * @throws IllegalArgumentException if a vehicle with that name wasn't found
+     */
+    public Vehicle getVehicleSafe(String name) {
+        Vehicle vehicle = getVehicle(name);
+        if (vehicle == null) {
+            throw new IllegalArgumentException("Could not find vehicle with name \"" + name + "\".");
+        }
+        return vehicle;
     }
 
     @Override
