@@ -4,6 +4,9 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Vehicle;
 
+/**
+ * The fuel-max function. Returns the the maximum possible fuel capacity that the {@link Vehicle} has.
+ */
 public class FuelMax extends DefaultFunction {
 
     @Override
@@ -14,6 +17,12 @@ public class FuelMax extends DefaultFunction {
         return apply((Vehicle) actionObjects[0]);
     }
 
+    /**
+     * Get the maximum fuel capacity of the {@link Vehicle}.
+     *
+     * @param vehicle the vehicle
+     * @return the maximum fuel capacity of the vehicle
+     */
     public ActionCost apply(Vehicle vehicle) {
         if (vehicle == null) {
             throw new IllegalArgumentException("Vehicle cannot be null.");

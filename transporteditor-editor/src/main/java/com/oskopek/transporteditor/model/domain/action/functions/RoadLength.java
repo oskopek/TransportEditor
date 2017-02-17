@@ -4,6 +4,9 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Road;
 
+/**
+ * The road-length function. Returns the the road length of the {@link Road}.
+ */
 public class RoadLength extends DefaultFunction {
 
     @Override
@@ -14,6 +17,12 @@ public class RoadLength extends DefaultFunction {
         return apply((Road) actionObjects[0]);
     }
 
+    /**
+     * Get the length of the {@link Road}.
+     *
+     * @param road the road
+     * @return the length
+     */
     public ActionCost apply(Road road) {
         if (road == null) {
             throw new IllegalArgumentException("Road cannot be null.");

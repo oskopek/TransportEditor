@@ -8,6 +8,9 @@ import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.problem.Locatable;
 import com.oskopek.transporteditor.model.problem.Problem;
 
+/**
+ * Asserts whether the locatable (who) is at the same place as a given locatable (where).
+ */
 public class WhoAtWhat extends DefaultPredicate {
 
     @Override

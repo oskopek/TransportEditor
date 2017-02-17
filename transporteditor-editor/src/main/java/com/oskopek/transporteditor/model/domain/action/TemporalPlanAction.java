@@ -3,6 +3,9 @@ package com.oskopek.transporteditor.model.domain.action;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Wrapper around {@link Action} containg start and end times.
+ */
 public class TemporalPlanAction {
 
     private final Action action;
@@ -10,25 +13,54 @@ public class TemporalPlanAction {
     private final Integer startTimestamp;
     private final Integer endTimestamp;
 
+    /**
+     * Default constructor.
+     *
+     * @param action the action
+     * @param startTimestamp the start time
+     * @param endTimestamp the end time
+     */
     public TemporalPlanAction(Action action, Integer startTimestamp, Integer endTimestamp) {
         this.action = action;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
     }
 
+    /**
+     * Updater method for the start time. Changes the end time appropriately using the action's duration.
+     *
+     * @param startTimestamp the new start time
+     * @return the updated temporal action
+     * @see Action#getDuration()
+     */
     public TemporalPlanAction updateStartTimestampSmart(Integer startTimestamp) {
         return new TemporalPlanAction(getAction(), startTimestamp,
                 startTimestamp + getAction().getDuration().getCost());
     }
 
+    /**
+     * Get the start time.
+     *
+     * @return the start time
+     */
     public Integer getStartTimestamp() {
         return startTimestamp;
     }
 
+    /**
+     * Get the end time.
+     *
+     * @return the end time
+     */
     public Integer getEndTimestamp() {
         return endTimestamp;
     }
 
+    /**
+     * Get the action.
+     *
+     * @return the action
+     */
     public Action getAction() {
         return action;
     }

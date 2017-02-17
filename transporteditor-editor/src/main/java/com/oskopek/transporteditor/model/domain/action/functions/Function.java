@@ -3,6 +3,9 @@ package com.oskopek.transporteditor.model.domain.action.functions;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 
+/**
+ * A PDDL function representation.
+ */
 public interface Function {
 
     /**

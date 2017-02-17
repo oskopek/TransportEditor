@@ -4,6 +4,9 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Package;
 
+/**
+ * The package-size function. Returns the the size that the {@link Package} has.
+ */
 public class PackageSize extends DefaultFunction {
 
     @Override
@@ -14,6 +17,12 @@ public class PackageSize extends DefaultFunction {
         return apply((Package) actionObjects[0]);
     }
 
+    /**
+     * Get the size of the {@link Package}.
+     *
+     * @param aPackage the package
+     * @return the size of the package
+     */
     public ActionCost apply(Package aPackage) {
         if (aPackage == null) {
             throw new IllegalArgumentException("Package cannot be null.");

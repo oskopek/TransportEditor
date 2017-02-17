@@ -3,6 +3,9 @@ package com.oskopek.transporteditor.model.domain.action.predicates;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.problem.Problem;
 
+/**
+ * The road predicate. Determines if the graph contains a given road from where to what.
+ */
 public class IsRoad extends DefaultPredicate {
 
     @Override

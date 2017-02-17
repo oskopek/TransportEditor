@@ -3,8 +3,16 @@ package com.oskopek.transporteditor.model.domain.action.predicates;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.problem.Problem;
 
+/**
+ * Negation predicate. Negates the validity of the internal predicate.
+ */
 public class Not extends PredicateWrapper {
 
+    /**
+     * Default constructor.
+     *
+     * @param internal the internal predicate
+     */
     public Not(Predicate internal) {
         super(internal);
     }

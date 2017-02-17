@@ -5,7 +5,10 @@ import com.oskopek.transporteditor.model.problem.ActionObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class TotalCost extends DefaultFunction {
+/**
+ * The total-cost global function. Returns the the current total cost of the plan.
+ */
+public class TotalCost extends DefaultFunction { // TODO how do we actually return the total cost of the plan?
 
     private final ObjectProperty<ActionCost> totalCost = new SimpleObjectProperty<>(ActionCost.valueOf(0));
 
@@ -17,6 +20,11 @@ public class TotalCost extends DefaultFunction {
         return apply();
     }
 
+    /**
+     * Gets the the current total cost of the plan.
+     *
+     * @return the total cost of the plan
+     */
     public ActionCost apply() {
         return totalCost.get();
     }

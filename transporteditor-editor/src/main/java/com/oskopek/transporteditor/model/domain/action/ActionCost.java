@@ -4,10 +4,18 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Wrapper method for an immutable whole number with default value 0. The actual internal type could be changed.
+ */
 public final class ActionCost implements Comparable<ActionCost> {
 
     private final Integer cost;
 
+    /**
+     * Default boxed constructor.
+     *
+     * @param cost the cost
+     */
     private ActionCost(Integer cost) {
         if (cost == null) {
             this.cost = 0;
@@ -16,23 +24,70 @@ public final class ActionCost implements Comparable<ActionCost> {
         }
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param cost the cost
+     */
+    private ActionCost(int cost) {
+        this.cost = cost;
+    }
+
+    /**
+     * Boxed builder method.
+     *
+     * @param cost the cost
+     * @return an associated action cost object
+     */
     public static ActionCost valueOf(Integer cost) {
         return new ActionCost(cost);
     }
 
+    /**
+     * Builder method.
+     *
+     * @param cost the cost
+     * @return an associated action cost object
+     */
+    public static ActionCost valueOf(int cost) {
+        return new ActionCost(cost);
+    }
+
+    /**
+     * Add the cost to our own value and return the resulting cost.
+     *
+     * @param cost the other cost
+     * @return the sum, non-null and immutable
+     */
     public ActionCost add(ActionCost cost) {
         return ActionCost.valueOf(getCost() + cost.getCost());
     }
 
-    public ActionCost neg(ActionCost cost) {
-        return ActionCost.valueOf(-cost.getCost());
+    /**
+     * Negate the cost of our own value and return the resulting cost.
+     *
+     * @return the negation, non-null and immutable
+     */
+    public ActionCost neg() {
+        return ActionCost.valueOf(-getCost());
     }
 
+    /**
+     * Subtract the other cost from our own value and return the resulting cost.
+     *
+     * @param cost the other cost
+     * @return the subtracted result, non-null and immutable
+     */
     public ActionCost subtract(ActionCost cost) {
-        return add(neg(cost));
+        return add(cost.neg());
     }
 
-    public Integer getCost() {
+    /**
+     * Get the internal value.
+     *
+     * @return the internal value
+     */
+    public int getCost() {
         return cost;
     }
 

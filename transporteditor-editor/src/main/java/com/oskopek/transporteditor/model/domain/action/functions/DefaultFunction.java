@@ -3,6 +3,11 @@ package com.oskopek.transporteditor.model.domain.action.functions;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Simple abstract function wrapper. Implements equality based on simple class name equality.
+ *
+ * @see Class#getSimpleName()
+ */
 public abstract class DefaultFunction implements Function {
 
     @Override
