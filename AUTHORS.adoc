@@ -1,4 +1,4 @@
-== Authors and Contributors of BP editor
+== Authors and Contributors of TransportEditor
 
 [cols="4*", options="header"]
 |===

@@ -9,7 +9,6 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;
-import com.oskopek.transporteditor.model.state.PlanState;
 import com.oskopek.transporteditor.model.state.SequentialPlanState;
 
 import java.util.Arrays;
