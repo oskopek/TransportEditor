@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
-import com.oskopek.transporteditor.view.TextAreaValidator;
+import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
@@ -22,11 +22,12 @@ import javafx.stage.Stage;
 import java.util.function.Predicate;
 
 /**
- * Controller for choosing a course out of several choices.
+ * Controller for choosing an executable with templated parameters.
  */
 public class ExecutableParametersController extends AbstractController {
 
     private Stage dialog;
+
     @FXML
     private Label headerText;
     @FXML
@@ -47,7 +48,9 @@ public class ExecutableParametersController extends AbstractController {
     private Button applyButton;
     @FXML
     private Button cancelButton;
+
     private ButtonBar.ButtonData result;
+
     private BooleanBinding allValidationsValid;
 
     @FXML
@@ -106,12 +109,10 @@ public class ExecutableParametersController extends AbstractController {
         parametersAreaValid = new ValidationProperty(parameterValidationFailed, parametersArea);
 
         Predicate<String> nonEmpty = s -> !s.trim().isEmpty();
-        executableAreaValid.bind(
-                new TextAreaValidator(executableArea.textProperty(), nonEmpty.and(executableTextValidator)::test)
-                        .isValidProperty());
-        parametersAreaValid.bind(
-                new TextAreaValidator(parametersArea.textProperty(), nonEmpty.and(parameterTextValidator)::test)
-                        .isValidProperty());
+        executableAreaValid.bind(new ObservableStringValidator(executableArea.textProperty(),
+                nonEmpty.and(executableTextValidator)).isValidProperty());
+        parametersAreaValid.bind(new ObservableStringValidator(parametersArea.textProperty(),
+                nonEmpty.and(parameterTextValidator)).isValidProperty());
 
         allValidationsValid = executableAreaValid.and(parametersAreaValid);
         applyButton.disableProperty().bind(allValidationsValid.not());
@@ -143,7 +144,7 @@ public class ExecutableParametersController extends AbstractController {
     }
 
     public ExecutableWithParameters getExecutable() {
-        return allValidationsValid.get() ? new DefaultExecutableWithParameters(executableArea.getText(),
-                parametersArea.getText()) : null;
+        return allValidationsValid.get() && ButtonBar.ButtonData.APPLY.equals(result) ?
+                new DefaultExecutableWithParameters(executableArea.getText(), parametersArea.getText()) : null;
     }
 }

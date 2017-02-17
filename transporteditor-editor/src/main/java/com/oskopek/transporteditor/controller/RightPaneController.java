@@ -111,97 +111,68 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void initialize() {
         eventBus.register(this);
-        // TODO: Eliminate duplicate creation after binding is changed to be immutable
 
         // Disable plan button condition
-        InvalidableOrBooleanBinding disablePlanButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::plannerProperty))
-                .or(new IsNullBinding(PlanningSession::domainProperty)).or(
-                        new IsNullBinding(PlanningSession::problemProperty));
-        planButton.disableProperty().bind(disablePlanButton);
+        InvalidableOrBooleanBinding domainBinding
+                = new InvalidableOrBooleanBinding(application.planningSessionProperty().isNull())
+                .or(new IsNullBinding(PlanningSession::domainProperty));
+        InvalidableOrBooleanBinding problemBinding = domainBinding
+                .or(new IsNullBinding(PlanningSession::problemProperty));
+        InvalidableOrBooleanBinding disablePlanButtonBinding = problemBinding
+                .or(new IsNullBinding(PlanningSession::plannerProperty));
+        planButton.disableProperty().bind(disablePlanButtonBinding);
 
         // Disable validate button condition
-        InvalidableOrBooleanBinding disableValidateButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty))
+        InvalidableOrBooleanBinding disableValidateButtonBinding = problemBinding
                 .or(new IsNullBinding(PlanningSession::planProperty))
                 .or(new IsNullBinding(PlanningSession::validatorProperty));
-        validateButton.disableProperty().bind(disableValidateButton);
+        validateButton.disableProperty().bind(disableValidateButtonBinding);
 
         // disable lock button condition
-        InvalidableOrBooleanBinding disableLockButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty));
-        lockButton.disableProperty().bind(disableLockButton);
+        InvalidableOrBooleanBinding disableLockButtonBinding = problemBinding.copyWithoutListeners();
+        lockButton.disableProperty().bind(disableLockButtonBinding);
 
         // Disable addLocation button condition
-        InvalidableOrBooleanBinding disableAddLocationButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty))
+        InvalidableOrBooleanBinding problemLockedBinding = problemBinding
                 .or(new BooleanBinding() {
                     @Override
                     protected boolean computeValue() {
                         return centerPaneController.isLocked();
                     }
                 });
-        centerPaneController.lockedProperty().addListener(e -> disableAddLocationButton.invalidate());
-        addLocationButton.disableProperty().bind(disableAddLocationButton);
+        centerPaneController.lockedProperty().addListener(e -> problemLockedBinding.invalidate());
+        addLocationButton.disableProperty().bind(problemLockedBinding);
 
         // Disable redraw button condition
-        InvalidableOrBooleanBinding disableRedrawButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull())
-                .or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty))
-                .or(new BooleanBinding() {
-                    @Override
-                    protected boolean computeValue() {
-                        return centerPaneController.isLocked();
-                    }
-                });
-        redrawButton.disableProperty().bind(disableRedrawButton);
+        InvalidableOrBooleanBinding disableRedrawButtonBinding = problemLockedBinding.copyWithoutListeners();
+        redrawButton.disableProperty().bind(disableRedrawButtonBinding);
 
         // Disable graph changes (addVehicle) button condition
-        InvalidableOrBooleanBinding disableAddVehicleButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty))
+        InvalidableOrBooleanBinding disableAddVehicleButtonBinding = problemLockedBinding
                 .or(new OptionalSelectionBinding<>(
                         () -> Optional.ofNullable(centerPaneController.getGraphSelectionHandler()),
-                        r -> !r.doesSelectionDeterminePossibleNewVehicle()))
-                .or(new BooleanBinding() {
-                    @Override
-                    protected boolean computeValue() {
-                        return centerPaneController.isLocked();
-                    }
-                });
-        addVehicleButton.disableProperty().bind(disableAddVehicleButton);
+                        r -> !r.doesSelectionDeterminePossibleNewVehicle()));
+        addVehicleButton.disableProperty().bind(disableAddVehicleButtonBinding);
 
         // Disable graph changes (addRoad and addPackage) button condition
-        InvalidableOrBooleanBinding disableAddRoadButton = new InvalidableOrBooleanBinding(
-                application.planningSessionProperty().isNull()).or(new IsNullBinding(PlanningSession::domainProperty))
-                .or(new IsNullBinding(PlanningSession::problemProperty))
+        InvalidableOrBooleanBinding disableAddRoadButtonBinding = problemLockedBinding
                 .or(new OptionalSelectionBinding<>(
                         () -> Optional.ofNullable(centerPaneController.getGraphSelectionHandler()),
-                        r -> !r.doesSelectionDeterminePossibleNewRoad()))
-                .or(new BooleanBinding() {
-                    @Override
-                    protected boolean computeValue() {
-                        return centerPaneController.isLocked();
-                    }
-                });
-        addRoadButton.disableProperty().bind(disableAddRoadButton);
-        addPackageButton.disableProperty().bind(disableAddRoadButton);
+                        r -> !r.doesSelectionDeterminePossibleNewRoad()));
+        addRoadButton.disableProperty().bind(disableAddRoadButtonBinding);
+        addPackageButton.disableProperty().bind(disableAddRoadButtonBinding);
 
         centerPaneController.lockedProperty().addListener(e -> {
-            disableAddLocationButton.invalidate();
-            disableAddVehicleButton.invalidate();
-            disableAddRoadButton.invalidate();
-            disableRedrawButton.invalidate();
+            problemLockedBinding.invalidate();
+            disableAddVehicleButtonBinding.invalidate();
+            disableAddRoadButtonBinding.invalidate();
+            disableRedrawButtonBinding.invalidate();
         });
 
         // Update disable AddRoad and AddVehicle button
         InvalidationListener graphSelectionChangedListener = e -> {
-            disableAddRoadButton.invalidate();
-            disableAddVehicleButton.invalidate();
+            disableAddRoadButtonBinding.invalidate();
+            disableAddVehicleButtonBinding.invalidate();
         };
         centerPaneController.graphSelectionHandlerProperty().addListener(graphSelectionChangedListener);
         centerPaneController.graphSelectionHandlerProperty().addListener((observable, oldValue, newValue) -> {
@@ -215,13 +186,13 @@ public class RightPaneController extends AbstractController {
 
         // Update disable planButton, validateButton, lockButton, graphChange and addRoad buttons on session change
         InvalidationListener invalidatePlanButtonBindingListener = s -> {
-            disablePlanButton.invalidate();
-            disableValidateButton.invalidate();
-            disableRedrawButton.invalidate();
-            disableLockButton.invalidate();
-            disableAddVehicleButton.invalidate();
-            disableAddRoadButton.invalidate();
-            disableAddLocationButton.invalidate();
+            disablePlanButtonBinding.invalidate();
+            disableValidateButtonBinding.invalidate();
+            disableRedrawButtonBinding.invalidate();
+            disableLockButtonBinding.invalidate();
+            disableAddVehicleButtonBinding.invalidate();
+            disableAddRoadButtonBinding.invalidate();
+            problemLockedBinding.invalidate();
         };
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
