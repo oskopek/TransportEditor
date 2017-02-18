@@ -14,11 +14,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A hard-coded sequential domain implementation. Should not differ from loading the sequential domain into a
+ * {@link VariableDomain}.
+ */
 public class SequentialDomain extends DefaultDomain {
 
     private static final Map<String, Class<? extends Predicate>> predicateMap;
     private static final Map<String, Class<? extends Function>> functionMap;
 
+    /**
+     * Default constructor. Initializes all the builder and labels.
+     *
+     * @param name the name of the domain
+     */
     public SequentialDomain(String name) {
         super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad()),
                         Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
