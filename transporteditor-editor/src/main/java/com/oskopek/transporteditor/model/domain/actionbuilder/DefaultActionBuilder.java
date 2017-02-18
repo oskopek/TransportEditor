@@ -9,6 +9,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
+/**
+ * Default action builder abstract implementation handling preconditions and effects.
+ *
+ * @param <Who> the who type
+ * @param <Where> the where type
+ * @param <What> the what type
+ */
 public abstract class DefaultActionBuilder<Who extends DefaultAction<Where, What>, Where extends Locatable, What
         extends ActionObject>
         implements ActionBuilder<Who, Where, What> {
@@ -16,6 +23,12 @@ public abstract class DefaultActionBuilder<Who extends DefaultAction<Where, What
     private final List<Predicate> preconditions;
     private final List<Predicate> effects;
 
+    /**
+     * Default constructor.
+     *
+     * @param preconditions the preconditions
+     * @param effects the effects
+     */
     public DefaultActionBuilder(List<Predicate> preconditions, List<Predicate> effects) {
         this.preconditions = preconditions;
         this.effects = effects;
@@ -44,13 +57,10 @@ public abstract class DefaultActionBuilder<Who extends DefaultAction<Where, What
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof DefaultActionBuilder)) {
             return false;
         }
-
         DefaultActionBuilder<?, ?, ?> that = (DefaultActionBuilder<?, ?, ?>) o;
-
         return new EqualsBuilder()
                 .append(getPreconditions(), that.getPreconditions())
                 .append(getEffects(), that.getEffects())

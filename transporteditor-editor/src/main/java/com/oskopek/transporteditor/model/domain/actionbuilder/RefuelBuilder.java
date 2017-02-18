@@ -9,8 +9,19 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
+/**
+ * Builder for the refuel action.
+ */
 public class RefuelBuilder extends DefaultActionBuilderWithCost<Refuel, Vehicle, PlaceholderActionObject> {
 
+    /**
+     * Default constructor.
+     *
+     * @param preconditions the preconditions
+     * @param effects the effects
+     * @param cost the cost
+     * @param duration the duration
+     */
     public RefuelBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost, ActionCost duration) {
         super(preconditions, effects, cost, duration);
     }
@@ -21,6 +32,14 @@ public class RefuelBuilder extends DefaultActionBuilderWithCost<Refuel, Vehicle,
         return build(who, where);
     }
 
+    /**
+     * A {@link #build(Vehicle, Location, PlaceholderActionObject)} wrapper that correctly ignores the what argument.
+     *
+     * @param who the vehicle
+     * @param where the location
+     * @param <Who_> the exacty who type
+     * @return the built refuel action
+     */
     public <Who_ extends Vehicle> Refuel build(Who_ who, Location where) {
         return new Refuel(who, where, getPreconditions(), getEffects(), getCost(), getDuration());
     }

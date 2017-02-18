@@ -8,7 +8,8 @@ import com.oskopek.transporteditor.model.problem.*;
 import java.util.List;
 
 /**
- * The drive action. Semantics: Vehicle (who) drives from location (where) to location (what).
+ * The drive action. Semantics: Vehicle (who) drives from location (where) to location (what). Do note, that it only
+ * supports driving along a single edge, not multiple edges (a path).
  */
 public class Drive extends DefaultAction<Vehicle, Location> {
 

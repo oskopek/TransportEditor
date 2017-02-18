@@ -10,13 +10,27 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Where, What>, Where extends Locatable, What
-        extends ActionObject>
-        extends DefaultActionBuilder<Who, Where, What> {
+/**
+ * Adds cost and duration to the {@link DefaultActionBuilder}.
+ *
+ * @param <Who> the who type
+ * @param <Where> the where type
+ * @param <What> the what type
+ */
+public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Where, What>, Where extends Locatable,
+        What extends ActionObject> extends DefaultActionBuilder<Who, Where, What> {
 
     private final ActionCost cost;
     private final ActionCost duration;
 
+    /**
+     * Default constructor.
+     *
+     * @param preconditions the preconditions
+     * @param effects the effects
+     * @param cost the cost
+     * @param duration the duration
+     */
     public DefaultActionBuilderWithCost(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost,
             ActionCost duration) {
         super(preconditions, effects);
@@ -24,10 +38,20 @@ public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Whe
         this.duration = duration;
     }
 
+    /**
+     * Get the cost.
+     *
+     * @return the cost
+     */
     public ActionCost getCost() {
         return cost;
     }
 
+    /**
+     * Get the duration.
+     *
+     * @return the duration
+     */
     public ActionCost getDuration() {
         return duration;
     }
