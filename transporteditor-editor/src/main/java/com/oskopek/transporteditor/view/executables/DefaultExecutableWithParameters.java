@@ -11,10 +11,12 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Simple {@link java.nio} based implementation of {@link ExecutableWithParameters}.
+ */
 public final class DefaultExecutableWithParameters implements ExecutableWithParameters {
 
     private static final transient Logger logger = LoggerFactory.getLogger(DefaultExecutableWithParameters.class);
@@ -23,6 +25,8 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
     private final String parameters;
 
     /**
+     * Default constructor.
+     *
      * @param executable an executable (either a file, or a command on the current system PATH).
      * @param parameters a parametrized string (containing {0}, {1}, ....)
      */
@@ -31,6 +35,13 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         this.parameters = parameters.trim();
     }
 
+    /**
+     * A simple greedy regex-based implementation of {@link #findExecutablePath()} that looks at the system
+     * {@code PATH} variable.
+     *
+     * @param executable the executable command
+     * @return empty if we couldn't find such an executable, else its path
+     */
     public static Optional<Path> findExecutablePath(String executable) {
         if (Files.isExecutable(Paths.get(executable))) {
             return Optional.of(executable).map(Paths::get);
@@ -62,11 +73,6 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
     @Override
     public Optional<Path> findExecutablePath() {
         return DefaultExecutableWithParameters.findExecutablePath(executable);
-    }
-
-    @Override
-    public String getParameters(Object... params) {
-        return MessageFormat.format(parameters, params);
     }
 
     @Override

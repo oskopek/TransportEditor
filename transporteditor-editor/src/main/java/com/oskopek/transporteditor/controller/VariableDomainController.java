@@ -4,7 +4,7 @@ import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
-import com.oskopek.transporteditor.view.TextAreaValidator;
+import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -88,13 +88,12 @@ public class VariableDomainController extends AbstractController {
         capacityCheckValid.set(true);
         numericCheckValid.set(true);
 
-        goalAreaValid.bind(new TextAreaValidator(goalArea.textProperty(), s -> goalArea.isDisabled() || !s.isEmpty())
-                .listenTo(goalArea.disabledProperty())
-                .isValidProperty()); // TODO goal area validation
-        metricAreaValid
-                .bind(new TextAreaValidator(metricArea.textProperty(), s -> metricArea.isDisabled() || !s.isEmpty())
-                        .listenTo(metricArea.disabledProperty())
-                .isValidProperty()); // TODO metric area validation
+        goalAreaValid.bind(new ObservableStringValidator(goalArea.textProperty(),
+                s -> goalArea.isDisabled() || !s.isEmpty())
+                .revalidateWhenChanged(goalArea.disabledProperty()).isValidProperty()); // TODO goal area validation
+        metricAreaValid.bind(new ObservableStringValidator(metricArea.textProperty(),
+                s -> metricArea.isDisabled() || !s.isEmpty())
+                .revalidateWhenChanged(metricArea.disabledProperty()).isValidProperty()); // TODO metric area validation
 
         allValidationsValid = nameFieldValid.and(sequentialRadioValid).and(temporalRadioValid).and(fuelCheckValid)
                 .and(numericCheckValid)
@@ -118,6 +117,8 @@ public class VariableDomainController extends AbstractController {
         domainBuilder.numericProperty().bind(numericCheck.selectedProperty());
 
         // TODO: Metric and goal parsing
+        // domainBuilder.goalTextProperty().bind(goalArea.textProperty());
+        // domainBuilder.metricTextProperty().bind(metricArea.textProperty());
 
         numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull());

@@ -39,6 +39,10 @@ public class ExecutableParametersCreator {
      * Create the dialog for creating a executable with parameters.
      *
      * @param parameterCount the number of parameters
+     * @param executableInstructions instructions for filling in the executable value
+     * @param parameterInstructions instructions for filling in the parameter value
+     * @param noteText the note text
+     * @param  existing the existing executable to pre-fill the fields with
      * @return the executable with parameters
      */
     public ExecutableWithParameters createExecutableWithParameters(int parameterCount, String executableInstructions,

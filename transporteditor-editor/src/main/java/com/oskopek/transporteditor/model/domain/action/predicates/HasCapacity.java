@@ -6,7 +6,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;
 
 /**
- * Assert a vehicle has a current capacity (current available space) of x.
+ * Assert that a vehicle (who) has a current capacity (current available space) to pick up package (what).
  */
 public class HasCapacity extends DefaultPredicate {
 

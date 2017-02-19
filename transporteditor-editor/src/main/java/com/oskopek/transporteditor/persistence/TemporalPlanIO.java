@@ -14,16 +14,33 @@ import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Reader and writer for {@link TemporalPlan} to and from the VAL format (supports only Transport domain plans).
+ * Uses ANTLR and {@link SequentialPlanIO}.
+ */
 public class TemporalPlanIO implements DataIO<Plan> {
 
     private final Domain domain;
     private final Problem problem;
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the domain associated
+     * @param problem the problem associated
+     */
     public TemporalPlanIO(Domain domain, Problem problem) {
         this.domain = domain;
         this.problem = problem;
     }
 
+    /**
+     * Transforms a temporal action into a VAL-format plan action.
+     * Uses {@link SequentialPlanIO#serializeActionSimple(Action)} for the action itself.
+     *
+     * @param temporalPlanAction the temporal action to serialize
+     * @return the serialized action in a single line
+     */
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
         String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
         StringBuilder str = new StringBuilder();
@@ -38,7 +55,7 @@ public class TemporalPlanIO implements DataIO<Plan> {
     }
 
     @Override
-    public String serialize(Plan plan) throws IllegalArgumentException {
+    public String serialize(Plan plan) {
         StringBuilder str = new StringBuilder();
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
         actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
@@ -54,7 +71,7 @@ public class TemporalPlanIO implements DataIO<Plan> {
     }
 
     @Override
-    public TemporalPlan parse(String contents) throws IllegalArgumentException {
+    public TemporalPlan parse(String contents) {
         Set<TemporalPlanAction> actions = new HashSet<>();
 
         PlanParser parser = new PlanParser(new CommonTokenStream(new PlanLexer(new ANTLRInputStream(contents))));

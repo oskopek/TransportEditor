@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * Reorderable and filterable {@link TableView} of {@link TemporalPlanAction}s, used for visualizing
+ * {@link SequentialPlan}s.
+ */
 public final class SequentialPlanTable {
 
     private static final DataFormat serializedMimeType = new DataFormat("application/x-java-serialized-object");
@@ -52,15 +56,26 @@ public final class SequentialPlanTable {
         }
     };
 
+    /**
+     * Empty constructor.
+     */
     private SequentialPlanTable() {
         // intentionally empty
     }
 
+    /**
+     * Build the filtered and reorderable table. Calls the updatePlan callback when a new plan is created and
+     * expects to be disposed afterwards (i.e. is not directly editable).
+     *
+     * @param actions the actions to display
+     * @param updatePlan the plan update callback (along with an row index to select)
+     * @return the {@link TableFilter} controlsfx widget with a backing table
+     */
     public static TableFilter<TemporalPlanAction> build(Collection<Action> actions,
             BiConsumer<List<Action>, Integer> updatePlan) {
         List<Action> actionList = new ArrayList<>(actions);
         List<TemporalPlanAction> temporalPlanActions
-                = new ArrayList<>(new SequentialPlan(actionList).getTemporalPlanActionsList());
+                = new ArrayList<>(new SequentialPlan(actionList).getTemporalPlanActions());
         TableView<TemporalPlanAction> tableView = new TableView<>(FXCollections.observableList(temporalPlanActions));
         BooleanProperty isFilteredProperty = new SimpleBooleanProperty(false);
 

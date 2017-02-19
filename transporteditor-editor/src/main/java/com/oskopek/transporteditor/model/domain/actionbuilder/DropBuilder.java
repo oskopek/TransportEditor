@@ -9,8 +9,19 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
+/**
+ * Builder for the drive action.
+ */
 public class DropBuilder extends DefaultActionBuilderWithCost<Drop, Vehicle, Package> {
 
+    /**
+     * Default constructor.
+     *
+     * @param preconditions the preconditions
+     * @param effects the effects
+     * @param cost the cost
+     * @param duration the duration
+     */
     public DropBuilder(List<Predicate> preconditions, List<Predicate> effects, ActionCost cost, ActionCost duration) {
         super(preconditions, effects, cost, duration);
     }

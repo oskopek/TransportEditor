@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class DefaultActionObject implements ActionObject {
+public abstract class DefaultActionObject implements ActionObject {
 
     private final String name;
 
@@ -13,11 +13,6 @@ public class DefaultActionObject implements ActionObject {
             throw new IllegalArgumentException("Name of action objects has to be lower case and non null.");
         }
         this.name = name;
-    }
-
-    @Override
-    public DefaultActionObject updateName(String newName) {
-        return new DefaultActionObject(newName);
     }
 
     @Override

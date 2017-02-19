@@ -17,18 +17,41 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 /**
- * Custom adaptation of {@link org.controlsfx.property.BeanPropertyUtils}.
+ * Custom adaptation of {@link org.controlsfx.property.BeanPropertyUtils} localizing and ordering its items
+ * with the annotation {@link FieldLocalization}.
  */
 public final class LocalizableSortableBeanPropertyUtils {
 
+    /**
+     * Empty constructor.
+     */
     private LocalizableSortableBeanPropertyUtils() {
         // intentionally empty
     }
 
+    /**
+     * Construct all {@link PropertySheet} items via {@link #getProperties(Object, ResourceBundle, Predicate)}.
+     *
+     * @param bean the bean to get the properties from
+     * @param messages the resource bundle used for localization of field names
+     * @return an observable list of {@link PropertySheet.Item}s
+     * @see org.controlsfx.property.BeanPropertyUtils#getProperties(Object)
+     */
     public static ObservableList<PropertySheet.Item> getProperties(final Object bean, ResourceBundle messages) {
         return getProperties(bean, messages, p -> true);
     }
 
+    /**
+     * Construct the {@link PropertySheet} items from properties for which the predicate holds.
+     * Additionally, they have to be annotated with the {@link FieldLocalization} annotation, which provides
+     * localization, ordering and more for the resulting item list.
+     *
+     * @param bean the bean to get the properties from
+     * @param messages the resource bundle used for localization of field names
+     * @param test the predicate to filter properties with
+     * @return an observable list of {@link PropertySheet.Item}s
+     * @see org.controlsfx.property.BeanPropertyUtils#getProperties(Object)
+     */
     public static ObservableList<PropertySheet.Item> getProperties(final Object bean, ResourceBundle messages,
             Predicate<PropertyDescriptor> test) {
         BeanInfo beanInfo = Try.of(() -> Introspector.getBeanInfo(bean.getClass(), Object.class))

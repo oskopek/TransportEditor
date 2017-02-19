@@ -11,32 +11,54 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A temporal domain's plan implementation. All actions are assumed to be potentially intersecting and unordered.
+ * Implementation is backed by a
+ * <a href="https://en.wikipedia.org/wiki/Interval_tree#Centered_interval_tree">centered interval tree</a>.
+ */
 public class TemporalPlan implements Plan {
 
     private final IntervalTree<TemporalPlanAction> actionIntervalTree = IntervalTree.empty();
 
+    /**
+     * Default constructor. Blocks while building the interval tree.
+     *
+     * @param planActions the actions to add
+     */
     public TemporalPlan(Collection<TemporalPlanAction> planActions) {
         planActions.forEach(
                 t -> actionIntervalTree.addInterval(t.getStartTimestamp(), t.getEndTimestamp(), t));
         actionIntervalTree.build();
     }
 
+    /**
+     * Get actions occurring at given time.
+     *
+     * @param timestamp the timestamp to query at
+     * @return a set of actions occurring at the given time
+     */
     public Set<Action> getActionsAt(Integer timestamp) {
         return getTemporalActionsAt(timestamp).stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
     }
 
+    /**
+     * Get temporal actions occurring at given time.
+     *
+     * @param timestamp the timestamp to query at
+     * @return a set of temporal actions occurring at the given time
+     */
     public Set<TemporalPlanAction> getTemporalActionsAt(Integer timestamp) {
         return actionIntervalTree.get(timestamp);
     }
 
     @Override
-    public Collection<Action> getActions() {
+    public Set<Action> getActions() {
         return getTemporalPlanActions().stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
     }
 
     @Override
     public Set<TemporalPlanAction> getTemporalPlanActions() {
-        return actionIntervalTree.getIntervals(Integer.MIN_VALUE, Integer.MAX_VALUE).stream().map(Interval::getData)
+        return actionIntervalTree.getIntervals(Long.MIN_VALUE, Long.MAX_VALUE).stream().map(Interval::getData)
                 .collect(Collectors.toSet());
     }
 

@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * TransportEditor JavaFX main class.
  */
 @Singleton
-public class TransportEditorApplication extends Application {
+public final class TransportEditorApplication extends Application {
 
     private static AtomicReference<TransportEditorApplication> atomicThis = new AtomicReference<>(null);
     private final String logoResource = "logo_64x64.png";
@@ -54,6 +54,9 @@ public class TransportEditorApplication extends Application {
     private transient Stage primaryStage;
     private transient EventBus eventBus;
 
+    /**
+     * Default constructor. Leaks {@code this} to {@link #atomicThis}.
+     */
     public TransportEditorApplication() {
         TransportEditorApplication.atomicThis.compareAndSet(null, this);
     }
@@ -62,11 +65,18 @@ public class TransportEditorApplication extends Application {
      * Main method.
      *
      * @param args command line arguments
+     * @see #launch(String...)
      */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Specifically, displays a splash screen while loading {@link Weld} and the main stage.
+     * The swap happens in {@link TransportEditorApplicationStarter}.
+     */
     @Override
     public void start(Stage initStage) throws Exception {
         final Stage primaryStage = new Stage(StageStyle.DECORATED);
@@ -101,6 +111,11 @@ public class TransportEditorApplication extends Application {
         // TODO: Save file
     }
 
+    /**
+     * Produce the real original singleton {@code TransportEditorApplication} instance.
+     *
+     * @return the singleton
+     */
     @Produces
     @Singleton
     @Named("mainApp")
@@ -140,6 +155,11 @@ public class TransportEditorApplication extends Application {
         CompletableFuture.runAsync(mainStageTask);
     }
 
+    /**
+     * Set the event bus.
+     *
+     * @param eventBus the event bus
+     */
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
     }
@@ -153,14 +173,31 @@ public class TransportEditorApplication extends Application {
         return primaryStage;
     }
 
+    /**
+     * Util method for getting the top left corner of the stage on screen.
+     *
+     * @return the top left corner point
+     */
     private Point2D getTopLeft() {
         return new Point2D(getPrimaryStage().getX(), getPrimaryStage().getY());
     }
 
+    /**
+     * Util method for getting the bottom right corner of the stage on screen.
+     *
+     * @return the bottom right corner point
+     */
     private Point2D getBottomRight() {
         return new Point2D(getPrimaryStage().getWidth(), getPrimaryStage().getHeight());
     }
 
+    /**
+     * Position the window provided in the middle of the stage, additionally moving it by the biases.
+     *
+     * @param window the window to position
+     * @param xBias the bias on the x axis
+     * @param yBias the bias on the y axis
+     */
     public void centerInPrimaryStage(Window window, double xBias, double yBias) {
         Point2D topLeft = getTopLeft();
         Point2D bottomRight = getBottomRight();
@@ -168,6 +205,13 @@ public class TransportEditorApplication extends Application {
         window.setY(topLeft.getY() + bottomRight.getY() / 2d + yBias);
     }
 
+    /**
+     * Position the dialog window provided in the middle of the stage, additionally moving it by the biases.
+     *
+     * @param window the window to position
+     * @param xBias the bias on the x axis
+     * @param yBias the bias on the y axis
+     */
     public void centerInPrimaryStage(Dialog<?> window, double xBias, double yBias) {
         Point2D topLeft = getTopLeft();
         Point2D bottomRight = getBottomRight();
@@ -181,7 +225,7 @@ public class TransportEditorApplication extends Application {
      * @param primaryStage non-null stage
      * @throws IllegalArgumentException if the stage is null
      */
-    public void setPrimaryStage(Stage primaryStage) throws IllegalArgumentException {
+    public void setPrimaryStage(Stage primaryStage) {
         if (primaryStage == null) {
             throw new IllegalArgumentException("Primary stage cannot be null.");
         }
@@ -206,6 +250,11 @@ public class TransportEditorApplication extends Application {
         this.planningSession.set(planningSession);
     }
 
+    /**
+     * Return the planning session wrapped in an optional.
+     *
+     * @return empty if no session is set, or an optional containing the loaded session
+     */
     public Optional<PlanningSession> getPlanningSessionOptional() {
         return Try.of(this::getPlanningSession).toJavaOptional();
     }

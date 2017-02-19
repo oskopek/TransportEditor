@@ -4,6 +4,9 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.FuelRoad;
 
+/**
+ * The fuel-demand function. Returns the the fuel cost of the {@link FuelRoad}.
+ */
 public class FuelDemand extends DefaultFunction {
 
     @Override
@@ -14,6 +17,12 @@ public class FuelDemand extends DefaultFunction {
         return apply((FuelRoad) actionObjects[0]);
     }
 
+    /**
+     * Get the fuel cost of the {@link FuelRoad}.
+     *
+     * @param road the fuel road
+     * @return the fuel cost
+     */
     public ActionCost apply(FuelRoad road) {
         if (road == null) {
             throw new IllegalArgumentException("FuelRoad cannot be null.");

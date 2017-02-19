@@ -9,10 +9,18 @@ import javafx.scene.control.SpinnerValueFactory;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 
+/**
+ * Simple property editor using an integer spinner for {@link ActionCost}.
+ */
 public class ActionCostEditor extends AbstractPropertyEditor<ActionCost, Spinner<Integer>> {
 
     private ObjectProperty<ActionCost> actionCostObservableValue;
 
+    /**
+     * Constructs the spinner and sets the default value.
+     *
+     * @param item the property sheet item
+     */
     public ActionCostEditor(PropertySheet.Item item) {
         super(item, new Spinner<>());
         if (actionCostObservableValue == null) {

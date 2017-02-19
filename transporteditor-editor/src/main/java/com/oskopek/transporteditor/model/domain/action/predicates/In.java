@@ -5,6 +5,9 @@ import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;
 
+/**
+ * The in predicate. Determines if the state has a specific vehicle (what) containing a specific package (who).
+ */
 public class In extends DefaultPredicate {
 
     @Override

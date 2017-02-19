@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.view.plan;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Location;
+import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
@@ -11,13 +12,21 @@ import javaslang.collection.Stream;
 
 import java.util.*;
 
-public final class TemporalPlanGanttChart extends GanttChart {
+/**
+ * Gantt chart specialized for {@link TemporalPlanAction}s. Distinguishes actions by color and provides useful tooltips.
+ */
+public final class TemporalGanttChart extends GanttChart {
 
     private final Set<TemporalPlanAction> temporalPlanActionSet;
     private final Map<String, Color> colorMap;
     private final Color defaultColor = Color.BLACK;
 
-    private TemporalPlanGanttChart(Collection<? extends TemporalPlanAction> actions) {
+    /**
+     * Default constructor.
+     *
+     * @param actions the actions to display
+     */
+    private TemporalGanttChart(Collection<? extends TemporalPlanAction> actions) {
         super("Time", "Action Object");
         this.temporalPlanActionSet = Collections.unmodifiableSet(new HashSet<>(actions));
 
@@ -31,10 +40,21 @@ public final class TemporalPlanGanttChart extends GanttChart {
         setMinWidth(Math.max(minWidth, 300d));
     }
 
-    public static TemporalPlanGanttChart build(Collection<? extends TemporalPlanAction> actions) {
-        return new TemporalPlanGanttChart(actions);
+    /**
+     * Default builder method.
+     *
+     * @param actions the actions to display
+     * @return a gantt chart showing the actions
+     */
+    public static TemporalGanttChart build(Collection<? extends TemporalPlanAction> actions) {
+        return new TemporalGanttChart(actions);
     }
 
+    /**
+     * Util method for converting temporal actions into chartable data.
+     *
+     * @return the list of data {@link javafx.scene.chart.XYChart.Series}
+     */
     private List<Series<Number, String>> computeData() {
         javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> who = Stream.ofAll(
                 temporalPlanActionSet).groupBy(ta -> ta.getAction().getWho());
@@ -52,7 +72,8 @@ public final class TemporalPlanGanttChart extends GanttChart {
                     color = defaultColor;
                 }
                 series.getData().add(new XYChart.Data<>(t.getStartTimestamp(), actionObject.getName(),
-                        new ExtraValue(color, t.getStartTimestamp(), t.getEndTimestamp())));
+                        new ExtraValue(color, t.getStartTimestamp(), t.getEndTimestamp(),
+                                SequentialPlanIO.toApproximateValFormat(t.getAction()))));
             });
             return Tuple.of(actionObject, series);
         }).values().sortBy(Series::getName).reverseIterator().toJavaList();

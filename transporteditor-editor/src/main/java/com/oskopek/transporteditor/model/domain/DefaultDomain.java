@@ -16,6 +16,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Set;
 
+/**
+ * Simple immutable abstract data-holding domain implementation. Provides equality checking.
+ */
 public abstract class DefaultDomain implements Domain {
 
     private final String name;
@@ -27,6 +30,16 @@ public abstract class DefaultDomain implements Domain {
 
     private final Set<PddlLabel> pddlLabelSet;
 
+    /**
+     * Default constructor.
+     *
+     * @param name the name
+     * @param driveBuilder the drive builder
+     * @param dropBuilder the drop builder
+     * @param pickUpBuilder the pick-up builder
+     * @param refuelBuilder the refuel builder
+     * @param pddlLabelSet the pddl labels
+     */
     public DefaultDomain(String name, DriveBuilder driveBuilder, DropBuilder dropBuilder, PickUpBuilder pickUpBuilder,
             RefuelBuilder refuelBuilder, Set<PddlLabel> pddlLabelSet) {
         this.name = name;

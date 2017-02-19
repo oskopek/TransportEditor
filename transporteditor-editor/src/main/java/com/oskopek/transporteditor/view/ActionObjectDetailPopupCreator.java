@@ -11,16 +11,30 @@ import java.util.ResourceBundle;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+/**
+ * An {@link ActionObjectBuilderConsumer} for showing {@link ActionObjectDetailPopup}s.
+ */
 @Singleton
 public final class ActionObjectDetailPopupCreator extends ActionObjectBuilderConsumer<ActionObjectDetailPopup> {
 
     @Inject
     private ResourceBundle messages;
 
+    /**
+     * Empty constructor.
+     */
     private ActionObjectDetailPopupCreator() {
         // intentionally empty
     }
 
+    /**
+     * Shows a read-only popup with info from the builder.
+     *
+     * @param builder the builder
+     * @return a filled in {@link ActionObjectDetailPopup}
+     * @see ActionObjectDetailPopup
+     * @see LocalizableSortableBeanPropertyUtils
+     */
     @Override
     protected ActionObjectDetailPopup createInternal(ActionObjectBuilder<?> builder) {
         Map<String, String> info = convertToInfoMap(LocalizableSortableBeanPropertyUtils.getProperties(builder,
@@ -28,7 +42,14 @@ public final class ActionObjectDetailPopupCreator extends ActionObjectBuilderCon
         return new ActionObjectDetailPopup(info);
     }
 
-    private LinkedHashMap<String, String> convertToInfoMap(List<PropertySheet.Item> items) {
+    /**
+     * Converts an property item list to a simple String -> String ordered map,
+     * which the {@link ActionObjectDetailPopup} can read.
+     *
+     * @param items the items to convert
+     * @return an ordered hash map (name -> string value) from the supplied item list
+     */
+    private static LinkedHashMap<String, String> convertToInfoMap(List<PropertySheet.Item> items) {
         LinkedHashMap<String, String> info = new LinkedHashMap<>(items.size());
         items.forEach(item -> info.put(item.getName(), item.getValue() == null ? "null" : item.getValue().toString()));
         return info;

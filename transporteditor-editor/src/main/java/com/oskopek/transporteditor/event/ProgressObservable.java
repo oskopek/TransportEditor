@@ -8,10 +8,10 @@ import javafx.beans.value.ObservableValue;
 public interface ProgressObservable {
 
     /**
-     * The double property that is bound to a UI element showing progress.
-     * Expects values either equal to {@code -1d} or in the range {@code [0, 1]}.
+     * The progress property that is bound to a UI element showing progress.
+     * Expects double values either equal to {@code -1d} or in the range {@code [0, 1]}.
      *
-     * @return the double property
+     * @return the progress property
      */
     ObservableValue<? extends Number> progressProperty();
 

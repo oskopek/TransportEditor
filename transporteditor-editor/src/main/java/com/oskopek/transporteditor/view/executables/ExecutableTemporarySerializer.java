@@ -16,6 +16,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Auto-closeable PDDL serializer of model objects. Makes them available at temporary locations and tries to delete
+ * them at close. To be used with Java 8's try-with-resources.
+ * <pre>
+ * {@code
+ * try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
+ *     ...
+ * }
+ * }
+ * </pre>
+ */
 public class ExecutableTemporarySerializer implements AutoCloseable {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
@@ -23,25 +34,31 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
     private Path problemTmpFile;
     private Path planTmpFile;
 
-    public ExecutableTemporarySerializer(Domain domain,
-            Problem problem, Plan plan) throws IOException {
+    /**
+     * Serializes the non-null objects and makes them available at a temporary location.
+     *
+     * @param domain the domain to serialize, non-null
+     * @param problem the problem to serialize, nullable
+     * @param plan the plan to serialize, nullable
+     * @throws IOException if an error during writing/reading the files occurs
+     */
+    public ExecutableTemporarySerializer(Domain domain, Problem problem, Plan plan) throws IOException {
+        if (domain == null) {
+            throw new IllegalArgumentException("Cannot serialize with a null domain.");
+        }
         VariableDomainIO domainIO = new VariableDomainIO();
-        DefaultProblemIO problemIO = null;
+        DefaultProblemIO problemIO = new DefaultProblemIO(domain);
         DataWriter<Plan> planIO = null;
-
-        if (domain != null) {
-            problemIO = new DefaultProblemIO(domain);
-            if (problem != null) {
-                if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
-                    planIO = new TemporalPlanIO(domain, problem);
-                } else {
-                    planIO = new SequentialPlanIO(domain, problem);
-                }
+        if (problem != null) {
+            if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
+                planIO = new TemporalPlanIO(domain, problem);
+            } else {
+                planIO = new SequentialPlanIO(domain, problem);
             }
         }
 
         String serializedDomain = domainIO.serialize(domain);
-        String serializedProblem = problemIO == null ? "" : problemIO.serialize(problem);
+        String serializedProblem = problem == null ? "" : problemIO.serialize(problem);
         String serializedPlan = planIO == null || plan == null ? "" : planIO.serialize(plan);
         domainTmpFile = Files.createTempFile("domain-", ".pddl");
         problemTmpFile = Files.createTempFile("problem-", ".pddl");
@@ -68,14 +85,29 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
         }
     }
 
+    /**
+     * Get the path of the temporary domain file.
+     *
+     * @return the domain file
+     */
     public Path getDomainTmpFile() {
         return domainTmpFile;
     }
 
+    /**
+     * Get the path of the temporary problem file.
+     *
+     * @return the problem file
+     */
     public Path getProblemTmpFile() {
         return problemTmpFile;
     }
 
+    /**
+     * Get the path of the temporary plan file.
+     *
+     * @return the plan file
+     */
     public Path getPlanTmpFile() {
         return planTmpFile;
     }

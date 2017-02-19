@@ -6,58 +6,75 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class InvalidableOrBooleanBinding implements Binding<Boolean> {
+import java.util.ArrayList;
+import java.util.List;
 
-    private ObservableList<Binding<Boolean>> bindings = FXCollections.observableArrayList();
-    private ObservableList<ChangeListener<? super Boolean>> changeListeners = FXCollections.observableArrayList();
-    private final ChangeListener<? super Boolean> changeListener
-            = (observable, oldValue, newValue) -> getChangeListeners().forEach(
-            c -> c.changed(observable, oldValue, newValue));
-    private ObservableList<InvalidationListener> invalidationListeners = FXCollections.observableArrayList();
-    private final InvalidationListener invalidationListener = observable -> getInvalidationListeners().forEach(
-            i -> i.invalidated(observable));
+/**
+ * An immutable, invalidable or-binding. Can contain multiple boolean bindings as if joined by an OR operation.
+ */
+public class InvalidableOrBooleanBinding implements Binding<Boolean> { // TODO: possible listener memleak?
 
+    private final ObservableList<Binding<Boolean>> bindings;
+    private final List<ChangeListener<? super Boolean>> changeListeners;
+    private final List<InvalidationListener> invalidationListeners;
+
+    /**
+     * Singleton constructor.
+     *
+     * @param binding the first binding in the chain
+     */
     public InvalidableOrBooleanBinding(Binding<Boolean> binding) {
-        addBinding(binding);
+        this.bindings = FXCollections.unmodifiableObservableList(FXCollections.singletonObservableList(binding));
+        this.changeListeners = new ArrayList<>();
+        this.invalidationListeners = new ArrayList<>();
     }
 
-    private synchronized void addBinding(Binding<Boolean> binding) {
-        getBindings().add(binding);
-        binding.addListener(changeListener);
-        binding.addListener(invalidationListener);
+    /**
+     * Copy constructor without keeping listeners.
+     *
+     * @param bindings the bindings
+     */
+    protected InvalidableOrBooleanBinding(List<Binding<Boolean>> bindings) {
+        this.bindings = FXCollections.unmodifiableObservableList(FXCollections.observableArrayList(bindings));
+        this.changeListeners = new ArrayList<>();
+        this.invalidationListeners = new ArrayList<>();
+        bindings.forEach(b -> b.addListener((observable, oldValue, newValue) -> changeListeners
+                .forEach(c -> c.changed(observable, oldValue, newValue))));
+        bindings.forEach(b -> b.addListener(observable -> invalidationListeners
+                .forEach(i -> i.invalidated(observable))));
     }
 
-    private synchronized void removeBinding(Binding<Boolean> binding) {
-        getBindings().remove(binding);
-        binding.removeListener(changeListener);
-        binding.removeListener(invalidationListener);
-    }
+    /**
+     * Append constructor.
+     *
+     * @param binding the old bindings
+     * @param newBinding the new binding
+     */
+    private InvalidableOrBooleanBinding(InvalidableOrBooleanBinding binding, Binding<Boolean> newBinding) {
+        ObservableList<Binding<Boolean>> newBindings = FXCollections.observableArrayList(binding.bindings);
+        newBindings.add(newBinding);
+        this.bindings = FXCollections.unmodifiableObservableList(newBindings);
+        this.changeListeners = new ArrayList<>(binding.changeListeners);
+        this.invalidationListeners = new ArrayList<>(binding.invalidationListeners);
 
-    private synchronized ObservableList<Binding<Boolean>> getBindings() {
-        return bindings;
-    }
-
-    private synchronized ObservableList<ChangeListener<? super Boolean>> getChangeListeners() {
-        return changeListeners;
-    }
-
-    private synchronized ObservableList<InvalidationListener> getInvalidationListeners() {
-        return invalidationListeners;
+        newBinding.addListener((observable, oldValue, newValue) -> changeListeners
+                .forEach(c -> c.changed(observable, oldValue, newValue)));
+        newBinding.addListener(observable -> invalidationListeners.forEach(i -> i.invalidated(observable)));
     }
 
     @Override
     public boolean isValid() {
-        return getBindings().stream().map(Binding::getValue).reduce(Boolean.TRUE, Boolean::logicalAnd);
+        return bindings.stream().map(Binding::getValue).reduce(Boolean.TRUE, Boolean::logicalAnd);
     }
 
     @Override
     public void invalidate() {
-        getBindings().forEach(Binding::invalidate);
+        bindings.forEach(Binding::invalidate);
     }
 
     @Override
     public ObservableList<?> getDependencies() {
-        return getBindings();
+        return bindings;
     }
 
     @Override
@@ -67,35 +84,54 @@ public class InvalidableOrBooleanBinding implements Binding<Boolean> {
 
     @Override
     public void addListener(ChangeListener<? super Boolean> listener) {
-        getChangeListeners().add(listener);
+        changeListeners.add(listener);
     }
 
     @Override
     public void removeListener(ChangeListener<? super Boolean> listener) {
-        getChangeListeners().remove(listener);
-    }
-
-    @Override
-    public Boolean getValue() {
-        return getBindings().stream().map(Binding::getValue).reduce(Boolean.FALSE, Boolean::logicalOr);
-    }
-
-    public Boolean get() {
-        return getValue();
+        changeListeners.remove(listener);
     }
 
     @Override
     public void addListener(InvalidationListener listener) {
-        getInvalidationListeners().add(listener);
+        invalidationListeners.add(listener);
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        getInvalidationListeners().remove(listener);
+        invalidationListeners.remove(listener);
     }
 
+    @Override
+    public Boolean getValue() {
+        return bindings.stream().map(Binding::getValue).reduce(Boolean.FALSE, Boolean::logicalOr);
+    }
+
+    /**
+     * Shorthand for {@link #getValue()}.
+     *
+     * @return true iff {@code getValue()} is true
+     */
+    public Boolean get() {
+        return getValue();
+    }
+
+    /**
+     * Append another binding as if joined by an OR operation with the rest.
+     *
+     * @param binding the appended binding
+     * @return a new {@code InvalidableOrBooleanBinding}
+     */
     public InvalidableOrBooleanBinding or(Binding<Boolean> binding) {
-        addBinding(binding);
-        return this;
+        return new InvalidableOrBooleanBinding(this, binding);
+    }
+
+    /**
+     * Copy or binding without keeping listeners.
+     *
+     * @return the new or binding
+     */
+    public InvalidableOrBooleanBinding copyWithoutListeners() {
+        return new InvalidableOrBooleanBinding(bindings);
     }
 }

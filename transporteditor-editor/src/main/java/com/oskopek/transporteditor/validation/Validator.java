@@ -25,6 +25,7 @@ public interface Validator extends LogStreamable, Cancellable {
      */
     boolean isValid(Domain domain, Problem problem, Plan plan);
 
+    @Override
     default boolean cancel() {
         // intentionally empty
         return false;
@@ -42,6 +43,12 @@ public interface Validator extends LogStreamable, Cancellable {
         return CompletableFuture.supplyAsync(() -> isValid(domain, problem, plan));
     }
 
+    /**
+     * Return the executable backing the validator. Implementations that do not have a backing executable
+     * should return null.
+     *
+     * @return the backing executable or null if none such exists
+     */
     default ExecutableWithParameters getExecutableWithParameters() {
         return null;
     }

@@ -9,8 +9,22 @@ import com.oskopek.transporteditor.model.problem.Vehicle;
 
 import java.util.List;
 
+/**
+ * The pick-up action. Semantics: Vehicle (who) picks up package (what) at location (where).
+ */
 public class PickUp extends DefaultAction<Vehicle, Package> {
 
+    /**
+     * Default constructor.
+     *
+     * @param vehicle the vehicle
+     * @param location where to pick up
+     * @param aPackage the package to pick up
+     * @param preconditions applicable preconditions
+     * @param effects applicable effects
+     * @param cost cost of the action
+     * @param duration duration of the action
+     */
     public PickUp(Vehicle vehicle, Location location, Package aPackage, List<Predicate> preconditions,
             List<Predicate> effects, ActionCost cost, ActionCost duration) {
         super("pick-up", vehicle, location, aPackage, preconditions, effects, cost, duration);

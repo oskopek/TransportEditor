@@ -9,6 +9,9 @@ import com.oskopek.transporteditor.model.problem.Locatable;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 
+/**
+ * Asserts whether the locatable (what) is at given location (where).
+ */
 public class WhatAtWhere extends DefaultPredicate {
 
     @Override

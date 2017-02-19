@@ -15,6 +15,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
+/**
+ * Create and display a dialog for editing properties of
+ * an {@link com.oskopek.transporteditor.model.problem.ActionObject}.
+ */
 @Singleton
 public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer<Supplier<Void>> {
 

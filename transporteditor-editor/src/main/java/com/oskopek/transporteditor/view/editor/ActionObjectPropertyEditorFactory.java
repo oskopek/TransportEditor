@@ -10,10 +10,19 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 import java.util.stream.Collectors;
 
+/**
+ * Custom {@link DefaultPropertyEditorFactory} implementation that handles our action objects correctly.
+ * For example, creates custom and validated editors for {@link Location}s and {@link ActionCost}s.
+ */
 public class ActionObjectPropertyEditorFactory extends DefaultPropertyEditorFactory {
 
     private RoadGraph graph;
 
+    /**
+     * Default constructor.
+     *
+     * @param graph used for location validation
+     */
     public ActionObjectPropertyEditorFactory(RoadGraph graph) {
         this.graph = graph;
     }

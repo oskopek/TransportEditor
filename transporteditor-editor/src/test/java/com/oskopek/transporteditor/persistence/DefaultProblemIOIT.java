@@ -69,13 +69,13 @@ public class DefaultProblemIOIT {
         assertNotNull(problem.getPackage("package-1").getLocation());
         assertEquals("city-loc-4", problem.getPackage("package-1").getLocation().getName());
         assertNotNull(problem.getPackage("package-1").getSize());
-        assertEquals(1, problem.getPackage("package-1").getSize().getCost().intValue());
+        assertEquals(1, problem.getPackage("package-1").getSize().getCost());
 
 
         assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
-        assertEquals(2, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
+        assertEquals(2, problem.getVehicle("truck-1").getCurCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
-        assertEquals(2, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertEquals(2, problem.getVehicle("truck-1").getMaxCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getPackageList());
         assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
 
@@ -86,7 +86,7 @@ public class DefaultProblemIOIT {
         Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
         assertNotNull(road);
         assertNotNull(road.getLength());
-        assertEquals(32, road.getLength().getCost().intValue());
+        assertEquals(32, road.getLength().getCost());
         for (int i = 1; i <= 5; i++) {
             if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
                 assertNotNull(rg.getLocation("city-loc-" + i).getPetrolStation());
@@ -182,14 +182,14 @@ public class DefaultProblemIOIT {
 
         assertNotNull(problem.getPackage("package-1"));
         assertNotNull(problem.getPackage("package-1").getSize());
-        assertEquals(23, problem.getPackage("package-1").getSize().getCost().intValue());
+        assertEquals(23, problem.getPackage("package-1").getSize().getCost());
         assertNotNull(problem.getPackage("package-1").getLocation());
         assertEquals("city-loc-3", problem.getPackage("package-1").getLocation().getName());
 
         assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
-        assertEquals(100, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
+        assertEquals(100, problem.getVehicle("truck-1").getCurCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
-        assertEquals(100, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertEquals(100, problem.getVehicle("truck-1").getMaxCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getPackageList());
         assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
 
@@ -199,11 +199,11 @@ public class DefaultProblemIOIT {
         assertEquals(12, rg.getEdgeCount());
         Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
         assertNotNull(road);
-        assertEquals(45, road.getLength().getCost().intValue());
+        assertEquals(45, road.getLength().getCost());
         assertEquals(FuelRoad.class, road.getClass());
         FuelRoad fuelRoad = (FuelRoad) road;
-        assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
-        assertEquals(45, fuelRoad.getLength().getCost().intValue());
+        assertEquals(89, fuelRoad.getFuelCost().getCost());
+        assertEquals(45, fuelRoad.getLength().getCost());
         assertNotNull(rg.getLocation("city-loc-1").getPetrolStation());
         assertTrue(rg.getLocation("city-loc-1").hasPetrolStation());
         for (int i = 2; i <= 5; i++) {
@@ -214,9 +214,9 @@ public class DefaultProblemIOIT {
         assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
         Vehicle truck1 = problem.getVehicle("truck-1");
         assertNotNull(truck1.getCurFuelCapacity());
-        assertEquals(424, (int) truck1.getCurFuelCapacity().getCost());
+        assertEquals(424, truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
-        assertEquals(424, (int) truck1.getMaxFuelCapacity().getCost());
+        assertEquals(424, truck1.getMaxFuelCapacity().getCost());
     }
 
     @Test
@@ -255,14 +255,14 @@ public class DefaultProblemIOIT {
 
         assertNotNull(problem.getPackage("package-1"));
         assertNotNull(problem.getPackage("package-1").getSize());
-        assertEquals(1, problem.getPackage("package-1").getSize().getCost().intValue());
+        assertEquals(1, problem.getPackage("package-1").getSize().getCost());
         assertNotNull(problem.getPackage("package-1").getLocation());
         assertEquals("city-loc-5", problem.getPackage("package-1").getLocation().getName());
 
         assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
-        assertEquals(3, (int) problem.getVehicle("truck-1").getCurCapacity().getCost());
+        assertEquals(3, problem.getVehicle("truck-1").getCurCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
-        assertEquals(3, (int) problem.getVehicle("truck-1").getMaxCapacity().getCost());
+        assertEquals(3, problem.getVehicle("truck-1").getMaxCapacity().getCost());
         assertNotNull(problem.getVehicle("truck-1").getPackageList());
         assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
 
@@ -272,18 +272,18 @@ public class DefaultProblemIOIT {
         assertEquals(14, rg.getEdgeCount());
         Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-3"), rg.getLocation("city-loc-4"));
         assertNotNull(road);
-        assertEquals(45, road.getLength().getCost().intValue());
+        assertEquals(45, road.getLength().getCost());
         assertEquals(FuelRoad.class, road.getClass());
         FuelRoad fuelRoad = (FuelRoad) road;
-        assertEquals(89, fuelRoad.getFuelCost().getCost().intValue());
-        assertEquals(45, fuelRoad.getLength().getCost().intValue());
+        assertEquals(89, fuelRoad.getFuelCost().getCost());
+        assertEquals(45, fuelRoad.getLength().getCost());
 
         assertEquals(Vehicle.class, problem.getVehicle("truck-1").getClass());
         Vehicle truck1 = problem.getVehicle("truck-1");
         assertNotNull(truck1.getCurFuelCapacity());
-        assertEquals(323, (int) truck1.getCurFuelCapacity().getCost());
+        assertEquals(323, truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
-        assertEquals(323, (int) truck1.getMaxFuelCapacity().getCost());
+        assertEquals(323, truck1.getMaxFuelCapacity().getCost());
     }
 
 }

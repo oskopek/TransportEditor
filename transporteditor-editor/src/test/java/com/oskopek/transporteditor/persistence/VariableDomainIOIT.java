@@ -16,14 +16,13 @@ import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
 
-import static com.oskopek.transporteditor.test.TestUtils.assertContains;
-import static com.oskopek.transporteditor.test.TestUtils.assertNotContains;
 import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
@@ -65,11 +64,11 @@ public class VariableDomainIOIT {
     public static void assertSequentialDomain(Domain parsed) {
         assertNotNull(parsed);
 
-        assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.Temporal, parsed.getPddlLabels());
-        assertContains(PddlLabel.ActionCost, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.Fuel, parsed.getPddlLabels());
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Capacity);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.MaxCapacity);
+        assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.Temporal);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.ActionCost);
+        assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.Fuel);
 
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
@@ -83,30 +82,30 @@ public class VariableDomainIOIT {
                         .getDuration());
 
         // drive
-        assertContains(new WhoAtWhere(), parsed.getDriveBuilder().getPreconditions());
-        assertContains(new IsRoad(), parsed.getDriveBuilder().getPreconditions());
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new WhoAtWhere());
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new IsRoad());
         assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
 
-        assertContains(new Not(new WhoAtWhere()), parsed.getDriveBuilder().getEffects());
-        assertContains(new WhoAtWhat(), parsed.getDriveBuilder().getEffects());
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(new Not(new WhoAtWhere()));
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(new WhoAtWhat());
         assertEquals(2, parsed.getDriveBuilder().getEffects().size());
 
         // pickup
-        assertContains(new WhoAtWhere(), parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new WhatAtWhere(), parsed.getPickUpBuilder().getPreconditions());
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(new WhoAtWhere());
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(new WhatAtWhere());
         assertEquals(2, parsed.getPickUpBuilder().getPreconditions().size());
 
-        assertContains(new In(), parsed.getPickUpBuilder().getEffects());
-        assertContains(new Not(new WhatAtWhere()), parsed.getPickUpBuilder().getEffects());
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(new In());
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(new Not(new WhatAtWhere()));
         assertEquals(2, parsed.getPickUpBuilder().getEffects().size());
 
         // drop
-        assertContains(new WhoAtWhere(), parsed.getDropBuilder().getPreconditions());
-        assertContains(new In(), parsed.getDropBuilder().getPreconditions());
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(new WhoAtWhere());
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(new In());
         assertEquals(2, parsed.getDropBuilder().getPreconditions().size());
 
-        assertContains(new Not(new In()), parsed.getDropBuilder().getEffects());
-        assertContains(new WhatAtWhere(), parsed.getDropBuilder().getEffects());
+        assertThat(parsed.getDropBuilder().getEffects()).contains(new Not(new In()));
+        assertThat(parsed.getDropBuilder().getEffects()).contains(new WhatAtWhere());
         assertEquals(2, parsed.getDropBuilder().getEffects().size());
 
         assertNull(parsed.getRefuelBuilder());
@@ -137,11 +136,11 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainTempPDDLContents);
         assertNotNull(parsed);
 
-        assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.Temporal, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.ActionCost, parsed.getPddlLabels());
-        assertContains(PddlLabel.Fuel, parsed.getPddlLabels());
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Capacity);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.MaxCapacity);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Temporal);
+        assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.ActionCost);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Fuel);
 
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
@@ -157,46 +156,46 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.valueOf(10), parsed.getRefuelBuilder().build(null, null, null).getCost());
 
         // drive
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getPreconditions());
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START));
         assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getEffects());
-        assertContains(new TemporalPredicate(new WhoAtWhat(), TemporalQuantifier.AT_END),
-                parsed.getDriveBuilder().getEffects());
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(
+                new TemporalPredicate(new WhoAtWhat(), TemporalQuantifier.AT_END));
         assertEquals(2, parsed.getDriveBuilder().getEffects().size());
 
         // pickup
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL),
-                parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getPreconditions());
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL));
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_START));
         assertEquals(3, parsed.getPickUpBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new In(), TemporalQuantifier.AT_END),
-                parsed.getPickUpBuilder().getEffects());
-        assertContains(new TemporalPredicate(new Not(new WhatAtWhere()), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getEffects());
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(
+                new TemporalPredicate(new In(), TemporalQuantifier.AT_END));
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new WhatAtWhere()), TemporalQuantifier.AT_START));
         assertEquals(2, parsed.getPickUpBuilder().getEffects().size());
 
         // drop
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL),
-                parsed.getDropBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new In(), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getPreconditions());
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL));
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new In(), TemporalQuantifier.AT_START));
         assertEquals(3, parsed.getDropBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new Not(new In()), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getEffects());
-        assertContains(new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_END),
-                parsed.getDropBuilder().getEffects());
+        assertThat(parsed.getDropBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new In()), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDropBuilder().getEffects()).contains(
+                new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_END));
         assertEquals(2, parsed.getDropBuilder().getEffects().size());
 
         assertNotNull(parsed.getRefuelBuilder());
@@ -229,11 +228,11 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainBPDDLContents);
         assertNotNull(parsed);
 
-        assertContains(PddlLabel.Capacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.MaxCapacity, parsed.getPddlLabels());
-        assertContains(PddlLabel.Temporal, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.ActionCost, parsed.getPddlLabels());
-        assertNotContains(PddlLabel.Fuel, parsed.getPddlLabels());
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Capacity);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.MaxCapacity);
+        assertThat(parsed.getPddlLabels()).contains(PddlLabel.Temporal);
+        assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.ActionCost);
+        assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.Fuel);
 
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
@@ -242,46 +241,46 @@ public class VariableDomainIOIT {
         assertNull(parsed.getRefuelBuilder());
 
         // drive
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getPreconditions());
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START));
         assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START),
-                parsed.getDriveBuilder().getEffects());
-        assertContains(new TemporalPredicate(new WhoAtWhat(), TemporalQuantifier.AT_END),
-                parsed.getDriveBuilder().getEffects());
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDriveBuilder().getEffects()).contains(
+                new TemporalPredicate(new WhoAtWhat(), TemporalQuantifier.AT_END));
         assertEquals(2, parsed.getDriveBuilder().getEffects().size());
 
         // pickup
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL),
-                parsed.getPickUpBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getPreconditions());
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL));
+        assertThat(parsed.getPickUpBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_START));
         assertEquals(3, parsed.getPickUpBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new In(), TemporalQuantifier.AT_END),
-                parsed.getPickUpBuilder().getEffects());
-        assertContains(new TemporalPredicate(new Not(new WhatAtWhere()), TemporalQuantifier.AT_START),
-                parsed.getPickUpBuilder().getEffects());
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(
+                new TemporalPredicate(new In(), TemporalQuantifier.AT_END));
+        assertThat(parsed.getPickUpBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new WhatAtWhere()), TemporalQuantifier.AT_START));
         assertEquals(2, parsed.getPickUpBuilder().getEffects().size());
 
         // drop
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL),
-                parsed.getDropBuilder().getPreconditions());
-        assertContains(new TemporalPredicate(new In(), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getPreconditions());
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.OVER_ALL));
+        assertThat(parsed.getDropBuilder().getPreconditions()).contains(
+                new TemporalPredicate(new In(), TemporalQuantifier.AT_START));
         assertEquals(3, parsed.getDropBuilder().getPreconditions().size());
 
-        assertContains(new TemporalPredicate(new Not(new In()), TemporalQuantifier.AT_START),
-                parsed.getDropBuilder().getEffects());
-        assertContains(new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_END),
-                parsed.getDropBuilder().getEffects());
+        assertThat(parsed.getDropBuilder().getEffects()).contains(
+                new TemporalPredicate(new Not(new In()), TemporalQuantifier.AT_START));
+        assertThat(parsed.getDropBuilder().getEffects()).contains(
+                new TemporalPredicate(new WhatAtWhere(), TemporalQuantifier.AT_END));
         assertEquals(2, parsed.getDropBuilder().getEffects().size());
     }
 

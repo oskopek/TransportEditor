@@ -4,17 +4,34 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * The Interval class maintains an interval with some associated data
+ * The Interval class maintains an interval with some associated data.
  *
  * @param <Type> The type of data being stored
  * @author Kevin Dolan
  */
 public class Interval<Type> implements Comparable<Interval<Type>> {
 
-    private long start;
-    private long end;
-    private Type data;
+    private final long start;
+    private final long end;
+    private final Type data;
 
+    /**
+     * Create an interval with the given parameters.
+     *
+     * @param start the start time
+     * @param end the end time
+     */
+    public Interval(long start, long end) {
+        this(start, end, null);
+    }
+
+    /**
+     * Create an interval with the given parameters.
+     *
+     * @param start the start time
+     * @param end the end time
+     * @param data the associated data
+     */
     public Interval(long start, long end, Type data) {
         if (start > end) {
             throw new IllegalArgumentException("Interval start cannot be later than end.");
@@ -24,51 +41,72 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
         this.data = data;
     }
 
+    /**
+     * Get the start time.
+     *
+     * @return the start time
+     */
     public long getStart() {
         return start;
     }
 
-    public void setStart(long start) {
-        this.start = start;
-    }
-
+    /**
+     * Get the end time.
+     *
+     * @return the end time
+     */
     public long getEnd() {
         return end;
     }
 
-    public void setEnd(long end) {
-        this.end = end;
-    }
-
+    /**
+     * Get the stored data.
+     *
+     * @return the stored data
+     */
     public Type getData() {
         return data;
     }
 
-    public void setData(Type data) {
-        this.data = data;
-    }
-
     /**
-     * @param time
+     * Verify that the {@code time} is in the interval. Inclusive from the left, exclusive from the right.
+     * Example:
+     * <ul>
+     *     <li>{@code contains(start) == true}</li>
+     *     <li>{@code contains(end) == false}</li>
+     * </ul>
+     *
+     * @param time the time
+     * @return true iff time is in [start, end)
      */
     public boolean contains(long time) {
         return time < end && time >= start;
     }
 
     /**
-     * @param other
+     * Verify that the {@code time} is outside the interval.
+     * Overlapping border times are not considered as intersections.
+     * Example:
+     * <ul>
+     *     <li>{@code Interval(0, 2).intersects(Interval(1, 3)) == true}</li>
+     *     <li>{@code Interval(0, 2).intersects(Interval(2, 3)) == false}</li>
+     *     <li>{@code Interval(0, 2).intersects(Interval(-1, 0)) == false}</li>
+     * </ul>
+     * @param other the other interval
+     * @return true iff {@code |[start, end] intersection [other.start, other.end]| > 1}
      */
     public boolean intersects(Interval<?> other) {
         return other.getEnd() > start && other.getStart() < end;
     }
 
     /**
-     * Return -1 if this interval's start time is less than the other, 1 if greater
-     * In the event of a tie, -1 if this interval's end time is less than the other, 1 if greater, 0 if same
+     * Return -1 if this interval's start time is less than the other, 1 if greater.
+     * In the event of a tie, -1 if this interval's end time is less than the other, 1 if greater, 0 if same.
      *
-     * @param other
-     * @return 1 or -1
+     * @param other the interval to compare to
+     * @return the comparison of the interval's start and end times
      */
+    @Override
     public int compareTo(Interval<Type> other) {
         if (start < other.getStart()) {
             return -1;
