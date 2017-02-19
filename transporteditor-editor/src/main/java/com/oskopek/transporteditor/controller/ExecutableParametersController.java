@@ -144,7 +144,7 @@ public class ExecutableParametersController extends AbstractController {
     }
 
     public ExecutableWithParameters getExecutable() {
-        return allValidationsValid.get() && ButtonBar.ButtonData.APPLY.equals(result) ?
-                new DefaultExecutableWithParameters(executableArea.getText(), parametersArea.getText()) : null;
+        return allValidationsValid.get() && ButtonBar.ButtonData.APPLY.equals(result)
+                ? new DefaultExecutableWithParameters(executableArea.getText(), parametersArea.getText()) : null;
     }
 }

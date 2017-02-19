@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graphstream.version>1.3</graphstream.version>
-        <checkstyle.javadoc.severity>error</checkstyle.javadoc.severity>
+        <checkstyle.javadoc.severity>warning</checkstyle.javadoc.severity>
         <rootLevelDir>${project.basedir}</rootLevelDir>
     </properties>
     <dependencyManagement>
