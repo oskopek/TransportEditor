@@ -7,6 +7,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a vehicle in the Transport domain's problem instance. Universal for all domain variants.
+ */
 public class Vehicle extends DefaultLocatable implements Locatable, ActionObject {
 
     private final ActionCost curCapacity;
@@ -15,11 +18,35 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     private final ActionCost maxFuelCapacity;
     private final List<Package> packageList;
 
+    /**
+     * Default constructor for a fuel disabled domain.
+     *
+     * @param name the name
+     * @param location the starting location of the vehicle
+     * @param curCapacity the current package capacity (the sum of package sizes that fit into the vehicle)
+     * @param maxCapacity the maximum package capacity (the sum of package sizes that fit into the vehicle
+     * if it is empty before)
+     * @param packageList a list of packages loaded into the vehicle
+     */
     public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
             List<Package> packageList) {
         this(name, location, curCapacity, maxCapacity, null, null, packageList);
     }
 
+    /**
+     * Default constructor for a fuel enabled domain.
+     *
+     * @param name the name
+     * @param location the current location of the vehicle
+     * @param curCapacity the current package capacity (the sum of package sizes that fit into the vehicle)
+     * @param maxCapacity the maximum package capacity (the sum of package sizes that fit into the vehicle
+     * if it is empty before)
+     * @param curFuelCapacity the current fuel capacity (the sum of road fuel costs that the vehicle can drive
+     * from now)
+     * @param maxFuelCapacity the maximum fuel capacity (the sum of road fuel costs that the vehicle can drive
+     * from a full tank)
+     * @param packageList a list of packages loaded into the vehicle
+     */
     public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
             ActionCost curFuelCapacity, ActionCost maxFuelCapacity,
             List<Package> packageList) {
@@ -34,22 +61,47 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         this.packageList = packageList;
     }
 
+    /**
+     * Get the current package capacity.
+     *
+     * @return the current package capacity
+     */
     public ActionCost getCurCapacity() {
         return curCapacity;
     }
 
+    /**
+     * Get the maximum package capacity.
+     *
+     * @return the maximum package capacity
+     */
     public ActionCost getMaxCapacity() {
         return maxCapacity;
     }
 
+    /**
+     * Get the current fuel capacity.
+     *
+     * @return the current fuel capacity
+     */
     public ActionCost getCurFuelCapacity() {
         return curFuelCapacity;
     }
 
+    /**
+     * Get the maximum fuel capacity.
+     *
+     * @return the maximum fuel capacity
+     */
     public ActionCost getMaxFuelCapacity() {
         return maxFuelCapacity;
     }
 
+    /**
+     * Get the package list.
+     *
+     * @return the package list
+     */
     public List<Package> getPackageList() {
         return packageList;
     }
@@ -60,20 +112,45 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
                 getMaxFuelCapacity(), getPackageList());
     }
 
+    /**
+     * Update the vehicle with a new current fuel capacity. Returns a new vehicle instance.
+     *
+     * @param curFuelCapacity the new current fuel capacity
+     * @return the updated vehicle
+     */
     public Vehicle updateCurFuelCapacity(ActionCost curFuelCapacity) {
         return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), curFuelCapacity,
                 getMaxFuelCapacity(), getPackageList());
     }
 
+    /**
+     * Update the vehicle with a new location. Returns a new vehicle instance.
+     *
+     * @param location the new location
+     * @return the updated vehicle
+     */
     public Vehicle updateLocation(Location location) {
         return new Vehicle(getName(), location, getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
                 getMaxFuelCapacity(), getPackageList());
     }
 
+    /**
+     * Update the vehicle with a new package. Returns a new vehicle instance.
+     *
+     * @param oldPackage the old package
+     * @param newPackage the new package
+     * @return the updated vehicle
+     */
     public Vehicle changePackage(Package oldPackage, Package newPackage) {
         return removePackage(oldPackage).addPackage(newPackage);
     }
 
+    /**
+     * Adds a package to the vehicle. Returns a new vehicle instance.
+     *
+     * @param pkg the package to add
+     * @return the updated vehicle
+     */
     public Vehicle addPackage(Package pkg) {
         if (getPackageList().contains(pkg)) {
             throw new IllegalArgumentException("Package " + pkg + " already is in vehicle " + this + ".");
@@ -89,6 +166,12 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
                 getMaxFuelCapacity(), newPackageList);
     }
 
+    /**
+     * Removes a package from the vehicle. Returns a new vehicle instance.
+     *
+     * @param pkg the package to remove
+     * @return the updated vehicle
+     */
     public Vehicle removePackage(Package pkg) {
         if (!getPackageList().contains(pkg)) {
             throw new IllegalArgumentException("Package " + pkg + " is not in vehicle " + this + ".");

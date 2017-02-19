@@ -2,10 +2,8 @@ package com.oskopek.transporteditor.model.problem;
 
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.view.SpriteBuilder;
-import javaslang.Tuple;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
@@ -26,9 +24,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Wrapper interface around a GraphStream graph type.
+ * Wrapper interface around a GraphStream oriented multigraph type. Currently supports only a single
+ * oriented edge between two ordered nodes (i.e. a total of two edges between a set of two nodes).
+ * <p>
+ * Displays edge and vehicle/package properties using {@link Sprite}s with a {@link SpriteManager},
+ * because GraphStream doesn't have a notion of clicking on an edge. These sprites should always be
+ * attached to a node or edge.
+ * The state mutator methods automatically cause graph redraws.
+ * <p>
+ * TODO: Refactor GUI out of this class
  */
-public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor GUI out of this
+public class RoadGraph extends MultiGraph implements Graph {
 
     private transient SpriteManager spriteManager;
     private transient double packageDegreeDelta;
@@ -38,17 +44,30 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Copy constructor.
+     *
+     * @param graph the graph to copy
+     */
     public RoadGraph(RoadGraph graph) {
         this(graph.getId());
         graph.getAllLocations().forEach(this::addLocation);
         graph.getAllRoads().forEach(e -> this.addRoad(e.getRoad(), e.getFrom(), e.getTo()));
     }
 
+    /**
+     * Constructs a new empty graph.
+     *
+     * @param id the name of the graph
+     */
     public RoadGraph(String id) {
         super(id);
         setDefaultStyling();
     }
 
+    /**
+     * Set the default CSS stylesheet and various rendering properties.
+     */
     public void setDefaultStyling() {
         String style;
         try {
@@ -63,14 +82,13 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         spriteManager = new SpriteManager(this);
     }
 
-    @Deprecated
-    public Optional<Point3> calculateCentroid() {
-        return getNodeSet().stream().map(Toolkit::nodePosition).map(c -> Tuple.of(c[0], c[1], c[2]))
-                .reduce((t1, t2) -> Tuple.of(t1._1 + t2._1, t1._2 + t2._2, t1._3 + t2._3))
-                .map(t -> Tuple.of(t._1 / nodeCount, t._2 / nodeCount, t._3 / nodeCount))
-                .map(t -> new Point3(t._1, t._2, t._3));
-    }
-
+    /**
+     * Add a new node to the graph represening the location.
+     *
+     * @param location the location to add
+     * @param <T> the type of the node object
+     * @return the created node
+     */
     public <T extends Node> T addLocation(Location location) {
         addAttribute(location.getName(), location);
         T node = addNode(location.getName());
@@ -79,6 +97,12 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return node;
     }
 
+    /**
+     * Removes the location and associated node from the graph. Does checking and removes any
+     * associated roads too.
+     *
+     * @param location the location to remove
+     */
     public void removeLocation(Location location) {
         removeRoads(getAllRoads().filter(re -> re.getFrom().equals(location) || re.getTo().equals(location))
                 .map(r -> r.getRoad().getName()).collect(Collectors.toList()));
@@ -86,10 +110,24 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         removeAttribute(location.getName());
     }
 
+    /**
+     * Removes all the locations.
+     *
+     * @param locations the locations to remove
+     * @see #removeLocation(Location)
+     */
     public void removeLocations(Iterable<? extends Location> locations) {
         locations.forEach(this::removeLocation);
     }
 
+    /**
+     * Move the given location to new X and Y coordinates.
+     *
+     * @param name the name of the location to move
+     * @param newX the new X coordinate
+     * @param newY the new Y coordinate
+     * @return the updated location
+     */
     public Location moveLocation(String name, int newX, int newY) {
         Location original = getAttribute(name);
         Location newLocation = new Location(original.getName(), newX, newY);
@@ -97,6 +135,14 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return original;
     }
 
+    /**
+     * Update the location's petrol station property. Creates a new location instance and replaces
+     * it in the graph.
+     *
+     * @param locationName the location's name
+     * @param hasPetrolStation the new petrol station value
+     * @return the updated location
+     */
     public Location setPetrolStation(String locationName, boolean hasPetrolStation) {
         Location original = getAttribute(locationName);
         Location newLocation = original.updateHasPetrolStation(hasPetrolStation);
@@ -104,10 +150,21 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return original;
     }
 
+    /**
+     * Get the location of the given name.
+     *
+     * @param name the name of the location
+     * @return the location, or null if there is no such location
+     */
     public Location getLocation(String name) {
         return getAttribute(name);
     }
 
+    /**
+     * Get a stream of all the locations in the graph.
+     *
+     * @return a stream of all the locations
+     */
     public Stream<Location> getAllLocations() {
         Stream.Builder<Location> stream = Stream.builder();
         for (Node n : getEachNode()) {
@@ -118,6 +175,11 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return stream.build();
     }
 
+    /**
+     * Get a stream of all the road edges in the graph.
+     *
+     * @return a stream of all the road edges
+     */
     public Stream<RoadEdge> getAllRoads() {
         Stream.Builder<RoadEdge> stream = Stream.builder();
         for (Edge e : getEachEdge()) {
@@ -127,6 +189,9 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return stream.build();
     }
 
+    /**
+     * Removes all sprites from the sprite manager and detaches it + resets graph styling.
+     */
     private void removeAllActionObjectSprites() {
         packageDegreeDelta = 0d;
         vehicleDegreeDelta = 0d;
@@ -139,6 +204,11 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         setDefaultStyling(); // TODO: Hack
     }
 
+    /**
+     * Remove and add all sprites.
+     *
+     * @param problem the problem from which to get the action objects
+     */
     public void redrawActionObjectSprites(Problem problem) {
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
@@ -146,22 +216,51 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         problem.getAllVehicles().forEach(v -> addVehicleSprite(v, v.getLocation()));
     }
 
+    /**
+     * Adds a sprite of the action object name to the sprite manager.
+     *
+     * @param name the name of the action object who's sprite to add
+     * @return a sprite builder of the sprite
+     */
     private SpriteBuilder<Sprite> addSprite(String name) {
         return new SpriteBuilder<>(spriteManager, "sprite-" + name, Sprite.class);
     }
 
+    /**
+     * Removes a sprite of the action object name from the sprite manager.
+     *
+     * @param name the name of the action object who's sprite to remove
+     */
     private void removeSprite(String name) {
         spriteManager.removeSprite("sprite-" + name);
     }
 
+    /**
+     * Adds an edge sprite to the graph, attached to the edge halfway along its run.
+     *
+     * @param edge the edge to add sprite to
+     */
     private void addEdgeSprite(Edge edge) {
         addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
     }
 
+    /**
+     * Adds a package sprite to the graph, returning a sprite builder. <strong>Needs to be finished
+     * by attaching to a location/road.</strong>
+     *
+     * @param pkg the package
+     * @return the sprite builder for this sprite
+     */
     private SpriteBuilder addPackageSprite(Package pkg) {
         return addSprite(pkg.getName()).setClass("package");
     }
 
+    /**
+     * Adds a package sprite to the graph, attached to the given location.
+     *
+     * @param pkg the package
+     * @param location the location
+     */
     public void addPackageSprite(Package pkg, Location location) {
         packageDegreeDelta += 25d;
         if (packageDegreeDelta > 180d) {
@@ -176,6 +275,13 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    /**
+     * Adds a package sprite to the graph, attached to the given road at a percentage of it's length.
+     *
+     * @param pkg the package
+     * @param road the road
+     * @param percentage the percentage from source to destination on which to add sprite
+     */
     public void addPackageSprite(Package pkg, Road road, double percentage) {
         SpriteBuilder sprite = addPackageSprite(pkg).setPosition(percentage);
         if (road != null) {
@@ -183,10 +289,23 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    /**
+     * Adds a vehicle sprite to the graph, returning a sprite builder. <strong>Needs to be finished
+     * by attaching to a location/road.</strong>
+     *
+     * @param vehicle the vehicle
+     * @return the sprite builder for this sprite
+     */
     private SpriteBuilder addVehicleSprite(Vehicle vehicle) {
         return addSprite(vehicle.getName()).setClass("vehicle");
     }
 
+    /**
+     * Adds a vehicle sprite to the graph, attached to the given location.
+     *
+     * @param vehicle the vehicle
+     * @param location the location
+     */
     public void addVehicleSprite(Vehicle vehicle, Location location) {
         vehicleDegreeDelta += 25d;
         if (vehicleDegreeDelta > 180d) {
@@ -199,6 +318,13 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    /**
+     * Adds a vehicle sprite to the graph, attached to the given road at a percentage of it's length.
+     *
+     * @param vehicle the vehicle
+     * @param road the road
+     * @param percentage the percentage from source to destination on which to add sprite
+     */
     public void addVehicleSprite(Vehicle vehicle, Road road, double percentage) {
         SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(percentage);
         if (road != null) {
@@ -206,6 +332,11 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    /**
+     * Set the correct CSS style class on the node based on if it has a petrol station.
+     *
+     * @param location the location
+     */
     private void setPetrolStationStyle(Location location) {
         Node node = getNode(location.getName());
         if (location.hasPetrolStation()) {
@@ -215,6 +346,16 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         }
     }
 
+    /**
+     * Add a new edge to the graph represening the road.
+     *
+     * @param road the road to add
+     * @param from the source location
+     * @param to the destination location
+     * @param <T> the type of the edge object
+     * @param <R> the type of the road object
+     * @return the created edge
+     */
     public <T extends Edge, R extends Road> T addRoad(R road, Location from, Location to) {
         addAttribute(road.getName(), road);
         T edge = addEdge(road.getName(), from.getName(), to.getName(), true);
@@ -223,6 +364,16 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return edge;
     }
 
+    /**
+     * Put (add with override) a new edge to the graph represening the road.
+     *
+     * @param road the road to add
+     * @param from the source location
+     * @param to the destination location
+     * @param <T> the type of the edge object
+     * @param <R> the type of the road object
+     * @return the created edge
+     */
     public <T extends Edge, R extends Road> T putRoad(R road, Location from, Location to) {
         removeAttribute(road.getName());
         try {
@@ -234,6 +385,15 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return addRoad(road, from, to);
     }
 
+    /**
+     * Get stream of all the roads going from the first to the second location.
+     * In the current implementation, should return the same
+     * as {@link #getShortestRoadBetween(Location, Location)}.
+     *
+     * @param l1 the from location
+     * @param l2 the to location
+     * @return a stream of all the roads l1 -> l2
+     */
     public Stream<Road> getAllRoadsBetween(Location l1, Location l2) {
         Node n1 = getNode(l1.getName());
         if (n1 == null) {
@@ -250,7 +410,8 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
     }
 
     /**
-     * Only a single road is permitted between two nodes in practice, but our model is a bit more flexible.
+     * Only a single road is currently permitted between two nodes in practice. This method returns that
+     * road, or null if there is none.
      *
      * @param l1 the from location
      * @param l2 the to location
@@ -260,14 +421,33 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         return getAllRoadsBetween(l1, l2).min(Comparator.comparing(Road::getLength)).orElse(null);
     }
 
+    /**
+     * Removes all nodes going from l1 to l2.
+     *
+     * @param l1 the from location
+     * @param l2 the to location
+     * @see #getAllRoadsBetween(Location, Location)
+     */
     public void removeAllRoadsBetween(Location l1, Location l2) {
         removeRoads(getAllRoadsBetween(l1, l2).map(Road::getName).collect(Collectors.toList()));
     }
 
+    /**
+     * Get the road given by the name.
+     *
+     * @param name the name of the road
+     * @return the road, null if a road like that doesn't exist
+     */
     public Road getRoad(String name) {
         return getAttribute(name);
     }
 
+    /**
+     * Get the road edge given by the name of the road.
+     *
+     * @param name the name of the road
+     * @return the road edge, null if a road like that doesn't exist
+     */
     public RoadEdge getRoadEdge(String name) {
         Edge edge = getEdge(name);
         if (edge == null) {
@@ -277,6 +457,11 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
                 getAttribute(edge.getNode1().getId()));
     }
 
+    /**
+     * Remove the road given by the name. Also removes its edge sprite and edge.
+     *
+     * @param name the name of the road
+     */
     public void removeRoad(String name) {
         try {
             removeSprite(name);
@@ -287,6 +472,11 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
         removeAttribute(name);
     }
 
+    /**
+     * Remove all the roads by their names.
+     * @param names the names of roads to remove
+     * @see #removeRoad(String)
+     */
     public void removeRoads(Iterable<? extends String> names) {
         names.forEach(this::removeRoad);
     }
@@ -329,30 +519,64 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
                 .isEquals();
     }
 
+    /**
+     * Represents a road along with the two locations between which it spans. Is not used internally
+     * in the graph, serves as public API that is calculated based on the internal representation.
+     */
     public static final class RoadEdge {
 
         private final Road road;
         private final Location from;
         private final Location to;
 
+        /**
+         * Private default constructor.
+         *
+         * @param road the road
+         * @param from the from location
+         * @param to the to location
+         */
         private RoadEdge(Road road, Location from, Location to) {
             this.road = road;
             this.from = from;
             this.to = to;
         }
 
+        /**
+         * Build a road edge from the arguments.
+         *
+         * @param road the road
+         * @param from the from location
+         * @param to the to location
+         * @return the built road edge
+         */
         public static RoadEdge of(Road road, Location from, Location to) {
             return new RoadEdge(road, from, to);
         }
 
+        /**
+         * Get the road.
+         *
+         * @return the road
+         */
         public Road getRoad() {
             return road;
         }
 
+        /**
+         * Get the from location.
+         *
+         * @return the from location
+         */
         public Location getFrom() {
             return from;
         }
 
+        /**
+         * Get the to location.
+         *
+         * @return the to location
+         */
         public Location getTo() {
             return to;
         }

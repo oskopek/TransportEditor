@@ -4,19 +4,43 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Default road implementation. Contains only the length and name of a road.
+ */
 public class DefaultRoad extends DefaultActionObject implements Road {
 
     private final ActionCost length;
 
+    /**
+     * Default constructor.
+     *
+     * @param name the name
+     * @param length the length
+     */
     public DefaultRoad(String name, ActionCost length) {
         super(name);
         this.length = length;
     }
 
+    /**
+     * Static builder method.
+     *
+     * @param from the source location
+     * @param to the destination location
+     * @return the road instance
+     */
     public static DefaultRoad build(Location from, Location to) {
         return build(from, to, null);
     }
 
+    /**
+     * Static builder method.
+     *
+     * @param from the source location
+     * @param to the destination location
+     * @param length the length
+     * @return the road instance
+     */
     public static DefaultRoad build(Location from, Location to, ActionCost length) {
         return new DefaultRoad(from.getName() + "->" + to.getName(), length);
     }
