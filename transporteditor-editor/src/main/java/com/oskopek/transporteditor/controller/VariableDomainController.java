@@ -65,6 +65,10 @@ public class VariableDomainController extends AbstractController {
     private ButtonBar.ButtonData result;
     private BooleanBinding allValidationsValid;
 
+    /**
+     * JavaFX initializer method. Registers with the event bus. Initializes button disabling
+     * and other validation.
+     */
     @FXML
     private void initialize() {
         nameFieldValid = new ValidationProperty(messages.getString("vdcreator.valid.name"),
@@ -133,14 +137,27 @@ public class VariableDomainController extends AbstractController {
         goalLabel.disableProperty().bind(numericCheck.selectedProperty().not());
     }
 
+    /**
+     * Set the header text.
+     *
+     * @param headerText the text to set
+     */
     public void setHeaderText(String headerText) {
         this.headerText.setText(headerText);
     }
 
+    /**
+     * Get the name text field.
+     *
+     * @return the text field
+     */
     public TextField getNameField() {
         return nameField;
     }
 
+    /**
+     * Handles the Apply button press.
+     */
     @FXML
     private void handleApplyButton() {
         if (allValidationsValid.get()) {
@@ -151,6 +168,9 @@ public class VariableDomainController extends AbstractController {
         }
     }
 
+    /**
+     * Handles the Cancel button press.
+     */
     @FXML
     private void handleCancelButton() {
         result = ButtonBar.ButtonData.CANCEL_CLOSE;

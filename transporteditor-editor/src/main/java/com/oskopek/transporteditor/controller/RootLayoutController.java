@@ -114,6 +114,14 @@ public class RootLayoutController extends AbstractController {
     private JavaFxOpenedTextObjectHandler<Domain> domainFileHandler;
     private JavaFxOpenedTextObjectHandler<Plan> planFileHandler;
 
+    /**
+     * Util method for determining the correct plan IO class to use for the given domain and problem
+     * and instantiating it.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @return the instantiated plan IO
+     */
     private static DataIO<Plan> createCorrectPlanIO(Domain domain, Problem problem) {
         if (domain.getPddlLabels().contains(PddlLabel.Temporal)) {
             return new TemporalPlanIO(domain, problem);
@@ -122,6 +130,10 @@ public class RootLayoutController extends AbstractController {
         }
     }
 
+    /**
+     * JavaFX initializer method. Registers with the event bus. Initializes button disabling
+     * and other validation. Initializes all IO handlers.
+     */
     @FXML
     private void initialize() {
         eventBus.register(this);
@@ -146,7 +158,7 @@ public class RootLayoutController extends AbstractController {
     }
 
     /**
-     * Menu item: File->Quit.
+     * Menu item: Session->Quit.
      * Exit the main app.
      */
     @FXML
@@ -154,6 +166,10 @@ public class RootLayoutController extends AbstractController {
         Platform.exit();
     }
 
+    /**
+     * Menu item: Session->New.
+     * Creates a new session.
+     */
     @FXML
     private void handleSessionNew() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
@@ -165,6 +181,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Session->Load.
+     * Loads a session from a file.
+     */
     @FXML
     private void handleSessionLoad() {
         DefaultPlanningSessionIO io = new DefaultPlanningSessionIO();
@@ -208,16 +228,28 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Session->Save.
+     * Save the session to the predetermined path.
+     */
     @FXML
     private void handleSessionSave() {
         planningSessionFileHandler.save();
     }
 
+    /**
+     * Menu item: Session->Save As.
+     * Saves the session to a chosen file.
+     */
     @FXML
     private void handleSessionSaveAs() {
-        planningSessionFileHandler.saveAs();
+        planningSessionFileHandler.saveAsWithDefaultFileChooser();
     }
 
+    /**
+     * Menu item: Session->Set Planner.
+     * Set an external planner using a {@link ExecutableParametersCreator}'s dialog.
+     */
     @FXML
     private void handleFileSetPlanner() {
         if (application.getPlanningSession() == null) {
@@ -239,6 +271,10 @@ public class RootLayoutController extends AbstractController {
         }
     }
 
+    /**
+     * Menu item: Session->Set Validator->Custom validator.
+     * Loads a custom executable validator using a {@link ExecutableParametersCreator}'s dialog.
+     */
     @FXML
     private void handleFileSetCustomValidator() {
         if (application.getPlanningSession() == null) {
@@ -260,6 +296,10 @@ public class RootLayoutController extends AbstractController {
         }
     }
 
+    /**
+     * Menu item: Session->Set Validator->Sequential.
+     * Loads the simple sequential validator.
+     */
     @FXML
     private void handleFileSetSequentialValidator() {
         if (application.getPlanningSession() == null) {
@@ -268,6 +308,10 @@ public class RootLayoutController extends AbstractController {
         application.getPlanningSession().setValidator(new SequentialPlanValidator());
     }
 
+    /**
+     * Menu item: Domain->New.
+     * Creates a new domain.
+     */
     @FXML
     private void handleDomainNew() {
         if (application.getPlanningSession() == null) {
@@ -291,6 +335,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Domain->Load.
+     * Loads a domain from a chosen path.
+     */
     @FXML
     private void handleDomainLoad() {
         if (application.getPlanningSession() == null) {
@@ -308,6 +356,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Domain->Save.
+     * Saves the domain to a predetermined file.
+     */
     @FXML
     private void handleDomainSave() {
         if (application.getPlanningSession() == null) {
@@ -316,14 +368,22 @@ public class RootLayoutController extends AbstractController {
         domainFileHandler.save();
     }
 
+    /**
+     * Menu item: Domain->Save As.
+     * Saves the domain to a chosen file.
+     */
     @FXML
     private void handleDomainSaveAs() {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot save domain as, because no planning session is loaded.");
         }
-        domainFileHandler.saveAs();
+        domainFileHandler.saveAsWithDefaultFileChooser();
     }
 
+    /**
+     * Menu item: Problem->New.
+     * Creates a new problem.
+     */
     @FXML
     private void handleProblemNew() {
         if (application.getPlanningSession().getDomain() == null) {
@@ -349,6 +409,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Problem->Load.
+     * Loads the problem from a chosen file.
+     */
     @FXML
     private void handleProblemLoad() {
         if (application.getPlanningSession().getDomain() == null) {
@@ -367,6 +431,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Menu item: Problem->Save.
+     * Saves the problem to the predetermined file.
+     */
     @FXML
     private void handleProblemSave() {
         if (application.getPlanningSession().getDomain() == null) {
@@ -375,14 +443,22 @@ public class RootLayoutController extends AbstractController {
         problemFileHandler.save();
     }
 
+    /**
+     * Menu item: Problem->Save As.
+     * Saves the problem to a chosen file.
+     */
     @FXML
     private void handleProblemSaveAs() {
         if (application.getPlanningSession().getDomain() == null) {
             throw new IllegalStateException("Cannot save problem as, because no domain is loaded.");
         }
-        problemFileHandler.saveAs();
+        problemFileHandler.saveAsWithDefaultFileChooser();
     }
 
+    /**
+     * Menu item: Plan->New.
+     * Creates a new plan.
+     */
     @FXML
     private void handlePlanNew() {
         if (application.getPlanningSession().getProblem() == null) {
@@ -401,6 +477,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new PlanningFinishedEvent());
     }
 
+    /**
+     * Menu item: Plan->Load.
+     * Loads a plan from the chosen file.
+     */
     @FXML
     private void handlePlanLoad() {
         if (application.getPlanningSession().getProblem() == null) {
@@ -420,6 +500,10 @@ public class RootLayoutController extends AbstractController {
         eventBus.post(new PlanningFinishedEvent());
     }
 
+    /**
+     * Menu item: Plan->Save.
+     * Saves the plan to the predetermined file.
+     */
     @FXML
     private void handlePlanSave() {
         if (application.getPlanningSession().getProblem() == null) {
@@ -428,12 +512,16 @@ public class RootLayoutController extends AbstractController {
         planFileHandler.save();
     }
 
+    /**
+     * Menu item: Plan->Save As.
+     * Saves the plan to the chosen file.
+     */
     @FXML
     private void handlePlanSaveAs() {
         if (application.getPlanningSession().getProblem() == null) {
             throw new IllegalStateException("Cannot save plan as, because no problem is loaded.");
         }
-        planFileHandler.saveAs();
+        planFileHandler.saveAsWithDefaultFileChooser();
     }
 
     /**
@@ -445,6 +533,14 @@ public class RootLayoutController extends AbstractController {
         loadWebResource("root.manualResource", "root.help", "root.manualNotAvailableInYourLanguage");
     }
 
+    /**
+     * Loads a web resource (used for local HTML files) and displays it in a modal dialog window.
+     * Blocking call.
+     *
+     * @param resourceName the resource key in the default localization bundle that has the correct localized filename
+     * @param titleResourceName the resource key of the title string
+     * @param errorResourceName the resource key of the error string (error while loading resource)
+     */
     private void loadWebResource(String resourceName, String titleResourceName, String errorResourceName) {
         WebView webView = new WebView();
         webView.setContextMenuEnabled(false);

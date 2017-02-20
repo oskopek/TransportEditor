@@ -392,7 +392,7 @@ public class RoadGraph extends MultiGraph implements Graph {
      *
      * @param l1 the from location
      * @param l2 the to location
-     * @return a stream of all the roads l1 -> l2
+     * @return a stream of all the roads {@code l1 -> l2}
      */
     public Stream<Road> getAllRoadsBetween(Location l1, Location l2) {
         Node n1 = getNode(l1.getName());
