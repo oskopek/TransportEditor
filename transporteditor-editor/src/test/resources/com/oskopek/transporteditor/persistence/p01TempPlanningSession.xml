@@ -102,9 +102,9 @@
       <duration reference="51"/>
     </refuelBuilder>
     <pddlLabelSet id="52">
-      <com.oskopek.transporteditor.model.domain.PddlLabel>Temporal</com.oskopek.transporteditor.model.domain.PddlLabel>
       <com.oskopek.transporteditor.model.domain.PddlLabel>Fuel</com.oskopek.transporteditor.model.domain.PddlLabel>
       <com.oskopek.transporteditor.model.domain.PddlLabel>MaxCapacity</com.oskopek.transporteditor.model.domain.PddlLabel>
+      <com.oskopek.transporteditor.model.domain.PddlLabel>Temporal</com.oskopek.transporteditor.model.domain.PddlLabel>
       <com.oskopek.transporteditor.model.domain.PddlLabel>Capacity</com.oskopek.transporteditor.model.domain.PddlLabel>
     </pddlLabelSet>
     <predicateMap id="53">
@@ -166,9 +166,9 @@
             <action class="com.oskopek.transporteditor.model.domain.action.PickUp" id="60">
               <name>pick-up</name>
               <who class="com.oskopek.transporteditor.model.problem.Vehicle" id="61">
-                <name>truck-1</name>
+                <name>truck-2</name>
                 <location id="62">
-                  <name>city-loc-3</name>
+                  <name>city-loc-4</name>
                   <xCoordinate>0</xCoordinate>
                   <yCoordinate>0</yCoordinate>
                   <petrolStation>false</petrolStation>
@@ -187,16 +187,16 @@
               </who>
               <where reference="62"/>
               <what class="com.oskopek.transporteditor.model.problem.Package" id="67">
-                <name>package-1</name>
+                <name>package-2</name>
                 <location reference="62"/>
                 <target id="68">
-                  <name>city-loc-2</name>
+                  <name>city-loc-3</name>
                   <xCoordinate>0</xCoordinate>
                   <yCoordinate>0</yCoordinate>
                   <petrolStation>false</petrolStation>
                 </target>
                 <size id="69">
-                  <cost>23</cost>
+                  <cost>55</cost>
                 </size>
               </what>
               <preconditions reference="30"/>
@@ -209,122 +209,40 @@
           </data>
         </com.github.kevinjdolan.intervaltree.Interval>
         <com.github.kevinjdolan.intervaltree.Interval id="70">
-          <start>1</start>
-          <end>46</end>
+          <start>0</start>
+          <end>1</end>
           <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="71">
-            <action class="com.oskopek.transporteditor.model.domain.action.Drive" id="72">
-              <name>drive</name>
+            <action class="com.oskopek.transporteditor.model.domain.action.PickUp" id="72">
+              <name>pick-up</name>
               <who class="com.oskopek.transporteditor.model.problem.Vehicle" id="73">
-                <name>truck-2</name>
-                <location id="74">
-                  <name>city-loc-4</name>
+                <name>truck-1</name>
+                <location reference="68"/>
+                <curCapacity id="74">
+                  <cost>100</cost>
+                </curCapacity>
+                <maxCapacity reference="74"/>
+                <curFuelCapacity id="75">
+                  <cost>424</cost>
+                </curFuelCapacity>
+                <maxFuelCapacity id="76">
+                  <cost>424</cost>
+                </maxFuelCapacity>
+                <packageList id="77"/>
+              </who>
+              <where reference="68"/>
+              <what class="com.oskopek.transporteditor.model.problem.Package" id="78">
+                <name>package-1</name>
+                <location reference="68"/>
+                <target id="79">
+                  <name>city-loc-2</name>
                   <xCoordinate>0</xCoordinate>
                   <yCoordinate>0</yCoordinate>
                   <petrolStation>false</petrolStation>
-                </location>
-                <curCapacity id="75">
-                  <cost>100</cost>
-                </curCapacity>
-                <maxCapacity reference="75"/>
-                <curFuelCapacity id="76">
-                  <cost>424</cost>
-                </curFuelCapacity>
-                <maxFuelCapacity id="77">
-                  <cost>424</cost>
-                </maxFuelCapacity>
-                <packageList id="78"/>
-              </who>
-              <where reference="74"/>
-              <what class="com.oskopek.transporteditor.model.problem.Location" reference="62"/>
-              <preconditions reference="4"/>
-              <effects reference="9"/>
-              <cost id="79">
-                <cost>45</cost>
-              </cost>
-              <duration reference="79"/>
-              <fuelCost id="80">
-                <cost>89</cost>
-              </fuelCost>
-            </action>
-            <startTimestamp>1</startTimestamp>
-            <endTimestamp>46</endTimestamp>
-          </data>
-        </com.github.kevinjdolan.intervaltree.Interval>
-        <com.github.kevinjdolan.intervaltree.Interval id="81">
-          <start>1</start>
-          <end>51</end>
-          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="82">
-            <action class="com.oskopek.transporteditor.model.domain.action.Drive" id="83">
-              <name>drive</name>
-              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="61"/>
-              <where reference="62"/>
-              <what class="com.oskopek.transporteditor.model.problem.Location" reference="68"/>
-              <preconditions reference="4"/>
-              <effects reference="9"/>
-              <cost id="84">
-                <cost>50</cost>
-              </cost>
-              <duration reference="84"/>
-              <fuelCost id="85">
-                <cost>99</cost>
-              </fuelCost>
-            </action>
-            <startTimestamp>1</startTimestamp>
-            <endTimestamp>51</endTimestamp>
-          </data>
-        </com.github.kevinjdolan.intervaltree.Interval>
-        <com.github.kevinjdolan.intervaltree.Interval id="86">
-          <start>46</start>
-          <end>47</end>
-          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="87">
-            <action class="com.oskopek.transporteditor.model.domain.action.Drop" id="88">
-              <name>drop</name>
-              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="73"/>
-              <where reference="62"/>
-              <what class="com.oskopek.transporteditor.model.problem.Package" id="89">
-                <name>package-2</name>
-                <location reference="74"/>
-                <target reference="62"/>
-                <size id="90">
-                  <cost>55</cost>
+                </target>
+                <size id="80">
+                  <cost>23</cost>
                 </size>
               </what>
-              <preconditions reference="16"/>
-              <effects reference="22"/>
-              <cost reference="28"/>
-              <duration reference="28"/>
-            </action>
-            <startTimestamp>46</startTimestamp>
-            <endTimestamp>47</endTimestamp>
-          </data>
-        </com.github.kevinjdolan.intervaltree.Interval>
-        <com.github.kevinjdolan.intervaltree.Interval id="91">
-          <start>51</start>
-          <end>52</end>
-          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="92">
-            <action class="com.oskopek.transporteditor.model.domain.action.Drop" id="93">
-              <name>drop</name>
-              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="61"/>
-              <where reference="68"/>
-              <what class="com.oskopek.transporteditor.model.problem.Package" reference="67"/>
-              <preconditions reference="16"/>
-              <effects reference="22"/>
-              <cost reference="28"/>
-              <duration reference="28"/>
-            </action>
-            <startTimestamp>51</startTimestamp>
-            <endTimestamp>52</endTimestamp>
-          </data>
-        </com.github.kevinjdolan.intervaltree.Interval>
-        <com.github.kevinjdolan.intervaltree.Interval id="94">
-          <start>0</start>
-          <end>1</end>
-          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="95">
-            <action class="com.oskopek.transporteditor.model.domain.action.PickUp" id="96">
-              <name>pick-up</name>
-              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="73"/>
-              <where reference="74"/>
-              <what class="com.oskopek.transporteditor.model.problem.Package" reference="89"/>
               <preconditions reference="30"/>
               <effects reference="36"/>
               <cost reference="42"/>
@@ -334,23 +252,99 @@
             <endTimestamp>1</endTimestamp>
           </data>
         </com.github.kevinjdolan.intervaltree.Interval>
+        <com.github.kevinjdolan.intervaltree.Interval id="81">
+          <start>1</start>
+          <end>51</end>
+          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="82">
+            <action class="com.oskopek.transporteditor.model.domain.action.Drive" id="83">
+              <name>drive</name>
+              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="73"/>
+              <where reference="68"/>
+              <what class="com.oskopek.transporteditor.model.problem.Location" reference="79"/>
+              <preconditions reference="4"/>
+              <effects reference="9"/>
+              <cost id="84">
+                <cost>50</cost>
+              </cost>
+              <duration reference="84"/>
+            </action>
+            <startTimestamp>1</startTimestamp>
+            <endTimestamp>51</endTimestamp>
+          </data>
+        </com.github.kevinjdolan.intervaltree.Interval>
+        <com.github.kevinjdolan.intervaltree.Interval id="85">
+          <start>1</start>
+          <end>46</end>
+          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="86">
+            <action class="com.oskopek.transporteditor.model.domain.action.Drive" id="87">
+              <name>drive</name>
+              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="61"/>
+              <where reference="62"/>
+              <what class="com.oskopek.transporteditor.model.problem.Location" reference="68"/>
+              <preconditions reference="4"/>
+              <effects reference="9"/>
+              <cost id="88">
+                <cost>45</cost>
+              </cost>
+              <duration reference="88"/>
+            </action>
+            <startTimestamp>1</startTimestamp>
+            <endTimestamp>46</endTimestamp>
+          </data>
+        </com.github.kevinjdolan.intervaltree.Interval>
+        <com.github.kevinjdolan.intervaltree.Interval id="89">
+          <start>46</start>
+          <end>47</end>
+          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="90">
+            <action class="com.oskopek.transporteditor.model.domain.action.Drop" id="91">
+              <name>drop</name>
+              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="61"/>
+              <where reference="68"/>
+              <what class="com.oskopek.transporteditor.model.problem.Package" reference="67"/>
+              <preconditions reference="16"/>
+              <effects reference="22"/>
+              <cost reference="28"/>
+              <duration reference="28"/>
+            </action>
+            <startTimestamp>46</startTimestamp>
+            <endTimestamp>47</endTimestamp>
+          </data>
+        </com.github.kevinjdolan.intervaltree.Interval>
+        <com.github.kevinjdolan.intervaltree.Interval id="92">
+          <start>51</start>
+          <end>52</end>
+          <data class="com.oskopek.transporteditor.model.domain.action.TemporalPlanAction" id="93">
+            <action class="com.oskopek.transporteditor.model.domain.action.Drop" id="94">
+              <name>drop</name>
+              <who class="com.oskopek.transporteditor.model.problem.Vehicle" reference="73"/>
+              <where reference="79"/>
+              <what class="com.oskopek.transporteditor.model.problem.Package" reference="78"/>
+              <preconditions reference="16"/>
+              <effects reference="22"/>
+              <cost reference="28"/>
+              <duration reference="28"/>
+            </action>
+            <startTimestamp>51</startTimestamp>
+            <endTimestamp>52</endTimestamp>
+          </data>
+        </com.github.kevinjdolan.intervaltree.Interval>
       </intervalList>
     </actionIntervalTree>
   </plan>
-  <problem class="com.oskopek.transporteditor.model.problem.DefaultProblem" id="97">
+  <problem class="com.oskopek.transporteditor.model.problem.DefaultProblem" id="95">
     <name>transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed</name>
-    <roadGraph id="98">
+    <roadGraph id="96">
       <id>transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed_graph</id>
       <index>0</index>
-      <attributes id="99">
+      <attributes id="97">
         <entry>
           <string>ui.sprite.sprite-truck-1.ui.class</string>
           <string>vehicle</string>
         </entry>
         <entry>
           <string>ui.sprite.sprite-package-1</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="100">
-            <values id="101">
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="98">
+            <values id="99">
               <double>25.0</double>
               <double>0.0</double>
               <double>230.0</double>
@@ -360,8 +354,8 @@
         </entry>
         <entry>
           <string>ui.sprite.sprite-package-2</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="102">
-            <values id="103">
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="100">
+            <values id="101">
               <double>25.0</double>
               <double>0.0</double>
               <double>205.0</double>
@@ -371,8 +365,8 @@
         </entry>
         <entry>
           <string>ui.sprite.sprite-city-loc-5-&gt;city-loc-1</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="104">
-            <values id="105">
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="102">
+            <values id="103">
               <double>0.5</double>
               <double>0.0</double>
               <double>0.0</double>
@@ -382,8 +376,8 @@
         </entry>
         <entry>
           <string>ui.sprite.sprite-city-loc-5-&gt;city-loc-4</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="106">
-            <values id="107">
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="104">
+            <values id="105">
               <double>0.5</double>
               <double>0.0</double>
               <double>0.0</double>
@@ -450,6 +444,17 @@ sprite:clicked {
         </entry>
         <entry>
           <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-5</string>
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="106">
+            <values id="107">
+              <double>0.5</double>
+              <double>0.0</double>
+              <double>0.0</double>
+            </values>
+            <units>GU</units>
+          </org.graphstream.ui.graphicGraph.stylesheet.Values>
+        </entry>
+        <entry>
+          <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-3</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="108">
             <values id="109">
               <double>0.5</double>
@@ -460,7 +465,7 @@ sprite:clicked {
           </org.graphstream.ui.graphicGraph.stylesheet.Values>
         </entry>
         <entry>
-          <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-3</string>
+          <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-4</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="110">
             <values id="111">
               <double>0.5</double>
@@ -471,7 +476,7 @@ sprite:clicked {
           </org.graphstream.ui.graphicGraph.stylesheet.Values>
         </entry>
         <entry>
-          <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-4</string>
+          <string>ui.sprite.sprite-city-loc-2-&gt;city-loc-3</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="112">
             <values id="113">
               <double>0.5</double>
@@ -482,20 +487,9 @@ sprite:clicked {
           </org.graphstream.ui.graphicGraph.stylesheet.Values>
         </entry>
         <entry>
-          <string>ui.sprite.sprite-city-loc-2-&gt;city-loc-3</string>
+          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-5</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="114">
             <values id="115">
-              <double>0.5</double>
-              <double>0.0</double>
-              <double>0.0</double>
-            </values>
-            <units>GU</units>
-          </org.graphstream.ui.graphicGraph.stylesheet.Values>
-        </entry>
-        <entry>
-          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-5</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="116">
-            <values id="117">
               <double>0.5</double>
               <double>0.0</double>
               <double>0.0</double>
@@ -509,6 +503,17 @@ sprite:clicked {
         </entry>
         <entry>
           <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-1</string>
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="116">
+            <values id="117">
+              <double>0.5</double>
+              <double>0.0</double>
+              <double>0.0</double>
+            </values>
+            <units>GU</units>
+          </org.graphstream.ui.graphicGraph.stylesheet.Values>
+        </entry>
+        <entry>
+          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-3</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="118">
             <values id="119">
               <double>0.5</double>
@@ -519,7 +524,7 @@ sprite:clicked {
           </org.graphstream.ui.graphicGraph.stylesheet.Values>
         </entry>
         <entry>
-          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-3</string>
+          <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-2</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="120">
             <values id="121">
               <double>0.5</double>
@@ -530,20 +535,9 @@ sprite:clicked {
           </org.graphstream.ui.graphicGraph.stylesheet.Values>
         </entry>
         <entry>
-          <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-2</string>
+          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-1</string>
           <org.graphstream.ui.graphicGraph.stylesheet.Values id="122">
             <values id="123">
-              <double>0.5</double>
-              <double>0.0</double>
-              <double>0.0</double>
-            </values>
-            <units>GU</units>
-          </org.graphstream.ui.graphicGraph.stylesheet.Values>
-        </entry>
-        <entry>
-          <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-1</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="124">
-            <values id="125">
               <double>0.5</double>
               <double>0.0</double>
               <double>0.0</double>
@@ -557,8 +551,8 @@ sprite:clicked {
         </entry>
         <entry>
           <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-4</string>
-          <org.graphstream.ui.graphicGraph.stylesheet.Values id="126">
-            <values id="127">
+          <org.graphstream.ui.graphicGraph.stylesheet.Values id="124">
+            <values id="125">
               <double>0.5</double>
               <double>0.0</double>
               <double>0.0</double>
@@ -568,7 +562,7 @@ sprite:clicked {
         </entry>
         <entry>
           <string>city-loc-1</string>
-          <com.oskopek.transporteditor.model.problem.Location id="128">
+          <com.oskopek.transporteditor.model.problem.Location id="126">
             <name>city-loc-1</name>
             <xCoordinate>0</xCoordinate>
             <yCoordinate>0</yCoordinate>
@@ -577,11 +571,11 @@ sprite:clicked {
         </entry>
         <entry>
           <string>city-loc-2</string>
-          <com.oskopek.transporteditor.model.problem.Location reference="68"/>
+          <com.oskopek.transporteditor.model.problem.Location reference="79"/>
         </entry>
         <entry>
           <string>city-loc-5</string>
-          <com.oskopek.transporteditor.model.problem.Location id="129">
+          <com.oskopek.transporteditor.model.problem.Location id="127">
             <name>city-loc-5</name>
             <xCoordinate>0</xCoordinate>
             <yCoordinate>0</yCoordinate>
@@ -590,100 +584,102 @@ sprite:clicked {
         </entry>
         <entry>
           <string>city-loc-3</string>
-          <com.oskopek.transporteditor.model.problem.Location reference="62"/>
+          <com.oskopek.transporteditor.model.problem.Location reference="68"/>
         </entry>
         <entry>
           <string>city-loc-4</string>
-          <com.oskopek.transporteditor.model.problem.Location reference="74"/>
+          <com.oskopek.transporteditor.model.problem.Location reference="62"/>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-3</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="130">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="128">
             <name>city-loc-4-&gt;city-loc-3</name>
-            <length reference="79"/>
-            <fuelCost reference="80"/>
+            <length reference="88"/>
+            <fuelCost id="129">
+              <cost>89</cost>
+            </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-5-&gt;city-loc-4</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="131">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="130">
             <name>city-loc-5-&gt;city-loc-4</name>
-            <length id="132">
+            <length id="131">
               <cost>12</cost>
             </length>
-            <fuelCost id="133">
+            <fuelCost id="132">
               <cost>24</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-1</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="134">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="133">
             <name>city-loc-4-&gt;city-loc-1</name>
-            <length id="135">
+            <length id="134">
               <cost>26</cost>
             </length>
-            <fuelCost id="136">
+            <fuelCost id="135">
               <cost>52</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-5-&gt;city-loc-1</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="137">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="136">
             <name>city-loc-5-&gt;city-loc-1</name>
-            <length id="138">
+            <length id="137">
               <cost>37</cost>
             </length>
-            <fuelCost id="139">
+            <fuelCost id="138">
               <cost>74</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-5</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="140">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="139">
             <name>city-loc-4-&gt;city-loc-5</name>
-            <length id="141">
+            <length id="140">
               <cost>12</cost>
             </length>
-            <fuelCost id="142">
+            <fuelCost id="141">
               <cost>24</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-1-&gt;city-loc-5</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="143">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="142">
             <name>city-loc-1-&gt;city-loc-5</name>
-            <length id="144">
+            <length id="143">
               <cost>37</cost>
             </length>
-            <fuelCost id="145">
+            <fuelCost id="144">
               <cost>74</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-1-&gt;city-loc-4</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="146">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="145">
             <name>city-loc-1-&gt;city-loc-4</name>
-            <length id="147">
+            <length id="146">
               <cost>26</cost>
             </length>
-            <fuelCost id="148">
+            <fuelCost id="147">
               <cost>52</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-2-&gt;city-loc-3</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="149">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="148">
             <name>city-loc-2-&gt;city-loc-3</name>
-            <length id="150">
+            <length id="149">
               <cost>50</cost>
             </length>
-            <fuelCost id="151">
+            <fuelCost id="150">
               <cost>99</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
@@ -694,22 +690,24 @@ sprite:clicked {
         </entry>
         <entry>
           <string>city-loc-3-&gt;city-loc-4</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="152">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="151">
             <name>city-loc-3-&gt;city-loc-4</name>
-            <length id="153">
+            <length id="152">
               <cost>45</cost>
             </length>
-            <fuelCost id="154">
+            <fuelCost id="153">
               <cost>89</cost>
             </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
           <string>city-loc-3-&gt;city-loc-2</string>
-          <com.oskopek.transporteditor.model.problem.FuelRoad id="155">
+          <com.oskopek.transporteditor.model.problem.FuelRoad id="154">
             <name>city-loc-3-&gt;city-loc-2</name>
             <length reference="84"/>
-            <fuelCost reference="85"/>
+            <fuelCost id="155">
+              <cost>99</cost>
+            </fuelCost>
           </com.oskopek.transporteditor.model.problem.FuelRoad>
         </entry>
         <entry>
@@ -765,7 +763,7 @@ sprite:clicked {
       <listeners id="167">
         <attrSinks id="168">
           <org.graphstream.ui.spriteManager.SpriteManager id="169">
-            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
             <sprites id="170">
               <entry>
                 <string>sprite-city-loc-5-&gt;city-loc-1</string>
@@ -1029,7 +1027,7 @@ sprite:clicked {
           </org.graphstream.ui.spriteManager.SpriteManager>
           <org.graphstream.stream.thread.ThreadProxyPipe id="220"/>
           <org.graphstream.ui.spriteManager.SpriteManager id="221">
-            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
             <sprites id="222">
               <entry>
                 <string>sprite-city-loc-5-&gt;city-loc-1</string>
@@ -1293,7 +1291,7 @@ sprite:clicked {
           </org.graphstream.ui.spriteManager.SpriteManager>
           <org.graphstream.stream.thread.ThreadProxyPipe id="272"/>
           <org.graphstream.ui.spriteManager.SpriteManager id="273">
-            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
             <sprites id="274">
               <entry>
                 <string>sprite-city-loc-5-&gt;city-loc-1</string>
@@ -1555,43 +1553,573 @@ sprite:clicked {
             <factory id="323"/>
             <attributeLock>false</attributeLock>
           </org.graphstream.ui.spriteManager.SpriteManager>
+          <org.graphstream.stream.thread.ThreadProxyPipe id="324"/>
+          <org.graphstream.ui.spriteManager.SpriteManager id="325">
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+            <sprites id="326">
+              <entry>
+                <string>sprite-city-loc-5-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="327">
+                  <id>sprite-city-loc-5-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-5-&gt;city-loc-1</completeId>
+                  <manager reference="325"/>
+                  <position id="328">
+                    <values id="329">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="330">
+                  <id>sprite-city-loc-3-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-1</completeId>
+                  <manager reference="325"/>
+                  <position id="331">
+                    <values id="332">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-5-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="333">
+                  <id>sprite-city-loc-5-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-5-&gt;city-loc-4</completeId>
+                  <manager reference="325"/>
+                  <position id="334">
+                    <values id="335">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-truck-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="336">
+                  <id>sprite-truck-1</id>
+                  <completeId>ui.sprite.sprite-truck-1</completeId>
+                  <manager reference="325"/>
+                  <position id="337">
+                    <values id="338">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>25.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="339">
+                  <id>sprite-city-loc-1-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-3</completeId>
+                  <manager reference="325"/>
+                  <position id="340">
+                    <values id="341">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-truck-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="342">
+                  <id>sprite-truck-2</id>
+                  <completeId>ui.sprite.sprite-truck-2</completeId>
+                  <manager reference="325"/>
+                  <position id="343">
+                    <values id="344">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>50.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-package-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="345">
+                  <id>sprite-package-1</id>
+                  <completeId>ui.sprite.sprite-package-1</completeId>
+                  <manager reference="325"/>
+                  <position id="346">
+                    <values id="347">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>230.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-package-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="348">
+                  <id>sprite-package-2</id>
+                  <completeId>ui.sprite.sprite-package-2</completeId>
+                  <manager reference="325"/>
+                  <position id="349">
+                    <values id="350">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>205.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-5</string>
+                <org.graphstream.ui.spriteManager.Sprite id="351">
+                  <id>sprite-city-loc-1-&gt;city-loc-5</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-5</completeId>
+                  <manager reference="325"/>
+                  <position id="352">
+                    <values id="353">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="354">
+                  <id>sprite-city-loc-1-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-4</completeId>
+                  <manager reference="325"/>
+                  <position id="355">
+                    <values id="356">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-2-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="357">
+                  <id>sprite-city-loc-2-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-2-&gt;city-loc-3</completeId>
+                  <manager reference="325"/>
+                  <position id="358">
+                    <values id="359">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="360">
+                  <id>sprite-city-loc-3-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-4</completeId>
+                  <manager reference="325"/>
+                  <position id="361">
+                    <values id="362">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-5</string>
+                <org.graphstream.ui.spriteManager.Sprite id="363">
+                  <id>sprite-city-loc-4-&gt;city-loc-5</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-5</completeId>
+                  <manager reference="325"/>
+                  <position id="364">
+                    <values id="365">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="366">
+                  <id>sprite-city-loc-3-&gt;city-loc-2</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-2</completeId>
+                  <manager reference="325"/>
+                  <position id="367">
+                    <values id="368">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="369">
+                  <id>sprite-city-loc-4-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-3</completeId>
+                  <manager reference="325"/>
+                  <position id="370">
+                    <values id="371">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="372">
+                  <id>sprite-city-loc-4-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-1</completeId>
+                  <manager reference="325"/>
+                  <position id="373">
+                    <values id="374">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+            </sprites>
+            <factory id="375"/>
+            <attributeLock>false</attributeLock>
+          </org.graphstream.ui.spriteManager.SpriteManager>
+          <org.graphstream.stream.thread.ThreadProxyPipe id="376"/>
+          <org.graphstream.ui.spriteManager.SpriteManager id="377">
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+            <sprites id="378">
+              <entry>
+                <string>sprite-city-loc-5-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="379">
+                  <id>sprite-city-loc-5-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-5-&gt;city-loc-1</completeId>
+                  <manager reference="377"/>
+                  <position id="380">
+                    <values id="381">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="382">
+                  <id>sprite-city-loc-3-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-1</completeId>
+                  <manager reference="377"/>
+                  <position id="383">
+                    <values id="384">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-5-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="385">
+                  <id>sprite-city-loc-5-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-5-&gt;city-loc-4</completeId>
+                  <manager reference="377"/>
+                  <position id="386">
+                    <values id="387">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-truck-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="388">
+                  <id>sprite-truck-1</id>
+                  <completeId>ui.sprite.sprite-truck-1</completeId>
+                  <manager reference="377"/>
+                  <position id="389">
+                    <values id="390">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>25.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="391">
+                  <id>sprite-city-loc-1-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-3</completeId>
+                  <manager reference="377"/>
+                  <position id="392">
+                    <values id="393">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-truck-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="394">
+                  <id>sprite-truck-2</id>
+                  <completeId>ui.sprite.sprite-truck-2</completeId>
+                  <manager reference="377"/>
+                  <position id="395">
+                    <values id="396">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>50.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-package-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="397">
+                  <id>sprite-package-1</id>
+                  <completeId>ui.sprite.sprite-package-1</completeId>
+                  <manager reference="377"/>
+                  <position id="398">
+                    <values id="399">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>230.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-package-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="400">
+                  <id>sprite-package-2</id>
+                  <completeId>ui.sprite.sprite-package-2</completeId>
+                  <manager reference="377"/>
+                  <position id="401">
+                    <values id="402">
+                      <double>25.0</double>
+                      <double>0.0</double>
+                      <double>205.0</double>
+                    </values>
+                    <units>PX</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-5</string>
+                <org.graphstream.ui.spriteManager.Sprite id="403">
+                  <id>sprite-city-loc-1-&gt;city-loc-5</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-5</completeId>
+                  <manager reference="377"/>
+                  <position id="404">
+                    <values id="405">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-1-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="406">
+                  <id>sprite-city-loc-1-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-1-&gt;city-loc-4</completeId>
+                  <manager reference="377"/>
+                  <position id="407">
+                    <values id="408">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-2-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="409">
+                  <id>sprite-city-loc-2-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-2-&gt;city-loc-3</completeId>
+                  <manager reference="377"/>
+                  <position id="410">
+                    <values id="411">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-4</string>
+                <org.graphstream.ui.spriteManager.Sprite id="412">
+                  <id>sprite-city-loc-3-&gt;city-loc-4</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-4</completeId>
+                  <manager reference="377"/>
+                  <position id="413">
+                    <values id="414">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-5</string>
+                <org.graphstream.ui.spriteManager.Sprite id="415">
+                  <id>sprite-city-loc-4-&gt;city-loc-5</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-5</completeId>
+                  <manager reference="377"/>
+                  <position id="416">
+                    <values id="417">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-3-&gt;city-loc-2</string>
+                <org.graphstream.ui.spriteManager.Sprite id="418">
+                  <id>sprite-city-loc-3-&gt;city-loc-2</id>
+                  <completeId>ui.sprite.sprite-city-loc-3-&gt;city-loc-2</completeId>
+                  <manager reference="377"/>
+                  <position id="419">
+                    <values id="420">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-3</string>
+                <org.graphstream.ui.spriteManager.Sprite id="421">
+                  <id>sprite-city-loc-4-&gt;city-loc-3</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-3</completeId>
+                  <manager reference="377"/>
+                  <position id="422">
+                    <values id="423">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+              <entry>
+                <string>sprite-city-loc-4-&gt;city-loc-1</string>
+                <org.graphstream.ui.spriteManager.Sprite id="424">
+                  <id>sprite-city-loc-4-&gt;city-loc-1</id>
+                  <completeId>ui.sprite.sprite-city-loc-4-&gt;city-loc-1</completeId>
+                  <manager reference="377"/>
+                  <position id="425">
+                    <values id="426">
+                      <double>0.5</double>
+                      <double>0.0</double>
+                      <double>0.0</double>
+                    </values>
+                    <units>GU</units>
+                  </position>
+                </org.graphstream.ui.spriteManager.Sprite>
+              </entry>
+            </sprites>
+            <factory id="427"/>
+            <attributeLock>false</attributeLock>
+          </org.graphstream.ui.spriteManager.SpriteManager>
         </attrSinks>
-        <eltsSinks id="324">
+        <eltsSinks id="428">
           <org.graphstream.stream.thread.ThreadProxyPipe reference="220"/>
           <org.graphstream.stream.thread.ThreadProxyPipe reference="272"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="324"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="376"/>
         </eltsSinks>
-        <eventQueue id="325"/>
+        <eventQueue id="429"/>
         <eventProcessing>false</eventProcessing>
         <sourceId>transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed_graph</sourceId>
-        <sourceTime id="326">
-          <sinkTime id="327"/>
+        <sourceTime id="430">
+          <sinkTime id="431"/>
           <sourceId>transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed_graph</sourceId>
         </sourceTime>
-        <sinkTime reference="327"/>
+        <sinkTime reference="431"/>
         <passYourWay>false</passYourWay>
-        <g class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+        <g class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
       </listeners>
-      <nodeFactory class="org.graphstream.graph.implementations.MultiGraph$1" id="328">
-        <outer-class class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+      <nodeFactory class="org.graphstream.graph.implementations.MultiGraph$1" id="432">
+        <outer-class class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
       </nodeFactory>
-      <edgeFactory class="org.graphstream.graph.implementations.AdjacencyListGraph$2" id="329">
-        <outer-class class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+      <edgeFactory class="org.graphstream.graph.implementations.AdjacencyListGraph$2" id="433">
+        <outer-class class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
       </edgeFactory>
       <step>0.0</step>
       <nullAttributesAreErrors>false</nullAttributesAreErrors>
-      <replayId>2</replayId>
-      <nodeMap id="330">
+      <replayId>4</replayId>
+      <nodeMap id="434">
         <entry>
           <string>city-loc-1</string>
-          <org.graphstream.graph.implementations.MultiNode id="331">
+          <org.graphstream.graph.implementations.MultiNode id="435">
             <id>city-loc-1</id>
             <index>0</index>
-            <attributes id="332">
+            <attributes id="436">
               <entry>
                 <string>xyz</string>
-                <object-array id="333">
-                  <double>-2.2967046915457914</double>
-                  <double>-2.0887207177913703</double>
+                <object-array id="437">
+                  <double>-2.3164578063079975</double>
+                  <double>-5.32539573774439</double>
                   <double>0.0</double>
                 </object-array>
               </entry>
@@ -1605,16 +2133,16 @@ sprite:clicked {
               </entry>
               <entry>
                 <string>ui.j2dsk</string>
-                <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="334"/>
+                <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="438"/>
               </entry>
             </attributes>
-            <attributesBeingRemoved id="335"/>
-            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
-            <edges id="336">
-              <org.graphstream.graph.implementations.AbstractEdge id="337">
+            <attributesBeingRemoved id="439"/>
+            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+            <edges id="440">
+              <org.graphstream.graph.implementations.AbstractEdge id="441">
                 <id>city-loc-3-&gt;city-loc-1</id>
                 <index>4</index>
-                <attributes id="338">
+                <attributes id="442">
                   <entry>
                     <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-1</string>
                     <boolean>true</boolean>
@@ -1625,22 +2153,22 @@ sprite:clicked {
                   </entry>
                   <entry>
                     <string>ui.j2dsk</string>
-                    <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="339"/>
+                    <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="443"/>
                   </entry>
                 </attributes>
-                <source class="org.graphstream.graph.implementations.MultiNode" id="340">
+                <source class="org.graphstream.graph.implementations.MultiNode" id="444">
                   <id>city-loc-3</id>
                   <index>2</index>
-                  <attributes id="341">
+                  <attributes id="445">
                     <entry>
                       <string>ui.class</string>
                       <string></string>
                     </entry>
                     <entry>
                       <string>xyz</string>
-                      <object-array id="342">
-                        <double>-1.3841210139132807</double>
-                        <double>-2.1423696518347928</double>
+                      <object-array id="446">
+                        <double>-2.517726566511754</double>
+                        <double>-4.114717637263387</double>
                         <double>0.0</double>
                       </object-array>
                     </entry>
@@ -1654,20 +2182,20 @@ sprite:clicked {
                     </entry>
                     <entry>
                       <string>ui.j2dsk</string>
-                      <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="343"/>
+                      <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="447"/>
                     </entry>
                     <entry>
                       <string>ui.sprite.sprite-truck-1</string>
                       <boolean>true</boolean>
                     </entry>
                   </attributes>
-                  <attributesBeingRemoved id="344"/>
-                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
-                  <edges id="345">
-                    <org.graphstream.graph.implementations.AbstractEdge id="346">
+                  <attributesBeingRemoved id="448"/>
+                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+                  <edges id="449">
+                    <org.graphstream.graph.implementations.AbstractEdge id="450">
                       <id>city-loc-1-&gt;city-loc-3</id>
                       <index>0</index>
-                      <attributes id="347">
+                      <attributes id="451">
                         <entry>
                           <string>road</string>
                           <com.oskopek.transporteditor.model.problem.FuelRoad reference="159"/>
@@ -1678,40 +2206,40 @@ sprite:clicked {
                         </entry>
                         <entry>
                           <string>ui.j2dsk</string>
-                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="348"/>
+                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="452"/>
                         </entry>
                       </attributes>
-                      <source class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
-                      <target class="org.graphstream.graph.implementations.MultiNode" reference="340"/>
+                      <source class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
+                      <target class="org.graphstream.graph.implementations.MultiNode" reference="444"/>
                       <directed>true</directed>
-                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                     </org.graphstream.graph.implementations.AbstractEdge>
-                    <org.graphstream.graph.implementations.AbstractEdge id="349">
+                    <org.graphstream.graph.implementations.AbstractEdge id="453">
                       <id>city-loc-2-&gt;city-loc-3</id>
                       <index>3</index>
-                      <attributes id="350">
+                      <attributes id="454">
                         <entry>
                           <string>ui.sprite.sprite-city-loc-2-&gt;city-loc-3</string>
                           <boolean>true</boolean>
                         </entry>
                         <entry>
                           <string>road</string>
-                          <com.oskopek.transporteditor.model.problem.FuelRoad reference="149"/>
+                          <com.oskopek.transporteditor.model.problem.FuelRoad reference="148"/>
                         </entry>
                         <entry>
                           <string>ui.j2dsk</string>
-                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="351"/>
+                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="455"/>
                         </entry>
                       </attributes>
-                      <source class="org.graphstream.graph.implementations.MultiNode" id="352">
+                      <source class="org.graphstream.graph.implementations.MultiNode" id="456">
                         <id>city-loc-2</id>
                         <index>1</index>
-                        <attributes id="353">
+                        <attributes id="457">
                           <entry>
                             <string>xyz</string>
-                            <object-array id="354">
-                              <double>-1.1235065598610496</double>
-                              <double>-1.1235065598610496</double>
+                            <object-array id="458">
+                              <double>-2.982002704394734</double>
+                              <double>-3.13338293652456</double>
                               <double>0.0</double>
                             </object-array>
                           </entry>
@@ -1725,34 +2253,34 @@ sprite:clicked {
                           </entry>
                           <entry>
                             <string>ui.j2dsk</string>
-                            <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="355"/>
+                            <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="459"/>
                           </entry>
                         </attributes>
-                        <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
-                        <edges id="356">
-                          <org.graphstream.graph.implementations.AbstractEdge id="357">
+                        <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+                        <edges id="460">
+                          <org.graphstream.graph.implementations.AbstractEdge id="461">
                             <id>city-loc-3-&gt;city-loc-2</id>
                             <index>5</index>
-                            <attributes id="358">
+                            <attributes id="462">
                               <entry>
                                 <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-2</string>
                                 <boolean>true</boolean>
                               </entry>
                               <entry>
                                 <string>road</string>
-                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="155"/>
+                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="154"/>
                               </entry>
                               <entry>
                                 <string>ui.j2dsk</string>
-                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="359"/>
+                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="463"/>
                               </entry>
                             </attributes>
-                            <source class="org.graphstream.graph.implementations.MultiNode" reference="340"/>
-                            <target class="org.graphstream.graph.implementations.MultiNode" reference="352"/>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="444"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="456"/>
                             <directed>true</directed>
-                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
-                          <org.graphstream.graph.implementations.AbstractEdge reference="349"/>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="453"/>
                           <null/>
                           <null/>
                           <null/>
@@ -1771,50 +2299,50 @@ sprite:clicked {
                         <ioStart>1</ioStart>
                         <oStart>1</oStart>
                         <degree>2</degree>
-                        <neighborMap id="360">
+                        <neighborMap id="464">
                           <entry>
-                            <org.graphstream.graph.implementations.MultiNode reference="340"/>
-                            <linked-list id="361">
-                              <org.graphstream.graph.implementations.AbstractEdge reference="349"/>
-                              <org.graphstream.graph.implementations.AbstractEdge reference="357"/>
+                            <org.graphstream.graph.implementations.MultiNode reference="444"/>
+                            <linked-list id="465">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="453"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
                             </linked-list>
                           </entry>
                         </neighborMap>
                       </source>
-                      <target class="org.graphstream.graph.implementations.MultiNode" reference="340"/>
+                      <target class="org.graphstream.graph.implementations.MultiNode" reference="444"/>
                       <directed>true</directed>
-                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                     </org.graphstream.graph.implementations.AbstractEdge>
-                    <org.graphstream.graph.implementations.AbstractEdge id="362">
+                    <org.graphstream.graph.implementations.AbstractEdge id="466">
                       <id>city-loc-4-&gt;city-loc-3</id>
                       <index>8</index>
-                      <attributes id="363">
+                      <attributes id="467">
                         <entry>
                           <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-3</string>
                           <boolean>true</boolean>
                         </entry>
                         <entry>
                           <string>road</string>
-                          <com.oskopek.transporteditor.model.problem.FuelRoad reference="130"/>
+                          <com.oskopek.transporteditor.model.problem.FuelRoad reference="128"/>
                         </entry>
                         <entry>
                           <string>ui.j2dsk</string>
-                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="364"/>
+                          <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="468"/>
                         </entry>
                       </attributes>
-                      <source class="org.graphstream.graph.implementations.MultiNode" id="365">
+                      <source class="org.graphstream.graph.implementations.MultiNode" id="469">
                         <id>city-loc-4</id>
                         <index>3</index>
-                        <attributes id="366">
+                        <attributes id="470">
                           <entry>
                             <string>ui.class</string>
                             <string></string>
                           </entry>
                           <entry>
                             <string>xyz</string>
-                            <object-array id="367">
-                              <double>-1.5265135516611519</double>
-                              <double>-1.2532159624629362</double>
+                            <object-array id="471">
+                              <double>-1.5709912819854555</double>
+                              <double>-4.543693869632173</double>
                               <double>0.0</double>
                             </object-array>
                           </entry>
@@ -1832,82 +2360,82 @@ sprite:clicked {
                           </entry>
                           <entry>
                             <string>ui.j2dsk</string>
-                            <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="368"/>
+                            <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="472"/>
                           </entry>
                         </attributes>
-                        <attributesBeingRemoved id="369"/>
-                        <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
-                        <edges id="370">
-                          <org.graphstream.graph.implementations.AbstractEdge id="371">
+                        <attributesBeingRemoved id="473"/>
+                        <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+                        <edges id="474">
+                          <org.graphstream.graph.implementations.AbstractEdge id="475">
                             <id>city-loc-1-&gt;city-loc-4</id>
                             <index>1</index>
-                            <attributes id="372">
+                            <attributes id="476">
                               <entry>
                                 <string>road</string>
-                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="146"/>
+                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="145"/>
                               </entry>
                               <entry>
                                 <string>ui.j2dsk</string>
-                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="373"/>
+                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="477"/>
                               </entry>
                               <entry>
                                 <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-4</string>
                                 <boolean>true</boolean>
                               </entry>
                             </attributes>
-                            <source class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
-                            <target class="org.graphstream.graph.implementations.MultiNode" reference="365"/>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="469"/>
                             <directed>true</directed>
-                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
-                          <org.graphstream.graph.implementations.AbstractEdge id="374">
+                          <org.graphstream.graph.implementations.AbstractEdge id="478">
                             <id>city-loc-3-&gt;city-loc-4</id>
                             <index>6</index>
-                            <attributes id="375">
+                            <attributes id="479">
                               <entry>
                                 <string>road</string>
-                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="152"/>
+                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="151"/>
                               </entry>
                               <entry>
                                 <string>ui.j2dsk</string>
-                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="376"/>
+                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="480"/>
                               </entry>
                               <entry>
                                 <string>ui.sprite.sprite-city-loc-3-&gt;city-loc-4</string>
                                 <boolean>true</boolean>
                               </entry>
                             </attributes>
-                            <source class="org.graphstream.graph.implementations.MultiNode" reference="340"/>
-                            <target class="org.graphstream.graph.implementations.MultiNode" reference="365"/>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="444"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="469"/>
                             <directed>true</directed>
-                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
-                          <org.graphstream.graph.implementations.AbstractEdge id="377">
+                          <org.graphstream.graph.implementations.AbstractEdge id="481">
                             <id>city-loc-5-&gt;city-loc-4</id>
                             <index>11</index>
-                            <attributes id="378">
+                            <attributes id="482">
                               <entry>
                                 <string>road</string>
-                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="131"/>
+                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="130"/>
                               </entry>
                               <entry>
                                 <string>ui.j2dsk</string>
-                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="379"/>
+                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="483"/>
                               </entry>
                               <entry>
                                 <string>ui.sprite.sprite-city-loc-5-&gt;city-loc-4</string>
                                 <boolean>true</boolean>
                               </entry>
                             </attributes>
-                            <source class="org.graphstream.graph.implementations.MultiNode" id="380">
+                            <source class="org.graphstream.graph.implementations.MultiNode" id="484">
                               <id>city-loc-5</id>
                               <index>4</index>
-                              <attributes id="381">
+                              <attributes id="485">
                                 <entry>
                                   <string>xyz</string>
-                                  <object-array id="382">
-                                    <double>-2.184196662978978</double>
-                                    <double>-1.2843796796463773</double>
+                                  <object-array id="486">
+                                    <double>-1.628856847375145</double>
+                                    <double>-4.885618874803734</double>
                                     <double>0.0</double>
                                   </object-array>
                                 </entry>
@@ -1921,41 +2449,41 @@ sprite:clicked {
                                 </entry>
                                 <entry>
                                   <string>ui.j2dsk</string>
-                                  <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="383"/>
+                                  <org.graphstream.ui.j2dviewer.renderer.AreaSkeleton id="487"/>
                                 </entry>
                               </attributes>
-                              <attributesBeingRemoved id="384"/>
-                              <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
-                              <edges id="385">
-                                <org.graphstream.graph.implementations.AbstractEdge id="386">
+                              <attributesBeingRemoved id="488"/>
+                              <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
+                              <edges id="489">
+                                <org.graphstream.graph.implementations.AbstractEdge id="490">
                                   <id>city-loc-1-&gt;city-loc-5</id>
                                   <index>2</index>
-                                  <attributes id="387">
+                                  <attributes id="491">
                                     <entry>
                                       <string>ui.sprite.sprite-city-loc-1-&gt;city-loc-5</string>
                                       <boolean>true</boolean>
                                     </entry>
                                     <entry>
                                       <string>road</string>
-                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="143"/>
+                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="142"/>
                                     </entry>
                                     <entry>
                                       <string>ui.j2dsk</string>
-                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="388"/>
+                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="492"/>
                                     </entry>
                                   </attributes>
-                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
-                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="380"/>
+                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
+                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="484"/>
                                   <directed>true</directed>
-                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                                 </org.graphstream.graph.implementations.AbstractEdge>
-                                <org.graphstream.graph.implementations.AbstractEdge id="389">
+                                <org.graphstream.graph.implementations.AbstractEdge id="493">
                                   <id>city-loc-4-&gt;city-loc-5</id>
                                   <index>9</index>
-                                  <attributes id="390">
+                                  <attributes id="494">
                                     <entry>
                                       <string>road</string>
-                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="140"/>
+                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="139"/>
                                     </entry>
                                     <entry>
                                       <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-5</string>
@@ -1963,37 +2491,37 @@ sprite:clicked {
                                     </entry>
                                     <entry>
                                       <string>ui.j2dsk</string>
-                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="391"/>
+                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="495"/>
                                     </entry>
                                   </attributes>
-                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="365"/>
-                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="380"/>
+                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="469"/>
+                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="484"/>
                                   <directed>true</directed>
-                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                                 </org.graphstream.graph.implementations.AbstractEdge>
-                                <org.graphstream.graph.implementations.AbstractEdge id="392">
+                                <org.graphstream.graph.implementations.AbstractEdge id="496">
                                   <id>city-loc-5-&gt;city-loc-1</id>
                                   <index>10</index>
-                                  <attributes id="393">
+                                  <attributes id="497">
                                     <entry>
                                       <string>ui.sprite.sprite-city-loc-5-&gt;city-loc-1</string>
                                       <boolean>true</boolean>
                                     </entry>
                                     <entry>
                                       <string>road</string>
-                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="137"/>
+                                      <com.oskopek.transporteditor.model.problem.FuelRoad reference="136"/>
                                     </entry>
                                     <entry>
                                       <string>ui.j2dsk</string>
-                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="394"/>
+                                      <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="498"/>
                                     </entry>
                                   </attributes>
-                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="380"/>
-                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
+                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="484"/>
+                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
                                   <directed>true</directed>
-                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                                  <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                                 </org.graphstream.graph.implementations.AbstractEdge>
-                                <org.graphstream.graph.implementations.AbstractEdge reference="377"/>
+                                <org.graphstream.graph.implementations.AbstractEdge reference="481"/>
                                 <null/>
                                 <null/>
                                 <null/>
@@ -2010,36 +2538,36 @@ sprite:clicked {
                               <ioStart>2</ioStart>
                               <oStart>2</oStart>
                               <degree>4</degree>
-                              <neighborMap id="395">
+                              <neighborMap id="499">
                                 <entry>
-                                  <org.graphstream.graph.implementations.MultiNode reference="365"/>
-                                  <linked-list id="396">
-                                    <org.graphstream.graph.implementations.AbstractEdge reference="389"/>
-                                    <org.graphstream.graph.implementations.AbstractEdge reference="377"/>
+                                  <org.graphstream.graph.implementations.MultiNode reference="469"/>
+                                  <linked-list id="500">
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="493"/>
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="481"/>
                                   </linked-list>
                                 </entry>
                                 <entry>
-                                  <org.graphstream.graph.implementations.MultiNode reference="331"/>
-                                  <linked-list id="397">
-                                    <org.graphstream.graph.implementations.AbstractEdge reference="386"/>
-                                    <org.graphstream.graph.implementations.AbstractEdge reference="392"/>
+                                  <org.graphstream.graph.implementations.MultiNode reference="435"/>
+                                  <linked-list id="501">
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="490"/>
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="496"/>
                                   </linked-list>
                                 </entry>
                               </neighborMap>
                             </source>
-                            <target class="org.graphstream.graph.implementations.MultiNode" reference="365"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="469"/>
                             <directed>true</directed>
-                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
-                          <org.graphstream.graph.implementations.AbstractEdge reference="362"/>
-                          <org.graphstream.graph.implementations.AbstractEdge reference="389"/>
-                          <org.graphstream.graph.implementations.AbstractEdge id="398">
+                          <org.graphstream.graph.implementations.AbstractEdge reference="466"/>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="493"/>
+                          <org.graphstream.graph.implementations.AbstractEdge id="502">
                             <id>city-loc-4-&gt;city-loc-1</id>
                             <index>7</index>
-                            <attributes id="399">
+                            <attributes id="503">
                               <entry>
                                 <string>road</string>
-                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="134"/>
+                                <com.oskopek.transporteditor.model.problem.FuelRoad reference="133"/>
                               </entry>
                               <entry>
                                 <string>ui.sprite.sprite-city-loc-4-&gt;city-loc-1</string>
@@ -2047,13 +2575,13 @@ sprite:clicked {
                               </entry>
                               <entry>
                                 <string>ui.j2dsk</string>
-                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="400"/>
+                                <org.graphstream.ui.j2dviewer.renderer.ConnectorSkeleton id="504"/>
                               </entry>
                             </attributes>
-                            <source class="org.graphstream.graph.implementations.MultiNode" reference="365"/>
-                            <target class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="469"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
                             <directed>true</directed>
-                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                            <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                           </org.graphstream.graph.implementations.AbstractEdge>
                           <null/>
                           <null/>
@@ -2069,37 +2597,37 @@ sprite:clicked {
                         <ioStart>3</ioStart>
                         <oStart>3</oStart>
                         <degree>6</degree>
-                        <neighborMap id="401">
+                        <neighborMap id="505">
                           <entry>
-                            <org.graphstream.graph.implementations.MultiNode reference="340"/>
-                            <linked-list id="402">
-                              <org.graphstream.graph.implementations.AbstractEdge reference="374"/>
-                              <org.graphstream.graph.implementations.AbstractEdge reference="362"/>
+                            <org.graphstream.graph.implementations.MultiNode reference="444"/>
+                            <linked-list id="506">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="478"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="466"/>
                             </linked-list>
                           </entry>
                           <entry>
-                            <org.graphstream.graph.implementations.MultiNode reference="380"/>
-                            <linked-list id="403">
-                              <org.graphstream.graph.implementations.AbstractEdge reference="389"/>
-                              <org.graphstream.graph.implementations.AbstractEdge reference="377"/>
+                            <org.graphstream.graph.implementations.MultiNode reference="435"/>
+                            <linked-list id="507">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="475"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="502"/>
                             </linked-list>
                           </entry>
                           <entry>
-                            <org.graphstream.graph.implementations.MultiNode reference="331"/>
-                            <linked-list id="404">
-                              <org.graphstream.graph.implementations.AbstractEdge reference="371"/>
-                              <org.graphstream.graph.implementations.AbstractEdge reference="398"/>
+                            <org.graphstream.graph.implementations.MultiNode reference="484"/>
+                            <linked-list id="508">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="493"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="481"/>
                             </linked-list>
                           </entry>
                         </neighborMap>
                       </source>
-                      <target class="org.graphstream.graph.implementations.MultiNode" reference="340"/>
+                      <target class="org.graphstream.graph.implementations.MultiNode" reference="444"/>
                       <directed>true</directed>
-                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                      <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
                     </org.graphstream.graph.implementations.AbstractEdge>
-                    <org.graphstream.graph.implementations.AbstractEdge reference="357"/>
-                    <org.graphstream.graph.implementations.AbstractEdge reference="374"/>
-                    <org.graphstream.graph.implementations.AbstractEdge reference="337"/>
+                    <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+                    <org.graphstream.graph.implementations.AbstractEdge reference="478"/>
+                    <org.graphstream.graph.implementations.AbstractEdge reference="441"/>
                     <null/>
                     <null/>
                     <null/>
@@ -2114,39 +2642,39 @@ sprite:clicked {
                   <ioStart>3</ioStart>
                   <oStart>3</oStart>
                   <degree>6</degree>
-                  <neighborMap id="405">
+                  <neighborMap id="509">
                     <entry>
-                      <org.graphstream.graph.implementations.MultiNode reference="352"/>
-                      <linked-list id="406">
-                        <org.graphstream.graph.implementations.AbstractEdge reference="349"/>
-                        <org.graphstream.graph.implementations.AbstractEdge reference="357"/>
+                      <org.graphstream.graph.implementations.MultiNode reference="469"/>
+                      <linked-list id="510">
+                        <org.graphstream.graph.implementations.AbstractEdge reference="478"/>
+                        <org.graphstream.graph.implementations.AbstractEdge reference="466"/>
                       </linked-list>
                     </entry>
                     <entry>
-                      <org.graphstream.graph.implementations.MultiNode reference="365"/>
-                      <linked-list id="407">
-                        <org.graphstream.graph.implementations.AbstractEdge reference="374"/>
-                        <org.graphstream.graph.implementations.AbstractEdge reference="362"/>
+                      <org.graphstream.graph.implementations.MultiNode reference="456"/>
+                      <linked-list id="511">
+                        <org.graphstream.graph.implementations.AbstractEdge reference="453"/>
+                        <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
                       </linked-list>
                     </entry>
                     <entry>
-                      <org.graphstream.graph.implementations.MultiNode reference="331"/>
-                      <linked-list id="408">
-                        <org.graphstream.graph.implementations.AbstractEdge reference="346"/>
-                        <org.graphstream.graph.implementations.AbstractEdge reference="337"/>
+                      <org.graphstream.graph.implementations.MultiNode reference="435"/>
+                      <linked-list id="512">
+                        <org.graphstream.graph.implementations.AbstractEdge reference="450"/>
+                        <org.graphstream.graph.implementations.AbstractEdge reference="441"/>
                       </linked-list>
                     </entry>
                   </neighborMap>
                 </source>
-                <target class="org.graphstream.graph.implementations.MultiNode" reference="331"/>
+                <target class="org.graphstream.graph.implementations.MultiNode" reference="435"/>
                 <directed>true</directed>
-                <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="98"/>
+                <graph class="com.oskopek.transporteditor.model.problem.RoadGraph" reference="96"/>
               </org.graphstream.graph.implementations.AbstractEdge>
-              <org.graphstream.graph.implementations.AbstractEdge reference="398"/>
-              <org.graphstream.graph.implementations.AbstractEdge reference="392"/>
-              <org.graphstream.graph.implementations.AbstractEdge reference="346"/>
-              <org.graphstream.graph.implementations.AbstractEdge reference="371"/>
-              <org.graphstream.graph.implementations.AbstractEdge reference="386"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="502"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="496"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="450"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="475"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="490"/>
               <null/>
               <null/>
               <null/>
@@ -2161,26 +2689,26 @@ sprite:clicked {
             <ioStart>3</ioStart>
             <oStart>3</oStart>
             <degree>6</degree>
-            <neighborMap id="409">
+            <neighborMap id="513">
               <entry>
-                <org.graphstream.graph.implementations.MultiNode reference="340"/>
-                <linked-list id="410">
-                  <org.graphstream.graph.implementations.AbstractEdge reference="346"/>
-                  <org.graphstream.graph.implementations.AbstractEdge reference="337"/>
+                <org.graphstream.graph.implementations.MultiNode reference="469"/>
+                <linked-list id="514">
+                  <org.graphstream.graph.implementations.AbstractEdge reference="475"/>
+                  <org.graphstream.graph.implementations.AbstractEdge reference="502"/>
                 </linked-list>
               </entry>
               <entry>
-                <org.graphstream.graph.implementations.MultiNode reference="380"/>
-                <linked-list id="411">
-                  <org.graphstream.graph.implementations.AbstractEdge reference="386"/>
-                  <org.graphstream.graph.implementations.AbstractEdge reference="392"/>
+                <org.graphstream.graph.implementations.MultiNode reference="444"/>
+                <linked-list id="515">
+                  <org.graphstream.graph.implementations.AbstractEdge reference="450"/>
+                  <org.graphstream.graph.implementations.AbstractEdge reference="441"/>
                 </linked-list>
               </entry>
               <entry>
-                <org.graphstream.graph.implementations.MultiNode reference="365"/>
-                <linked-list id="412">
-                  <org.graphstream.graph.implementations.AbstractEdge reference="371"/>
-                  <org.graphstream.graph.implementations.AbstractEdge reference="398"/>
+                <org.graphstream.graph.implementations.MultiNode reference="484"/>
+                <linked-list id="516">
+                  <org.graphstream.graph.implementations.AbstractEdge reference="490"/>
+                  <org.graphstream.graph.implementations.AbstractEdge reference="496"/>
                 </linked-list>
               </entry>
             </neighborMap>
@@ -2188,77 +2716,77 @@ sprite:clicked {
         </entry>
         <entry>
           <string>city-loc-2</string>
-          <org.graphstream.graph.implementations.MultiNode reference="352"/>
+          <org.graphstream.graph.implementations.MultiNode reference="456"/>
         </entry>
         <entry>
           <string>city-loc-5</string>
-          <org.graphstream.graph.implementations.MultiNode reference="380"/>
+          <org.graphstream.graph.implementations.MultiNode reference="484"/>
         </entry>
         <entry>
           <string>city-loc-3</string>
-          <org.graphstream.graph.implementations.MultiNode reference="340"/>
+          <org.graphstream.graph.implementations.MultiNode reference="444"/>
         </entry>
         <entry>
           <string>city-loc-4</string>
-          <org.graphstream.graph.implementations.MultiNode reference="365"/>
+          <org.graphstream.graph.implementations.MultiNode reference="469"/>
         </entry>
       </nodeMap>
-      <edgeMap id="413">
+      <edgeMap id="517">
         <entry>
           <string>city-loc-2-&gt;city-loc-3</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="349"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="453"/>
         </entry>
         <entry>
           <string>city-loc-5-&gt;city-loc-4</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="377"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="481"/>
         </entry>
         <entry>
           <string>city-loc-5-&gt;city-loc-1</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="392"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="496"/>
         </entry>
         <entry>
           <string>city-loc-1-&gt;city-loc-5</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="386"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="490"/>
         </entry>
         <entry>
           <string>city-loc-1-&gt;city-loc-4</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="371"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="475"/>
         </entry>
         <entry>
           <string>city-loc-3-&gt;city-loc-4</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="374"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="478"/>
         </entry>
         <entry>
           <string>city-loc-3-&gt;city-loc-2</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="357"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
         </entry>
         <entry>
           <string>city-loc-3-&gt;city-loc-1</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="337"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="441"/>
         </entry>
         <entry>
           <string>city-loc-1-&gt;city-loc-3</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="346"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="450"/>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-3</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="362"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="466"/>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-1</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="398"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="502"/>
         </entry>
         <entry>
           <string>city-loc-4-&gt;city-loc-5</string>
-          <org.graphstream.graph.implementations.AbstractEdge reference="389"/>
+          <org.graphstream.graph.implementations.AbstractEdge reference="493"/>
         </entry>
       </edgeMap>
-      <nodeArray id="414">
-        <org.graphstream.graph.implementations.MultiNode reference="331"/>
-        <org.graphstream.graph.implementations.MultiNode reference="352"/>
-        <org.graphstream.graph.implementations.MultiNode reference="340"/>
-        <org.graphstream.graph.implementations.MultiNode reference="365"/>
-        <org.graphstream.graph.implementations.MultiNode reference="380"/>
+      <nodeArray id="518">
+        <org.graphstream.graph.implementations.MultiNode reference="435"/>
+        <org.graphstream.graph.implementations.MultiNode reference="456"/>
+        <org.graphstream.graph.implementations.MultiNode reference="444"/>
+        <org.graphstream.graph.implementations.MultiNode reference="469"/>
+        <org.graphstream.graph.implementations.MultiNode reference="484"/>
         <null/>
         <null/>
         <null/>
@@ -2383,19 +2911,19 @@ sprite:clicked {
         <null/>
         <null/>
       </nodeArray>
-      <edgeArray id="415">
-        <org.graphstream.graph.implementations.AbstractEdge reference="346"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="371"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="386"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="349"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="337"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="357"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="374"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="398"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="362"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="389"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="392"/>
-        <org.graphstream.graph.implementations.AbstractEdge reference="377"/>
+      <edgeArray id="519">
+        <org.graphstream.graph.implementations.AbstractEdge reference="450"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="475"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="490"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="453"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="441"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="478"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="502"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="466"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="493"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="496"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="481"/>
         <null/>
         <null/>
         <null/>
@@ -3411,30 +3939,30 @@ sprite:clicked {
       </edgeArray>
       <nodeCount>5</nodeCount>
       <edgeCount>12</edgeCount>
-      <logger class="ch.qos.logback.classic.Logger" id="416">
+      <logger class="ch.qos.logback.classic.Logger" id="520">
         <name>com.oskopek.transporteditor.model.problem.RoadGraph</name>
       </logger>
     </roadGraph>
-    <vehicleMap id="417">
+    <vehicleMap id="521">
       <entry>
         <string>truck-1</string>
-        <com.oskopek.transporteditor.model.problem.Vehicle reference="61"/>
+        <com.oskopek.transporteditor.model.problem.Vehicle reference="73"/>
       </entry>
       <entry>
         <string>truck-2</string>
-        <com.oskopek.transporteditor.model.problem.Vehicle reference="73"/>
+        <com.oskopek.transporteditor.model.problem.Vehicle reference="61"/>
       </entry>
     </vehicleMap>
-    <packageMap id="418">
+    <packageMap id="522">
       <entry>
         <string>package-2</string>
-        <com.oskopek.transporteditor.model.problem.Package reference="89"/>
+        <com.oskopek.transporteditor.model.problem.Package reference="67"/>
       </entry>
       <entry>
         <string>package-1</string>
-        <com.oskopek.transporteditor.model.problem.Package reference="67"/>
+        <com.oskopek.transporteditor.model.problem.Package reference="78"/>
       </entry>
     </packageMap>
   </problem>
-  <validator class="com.oskopek.transporteditor.validation.EmptyValidator" id="419"/>
+  <validator class="com.oskopek.transporteditor.validation.SequentialPlanValidator" id="523"/>
 </com.oskopek.transporteditor.model.DefaultPlanningSession>
