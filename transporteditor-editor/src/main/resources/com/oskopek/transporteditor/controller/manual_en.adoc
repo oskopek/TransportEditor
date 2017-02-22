@@ -3,11 +3,22 @@
 
 Welcome to TransportEditor's manual!
 
-// TODO intro
+TransportEditor is a planning dashboard for the Transport planning domain.
+You can use it to study various Transport domain variants,
+create, edit and visualize problem instances, after which you can
+run various planners and validators and visualize the resulting plans.
 
 How TransportEditor works and what it can do:
 
-// TODO workflow
+. Create a new session, create or load a domain.
+. Create/load a problem. TransportEditor will display the road graph for you.
+You can use the buttons on the right to edit the graph and its elements.
+. Go to "%root.session" -> "%root.setPlanner" to set a planner to use. Likewise, set a validator in
+"%root.session" -> "%root.setValidator"
+. Click on the "%plan" button to run the planner. After some time, the planning will end and you can
+see the generated plan in the table on the right. There are several plan views available, f.e. the Gantt chart.
+
+Now you can edit the graph, the vehicles, packages, rerun your planner and test the outcome. Happy planning!
 
 Read the following sections if you want to learn to work with TransportEditor quickly and effectively.
 
@@ -15,14 +26,15 @@ Read the following sections if you want to learn to work with TransportEditor qu
 
 If you can't find the answer to your question or request in this document
 (located in the menu, in "%root.help" -> "%root.help"),
-feel free to submit a pull request / issue in the GitHub repository of TransportEditor,
-post a question on StackOverflow,
-or email me personally. You can find all the needed information in the menu, in
-"%root.help" -> "%root.about".
+feel free to submit a pull request/issue in
+the https://gitlab.com/oskopek/TransportEditor[GitLab repository] of TransportEditor,
+post a question on https://stackoverflow.com[StackOverflow], or email me personally.
+You can find all the needed information in the menu, in "%root.help" -> "%root.about".
 
 === Changing the language
 
-If you want to run a translated version of TransportEditor, set your system locale accordingly and restart TransportEditor.
+If you want to run a translated version of TransportEditor,
+set your system locale accordingly and restart TransportEditor.
 
 If you want to try out a translated version (on Linux) without changing your system locale permanently,
 try running: `LC_ALL="LOCALE" java -jar TransportEditor.jar`, where `LOCALE` is any locale available on your system
@@ -30,16 +42,82 @@ try running: `LC_ALL="LOCALE" java -jar TransportEditor.jar`, where `LOCALE` is 
 
 TransportEditor currently does not support changing the language on the fly.
 
-== Domain variant creator
+== The Transport planning domain
 
-The domain variant creator helps you adjust the constraints and features available in your domain.
-The base of the domain includes a few predicates and functions:
+Transport is a domain designed originally for the International Planning Competition
+(IPC, part of the International Conference on Automated Planning and Scheduling ICAPS).
+Originally, Transport appeared at http://icaps-conference.org/ipc2008/deterministic/Domains.html[IPC-6 2008].
+Since then, it has been used in every IPC, specifically http://www.plg.inf.uc3m.es/ipc2011-deterministic/[IPC-7 2011]
+and https://helios.hud.ac.uk/scommv/IPC-14/[IPC-8 2014].
+
+There are two basic formulations of the Transport domain family (i.e. two "similar Transport domains"):
+
+* `transport-strips -- the classical, sequential Transport domain. See the STRIPS section below for details.
+* `transport-numeric` -- the numerical Transport domain. See the Numeric section below for details.
+
+Both of these formulations have been used interchangeably in various competition tracks.
+
+Short descriptions of the various tracks and subtracks can be found in the rule pages of
+https://helios.hud.ac.uk/scommv/IPC-14/rules.html[IPC-6]
+and the http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html[rule page of IPC-8].
+
+As a bonus, TransportEditor supports custom domains based on the Transport domain family.
+Users can create new Transport-like domains that have any subset of constraints/features of the two basic formulations.
+Only subsets in which individual constraints are not in conflict with each other are allowed.
+
+=== Transport STRIPS formulation description
+
+The STRIPS version of Transport is a logistics domain -- vehicles with limited capacities drive around on
+a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way.
+Picking up or dropping a package costs 1, driving along a road costs depending on the edge weight.
+All packages have a size of 1. The general aim is to minimize the total cost,
+while delivering all packages to their destination.
+
+=== Transport Numeric formulation description
+
+The numerical version of Transport is very similar to the STRIPS version. The key differences are:
+
+* Package sizes can now be any positive number.
+* The concept of fuel -- every vehicle has a maximum fuel level, current fuel level,
+and all roads have a fuel demand (generally different than the length of the road).
+A vehicle can refuel if there is a petrol station at the given location.
+Refuelling always fills the vehicle's tank to the max.
+* The introduction of time:
+** The duration of driving along a road is equal to it's length.
+** The duration of picking a package up or dropping it off is equal to 1.
+** The duration of refuelling is equal to 10.
+** A vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time.
+** A vehicle cannot do other actions during driving to another location
+(it is essentially placed "off the graph" for the duration of driving).
+* The cost function is removed (we now minimize the total duration of a plan).
+
+== Loading and saving
+
+=== Session
+
+Session is an abstraction over all the user workspace. It encompasses all your currently loaded data and options,
+including the domain, problem, plan, planner and validator.
+
+You can create a new session by clicking on "%root.session" -> "%root.new".
+
+Session can be saved to an XML file using "%root.session" -> "%root.save" or "%root.session" -> "%root.saveas".
+After that, you can come back to your session any time by using "%root.session" -> "%root.load", without
+having to load all the individual parts again.
+
+=== Domain
+
+Loading a domain from its PDDL file is as simple as clicking on "%root.domain" -> "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.
+
+==== Domain variant creator
+
+After clicking on "%root.domain" -> "%root.new", the domain variant creator will help
+you adjust the constraints and features available in your domain.
+The base of the domain includes a few predicates and functions, along with:
 
 * the graph
-* distance of an edge
-* positioning of locatables (packages, vehicles, ...)
-* determining if a package is in a vehicle
-* capacity of a vehice
+* distances of edges
+* locatables (packages, vehicles, ...)
 
 And actions:
 
@@ -47,37 +125,73 @@ And actions:
 * Drop (a package from a vehicle)
 * Drive (a vehicle between two nodes on an edge)
 
-Each action has an associated cost, and the minimazition function is by default the total cost of a plan.
+Each action has an associated cost, and the minimization function is by default the total cost of a plan.
+
+There two basic domain types you can select:
+
+* Sequential -- All actions are disjunct in time, the total-duration (sum of action durations) is minimized by default.
+* Temporal -- Introduces start/end times of actions,
+preconditions/effects are now checked with temporal reasoning (at start/at end/over all),
+new minimization function -- total-time.
 
 There are several optional constraints you can place on your model:
 
 * absence of capacity (vehicles have no maximum capacity)
-* fuel (introduces petrol stations, max fuel capacity of a vehicle and it's current status)
-* fuel demand (introduces an additional edge-weight, fuel-demand, and hence a new minimization function, total-fuel - equally long edges can have different fuel-demands, for example)
-* time (introduces start/end times of actions, preconditions/effects are now checked with temporal reasoning (at start/at end/over all), new minimization function - total-time)
+* fuel (introduces petrol stations, max fuel capacity of a vehicle and it's current status.
+Also introduces an additional edge-weight, fuel-demand -- equally long edges can have different
+fuel-demands, for example)
+* numerical minimization -- currently not implemented. Sorry for the inconvenience.
 
 You can select any subset of these constraint packages, but only a single cost function to go with them.
 The domain variant creator will then create your chosen domain and TransportEditor enables you to export it to PDDL,
 so that you can use it in different (mainly domain-independent) planners.
 
+=== Problem
 
+Loading a problem from its PDDL file is as simple as clicking on "%root.problem" -> "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.
 
-== Load and save
+Saving and creating new problems works quite simply with the appropriate button in the "%root.problem" menu.
 
-// TODO load and save
+=== Plan
 
-=== Loading
+Loading a plan from its PDDL file is as simple as clicking on "%root.plan" -> "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.
 
-=== Saving
-
-
+Saving and creating new plans works quite simply with the appropriate button in the "%root.plan" menu.
+Plans can also be changed by the planner (see the "%plan" button on the right) and by the user, in the plan view
+table at the bottom right -- either by rearranging the plan actions or changing their start time.
 
 === Demo data
 
-== Edit
+You can try all of this out on the datasets gathered from the IPC competitions, located in the folder `datasets/`.
 
-// TODO edit
+== Editing the problem
 
-=== Creating your own
+// TODO shortcuts, selection, ...
 
-=== Verifying problem integrity
+== Planning
+
+// TODO setting planners
+
+=== Internal planners
+
+Unfortunately, TransportEditor does not currently contain any internal planners.
+
+=== External planners
+
+// TODO Setting external planners and their interface
+
+=== Validating your plan
+
+// TODO Setting validators and internal validators
+
+==== External validator
+
+// TODO Setting external validators and their interface
+
+== Plan views
+
+
+
+// TODO: Might be more.

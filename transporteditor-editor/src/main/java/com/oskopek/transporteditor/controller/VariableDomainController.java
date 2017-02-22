@@ -7,7 +7,9 @@ import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -124,17 +126,18 @@ public class VariableDomainController extends AbstractController {
         // domainBuilder.goalTextProperty().bind(goalArea.textProperty());
         // domainBuilder.metricTextProperty().bind(metricArea.textProperty());
 
-        numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
-        numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
+        ReadOnlyBooleanWrapper disableBind = new ReadOnlyBooleanWrapper(true);
+        numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
+        numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
         capacityLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         capacityCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
 
-        metricArea.disableProperty().bind(numericCheck.selectedProperty().not());
-        metricLabel.disableProperty().bind(numericCheck.selectedProperty().not());
-        goalArea.disableProperty().bind(numericCheck.selectedProperty().not());
-        goalLabel.disableProperty().bind(numericCheck.selectedProperty().not());
+        metricArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        metricLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        goalArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        goalLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
     }
 
     /**
