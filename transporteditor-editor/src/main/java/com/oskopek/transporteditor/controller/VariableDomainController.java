@@ -7,7 +7,6 @@ import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;

@@ -25,7 +25,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
 
     private final String executable;
     private final String parameters;
-    private final List<Path> executablesOnPath;
+    private final transient List<Path> executablesOnPath;
 
     /**
      * Default constructor.
@@ -56,6 +56,10 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         return executablesOnPath.stream().filter(p -> p.getFileName().toString().equals(executable)).findFirst();
     }
 
+    /**
+     * Populates the {@code executablesOnPath} list serving as a cache from the filesystem and the environment
+     * variable PATH.
+     */
     private void populateExecutablePaths() {
         String path = System.getenv("PATH");
         String[] pathFolders;
