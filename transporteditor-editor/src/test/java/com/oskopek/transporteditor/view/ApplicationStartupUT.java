@@ -1,25 +1,36 @@
 package com.oskopek.transporteditor.view;
 
 import javafx.stage.Stage;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.testfx.api.FxAssert.*;
 import org.testfx.framework.junit.ApplicationTest;
+
+import javax.enterprise.inject.spi.CDI;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.*;
-import static org.assertj.core.api.Assertions.*;
 
 public class ApplicationStartupUT extends ApplicationTest {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setMaximized(true); // needs to happen
-    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
         ApplicationTest.launch(TransportEditorApplication.class);
         Thread.sleep(5000);
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        WeldContainer container = (WeldContainer) CDI.current();
+        container.close();
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        stage.setMaximized(true); // needs to happen
     }
 
     @Before
