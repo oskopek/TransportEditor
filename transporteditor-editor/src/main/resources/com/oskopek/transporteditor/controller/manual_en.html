@@ -427,7 +427,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Welcome to TransportEditor&#8217;s manual!</p>
 </div>
 <div class="paragraph">
+<p>TransportEditor is a planning dashboard for the Transport planning domain.
+You can use it to study various Transport domain variants,
+create, edit and visualize problem instances, after which you can
+run various planners and validators and visualize the resulting plans.</p>
+</div>
+<div class="paragraph">
 <p>How TransportEditor works and what it can do:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a new session, create or load a domain.</p>
+</li>
+<li>
+<p>Create/load a problem. TransportEditor will display the road graph for you.
+You can use the buttons on the right to edit the graph and its elements.</p>
+</li>
+<li>
+<p>Go to "%root.session" &#8594; "%root.setPlanner" to set a planner to use. Likewise, set a validator in
+"%root.session" &#8594; "%root.setValidator"</p>
+</li>
+<li>
+<p>Click on the "%plan" button to run the planner. After some time, the planning will end and you can
+see the generated plan in the table on the right. There are several plan views available, f.e. the Gantt chart.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Now you can edit the graph, the vehicles, packages, rerun your planner and test the outcome. Happy planning!</p>
 </div>
 <div class="paragraph">
 <p>Read the following sections if you want to learn to work with TransportEditor quickly and effectively.</p>
@@ -440,15 +468,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>If you can&#8217;t find the answer to your question or request in this document
 (located in the menu, in "%root.help" &#8594; "%root.help"),
-feel free to submit a pull request / issue in the GitHub repository of TransportEditor,
-post a question on StackOverflow,
-or email me personally. You can find all the needed information in the menu, in
-"%root.help" &#8594; "%root.about".</p>
+feel free to submit a pull request/issue in
+the <a href="https://gitlab.com/oskopek/TransportEditor">GitLab repository</a> of TransportEditor,
+post a question on <a href="https://stackoverflow.com">StackOverflow</a>, or email me personally.
+You can find all the needed information in the menu, in "%root.help" &#8594; "%root.about".</p>
 </div>
 <div class="sect2">
 <h3 id="_changing_the_language">1.1. Changing the language</h3>
 <div class="paragraph">
-<p>If you want to run a translated version of TransportEditor, set your system locale accordingly and restart TransportEditor.</p>
+<p>If you want to run a translated version of TransportEditor,
+set your system locale accordingly and restart TransportEditor.</p>
 </div>
 <div class="paragraph">
 <p>If you want to try out a translated version (on Linux) without changing your system locale permanently,
@@ -462,11 +491,128 @@ try running: <code>LC_ALL="LOCALE" java -jar TransportEditor.jar</code>, where <
 </div>
 </div>
 <div class="sect1">
-<h2 id="_domain_variant_creator">2. Domain variant creator</h2>
+<h2 id="_the_transport_planning_domain">2. The Transport planning domain</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The domain variant creator helps you adjust the constraints and features available in your domain.
-The base of the domain includes a few predicates and functions:</p>
+<p>Transport is a domain designed originally for the International Planning Competition
+(IPC, part of the International Conference on Automated Planning and Scheduling ICAPS).
+Originally, Transport appeared at <a href="http://icaps-conference.org/ipc2008/deterministic/Domains.html">IPC-6 2008</a>.
+Since then, it has been used in every IPC, specifically <a href="http://www.plg.inf.uc3m.es/ipc2011-deterministic/">IPC-7 2011</a>
+and <a href="https://helios.hud.ac.uk/scommv/IPC-14/">IPC-8 2014</a>.</p>
+</div>
+<div class="paragraph">
+<p>There are two basic formulations of the Transport domain family (i.e. two "similar Transport domains"):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>`transport-strips&#8201;&#8212;&#8201;the classical, sequential Transport domain. See the STRIPS section below for details.</p>
+</li>
+<li>
+<p><code>transport-numeric</code>&#8201;&#8212;&#8201;the numerical Transport domain. See the Numeric section below for details.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Both of these formulations have been used interchangeably in various competition tracks.</p>
+</div>
+<div class="paragraph">
+<p>Short descriptions of the various tracks and subtracks can be found in the rule pages of
+<a href="https://helios.hud.ac.uk/scommv/IPC-14/rules.html">IPC-6</a>
+and the <a href="http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html">rule page of IPC-8</a>.</p>
+</div>
+<div class="paragraph">
+<p>As a bonus, TransportEditor supports custom domains based on the Transport domain family.
+Users can create new Transport-like domains that have any subset of constraints/features of the two basic formulations.
+Only subsets in which individual constraints are not in conflict with each other are allowed.</p>
+</div>
+<div class="sect2">
+<h3 id="_transport_strips_formulation_description">2.1. Transport STRIPS formulation description</h3>
+<div class="paragraph">
+<p>The STRIPS version of Transport is a logistics domain&#8201;&#8212;&#8201;vehicles with limited capacities drive around on
+a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way.
+Picking up or dropping a package costs 1, driving along a road costs depending on the edge weight.
+All packages have a size of 1. The general aim is to minimize the total cost,
+while delivering all packages to their destination.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_transport_numeric_formulation_description">2.2. Transport Numeric formulation description</h3>
+<div class="paragraph">
+<p>The numerical version of Transport is very similar to the STRIPS version. The key differences are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Package sizes can now be any positive number.</p>
+</li>
+<li>
+<p>The concept of fuel&#8201;&#8212;&#8201;every vehicle has a maximum fuel level, current fuel level,
+and all roads have a fuel demand (generally different than the length of the road).
+A vehicle can refuel if there is a petrol station at the given location.
+Refuelling always fills the vehicle&#8217;s tank to the max.</p>
+</li>
+<li>
+<p>The introduction of time:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The duration of driving along a road is equal to it&#8217;s length.</p>
+</li>
+<li>
+<p>The duration of picking a package up or dropping it off is equal to 1.</p>
+</li>
+<li>
+<p>The duration of refuelling is equal to 10.</p>
+</li>
+<li>
+<p>A vehicle cannot pick up or drop packages concurrently&#8201;&#8212;&#8201;it always handles packages one at a time.</p>
+</li>
+<li>
+<p>A vehicle cannot do other actions during driving to another location
+(it is essentially placed "off the graph" for the duration of driving).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The cost function is removed (we now minimize the total duration of a plan).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_loading_and_saving">3. Loading and saving</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_session">3.1. Session</h3>
+<div class="paragraph">
+<p>Session is an abstraction over all the user workspace. It encompasses all your currently loaded data and options,
+including the domain, problem, plan, planner and validator.</p>
+</div>
+<div class="paragraph">
+<p>You can create a new session by clicking on "%root.session" &#8594; "%root.new".</p>
+</div>
+<div class="paragraph">
+<p>Session can be saved to an XML file using "%root.session" &#8594; "%root.save" or "%root.session" &#8594; "%root.saveAs".
+After that, you can come back to your session any time by using "%root.session" &#8594; "%root.load", without
+having to load all the individual parts again.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain">3.2. Domain</h3>
+<div class="paragraph">
+<p>Loading a domain from its PDDL file is as simple as clicking on "%root.domain" &#8594; "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.</p>
+</div>
+<div class="sect3">
+<h4 id="_domain_variant_creator">3.2.1. Domain variant creator</h4>
+<div class="paragraph">
+<p>After clicking on "%root.domain" &#8594; "%root.new", the domain variant creator will help
+you adjust the constraints and features available in your domain.
+The base of the domain includes a few predicates and functions, along with:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -474,16 +620,10 @@ The base of the domain includes a few predicates and functions:</p>
 <p>the graph</p>
 </li>
 <li>
-<p>distance of an edge</p>
+<p>distances of edges</p>
 </li>
 <li>
-<p>positioning of locatables (packages, vehicles, &#8230;&#8203;)</p>
-</li>
-<li>
-<p>determining if a package is in a vehicle</p>
-</li>
-<li>
-<p>capacity of a vehice</p>
+<p>locatables (packages, vehicles, &#8230;&#8203;)</p>
 </li>
 </ul>
 </div>
@@ -504,7 +644,22 @@ The base of the domain includes a few predicates and functions:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Each action has an associated cost, and the minimazition function is by default the total cost of a plan.</p>
+<p>Each action has an associated cost, and the minimization function is by default the total cost of a plan.</p>
+</div>
+<div class="paragraph">
+<p>There two basic domain types you can select:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Sequential&#8201;&#8212;&#8201;All actions are disjunct in time, the total-duration (sum of action durations) is minimized by default.</p>
+</li>
+<li>
+<p>Temporal&#8201;&#8212;&#8201;Introduces start/end times of actions,
+preconditions/effects are now checked with temporal reasoning (at start/at end/over all),
+new minimization function&#8201;&#8212;&#8201;total-time.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>There are several optional constraints you can place on your model:</p>
@@ -515,13 +670,12 @@ The base of the domain includes a few predicates and functions:</p>
 <p>absence of capacity (vehicles have no maximum capacity)</p>
 </li>
 <li>
-<p>fuel (introduces petrol stations, max fuel capacity of a vehicle and it&#8217;s current status)</p>
+<p>fuel (introduces petrol stations, max fuel capacity of a vehicle and it&#8217;s current status.
+Also introduces an additional edge-weight, fuel-demand&#8201;&#8212;&#8201;equally long edges can have different
+fuel-demands, for example)</p>
 </li>
 <li>
-<p>fuel demand (introduces an additional edge-weight, fuel-demand, and hence a new minimization function, total-fuel - equally long edges can have different fuel-demands, for example)</p>
-</li>
-<li>
-<p>time (introduces start/end times of actions, preconditions/effects are now checked with temporal reasoning (at start/at end/over all), new minimization function - total-time)</p>
+<p>numerical minimization&#8201;&#8212;&#8201;currently not implemented. Sorry for the inconvenience.</p>
 </li>
 </ul>
 </div>
@@ -532,40 +686,186 @@ so that you can use it in different (mainly domain-independent) planners.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_problem">3.3. Problem</h3>
+<div class="paragraph">
+<p>Loading a problem from its PDDL file is as simple as clicking on "%root.problem" &#8594; "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.</p>
+</div>
+<div class="paragraph">
+<p>Saving and creating new problems works quite simply with the appropriate button in the "%root.problem" menu.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_plan">3.4. Plan</h3>
+<div class="paragraph">
+<p>Loading a plan from its PDDL file is as simple as clicking on "%root.plan" &#8594; "%root.load".
+A file chooser dialog will pop up, where you can select the correct file.</p>
+</div>
+<div class="paragraph">
+<p>Saving and creating new plans works quite simply with the appropriate button in the "%root.plan" menu.
+Plans can also be changed by the planner (see the "%plan" button on the right) and by the user, in the plan view
+table at the bottom right&#8201;&#8212;&#8201;either by rearranging the plan actions or changing their start time.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demo_data">3.5. Demo data</h3>
+<div class="paragraph">
+<p>You can try all of this out on the datasets gathered from the IPC competitions, located in the folder <code>datasets/</code>.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="_load_and_save">3. Load and save</h2>
+<h2 id="_editing_the_problem">4. Editing the problem</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_loading">3.1. Loading</h3>
-
+<div class="paragraph">
+<p>Left-clicking and dragging will move the locations on screen. To attempt a new redraw of the graph,
+press the "%redraw" button. If the layout doesn&#8217;t get redrawn properly, try moving a few nodes from their
+positions to destabilize the algorithm and press redraw again.</p>
 </div>
-<div class="sect2">
-<h3 id="_saving">3.2. Saving</h3>
-
+<div class="paragraph">
+<p>You can select graph elements by left-clicking and dragging in the graph area, creating a selection region.
+The buttons on the right will get enabled/disabled based on the selected elements in the graph.
+To be aware of all the selection options, it is recommended to read through the
+Shortcut quick-tip manual, located in "%root.about" &#8594; "%root.shortcutQuickTips". To deselect nodes,
+press Escape (Esc) or click on point in the graph containing no element.</p>
 </div>
-<div class="sect2">
-<h3 id="_demo_data">3.3. Demo data</h3>
-
+<div class="paragraph">
+<p>The "%lock" button disables all graph editing. Clicking it again will unlock the graph.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_edit">4. Edit</h2>
+<h2 id="_planning">5. Planning</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_creating_your_own">4.1. Creating your own</h3>
-
+<div class="paragraph">
+<p>To set a planner, go to the "%root.session" &#8594; "%root.setPlanner" menu.</p>
 </div>
 <div class="sect2">
-<h3 id="_verifying_problem_integrity">4.2. Verifying problem integrity</h3>
-
+<h3 id="_external_planners">5.1. External planners</h3>
+<div class="paragraph">
+<p>In the "%root.setPlanner" menu, you can choose to set an external planner. An external planner is either an
+executable&#8217;s name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.</p>
+</div>
+<div class="paragraph">
+<p>The planner executable must follow a few rules (usually these are enforced by wrapping your planner in a shell script
+that enforces these rules):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Only the resulting plan is written to standard output.</p>
+</li>
+<li>
+<p>All logging, debugging and error messages are written to standard error output.</p>
+</li>
+<li>
+<p>The executable must exit with a 0 return code if and only if planning succeeded and a plan was output to stdout.</p>
+</li>
+<li>
+<p>The executable must take two filepath parameters&#8201;&#8212;&#8201;the domain in PDDL and the problem in PDDL.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You can specify a parameter template while setting the external planner. For example, you can specify <code>fast-downard</code>
+to be the executable and its parameters to be <code>{0} {1} --search "astar(lmcut())"</code>. The template <code>{0}</code> will get
+substituted for the domain filename at runtime, the <code>{1}</code> will be the problem filename.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_internal_planners">5.2. Internal planners</h3>
+<div class="paragraph">
+<p>Unfortunately, TransportEditor does not currently contain any internal planners.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_validating_your_plan">5.3. Validating your plan</h3>
+<div class="paragraph">
+<p>To set a validator, go to the "%root.session" &#8594; "%root.setValidator" menu.</p>
+</div>
+<div class="paragraph">
+<p>The "%root.setSequentialValidator" is a simple validator used for sequential domains that checks basic
+properties of the problem state, like predicates holding before and effects holding after applying an action.
+See the class <code>SequentialValidator</code> for more detailed information.</p>
+</div>
+<div class="sect3">
+<h4 id="_external_validators">5.3.1. External validators</h4>
+<div class="paragraph">
+<p>In the "%root.setValidator" menu, you can choose to set an external validator. An validator planner is either an
+executable&#8217;s name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.</p>
+</div>
+<div class="paragraph">
+<p>The validator executable must follow a few rules:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All logging, debugging and error messages are written to standard error output or standard output.</p>
+</li>
+<li>
+<p>The executable must exit with a 0 return code if and only if the plan is valid.</p>
+</li>
+<li>
+<p>The executable must take three filepath parameters&#8201;&#8212;&#8201;the domain in PDDL, the problem in PDDL and the plan in a
+VAL-like format.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You can specify a parameter template while setting the external validator.
+For example, you can specify <code>val</code> to be the executable and its parameters to be <code>{0} {1} {2}"</code>.
+The template <code>{0}</code> will get substituted for the domain filename at runtime, the <code>{1}</code> will be the problem filename and
+<code>{2}</code> will be the plan filename.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_plan_views">6. Plan views</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On the lower right hand side when a plan is loaded, you can see a table with the plans actions. If the loaded domain
+is sequential, that table displays basic action info and its first column is draggable - you can reorder the plan&#8217;s
+actions by dragging them from one place to another in the table. If the domain is temporal, you can double click and
+edit the action start time in the table.</p>
+</div>
+<div class="paragraph">
+<p>Both of these tables are filtrable&#8201;&#8212;&#8201;if you right click on the table&#8217;s headers a small dialog popup will show up
+and you can choose which values to show and which to hide. These choices will get propagated to the other plan views
+and they too will get filtered (if possible).</p>
+</div>
+<div class="paragraph">
+<p>One of the alternative table views is the Gantt chart. It displays action objects on the Y axis and time on the X axis.
+The contents of the chart are individual actions involving the given action objects at the given time. The color
+corresponds to a type of action.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stepping_through_a_plan">7. Stepping through a plan</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TBA</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-15 00:35:45 CET
+Last updated 2017-02-23 01:31:05 CET
 </div>
 </div>
 </body>

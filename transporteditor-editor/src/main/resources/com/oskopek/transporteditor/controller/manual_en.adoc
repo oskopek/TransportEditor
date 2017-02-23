@@ -100,7 +100,7 @@ including the domain, problem, plan, planner and validator.
 
 You can create a new session by clicking on "%root.session" -> "%root.new".
 
-Session can be saved to an XML file using "%root.session" -> "%root.save" or "%root.session" -> "%root.saveas".
+Session can be saved to an XML file using "%root.session" -> "%root.save" or "%root.session" -> "%root.saveAs".
 After that, you can come back to your session any time by using "%root.session" -> "%root.load", without
 having to load all the individual parts again.
 
@@ -168,30 +168,84 @@ You can try all of this out on the datasets gathered from the IPC competitions, 
 
 == Editing the problem
 
-// TODO shortcuts, selection, ...
+Left-clicking and dragging will move the locations on screen. To attempt a new redraw of the graph,
+press the "%redraw" button. If the layout doesn't get redrawn properly, try moving a few nodes from their
+positions to destabilize the algorithm and press redraw again.
+
+You can select graph elements by left-clicking and dragging in the graph area, creating a selection region.
+The buttons on the right will get enabled/disabled based on the selected elements in the graph.
+To be aware of all the selection options, it is recommended to read through the
+Shortcut quick-tip manual, located in "%root.about" -> "%root.shortcutQuickTips". To deselect nodes,
+press Escape (Esc) or click on point in the graph containing no element.
+
+The "%lock" button disables all graph editing. Clicking it again will unlock the graph.
 
 == Planning
 
-// TODO setting planners
+To set a planner, go to the "%root.session" -> "%root.setPlanner" menu.
+
+=== External planners
+
+In the "%root.setPlanner" menu, you can choose to set an external planner. An external planner is either an
+executable's name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.
+
+The planner executable must follow a few rules (usually these are enforced by wrapping your planner in a shell script
+that enforces these rules):
+
+* Only the resulting plan is written to standard output.
+* All logging, debugging and error messages are written to standard error output.
+* The executable must exit with a 0 return code if and only if planning succeeded and a plan was output to stdout.
+* The executable must take two filepath parameters -- the domain in PDDL and the problem in PDDL.
+** You can specify a parameter template while setting the external planner. For example, you can specify `fast-downard`
+to be the executable and its parameters to be `{0} {1} --search "astar(lmcut())"`. The template `{0}` will get
+substituted for the domain filename at runtime, the `{1}` will be the problem filename.
 
 === Internal planners
 
 Unfortunately, TransportEditor does not currently contain any internal planners.
 
-=== External planners
-
-// TODO Setting external planners and their interface
-
 === Validating your plan
 
-// TODO Setting validators and internal validators
+To set a validator, go to the "%root.session" -> "%root.setValidator" menu.
 
-==== External validator
+The "%root.setSequentialValidator" is a simple validator used for sequential domains that checks basic
+properties of the problem state, like predicates holding before and effects holding after applying an action.
+See the class `SequentialValidator` for more detailed information.
 
-// TODO Setting external validators and their interface
+==== External validators
+
+In the "%root.setValidator" menu, you can choose to set an external validator. An validator planner is either an
+executable's name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.
+
+The validator executable must follow a few rules:
+
+* All logging, debugging and error messages are written to standard error output or standard output.
+* The executable must exit with a 0 return code if and only if the plan is valid.
+* The executable must take three filepath parameters -- the domain in PDDL, the problem in PDDL and the plan in a
+VAL-like format.
+** You can specify a parameter template while setting the external validator.
+For example, you can specify `val` to be the executable and its parameters to be `{0} {1} {2}"`.
+The template `{0}` will get substituted for the domain filename at runtime, the `{1}` will be the problem filename and
+`{2}` will be the plan filename.
 
 == Plan views
 
+On the lower right hand side when a plan is loaded, you can see a table with the plans actions. If the loaded domain
+is sequential, that table displays basic action info and its first column is draggable - you can reorder the plan's
+actions by dragging them from one place to another in the table. If the domain is temporal, you can double click and
+edit the action start time in the table.
 
+Both of these tables are filtrable -- if you right click on the table's headers a small dialog popup will show up
+and you can choose which values to show and which to hide. These choices will get propagated to the other plan views
+and they too will get filtered (if possible).
 
-// TODO: Might be more.
+One of the alternative table views is the Gantt chart. It displays action objects on the Y axis and time on the X axis.
+The contents of the chart are individual actions involving the given action objects at the given time. The color
+corresponds to a type of action.
+
+== Stepping through a plan
+
+TBA
+// TODO Stepping through a plan

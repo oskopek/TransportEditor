@@ -66,7 +66,7 @@ public class RootLayoutController extends AbstractController {
     @Inject
     private SaveDiscardDialogPaneCreator creator;
     @FXML
-    private MenuItem fileSetPlannerMenuItem;
+    private Menu fileSetPlannerMenu;
     @FXML
     private Menu fileSetValidatorMenu;
     @FXML
@@ -153,7 +153,7 @@ public class RootLayoutController extends AbstractController {
                         problemFileHandler).useVal();
 
         application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
-        fileSetPlannerMenuItem.disableProperty().bind(application.planningSessionProperty().isNull());
+        fileSetPlannerMenu.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenu.disableProperty().bind(application.planningSessionProperty().isNull());
     }
 
@@ -247,11 +247,11 @@ public class RootLayoutController extends AbstractController {
     }
 
     /**
-     * Menu item: Session->Set Planner.
+     * Menu item: Session->Set Planner->External Planner.
      * Set an external planner using a {@link ExecutableParametersCreator}'s dialog.
      */
     @FXML
-    private void handleFileSetPlanner() {
+    private void handleFileSetExternalPlanner() {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot set planner, because no planning session is loaded.");
         }
@@ -272,11 +272,11 @@ public class RootLayoutController extends AbstractController {
     }
 
     /**
-     * Menu item: Session->Set Validator->Custom validator.
+     * Menu item: Session->Set Validator->External validator.
      * Loads a custom executable validator using a {@link ExecutableParametersCreator}'s dialog.
      */
     @FXML
-    private void handleFileSetCustomValidator() {
+    private void handleFileSetExternalValidator() {
         if (application.getPlanningSession() == null) {
             throw new IllegalStateException("Cannot set custom validator, because no planning session is loaded.");
         }
