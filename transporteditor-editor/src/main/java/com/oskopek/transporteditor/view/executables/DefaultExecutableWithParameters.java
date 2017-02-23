@@ -11,6 +11,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
 
     private final String executable;
     private final String parameters;
+    private final transient List<Path> executablesOnPath;
 
     /**
      * Default constructor.
@@ -33,6 +36,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
     public DefaultExecutableWithParameters(String executable, String parameters) {
         this.executable = executable.trim();
         this.parameters = parameters.trim();
+        this.executablesOnPath = new ArrayList<>();
     }
 
     /**
@@ -42,10 +46,21 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
      * @param executable the executable command
      * @return empty if we couldn't find such an executable, else its path
      */
-    public static Optional<Path> findExecutablePath(String executable) {
+    public Optional<Path> findExecutablePath(String executable) {
         if (Files.isExecutable(Paths.get(executable))) {
             return Optional.of(executable).map(Paths::get);
         }
+        if (executablesOnPath.isEmpty()) {
+            populateExecutablePaths();
+        }
+        return executablesOnPath.stream().filter(p -> p.getFileName().toString().equals(executable)).findFirst();
+    }
+
+    /**
+     * Populates the {@code executablesOnPath} list serving as a cache from the filesystem and the environment
+     * variable PATH.
+     */
+    private void populateExecutablePaths() {
         String path = System.getenv("PATH");
         String[] pathFolders;
         if (File.separatorChar == '/') {
@@ -53,16 +68,17 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         } else if (File.separatorChar == '\\') {
             pathFolders = path.split(";");
         } else {
-            logger.warn("Found unknown PATH env variable format: \"{}\". Cannot verify if executable is valid.", path);
-            return Optional.empty();
+            logger.warn("Found unknown PATH env variable format: \"{}\". Cannot populate executables.", path);
+            return;
         }
 
         Stream<Path> pathVariableFiles = Stream.of(pathFolders).map(Paths::get).filter(Files::isRegularFile);
         Stream<Path> pathVariableFolderContents = Stream.of(pathFolders).map(Paths::get).filter(Files::isDirectory).map(
                 d -> Try.of(() -> Files.list(d))).filter(Try::isSuccess).map(Try::get).flatMap(
                 s -> Stream.ofAll(s.collect(Collectors.toList())));
-        return pathVariableFiles.appendAll(pathVariableFolderContents).filter(Files::isExecutable).filter(
-                p -> p.getFileName().toString().equals(executable)).toJavaStream().findFirst();
+        executablesOnPath.clear();
+        executablesOnPath.addAll(pathVariableFiles.appendAll(pathVariableFolderContents).filter(Files::isExecutable)
+                .toJavaList());
     }
 
     @Override
@@ -72,7 +88,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
 
     @Override
     public Optional<Path> findExecutablePath() {
-        return DefaultExecutableWithParameters.findExecutablePath(executable);
+        return findExecutablePath(executable);
     }
 
     @Override

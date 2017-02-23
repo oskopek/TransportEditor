@@ -56,7 +56,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
         } else if (Drop.class.isInstance(action)) {
             str.append(" ").append(action.getWhat().getName());
         } else if (Refuel.class.isInstance(action)) {
-            // intentionally empty
+            str.append(""); // intentionally empty
         } else {
             throw new IllegalArgumentException("Not recognized action: " + action);
         }

@@ -4,13 +4,12 @@ import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 /**
- * Controller for choosing a course out of several choices.
+ * Controller for a dialog showing log messages and progress while waiting for an action to complete.
  */
 public class LogProgressController extends AbstractController {
 
@@ -33,6 +32,9 @@ public class LogProgressController extends AbstractController {
 
     private Runnable cancellator;
 
+    /**
+     * JavaFX initializer method.
+     */
     @FXML
     private void initialize() {
         logArea.setStyle("-fx-border-color: transparent");
@@ -41,6 +43,14 @@ public class LogProgressController extends AbstractController {
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
     }
 
+    /**
+     * Set the observable predicates used to determine the progress.
+     *
+     * @param successfullyFinished {@code finished & completed succesfully}, we can "ok" the dialog
+     * @param cancelAvailable {@code !finished & a cancellable} was provided
+     * @param inProgress {@code !finished}
+     * @param cancellator the operation to run when the user wants to cancel
+     */
     public void setProgressConditions(ObservableValue<Boolean> successfullyFinished,
             ObservableValue<Boolean> cancelAvailable, ObservableValue<Boolean> inProgress, Runnable cancellator) {
         this.cancellator = cancellator;
@@ -54,14 +64,27 @@ public class LogProgressController extends AbstractController {
         });
     }
 
-    public synchronized void appendLog(String logMessage) {
+    /**
+     * Append a log message to the display.
+     *
+     * @param logMessage the log message to append
+     */
+    public void appendLog(String logMessage) {
         Platform.runLater(() -> logArea.appendText(logMessage));
     }
 
+    /**
+     * Set the header text. Should be localized before setting.
+     *
+     * @param headerText the localized header text
+     */
     public void setHeaderText(String headerText) {
         this.headerText.setText(headerText);
     }
 
+    /**
+     * Handles the cancel button. Invokes the cancellator supplied.
+     */
     @FXML
     private void handleCancelButton() {
         if (!cancelButton.isDisabled()) {
@@ -85,8 +108,11 @@ public class LogProgressController extends AbstractController {
         this.dialog = dialog;
     }
 
+    /**
+     * Handles the OK button press. Applies the dialog.
+     */
     @FXML
-    private void handleOkButton(ActionEvent actionEvent) {
+    private void handleOkButton() {
         if (!okButton.isDisabled()) {
             result = ButtonBar.ButtonData.APPLY;
             dialog.close();
@@ -95,6 +121,11 @@ public class LogProgressController extends AbstractController {
         }
     }
 
+    /**
+     * Get the resulting button that was pressed by the user.
+     *
+     * @return the resulting button
+     */
     public ButtonBar.ButtonData getResult() {
         return result;
     }

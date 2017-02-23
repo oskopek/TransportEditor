@@ -4,29 +4,62 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Represents a package in the Transport domain's problem instance.
+ */
 public class Package extends DefaultLocatable implements ActionObject, Locatable {
 
     private final Location target;
     private final ActionCost size;
 
+    /**
+     * Default constructor.
+     *
+     * @param name the name
+     * @param location the current location
+     * @param target the target location
+     * @param size the size of the package
+     */
     public Package(String name, Location location, Location target, ActionCost size) {
         super(name, location);
         this.target = target;
         this.size = size;
     }
 
+    /**
+     * Get the target location.
+     *
+     * @return the target location
+     */
     public Location getTarget() {
         return target;
     }
 
+    /**
+     * Get the package size.
+     *
+     * @return the package size
+     */
     public ActionCost getSize() {
         return size;
     }
 
+    /**
+     * Update the current location of the package. Returns a new package instance.
+     *
+     * @param location the new location
+     * @return the updated package
+     */
     public Package updateLocation(Location location) {
         return new Package(getName(), location, getTarget(), getSize());
     }
 
+    /**
+     * Update the target location of the package. Returns a new package instance.
+     *
+     * @param target the new target location
+     * @return the updated package
+     */
     public Package updateTarget(Location target) {
         return new Package(getName(), getLocation(), target, getSize());
     }

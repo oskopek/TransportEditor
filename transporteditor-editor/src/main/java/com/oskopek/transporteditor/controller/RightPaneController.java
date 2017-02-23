@@ -18,6 +18,7 @@ import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
+import com.oskopek.transporteditor.view.TransportEditorApplication;
 import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
@@ -44,6 +45,9 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Controller for the right pane - contains plan views and the graph edit toolbox of buttons.
+ */
 @Singleton
 public class RightPaneController extends AbstractController {
 
@@ -108,6 +112,10 @@ public class RightPaneController extends AbstractController {
     @Inject
     private EventBus eventBus;
 
+    /**
+     * JavaFX initializer method. Registers with the event bus. Initializes button disabling
+     * and other validation.
+     */
     @FXML
     private void initialize() {
         eventBus.register(this);
@@ -205,16 +213,32 @@ public class RightPaneController extends AbstractController {
         });
     }
 
+    /**
+     * Redraw plan views without selecting a row of the plan.
+     *
+     * @param event the event subscribed to
+     */
     @Subscribe
     public void redrawPlans(GraphUpdatedEvent event) {
         redrawPlansInternal(null);
     }
 
+    /**
+     * Redraw plan views and select a row of the plan, if one was provided in the event.
+     *
+     * @param event the event subscribed to
+     */
     @Subscribe
     public void redrawPlans(PlanningFinishedEvent event) {
         redrawPlansInternal(event.getSelectRow());
     }
 
+    /**
+     * Redraw the plan views and potentially select a row of the plan.
+     * Applies filtering to the plan tables and synchronizes the Gantt view with it.
+     *
+     * @param selectedRow null = no selection, otherwise the index from 0 of the action to select in the plan
+     */
     private void redrawPlansInternal(Integer selectedRow) {
         logger.debug("Caught planning finished event: redrawing plans.");
         Platform.runLater(() -> {
@@ -275,6 +299,10 @@ public class RightPaneController extends AbstractController {
         });
     }
 
+    /**
+     * Handle the Plan button press. Starts planning and orchestrates UI events surrounding it.
+     * Displays a waiting dialog and possible followup actions to the planning.
+     */
     @FXML
     private void handlePlan() {
         logger.debug("Starting planning...");
@@ -315,6 +343,10 @@ public class RightPaneController extends AbstractController {
         logger.trace("LogProgress end");
     }
 
+    /**
+     * Handle the Validate button press. Starts validation and orchestrates UI events surrounding it.
+     * Displays a waiting dialog and possible followup actions to the validation.
+     */
     @FXML
     private void handleValidate() {
         logger.debug("Starting validation...");
@@ -343,12 +375,20 @@ public class RightPaneController extends AbstractController {
                 completed.not(), completed.not(), validator::cancel);
     }
 
+    /**
+     * Handles the Redraw button being pressed. Posts a {@link GraphUpdatedEvent}.
+     */
     @FXML
     private void handleRedraw() {
         logger.debug("Starting redraw...");
         eventBus.post(new GraphUpdatedEvent());
     }
 
+    /**
+     * Handles the +Location button being pressed. Adds a location to the graph and displays it in the graph.
+     * Does not verify that we are in a good state to add a road, that should be done by button disabling
+     * validation.
+     */
     @FXML
     private void handleAddLocation() {
         RoadGraph graph = null;
@@ -376,6 +416,11 @@ public class RightPaneController extends AbstractController {
         }
     }
 
+    /**
+     * Handles the +Road button being pressed. Adds a road to the graph and displays it.
+     * Does not verify that we are in a good state to add a road, that should be done by button disabling
+     * validation.
+     */
     @FXML
     private void handleAddRoad() {
         RoadGraph graph = null;
@@ -421,6 +466,11 @@ public class RightPaneController extends AbstractController {
         }
     }
 
+    /**
+     * Handles the +Vehicle button being pressed. Adds a vehicle to the graph and displays it.
+     * Does not verify that we are in a good state to add a vehicle, that should be done by button disabling
+     * validation.
+     */
     @FXML
     private void handleAddVehicle() {
         Problem problem = application.getPlanningSession().getProblem();
@@ -449,6 +499,11 @@ public class RightPaneController extends AbstractController {
         });
     }
 
+    /**
+     * Handles the +Package button being pressed. Adds a package to the graph and displays it.
+     * Does not verify that we are in a good state to add a package, that should be done by button disabling
+     * validation.
+     */
     @FXML
     private void handleAddPackage() {
         Problem problem = application.getPlanningSession().getProblem();
@@ -470,6 +525,10 @@ public class RightPaneController extends AbstractController {
         });
     }
 
+    /**
+     * Handles the Lock button press. Changes the buttons appearance and switches the lock property
+     * that all the editing methods check before executing.
+     */
     @FXML
     private void handleLockToggle() {
         boolean newLocked = !centerPaneController.isLocked();
@@ -484,28 +543,48 @@ public class RightPaneController extends AbstractController {
     }
 
     /**
-     * Is value not present or null?
+     * Util method for overcomming the greedy linking of creating a lambda in the constructor of {@link IsNullBinding}.
+     *
+     * @return the planning session optional of the CDI injected application
      */
-    private class IsNullBinding extends BooleanBinding {
+    private Optional<PlanningSession> getPlanningSessionOptionalIndirection() {
+        return application.getPlanningSessionOptional();
+    }
 
-        private final Function<PlanningSession, ObjectProperty> getter;
-
+    /**
+     * An extension of {@link OptionalSelectionBinding} for {@link PlanningSession}
+     * using {@link TransportEditorApplication#getPlanningSessionOptional()}.
+     * Is true iff the resulting getter value is null or any value on the way to it is null.
+     */
+    private class IsNullBinding extends OptionalSelectionBinding<PlanningSession> {
+        /**
+         * Default constructor.
+         *
+         * @param getter the getter of a property in the planning session
+         */
         IsNullBinding(Function<PlanningSession, ObjectProperty> getter) {
-            this.getter = getter;
-        }
-
-        @Override
-        protected boolean computeValue() {
-            return application.getPlanningSessionOptional().map(getter).map(ObjectProperty::isNull).map(
-                    BooleanBinding::get).orElse(true);
+            super(() -> getPlanningSessionOptionalIndirection(),
+                    getter.andThen(ObjectProperty::isNull).andThen(BooleanBinding::get));
         }
     }
 
+    /**
+     * Immutable is null binding. Uses Optional's monad semantics to get a value inside the
+     * optional and returns it.
+     *
+     * @param <T> the type of the optional
+     */
     private static class OptionalSelectionBinding<T> extends BooleanBinding {
 
         private final Supplier<Optional<T>> supplier;
         private final Function<T, Boolean> getter;
 
+        /**
+         * Default constructor.
+         *
+         * @param supplier the optional supplier
+         * @param getter the boolean getter
+         */
         OptionalSelectionBinding(Supplier<Optional<T>> supplier, Function<T, Boolean> getter) {
             this.supplier = supplier;
             this.getter = getter;

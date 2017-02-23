@@ -8,6 +8,7 @@ import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -65,6 +66,10 @@ public class VariableDomainController extends AbstractController {
     private ButtonBar.ButtonData result;
     private BooleanBinding allValidationsValid;
 
+    /**
+     * JavaFX initializer method. Registers with the event bus. Initializes button disabling
+     * and other validation.
+     */
     @FXML
     private void initialize() {
         nameFieldValid = new ValidationProperty(messages.getString("vdcreator.valid.name"),
@@ -120,27 +125,41 @@ public class VariableDomainController extends AbstractController {
         // domainBuilder.goalTextProperty().bind(goalArea.textProperty());
         // domainBuilder.metricTextProperty().bind(metricArea.textProperty());
 
-        numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
-        numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
+        ReadOnlyBooleanWrapper disableBind = new ReadOnlyBooleanWrapper(true);
+        numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
+        numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
         capacityLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         capacityCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
 
-        metricArea.disableProperty().bind(numericCheck.selectedProperty().not());
-        metricLabel.disableProperty().bind(numericCheck.selectedProperty().not());
-        goalArea.disableProperty().bind(numericCheck.selectedProperty().not());
-        goalLabel.disableProperty().bind(numericCheck.selectedProperty().not());
+        metricArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        metricLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        goalArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
+        goalLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
     }
 
+    /**
+     * Set the header text.
+     *
+     * @param headerText the text to set
+     */
     public void setHeaderText(String headerText) {
         this.headerText.setText(headerText);
     }
 
+    /**
+     * Get the name text field.
+     *
+     * @return the text field
+     */
     public TextField getNameField() {
         return nameField;
     }
 
+    /**
+     * Handles the Apply button press.
+     */
     @FXML
     private void handleApplyButton() {
         if (allValidationsValid.get()) {
@@ -151,6 +170,9 @@ public class VariableDomainController extends AbstractController {
         }
     }
 
+    /**
+     * Handles the Cancel button press.
+     */
     @FXML
     private void handleCancelButton() {
         result = ButtonBar.ButtonData.CANCEL_CLOSE;

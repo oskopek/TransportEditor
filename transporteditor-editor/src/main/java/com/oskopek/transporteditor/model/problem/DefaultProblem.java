@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Default problem implementation. Provides basic data properties and immutable update methods.
+ */
 public class DefaultProblem implements Problem {
 
     private final String name;
@@ -15,6 +18,11 @@ public class DefaultProblem implements Problem {
     private final Map<String, Vehicle> vehicleMap;
     private final Map<String, Package> packageMap;
 
+    /**
+     * Copy constructor.
+     *
+     * @param problem the problem to copy
+     */
     public DefaultProblem(Problem problem) {
         // vehicles are immutable
         // packages are immutable
@@ -22,6 +30,14 @@ public class DefaultProblem implements Problem {
                 new HashMap<>(problem.getVehicleMap()), new HashMap<>(problem.getPackageMap()));
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param name the name
+     * @param roadGraph the graph
+     * @param vehicleMap the vehicle map
+     * @param packageMap the package map
+     */
     public DefaultProblem(String name, RoadGraph roadGraph, Map<String, Vehicle> vehicleMap,
             Map<String, Package> packageMap) {
         this.name = name;
@@ -107,6 +123,13 @@ public class DefaultProblem implements Problem {
         return new DefaultProblem(getName(), getRoadGraph(), newVehicleMap, getPackageMap());
     }
 
+    /**
+     * Put all vehicles in the stream.
+     *
+     * @param vehicles the vehicles to put, keys are their names
+     * @return the updated problem
+     * @see #putVehicle(String, Vehicle)
+     */
     public Problem putAllVehicles(Stream<Vehicle> vehicles) {
         Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
         vehicles.forEach(v -> newVehicleMap.put(v.getName(), v));

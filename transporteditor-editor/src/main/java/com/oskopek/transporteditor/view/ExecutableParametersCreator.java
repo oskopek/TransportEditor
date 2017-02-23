@@ -67,9 +67,13 @@ public class ExecutableParametersCreator {
         executableParametersController.setExecutableSubLabelText(executableInstructions);
         executableParametersController.setParametersSubLabelText(parameterInstructions);
         executableParametersController.setNoteText(noteText);
+
+
+        DefaultExecutableWithParameters executable = new DefaultExecutableWithParameters("ls", "");
+        executable.findExecutablePath(); // Pre-load the cache
+
         executableParametersController.enableValidation(
-                executableString -> DefaultExecutableWithParameters.findExecutablePath(executableString.trim())
-                        .isPresent(),
+                executableString -> executable.findExecutablePath(executableString.trim()).isPresent(),
                 messages.getString("excreator.valid.executable"), parameterString -> List.range(0, parameterCount)
                         .map(i -> "{" + i + "}").forAll(parameterString::contains),
                 messages.getString("excreator.valid.paramcount") + ": " + parameterCount);

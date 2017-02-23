@@ -39,6 +39,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the central pane (contains the graph rendering viewer).
+ */
 @Singleton
 public class CenterPaneController extends AbstractController {
 
@@ -60,35 +63,71 @@ public class CenterPaneController extends AbstractController {
 
     private BooleanProperty locked = new SimpleBooleanProperty(false);
 
+    /**
+     * JavaFX initializer method. Registers with the event bus.
+     */
     @FXML
     private void initialize() {
         eventBus.register(this);
     }
 
+    /**
+     * Determine if the graph is locked for edits.
+     *
+     * @return true iff the graph is locked
+     */
     public boolean isLocked() {
         return locked.get();
     }
 
+    /**
+     * The graph's locked property.
+     *
+     * @return the locked property
+     */
     public BooleanProperty lockedProperty() {
         return locked;
     }
 
+    /**
+     * Set the graph lock.
+     *
+     * @param locked the new graph lock state
+     */
     public void setLocked(boolean locked) {
         this.locked.set(locked);
     }
 
+    /**
+     * Get the graph selection handler.
+     *
+     * @return the graph selection handler
+     */
     public GraphSelectionHandler getGraphSelectionHandler() {
         return graphSelectionHandler.get();
     }
 
+    /**
+     * Get the graph selection handler property.
+     *
+     * @return the graph selection handler property
+     */
     public ReadOnlyObjectProperty<GraphSelectionHandler> graphSelectionHandlerProperty() {
         return graphSelectionHandler;
     }
 
+    /**
+     * Sets the current problem instance into the graph selection handler.
+     */
     public void refreshGraphSelectionHandler() {
         graphSelectionHandler.get().setProblem(application.getPlanningSession().getProblem());
     }
 
+    /**
+     * Disposes the graph viewer and nulls it out upon receiveing a {@link DisposeGraphViewerEvent}.
+     *
+     * @param event the event subscribed to
+     */
     @Subscribe
     public void disposeGraphViewer(DisposeGraphViewerEvent event) {
         logger.debug("Disposing Graph viewer in CenterPane.");
@@ -100,6 +139,11 @@ public class CenterPaneController extends AbstractController {
         problemGraph.setContent(null);
     }
 
+    /**
+     * Redraws the graph and all related actions when a {@link GraphUpdatedEvent} is received.
+     *
+     * @param graphUpdatedEvent the event subscribed to
+     */
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
         locked.setValue(false);
@@ -237,6 +281,10 @@ public class CenterPaneController extends AbstractController {
         });
     }
 
+    /**
+     * Custom mouse manager making sprites unmovable, respecting locking
+     * and handling left and right mouse clicks according to the documentation.
+     */
     private class SpriteUnClickableMouseManager extends DefaultMouseManager {
 
         private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -244,6 +292,12 @@ public class CenterPaneController extends AbstractController {
         private ActionObjectDetailPopup popup;
         private RoadGraph graph;
 
+        /**
+         * Default constructor.
+         *
+         * @param selectionHandler the selection handler
+         * @param graph the graph to manage
+         */
         SpriteUnClickableMouseManager(GraphSelectionHandler selectionHandler, RoadGraph graph) {
             this.selectionHandler = selectionHandler;
             this.graph = graph;
@@ -293,6 +347,15 @@ public class CenterPaneController extends AbstractController {
             }
         }
 
+        /**
+         * Glue code method - passes the element to the appropriate creator with the proper
+         * graph, problem and session update callbacks.
+         *
+         * @param element the element to pass
+         * @param creator the creator to pass to
+         * @param <T> the type of the created object
+         * @return the created object
+         */
         private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
             Consumer<Problem> problemUpdater = problem -> {
                 application.getPlanningSession().setProblem(problem);
