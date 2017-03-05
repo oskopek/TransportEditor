@@ -31,6 +31,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
@@ -106,11 +107,33 @@ public class RightPaneController extends AbstractController {
     @FXML
     private Button lockButton;
 
+    @FXML
+    private Button stepButton;
+
+    @FXML
+    private RadioButton startTimeButton;
+
+    @FXML
+    private RadioButton middleTimeButton;
+
+    @FXML
+    private RadioButton endTimeButton;
+
+    private ToggleGroup actionTimeGroup = new ToggleGroup();
+
+    @FXML
+    private HBox stepRow;
+
+    @FXML
+    private Spinner<Integer> timeSpinner;
+
     @Inject
     private CenterPaneController centerPaneController;
 
     @Inject
     private EventBus eventBus;
+
+    private BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
 
     /**
      * JavaFX initializer method. Registers with the event bus. Initializes button disabling
@@ -119,6 +142,17 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void initialize() {
         eventBus.register(this);
+
+        stepRow.managedProperty().bind(stepPreviewEnabled);
+        stepRow.visibleProperty().bind(stepRow.managedProperty());
+
+        timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
+        timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // OOO: update plan state
+        });
+
+        actionTimeGroup.getToggles().addAll(startTimeButton, middleTimeButton, endTimeButton);
+        actionTimeGroup.selectToggle(endTimeButton);
 
         // Disable plan button condition
         InvalidableOrBooleanBinding domainBinding
@@ -130,15 +164,26 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::plannerProperty));
         planButton.disableProperty().bind(disablePlanButtonBinding);
 
+        // Disable lock button condition
+        InvalidableOrBooleanBinding disableStepButtonBinding = problemBinding
+                .or(new IsNullBinding(PlanningSession::planProperty));
+        stepButton.disableProperty().bind(disableStepButtonBinding);
+
         // Disable validate button condition
         InvalidableOrBooleanBinding disableValidateButtonBinding = problemBinding
                 .or(new IsNullBinding(PlanningSession::planProperty))
                 .or(new IsNullBinding(PlanningSession::validatorProperty));
         validateButton.disableProperty().bind(disableValidateButtonBinding);
 
-        // disable lock button condition
-        InvalidableOrBooleanBinding disableLockButtonBinding = problemBinding.copyWithoutListeners();
+        // Disable lock button condition
+        InvalidableOrBooleanBinding disableLockButtonBinding = problemBinding.or(new BooleanBinding() {
+            @Override
+            protected boolean computeValue() {
+                return stepPreviewEnabled.get();
+            }
+        });
         lockButton.disableProperty().bind(disableLockButtonBinding);
+        stepRow.visibleProperty().addListener(s -> disableLockButtonBinding.invalidate());
 
         // Disable addLocation button condition
         InvalidableOrBooleanBinding problemLockedBinding = problemBinding
@@ -201,6 +246,7 @@ public class RightPaneController extends AbstractController {
             disableAddVehicleButtonBinding.invalidate();
             disableAddRoadButtonBinding.invalidate();
             problemLockedBinding.invalidate();
+            disableStepButtonBinding.invalidate();
         };
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
@@ -531,15 +577,63 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleLockToggle() {
-        boolean newLocked = !centerPaneController.isLocked();
-        centerPaneController.setLocked(newLocked);
-        if (newLocked) {
-            lockButton.setText(messages.getString("unlock"));
-            lockButton.setStyle("-fx-text-fill: green;");
+        if (centerPaneController.isLocked()) {
+            unlock();
         } else {
-            lockButton.setText(messages.getString("lock"));
-            lockButton.setStyle("-fx-text-fill: red;");
+            lock();
         }
+    }
+
+    private void lock() {
+        centerPaneController.setLocked(true);
+        lockButton.setText(messages.getString("unlock"));
+        lockButton.setStyle("-fx-text-fill: green;");
+    }
+
+    private void unlock() {
+        centerPaneController.setLocked(false);
+        lockButton.setText(messages.getString("lock"));
+        lockButton.setStyle("-fx-text-fill: red;");
+    }
+
+    @FXML
+    private void handleStepToggle() {
+        boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
+        stepPreviewEnabled.set(newStepPreviewEnabled);
+        if (!newStepPreviewEnabled) {
+            stepButton.setText(messages.getString("steps.show"));
+            stepButton.setStyle("-fx-text-fill: green;");
+            unlock();
+        } else {
+            stepButton.setText(messages.getString("steps.hide"));
+            stepButton.setStyle("-fx-text-fill: red;");
+            lock();
+        }
+    }
+
+    @FXML
+    private void handleDownAction() {
+        // OOO: update plan state
+    }
+
+    @FXML
+    private void handleUpAction() {
+        // OOO: update plan state
+    }
+
+    @FXML
+    private void handleStartTime() {
+        // OOO: Set + update plan state
+    }
+
+    @FXML
+    private void handleMiddleTime() {
+        // OOO: Set + update plan state
+    }
+
+    @FXML
+    private void handleEndTime() {
+        // OOO: Set + update plan state
     }
 
     /**

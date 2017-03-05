@@ -21,6 +21,7 @@
         </TabPane>
     </center>
     <top>
+        <BorderPane><center>
         <GridPane prefHeight="30.0" prefWidth="Infinity" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="planButton" disable="true" maxWidth="1.7976931348623157E308" onAction="#handlePlan"
@@ -61,8 +62,12 @@
                         <Button fx:id="lockButton" disable="true" maxWidth="1.7976931348623157E308"
                                 onAction="#handleLockToggle" style="-fx-text-fill: red;" text="%lock"
                                 HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="stepButton" disable="true" maxWidth="1.7976931348623157E308"
+                                onAction="#handleStepToggle" style="-fx-text-fill: green;" text="%steps.show"
+                                HBox.hgrow="ALWAYS"/>
                     </children>
                 </HBox>
+
             </children>
             <rowConstraints>
                 <RowConstraints minHeight="35.0" prefHeight="35.0"/>
@@ -80,5 +85,30 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </GridPane>
+        </center>
+        <bottom>
+            <HBox fx:id="stepRow" prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER">
+                <children>
+                    <Button fx:id="downButton" onAction="#handleDownAction" text="%arrow.down"/>
+                    <Button fx:id="upButton" onAction="#handleUpAction" text="%arrow.up"/>
+                    <Separator orientation="VERTICAL"/>
+                    <RadioButton fx:id="startTimeButton" maxWidth="1.7976931348623157E308"
+                                  onAction="#handleStartTime" text="%time.start"
+                                  HBox.hgrow="ALWAYS"/>
+                    <RadioButton fx:id="middleTimeButton" maxWidth="1.7976931348623157E308"
+                                  onAction="#handleMiddleTime" text="%time.middle"
+                                  HBox.hgrow="ALWAYS"/>
+                    <RadioButton fx:id="endTimeButton" maxWidth="1.7976931348623157E308"
+                                  onAction="#handleEndTime" text="%time.end"
+                                  HBox.hgrow="ALWAYS"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Spinner fx:id="timeSpinner" editable="true"/>
+                </children>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+            </HBox>
+        </bottom>
+        </BorderPane>
     </top>
 </BorderPane>
