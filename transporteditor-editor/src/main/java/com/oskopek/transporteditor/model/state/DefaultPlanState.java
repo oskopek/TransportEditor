@@ -2,9 +2,6 @@ package com.oskopek.transporteditor.model.state;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import org.slf4j.Logger;
@@ -14,9 +11,9 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * A {@link PlanState} implementation for sequential domains.
+ * A default {@link PlanState} implementation for sequential and temporal domains.
  */
-public class SequentialPlanState implements PlanState {
+public class DefaultPlanState implements PlanState {
 
     private final Domain origDomain;
     private final Problem origProblem;
@@ -28,7 +25,7 @@ public class SequentialPlanState implements PlanState {
      * @param domain the domain
      * @param problem the problem
      */
-    public SequentialPlanState(Domain domain, Problem problem) {
+    public DefaultPlanState(Domain domain, Problem problem) {
         this.origDomain = domain;
         this.origProblem = problem;
         this.problem = origProblem;

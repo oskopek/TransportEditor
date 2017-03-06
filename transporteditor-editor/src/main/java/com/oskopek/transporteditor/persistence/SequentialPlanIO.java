@@ -9,7 +9,7 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;
-import com.oskopek.transporteditor.model.state.SequentialPlanState;
+import com.oskopek.transporteditor.model.state.DefaultPlanState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
 
     private final Problem problem;
     private final Domain domain;
-    private SequentialPlanState planState;
+    private DefaultPlanState planState;
 
     /**
      * Default constructor.
@@ -150,7 +150,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
     @Override
     public synchronized String serialize(Plan plan) {
         StringBuilder builder = new StringBuilder();
-        planState = new SequentialPlanState(domain, problem);
+        planState = new DefaultPlanState(domain, problem);
         for (Action action : plan.getActions()) {
             builder.append(serializeAction(action, true)).append('\n');
             planState.apply(action);

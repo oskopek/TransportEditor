@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -169,20 +169,20 @@
                         </Button>
                         <Separator orientation="VERTICAL"/>
                         <RadioButton fx:id="startTimeButton" maxWidth="1.7976931348623157E308"
-                                     onAction="#handleStartTime" text="%time.start" HBox.hgrow="ALWAYS">
+                                     text="%time.start" HBox.hgrow="ALWAYS">
                         <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
                             <tooltip>
                                 <Tooltip text="%time.start.text"/>
                             </tooltip>
                     </RadioButton>
                         <RadioButton fx:id="middleTimeButton" maxWidth="1.7976931348623157E308"
-                                     onAction="#handleMiddleTime" text="%time.middle" HBox.hgrow="ALWAYS">
+                                     text="%time.middle" HBox.hgrow="ALWAYS">
                         <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
                             <tooltip>
                                 <Tooltip text="%time.middle.text"/>
                             </tooltip>
                     </RadioButton>
-                        <RadioButton fx:id="endTimeButton" maxWidth="1.7976931348623157E308" onAction="#handleEndTime"
+                        <RadioButton fx:id="endTimeButton" maxWidth="1.7976931348623157E308"
                                      text="%time.end" HBox.hgrow="ALWAYS">
                             <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
                             <tooltip>

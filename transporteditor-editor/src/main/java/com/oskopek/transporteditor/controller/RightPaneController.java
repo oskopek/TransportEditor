@@ -14,20 +14,22 @@ import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.model.state.TemporalPlanStateManager;
 import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
 import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
-import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
+import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -52,87 +54,60 @@ import java.util.function.Supplier;
 @Singleton
 public class RightPaneController extends AbstractController {
 
+    private final ObjectProperty<TemporalPlanStateManager> planStateManager = new SimpleObjectProperty<>();
     @Inject
     private transient Logger logger;
-
     @Inject
     private LogProgressCreator logProgressCreator;
-
     @FXML
     private TabPane planTabPane;
-
     @FXML
     private Tab temporalPlanTab;
-
     @FXML
     private Tab sequentialPlanTab;
-
     @FXML
     private Tab ganttPlanTab;
-
     @FXML
     private ScrollPane sequentialPlanTabScrollPane;
-
     @FXML
     private ScrollPane temporalPlanTabScrollPane;
-
     @FXML
     private ScrollPane ganttPlanTabScrollPane;
-
     private TableFilter<TemporalPlanAction> actionTableFilter;
-
     private ListChangeListener<? super TemporalPlanAction> lastChangeListener;
-
     @FXML
     private Button planButton;
-
     @FXML
     private Button validateButton;
-
     @FXML
     private Button redrawButton;
-
     @FXML
     private Button addLocationButton;
-
     @FXML
     private Button addRoadButton;
-
     @FXML
     private Button addVehicleButton;
-
     @FXML
     private Button addPackageButton;
-
     @FXML
     private Button lockButton;
-
     @FXML
     private Button stepButton;
-
     @FXML
     private RadioButton startTimeButton;
-
     @FXML
     private RadioButton middleTimeButton;
-
     @FXML
     private RadioButton endTimeButton;
-
     private ToggleGroup actionTimeGroup = new ToggleGroup();
-
     @FXML
     private HBox stepRow;
-
     @FXML
     private Spinner<Integer> timeSpinner;
-
     @Inject
     private CenterPaneController centerPaneController;
-
     @Inject
     private EventBus eventBus;
-
     private BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
 
     /**
@@ -148,11 +123,14 @@ public class RightPaneController extends AbstractController {
 
         timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
         timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            // OOO: update plan state
+            actionTimeGroup.selectToggle(startTimeButton);
+            planStateManager.get().goToTime(ActionCost.valueOf(newValue)); // TODO: Might throw format exception
         });
+        actionTimeGroup.selectedToggleProperty().addListener(l -> updateState());
+
 
         actionTimeGroup.getToggles().addAll(startTimeButton, middleTimeButton, endTimeButton);
-        actionTimeGroup.selectToggle(endTimeButton);
+        actionTimeGroup.selectToggle(startTimeButton);
 
         // Disable plan button condition
         InvalidableOrBooleanBinding domainBinding
@@ -604,36 +582,31 @@ public class RightPaneController extends AbstractController {
             stepButton.setText(messages.getString("steps.show"));
             stepButton.setStyle("-fx-text-fill: green;");
             unlock();
+
+            planStateManager.setValue(null);
         } else {
             stepButton.setText(messages.getString("steps.hide"));
             stepButton.setStyle("-fx-text-fill: red;");
             lock();
+
+            PlanningSession session = application.getPlanningSession();
+            planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
+                    session.getPlan()));
         }
     }
 
     @FXML
     private void handleDownAction() {
-        // OOO: update plan state
+        planStateManager.get().goToNextCheckpoint();
     }
 
     @FXML
     private void handleUpAction() {
-        // OOO: update plan state
+        planStateManager.get().goToPreviousCheckpoint();
     }
 
-    @FXML
-    private void handleStartTime() {
-        // OOO: Set + update plan state
-    }
-
-    @FXML
-    private void handleMiddleTime() {
-        // OOO: Set + update plan state
-    }
-
-    @FXML
-    private void handleEndTime() {
-        // OOO: Set + update plan state
+    private void updateState() {
+        // OOO: update plan state + draw
     }
 
     /**
@@ -643,23 +616,6 @@ public class RightPaneController extends AbstractController {
      */
     private Optional<PlanningSession> getPlanningSessionOptionalIndirection() {
         return application.getPlanningSessionOptional();
-    }
-
-    /**
-     * An extension of {@link OptionalSelectionBinding} for {@link PlanningSession}
-     * using {@link TransportEditorApplication#getPlanningSessionOptional()}.
-     * Is true iff the resulting getter value is null or any value on the way to it is null.
-     */
-    private class IsNullBinding extends OptionalSelectionBinding<PlanningSession> {
-        /**
-         * Default constructor.
-         *
-         * @param getter the getter of a property in the planning session
-         */
-        IsNullBinding(Function<PlanningSession, ObjectProperty> getter) {
-            super(() -> getPlanningSessionOptionalIndirection(),
-                    getter.andThen(ObjectProperty::isNull).andThen(BooleanBinding::get));
-        }
     }
 
     /**
@@ -687,6 +643,23 @@ public class RightPaneController extends AbstractController {
         @Override
         protected boolean computeValue() {
             return supplier.get().map(getter).orElse(true);
+        }
+    }
+
+    /**
+     * An extension of {@link OptionalSelectionBinding} for {@link PlanningSession}
+     * using {@link TransportEditorApplication#getPlanningSessionOptional()}.
+     * Is true iff the resulting getter value is null or any value on the way to it is null.
+     */
+    private class IsNullBinding extends OptionalSelectionBinding<PlanningSession> {
+        /**
+         * Default constructor.
+         *
+         * @param getter the getter of a property in the planning session
+         */
+        IsNullBinding(Function<PlanningSession, ObjectProperty> getter) {
+            super(RightPaneController.this::getPlanningSessionOptionalIndirection,
+                    getter.andThen(ObjectProperty::isNull).andThen(BooleanBinding::get));
         }
     }
 }

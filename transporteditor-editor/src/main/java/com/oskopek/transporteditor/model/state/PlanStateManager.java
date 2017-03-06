@@ -14,4 +14,6 @@ public interface PlanStateManager {
 
     void goToNextCheckpoint();
 
+    void goToPreviousCheckpoint();
+
 }
