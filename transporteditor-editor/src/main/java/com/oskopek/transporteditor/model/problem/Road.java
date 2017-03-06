@@ -5,7 +5,7 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 /**
  * Attributes of an edge in the {@link RoadGraph}.
  */
-public interface Road extends ActionObject {
+public interface Road extends ActionObject, Locatable {
 
     /**
      * Get the length.

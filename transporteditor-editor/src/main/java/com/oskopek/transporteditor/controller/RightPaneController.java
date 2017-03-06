@@ -530,9 +530,9 @@ public class RightPaneController extends AbstractController {
         Vehicle vehicle;
         if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
             vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), ActionCost.valueOf(0),
-                    ActionCost.valueOf(0), new ArrayList<>());
+                    ActionCost.valueOf(0), true, new ArrayList<>());
         } else {
-            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), true, new ArrayList<>());
         }
 
         problem = problem.putVehicle(name, vehicle);

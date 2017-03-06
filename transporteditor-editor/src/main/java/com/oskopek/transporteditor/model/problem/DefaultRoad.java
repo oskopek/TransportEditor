@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class DefaultRoad extends DefaultActionObject implements Road {
 
     private final ActionCost length;
+    private final Location location;
 
     /**
      * Default constructor.
@@ -20,7 +21,10 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     public DefaultRoad(String name, ActionCost length) {
         super(name);
         this.length = length;
+        this.location = new Location(name);
     }
+
+
 
     /**
      * Static builder method.
@@ -53,6 +57,11 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     @Override
     public DefaultRoad updateName(String newName) {
         return new DefaultRoad(newName, getLength());
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
     }
 
     @Override

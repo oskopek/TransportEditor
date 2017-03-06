@@ -17,6 +17,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     private final ActionCost curFuelCapacity;
     private final ActionCost maxFuelCapacity;
     private final List<Package> packageList;
+    private final boolean readyLoading;
 
     /**
      * Default constructor for a fuel disabled domain.
@@ -28,9 +29,9 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * if it is empty before)
      * @param packageList a list of packages loaded into the vehicle
      */
-    public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
+    public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity, boolean readyLoading,
             List<Package> packageList) {
-        this(name, location, curCapacity, maxCapacity, null, null, packageList);
+        this(name, location, curCapacity, maxCapacity, null, null, readyLoading, packageList);
     }
 
     /**
@@ -48,7 +49,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * @param packageList a list of packages loaded into the vehicle
      */
     public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
-            ActionCost curFuelCapacity, ActionCost maxFuelCapacity,
+            ActionCost curFuelCapacity, ActionCost maxFuelCapacity, boolean readyLoading,
             List<Package> packageList) {
         super(name, location);
         if (packageList == null) {
@@ -58,6 +59,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         this.maxCapacity = maxCapacity;
         this.curFuelCapacity = curFuelCapacity;
         this.maxFuelCapacity = maxFuelCapacity;
+        this.readyLoading = readyLoading;
         this.packageList = packageList;
     }
 
@@ -97,6 +99,10 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         return maxFuelCapacity;
     }
 
+    public boolean isReadyLoading() {
+        return readyLoading;
+    }
+
     /**
      * Get the package list.
      *
@@ -109,7 +115,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     @Override
     public Vehicle updateName(String newName) {
         return new Vehicle(newName, getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
-                getMaxFuelCapacity(), getPackageList());
+                getMaxFuelCapacity(), isReadyLoading(), getPackageList());
     }
 
     /**
@@ -120,7 +126,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      */
     public Vehicle updateCurFuelCapacity(ActionCost curFuelCapacity) {
         return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), curFuelCapacity,
-                getMaxFuelCapacity(), getPackageList());
+                getMaxFuelCapacity(), isReadyLoading(), getPackageList());
     }
 
     /**
@@ -131,7 +137,18 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      */
     public Vehicle updateLocation(Location location) {
         return new Vehicle(getName(), location, getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
-                getMaxFuelCapacity(), getPackageList());
+                getMaxFuelCapacity(), isReadyLoading(), getPackageList());
+    }
+
+    /**
+     * Update the vehicle with a new ready loading state. Returns a new vehicle instance.
+     *
+     * @param readyLoading the new ready-loading state
+     * @return the updated vehicle
+     */
+    public Vehicle updateReadyLoading(boolean readyLoading) {
+        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+                getMaxFuelCapacity(), readyLoading, getPackageList());
     }
 
     /**
@@ -162,8 +179,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.add(pkg);
         return new Vehicle(getName(), getLocation(), getCurCapacity().subtract(pkg.getSize()), getMaxCapacity(),
-                getCurFuelCapacity(),
-                getMaxFuelCapacity(), newPackageList);
+                getCurFuelCapacity(), getMaxFuelCapacity(), isReadyLoading(), newPackageList);
     }
 
     /**
@@ -183,15 +199,14 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.remove(pkg);
         return new Vehicle(getName(), getLocation(), getCurCapacity().add(pkg.getSize()), getMaxCapacity(),
-                getCurFuelCapacity(),
-                getMaxFuelCapacity(), newPackageList);
+                getCurFuelCapacity(), getMaxFuelCapacity(), isReadyLoading(), newPackageList);
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getCurCapacity()).append(
-                getMaxCapacity()).append(getCurFuelCapacity()).append(
-                getMaxFuelCapacity()).append(getPackageList()).toHashCode();
+                getMaxCapacity()).append(getCurFuelCapacity()).append(getMaxFuelCapacity()).append(isReadyLoading())
+                .append(getPackageList()).toHashCode();
     }
 
     @Override
@@ -207,6 +222,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
                 .append(getMaxCapacity(), vehicle.getMaxCapacity())
                 .append(getCurFuelCapacity(), vehicle.getCurFuelCapacity())
                 .append(getMaxFuelCapacity(), vehicle.getMaxFuelCapacity())
+                .append(isReadyLoading(), vehicle.isReadyLoading())
                 .append(getPackageList(), vehicle.getPackageList())
                 .isEquals();
     }
@@ -214,7 +230,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     @Override
     public String toString() {
         return "Vehicle[" + getName() + ", at=" + getLocation() + ", capacity=" + getCurCapacity() + "/"
-                + getMaxCapacity() + ", fuel=" + getCurFuelCapacity() + "/" + getMaxFuelCapacity() + ", packages="
-                + getPackageList() + "]";
+                + getMaxCapacity() + ", fuel=" + getCurFuelCapacity() + "/" + getMaxFuelCapacity() + ", readyLoading="
+                + isReadyLoading() + ", packages=" + getPackageList() + "]";
     }
 }

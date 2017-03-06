@@ -17,29 +17,39 @@ public class Drive extends DefaultAction<Vehicle, Location> {
      * Default constructor.
      *
      * @param vehicle the vehicle
-     * @param location from where to drive
-     * @param location2 destination to drive to
+     * @param from from where to drive
+     * @param to destination to drive to
      * @param preconditions applicable preconditions
      * @param effects applicable effects
      * @param road the road to use
      */
-    public Drive(Vehicle vehicle, Location location, Location location2, List<Predicate> preconditions,
+    public Drive(Vehicle vehicle, Location from, Location to, List<Predicate> preconditions,
             List<Predicate> effects, Road road) {
-        super("drive", vehicle, location, location2, preconditions, effects, road.getLength(), road.getLength());
+        super("drive", vehicle, from, to, preconditions, effects, road.getLength(), road.getLength());
     }
 
     @Override
-    public Problem apply(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Domain domain, Problem problemState) {
         String name = this.getWho().getName();
         Location source = problemState.getRoadGraph().getLocation(getWhere().getName());
         Location destination = problemState.getRoadGraph().getLocation(getWhat().getName());
         Vehicle vehicle = problemState.getVehicle(name);
         ActionCost curFuelCapacity = vehicle.getCurFuelCapacity();
+        Road road = problemState.getRoadGraph().getShortestRoadBetween(source, destination);
         if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-            FuelRoad fuelRoad = (FuelRoad) problemState.getRoadGraph().getShortestRoadBetween(source, destination);
+            FuelRoad fuelRoad = (FuelRoad) road;
             curFuelCapacity = curFuelCapacity.subtract(fuelRoad.getFuelCost());
         }
         return problemState
-                .putVehicle(name, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(destination));
+                .putVehicle(name, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(road.getLocation()));
+    }
+
+    @Override
+    public Problem applyEffects(Domain domain, Problem problemState) {
+        String name = this.getWho().getName();
+        Location destination = problemState.getRoadGraph().getLocation(getWhat().getName());
+        Vehicle vehicle = problemState.getVehicle(name);
+        return problemState
+                .putVehicle(name, vehicle.updateLocation(destination));
     }
 }
