@@ -1,6 +1,10 @@
 package com.oskopek.transporteditor.model.state;
 
+import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
 
 /**
@@ -13,6 +17,13 @@ public interface PlanState extends Problem {
      *
      * @param action the action to apply
      */
-    void apply(Action action);
+    default void apply(Action action) {
+        applyPreconditions(action);
+        applyEffects(action);
+    }
+
+    void applyPreconditions(Action action);
+
+    void applyEffects(Action action);
 
 }

@@ -2,6 +2,9 @@ package com.oskopek.transporteditor.model.state;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
+import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import org.slf4j.Logger;
@@ -32,13 +35,20 @@ public class SequentialPlanState implements PlanState {
     }
 
     @Override
-    public void apply(Action action) {
+    public void applyPreconditions(Action action) {
         logger.debug("Checking preconditions of action {}.", action.getName());
         if (!action.arePreconditionsValid(problem)) {
             throw new IllegalStateException("Preconditions of action " + action + " are invalid in problem " + problem);
         }
-        logger.debug("Applying action {}.", action.getName());
-        Problem newProblem = action.apply(origDomain, problem);
+        logger.debug("Applying preconditions of action {}.", action.getName());
+        problem = action.applyPreconditions(origDomain, problem);
+        logger.debug("Applied preconditions of action {}.", action.getName());
+    }
+
+    @Override
+    public void applyEffects(Action action) {
+        logger.debug("Applying effects of action {}.", action.getName());
+        Problem newProblem = action.applyEffects(origDomain, problem);
         logger.debug("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             throw new IllegalStateException(

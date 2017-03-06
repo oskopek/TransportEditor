@@ -49,7 +49,7 @@ public class IntervalNode<Type> {
      * @param <Type_> the type of data contained in the individual intervals
      * @return a new interval node containing the given intervals
      */
-    public static <Type_> IntervalNode<Type_> of(List<Interval<Type_>> intervalList) {
+    public static <Type_> IntervalNode<Type_> of(Collection<Interval<Type_>> intervalList) {
         SortedMap<Interval<Type_>, List<Interval<Type_>>> intervals = new TreeMap<>();
         if (intervalList.isEmpty()) {
             return empty();

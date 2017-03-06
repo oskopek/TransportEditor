@@ -3,10 +3,7 @@ package com.github.kevinjdolan.intervaltree;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +33,7 @@ public class IntervalTree<Type> {
      *
      * @param intervalList the list of intervals to use
      */
-    protected IntervalTree(List<Interval<Type>> intervalList) {
+    protected IntervalTree(Collection<Interval<Type>> intervalList) {
         this.head = IntervalNode.of(intervalList);
         this.intervalList = new ArrayList<>(intervalList);
         this.inSync = true;
@@ -60,7 +57,7 @@ public class IntervalTree<Type> {
      * @param <Type_> the type of data contained in the individual intervals
      * @return a filled in interval tree
      */
-    public static <Type_> IntervalTree<Type_> of(List<Interval<Type_>> intervalList) {
+    public static <Type_> IntervalTree<Type_> of(Collection<Interval<Type_>> intervalList) {
         return new IntervalTree<>(intervalList);
     }
 
