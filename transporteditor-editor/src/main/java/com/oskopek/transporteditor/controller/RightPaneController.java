@@ -124,7 +124,7 @@ public class RightPaneController extends AbstractController {
         timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
         timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
             actionTimeGroup.selectToggle(startTimeButton);
-            planStateManager.get().goToTime(ActionCost.valueOf(newValue)); // TODO: Might throw format exception
+            planStateManager.get().goToTime(ActionCost.valueOf(newValue), false); // TODO: Might throw format exception // TODO: Add applyStart/not to GUI // TODO: Add proper start/end/middle calculation
         });
         actionTimeGroup.selectedToggleProperty().addListener(l -> updateState());
 

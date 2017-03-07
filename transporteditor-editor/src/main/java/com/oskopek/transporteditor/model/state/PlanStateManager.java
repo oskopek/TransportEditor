@@ -8,9 +8,7 @@ public interface PlanStateManager {
 
     ActionCost getCurrentTime();
 
-    void goToTime(ActionCost time);
-
-    void goToTimeRightAfter(ActionCost time);
+    void goToTime(ActionCost time, boolean applyStarts);
 
     void goToNextCheckpoint();
 

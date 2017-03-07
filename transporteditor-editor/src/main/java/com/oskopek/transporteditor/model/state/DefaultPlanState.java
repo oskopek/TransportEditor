@@ -4,6 +4,8 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +17,8 @@ import java.util.Map;
  */
 public class DefaultPlanState implements PlanState {
 
-    private final Domain origDomain;
-    private final Problem origProblem;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Domain domain;
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private Problem problem;
 
     /**
@@ -26,9 +27,8 @@ public class DefaultPlanState implements PlanState {
      * @param problem the problem
      */
     public DefaultPlanState(Domain domain, Problem problem) {
-        this.origDomain = domain;
-        this.origProblem = problem;
-        this.problem = origProblem;
+        this.domain = domain;
+        this.problem = problem;
     }
 
     @Override
@@ -38,14 +38,14 @@ public class DefaultPlanState implements PlanState {
             throw new IllegalStateException("Preconditions of action " + action + " are invalid in problem " + problem);
         }
         logger.debug("Applying preconditions of action {}.", action.getName());
-        problem = action.applyPreconditions(origDomain, problem);
+        problem = action.applyPreconditions(domain, problem);
         logger.debug("Applied preconditions of action {}.", action.getName());
     }
 
     @Override
     public void applyEffects(Action action) {
         logger.debug("Applying effects of action {}.", action.getName());
-        Problem newProblem = action.applyEffects(origDomain, problem);
+        Problem newProblem = action.applyEffects(domain, problem);
         logger.debug("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             throw new IllegalStateException(
@@ -153,5 +153,23 @@ public class DefaultPlanState implements PlanState {
     @Override
     public Problem removeLocation(String name) {
         return problem.removeLocation(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DefaultPlanState)) {
+            return false;
+        }
+        DefaultPlanState that = (DefaultPlanState) o;
+        return new EqualsBuilder().append(domain, that.domain).append(problem, that.problem).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(domain).append(problem)
+                .toHashCode();
     }
 }

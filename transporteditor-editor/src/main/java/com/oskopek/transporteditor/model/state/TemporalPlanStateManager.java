@@ -12,11 +12,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class TemporalPlanStateManager implements PlanStateManager { // TODO: Unit tests
+public class TemporalPlanStateManager implements PlanStateManager {
 
     private final static Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
             .append(t1.getStartTimestamp(), t2.getStartTimestamp()).append(t1.getEndTimestamp(), t2.getEndTimestamp())
@@ -26,7 +26,6 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
     private final List<TemporalPlanAction> temporalPlanActions;
     private PlanActionPointer pointer;
     private PlanState state;
-    private ActionCost time;
 
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
         this.domain = domain;
@@ -34,7 +33,6 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
         this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted(endStartTimeComparator)
                 .collect(Collectors.toList());
         this.state = getOriginalState();
-        this.time = ActionCost.valueOf(0);
         this.pointer = new PlanActionPointer(0, false);
     }
 
@@ -45,7 +43,7 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
 
     @Override
     public ActionCost getCurrentTime() {
-        return time;
+        return ActionCost.valueOf(pointer.getTime());
     }
 
     private PlanState getOriginalState() {
@@ -53,67 +51,72 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
     }
 
     @Override
-    public void goToTime(ActionCost time) {
+    public void goToTime(ActionCost time, boolean applyStarts) {
         state = getOriginalState();
-        int simulationTime = applyAll(t -> t.getStartTimestamp() < time.getCost());
-        pointer = new PlanActionPointer(simulationTime + 1, false);
+        int simulationTime = applyAll(time.getCost(), applyStarts);
+        pointer = new PlanActionPointer(simulationTime, applyStarts);
     }
 
-    @Override
-    public void goToTimeRightAfter(ActionCost time) {
-        state = getOriginalState();
-        int simulationTime = applyAll(t -> t.getStartTimestamp() <= time.getCost());
-        pointer = new PlanActionPointer(simulationTime, true);
-    }
+    private int applyAll(int upToIncluding, boolean applyStarts) {
+        Stream<TimeElement<TemporalPlanAction>> actions = temporalPlanActions.stream()
+                .flatMap(t -> Stream.of(new TimeElement<>(t.getStartTimestamp(), false, t),
+                        new TimeElement<>(t.getEndTimestamp(), true, t)))
+                .filter(t -> t.getPriority() <= upToIncluding);
 
-    private int applyAll(Predicate<TemporalPlanAction> filter) {
-        PriorityQueue<IntQueueElement<TemporalPlanAction>> applyQueue = new PriorityQueue<>(temporalPlanActions.stream()
-                .filter(filter)
-                .map(t -> new IntQueueElement<>(t.getStartTimestamp(), t)).collect(Collectors.toList()));
+        if (!applyStarts) {
+            actions = actions.filter(t -> !(t.getPriority() == upToIncluding && !t.isEnd()));
+        }
+
+        PriorityQueue<TimeElement<TemporalPlanAction>> applyQueue = new PriorityQueue<>(
+                actions.collect(Collectors.toList()));
+
         int simulationTime = 0;
-        IntQueueElement<TemporalPlanAction> head;
+        TimeElement<TemporalPlanAction> head;
         while ((head = applyQueue.poll()) != null) {
             TemporalPlanAction action = head.getPayload();
-            if (simulationTime <= action.getStartTimestamp()) {
+            simulationTime = head.getPriority();
+            if (simulationTime == action.getStartTimestamp()) {
                 state.applyPreconditions(action.getAction());
-                applyQueue.add(new IntQueueElement<>(action.getEndTimestamp(), action));
-            } else if (simulationTime <= action.getEndTimestamp()) {
+            } else if (simulationTime == action.getEndTimestamp()) {
                 state.applyEffects(action.getAction());
             } else {
                 throw new IllegalStateException("Cannot occur.");
             }
-            simulationTime = head.getPriority();
+
         }
         return simulationTime;
     }
 
     @Override
     public void goToNextCheckpoint() {
-        if (pointer.isPreconditionsApplied()) {
+        if (pointer.isStartsApplied()) {
             temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t > time.getCost()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res)));
+                    .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
         } else {
-            goToTimeRightAfter(getCurrentTime());
+            goToTime(getCurrentTime(), true);
         }
     }
 
     @Override
     public void goToPreviousCheckpoint() {
-        if (pointer.isPreconditionsApplied()) {
-            goToTime(getCurrentTime());
+        if (pointer.isStartsApplied()) {
+            goToTime(getCurrentTime(), false);
         } else {
             temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t <= time.getCost()).max().ifPresent(res -> goToTime(ActionCost.valueOf(res)));
+                    .filter(t -> t < pointer.getTime()).max().ifPresent(res -> goToTime(ActionCost.valueOf(res), true));
         }
     }
 
-    private static class IntQueueElement<Payload> implements Comparable<IntQueueElement<Payload>> {
+    private static class TimeElement<Payload> implements Comparable<TimeElement<Payload>> {
 
-        private final Payload payload;
         private final int priority;
+        private final boolean isEnd;
+        private final Payload payload;
 
-        public IntQueueElement(int priority, Payload payload) {
+
+        public TimeElement(int priority, boolean isEnd, Payload payload) {
             this.payload = payload;
+            this.isEnd = isEnd;
             this.priority = priority;
         }
 
@@ -124,6 +127,10 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
          */
         public Payload getPayload() {
             return payload;
+        }
+
+        public boolean isEnd() {
+            return isEnd;
         }
 
         /**
@@ -140,23 +147,27 @@ public class TemporalPlanStateManager implements PlanStateManager { // TODO: Uni
             if (this == o) {
                 return true;
             }
-            if (o == null || !(o instanceof IntQueueElement<?>)) {
+            if (o == null || !(o instanceof TimeElement<?>)) {
                 return false;
             }
-            IntQueueElement<?> that = (IntQueueElement<?>) o;
+            TimeElement<?> that = (TimeElement<?>) o;
 
-            return new EqualsBuilder().append(getPriority(), that.getPriority()).append(getPayload(), that.getPayload())
-                    .isEquals();
+            return new EqualsBuilder().append(getPriority(), that.getPriority())
+                    .append(isEnd(), that.isEnd())
+                    .append(getPayload(), that.getPayload()).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getPriority()).append(getPayload()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(getPriority()).append(isEnd())
+                    .append(getPayload()).toHashCode();
         }
 
         @Override
-        public int compareTo(IntQueueElement<Payload> o) {
-            return new CompareToBuilder().append(getPriority(), o.getPriority()).toComparison();
+        public int compareTo(TimeElement<Payload> o) {
+            return new CompareToBuilder().append(getPriority(), o.getPriority())
+                    .append(o.isEnd(), isEnd()) // reversed on purpose
+                    .toComparison();
         }
     }
 }

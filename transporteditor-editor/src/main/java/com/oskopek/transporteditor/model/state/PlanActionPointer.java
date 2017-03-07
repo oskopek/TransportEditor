@@ -2,30 +2,30 @@ package com.oskopek.transporteditor.model.state;
 
 public class PlanActionPointer {
 
-    private final int actionIndex;
+    private final int time;
 
-    private final boolean preconditionsApplied;
+    private final boolean startsApplied;
 
-    public PlanActionPointer(int actionIndex, boolean preconditionsApplied) {
-        this.actionIndex = actionIndex;
-        this.preconditionsApplied = preconditionsApplied;
+    public PlanActionPointer(int time, boolean startsApplied) {
+        this.time = time;
+        this.startsApplied = startsApplied;
     }
 
     /**
-     * Get the actionIndex.
+     * Get the time.
      *
-     * @return the actionIndex
+     * @return the time
      */
-    public int getActionIndex() {
-        return actionIndex;
+    public int getTime() {
+        return time;
     }
 
     /**
-     * Get the preconditionsApplied.
+     * Get the startsApplied.
      *
-     * @return the preconditionsApplied
+     * @return the startsApplied
      */
-    public boolean isPreconditionsApplied() {
-        return preconditionsApplied;
+    public boolean isStartsApplied() {
+        return startsApplied;
     }
 }
