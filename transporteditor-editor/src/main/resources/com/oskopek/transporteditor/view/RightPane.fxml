@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="400" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.112"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="460" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.112"
             fx:controller="com.oskopek.transporteditor.controller.RightPaneController">
     <center>
         <TabPane fx:id="planTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -47,10 +47,11 @@
                             </font>
                         </Button>
                         <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
-                              GridPane.columnIndex="0" GridPane.rowIndex="2">
+                              GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="5">
                             <children>
                                 <Button fx:id="addLocationButton" disable="true" maxWidth="1.7976931348623157E308"
-                                        onAction="#handleAddLocation" text="%add.location" HBox.hgrow="ALWAYS">
+                                        onAction="#handleAddLocation" text="%add.location" HBox.hgrow="ALWAYS"
+                                        minWidth="50">
                                     <font>
                                         <Font size="20"/>
                                     </font>
@@ -66,7 +67,8 @@
                                     </tooltip>
                                 </Button>
                                 <Button fx:id="addRoadButton" disable="true" maxWidth="1.7976931348623157E308"
-                                        onAction="#handleAddRoad" text="%add.road" HBox.hgrow="ALWAYS">
+                                        onAction="#handleAddRoad" text="%add.road" HBox.hgrow="ALWAYS"
+                                        minWidth="50">
                                     <font>
                                         <Font size="20"/>
                                     </font>
@@ -81,13 +83,9 @@
                                         </Tooltip>
                                     </tooltip>
                                 </Button>
-                            </children>
-                        </HBox>
-                        <HBox prefHeight="30.0" prefWidth="Infinity" spacing="5.0" BorderPane.alignment="CENTER"
-                              GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
-                            <children>
                                 <Button fx:id="addVehicleButton" disable="true" maxWidth="1.7976931348623157E308"
-                                        onAction="#handleAddVehicle" text="%add.vehicle" HBox.hgrow="ALWAYS">
+                                        onAction="#handleAddVehicle" text="%add.vehicle" HBox.hgrow="ALWAYS"
+                                        minWidth="50">
                                     <font>
                                         <Font size="20"/>
                                     </font>
@@ -103,7 +101,8 @@
                                     </tooltip>
                                 </Button>
                                 <Button fx:id="addPackageButton" disable="true" maxWidth="1.7976931348623157E308"
-                                        onAction="#handleAddPackage" text="%add.package" HBox.hgrow="ALWAYS">
+                                        onAction="#handleAddPackage" text="%add.package" HBox.hgrow="ALWAYS"
+                                        minWidth="50">
                                     <font>
                                         <Font size="20"/>
                                     </font>
@@ -134,7 +133,6 @@
                                 </Button>
                             </children>
                         </HBox>
-
                     </children>
                     <rowConstraints>
                         <RowConstraints minHeight="35.0" prefHeight="35.0"/>
@@ -169,28 +167,41 @@
                         </Button>
                         <Separator orientation="VERTICAL"/>
                         <RadioButton fx:id="startTimeButton" maxWidth="1.7976931348623157E308"
-                                     text="%time.start" HBox.hgrow="ALWAYS">
-                        <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
+                                     text="%time.start">
+                            <padding>
+                                <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
+                            </padding>
                             <tooltip>
                                 <Tooltip text="%time.start.text"/>
                             </tooltip>
-                    </RadioButton>
+                        </RadioButton>
                         <RadioButton fx:id="middleTimeButton" maxWidth="1.7976931348623157E308"
-                                     text="%time.middle" HBox.hgrow="ALWAYS">
-                        <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
+                                     text="%time.middle">
+                            <padding>
+                                <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
+                            </padding>
                             <tooltip>
                                 <Tooltip text="%time.middle.text"/>
                             </tooltip>
-                    </RadioButton>
+                        </RadioButton>
                         <RadioButton fx:id="endTimeButton" maxWidth="1.7976931348623157E308"
                                      text="%time.end" HBox.hgrow="ALWAYS">
-                            <padding><Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/></padding>
+                            <padding>
+                                <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
+                            </padding>
                             <tooltip>
                                 <Tooltip text="%time.end.text"/>
                             </tooltip>
                         </RadioButton>
                         <Separator orientation="VERTICAL"/>
-                        <Spinner fx:id="timeSpinner" editable="true">
+                        <ToggleButton fx:id="applyStartsButton" maxWidth="1.7976931348623157E308"
+                                      text="%time.applystarts">
+                            <tooltip>
+                                <Tooltip text="%time.applystarts.text"/>
+                            </tooltip>
+                        </ToggleButton>
+                        <Spinner fx:id="timeSpinner" editable="true" maxWidth="1.7976931348623157E308"
+                                 prefWidth="60" minWidth="48" HBox.hgrow="ALWAYS">
                             <tooltip>
                                 <Tooltip text="%time.spinner.text"/>
                             </tooltip>

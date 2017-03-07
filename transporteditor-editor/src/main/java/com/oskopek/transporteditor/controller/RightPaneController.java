@@ -55,6 +55,7 @@ import java.util.function.Supplier;
 public class RightPaneController extends AbstractController {
 
     private final ObjectProperty<TemporalPlanStateManager> planStateManager = new SimpleObjectProperty<>();
+    private final BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
     @Inject
     private transient Logger logger;
     @Inject
@@ -101,6 +102,8 @@ public class RightPaneController extends AbstractController {
     private RadioButton endTimeButton;
     private ToggleGroup actionTimeGroup = new ToggleGroup();
     @FXML
+    private ToggleButton applyStartsButton;
+    @FXML
     private HBox stepRow;
     @FXML
     private Spinner<Integer> timeSpinner;
@@ -108,7 +111,7 @@ public class RightPaneController extends AbstractController {
     private CenterPaneController centerPaneController;
     @Inject
     private EventBus eventBus;
-    private BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
+    private InvalidationListener stepUpdated;
 
     /**
      * JavaFX initializer method. Registers with the event bus. Initializes button disabling
@@ -118,19 +121,24 @@ public class RightPaneController extends AbstractController {
     private void initialize() {
         eventBus.register(this);
 
+        stepUpdated = l -> application.getPlanningSessionOptional().ifPresent(s -> s.getProblem().getRoadGraph()
+                .redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
+
         stepRow.managedProperty().bind(stepPreviewEnabled);
         stepRow.visibleProperty().bind(stepRow.managedProperty());
 
         timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
         timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
             actionTimeGroup.selectToggle(startTimeButton);
-            planStateManager.get().goToTime(ActionCost.valueOf(newValue), false); // TODO: Might throw format exception // TODO: Add applyStart/not to GUI // TODO: Add proper start/end/middle calculation
+            planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected()); // TODO: Might throw format exception // TODO: Add proper start/end/middle calculation
+            redrawState();
         });
-        actionTimeGroup.selectedToggleProperty().addListener(l -> updateState());
+        actionTimeGroup.selectedToggleProperty().addListener(l -> redrawState());
 
 
         actionTimeGroup.getToggles().addAll(startTimeButton, middleTimeButton, endTimeButton);
         actionTimeGroup.selectToggle(startTimeButton);
+        applyStartsButton.setSelected(false);
 
         // Disable plan button condition
         InvalidableOrBooleanBinding domainBinding
@@ -295,9 +303,8 @@ public class RightPaneController extends AbstractController {
                 temporalPlanTab.setDisable(!isDomainTemporal);
 
                 if (isDomainTemporal) {
-                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) -> {
-                        application.getPlanningSession().setPlan(new TemporalPlan(list));
-                    });
+                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) ->
+                            application.getPlanningSession().setPlan(new TemporalPlan(list)));
                     temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
                     sequentialPlanTabScrollPane.setContent(null);
                     planTabPane.getSelectionModel().select(temporalPlanTab);
@@ -578,12 +585,15 @@ public class RightPaneController extends AbstractController {
     private void handleStepToggle() {
         boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
         stepPreviewEnabled.set(newStepPreviewEnabled);
+
         if (!newStepPreviewEnabled) {
             stepButton.setText(messages.getString("steps.show"));
             stepButton.setStyle("-fx-text-fill: green;");
             unlock();
 
             planStateManager.setValue(null);
+            Problem problem = application.getPlanningSession().getProblem();
+            problem.getRoadGraph().redrawActionObjectSprites(problem);
         } else {
             stepButton.setText(messages.getString("steps.hide"));
             stepButton.setStyle("-fx-text-fill: red;");
@@ -592,25 +602,32 @@ public class RightPaneController extends AbstractController {
             PlanningSession session = application.getPlanningSession();
             planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
                     session.getPlan()));
+            redrawState();
         }
+    }
+
+    private void redrawState() {
+        if (!stepPreviewEnabled.get()) {
+            logger.info("Cannot draw step state when not enabled.");
+            return;
+        }
+        stepUpdated.invalidated(null);
     }
 
     @FXML
     private void handleDownAction() {
         planStateManager.get().goToNextCheckpoint();
+        redrawState();
     }
 
     @FXML
     private void handleUpAction() {
         planStateManager.get().goToPreviousCheckpoint();
-    }
-
-    private void updateState() {
-        // OOO: update plan state + draw
+        redrawState();
     }
 
     /**
-     * Util method for overcomming the greedy linking of creating a lambda in the constructor of {@link IsNullBinding}.
+     * Util method for overcoming the greedy linking of creating a lambda in the constructor of {@link IsNullBinding}.
      *
      * @return the planning session optional of the CDI injected application
      */
