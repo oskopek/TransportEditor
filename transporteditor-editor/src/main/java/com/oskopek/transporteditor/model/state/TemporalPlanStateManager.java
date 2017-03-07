@@ -9,9 +9,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -105,6 +103,14 @@ public class TemporalPlanStateManager implements PlanStateManager {
             temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
                     .filter(t -> t < pointer.getTime()).max().ifPresent(res -> goToTime(ActionCost.valueOf(res), true));
         }
+    }
+
+    @Override
+    public Optional<TemporalPlanAction> getLastAction() {
+        return javaslang.collection.Stream.ofAll(temporalPlanActions).reverse()
+                .dropWhile(t -> t.getStartTimestamp() > pointer.getTime())
+                .dropWhile(t -> !pointer.isStartsApplied() && t.getStartTimestamp() == pointer.getTime())
+                .take(1).toJavaOptional();
     }
 
     private static class TimeElement<Payload> implements Comparable<TimeElement<Payload>> {

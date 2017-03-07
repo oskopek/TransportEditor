@@ -14,6 +14,7 @@ import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.model.state.PlanStateManager;
 import com.oskopek.transporteditor.model.state.TemporalPlanStateManager;
 import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
@@ -25,15 +26,18 @@ import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
 import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.NamedArg;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.util.converter.IntegerStringConverter;
 import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
@@ -54,7 +58,7 @@ import java.util.function.Supplier;
 @Singleton
 public class RightPaneController extends AbstractController {
 
-    private final ObjectProperty<TemporalPlanStateManager> planStateManager = new SimpleObjectProperty<>();
+    private final ObjectProperty<PlanStateManager> planStateManager = new SimpleObjectProperty<>();
     private final BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
     @Inject
     private transient Logger logger;
@@ -76,6 +80,7 @@ public class RightPaneController extends AbstractController {
     private ScrollPane ganttPlanTabScrollPane;
     private TableFilter<TemporalPlanAction> actionTableFilter;
     private ListChangeListener<? super TemporalPlanAction> lastChangeListener;
+    private ChangeListener<? super TemporalPlanAction> rowSelectionChangeListener;
     @FXML
     private Button planButton;
     @FXML
@@ -112,6 +117,7 @@ public class RightPaneController extends AbstractController {
     @Inject
     private EventBus eventBus;
     private InvalidationListener stepUpdated;
+    private boolean thirdPartySelection = false;
 
     /**
      * JavaFX initializer method. Registers with the event bus. Initializes button disabling
@@ -121,23 +127,47 @@ public class RightPaneController extends AbstractController {
     private void initialize() {
         eventBus.register(this);
 
-        stepUpdated = l -> application.getPlanningSessionOptional().ifPresent(s -> s.getProblem().getRoadGraph()
-                .redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
+        stepUpdated = l -> centerPaneController.getProblemSupplier().get().ifPresent(p ->
+                p.getRoadGraph().redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
 
         stepRow.managedProperty().bind(stepPreviewEnabled);
         stepRow.visibleProperty().bind(stepRow.managedProperty());
 
-        timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
+        updateTimeSpinner();
         timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            actionTimeGroup.selectToggle(startTimeButton);
-            planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected()); // TODO: Might throw format exception // TODO: Add proper start/end/middle calculation
+            planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected());
             redrawState();
+            updateTableSelection();
         });
         actionTimeGroup.selectedToggleProperty().addListener(l -> redrawState());
 
+        rowSelectionChangeListener = (observable, oldValue, newValue) -> {
+            if (!stepPreviewEnabled.get()) {
+                return;
+            }
+            if (thirdPartySelection) {
+                thirdPartySelection = false;
+                return;
+            }
+            if (newValue != null) {
+                Toggle timeProperties = actionTimeGroup.getSelectedToggle();
+                if (startTimeButton.equals(timeProperties)) {
+                    planStateManager.get().goToTime(ActionCost.valueOf(newValue.getStartTimestamp() - 1), true);
+                } else if (middleTimeButton.equals(timeProperties)) {
+                    planStateManager.get().goToTime(ActionCost.valueOf((newValue.getStartTimestamp() + newValue.getEndTimestamp()) / 2), true);
+                } else if (endTimeButton.equals(timeProperties)) {
+                    planStateManager.get().goToTime(ActionCost.valueOf(newValue.getEndTimestamp()), false);
+                } else {
+                    throw new IllegalStateException("No time preference button selected.");
+                }
+
+                redrawState();
+                updateTimeSpinner();
+            }
+        };
 
         actionTimeGroup.getToggles().addAll(startTimeButton, middleTimeButton, endTimeButton);
-        actionTimeGroup.selectToggle(startTimeButton);
+        actionTimeGroup.selectToggle(endTimeButton);
         applyStartsButton.setSelected(false);
 
         // Disable plan button condition
@@ -283,6 +313,8 @@ public class RightPaneController extends AbstractController {
 
             if (actionTableFilter != null) {
                 actionTableFilter.getFilteredList().removeListener(lastChangeListener);
+                actionTableFilter.getTableView().getSelectionModel().selectedItemProperty()
+                        .removeListener(rowSelectionChangeListener);
                 lastChangeListener = null;
                 actionTableFilter = null;
             }
@@ -324,6 +356,8 @@ public class RightPaneController extends AbstractController {
 
                 lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(c.getList()));
                 actionTableFilter.getFilteredList().addListener(lastChangeListener);
+                actionTableFilter.getTableView().getSelectionModel().selectedItemProperty()
+                        .addListener(rowSelectionChangeListener);
                 ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(actionTableFilter.getFilteredList()));
 
             }
@@ -586,14 +620,16 @@ public class RightPaneController extends AbstractController {
         boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
         stepPreviewEnabled.set(newStepPreviewEnabled);
 
+        redrawPlansInternal(null);
         if (!newStepPreviewEnabled) {
             stepButton.setText(messages.getString("steps.show"));
             stepButton.setStyle("-fx-text-fill: green;");
             unlock();
 
-            planStateManager.setValue(null);
             Problem problem = application.getPlanningSession().getProblem();
+            centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional().map(PlanningSession::getProblem));
             problem.getRoadGraph().redrawActionObjectSprites(problem);
+            planStateManager.setValue(null);
         } else {
             stepButton.setText(messages.getString("steps.hide"));
             stepButton.setStyle("-fx-text-fill: red;");
@@ -602,7 +638,11 @@ public class RightPaneController extends AbstractController {
             PlanningSession session = application.getPlanningSession();
             planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
                     session.getPlan()));
+            centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get().getCurrentPlanState()));
+
             redrawState();
+            updateTimeSpinner();
+            updateTableSelection();
         }
     }
 
@@ -618,12 +658,62 @@ public class RightPaneController extends AbstractController {
     private void handleDownAction() {
         planStateManager.get().goToNextCheckpoint();
         redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
     }
 
     @FXML
     private void handleUpAction() {
         planStateManager.get().goToPreviousCheckpoint();
         redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    @FXML
+    private void handleTimeButtons() {
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    private void updateTableSelection() {
+        MultipleSelectionModel<TemporalPlanAction> model = actionTableFilter.getTableView().getSelectionModel();
+        model.clearSelection();
+
+        Optional<TemporalPlanAction> toSelect = planStateManager.get().getLastAction();
+        if (!toSelect.isPresent()) {
+            return;
+        }
+        TemporalPlanAction actionToSelect = toSelect.get();
+
+        int index = 0;
+        for (TemporalPlanAction action : actionTableFilter.getFilteredList()) {
+            if (actionToSelect.equals(action)) {
+                thirdPartySelection = true;
+                model.select(index);
+            }
+            index++;
+        }
+    }
+
+    private void updateTimeSpinner() {
+        ActionCost currentTime = Optional.ofNullable(planStateManager.get()).map(PlanStateManager::getCurrentTime)
+                .orElse(ActionCost.valueOf(0));
+        SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
+                Integer.MAX_VALUE, currentTime.getCost(), 1);
+        factory.setConverter(new IntegerStringConverter() {
+            @Override
+            public Integer fromString(String value) {
+                String safe = value.replaceAll("[^0-9]", "");
+                if (safe.isEmpty()) {
+                    return 0;
+                } else {
+                    return super.fromString(safe);
+                }
+            }
+        });
+        timeSpinner.setValueFactory(factory);
     }
 
     /**

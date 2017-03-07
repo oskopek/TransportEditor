@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.model.state;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -11,6 +12,9 @@ import com.oskopek.transporteditor.persistence.SequentialPlanIOIT;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TemporalPlanStateManagerTest {
@@ -18,6 +22,7 @@ public class TemporalPlanStateManagerTest {
     private static final Domain domain = new SequentialDomain("Transport sequential");
     private static final Problem problem = SequentialPlanIOIT.P01SequentialProblem();
     private static final Plan plan = SequentialPlanIOIT.P01SequentialPlan(problem);
+    private static final List<TemporalPlanAction> actions = new ArrayList<>(plan.getTemporalPlanActions());
 
     private TemporalPlanStateManager planStateManager;
     private PlanState planState;
@@ -54,6 +59,7 @@ public class TemporalPlanStateManagerTest {
 
         planStateManager.goToTime(ActionCost.valueOf(0), false);
 
+        assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
     }
@@ -69,6 +75,7 @@ public class TemporalPlanStateManagerTest {
 
         planStateManager.goToTime(ActionCost.valueOf(0), true);
 
+        assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
     }
@@ -79,6 +86,8 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
 
         planStateManager.goToTime(ActionCost.valueOf(1), false);
+
+        assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
 
         Package pkg = problem.getPackage("package-1").updateLocation(null);
         Vehicle truck = problem.getVehicle("truck-1").updateReadyLoading(true).addPackage(pkg);
@@ -101,6 +110,8 @@ public class TemporalPlanStateManagerTest {
 
         planStateManager.goToTime(ActionCost.valueOf(1), true);
 
+        assertThat(planStateManager.getLastAction()).hasValue(actions.get(1));
+
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(1));
     }
@@ -111,6 +122,8 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
 
         planStateManager.goToTime(ActionCost.valueOf(54), false);
+        assertThat(planStateManager.getLastAction()).hasValue(actions.get(5));
+
 
         Package pkg1 = problem.getPackage("package-1");
         pkg1 = pkg1.updateLocation(pkg1.getTarget());
@@ -151,7 +164,9 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
 
         planStateManager.goToNextCheckpoint();
+        assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
         planStateManager.goToPreviousCheckpoint();
+        assertThat(planStateManager.getLastAction()).isEmpty();
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
@@ -162,14 +177,16 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
 
-        final int n = 2;
+        final int n = 5;
         for (int i = 0; i < n; i++) {
             planStateManager.goToNextCheckpoint();
+            assertThat(planStateManager.getLastAction()).hasValue(actions.get(i/2));
         }
         for (int i = 0; i < n; i++) {
+            assertThat(planStateManager.getLastAction()).hasValue(actions.get((n-i-1)/2));
             planStateManager.goToPreviousCheckpoint();
         }
-
+        assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
     }
@@ -210,7 +227,7 @@ public class TemporalPlanStateManagerTest {
         for (int i = 0; i < n; i++) {
             planStateManager.goToPreviousCheckpoint();
         }
-
+        assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
     }

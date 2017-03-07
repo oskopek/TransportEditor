@@ -167,7 +167,7 @@
                         </Button>
                         <Separator orientation="VERTICAL"/>
                         <RadioButton fx:id="startTimeButton" maxWidth="1.7976931348623157E308"
-                                     text="%time.start">
+                                     text="%time.start" onAction="#handleTimeButtons">
                             <padding>
                                 <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
                             </padding>
@@ -176,7 +176,7 @@
                             </tooltip>
                         </RadioButton>
                         <RadioButton fx:id="middleTimeButton" maxWidth="1.7976931348623157E308"
-                                     text="%time.middle">
+                                     text="%time.middle" onAction="#handleTimeButtons">
                             <padding>
                                 <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
                             </padding>
@@ -185,7 +185,7 @@
                             </tooltip>
                         </RadioButton>
                         <RadioButton fx:id="endTimeButton" maxWidth="1.7976931348623157E308"
-                                     text="%time.end" HBox.hgrow="ALWAYS">
+                                     text="%time.end" HBox.hgrow="ALWAYS" onAction="#handleTimeButtons">
                             <padding>
                                 <Insets top="2.0" bottom="2.0" left="1.0" right="1.0"/>
                             </padding>

@@ -14,7 +14,7 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.stage.*;
+import javafx.stage.Stage;
 import javaslang.control.Try;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.ProxyPipe;
@@ -31,9 +31,12 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -63,6 +66,17 @@ public class CenterPaneController extends AbstractController {
 
     private BooleanProperty locked = new SimpleBooleanProperty(false);
 
+    private transient Supplier<Optional<Problem>> problemSupplier = () -> application.getPlanningSessionOptional()
+            .map(PlanningSession::getProblem);
+
+    public Supplier<Optional<Problem>> getProblemSupplier() {
+        return problemSupplier;
+    }
+
+    public void setProblemSupplier(Supplier<Optional<Problem>> problemSupplier) {
+        this.problemSupplier = problemSupplier;
+    }
+
     /**
      * JavaFX initializer method. Registers with the event bus.
      */
@@ -81,21 +95,21 @@ public class CenterPaneController extends AbstractController {
     }
 
     /**
-     * The graph's locked property.
-     *
-     * @return the locked property
-     */
-    public BooleanProperty lockedProperty() {
-        return locked;
-    }
-
-    /**
      * Set the graph lock.
      *
      * @param locked the new graph lock state
      */
     public void setLocked(boolean locked) {
         this.locked.set(locked);
+    }
+
+    /**
+     * The graph's locked property.
+     *
+     * @return the locked property
+     */
+    public BooleanProperty lockedProperty() {
+        return locked;
     }
 
     /**
@@ -305,9 +319,6 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonPress(MouseEvent event) {
-            if (locked.get()) {
-                return;
-            }
             view.requestFocus();
             // un-select all
             if (!event.isShiftDown()) {
@@ -317,17 +328,11 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonRelease(MouseEvent event, Iterable<GraphicElement> elementsInArea) {
-            if (locked.get()) {
-                return;
-            }
             selectionHandler.toggleSelectionOnElements(elementsInArea);
         }
 
         @Override
         protected void mouseButtonPressOnElement(GraphicElement element, MouseEvent event) {
-            if (locked.get()) {
-                return;
-            }
             view.freezeElement(element, true);
             element.addAttribute("ui.clicked");
             if (SwingUtilities.isLeftMouseButton(event)) {
@@ -336,7 +341,7 @@ public class CenterPaneController extends AbstractController {
                 } else {
                     selectionHandler.unSelectAll();
 
-                    popup = createResponse(element, actionObjectDetailPopupCreator);
+                    popup = createResponse(problemSupplier.get().get(), element, actionObjectDetailPopupCreator);
                     if (popup != null) {
                         int showAtX = event.getXOnScreen();
                         int showAtY = event.getYOnScreen() - 15;
@@ -356,16 +361,15 @@ public class CenterPaneController extends AbstractController {
          * @param <T> the type of the created object
          * @return the created object
          */
-        private <T> T createResponse(GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
-            Consumer<Problem> problemUpdater = problem -> {
-                application.getPlanningSession().setProblem(problem);
+        private <T> T createResponse(Problem problem, GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
+            Consumer<Problem> problemUpdater = p -> {
+                application.getPlanningSession().setProblem(p);
                 // TODO: Hack
-                application.getPlanningSession().getProblem().getRoadGraph().redrawActionObjectSprites(problem);
+                application.getPlanningSession().getProblem().getRoadGraph().redrawActionObjectSprites(p);
             };
-            PlanningSession session = application.getPlanningSession();
             if (element instanceof Node) { // TODO: Hack
                 Location oldLocation = graph.getLocation(element.getId());
-                return creator.create(oldLocation, newLocation -> problemUpdater.accept(session.getProblem()
+                return creator.create(oldLocation, newLocation -> problemUpdater.accept(problem
                         .changeLocation(oldLocation, newLocation)));
             } else if (element instanceof GraphicSprite) {
                 String name = element.getId().substring("sprite-".length());
@@ -374,7 +378,7 @@ public class CenterPaneController extends AbstractController {
                     return creator.create(roadEdge, newRoad -> graph.putRoad(newRoad, roadEdge.getFrom(),
                             roadEdge.getTo()));
                 } else {
-                    return creator.tryCreateFromLocatable(application.getPlanningSession().getProblem(), name,
+                    return creator.tryCreateFromLocatable(problem, name,
                             problemUpdater);
                 }
             } else {
@@ -401,17 +405,14 @@ public class CenterPaneController extends AbstractController {
 
         @Override
         protected void mouseButtonReleaseOffElement(GraphicElement element, MouseEvent event) {
-            if (locked.get()) {
-                return;
-            }
             view.freezeElement(element, false);
             element.removeAttribute("ui.clicked");
             if (SwingUtilities.isLeftMouseButton(event)) {
                 if (popup != null) {
                     Platform.runLater(() -> popup.hide());
                 }
-            } else if (SwingUtilities.isRightMouseButton(event)) {
-                Supplier<Void> editDialog = createResponse(element, propertyEditorDialogPaneCreator);
+            } else if (SwingUtilities.isRightMouseButton(event) && !locked.get()) {
+                Supplier<Void> editDialog = createResponse(problemSupplier.get().get(), element, propertyEditorDialogPaneCreator);
                 Platform.runLater(editDialog::get);
             }
 
