@@ -26,7 +26,6 @@ import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
 import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.NamedArg;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -126,7 +125,6 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void initialize() {
         eventBus.register(this);
-
         stepUpdated = l -> centerPaneController.getProblemSupplier().get().ifPresent(p ->
                 p.getRoadGraph().redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
 
@@ -154,7 +152,8 @@ public class RightPaneController extends AbstractController {
                 if (startTimeButton.equals(timeProperties)) {
                     planStateManager.get().goToTime(ActionCost.valueOf(newValue.getStartTimestamp() - 1), true);
                 } else if (middleTimeButton.equals(timeProperties)) {
-                    planStateManager.get().goToTime(ActionCost.valueOf((newValue.getStartTimestamp() + newValue.getEndTimestamp()) / 2), true);
+                    planStateManager.get().goToTime(ActionCost.valueOf((newValue.getStartTimestamp()
+                            + newValue.getEndTimestamp()) / 2), true);
                 } else if (endTimeButton.equals(timeProperties)) {
                     planStateManager.get().goToTime(ActionCost.valueOf(newValue.getEndTimestamp()), false);
                 } else {
@@ -170,6 +169,13 @@ public class RightPaneController extends AbstractController {
         actionTimeGroup.selectToggle(endTimeButton);
         applyStartsButton.setSelected(false);
 
+        initializeBindings();
+    }
+
+    /**
+     * Initialize all bindings.
+     */
+    private void initializeBindings() {
         // Disable plan button condition
         InvalidableOrBooleanBinding domainBinding
                 = new InvalidableOrBooleanBinding(application.planningSessionProperty().isNull())
@@ -603,18 +609,27 @@ public class RightPaneController extends AbstractController {
         }
     }
 
+    /**
+     * Lock the problem graph.
+     */
     private void lock() {
         centerPaneController.setLocked(true);
         lockButton.setText(messages.getString("unlock"));
         lockButton.setStyle("-fx-text-fill: green;");
     }
 
+    /**
+     * Unlock the problem graph.
+     */
     private void unlock() {
         centerPaneController.setLocked(false);
         lockButton.setText(messages.getString("lock"));
         lockButton.setStyle("-fx-text-fill: red;");
     }
 
+    /**
+     * Handle pressing the show steps button. Toggles the "step showing" mode.
+     */
     @FXML
     private void handleStepToggle() {
         boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
@@ -627,7 +642,8 @@ public class RightPaneController extends AbstractController {
             unlock();
 
             Problem problem = application.getPlanningSession().getProblem();
-            centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional().map(PlanningSession::getProblem));
+            centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional()
+                    .map(PlanningSession::getProblem));
             problem.getRoadGraph().redrawActionObjectSprites(problem);
             planStateManager.setValue(null);
         } else {
@@ -638,7 +654,8 @@ public class RightPaneController extends AbstractController {
             PlanningSession session = application.getPlanningSession();
             planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
                     session.getPlan()));
-            centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get().getCurrentPlanState()));
+            centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get()
+                    .getCurrentPlanState()));
 
             redrawState();
             updateTimeSpinner();
@@ -646,6 +663,9 @@ public class RightPaneController extends AbstractController {
         }
     }
 
+    /**
+     * Redraw sprites in the correct graph in the correct problem.
+     */
     private void redrawState() {
         if (!stepPreviewEnabled.get()) {
             logger.info("Cannot draw step state when not enabled.");
@@ -654,6 +674,9 @@ public class RightPaneController extends AbstractController {
         stepUpdated.invalidated(null);
     }
 
+    /**
+     * Handle the "V" button press in the step button row. Go to the next action.
+     */
     @FXML
     private void handleDownAction() {
         planStateManager.get().goToNextCheckpoint();
@@ -662,6 +685,9 @@ public class RightPaneController extends AbstractController {
         updateTableSelection();
     }
 
+    /**
+     * Handle the "A" button press in the step button row. Go to the previous action.
+     */
     @FXML
     private void handleUpAction() {
         planStateManager.get().goToPreviousCheckpoint();
@@ -670,6 +696,9 @@ public class RightPaneController extends AbstractController {
         updateTableSelection();
     }
 
+    /**
+     * Handle the Start, Middle, End button presses.
+     */
     @FXML
     private void handleTimeButtons() {
         redrawState();
@@ -677,6 +706,9 @@ public class RightPaneController extends AbstractController {
         updateTableSelection();
     }
 
+    /**
+     * Update the selection in the plan table according to the plan state. Used only during step showing.
+     */
     private void updateTableSelection() {
         MultipleSelectionModel<TemporalPlanAction> model = actionTableFilter.getTableView().getSelectionModel();
         model.clearSelection();
@@ -697,6 +729,9 @@ public class RightPaneController extends AbstractController {
         }
     }
 
+    /**
+     * Update the selection in the time spinner according to the plan state. Used only during step showing.
+     */
     private void updateTimeSpinner() {
         ActionCost currentTime = Optional.ofNullable(planStateManager.get()).map(PlanStateManager::getCurrentTime)
                 .orElse(ActionCost.valueOf(0));

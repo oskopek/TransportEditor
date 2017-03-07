@@ -9,14 +9,21 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+/**
+ * A plan state manager for temporal domains. Can be used for sequential domains too.
+ * Checkpoints are regarded as "time steps". Every integral time unit is divided into two time steps.
+ */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    private final static Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
+    private static final Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
             .append(t1.getStartTimestamp(), t2.getStartTimestamp()).append(t1.getEndTimestamp(), t2.getEndTimestamp())
             .toComparison();
     private final Domain domain;
@@ -30,7 +37,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
         this.problem = problem;
         this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted(endStartTimeComparator)
                 .collect(Collectors.toList());
-        this.state = getOriginalState();
+        this.state = getBeginningState();
         this.pointer = new PlanActionPointer(0, false);
     }
 
@@ -44,13 +51,18 @@ public class TemporalPlanStateManager implements PlanStateManager {
         return ActionCost.valueOf(pointer.getTime());
     }
 
-    private PlanState getOriginalState() {
+    /**
+     * Create a new plan state to symbolize the beginning state.
+     *
+     * @return the beginning state
+     */
+    private PlanState getBeginningState() {
         return new DefaultPlanState(domain, problem);
     }
 
     @Override
     public void goToTime(ActionCost time, boolean applyStarts) {
-        state = getOriginalState();
+        state = getBeginningState();
         int simulationTime = applyAll(time.getCost(), applyStarts);
         pointer = new PlanActionPointer(simulationTime, applyStarts);
     }
@@ -89,7 +101,8 @@ public class TemporalPlanStateManager implements PlanStateManager {
     public void goToNextCheckpoint() {
         if (pointer.isStartsApplied()) {
             temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
+                    .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res),
+                    false));
         } else {
             goToTime(getCurrentTime(), true);
         }
@@ -120,7 +133,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
         private final Payload payload;
 
 
-        public TimeElement(int priority, boolean isEnd, Payload payload) {
+        TimeElement(int priority, boolean isEnd, Payload payload) {
             this.payload = payload;
             this.isEnd = isEnd;
             this.priority = priority;

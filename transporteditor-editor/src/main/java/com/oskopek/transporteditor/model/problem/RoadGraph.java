@@ -218,6 +218,12 @@ public class RoadGraph extends MultiGraph implements Graph {
                 .forEach(p -> addPackageSprite(p, p.getLocation()));
     }
 
+    /**
+     * Remove and add all sprites, taking care to draw vehicles and packages at their current state location
+     * (edges, ...).
+     *
+     * @param state the current problem state from which to get the action objects
+     */
     public void redrawPackagesVehiclesFromPlanState(PlanState state) {
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);

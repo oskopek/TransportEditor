@@ -69,10 +69,22 @@ public class CenterPaneController extends AbstractController {
     private transient Supplier<Optional<Problem>> problemSupplier = () -> application.getPlanningSessionOptional()
             .map(PlanningSession::getProblem);
 
+    /**
+     * Get the problem supplier. Used for showing data in the graph (differentiating between the problem
+     * and plan states when showing steps).
+     *
+     * @return the currently shown problem
+     */
     public Supplier<Optional<Problem>> getProblemSupplier() {
         return problemSupplier;
     }
 
+    /**
+     * Set the problem supplier. Used for showing data in the graph (differentiating between the problem
+     * and plan states when showing steps).
+     *
+     * @param problemSupplier supplier of the currently shown problem
+     */
     public void setProblemSupplier(Supplier<Optional<Problem>> problemSupplier) {
         this.problemSupplier = problemSupplier;
     }
@@ -356,12 +368,14 @@ public class CenterPaneController extends AbstractController {
          * Glue code method - passes the element to the appropriate creator with the proper
          * graph, problem and session update callbacks.
          *
+         * @param problem the problem to take data from
          * @param element the element to pass
          * @param creator the creator to pass to
          * @param <T> the type of the created object
          * @return the created object
          */
-        private <T> T createResponse(Problem problem, GraphicElement element, ActionObjectBuilderConsumer<? extends T> creator) {
+        private <T> T createResponse(Problem problem, GraphicElement element,
+                                     ActionObjectBuilderConsumer<? extends T> creator) {
             Consumer<Problem> problemUpdater = p -> {
                 application.getPlanningSession().setProblem(p);
                 // TODO: Hack
@@ -412,7 +426,8 @@ public class CenterPaneController extends AbstractController {
                     Platform.runLater(() -> popup.hide());
                 }
             } else if (SwingUtilities.isRightMouseButton(event) && !locked.get()) {
-                Supplier<Void> editDialog = createResponse(problemSupplier.get().get(), element, propertyEditorDialogPaneCreator);
+                Supplier<Void> editDialog = createResponse(problemSupplier.get().get(), element,
+                        propertyEditorDialogPaneCreator);
                 Platform.runLater(editDialog::get);
             }
 

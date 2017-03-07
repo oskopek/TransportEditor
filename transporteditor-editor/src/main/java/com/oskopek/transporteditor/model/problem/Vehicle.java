@@ -27,6 +27,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * @param curCapacity the current package capacity (the sum of package sizes that fit into the vehicle)
      * @param maxCapacity the maximum package capacity (the sum of package sizes that fit into the vehicle
      * if it is empty before)
+     * @param readyLoading the ready-laoding state
      * @param packageList a list of packages loaded into the vehicle
      */
     public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity, boolean readyLoading,
@@ -46,6 +47,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * from now)
      * @param maxFuelCapacity the maximum fuel capacity (the sum of road fuel costs that the vehicle can drive
      * from a full tank)
+     * @param readyLoading the ready-laoding state
      * @param packageList a list of packages loaded into the vehicle
      */
     public Vehicle(String name, Location location, ActionCost curCapacity, ActionCost maxCapacity,
@@ -99,6 +101,11 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         return maxFuelCapacity;
     }
 
+    /**
+     * Get whether is in ready-loading state.
+     *
+     * @return the ready-loading state
+     */
     public boolean isReadyLoading() {
         return readyLoading;
     }
