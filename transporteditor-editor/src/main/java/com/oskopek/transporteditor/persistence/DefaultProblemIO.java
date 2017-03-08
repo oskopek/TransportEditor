@@ -5,6 +5,8 @@ import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.persistence.antlr4.PddlLexer;
+import com.oskopek.transporteditor.persistence.antlr4.PddlParser;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,7 +31,6 @@ import java.util.stream.Collectors;
  */
 public class DefaultProblemIO implements DataIO<Problem> {
 
-    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);
 
     static {
@@ -39,6 +40,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final Domain domain;
 
     /**

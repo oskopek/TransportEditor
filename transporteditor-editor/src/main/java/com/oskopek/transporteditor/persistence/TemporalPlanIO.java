@@ -6,6 +6,8 @@ import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.persistence.antlr4.PlanLexer;
+import com.oskopek.transporteditor.persistence.antlr4.PlanParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 

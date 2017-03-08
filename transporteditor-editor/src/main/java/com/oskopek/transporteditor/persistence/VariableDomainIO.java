@@ -11,6 +11,8 @@ import com.oskopek.transporteditor.model.domain.actionbuilder.DriveBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transporteditor.model.domain.actionbuilder.RefuelBuilder;
+import com.oskopek.transporteditor.persistence.antlr4.PddlLexer;
+import com.oskopek.transporteditor.persistence.antlr4.PddlParser;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
