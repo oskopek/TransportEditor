@@ -6,8 +6,8 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transporteditor.model.state.DefaultPlanState;
 import com.oskopek.transporteditor.model.state.PlanState;
-import com.oskopek.transporteditor.model.state.SequentialPlanState;
 import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -37,7 +37,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
      */
     public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
-        PlanState state = new SequentialPlanState(domain, problem);
+        PlanState state = new DefaultPlanState(domain, problem);
         log("Starting validation. Actions: " + actionList.size());
         for (Action action : actionList) {
             log("Validating: " + action);

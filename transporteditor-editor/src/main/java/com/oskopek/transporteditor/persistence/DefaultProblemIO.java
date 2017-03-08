@@ -170,7 +170,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Vehicle vehicle = parsed.vehicleMap().get(arg1);
                 if (vehicle != null) {
                     Vehicle newVehicle = new Vehicle(vehicle.getName(), parsed.graph().getLocation(arg2),
-                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(), vehicle.getPackageList());
+                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(), true, vehicle.getPackageList());
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -189,7 +189,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 if (vehicle != null) {
                     ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
                     Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                            capacity, vehicle.getPackageList());
+                            capacity, true, vehicle.getPackageList());
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -253,7 +253,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 if (vehicle != null) {
                     ActionCost capacity = ActionCost.valueOf(number);
                     Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                            capacity, vehicle.getPackageList());
+                            capacity, true, vehicle.getPackageList());
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -275,7 +275,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                     }
                     Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
                             vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                            fuelLeft, fuelMax, vehicle.getPackageList());
+                            fuelLeft, fuelMax, true, vehicle.getPackageList());
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -297,7 +297,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                     }
                     Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
                             vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                            fuelLeft, fuelMax, vehicle.getPackageList());
+                            fuelLeft, fuelMax, true, vehicle.getPackageList());
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -336,7 +336,8 @@ public class DefaultProblemIO implements DataIO<Problem> {
             String objectName = typeNameListContext.NAME(0).getText();
             switch (typeName) {
                 case "vehicle":
-                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, new ArrayList<>()));
+                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, true,
+                            new ArrayList<>()));
                     break;
                 case "package":
                     parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.valueOf(1)));

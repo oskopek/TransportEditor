@@ -15,7 +15,9 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     private ActionCost maxCapacity;
     private ActionCost curFuelCapacity;
     private ActionCost maxFuelCapacity;
+    private boolean readyLoading;
     private List<Package> packageList;
+
 
     /**
      * Default constructor.
@@ -30,7 +32,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
      * @return the current capacity
      */
     @FieldLocalization(key = "vehicle.curcapacity", priority = 3, editable = false)
-    public ActionCost getCurCapacity() { // TODO: Set automatically maxFuelCapacity - packageSizeSum
+    public ActionCost getCurCapacity() {
         return curCapacity;
     }
 
@@ -101,11 +103,30 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     }
 
     /**
+     * Is the vehicle ready to be loaded.
+     *
+     * @return the ready-loading state
+     */
+    @FieldLocalization(key = "vehicle.readyloading", editable = false)
+    public boolean isReadyLoading() {
+        return readyLoading;
+    }
+
+    /**
+     * Set the ready-loading state.
+     *
+     * @param readyLoading the ready-loading state to set
+     */
+    public void setReadyLoading(boolean readyLoading) {
+        this.readyLoading = readyLoading;
+    }
+
+    /**
      * Get the package list.
      *
      * @return the package list
      */
-    @FieldLocalization(key = "vehicle.packagelist", editable = false)
+    @FieldLocalization(key = "vehicle.packagelist", editable = false, priority = 6)
     public List<Package> getPackageList() {
         return packageList;
     }
@@ -122,7 +143,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     @Override
     public Vehicle build() {
         return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
-                getMaxFuelCapacity(), getPackageList());
+                getMaxFuelCapacity(), true, getPackageList());
     }
 
     @Override
@@ -132,6 +153,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
         setMaxCapacity(instance.getMaxCapacity());
         setCurFuelCapacity(instance.getCurFuelCapacity());
         setMaxFuelCapacity(instance.getMaxFuelCapacity());
+        setReadyLoading(instance.isReadyLoading());
         setPackageList(instance.getPackageList());
     }
 }

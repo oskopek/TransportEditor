@@ -77,7 +77,27 @@ public interface Action {
      * @param problemState the state before applying
      * @return the state after applying
      */
-    Problem apply(Domain domain, Problem problemState);
+    default Problem apply(Domain domain, Problem problemState) {
+        return applyEffects(domain, applyPreconditions(domain, problemState));
+    }
+
+    /**
+     * Apply the "at start" effects of this action to a problem, returning the changed problem.
+     *
+     * @param domain       the domain of the problem
+     * @param problemState the state before applying
+     * @return the state after applying the "at start" effects
+     */
+    Problem applyPreconditions(Domain domain, Problem problemState);
+
+    /**
+     * Apply the "at end" effects of this action to a problem, returning the changed problem.
+     *
+     * @param domain the domain of the problem
+     * @param problemState the state before applying
+     * @return the state after applying the "at end" effects
+     */
+    Problem applyEffects(Domain domain, Problem problemState);
 
     /**
      * Check if all preconditions of the action are valid in the given state.

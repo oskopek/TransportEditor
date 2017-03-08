@@ -52,10 +52,21 @@ public class SpriteBuilder<T extends Sprite> {
      * Set the position of the sprite.
      *
      * @param percentage the percentage (edge = distance along from source to destination, node = ?)
+     * @param radiusPx the radius in pixels
+     * @param degrees the degrees of rotation on the edge XY plane (x axis is in the direction of the arrow)
      * @return this
      */
-    public SpriteBuilder setPosition(double percentage) {
-        sprite.setPosition(percentage);
+    public SpriteBuilder setPosition(double percentage, double radiusPx, double degrees) {
+        if (radiusPx == 0d && degrees == 0d) {
+            sprite.setPosition(percentage);
+            return this;
+        }
+
+        double rad = Math.toRadians(degrees);
+        double yOffset = Math.sin(rad) * radiusPx; // y axis is perpendicular to the x axis
+        double xOffset = Math.cos(rad) * 0.05; // down scale to 5% // x axis is in the direction of the arrow
+
+        sprite.setPosition(StyleConstants.Units.PX, percentage + xOffset, yOffset, 0);
         return this;
     }
 

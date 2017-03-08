@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.model.problem;
 
+import com.oskopek.transporteditor.model.state.PlanState;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.view.SpriteBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -31,18 +32,15 @@ import java.util.stream.Stream;
  * because GraphStream doesn't have a notion of clicking on an edge. These sprites should always be
  * attached to a node or edge.
  * The state mutator methods automatically cause graph redraws.
- * <p>
- * TODO: Refactor GUI out of this class
  */
-public class RoadGraph extends MultiGraph implements Graph {
+public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor GUI out of this class
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private transient SpriteManager spriteManager;
     private transient double packageDegreeDelta;
     private transient double vehicleDegreeDelta;
     private transient double vehicleRadius;
     private transient double packageRadius;
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Copy constructor.
@@ -192,7 +190,7 @@ public class RoadGraph extends MultiGraph implements Graph {
     /**
      * Removes all sprites from the sprite manager and detaches it + resets graph styling.
      */
-    private void removeAllActionObjectSprites() {
+    private synchronized void removeAllActionObjectSprites() {
         packageDegreeDelta = 0d;
         vehicleDegreeDelta = 0d;
         vehicleRadius = 25d;
@@ -212,8 +210,64 @@ public class RoadGraph extends MultiGraph implements Graph {
     public void redrawActionObjectSprites(Problem problem) {
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
-        problem.getAllPackages().forEach(p -> addPackageSprite(p, p.getLocation()));
-        problem.getAllVehicles().forEach(v -> addVehicleSprite(v, v.getLocation()));
+        problem.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
+                .forEach(v -> addVehicleSprite(v, v.getLocation()));
+        problem.getAllPackages().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
+                .forEach(p -> addPackageSprite(p, p.getLocation()));
+    }
+
+    /**
+     * Remove and add all sprites, taking care to draw vehicles and packages at their current state location
+     * (edges, ...).
+     *
+     * @param state the current problem state from which to get the action objects
+     */
+    public void redrawPackagesVehiclesFromPlanState(PlanState state) {
+        removeAllActionObjectSprites();
+        getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
+
+        Map<Package, Location> packagesAtNodes = new HashMap<>();
+        Map<Package, Road> packagesAtEdges = new HashMap<>();
+
+        // draw vehicles
+        state.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName)).forEach(v -> {
+            String vehicleLocationName = v.getLocation().getName();
+            boolean isAtLocation = hasAttribute(vehicleLocationName, Location.class);
+
+            Location vehicleLocation = null;
+            Road vehicleRoad = null;
+            if (isAtLocation) {
+                vehicleLocation = getLocation(vehicleLocationName);
+            } else {
+                vehicleRoad = getRoad(vehicleLocationName);
+            }
+
+            if (isAtLocation) {
+                addVehicleSprite(v, vehicleLocation);
+            } else { // at edge
+                addVehicleSprite(v, vehicleRoad, 0.5d);
+            }
+
+            for (Package pkg : v.getPackageList()) {
+                if (isAtLocation) {
+                    packagesAtNodes.put(pkg, vehicleLocation);
+                } else { // at edge
+                    packagesAtEdges.put(pkg, vehicleRoad);
+                }
+            }
+        });
+
+        // draw packages
+        state.getAllPackages().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
+                .forEach(p -> {
+                    if (p.getLocation() != null) {
+                        addPackageSprite(p, p.getLocation());
+                    } else if (packagesAtNodes.containsKey(p)) {
+                        addPackageSprite(p, packagesAtNodes.get(p));
+                    } else if (packagesAtEdges.containsKey(p)) {
+                        addPackageSprite(p, packagesAtEdges.get(p), 0.5d);
+                    }
+                });
     }
 
     /**
@@ -241,7 +295,7 @@ public class RoadGraph extends MultiGraph implements Graph {
      * @param edge the edge to add sprite to
      */
     private void addEdgeSprite(Edge edge) {
-        addSprite(edge.getId()).attachTo(edge).setPosition(0.5d);
+        addSprite(edge.getId()).attachTo(edge).setPosition(0.5d, 0, 0);
     }
 
     /**
@@ -268,8 +322,7 @@ public class RoadGraph extends MultiGraph implements Graph {
             packageDegreeDelta %= 180d;
         }
 
-        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(packageRadius,
-                180d + packageDegreeDelta);
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(packageRadius, 180d + packageDegreeDelta);
         if (location != null) {
             sprite.attachTo((Node) getNode(location.getName()));
         }
@@ -283,7 +336,13 @@ public class RoadGraph extends MultiGraph implements Graph {
      * @param percentage the percentage from source to destination on which to add sprite
      */
     public void addPackageSprite(Package pkg, Road road, double percentage) {
-        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(percentage);
+        packageDegreeDelta += 25d;
+        if (packageDegreeDelta > 180d) {
+            packageRadius += 12d;
+            packageDegreeDelta %= 180d;
+        }
+
+        SpriteBuilder sprite = addPackageSprite(pkg).setPosition(percentage, packageRadius, 180d + packageDegreeDelta);
         if (road != null) {
             sprite.attachTo((Edge) getEdge(road.getName()));
         }
@@ -312,6 +371,7 @@ public class RoadGraph extends MultiGraph implements Graph {
             vehicleRadius += 12d;
             vehicleDegreeDelta %= 180d;
         }
+
         SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(vehicleRadius, vehicleDegreeDelta);
         if (location != null) {
             sprite.attachTo((Node) getNode(location.getName()));
@@ -326,7 +386,13 @@ public class RoadGraph extends MultiGraph implements Graph {
      * @param percentage the percentage from source to destination on which to add sprite
      */
     public void addVehicleSprite(Vehicle vehicle, Road road, double percentage) {
-        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(percentage);
+        vehicleDegreeDelta += 25d;
+        if (vehicleDegreeDelta > 180d) {
+            vehicleRadius += 12d;
+            vehicleDegreeDelta %= 180d;
+        }
+
+        SpriteBuilder sprite = addVehicleSprite(vehicle).setPosition(percentage, vehicleRadius, vehicleDegreeDelta);
         if (road != null) {
             sprite.attachTo((Edge) getEdge(road.getName()));
         }

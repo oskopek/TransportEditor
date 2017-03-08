@@ -13,6 +13,23 @@ public interface PlanState extends Problem {
      *
      * @param action the action to apply
      */
-    void apply(Action action);
+    default void apply(Action action) {
+        applyPreconditions(action);
+        applyEffects(action);
+    }
+
+    /**
+     * Changes the internal state of the problem by applying effects specified as "at start".
+     *
+     * @param action the action whose parts to apply
+     */
+    void applyPreconditions(Action action);
+
+    /**
+     * Changes the internal state of the problem by applying effects specified as "at end".
+     *
+     * @param action the action whose parts to apply
+     */
+    void applyEffects(Action action);
 
 }

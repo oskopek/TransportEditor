@@ -203,13 +203,13 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
-    public Problem removeLocation(String name) { // TODO: Should this be immutable too?
+    public Problem removeLocation(String name) { // TODO: Should this be immutable too? Yes!
         getRoadGraph().removeLocation(getRoadGraph().getLocation(name));
         return this;
     }
 
     @Override
-    public Problem putLocation(String name, Location location) { // TODO: Should this be immutable too?
+    public Problem putLocation(String name, Location location) { // TODO: Should this be immutable too? Yes!
         getRoadGraph().moveLocation(name, location.getxCoordinate(), location.getyCoordinate());
         getRoadGraph().setPetrolStation(name, location.getPetrolStation());
         return this;

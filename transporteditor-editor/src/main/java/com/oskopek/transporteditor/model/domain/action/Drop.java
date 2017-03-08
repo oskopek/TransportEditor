@@ -31,7 +31,17 @@ public class Drop extends DefaultAction<Vehicle, Package> {
     }
 
     @Override
-    public Problem apply(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Domain domain, Problem problemState) {
+        String vehicleName = this.getWho().getName();
+        String packageName = this.getWhat().getName();
+        Vehicle vehicle = problemState.getVehicle(vehicleName);
+        Package pkg = problemState.getPackage(packageName);
+        return problemState.putVehicle(vehicleName, vehicle.removePackage(pkg).updateReadyLoading(false))
+                .putPackage(packageName, pkg.updateLocation(null));
+    }
+
+    @Override
+    public Problem applyEffects(Domain domain, Problem problemState) {
         String vehicleName = this.getWho().getName();
         String packageName = this.getWhat().getName();
         String locationName = this.getWhere().getName();
@@ -39,7 +49,7 @@ public class Drop extends DefaultAction<Vehicle, Package> {
         Package pkg = problemState.getPackage(packageName);
         Location location = problemState.getRoadGraph().getLocation(locationName);
         Package newPackage = pkg.updateLocation(location);
-        return problemState.putVehicle(vehicleName, vehicle.removePackage(pkg))
+        return problemState.putVehicle(vehicleName, vehicle.updateReadyLoading(true))
                 .putPackage(packageName, newPackage);
     }
 }

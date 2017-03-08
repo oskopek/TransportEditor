@@ -30,7 +30,12 @@ public class Refuel extends DefaultAction<Vehicle, PlaceholderActionObject> {
     }
 
     @Override
-    public Problem apply(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Domain domain, Problem problemState) {
+        return problemState;
+    }
+
+    @Override
+    public Problem applyEffects(Domain domain, Problem problemState) {
         String name = this.getWho().getName();
         Vehicle vehicle = problemState.getVehicle(name);
         return problemState.putVehicle(name, vehicle.updateCurFuelCapacity(vehicle.getMaxFuelCapacity()));

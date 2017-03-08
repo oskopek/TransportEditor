@@ -13,8 +13,8 @@ public class VehicleTest {
     public void equalsTest() throws Exception {
         Location location = new Location("l1", 0, 0);
         ActionCost zero = ActionCost.valueOf(0);
-        Vehicle v1 = new Vehicle("v1", location, zero, zero, new ArrayList<>());
-        Vehicle v2 = new Vehicle("v1", location, zero, zero, new ArrayList<>());
+        Vehicle v1 = new Vehicle("v1", location, zero, zero, true, new ArrayList<>());
+        Vehicle v2 = new Vehicle("v1", location, zero, zero, true, new ArrayList<>());
         assertEquals(v1, v2);
         assertEquals(v2, v1);
     }

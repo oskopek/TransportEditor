@@ -59,7 +59,7 @@ public class VariableDomainBuilderFilesIT {
 
     @Test
     public void toDomain() throws Exception {
-        Assume.assumeTrue("Numeric tests are ignored for now.", fileName.contains("NoNum")); // TODO: Num
+        Assume.assumeTrue("Numeric tests are ignored for now.", fileName.contains("NoNum")); // TODO: Numeric
         String domainFile = String.format(fileName, "domain", "domain");
         String problemFile = String.format(fileName, "problem", "p01");
 

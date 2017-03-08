@@ -14,23 +14,29 @@ import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.model.state.PlanStateManager;
+import com.oskopek.transporteditor.model.state.TemporalPlanStateManager;
 import com.oskopek.transporteditor.validation.Validator;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
 import com.oskopek.transporteditor.view.LogProgressCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;
 import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
-import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
+import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.util.converter.IntegerStringConverter;
 import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
@@ -51,66 +57,67 @@ import java.util.function.Supplier;
 @Singleton
 public class RightPaneController extends AbstractController {
 
+    private final ObjectProperty<PlanStateManager> planStateManager = new SimpleObjectProperty<>();
+    private final BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
     @Inject
     private transient Logger logger;
-
     @Inject
     private LogProgressCreator logProgressCreator;
-
     @FXML
     private TabPane planTabPane;
-
     @FXML
     private Tab temporalPlanTab;
-
     @FXML
     private Tab sequentialPlanTab;
-
     @FXML
     private Tab ganttPlanTab;
-
     @FXML
     private ScrollPane sequentialPlanTabScrollPane;
-
     @FXML
     private ScrollPane temporalPlanTabScrollPane;
-
     @FXML
     private ScrollPane ganttPlanTabScrollPane;
-
     private TableFilter<TemporalPlanAction> actionTableFilter;
-
     private ListChangeListener<? super TemporalPlanAction> lastChangeListener;
-
+    private ChangeListener<? super TemporalPlanAction> rowSelectionChangeListener;
     @FXML
     private Button planButton;
-
     @FXML
     private Button validateButton;
-
     @FXML
     private Button redrawButton;
-
     @FXML
     private Button addLocationButton;
-
     @FXML
     private Button addRoadButton;
-
     @FXML
     private Button addVehicleButton;
-
     @FXML
     private Button addPackageButton;
-
     @FXML
     private Button lockButton;
-
+    @FXML
+    private Button stepButton;
+    @FXML
+    private RadioButton startTimeButton;
+    @FXML
+    private RadioButton middleTimeButton;
+    @FXML
+    private RadioButton endTimeButton;
+    private ToggleGroup actionTimeGroup = new ToggleGroup();
+    @FXML
+    private ToggleButton applyStartsButton;
+    @FXML
+    private HBox stepRow;
+    @FXML
+    private Spinner<Integer> timeSpinner;
     @Inject
     private CenterPaneController centerPaneController;
-
     @Inject
     private EventBus eventBus;
+    private InvalidationListener stepUpdated;
+    private boolean thirdPartySelection = false;
+    private boolean thirdPartySpinnerChange = false;
 
     /**
      * JavaFX initializer method. Registers with the event bus. Initializes button disabling
@@ -119,7 +126,55 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void initialize() {
         eventBus.register(this);
+        stepUpdated = l -> centerPaneController.getProblemSupplier().get().ifPresent(p ->
+                p.getRoadGraph().redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
 
+        stepRow.managedProperty().bind(stepPreviewEnabled);
+        stepRow.visibleProperty().bind(stepRow.managedProperty());
+
+        updateTimeSpinner();
+        timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (thirdPartySpinnerChange) {
+                thirdPartySpinnerChange = false;
+                return;
+            }
+            planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected());
+            redrawState();
+            updateTableSelection();
+            if (applyStartsButton.isSelected()) {
+                actionTimeGroup.selectToggle(startTimeButton);
+            } else {
+                actionTimeGroup.selectToggle(endTimeButton);
+            }
+        });
+
+        rowSelectionChangeListener = (observable, oldValue, newValue) -> {
+            if (!stepPreviewEnabled.get()) {
+                return;
+            }
+            if (thirdPartySelection) {
+                thirdPartySelection = false;
+                return;
+            }
+            if (newValue != null) {
+                applyStartsButton.setSelected(false);
+                updateFromTimeButtons(newValue);
+                redrawState();
+                updateTimeSpinner();
+            }
+        };
+
+        actionTimeGroup.getToggles().addAll(startTimeButton, middleTimeButton, endTimeButton);
+        actionTimeGroup.selectToggle(endTimeButton);
+        applyStartsButton.setSelected(false);
+
+        initializeBindings();
+    }
+
+    /**
+     * Initialize all bindings.
+     */
+    private void initializeBindings() {
         // Disable plan button condition
         InvalidableOrBooleanBinding domainBinding
                 = new InvalidableOrBooleanBinding(application.planningSessionProperty().isNull())
@@ -130,15 +185,26 @@ public class RightPaneController extends AbstractController {
                 .or(new IsNullBinding(PlanningSession::plannerProperty));
         planButton.disableProperty().bind(disablePlanButtonBinding);
 
+        // Disable lock button condition
+        InvalidableOrBooleanBinding disableStepButtonBinding = problemBinding
+                .or(new IsNullBinding(PlanningSession::planProperty));
+        stepButton.disableProperty().bind(disableStepButtonBinding);
+
         // Disable validate button condition
         InvalidableOrBooleanBinding disableValidateButtonBinding = problemBinding
                 .or(new IsNullBinding(PlanningSession::planProperty))
                 .or(new IsNullBinding(PlanningSession::validatorProperty));
         validateButton.disableProperty().bind(disableValidateButtonBinding);
 
-        // disable lock button condition
-        InvalidableOrBooleanBinding disableLockButtonBinding = problemBinding.copyWithoutListeners();
+        // Disable lock button condition
+        InvalidableOrBooleanBinding disableLockButtonBinding = problemBinding.or(new BooleanBinding() {
+            @Override
+            protected boolean computeValue() {
+                return stepPreviewEnabled.get();
+            }
+        });
         lockButton.disableProperty().bind(disableLockButtonBinding);
+        stepRow.visibleProperty().addListener(s -> disableLockButtonBinding.invalidate());
 
         // Disable addLocation button condition
         InvalidableOrBooleanBinding problemLockedBinding = problemBinding
@@ -201,6 +267,7 @@ public class RightPaneController extends AbstractController {
             disableAddVehicleButtonBinding.invalidate();
             disableAddRoadButtonBinding.invalidate();
             problemLockedBinding.invalidate();
+            disableStepButtonBinding.invalidate();
         };
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
@@ -251,6 +318,8 @@ public class RightPaneController extends AbstractController {
 
             if (actionTableFilter != null) {
                 actionTableFilter.getFilteredList().removeListener(lastChangeListener);
+                actionTableFilter.getTableView().getSelectionModel().selectedItemProperty()
+                        .removeListener(rowSelectionChangeListener);
                 lastChangeListener = null;
                 actionTableFilter = null;
             }
@@ -271,9 +340,8 @@ public class RightPaneController extends AbstractController {
                 temporalPlanTab.setDisable(!isDomainTemporal);
 
                 if (isDomainTemporal) {
-                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) -> {
-                        application.getPlanningSession().setPlan(new TemporalPlan(list));
-                    });
+                    actionTableFilter = TemporalPlanTable.build(plan.getTemporalPlanActions(), (list) ->
+                            application.getPlanningSession().setPlan(new TemporalPlan(list)));
                     temporalPlanTabScrollPane.setContent(actionTableFilter.getTableView());
                     sequentialPlanTabScrollPane.setContent(null);
                     planTabPane.getSelectionModel().select(temporalPlanTab);
@@ -293,6 +361,8 @@ public class RightPaneController extends AbstractController {
 
                 lastChangeListener = c -> ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(c.getList()));
                 actionTableFilter.getFilteredList().addListener(lastChangeListener);
+                actionTableFilter.getTableView().getSelectionModel().selectedItemProperty()
+                        .addListener(rowSelectionChangeListener);
                 ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(actionTableFilter.getFilteredList()));
 
             }
@@ -484,9 +554,9 @@ public class RightPaneController extends AbstractController {
         Vehicle vehicle;
         if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
             vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), ActionCost.valueOf(0),
-                    ActionCost.valueOf(0), new ArrayList<>());
+                    ActionCost.valueOf(0), true, new ArrayList<>());
         } else {
-            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), new ArrayList<>());
+            vehicle = new Vehicle(name, at, ActionCost.valueOf(0), ActionCost.valueOf(0), true, new ArrayList<>());
         }
 
         problem = problem.putVehicle(name, vehicle);
@@ -531,41 +601,212 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleLockToggle() {
-        boolean newLocked = !centerPaneController.isLocked();
-        centerPaneController.setLocked(newLocked);
-        if (newLocked) {
-            lockButton.setText(messages.getString("unlock"));
-            lockButton.setStyle("-fx-text-fill: green;");
+        if (centerPaneController.isLocked()) {
+            unlock();
         } else {
-            lockButton.setText(messages.getString("lock"));
-            lockButton.setStyle("-fx-text-fill: red;");
+            lock();
         }
     }
 
     /**
-     * Util method for overcomming the greedy linking of creating a lambda in the constructor of {@link IsNullBinding}.
+     * Lock the problem graph.
+     */
+    private void lock() {
+        centerPaneController.setLocked(true);
+        lockButton.setText(messages.getString("unlock"));
+        lockButton.setStyle("-fx-text-fill: green;");
+    }
+
+    /**
+     * Unlock the problem graph.
+     */
+    private void unlock() {
+        centerPaneController.setLocked(false);
+        lockButton.setText(messages.getString("lock"));
+        lockButton.setStyle("-fx-text-fill: red;");
+    }
+
+    /**
+     * Handle pressing the show steps button. Toggles the "step showing" mode.
+     */
+    @FXML
+    private void handleStepToggle() {
+        boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
+        stepPreviewEnabled.set(newStepPreviewEnabled);
+
+        if (!newStepPreviewEnabled) {
+            stepButton.setText(messages.getString("steps.show"));
+            stepButton.setStyle("-fx-text-fill: green;");
+            unlock();
+
+            Problem problem = application.getPlanningSession().getProblem();
+            centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional()
+                    .map(PlanningSession::getProblem));
+            problem.getRoadGraph().redrawActionObjectSprites(problem);
+            planStateManager.setValue(null);
+        } else {
+            stepButton.setText(messages.getString("steps.hide"));
+            stepButton.setStyle("-fx-text-fill: red;");
+            lock();
+
+            PlanningSession session = application.getPlanningSession();
+            planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
+                    session.getPlan()));
+            centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get()
+                    .getCurrentPlanState()));
+
+            redrawState();
+            updateTimeSpinner();
+            updateTableSelection();
+        }
+    }
+
+    /**
+     * Redraw sprites in the correct graph in the correct problem.
+     */
+    private void redrawState() {
+        if (!stepPreviewEnabled.get()) {
+            logger.info("Cannot draw step state when not enabled.");
+            return;
+        }
+        stepUpdated.invalidated(null);
+    }
+
+    /**
+     * Handle the "V" button press in the step button row. Go to the next action.
+     */
+    @FXML
+    private void handleDownAction() {
+        applyStartsButton.setSelected(false);
+        actionTimeGroup.selectToggle(endTimeButton);
+        planStateManager.get().goToNextCheckpoint();
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    /**
+     * Handle the "A" button press in the step button row. Go to the previous action.
+     */
+    @FXML
+    private void handleUpAction() {
+        applyStartsButton.setSelected(false);
+        actionTimeGroup.selectToggle(endTimeButton);
+        planStateManager.get().goToPreviousCheckpoint();
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    /**
+     * Handle the Start, Middle, End button presses.
+     */
+    @FXML
+    private void handleTimeButtons() {
+        applyStartsButton.setSelected(false);
+        updateFromTimeButtons(null);
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    /**
+     * Handle the Apply starts button presses.
+     */
+    @FXML
+    private void handleApplyStartsButton() {
+        updateFromTimeButtons(null);
+        planStateManager.get().goToTime(planStateManager.get().getCurrentTime(), applyStartsButton.isSelected());
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    /**
+     * Updates the plan manager using the selected action as if changing the time button selection or
+     * clicking on an action (takes into account time button selection for proper time to go to and whether
+     * to apply starts).
+     * <p>
+     * If the selected action is null, tries to get the selected item from the table. If there is none, returns
+     * without doing anything.
+     *
+     * @param selected the selected action
+     */
+    private void updateFromTimeButtons(TemporalPlanAction selected) {
+        if (selected == null) {
+            selected = actionTableFilter.getTableView().getSelectionModel().getSelectedItem();
+        }
+        if (selected == null) {
+            logger.debug("No item selected, cannot update from time buttons.");
+            return;
+        }
+
+        Toggle timeProperties = actionTimeGroup.getSelectedToggle();
+        if (startTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf(selected.getStartTimestamp()), false);
+        } else if (middleTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf((selected.getStartTimestamp()
+                    + selected.getEndTimestamp()) / 2), true);
+        } else if (endTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf(selected.getEndTimestamp()), false);
+        } else {
+            throw new IllegalStateException("No time preference button selected.");
+        }
+    }
+
+    /**
+     * Update the selection in the plan table according to the plan state. Used only during step showing.
+     */
+    private void updateTableSelection() {
+        MultipleSelectionModel<TemporalPlanAction> model = actionTableFilter.getTableView().getSelectionModel();
+        model.clearSelection();
+
+        Optional<TemporalPlanAction> toSelect = planStateManager.get().getLastAction();
+        if (!toSelect.isPresent()) {
+            return;
+        }
+        TemporalPlanAction actionToSelect = toSelect.get();
+
+        int index = 0;
+        for (TemporalPlanAction action : actionTableFilter.getFilteredList()) {
+            if (actionToSelect.equals(action)) {
+                thirdPartySelection = true;
+                model.select(index);
+            }
+            index++;
+        }
+    }
+
+    /**
+     * Update the selection in the time spinner according to the plan state. Used only during step showing.
+     */
+    private void updateTimeSpinner() {
+        ActionCost currentTime = Optional.ofNullable(planStateManager.get()).map(PlanStateManager::getCurrentTime)
+                .orElse(ActionCost.valueOf(0));
+        SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
+                Integer.MAX_VALUE, currentTime.getCost(), 1);
+        factory.setConverter(new IntegerStringConverter() {
+            @Override
+            public Integer fromString(String value) {
+                String safe = value.replaceAll("[^0-9]", "");
+                if (safe.isEmpty()) {
+                    return 0;
+                } else {
+                    return super.fromString(safe);
+                }
+            }
+        });
+        thirdPartySpinnerChange = true;
+        timeSpinner.setValueFactory(factory);
+    }
+
+    /**
+     * Util method for overcoming the greedy linking of creating a lambda in the constructor of {@link IsNullBinding}.
      *
      * @return the planning session optional of the CDI injected application
      */
     private Optional<PlanningSession> getPlanningSessionOptionalIndirection() {
         return application.getPlanningSessionOptional();
-    }
-
-    /**
-     * An extension of {@link OptionalSelectionBinding} for {@link PlanningSession}
-     * using {@link TransportEditorApplication#getPlanningSessionOptional()}.
-     * Is true iff the resulting getter value is null or any value on the way to it is null.
-     */
-    private class IsNullBinding extends OptionalSelectionBinding<PlanningSession> {
-        /**
-         * Default constructor.
-         *
-         * @param getter the getter of a property in the planning session
-         */
-        IsNullBinding(Function<PlanningSession, ObjectProperty> getter) {
-            super(() -> getPlanningSessionOptionalIndirection(),
-                    getter.andThen(ObjectProperty::isNull).andThen(BooleanBinding::get));
-        }
     }
 
     /**
@@ -593,6 +834,23 @@ public class RightPaneController extends AbstractController {
         @Override
         protected boolean computeValue() {
             return supplier.get().map(getter).orElse(true);
+        }
+    }
+
+    /**
+     * An extension of {@link OptionalSelectionBinding} for {@link PlanningSession}
+     * using {@link TransportEditorApplication#getPlanningSessionOptional()}.
+     * Is true iff the resulting getter value is null or any value on the way to it is null.
+     */
+    private class IsNullBinding extends OptionalSelectionBinding<PlanningSession> {
+        /**
+         * Default constructor.
+         *
+         * @param getter the getter of a property in the planning session
+         */
+        IsNullBinding(Function<PlanningSession, ObjectProperty> getter) {
+            super(RightPaneController.this::getPlanningSessionOptionalIndirection,
+                    getter.andThen(ObjectProperty::isNull).andThen(BooleanBinding::get));
         }
     }
 }
