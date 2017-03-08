@@ -84,7 +84,7 @@ public interface Action {
     /**
      * Apply the "at start" effects of this action to a problem, returning the changed problem.
      *
-     * @param domain       the domain of the problem
+     * @param domain the domain of the problem
      * @param problemState the state before applying
      * @return the state after applying the "at start" effects
      */

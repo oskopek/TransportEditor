@@ -200,11 +200,11 @@ public class CenterPaneController extends AbstractController {
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
                 Platform.runLater(() -> {
-                        problemGraph.requestFocus();
-                        if (problemGraph.getContent() != null) {
-                            problemGraph.getContent().requestFocus();
-                        }
-                    });
+                    problemGraph.requestFocus();
+                    if (problemGraph.getContent() != null) {
+                        problemGraph.getContent().requestFocus();
+                    }
+                });
                 logger.trace("Requested focus on SwingNode.");
             }
 
@@ -375,7 +375,7 @@ public class CenterPaneController extends AbstractController {
          * @return the created object
          */
         private <T> T createResponse(Problem problem, GraphicElement element,
-                                     ActionObjectBuilderConsumer<? extends T> creator) {
+                ActionObjectBuilderConsumer<? extends T> creator) {
             Consumer<Problem> problemUpdater = p -> {
                 application.getPlanningSession().setProblem(p);
                 // TODO: Hack

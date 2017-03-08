@@ -9,6 +9,7 @@ import org.graphstream.ui.spriteManager.SpriteManager;
 /**
  * Sprite builder utility class used for building stylized sprites for
  * a {@link com.oskopek.transporteditor.model.problem.RoadGraph}.
+ *
  * @param <T> the class of the built sprite
  */
 public class SpriteBuilder<T extends Sprite> {

@@ -13,19 +13,19 @@ public class NumberIntegerStringConverter extends IntegerStringConverter {
 
     private static final transient Logger logger = LoggerFactory.getLogger(NumberIntegerStringConverter.class);
 
-        @Override
-        public Integer fromString(String string) {
-            if (string == null) {
-                return 0;
-            }
-            String replaced = string.replaceAll("[^0-9]", "");
-            return Try.of(() -> Integer.parseInt(replaced)).onFailure(e -> {
-                if (e instanceof NumberFormatException) {
-                    logger.debug("Couldn't parse input into table (\"{}\") - NumberFormatException: ", replaced,
-                            e.getMessage());
-                } else {
-                    logger.debug("Couldn't parse input into table (\"{}\"): ", replaced, e);
-                }
-            }).getOrElse(0);
+    @Override
+    public Integer fromString(String string) {
+        if (string == null) {
+            return 0;
         }
+        String replaced = string.replaceAll("[^0-9]", "");
+        return Try.of(() -> Integer.parseInt(replaced)).onFailure(e -> {
+            if (e instanceof NumberFormatException) {
+                logger.debug("Couldn't parse input into table (\"{}\") - NumberFormatException: ", replaced,
+                        e.getMessage());
+            } else {
+                logger.debug("Couldn't parse input into table (\"{}\"): ", replaced, e);
+            }
+        }).getOrElse(0);
+    }
 }

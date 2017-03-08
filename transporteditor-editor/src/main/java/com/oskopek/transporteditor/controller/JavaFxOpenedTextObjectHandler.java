@@ -50,7 +50,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
     private final TransportEditorApplication application;
     private final ResourceBundle messages;
     private final SaveDiscardDialogPaneCreator creator;
-    private FileChooser.ExtensionFilter[] chosenFilters = new FileChooser.ExtensionFilter[] {allFileFilter};
+    private FileChooser.ExtensionFilter[] chosenFilters = new FileChooser.ExtensionFilter[]{allFileFilter};
 
     /**
      * Default constructor.
@@ -88,7 +88,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
         chooser.setTitle(title);
 
         if (filters == null || filters.length == 0) {
-            filters = new FileChooser.ExtensionFilter[] {allFileFilter};
+            filters = new FileChooser.ExtensionFilter[]{allFileFilter};
         }
 
         chooser.getExtensionFilters().addAll(filters);
@@ -155,6 +155,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     /**
      * A builder method to add the {@code .pddl} file filter.
+     *
      * @return this
      */
     public JavaFxOpenedTextObjectHandler<Persistable_> usePddl() {
@@ -164,6 +165,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     /**
      * A builder method to add the {@code .xml} file filter.
+     *
      * @return this
      */
     public JavaFxOpenedTextObjectHandler<Persistable_> useXml() {
@@ -173,6 +175,7 @@ public class JavaFxOpenedTextObjectHandler<Persistable_> extends OpenedTextObjec
 
     /**
      * A builder method to add the {@code .val} file filter.
+     *
      * @return this
      */
     public JavaFxOpenedTextObjectHandler<Persistable_> useVal() {

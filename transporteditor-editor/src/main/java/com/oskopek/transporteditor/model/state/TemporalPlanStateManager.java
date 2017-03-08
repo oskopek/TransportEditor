@@ -122,9 +122,9 @@ public class TemporalPlanStateManager implements PlanStateManager {
 
     @Override
     public void goToPreviousCheckpoint() {
-            temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t < pointer.getTime()).max()
-                    .ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
+        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+                .filter(t -> t < pointer.getTime()).max()
+                .ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
     }
 
     @Override

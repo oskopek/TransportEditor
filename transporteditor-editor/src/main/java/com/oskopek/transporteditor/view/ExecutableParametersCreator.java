@@ -42,7 +42,7 @@ public class ExecutableParametersCreator {
      * @param executableInstructions instructions for filling in the executable value
      * @param parameterInstructions instructions for filling in the parameter value
      * @param noteText the note text
-     * @param  existing the existing executable to pre-fill the fields with
+     * @param existing the existing executable to pre-fill the fields with
      * @return the executable with parameters
      */
     public ExecutableWithParameters createExecutableWithParameters(int parameterCount, String executableInstructions,
@@ -67,7 +67,6 @@ public class ExecutableParametersCreator {
         executableParametersController.setExecutableSubLabelText(executableInstructions);
         executableParametersController.setParametersSubLabelText(parameterInstructions);
         executableParametersController.setNoteText(noteText);
-
 
         DefaultExecutableWithParameters executable = new DefaultExecutableWithParameters("ls", "");
         executable.findExecutablePath(); // Pre-load the cache

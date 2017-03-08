@@ -1,13 +1,13 @@
 package com.oskopek.transporteditor.weld;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.Test;
 
 import javax.enterprise.inject.spi.CDI;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertNotNull;
 
 public class BeanManagerUtilTest {
 

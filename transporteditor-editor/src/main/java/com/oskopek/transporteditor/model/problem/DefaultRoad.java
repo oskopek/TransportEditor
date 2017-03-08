@@ -24,8 +24,6 @@ public class DefaultRoad extends DefaultActionObject implements Road {
         this.location = new Location(name);
     }
 
-
-
     /**
      * Static builder method.
      *

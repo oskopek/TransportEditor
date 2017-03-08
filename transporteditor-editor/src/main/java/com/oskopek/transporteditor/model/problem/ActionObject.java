@@ -5,7 +5,6 @@ package com.oskopek.transporteditor.model.problem;
  */
 public interface ActionObject {
 
-
     /**
      * Get the name.
      *

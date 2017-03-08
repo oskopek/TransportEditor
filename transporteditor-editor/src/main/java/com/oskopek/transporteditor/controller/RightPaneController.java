@@ -389,7 +389,7 @@ public class RightPaneController extends AbstractController {
                 completed.setValue(true);
                 if (plan == null) {
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                            + messages.getString("planner.nullplan"),
+                                    + messages.getString("planner.nullplan"),
                             a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
                 }
             });
@@ -406,9 +406,10 @@ public class RightPaneController extends AbstractController {
                     Platform.runLater(() -> completed.setValue(true));
                     logger.debug("Planning failed.", throwable);
                     AlertCreator.showAlert(Alert.AlertType.ERROR, messages.getString("planning.failed") + ": "
-                    + throwable.getMessage(), a -> application.centerInPrimaryStage(a, -200, -50), ButtonType.OK);
-            return null;
-        });
+                                    + throwable.getMessage(), a -> application.centerInPrimaryStage(a, -200, -50),
+                            ButtonType.OK);
+                    return null;
+                });
         logger.trace("LogProgress begin");
         logProgressCreator.createLogProgressDialog(application.getPlanningSession().getPlanner(), successful,
                 completed.not(), completed.not(), planner::cancel);

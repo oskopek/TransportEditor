@@ -24,7 +24,6 @@ public interface Problem {
      */
     RoadGraph getRoadGraph();
 
-
     /**
      * Get the vehicle.
      *

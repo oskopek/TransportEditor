@@ -31,7 +31,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
      * Default constructor.
      *
      * @param domain the associated domain
-     * @param problem  the associated problem
+     * @param problem the associated problem
      */
     public SequentialPlanIO(Domain domain, Problem problem) {
         this.domain = domain;

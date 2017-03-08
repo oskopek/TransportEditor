@@ -179,8 +179,8 @@ public class DefaultPlanningSession implements PlanningSession {
      *
      * @param plan the plan to validate
      * @return a promise of a boolean determining the validity
-     * @see Validator#isValidAsync(Domain, Problem, Plan)
      * @throws IllegalStateException if validator is null
+     * @see Validator#isValidAsync(Domain, Problem, Plan)
      */
     private CompletionStage<Boolean> startValidationAsyncInternal(Plan plan) {
         Validator validator = getValidator();

@@ -5,7 +5,6 @@ import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
 import javafx.collections.ObservableList;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.controlsfx.control.PropertySheet;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +14,10 @@ import java.util.Enumeration;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class PackageBuilderTest {
 
-    private PackageBuilder builder;
     private final Location location1 = new Location("loc1", 0, 1);
     private final Location location2 = new Location("loc2", 1, 0);
     private final Package defaultPackage = new Package("test", location1, location2, ActionCost.valueOf(1));
@@ -32,6 +32,7 @@ public class PackageBuilderTest {
             return Collections.emptyEnumeration();
         }
     };
+    private PackageBuilder builder;
 
     @Before
     public void setUp() throws Exception {

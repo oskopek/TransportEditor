@@ -23,6 +23,7 @@ public class DefaultPlanState implements PlanState {
 
     /**
      * Default constructor.
+     *
      * @param domain the domain
      * @param problem the problem
      */

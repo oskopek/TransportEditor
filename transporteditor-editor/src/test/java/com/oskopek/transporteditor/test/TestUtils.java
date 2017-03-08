@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Various methods for easier testing. Util methods missing in JUnit, Mockito, etc.
@@ -33,7 +34,5 @@ public final class TestUtils {
             assertEquals(contentComp, serializedComp);
         }
     }
-
-
 
 }

@@ -3,8 +3,6 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
-import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
-import static org.junit.Assert.*;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Parameterized.class)
 public class VariableDomainBuilderFilesIT {

@@ -73,7 +73,6 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
     }
 
     /**
-     *
      * @param object the new object instance
      * @param writer the writer to write with afterwards
      * @param reader the reader to read with afterwards

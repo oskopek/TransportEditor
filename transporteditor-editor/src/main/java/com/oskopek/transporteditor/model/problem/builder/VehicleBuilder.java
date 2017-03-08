@@ -18,7 +18,6 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     private boolean readyLoading;
     private List<Package> packageList;
 
-
     /**
      * Default constructor.
      */

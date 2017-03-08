@@ -9,16 +9,17 @@ import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
-import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
 import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.*;
-
 import java.util.Arrays;
 import java.util.Collections;
+
+import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.*;
 
 public class DefaultPlanningSessionIOIT {
 

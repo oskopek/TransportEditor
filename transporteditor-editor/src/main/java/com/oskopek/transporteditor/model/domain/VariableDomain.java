@@ -28,7 +28,7 @@ public class VariableDomain extends DefaultDomain {
      * @param refuelBuilder the refuel builder
      * @param pddlLabelSet the pddl labels
      * @param predicateMap the predicate map
-     * @param functionMap  the function map
+     * @param functionMap the function map
      */
     public VariableDomain(String name, DriveBuilder driveBuilder, DropBuilder dropBuilder, PickUpBuilder pickUpBuilder,
             RefuelBuilder refuelBuilder, Set<PddlLabel> pddlLabelSet,

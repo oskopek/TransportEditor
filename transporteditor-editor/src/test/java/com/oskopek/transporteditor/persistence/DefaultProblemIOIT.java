@@ -5,7 +5,6 @@ import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.problem.*;
-import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -14,8 +13,9 @@ import org.junit.Test;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.*;
 
 public class DefaultProblemIOIT {
 
@@ -70,7 +70,6 @@ public class DefaultProblemIOIT {
         assertEquals("city-loc-4", problem.getPackage("package-1").getLocation().getName());
         assertNotNull(problem.getPackage("package-1").getSize());
         assertEquals(1, problem.getPackage("package-1").getSize().getCost());
-
 
         assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
         assertEquals(2, problem.getVehicle("truck-1").getCurCapacity().getCost());

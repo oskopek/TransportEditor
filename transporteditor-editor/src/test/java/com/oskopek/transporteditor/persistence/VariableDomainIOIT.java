@@ -16,7 +16,6 @@ import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
-import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import org.junit.Test;
 import java.util.stream.Collectors;
 
 import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;

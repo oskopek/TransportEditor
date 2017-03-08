@@ -1,14 +1,14 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
-import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
 
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 
 public class ExternalPlannerIOIT {

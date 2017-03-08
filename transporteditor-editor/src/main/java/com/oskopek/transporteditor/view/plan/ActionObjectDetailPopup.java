@@ -83,5 +83,4 @@ public class ActionObjectDetailPopup extends PopOver {
         return this;
     }
 
-
 }

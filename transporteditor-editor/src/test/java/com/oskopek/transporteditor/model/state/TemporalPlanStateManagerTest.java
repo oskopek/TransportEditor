@@ -124,7 +124,6 @@ public class TemporalPlanStateManagerTest {
         planStateManager.goToTime(ActionCost.valueOf(54), false);
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(5));
 
-
         Package pkg1 = problem.getPackage("package-1");
         pkg1 = pkg1.updateLocation(pkg1.getTarget());
         Package pkg2 = problem.getPackage("package-2");

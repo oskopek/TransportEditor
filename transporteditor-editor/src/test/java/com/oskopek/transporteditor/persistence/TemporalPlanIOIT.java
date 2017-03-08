@@ -3,7 +3,6 @@ package com.oskopek.transporteditor.persistence;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
-import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import com.oskopek.transporteditor.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,7 +10,9 @@ import org.junit.Test;
 
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TemporalPlanIOIT {
 

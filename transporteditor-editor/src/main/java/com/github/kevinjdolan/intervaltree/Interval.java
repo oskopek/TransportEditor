@@ -72,8 +72,8 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
      * Verify that the {@code time} is in the interval. Inclusive from the left, exclusive from the right.
      * Example:
      * <ul>
-     *     <li>{@code contains(start) == true}</li>
-     *     <li>{@code contains(end) == false}</li>
+     * <li>{@code contains(start) == true}</li>
+     * <li>{@code contains(end) == false}</li>
      * </ul>
      *
      * @param time the time
@@ -88,10 +88,11 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
      * Overlapping border times are not considered as intersections.
      * Example:
      * <ul>
-     *     <li>{@code Interval(0, 2).intersects(Interval(1, 3)) == true}</li>
-     *     <li>{@code Interval(0, 2).intersects(Interval(2, 3)) == false}</li>
-     *     <li>{@code Interval(0, 2).intersects(Interval(-1, 0)) == false}</li>
+     * <li>{@code Interval(0, 2).intersects(Interval(1, 3)) == true}</li>
+     * <li>{@code Interval(0, 2).intersects(Interval(2, 3)) == false}</li>
+     * <li>{@code Interval(0, 2).intersects(Interval(-1, 0)) == false}</li>
      * </ul>
+     *
      * @param other the other interval
      * @return true iff {@code |[start, end] intersection [other.start, other.end]| > 1}
      */

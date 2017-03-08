@@ -540,6 +540,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
 
     /**
      * Remove all the roads by their names.
+     *
      * @param names the names of roads to remove
      * @see #removeRoad(String)
      */

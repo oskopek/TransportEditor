@@ -5,7 +5,6 @@ import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import static org.assertj.core.api.Assertions.*;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.BeanPropertyUtils;
 import org.junit.Before;
@@ -15,6 +14,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LocationBuilderTest {
 
