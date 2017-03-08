@@ -32,10 +32,8 @@ import java.util.stream.Stream;
  * because GraphStream doesn't have a notion of clicking on an edge. These sprites should always be
  * attached to a node or edge.
  * The state mutator methods automatically cause graph redraws.
- * <p>
- * TODO: Refactor GUI out of this class
  */
-public class RoadGraph extends MultiGraph implements Graph {
+public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor GUI out of this class
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private transient SpriteManager spriteManager;

@@ -26,7 +26,7 @@ public abstract class DefaultActionObjectBuilder<T extends DefaultActionObject> 
      *
      * @return the name
      */
-    @FieldLocalization(key = "name", priority = 0, editable = false) // TODO: is non-editable reasonable?
+    @FieldLocalization(key = "name", priority = 0, editable = false)
     public String getName() {
         return name;
     }

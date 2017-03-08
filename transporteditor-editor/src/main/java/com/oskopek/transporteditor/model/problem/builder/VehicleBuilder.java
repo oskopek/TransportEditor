@@ -32,7 +32,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
      * @return the current capacity
      */
     @FieldLocalization(key = "vehicle.curcapacity", priority = 3, editable = false)
-    public ActionCost getCurCapacity() { // TODO: Set automatically maxFuelCapacity - packageSizeSum
+    public ActionCost getCurCapacity() {
         return curCapacity;
     }
 

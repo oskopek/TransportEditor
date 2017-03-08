@@ -13,7 +13,6 @@ import java.util.List;
  * Builder for the drive action.
  */
 public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location> {
-    // TODO: Add fuel as a pre and post condition to drive
 
     /**
      * Default constructor.

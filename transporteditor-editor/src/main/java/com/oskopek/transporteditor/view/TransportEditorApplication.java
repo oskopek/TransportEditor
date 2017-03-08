@@ -108,7 +108,6 @@ public final class TransportEditorApplication extends Application {
         logger.debug("Stage is closing...");
         eventBus.post(new DisposeGraphViewerEvent());
         logger.debug("Disposed graph viewer.");
-        // TODO: Save file
     }
 
     /**

@@ -19,7 +19,8 @@ import java.util.stream.Stream;
 
 /**
  * A plan state manager for temporal domains. Can be used for sequential domains too.
- * Checkpoints are regarded as "time steps". Every integral time unit is divided into two time steps.
+ * Checkpoints in this manager are defined as applying the end of the next/previous action in the plan with respect to
+ * time.
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
@@ -32,6 +33,13 @@ public class TemporalPlanStateManager implements PlanStateManager {
     private PlanActionPointer pointer;
     private PlanState state;
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the domain
+     * @param problem the problem (beginning state)
+     * @param plan the plan to simulate
+     */
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
         this.domain = domain;
         this.problem = problem;
@@ -67,14 +75,22 @@ public class TemporalPlanStateManager implements PlanStateManager {
         pointer = new PlanActionPointer(simulationTime, applyStarts);
     }
 
+    /**
+     * Applies all actions from the beginning of the plan to the given time, including. If apply starts is true,
+     * also applies the "at start" effects of actions at the given time. Mutates the internal plan state.
+     *
+     * @param upToIncluding the time up to which to apply actions from the plan, including
+     * @param applyStarts if true, will apply the "at start" effects of actions at time {@code upToIncluding}
+     * @return the last time an action effect was applied
+     */
     private int applyAll(int upToIncluding, boolean applyStarts) {
         Stream<TimeElement<TemporalPlanAction>> actions = temporalPlanActions.stream()
                 .flatMap(t -> Stream.of(new TimeElement<>(t.getStartTimestamp(), false, t),
                         new TimeElement<>(t.getEndTimestamp(), true, t)))
-                .filter(t -> t.getPriority() <= upToIncluding);
+                .filter(t -> t.getTime() <= upToIncluding);
 
         if (!applyStarts) {
-            actions = actions.filter(t -> !(t.getPriority() == upToIncluding && !t.isEnd()));
+            actions = actions.filter(t -> !(t.getTime() == upToIncluding && !t.isEnd()));
         }
 
         PriorityQueue<TimeElement<TemporalPlanAction>> applyQueue = new PriorityQueue<>(
@@ -84,7 +100,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
         TimeElement<TemporalPlanAction> head;
         while ((head = applyQueue.poll()) != null) {
             TemporalPlanAction action = head.getPayload();
-            simulationTime = head.getPriority();
+            simulationTime = head.getTime();
             if (simulationTime == action.getStartTimestamp()) {
                 state.applyPreconditions(action.getAction());
             } else if (simulationTime == action.getEndTimestamp()) {
@@ -99,23 +115,16 @@ public class TemporalPlanStateManager implements PlanStateManager {
 
     @Override
     public void goToNextCheckpoint() {
-        if (pointer.isStartsApplied()) {
-            temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res),
-                    false));
-        } else {
-            goToTime(getCurrentTime(), true);
-        }
+        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res),
+                false));
     }
 
     @Override
     public void goToPreviousCheckpoint() {
-        if (pointer.isStartsApplied()) {
-            goToTime(getCurrentTime(), false);
-        } else {
             temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                    .filter(t -> t < pointer.getTime()).max().ifPresent(res -> goToTime(ActionCost.valueOf(res), true));
-        }
+                    .filter(t -> t < pointer.getTime()).max()
+                    .ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
     }
 
     @Override
@@ -126,17 +135,31 @@ public class TemporalPlanStateManager implements PlanStateManager {
                 .take(1).toJavaOptional();
     }
 
+    /**
+     * Simple data struct, used in a time-oriented priority queue.
+     * <p>
+     * The ordering is based on the time. If the time is inconclusive, elements with {@code isEnd == true}
+     * are ranked before {@code isEnd == false} (ends of actions before starts of actions).
+     *
+     * @param <Payload> the type of the payload object
+     */
     private static class TimeElement<Payload> implements Comparable<TimeElement<Payload>> {
 
-        private final int priority;
+        private final int time;
         private final boolean isEnd;
         private final Payload payload;
 
-
-        TimeElement(int priority, boolean isEnd, Payload payload) {
+        /**
+         * Default constructor.
+         *
+         * @param time the time of the element (priority in the priority queue)
+         * @param isEnd true iff this element represent an end of an action (not a start)
+         * @param payload the payload object
+         */
+        TimeElement(int time, boolean isEnd, Payload payload) {
             this.payload = payload;
             this.isEnd = isEnd;
-            this.priority = priority;
+            this.time = time;
         }
 
         /**
@@ -148,17 +171,22 @@ public class TemporalPlanStateManager implements PlanStateManager {
             return payload;
         }
 
+        /**
+         * True iff this element represent an end of an action (not a start).
+         *
+         * @return true iff this element is an action end
+         */
         public boolean isEnd() {
             return isEnd;
         }
 
         /**
-         * Get the index.
+         * Get the time (priority in the priority queue).
          *
-         * @return the index
+         * @return the time
          */
-        public int getPriority() {
-            return priority;
+        public int getTime() {
+            return time;
         }
 
         @Override
@@ -171,20 +199,26 @@ public class TemporalPlanStateManager implements PlanStateManager {
             }
             TimeElement<?> that = (TimeElement<?>) o;
 
-            return new EqualsBuilder().append(getPriority(), that.getPriority())
+            return new EqualsBuilder().append(getTime(), that.getTime())
                     .append(isEnd(), that.isEnd())
                     .append(getPayload(), that.getPayload()).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getPriority()).append(isEnd())
+            return new HashCodeBuilder(17, 37).append(getTime()).append(isEnd())
                     .append(getPayload()).toHashCode();
         }
 
+        /**
+         * The ordering is based on the time. If the time is inconclusive, elements with {@code isEnd == true}
+         * are ranked before {@code isEnd == false} (ends of actions before starts of actions).
+         * <p>
+         * {@inheritDoc}
+         */
         @Override
         public int compareTo(TimeElement<Payload> o) {
-            return new CompareToBuilder().append(getPriority(), o.getPriority())
+            return new CompareToBuilder().append(getTime(), o.getTime())
                     .append(o.isEnd(), isEnd()) // reversed on purpose
                     .toComparison();
         }

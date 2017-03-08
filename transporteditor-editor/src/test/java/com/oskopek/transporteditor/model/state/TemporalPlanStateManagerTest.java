@@ -180,10 +180,10 @@ public class TemporalPlanStateManagerTest {
         final int n = 5;
         for (int i = 0; i < n; i++) {
             planStateManager.goToNextCheckpoint();
-            assertThat(planStateManager.getLastAction()).hasValue(actions.get(i / 2));
+            assertThat(planStateManager.getLastAction()).hasValue(actions.get(i));
         }
         for (int i = 0; i < n; i++) {
-            assertThat(planStateManager.getLastAction()).hasValue(actions.get((n - i - 1) / 2));
+            assertThat(planStateManager.getLastAction()).hasValue(actions.get(n - i - 1));
             planStateManager.goToPreviousCheckpoint();
         }
         assertThat(planStateManager.getLastAction()).isEmpty();
@@ -199,8 +199,6 @@ public class TemporalPlanStateManagerTest {
         for (int i = 0; i < 50; i++) {
             planStateManager.goToNextCheckpoint();
         }
-        planStateManager.goToPreviousCheckpoint();
-        planStateManager.goToPreviousCheckpoint();
         planStateManager.goToPreviousCheckpoint();
 
         Package pkg1 = problem.getPackage("package-1");

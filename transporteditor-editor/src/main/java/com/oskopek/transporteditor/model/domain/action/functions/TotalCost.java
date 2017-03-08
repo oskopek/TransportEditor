@@ -8,7 +8,8 @@ import javafx.beans.property.SimpleObjectProperty;
 /**
  * The total-cost global function. Returns the the current total cost of the plan.
  */
-public class TotalCost extends DefaultFunction { // TODO how do we actually return the total cost of the plan?
+public class TotalCost extends DefaultFunction {
+    // TODO how do we actually return the total cost of the plan? Do we even need this function? Only as a placeholder?
 
     private final ObjectProperty<ActionCost> totalCost = new SimpleObjectProperty<>(ActionCost.valueOf(0));
 

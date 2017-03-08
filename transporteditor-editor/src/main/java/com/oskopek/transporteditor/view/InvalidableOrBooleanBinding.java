@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * An immutable, invalidable or-binding. Can contain multiple boolean bindings as if joined by an OR operation.
  */
-public class InvalidableOrBooleanBinding implements Binding<Boolean> { // TODO: possible listener memleak?
+public class InvalidableOrBooleanBinding implements Binding<Boolean> {
 
     private final ObservableList<Binding<Boolean>> bindings;
     private final List<ChangeListener<? super Boolean>> changeListeners;

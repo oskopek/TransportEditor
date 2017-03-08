@@ -237,7 +237,7 @@ is sequential, that table displays basic action info and its first column is dra
 actions by dragging them from one place to another in the table. If the domain is temporal, you can double click and
 edit the action start time in the table.
 
-Both of these tables are filtrable -- if you right click on the table's headers a small dialog popup will show up
+Both of these tables are filterable -- if you right click on the table's headers a small dialog popup will show up
 and you can choose which values to show and which to hide. These choices will get propagated to the other plan views
 and they too will get filtered (if possible).
 
@@ -247,5 +247,22 @@ corresponds to a type of action.
 
 == Stepping through a plan
 
-TBA
-// TODO Stepping through a plan
+When a plan is loaded, there is an option of stepping through the plan's actions and visualizing the intermediate
+problem state. To enable this, press the "%steps.show" button in the panel on the right -- this will remove
+all filters in the table and disable graph editing. Do note that stepping through the plan does not change the
+actual problem -- if you press "%steps.hide", the original problem will appear.
+
+When stepping through a plan, a new panel will display, showing navigation buttons.
+You can move in the plan in three different ways:
+
+* Using the up ("%arrow.up") and down ("%arrow.down") arrow buttons. This will de-apply or apply the previous
+or next action in the plan. Do note, that in temporal plans, this might not necessarily be the action
+above or beneath the currently selected one, although it probably will be.
+
+* Selecting the appropriate action in the plan table. The plan state will change to before, during or after the
+selected action is applied -- depending on which time button is selected ("%time.start", "%time.middle" or "%time.end").
+
+* Selecting a specific time in the text field on the right. You can input any positive number and the plan will move to
+that time step. It will either apply the "at start" effects of actions starting at the selected time or not, depending
+on the selection of the "%time.applystarts" button. If it is selected, the "at start" effects will be applied.
+Otherwise, only "at end" effects of actions ending at the selected time will be applied to the plan state.
