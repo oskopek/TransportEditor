@@ -1,15 +1,14 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transporteditor.view.NumberIntegerStringConverter;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
 import javaslang.collection.Stream;
-import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,28 +65,7 @@ public final class TemporalPlanTable {
             SimpleIntegerProperty startTimeProperty = new SimpleIntegerProperty(param.getValue().getStartTimestamp());
             return startTimeProperty.asObject();
         });
-        startColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>() {
-            @Override
-            public String toString(Integer object) {
-                return object + "";
-            }
-
-            @Override
-            public Integer fromString(String string) {
-                if (string == null) {
-                    return null;
-                }
-                String replaced = string.replaceAll("[^0-9]", "");
-                return Try.of(() -> Integer.parseInt(replaced)).onFailure(e -> {
-                    if (e instanceof NumberFormatException) {
-                        logger.debug("Couldn't parse input into table (\"{}\") - NumberFormatException: ", replaced,
-                                e.getMessage());
-                    } else {
-                        logger.debug("Couldn't parse input into table (\"{}\"): ", replaced, e);
-                    }
-                }).getOrElse((Integer) null);
-            }
-        }));
+        startColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberIntegerStringConverter()));
         startColumn.editableProperty().setValue(true);
         startColumn.setOnEditCommit(event -> {
             Integer newValue = event.getNewValue();

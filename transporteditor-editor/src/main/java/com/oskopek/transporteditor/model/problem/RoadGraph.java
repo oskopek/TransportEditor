@@ -207,7 +207,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
      *
      * @param problem the problem from which to get the action objects
      */
-    public void redrawActionObjectSprites(Problem problem) {
+    public synchronized void redrawActionObjectSprites(Problem problem) {
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
         problem.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
@@ -222,7 +222,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
      *
      * @param state the current problem state from which to get the action objects
      */
-    public void redrawPackagesVehiclesFromPlanState(PlanState state) {
+    public synchronized void redrawPackagesVehiclesFromPlanState(PlanState state) {
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
 

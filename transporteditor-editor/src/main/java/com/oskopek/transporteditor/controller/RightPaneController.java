@@ -17,10 +17,7 @@ import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.PlanStateManager;
 import com.oskopek.transporteditor.model.state.TemporalPlanStateManager;
 import com.oskopek.transporteditor.validation.Validator;
-import com.oskopek.transporteditor.view.AlertCreator;
-import com.oskopek.transporteditor.view.InvalidableOrBooleanBinding;
-import com.oskopek.transporteditor.view.LogProgressCreator;
-import com.oskopek.transporteditor.view.TransportEditorApplication;
+import com.oskopek.transporteditor.view.*;
 import com.oskopek.transporteditor.view.plan.SequentialPlanTable;
 import com.oskopek.transporteditor.view.plan.TemporalGanttChart;
 import com.oskopek.transporteditor.view.plan.TemporalPlanTable;
@@ -36,7 +33,6 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.util.converter.IntegerStringConverter;
 import javaslang.control.Try;
 import org.controlsfx.control.table.TableFilter;
 import org.graphstream.graph.Edge;
@@ -57,8 +53,8 @@ import java.util.function.Supplier;
 @Singleton
 public class RightPaneController extends AbstractController {
 
-    private final ObjectProperty<PlanStateManager> planStateManager = new SimpleObjectProperty<>();
     private final BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
+    private ObjectProperty<PlanStateManager> planStateManager;
     @Inject
     private transient Logger logger;
     @Inject
@@ -125,6 +121,7 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void initialize() {
+        planStateManager = new SimpleObjectProperty<>();
         eventBus.register(this);
         stepUpdated = l -> centerPaneController.getProblemSupplier().get().ifPresent(p ->
                 p.getRoadGraph().redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
@@ -133,12 +130,17 @@ public class RightPaneController extends AbstractController {
         stepRow.visibleProperty().bind(stepRow.managedProperty());
 
         updateTimeSpinner();
-        timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+        timeSpinner.valueProperty().addListener(l -> {
+            Integer value = timeSpinner.getValue();
+            if (value == null) {
+                return;
+            }
             if (thirdPartySpinnerChange) {
                 thirdPartySpinnerChange = false;
                 return;
             }
-            planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected());
+
+            planStateManager.get().goToTime(ActionCost.valueOf(value), applyStartsButton.isSelected());
             redrawState();
             updateTableSelection();
             if (applyStartsButton.isSelected()) {
@@ -643,14 +645,14 @@ public class RightPaneController extends AbstractController {
             centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional()
                     .map(PlanningSession::getProblem));
             problem.getRoadGraph().redrawActionObjectSprites(problem);
-            planStateManager.setValue(null);
+            planStateManager.set(null);
         } else {
             stepButton.setText(messages.getString("steps.hide"));
             stepButton.setStyle("-fx-text-fill: red;");
             lock();
 
             PlanningSession session = application.getPlanningSession();
-            planStateManager.setValue(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
+            planStateManager.set(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
                     session.getPlan()));
             centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get()
                     .getCurrentPlanState()));
@@ -715,7 +717,6 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleApplyStartsButton() {
-        updateFromTimeButtons(null);
         planStateManager.get().goToTime(planStateManager.get().getCurrentTime(), applyStartsButton.isSelected());
         redrawState();
         updateTimeSpinner();
@@ -785,17 +786,7 @@ public class RightPaneController extends AbstractController {
                 .orElse(ActionCost.valueOf(0));
         SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
                 Integer.MAX_VALUE, currentTime.getCost(), 1);
-        factory.setConverter(new IntegerStringConverter() {
-            @Override
-            public Integer fromString(String value) {
-                String safe = value.replaceAll("[^0-9]", "");
-                if (safe.isEmpty()) {
-                    return 0;
-                } else {
-                    return super.fromString(safe);
-                }
-            }
-        });
+        factory.setConverter(new NumberIntegerStringConverter());
         thirdPartySpinnerChange = true;
         timeSpinner.setValueFactory(factory);
     }
