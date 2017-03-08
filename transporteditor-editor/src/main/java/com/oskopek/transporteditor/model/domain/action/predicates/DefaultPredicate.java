@@ -17,8 +17,8 @@ public abstract class DefaultPredicate implements Predicate {
     @Override
     public boolean isValid(Problem state, Action action) {
         boolean result = isValidInternal(state, action);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Validating predicate {} in action {}: {}.", getClass().getSimpleName(), action.getName(),
+        if (logger.isTraceEnabled()) {
+            logger.trace("Validating predicate {} in action {}: {}.", getClass().getSimpleName(), action.getName(),
                     result);
         }
         return result;

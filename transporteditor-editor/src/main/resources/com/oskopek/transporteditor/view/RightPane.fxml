@@ -195,7 +195,7 @@
                         </RadioButton>
                         <Separator orientation="VERTICAL"/>
                         <ToggleButton fx:id="applyStartsButton" maxWidth="1.7976931348623157E308"
-                                      text="%time.applystarts">
+                                      text="%time.applystarts" onAction="#handleApplyStartsButton">
                             <tooltip>
                                 <Tooltip text="%time.applystarts.text"/>
                             </tooltip>

@@ -117,6 +117,7 @@ public class RightPaneController extends AbstractController {
     private EventBus eventBus;
     private InvalidationListener stepUpdated;
     private boolean thirdPartySelection = false;
+    private boolean thirdPartySpinnerChange = false;
 
     /**
      * JavaFX initializer method. Registers with the event bus. Initializes button disabling
@@ -133,11 +134,19 @@ public class RightPaneController extends AbstractController {
 
         updateTimeSpinner();
         timeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (thirdPartySpinnerChange) {
+                thirdPartySpinnerChange = false;
+                return;
+            }
             planStateManager.get().goToTime(ActionCost.valueOf(newValue), applyStartsButton.isSelected());
             redrawState();
             updateTableSelection();
+            if (applyStartsButton.isSelected()) {
+                actionTimeGroup.selectToggle(startTimeButton);
+            } else {
+                actionTimeGroup.selectToggle(endTimeButton);
+            }
         });
-        actionTimeGroup.selectedToggleProperty().addListener(l -> redrawState());
 
         rowSelectionChangeListener = (observable, oldValue, newValue) -> {
             if (!stepPreviewEnabled.get()) {
@@ -148,18 +157,8 @@ public class RightPaneController extends AbstractController {
                 return;
             }
             if (newValue != null) {
-                Toggle timeProperties = actionTimeGroup.getSelectedToggle();
-                if (startTimeButton.equals(timeProperties)) {
-                    planStateManager.get().goToTime(ActionCost.valueOf(newValue.getStartTimestamp() - 1), true);
-                } else if (middleTimeButton.equals(timeProperties)) {
-                    planStateManager.get().goToTime(ActionCost.valueOf((newValue.getStartTimestamp()
-                            + newValue.getEndTimestamp()) / 2), true);
-                } else if (endTimeButton.equals(timeProperties)) {
-                    planStateManager.get().goToTime(ActionCost.valueOf(newValue.getEndTimestamp()), false);
-                } else {
-                    throw new IllegalStateException("No time preference button selected.");
-                }
-
+                applyStartsButton.setSelected(false);
+                updateFromTimeButtons(newValue);
                 redrawState();
                 updateTimeSpinner();
             }
@@ -635,7 +634,6 @@ public class RightPaneController extends AbstractController {
         boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
         stepPreviewEnabled.set(newStepPreviewEnabled);
 
-        redrawPlansInternal(null);
         if (!newStepPreviewEnabled) {
             stepButton.setText(messages.getString("steps.show"));
             stepButton.setStyle("-fx-text-fill: green;");
@@ -679,6 +677,8 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleDownAction() {
+        applyStartsButton.setSelected(false);
+        actionTimeGroup.selectToggle(endTimeButton);
         planStateManager.get().goToNextCheckpoint();
         redrawState();
         updateTimeSpinner();
@@ -690,6 +690,8 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleUpAction() {
+        applyStartsButton.setSelected(false);
+        actionTimeGroup.selectToggle(endTimeButton);
         planStateManager.get().goToPreviousCheckpoint();
         redrawState();
         updateTimeSpinner();
@@ -701,9 +703,55 @@ public class RightPaneController extends AbstractController {
      */
     @FXML
     private void handleTimeButtons() {
+        applyStartsButton.setSelected(false);
+        updateFromTimeButtons(null);
         redrawState();
         updateTimeSpinner();
         updateTableSelection();
+    }
+
+    /**
+     * Handle the Apply starts button presses.
+     */
+    @FXML
+    private void handleApplyStartsButton() {
+        updateFromTimeButtons(null);
+        planStateManager.get().goToTime(planStateManager.get().getCurrentTime(), applyStartsButton.isSelected());
+        redrawState();
+        updateTimeSpinner();
+        updateTableSelection();
+    }
+
+    /**
+     * Updates the plan manager using the selected action as if changing the time button selection or
+     * clicking on an action (takes into account time button selection for proper time to go to and whether
+     * to apply starts).
+     * <p>
+     * If the selected action is null, tries to get the selected item from the table. If there is none, returns
+     * without doing anything.
+     *
+     * @param selected the selected action
+     */
+    private void updateFromTimeButtons(TemporalPlanAction selected) {
+        if (selected == null) {
+            selected = actionTableFilter.getTableView().getSelectionModel().getSelectedItem();
+        }
+        if (selected == null) {
+            logger.debug("No item selected, cannot update from time buttons.");
+            return;
+        }
+
+        Toggle timeProperties = actionTimeGroup.getSelectedToggle();
+        if (startTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf(selected.getStartTimestamp()), false);
+        } else if (middleTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf((selected.getStartTimestamp()
+                    + selected.getEndTimestamp()) / 2), true);
+        } else if (endTimeButton.equals(timeProperties)) {
+            planStateManager.get().goToTime(ActionCost.valueOf(selected.getEndTimestamp()), false);
+        } else {
+            throw new IllegalStateException("No time preference button selected.");
+        }
     }
 
     /**
@@ -748,6 +796,7 @@ public class RightPaneController extends AbstractController {
                 }
             }
         });
+        thirdPartySpinnerChange = true;
         timeSpinner.setValueFactory(factory);
     }
 

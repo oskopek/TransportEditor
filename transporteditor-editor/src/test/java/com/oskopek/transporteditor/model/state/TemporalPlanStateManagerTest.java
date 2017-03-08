@@ -230,4 +230,35 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
     }
 
+    @Test
+    public void goToInProgressAndLastActionTest() throws Exception {
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+
+        planStateManager.goToTime(ActionCost.valueOf(25), false);
+        assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(2)); // drive is in progress
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(25));
+    }
+
+    @Test
+    public void goToBeginningWithoutApplyStartsAndLastActionTest() throws Exception {
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+
+        planStateManager.goToTime(ActionCost.valueOf(2), false);
+        // pickup ended, drive didn't begin yet
+        assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(1));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(2));
+    }
+
+    @Test
+    public void goToBeginningWithApplyStartsAndLastActionTest() throws Exception {
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+
+        planStateManager.goToTime(ActionCost.valueOf(2), true);
+        assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(2)); // drive has started
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(2));
+    }
+
 }

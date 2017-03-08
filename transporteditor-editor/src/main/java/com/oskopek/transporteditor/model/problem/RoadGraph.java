@@ -190,7 +190,7 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
     /**
      * Removes all sprites from the sprite manager and detaches it + resets graph styling.
      */
-    private void removeAllActionObjectSprites() {
+    private synchronized void removeAllActionObjectSprites() {
         packageDegreeDelta = 0d;
         vehicleDegreeDelta = 0d;
         vehicleRadius = 25d;

@@ -33,20 +33,20 @@ public class DefaultPlanState implements PlanState {
 
     @Override
     public void applyPreconditions(Action action) {
-        logger.debug("Checking preconditions of action {}.", action.getName());
+        logger.trace("Checking preconditions of action {}.", action.getName());
         if (!action.arePreconditionsValid(problem)) {
             throw new IllegalStateException("Preconditions of action " + action + " are invalid in problem " + problem);
         }
-        logger.debug("Applying preconditions of action {}.", action.getName());
+        logger.trace("Applying preconditions of action {}.", action.getName());
         problem = action.applyPreconditions(domain, problem);
-        logger.debug("Applied preconditions of action {}.", action.getName());
+        logger.trace("Applied preconditions of action {}.", action.getName());
     }
 
     @Override
     public void applyEffects(Action action) {
-        logger.debug("Applying effects of action {}.", action.getName());
+        logger.trace("Applying effects of action {}.", action.getName());
         Problem newProblem = action.applyEffects(domain, problem);
-        logger.debug("Checking effects of action {}.", action.getName());
+        logger.trace("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             throw new IllegalStateException(
                     "Effects of action " + action + " are invalid after applying to problem " + problem + "(result: "

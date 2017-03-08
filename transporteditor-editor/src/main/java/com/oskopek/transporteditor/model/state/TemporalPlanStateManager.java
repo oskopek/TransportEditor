@@ -72,7 +72,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
     public void goToTime(ActionCost time, boolean applyStarts) {
         state = getBeginningState();
         int simulationTime = applyAll(time.getCost(), applyStarts);
-        pointer = new PlanActionPointer(simulationTime, applyStarts);
+        pointer = new PlanActionPointer(time.getCost(), applyStarts);
     }
 
     /**

@@ -248,8 +248,9 @@ corresponds to a type of action.
 == Stepping through a plan
 
 When a plan is loaded, there is an option of stepping through the plan's actions and visualizing the intermediate
-problem state. To enable this, press the "%steps.show" button in the panel on the right -- this will remove
-all filters in the table and disable graph editing. Do note that stepping through the plan does not change the
+problem state. To enable this, press the "%steps.show" button in the panel on the right
+-- this will disable graph editing.
+Do note that stepping through the plan does not change the
 actual problem -- if you press "%steps.hide", the original problem will appear.
 
 When stepping through a plan, a new panel will display, showing navigation buttons.
