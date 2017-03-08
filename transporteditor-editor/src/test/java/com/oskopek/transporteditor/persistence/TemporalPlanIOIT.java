@@ -52,9 +52,12 @@ public class TemporalPlanIOIT {
         assertEquals(2, plan.getActionsAt(0).size());
         assertEquals(2, plan.getActionsAt(1).size());
         assertEquals(2, plan.getActionsAt(45).size());
-        assertEquals(2, plan.getActionsAt(46).size());
-        assertEquals(1, plan.getActionsAt(51).size());
-        assertEquals(0, plan.getActionsAt(52).size());
+        assertEquals(1, plan.getActionsAt(46).size());
+        assertEquals(2, plan.getActionsAt(47).size());
+        assertEquals(1, plan.getActionsAt(48).size());
+        assertEquals(0, plan.getActionsAt(51).size());
+        assertEquals(1, plan.getActionsAt(52).size());
+        assertEquals(0, plan.getActionsAt(53).size());
     }
 
 }
