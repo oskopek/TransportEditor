@@ -2,5 +2,5 @@
 0.000: (pick-up truck-2 city-loc-4 package-2) [1.000]
 1.000: (drive truck-1 city-loc-3 city-loc-2) [50.000]
 1.000: (drive truck-2 city-loc-4 city-loc-3) [45.000]
-46.000: (drop truck-2 city-loc-3 package-2) [1.000]
-51.000: (drop truck-1 city-loc-2 package-1) [1.000]
+47.000: (drop truck-2 city-loc-3 package-2) [1.000]
+52.000: (drop truck-1 city-loc-2 package-1) [1.000]

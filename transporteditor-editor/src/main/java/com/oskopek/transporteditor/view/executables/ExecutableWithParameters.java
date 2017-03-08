@@ -3,6 +3,8 @@ package com.oskopek.transporteditor.view.executables;
 import java.io.File;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,13 +39,36 @@ public interface ExecutableWithParameters {
     /**
      * Get the parameter string where the first {@code n} templates have been filled in by the objects
      * supplied as arguments. {@code n} is the number of {@code params}.
+     * <p>
+     * <strong>Make sure to use {@link #getCommandParameterList(Object...)} instead if you are using
+     * a {@link ProcessBuilder}.</strong>
      *
      * @param params the parameters to substitute (their toString())
      * @return the (partially) substituted parameter string
      * @see MessageFormat
+     *
      */
     default String getParameters(Object... params) {
         return MessageFormat.format(getParameters(), params);
+    }
+
+    /**
+     * Get the executable and all the parameters, where the first {@code n} templates have been filled in by the objects
+     * supplied as arguments. {@code n} is the number of {@code params}.
+     *
+     * @param params the parameters to substitute (their toString())
+     * @return a list of strings to use in a {@link ProcessBuilder}
+     * @see MessageFormat
+     */
+    default List<String> getCommandParameterList(Object... params) {
+        String filledIn = MessageFormat.format(getParameters(), params);
+        String[] splitFilledIn = filledIn.split(" ");
+        List<String> parameters = new ArrayList<>(splitFilledIn.length + 1);
+        parameters.add(getExecutable());
+        for (String param : splitFilledIn) {
+            parameters.add(param);
+        }
+        return parameters;
     }
 
     /**

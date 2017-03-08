@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -74,9 +75,9 @@ public class ValValidator extends CancellableLogStreamable implements Validator 
         }
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, plan)) {
             String executableCommand = executable.getExecutable();
-            String filledIn = executable.getParameters(serializer.getDomainTmpFile().toAbsolutePath(),
+            List<String> parameters = executable.getCommandParameterList(serializer.getDomainTmpFile().toAbsolutePath(),
                     serializer.getProblemTmpFile().toAbsolutePath(), serializer.getPlanTmpFile().toAbsolutePath());
-            ProcessBuilder builder = new ProcessBuilder(executableCommand, filledIn).redirectErrorStream(true);
+            ProcessBuilder builder = new ProcessBuilder(parameters).redirectErrorStream(true);
             try {
                 validatorProcessProperty.set(builder.start());
             } catch (IOException e) {
