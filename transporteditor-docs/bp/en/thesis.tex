@@ -25,8 +25,14 @@
 % \setlength\headheight{0mm}
 % \let\openright=\cleardoublepage
 
+%% Generate PDF/A-2u
+\usepackage[a-2u]{pdfx}
+
 %% Character encoding: usually latin2, cp1250 or utf8:
 \usepackage[utf8]{inputenc}
+
+%% Prefer Latin Modern fonts
+\usepackage{lmodern}
 
 %% Further useful packages (included in most LaTeX distributions)
 \usepackage{amsmath}        % extensions for typesetting of math
@@ -77,27 +83,24 @@
 % An optional dedication: you can thank whomever you wish (your supervisor,
 % consultant, a person who lent the software, etc.)
 \def\Dedication{%
-My dedication comes here.
+Dedication.
 }
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
-The abstract of my thesis comes here.
+Abstract.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
 \def\Keywords{%
-{automated planning}, {transport}, {IPC}, {vehicle routing}
-}
+{planning}, {transport}, {logistics}
+}% TODO: Should have commas?
 
 %% The hyperref package for clickable links in PDF and also for storing
 %% metadata to PDF (including the table of contents).
-\usepackage[pdftex,unicode]{hyperref}   % Must follow all other packages
+%% Most settings are pre-set by the pdfx package.
+\hypersetup{unicode}
 \hypersetup{breaklinks=true}
-\hypersetup{pdftitle={\ThesisTitle}}
-\hypersetup{pdfauthor={\ThesisAuthor}}
-\hypersetup{pdfkeywords=\Keywords}
-\hypersetup{urlcolor=blue}
 
 % Definitions of macros (see description inside)
 \include{macros}
@@ -141,6 +144,7 @@ The abstract of my thesis comes here.
 %%% which will likely be used in an electronic form rather than read (program
 %%% source code, data files, interactive charts, etc.). Electronic attachments
 %%% should be uploaded to SIS and optionally also included in the thesis on a~CD/DVD.
+%%% Allowed file formats are specified in provision of the rector no. 23/2016.
 \chapwithtoc{Attachments}
 
 \openright
