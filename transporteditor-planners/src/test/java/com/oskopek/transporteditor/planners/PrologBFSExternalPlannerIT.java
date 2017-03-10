@@ -1,8 +1,7 @@
-package com.oskopek.transporteditor.planner;
+package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
@@ -17,7 +16,7 @@ import org.junit.Test;
 public class PrologBFSExternalPlannerIT {
 
     private PrologBFSExternalPlanner planner;
-    private final static SequentialDomain domain = new SequentialDomain("");
+    private static final SequentialDomain domain = new SequentialDomain("");
     private static Problem problem;
     private static Plan plan;
 

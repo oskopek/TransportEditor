@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planner;
+package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
@@ -11,21 +11,42 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
+import java.util.Optional;
+
+/**
+ * A planner implementation for simple Java-based planners. Handles listeners
+ * and all needed JavaFX properties. Extensions only need to handle:
+ * <ul>
+ *     <li>planning: {@link #plan(Domain, Problem)}</li>
+ *     <li>logging, using {@link #log(String)}</li>
+ * </ul>
+ */
 public abstract class AbstractPlanner extends AbstractLogStreamable implements Planner {
 
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
     private final BooleanProperty isPlanningProperty = new SimpleBooleanProperty(false);
 
+    /**
+     * Default empty constructor as per {@link Planner} requirements.
+     */
     public AbstractPlanner() {
         // intentionally empty
     }
 
-    public abstract Plan plan(Domain domain, Problem problem);
+    /**
+     * Create a plan for the given problem and domain. Will return empty {@link Optional} if no plan could be found,
+     * for any reason.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @return the plan, or nothing
+     */
+    public abstract Optional<Plan> plan(Domain domain, Problem problem);
 
     @Override
     public final Plan startAndWait(Domain domain, Problem problem) {
         isPlanningProperty.setValue(true);
-        Plan plan = plan(domain, problem);
+        Plan plan = plan(domain, problem).orElse(null);
         isPlanningProperty.setValue(false);
         planProperty.setValue(plan);
         return plan;

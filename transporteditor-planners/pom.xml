@@ -8,7 +8,7 @@
     </parent>
     <artifactId>transporteditor-planners</artifactId>
     <packaging>jar</packaging>
-    <name>TransportEditor</name>
+    <name>TransportEditor Planners</name>
     <description>Planners for IPC Transport domain problems.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

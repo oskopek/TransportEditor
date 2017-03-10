@@ -80,6 +80,11 @@ public interface Planner extends LogStreamable, Cancellable {
         return null;
     }
 
+    /**
+     * Signifies if the given planner is available on this system.
+     *
+     * @return true iff this planner is available and ready to be executed on this system
+     */
     boolean isAvailable();
 
 }
