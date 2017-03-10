@@ -10,6 +10,7 @@
     <inceptionYear>2016</inceptionYear>
     <modules>
         <module>transporteditor-editor</module>
+        <module>transporteditor-planners</module>
     </modules>
     <scm>
         <url>https://github.com/oskopek/TransportEditor.git</url>
@@ -89,11 +90,6 @@
                 <version>1.1.8</version>
             </dependency>
             <dependency>
-                <groupId>com.github.mpkorstanje</groupId>
-                <artifactId>simmetrics-core</artifactId>
-                <version>4.1.1</version>
-            </dependency>
-            <dependency>
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se</artifactId>
                 <version>2.3.5.Final</version>
@@ -123,11 +119,6 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>2.3.25-incubating</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>20.0</version>
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>

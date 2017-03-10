@@ -1,6 +1,6 @@
 = Notice
 
-All libraries imported via Maven are listed automatically in `transporteditor-editor/NOTICE.txt`.
+All libraries imported via Maven are listed automatically in `transporteditor-editor/NOTICE.txt` and `transporteditor-planners/NOTICE.txt`.
 
 == Pddl Antlr grammar
 
