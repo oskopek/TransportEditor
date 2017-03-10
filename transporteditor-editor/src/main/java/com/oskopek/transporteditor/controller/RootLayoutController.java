@@ -11,6 +11,7 @@ import com.oskopek.transporteditor.model.domain.VariableDomain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
+import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -35,6 +36,13 @@ import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javaslang.Tuple;
+import javaslang.collection.Stream;
+import javaslang.control.Try;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -43,10 +51,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.MissingResourceException;
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -158,6 +164,45 @@ public class RootLayoutController extends AbstractController {
         application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenu.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenu.disableProperty().bind(application.planningSessionProperty().isNull());
+
+        populatePlanners();
+    }
+
+    /**
+     * Populate the {@link #fileSetPlannerMenu} using all non-abstract {@link Planner}s with a default empty constructor
+     * from the {@link com.oskopek.transporteditor} package.
+     * Uses {@link Reflections} internally.
+     */
+    private void populatePlanners() {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forClass(Planner.class))
+                .setScanners(new SubTypesScanner())
+                .filterInputsBy(s -> s.matches("com\\.oskopek\\.transporteditor.*\\.class$"))
+        );
+        Stream.ofAll(reflections.getSubTypesOf(Planner.class))
+                .filter(type -> !Modifier.isAbstract(type.getModifiers()))
+                .map(type -> Tuple.of(type, Try.of(() -> type.newInstance()).toJavaOptional()))
+                .map(tuple -> tuple.map((type, instance) -> Tuple.of(type.getSimpleName(), instance)))
+                .filter(tuple -> tuple._2.isPresent())
+                .forEach(tuple -> addPlanner(tuple._1, tuple._2.get()));
+    }
+
+    /**
+     * Adds a planner to the {@link #fileSetPlannerMenu}.
+     *
+     * @param label the label to display in the menu item
+     * @param planner the planner to set to the {@link PlanningSession} when clicked
+     */
+    private void addPlanner(String label, Planner planner) {
+        logger.info("Adding planner \"{}\"", label);
+        MenuItem item = new MenuItem(label);
+        item.setOnAction(event -> {
+            if (application.getPlanningSession() == null) {
+                throw new IllegalStateException("Cannot set planner, because no planning session is loaded.");
+            }
+            application.getPlanningSession().setPlanner(planner);
+        });
+        fileSetPlannerMenu.getItems().add(item);
     }
 
     /**

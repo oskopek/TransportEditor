@@ -152,6 +152,10 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
             setShouldCancel(false);
             plannerProcessProperty.setValue(null);
             throw new IllegalStateException("Failed to persist domain or problem, cannot plan.", e);
+        } catch (Throwable e) {
+            setShouldCancel(false);
+            plannerProcessProperty.setValue(null);
+            throw new IllegalStateException(e);
         }
         setShouldCancel(false);
         plannerProcessProperty.setValue(null);
