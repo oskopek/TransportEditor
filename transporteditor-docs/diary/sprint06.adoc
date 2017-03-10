@@ -1,0 +1,11 @@
+= Sprint 06
+
+== 2017/02/20 -> 2017/03/08
+
+* Refactoring, reformatting, ...
+* Added user docs and javadocs
+* Added plan state viewing
+
+== 2017/03/08 -> 2017/03/10
+
+* Added tests, fixed external validation, fixed a model bug

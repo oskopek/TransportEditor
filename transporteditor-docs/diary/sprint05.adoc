@@ -1,0 +1,11 @@
+= Sprint 05
+
+== 2017/01/30 -> 2017/02/19
+
+After exams, sprint 05.
+
+* Added UI tests.
+* Finished backend graph editing, added frontend problem editing.
+* Fixed plan viewing UI and added plan editing UI. Added filtering to plan views.
+* Fixed a bunch of UI bugs.
+* Added most javadocs and completed dev docs. Need to finish JavaDoc and user in-UI docs.

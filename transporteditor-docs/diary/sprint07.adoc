@@ -1,0 +1,12 @@
+= Sprint 07
+
+== 2017/03/10
+
+* Fixed thesis template
+* Added planner module
+* Split out core module
+
+== 2017/03/11
+
+* Added basic thesis outline
+* Started writing parts
