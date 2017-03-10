@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
+import com.oskopek.transporteditor.event.DisableShowStepEvent;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.PddlLabel;
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
@@ -630,13 +631,24 @@ public class RightPaneController extends AbstractController {
     }
 
     /**
-     * Handle pressing the show steps button. Toggles the "step showing" mode.
+     * Disables the step showing mode when the appropriate event is received.
+     *
+     * @param event the received event
      */
-    @FXML
-    private void handleStepToggle() {
-        boolean newStepPreviewEnabled = !stepPreviewEnabled.get();
-        stepPreviewEnabled.set(newStepPreviewEnabled);
+    @Subscribe
+    public void disableShowStep(DisableShowStepEvent event) {
+        if (stepPreviewEnabled.get()) {
+            changeSetPreview(false);
+        }
+    }
 
+    /**
+     * Changes the step preview mode according to the passed parameter.
+     *
+     * @param newStepPreviewEnabled whether we should enable (true) or disable (false) the step preview mode
+     */
+    private void changeSetPreview(boolean newStepPreviewEnabled) {
+        stepPreviewEnabled.set(newStepPreviewEnabled);
         if (!newStepPreviewEnabled) {
             stepButton.setText(messages.getString("steps.show"));
             stepButton.setStyle("-fx-text-fill: green;");
@@ -662,6 +674,14 @@ public class RightPaneController extends AbstractController {
             updateTimeSpinner();
             updateTableSelection();
         }
+    }
+
+    /**
+     * Handle pressing the show steps button. Toggles the "step showing" mode.
+     */
+    @FXML
+    private void handleStepToggle() {
+        changeSetPreview(!stepPreviewEnabled.get());
     }
 
     /**
