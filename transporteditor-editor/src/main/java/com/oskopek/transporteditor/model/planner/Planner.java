@@ -13,6 +13,7 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * Planners create {@link Plan}s from a given {@link Domain} and {@link Problem}.
+ * An unenforced interface requirement: <strong>needs to have a no-arg public constructor.</strong>
  */
 public interface Planner extends LogStreamable, Cancellable {
 
@@ -78,5 +79,7 @@ public interface Planner extends LogStreamable, Cancellable {
     default ExecutableWithParameters getExecutableWithParameters() {
         return null;
     }
+
+    boolean isAvailable();
 
 }

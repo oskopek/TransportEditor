@@ -31,7 +31,8 @@ import java.util.concurrent.TimeUnit;
  * from stdout. Uses a Process. Logs the process' stderr via
  * {@link com.oskopek.transporteditor.view.executables.AbstractLogStreamable#log(String)}.
  * Returns a success iff the process exits with a 0 return code. And the plan is parsable from stdout.
- * Is cancellable via {@link Cancellable#cancel()}.
+ * Is cancellable via {@link Cancellable#cancel()}. Does not have a no-arg constructor, because it is a
+ * special case, handled separately in the UI.
  */
 public class ExternalPlanner extends CancellableLogStreamable implements Planner {
 
@@ -58,12 +59,11 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
      *
      * @param executable an executable with correct parameter templates
-     * @throws IllegalArgumentException if the parameter templates are wrong
      */
     public ExternalPlanner(ExecutableWithParameters executable) {
         String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
-            throw new IllegalArgumentException("Executable command does not contain {0} and {1}.");
+            logger.warn("Executable command does not contain {0} and {1} parameter templates.");
         }
         this.executable = executable;
     }
@@ -198,6 +198,11 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     @Override
     public ExecutableWithParameters getExecutableWithParameters() {
         return executable;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
     }
 
     @Override
