@@ -6,8 +6,8 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assume.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -23,9 +23,9 @@ public class PrologBFSExternalPlannerIT {
     @BeforeClass
     public static void setUpClass() throws Exception {
         problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                PrologBFSExternalPlannerIT.class.getResourceAsStream("p01SeqProblem.pddl")));
+                PrologBFSExternalPlannerIT.class.getResourceAsStream("../persistence/p01SeqProblem.pddl")));
         plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                PrologBFSExternalPlannerIT.class.getResourceAsStream("p01SeqPlan.val")));
+                PrologBFSExternalPlannerIT.class.getResourceAsStream("../persistence/p01SeqPlan.val")));
     }
 
     @Before

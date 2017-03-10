@@ -17,7 +17,6 @@
     </licenses>
     <modules>
         <module>transporteditor-editor</module>
-        <module>transporteditor-planners</module>
     </modules>
     <scm>
         <url>https://github.com/oskopek/TransportEditor.git</url>
@@ -302,8 +301,9 @@
                             <configuration>
                                 <checkstyleRules>
                                     <module name="Checker">
+                                        <property name="fileExtensions" value="java, properties, xml"/>
                                         <module name="SuppressionFilter">
-                                            <property name="file" value="${basedir}/config/checkstyle/suppression.xml"/>
+                                            <property name="file" value="${rootLevelDir}/config/checkstyle/suppression.xml"/>
                                         </module>
                                         <!--<property name="severity" value="warning" default="warning"/>-->
                                         <!-- Checks whether files end with a new line.                        -->
@@ -334,7 +334,7 @@
                                             <property name="message" value="Line has trailing spaces."/>
                                         </module>
                                         <module name="TreeWalker">
-                                            <property name="cacheFile" value="${basedir}/target/cachefile"/>
+                                            <property name="cacheFile" value="target/cachefile"/>
                                             <property name="tabWidth" value="4"/>
                                             <!-- Checks for Javadoc comments.                     -->
                                             <!-- See http://checkstyle.sf.net/config_javadoc.html -->
