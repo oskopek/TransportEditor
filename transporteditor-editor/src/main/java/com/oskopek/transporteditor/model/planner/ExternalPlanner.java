@@ -118,7 +118,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
                 String line = reader.readLine();
                 while (line != null && !retValFuture.isDone()) {
                     logger.debug("stderr: {}", line);
-                    log("ERROR: " + line);
+                    log(line);
                     line = reader.readLine();
                 }
             } catch (IOException e) {
@@ -183,11 +183,6 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
             throw new IllegalStateException("Already planning!");
         }
         return startPlanning(domain, problem);
-    }
-
-    @Override
-    public Plan getCurrentPlan() {
-        return bestPlan.get();
     }
 
     @Override

@@ -44,7 +44,9 @@ public interface Planner extends LogStreamable, Cancellable {
      *
      * @return the current/best found plan (may be null)
      */
-    Plan getCurrentPlan();
+    default Plan getCurrentPlan() {
+        return currentPlanProperty().getValue();
+    }
 
     @Override
     default boolean cancel() {
