@@ -45,6 +45,6 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
             return false;
         }
         DefaultLocatable that = (DefaultLocatable) o;
-        return new EqualsBuilder().append(getLocation(), that.getLocation()).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(getLocation(), that.getLocation()).isEquals();
     }
 }
