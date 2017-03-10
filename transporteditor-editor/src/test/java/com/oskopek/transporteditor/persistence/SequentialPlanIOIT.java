@@ -6,31 +6,45 @@ import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transporteditor.test.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
+import static com.oskopek.transporteditor.persistence.IOUtils.concatReadAllLines;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class SequentialPlanIOIT {
 
-    private static final String sequentialPlanFile = "p01SeqPlan.val";
     private static final SequentialDomain domain = new SequentialDomain("Transport sequential");
-    private static final DefaultProblem problem = P01SequentialProblem();
-    private static String P01SequentialPlanFileContents;
+    public static final DefaultProblem p01Problem = P01SequentialProblem();
+    public static DefaultProblem p20Problem;
+    public static String P01SequentialPlanFileContents;
+    public static String P20SequentialPlanFileContents;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        P01SequentialPlanFileContents = readAllLines(
-                VariableDomainIOIT.class.getResourceAsStream(sequentialPlanFile)).stream().collect(
-                Collectors.joining("\n"));
+        initialize();
+    }
+
+    /**
+     * Used by other classes as well.
+     *
+     * @throws IOException if an error occurs during plan/problem reading
+     */
+    public static void initialize() throws IOException {
+        p20Problem = new DefaultProblemIO(domain).parse(concatReadAllLines(SequentialPlanIOIT.class
+                .getResourceAsStream("p20SeqProblem.pddl")));
+        P01SequentialPlanFileContents = concatReadAllLines(SequentialPlanIOIT.class
+                .getResourceAsStream("p01SeqPlan.val"));
+        P20SequentialPlanFileContents = concatReadAllLines(SequentialPlanIOIT.class
+                .getResourceAsStream("p20SeqPlan.val"));
     }
 
     public static SequentialPlan P01SequentialPlan(Problem p01) {
@@ -110,8 +124,8 @@ public class SequentialPlanIOIT {
 
     @Test
     public void serialize() throws Exception {
-        SequentialPlan P01SequentialPlan = P01SequentialPlan(problem);
-        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, problem);
+        SequentialPlan P01SequentialPlan = P01SequentialPlan(p01Problem);
+        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, p01Problem);
         String serializedPlan = sequentialPlanIO.serialize(P01SequentialPlan);
         assertNotNull(serializedPlan);
         assertEquals(P01SequentialPlanFileContents, serializedPlan);
@@ -119,9 +133,17 @@ public class SequentialPlanIOIT {
 
     @Test
     public void parse() throws Exception {
-        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, problem);
+        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, p01Problem);
         SequentialPlan plan = sequentialPlanIO.parse(P01SequentialPlanFileContents);
         assertNotNull(plan);
-        assertEquals(plan, P01SequentialPlan(problem));
+        assertEquals(plan, P01SequentialPlan(p01Problem));
+    }
+
+    @Test
+    public void parseSerializeLarge() throws Exception {
+        SequentialPlanIO sequentialPlanIO = new SequentialPlanIO(domain, p20Problem);
+        SequentialPlan plan = sequentialPlanIO.parse(P20SequentialPlanFileContents);
+        assertNotNull(plan);
+        TestUtils.assertPDDLContentEquals(P20SequentialPlanFileContents, sequentialPlanIO.serialize(plan));
     }
 }

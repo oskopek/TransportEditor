@@ -23,7 +23,7 @@ public class SequentialPlanValidatorTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        SequentialPlanIOIT.setUpClass();
+        SequentialPlanIOIT.initialize();
     }
 
     @Before

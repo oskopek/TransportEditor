@@ -23,14 +23,13 @@ public final class IOUtils {
 
     /**
      * Reads all lines via {@link #readAllLines(InputStream)} and joins them with {@code \n}.
-     * Appends a trailing {@code \n}.
      *
      * @param stream the stream to read from
      * @return the concatenated string
      * @throws IOException if an error during reading occurs
      */
     public static String concatReadAllLines(InputStream stream) throws IOException {
-        return readAllLines(stream).stream().collect(Collectors.joining("\n")) + "\n";
+        return readAllLines(stream).stream().collect(Collectors.joining("\n"));
     }
 
     /**
