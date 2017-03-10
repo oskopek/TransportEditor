@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.oskopek.transporteditor</groupId>
     <artifactId>transporteditor</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>TransportEditor multiproject parent</name>
     <description>A problem editor and plan visualizer for the Transport domain from the IPC 2008.</description>
