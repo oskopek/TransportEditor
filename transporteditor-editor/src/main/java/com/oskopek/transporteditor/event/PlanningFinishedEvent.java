@@ -4,7 +4,7 @@ package com.oskopek.transporteditor.event;
  * Event for announcing that a planning process in a {@link com.oskopek.transporteditor.model.planner.Planner}
  * was completed.
  */
-public class PlanningFinishedEvent {
+public final class PlanningFinishedEvent {
 
     private final Integer selectRow;
 

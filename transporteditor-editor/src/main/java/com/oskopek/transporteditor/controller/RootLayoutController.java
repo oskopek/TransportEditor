@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.controller;
 
 import com.oskopek.transporteditor.event.GraphUpdatedEvent;
 import com.oskopek.transporteditor.event.PlanningFinishedEvent;
+import com.oskopek.transporteditor.event.DisableShowStepEvent;
 import com.oskopek.transporteditor.model.DefaultPlanningSession;
 import com.oskopek.transporteditor.model.PlanningSession;
 import com.oskopek.transporteditor.model.domain.Domain;
@@ -151,6 +152,8 @@ public class RootLayoutController extends AbstractController {
         planFileHandler = new JavaFxOpenedTextObjectHandler<Plan>(application, messages, creator)
                 .bind(planMenu, planNewMenuItem, planLoadMenuItem, planSaveMenuItem, planSaveAsMenuItem,
                         problemFileHandler).useVal();
+
+        planFileHandler.objectProperty().addListener(l -> eventBus.post(new DisableShowStepEvent()));
 
         application.planningSessionProperty().bindBidirectional(planningSessionFileHandler.objectProperty());
         fileSetPlannerMenu.disableProperty().bind(application.planningSessionProperty().isNull());
