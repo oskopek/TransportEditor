@@ -12,11 +12,21 @@
 
 ###################################################################################
 
-inputfile="$1"
-outputfile="$2"
+inputfile=`realpath "$1"`
+outputfile=""
+if [ -n "$2" ]; then
+outputfile=`realpath "$2"`
+fi
+
+wd="`pwd`"
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd "$dir"
+
 tmpout="`mktemp`"
 tmpout2="`mktemp`"
 domain="inputs/domain.pddl"
+
 
 if [ -z "$inputfile" ]; then
     echo "ERROR: No input file specified. Please supply an argument PDDL file."
@@ -40,4 +50,6 @@ if command -v validate > /dev/null 2>&1; then # if we have validate on the syste
 fi
 
 rm "$tmpout" "$tmpout2" debug
+
+cd $wd
 
