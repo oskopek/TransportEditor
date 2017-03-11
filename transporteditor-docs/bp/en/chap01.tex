@@ -1,8 +1,83 @@
 \chapter{Transport domain}
 
-An~example citation: \cite{Ghallab2004}
+\section{Automated planning}
 
-\section{Planning}
+Planning is usually defined as the reasoning side of acting -- an abstract deliberation
+process that chooses and organizes actions by anticipating their outcomes. \cite[Section~1.1]{Ghallab2004}
+It seems only natural that we want to have computers to do this strenuous activity for us.
+Automated planning is an attempt at just that -- it is an area of Artificial Intelligence (AI) that
+studies the planning process computationally. \cite[Section~1.1]{Ghallab2004}
+
+\TODO{Define domain and problem, planner?}
+
+Unfortunately, the specific situations in which we want to use automated planning are very diverse --
+from devising a sequence of actions to shut down a nuclear power plant to planning the robotic arm
+movements in an assembly line or devising the complex motor activations for space aircraft positioning.
+Due to this, people are often interested in domain-independent planning, where the planner gets information
+about both the domain and the specific problem and attempts to devise a plan using only the provided knowledge
+and its previously built-in processes. \cite[Section~1.3]{Ghallab2004}
+
+On the other hand, domain-specific planning, where domain knowledge has been built into the planner,
+has obvious advantages when solving problems in that domain -- all the while being useless on problems of other
+domains. \cite[Section~1.3]{Ghallab2004}
+
+\subsection{Planning model}
+
+As a basis for the later-defined representation of planning, we first define
+a conceptual model similar to the restricted model in \cite[Section~1.4, Section~1.5]{Ghallab2004}.
+
+\begin{defn}[State-transition system]\label{defn:state-transition-sys}
+A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma)$, where:
+\begin{itemize}
+\item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states,
+\item $A = \{\noop, a_1, a_2, \ldots\}$ is a finite set of actions;
+\item $\gamma: S \times A \to S \cup \{\emptyset\}$ is a state-transition function,
+where $\forall s \in S : \gamma(s, \noop) = s$,
+and $\forall s \in S\,\exists a \in A : \gamma(s, a) \neq \emptyset$; and
+\item $\Sigma$ is static and offline,
+it only changes when an action is applied to it and does not change while planning.
+\end{itemize}
+In the basic version, all actions have no duration.
+\end{defn}
+
+\noindent \TODO{define goals}
+
+\begin{defn}[Planning problem]\label{defn:planning-problem}\cite[Part~I]{Ghallab2004}
+A planning problem is a 5-tuple $\mathbb{P} = (S, A, \gamma, s_0, g)$, where:
+\begin{itemize}
+\item $(S, A, \gamma)$ is a state-transition system;
+\item $s_0 \in S$ is an initial state; and
+\item $g \subseteq S$ is a set of goal states.
+\end{itemize}
+\end{defn}
+
+\noindent For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$
+
+\begin{defn}[Plan]\label{defn:plan}\cite[Section~1.5]{Ghallab2004}
+For a planning problem $\mathbb{P} = (S, A, \gamma, s_0, g)$,
+a plan is a finite ($k \in \N$) sequence of actions $(a_1, a_2, \ldots, a_k)$ where
+$\forall i \in [k] : a_i \in A$ such that
+$\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i$ and $s_k \in g$.
+\end{defn}
+
+\noindent A basic planning model consists of three components:
+
+\begin{itemize}
+\item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
+it receives.
+\item A \textit{controller} -- given an input state $s \in S$ provides an action $a \in A$ as output according
+a plan.
+\item A \textit{planner} -- uses a description of $\Sigma$ to synthesize a plan for the controller
+to execute in order to achieve the objective.
+\end{itemize}
+
+\TODO{image of the system}
+
+\subsection{Classical planning}
+
+There are several theoretical representations of planning problems.
+
+\subsection{Neoclassical planning}
 
 \subsection{Temporal planning}
 
