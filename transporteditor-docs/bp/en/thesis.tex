@@ -57,10 +57,15 @@
 \def\ThesisTitle{Planning for Transportation Problems}
 
 % Author of the thesis
-\def\ThesisAuthor{Ondrej Škopek}
+\def\ThesisAuthor{Ondrej~Škopek}
 
 % Year when the thesis is submitted
 \def\YearSubmitted{2017}
+
+% Thesis date
+% TODO: fix the date
+%\def\ThesisDate{May 19, 2017}
+\def\ThesisDate{\today}
 
 % Name of the department or institute, where the work was officially assigned
 % (according to the Organizational Structure of MFF UK in English,
@@ -71,7 +76,7 @@
 \def\DeptType{Department}
 
 % Thesis supervisor: name, surname and titles
-\def\Supervisor{prof. RNDr. Roman Barták, Ph.D.}
+\def\Supervisor{\mbox{prof.} \mbox{RNDr.} \mbox{Roman} \mbox{Barták}, \mbox{Ph.D.}}
 
 % Supervisor's department (again according to Organizational structure of MFF)
 \def\SupervisorsDepartment{Department of Theoretical Computer Science and Mathematical Logic}
@@ -83,12 +88,22 @@
 % An optional dedication: you can thank whomever you wish (your supervisor,
 % consultant, a person who lent the software, etc.)
 \def\Dedication{%
-Dedication.
+\TODO{Dedication}% TODO: Remove me
+\comment{% TODO: Uncomment me
+This work is dedicated to my parents, friends and girlfriend -- thanks for getting me through this. A big thank you goes out to my advisor, \Supervisor, for all the advice along the way.
+}
 }
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
-Abstract.
+The purpose of this thesis is to investigate the possibilities of generating plans for logistic problems.
+In particular, we study variants of the Transport domain, originally from the 2008 International Planning Competition. The Transport domain's goal is to deliver all packages to their destinations using a fleet
+of vehicles on an oriented non-negatively weighted graph.
+
+An editor and visualizer, TransportEditor, was developed to aid the analysis and debugging during
+planner construction. We propose several domain-dependent planners and heuristics \TODO{describe planners and heuristics}.
+
+Benchmarks on the original competition data show that \TODO{describe results}.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
