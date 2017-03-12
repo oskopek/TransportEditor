@@ -87,4 +87,6 @@ public interface Planner extends LogStreamable, Cancellable {
      */
     boolean isAvailable();
 
+    String getName();
+
 }

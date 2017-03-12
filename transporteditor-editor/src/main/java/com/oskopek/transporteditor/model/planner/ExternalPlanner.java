@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javaslang.control.Try;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -228,5 +229,16 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         return new EqualsBuilder()
                 .append(executable, that.executable)
                 .isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("executable", executable).toString();
+    }
+
+    @Override
+    public String getName() {
+        return new StringBuilder(getClass().getSimpleName()).append('[').append(executable.getExecutable()).append(' ')
+                .append(executable.getParameters()).append(']').toString();
     }
 }

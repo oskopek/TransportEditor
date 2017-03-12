@@ -1,0 +1,13 @@
+{
+  "domain": "../../../persistence/variableDomainSeq.pddl",
+  "problems": [
+    "../../../persistence/p01SeqProblem.pddl",
+    "../../../persistence/p01SeqProblemEasier.pddl"
+  ],
+  "scoreFunctionType": "ACTION_COUNT",
+  "planners": {
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "--alias seq-sat-lama-2011",
+    "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner": null
+  },
+  "threadCount": 2
+}

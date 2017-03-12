@@ -66,4 +66,7 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
     public final boolean isAvailable() {
         return true;
     }
+
+    @Override
+    public abstract String getName();
 }
