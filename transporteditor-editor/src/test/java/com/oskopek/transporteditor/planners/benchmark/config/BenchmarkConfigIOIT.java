@@ -43,5 +43,6 @@ public class BenchmarkConfigIOIT {
         BenchmarkConfig config = BenchmarkConfig.from(simpleConfigPath);
         Benchmark benchmark = config.toBenchmark();
         assertThat(benchmark).isNotNull();
+        assertThat(benchmark.benchmark(config.getThreadCount())); // OOO: Verify that uses correct arguments and threads
     }
 }

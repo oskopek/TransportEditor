@@ -137,7 +137,6 @@ public final class BenchmarkConfig {
         }
 
         config.domain = Stream.of(config.domain)
-                .map(domainRelativePath -> directory + File.separator + domainRelativePath)
                 .map(domainFilePath -> Try.of(() ->
                         IOUtils.concatReadAllLines(new FileInputStream(domainFilePath)))
                         .getOrElseThrow(() -> new IllegalStateException("Failed to read domain file: "
@@ -149,7 +148,6 @@ public final class BenchmarkConfig {
         }
 
         config.problems = config.problems.stream()
-                .map(problemRelativePath -> directory + File.separator + problemRelativePath)
                 .map(problemFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(problemFilePath)))
                         .getOrElseThrow(() -> new IllegalStateException("Failed to read problem file: "
                                 + problemFilePath)))

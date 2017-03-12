@@ -8,6 +8,8 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BenchmarkRun {
 
@@ -16,6 +18,8 @@ public class BenchmarkRun {
     private final Planner planner;
     private final ScoreFunction scoreFunction;
     private final Results runResults;
+
+    private static final Logger logger = LoggerFactory.getLogger(BenchmarkRun.class);
 
     public BenchmarkRun(BenchmarkRun run, Results runResults) {
         this(run.getDomain(), run.getProblem(), run.getPlanner(), run.scoreFunction, runResults);
@@ -34,7 +38,9 @@ public class BenchmarkRun {
         this.runResults = runResults;
     }
 
-    public BenchmarkRun run() {
+    public BenchmarkRun execute() {
+        logger.info("Starting benchmark run for domain {}, problem {}, planner {}", domain.getName(), problem.getName(),
+                planner.getName());
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();

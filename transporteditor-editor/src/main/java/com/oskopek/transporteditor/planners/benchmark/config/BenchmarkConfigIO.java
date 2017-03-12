@@ -1,10 +1,13 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.oskopek.transporteditor.persistence.DataIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import javaslang.control.Try;
+import org.apache.commons.lang3.text.StrSubstitutor;
 
 public class BenchmarkConfigIO implements DataIO<BenchmarkConfig> {
 
@@ -13,11 +16,13 @@ public class BenchmarkConfigIO implements DataIO<BenchmarkConfig> {
     public BenchmarkConfigIO() {
         mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        mapper.enable(JsonParser.Feature.ALLOW_TRAILING_COMMA);
     }
 
     @Override
     public BenchmarkConfig parse(String contents) {
-        return Try.of(() -> mapper.readValue(contents, BenchmarkConfig.class))
+        return Try.of(() -> mapper.readValue(StrSubstitutor.replaceSystemProperties(contents), BenchmarkConfig.class))
                 .getOrElseThrow(e -> new IllegalStateException("Error while parsing benchmark JSON.", e));
     }
 
