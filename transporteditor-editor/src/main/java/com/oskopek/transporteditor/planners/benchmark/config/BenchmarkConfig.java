@@ -9,12 +9,10 @@ import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
-import javaslang.Function1;
 import javaslang.Function2;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;

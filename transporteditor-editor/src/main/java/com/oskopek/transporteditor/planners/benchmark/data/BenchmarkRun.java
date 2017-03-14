@@ -44,8 +44,8 @@ public class BenchmarkRun {
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();
-        return new BenchmarkRun(this, new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem, plan), startTime,
-                endTime));
+        return new BenchmarkRun(this, new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem,
+                plan), startTime, endTime));
     }
 
     /**
@@ -93,14 +93,14 @@ public class BenchmarkRun {
                 return false;
             }
             BenchmarkRun that = (BenchmarkRun) o;
-            return new EqualsBuilder().append(getDomain(), that.getDomain()).append(getProblem(), that.getProblem()).append(
-                    getPlanner(), that.getPlanner()).append(getRunResults(), that.getRunResults()).isEquals();
+            return new EqualsBuilder().append(getDomain(), that.getDomain()).append(getProblem(), that.getProblem())
+                    .append(getPlanner(), that.getPlanner()).append(getRunResults(), that.getRunResults()).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getDomain()).append(getProblem()).append(getPlanner()).append(
-                    getRunResults()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(getDomain()).append(getProblem())
+                    .append(getPlanner()).append(getRunResults()).toHashCode();
         }
 
     public static class Results {

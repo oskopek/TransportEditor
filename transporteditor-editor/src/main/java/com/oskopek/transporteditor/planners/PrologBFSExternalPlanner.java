@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
-import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 
 import java.nio.file.Files;

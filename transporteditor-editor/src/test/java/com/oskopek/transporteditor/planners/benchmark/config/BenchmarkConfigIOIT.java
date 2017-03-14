@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
-import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
@@ -30,7 +29,8 @@ public class BenchmarkConfigIOIT {
         assertThat(config.getDomain()).isNotNull();
         assertThat(config.getProblems()).hasSize(2);
         assertThat(config.getPlanners()).hasSize(2);
-        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null,
+                "{0} {1} --search astar(ff())");
         assertThat(config.getPlanners().keySet()).allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
         assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.ACTION_COUNT);
         assertThat(config.getThreadCount()).isNull();
@@ -43,7 +43,8 @@ public class BenchmarkConfigIOIT {
         assertThat(config.getDomain()).isNotNull();
         assertThat(config.getProblems()).hasSize(2);
         assertThat(config.getPlanners()).hasSize(2);
-        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null,
+                "{0} {1} --search astar(ff())");
         assertThat(config.getPlanners().keySet()).allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
         assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.ACTION_COUNT);
         assertThat(config.getThreadCount()).isNotNull().isEqualTo(2);

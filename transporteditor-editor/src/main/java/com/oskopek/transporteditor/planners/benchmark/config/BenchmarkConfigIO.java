@@ -1,11 +1,9 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.oskopek.transporteditor.persistence.DataIO;
-import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import javaslang.control.Try;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
