@@ -7,8 +7,8 @@ import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
-import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
+import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import javaslang.Function2;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
@@ -29,6 +29,64 @@ public final class BenchmarkConfig {
     private String domain;
     private List<String> problems;
     private ScoreFunctionType scoreFunctionType;
+
+    private BenchmarkConfig() {
+        // intentionally empty
+    }
+
+    private static List<Planner> toPlanners(Map<String, String> plannerClassNamesAndParams) {
+        if (plannerClassNamesAndParams == null || plannerClassNamesAndParams.isEmpty()) {
+            throw new IllegalArgumentException("No planners configured.");
+        }
+
+        List<Planner> planners = new ArrayList<>();
+        plannerClassNamesAndParams.forEach((className, parameters) -> {
+            Class<? extends Planner> planner = Try.of(() -> Class.forName(className)).getOrElseThrow(
+                    e -> new IllegalStateException("Couldn't find planner class: " + className, e)).asSubclass(
+                    Planner.class);
+            Planner instance;
+            if (parameters == null || parameters.isEmpty()) {
+                instance = Try.of(() -> planner.newInstance()).getOrElseThrow(e -> new IllegalStateException(
+                        "Couldn't instantiate planner with empty constructor: " + planner, e));
+            } else {
+                instance = Try.of(() -> planner.getConstructor(String.class)).flatMap(
+                        c -> Try.of(() -> c.newInstance(parameters))).getOrElseThrow(e -> new IllegalStateException(
+                        "Couldn't instantiate planner with parameters: " + planner + ", " + parameters, e));
+            }
+            planners.add(instance);
+        });
+        return planners;
+    }
+
+    public static BenchmarkConfig from(String configFile) throws IOException {
+        Path configFilePath = Paths.get(configFile);
+        Path directory = configFilePath.getParent();
+
+        BenchmarkConfigIO io = new BenchmarkConfigIO();
+        BenchmarkConfig config = io.parse(IOUtils.concatReadAllLines(new FileInputStream(configFilePath.toFile())));
+
+        if (config.domain == null) {
+            throw new IllegalArgumentException("Failed to parse the domain filename.");
+        }
+
+        config.domain = Stream.of(config.domain).map(
+                domainFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(domainFilePath)))
+                        .getOrElseThrow(
+                                () -> new IllegalStateException("Failed to read domain file: " + domainFilePath)))
+                .get();
+
+        if (config.problems == null) {
+            throw new IllegalArgumentException("Failed to parse problem filenames.");
+        }
+
+        config.problems = config.problems.stream().map(
+                problemFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(problemFilePath)))
+                        .getOrElseThrow(
+                                () -> new IllegalStateException("Failed to read problem file: " + problemFilePath)))
+                .collect(Collectors.toList());
+
+        return config;
+    }
 
     /**
      * Get the threadCount.
@@ -75,10 +133,6 @@ public final class BenchmarkConfig {
         return scoreFunctionType;
     }
 
-    private BenchmarkConfig() {
-        // intentionally empty
-    }
-
     public Benchmark toBenchmark() {
         VariableDomainIO domainIO = new VariableDomainIO();
         Domain domain = domainIO.parse(this.domain);
@@ -96,62 +150,6 @@ public final class BenchmarkConfig {
         }
         ScoreFunction scoreFunction = scoreFunctionType.toScoreFunction();
         return new Benchmark(new BenchmarkMatrix(domain, problems, planners), scoreFunction, skipFunction);
-    }
-
-    private static List<Planner> toPlanners(Map<String, String> plannerClassNamesAndParams) {
-        if (plannerClassNamesAndParams == null || plannerClassNamesAndParams.isEmpty()) {
-            throw new IllegalArgumentException("No planners configured.");
-        }
-
-        List<Planner> planners = new ArrayList<>();
-        plannerClassNamesAndParams.forEach((className, parameters) -> {
-            Class<? extends Planner> planner = Try.of(() -> Class.forName(className))
-                    .getOrElseThrow(e -> new IllegalStateException("Couldn't find planner class: " + className, e))
-                    .asSubclass(Planner.class);
-            Planner instance;
-            if (parameters == null || parameters.isEmpty()) {
-                instance = Try.of(() -> planner.newInstance()).getOrElseThrow(e -> new IllegalStateException(
-                        "Couldn't instantiate planner with empty constructor: " + planner, e));
-            } else {
-                instance = Try.of(() -> planner.getConstructor(String.class))
-                        .flatMap(c -> Try.of(() -> c.newInstance(parameters)))
-                        .getOrElseThrow(e -> new IllegalStateException("Couldn't instantiate planner with parameters: "
-                                + planner + ", " + parameters, e));
-            }
-            planners.add(instance);
-        });
-        return planners;
-    }
-
-    public static BenchmarkConfig from(String configFile) throws IOException {
-        Path configFilePath = Paths.get(configFile);
-        Path directory = configFilePath.getParent();
-
-        BenchmarkConfigIO io = new BenchmarkConfigIO();
-        BenchmarkConfig config = io.parse(IOUtils.concatReadAllLines(new FileInputStream(configFilePath.toFile())));
-
-        if (config.domain == null) {
-            throw new IllegalArgumentException("Failed to parse the domain filename.");
-        }
-
-        config.domain = Stream.of(config.domain)
-                .map(domainFilePath -> Try.of(() ->
-                        IOUtils.concatReadAllLines(new FileInputStream(domainFilePath)))
-                        .getOrElseThrow(() -> new IllegalStateException("Failed to read domain file: "
-                                + domainFilePath)))
-                .get();
-
-        if (config.problems == null) {
-            throw new IllegalArgumentException("Failed to parse problem filenames.");
-        }
-
-        config.problems = config.problems.stream()
-                .map(problemFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(problemFilePath)))
-                        .getOrElseThrow(() -> new IllegalStateException("Failed to read problem file: "
-                                + problemFilePath)))
-                .collect(Collectors.toList());
-
-        return config;
     }
 
 

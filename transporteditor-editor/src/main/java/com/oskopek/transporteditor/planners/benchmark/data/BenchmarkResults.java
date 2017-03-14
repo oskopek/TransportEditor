@@ -24,8 +24,7 @@ public final class BenchmarkResults {
     }
 
     public static BenchmarkResults from(ArrayTable<Problem, Planner, BenchmarkRun> runTable) {
-        return new BenchmarkResults(runTable, runTable.values().stream().map(JsonRun::of)
-                .collect(Collectors.toList()));
+        return new BenchmarkResults(runTable, runTable.values().stream().map(JsonRun::of).collect(Collectors.toList()));
     }
 
     public String toJson() {
@@ -68,6 +67,16 @@ public final class BenchmarkResults {
             this.temporalPlanActions = temporalPlanActions;
             this.actions = actions;
             this.results = results;
+        }
+
+        public static JsonRun of(BenchmarkRun run) {
+            Plan plan = run.getRunResults().getPlan();
+            List<String> actions = Arrays.asList(new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan)
+                    .split("\n"));
+            List<String> temporalPlanActions = Arrays.asList(new TemporalPlanIO(run.getDomain(), run.getProblem())
+                    .serialize(plan).split("\n"));
+            return new JsonRun(run.getDomain().getName(), run.getProblem().getName(), run.getPlanner().getName(),
+                    temporalPlanActions, actions, run.getRunResults());
         }
 
         /**
@@ -122,16 +131,6 @@ public final class BenchmarkResults {
          */
         public BenchmarkRun.Results getResults() {
             return results;
-        }
-
-        public static JsonRun of(BenchmarkRun run) {
-            Plan plan = run.getRunResults().getPlan();
-            List<String> actions = Arrays.asList(new SequentialPlanIO(run.getDomain(), run.getProblem())
-                    .serialize(plan).split("\n"));
-            List<String> temporalPlanActions = Arrays.asList(new TemporalPlanIO(run.getDomain(), run.getProblem())
-                    .serialize(plan).split("\n"));
-            return new JsonRun(run.getDomain().getName(), run.getProblem().getName(), run.getPlanner().getName(),
-                    temporalPlanActions, actions, run.getRunResults());
         }
     }
 

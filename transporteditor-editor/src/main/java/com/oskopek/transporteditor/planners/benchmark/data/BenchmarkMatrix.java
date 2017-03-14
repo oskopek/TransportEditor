@@ -26,10 +26,8 @@ public class BenchmarkMatrix {
 
     public Iterator<BenchmarkRun> toBenchmarkRuns(Function2<Problem, Planner, Boolean> skipFunction,
             ScoreFunction scoreFunction) {
-        return Stream.ofAll(getProblems())
-                .crossProduct(getPlanners())
-                .filter(t -> !skipFunction.apply(t._1, t._2))
-                .map(t -> new BenchmarkRun(domain, t._1, t._2.copy(), scoreFunction));
+        return Stream.ofAll(getProblems()).crossProduct(getPlanners()).filter(t -> !skipFunction.apply(t._1, t._2)).map(
+                t -> new BenchmarkRun(domain, t._1, t._2.copy(), scoreFunction));
     }
 
     /**
@@ -74,8 +72,7 @@ public class BenchmarkMatrix {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getPlanners()).append(getDomain()).append(getProblems())
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(getPlanners()).append(getDomain()).append(getProblems()).toHashCode();
     }
 
 

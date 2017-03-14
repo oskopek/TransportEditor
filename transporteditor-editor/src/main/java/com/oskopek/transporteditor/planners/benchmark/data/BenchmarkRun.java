@@ -13,13 +13,12 @@ import org.slf4j.LoggerFactory;
 
 public class BenchmarkRun {
 
+    private static final Logger logger = LoggerFactory.getLogger(BenchmarkRun.class);
     private final Domain domain;
     private final Problem problem;
     private final Planner planner;
     private final ScoreFunction scoreFunction;
     private final Results runResults;
-
-    private static final Logger logger = LoggerFactory.getLogger(BenchmarkRun.class);
 
     public BenchmarkRun(BenchmarkRun run, Results runResults) {
         this(run.getDomain(), run.getProblem(), run.getPlanner(), run.scoreFunction, runResults);
@@ -44,64 +43,64 @@ public class BenchmarkRun {
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();
-        return new BenchmarkRun(this, new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem,
-                plan), startTime, endTime));
+        return new BenchmarkRun(this,
+                new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem, plan), startTime, endTime));
     }
 
     /**
-         * Get the domain.
-         *
-         * @return the domain
-         */
-        public Domain getDomain() {
-            return domain;
-        }
+     * Get the domain.
+     *
+     * @return the domain
+     */
+    public Domain getDomain() {
+        return domain;
+    }
 
-        /**
-         * Get the problem.
-         *
-         * @return the problem
-         */
-        public Problem getProblem() {
-            return problem;
-        }
+    /**
+     * Get the problem.
+     *
+     * @return the problem
+     */
+    public Problem getProblem() {
+        return problem;
+    }
 
-        /**
-         * Get the planner.
-         *
-         * @return the planner
-         */
-        public Planner getPlanner() {
-            return planner;
-        }
+    /**
+     * Get the planner.
+     *
+     * @return the planner
+     */
+    public Planner getPlanner() {
+        return planner;
+    }
 
-        /**
-         * Get the results.
-         *
-         * @return the results
-         */
-        public Results getRunResults() {
-            return runResults;
-        }
+    /**
+     * Get the results.
+     *
+     * @return the results
+     */
+    public Results getRunResults() {
+        return runResults;
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof BenchmarkRun)) {
-                return false;
-            }
-            BenchmarkRun that = (BenchmarkRun) o;
-            return new EqualsBuilder().append(getDomain(), that.getDomain()).append(getProblem(), that.getProblem())
-                    .append(getPlanner(), that.getPlanner()).append(getRunResults(), that.getRunResults()).isEquals();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
+        if (!(o instanceof BenchmarkRun)) {
+            return false;
+        }
+        BenchmarkRun that = (BenchmarkRun) o;
+        return new EqualsBuilder().append(getDomain(), that.getDomain()).append(getProblem(), that.getProblem()).append(
+                getPlanner(), that.getPlanner()).append(getRunResults(), that.getRunResults()).isEquals();
+    }
 
-        @Override
-        public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getDomain()).append(getProblem())
-                    .append(getPlanner()).append(getRunResults()).toHashCode();
-        }
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getDomain()).append(getProblem()).append(getPlanner()).append(
+                getRunResults()).toHashCode();
+    }
 
     public static class Results {
 

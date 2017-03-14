@@ -28,7 +28,7 @@ public class BenchmarkConfigIO implements DataIO<BenchmarkConfig> {
 
     @Override
     public <T extends BenchmarkConfig> String serialize(T object) {
-        return Try.of(() -> mapper.writeValueAsString(object))
-                .getOrElseThrow(e -> new IllegalStateException("Error while serializing benchmark JSON.", e));
+        return Try.of(() -> mapper.writeValueAsString(object)).getOrElseThrow(
+                e -> new IllegalStateException("Error while serializing benchmark JSON.", e));
     }
 }

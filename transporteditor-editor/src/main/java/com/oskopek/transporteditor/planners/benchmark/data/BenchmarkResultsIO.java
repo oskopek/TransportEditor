@@ -21,13 +21,13 @@ public class BenchmarkResultsIO implements DataIO<BenchmarkResults> {
 
     @Override
     public BenchmarkResults parse(String contents) {
-        return Try.of(() -> mapper.readValue(contents, BenchmarkResults.class))
-                .getOrElseThrow(e -> new IllegalStateException("Error while parsing benchmark result JSON.", e));
+        return Try.of(() -> mapper.readValue(contents, BenchmarkResults.class)).getOrElseThrow(
+                e -> new IllegalStateException("Error while parsing benchmark result JSON.", e));
     }
 
     @Override
     public <T extends BenchmarkResults> String serialize(T object) {
-        return Try.of(() -> mapper.writeValueAsString(object))
-                .getOrElseThrow(e -> new IllegalStateException("Error while serializing benchmark result JSON.", e));
+        return Try.of(() -> mapper.writeValueAsString(object)).getOrElseThrow(
+                e -> new IllegalStateException("Error while serializing benchmark result JSON.", e));
     }
 }
