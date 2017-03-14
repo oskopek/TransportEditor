@@ -69,4 +69,7 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
 
     @Override
     public abstract String getName();
+
+    @Override
+    public abstract AbstractPlanner copy();
 }

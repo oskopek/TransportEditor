@@ -17,7 +17,6 @@ public final class BenchmarkResults {
 
     private final transient ArrayTable<Problem, Planner, BenchmarkRun> runTable;
     private final List<JsonRun> runs;
-//    private final SummaryStatistics statistics; TODO
 
     private BenchmarkResults(ArrayTable<Problem, Planner, BenchmarkRun> runTable, List<JsonRun> runs) {
         this.runTable = runTable;

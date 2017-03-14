@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
+import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 
 /**
@@ -10,7 +11,7 @@ import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParamet
 public class FastDownwardExternalPlanner extends ExternalPlanner {
 
     private static final String executable = "fast-down-plan.sh";
-    private static final String defaultParamaters = "--search \"astar(lmcut())\"";
+    private static final String defaultParamaters = "--search astar(lmcut())";
 
     /**
      * Default empty constructor.
@@ -25,7 +26,11 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
      * @param defaultParamaters the command line args
      */
     public FastDownwardExternalPlanner(String defaultParamaters) {
-        super(executable, "{0} {1} " + defaultParamaters);
+        this(executable, "{0} {1} " + defaultParamaters);
+    }
+
+    protected FastDownwardExternalPlanner(String executable, String parameters) {
+        super(executable, parameters);
     }
 
     /**
@@ -38,5 +43,11 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
     public boolean isAvailable() {
         return new DefaultExecutableWithParameters(executable, "").isExecutableValid()
                 && new DefaultExecutableWithParameters("sh", "").isExecutableValid();
+    }
+
+    @Override
+    public FastDownwardExternalPlanner copy() {
+        return new FastDownwardExternalPlanner(getExecutableWithParameters().getExecutable(),
+                getExecutableWithParameters().getParameters());
     }
 }

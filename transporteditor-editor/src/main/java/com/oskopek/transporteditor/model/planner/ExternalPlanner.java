@@ -241,4 +241,9 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         return new StringBuilder(getClass().getSimpleName()).append('[').append(executable.getExecutable()).append(' ')
                 .append(executable.getParameters()).append(']').toString();
     }
+
+    @Override
+    public ExternalPlanner copy() {
+        return new ExternalPlanner(executable);
+    }
 }

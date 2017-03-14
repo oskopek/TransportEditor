@@ -89,4 +89,6 @@ public interface Planner extends LogStreamable, Cancellable {
 
     String getName();
 
+    Planner copy();
+
 }

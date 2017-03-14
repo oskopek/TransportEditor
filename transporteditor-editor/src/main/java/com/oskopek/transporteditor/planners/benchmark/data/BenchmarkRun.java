@@ -44,7 +44,7 @@ public class BenchmarkRun {
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();
-        return new BenchmarkRun(this, new Results(plan, scoreFunction.apply(domain, problem, plan), startTime,
+        return new BenchmarkRun(this, new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem, plan), startTime,
                 endTime));
     }
 

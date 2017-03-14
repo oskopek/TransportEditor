@@ -29,7 +29,7 @@ public class BenchmarkMatrix {
         return Stream.ofAll(getProblems())
                 .crossProduct(getPlanners())
                 .filter(t -> !skipFunction.apply(t._1, t._2))
-                .map(t -> new BenchmarkRun(domain, t._1, t._2, scoreFunction));
+                .map(t -> new BenchmarkRun(domain, t._1, t._2.copy(), scoreFunction));
     }
 
     /**

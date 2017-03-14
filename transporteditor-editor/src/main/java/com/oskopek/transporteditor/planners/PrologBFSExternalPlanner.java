@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
+import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
 
 import java.nio.file.Files;
@@ -31,5 +32,10 @@ public final class PrologBFSExternalPlanner extends ExternalPlanner {
     public boolean isAvailable() {
         return Files.isExecutable(executable) && new DefaultExecutableWithParameters("swipl", "").isExecutableValid()
                 && new DefaultExecutableWithParameters("sh", "").isExecutableValid();
+    }
+
+    @Override
+    public PrologBFSExternalPlanner copy() {
+        return new PrologBFSExternalPlanner();
     }
 }
