@@ -13,20 +13,40 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the aggregated results of a {@link com.oskopek.transporteditor.planners.benchmark.Benchmark}.
+ */
 public final class BenchmarkResults {
 
     private final transient ArrayTable<Problem, Planner, BenchmarkRun> runTable;
     private final List<JsonRun> runs;
 
+    /**
+     * Default constructor.
+     *
+     * @param runTable the run table
+     * @param runs the JSON run representation
+     */
     private BenchmarkResults(ArrayTable<Problem, Planner, BenchmarkRun> runTable, List<JsonRun> runs) {
         this.runTable = runTable;
         this.runs = runs;
     }
 
+    /**
+     * Create a results instance from the run table.
+     *
+     * @param runTable the run table
+     * @return the initialized results
+     */
     public static BenchmarkResults from(ArrayTable<Problem, Planner, BenchmarkRun> runTable) {
         return new BenchmarkResults(runTable, runTable.values().stream().map(JsonRun::of).collect(Collectors.toList()));
     }
 
+    /**
+     * Serialize the results to JSON.
+     *
+     * @return the JSON representation
+     */
     public String toJson() {
         return new BenchmarkResultsIO().serialize(this);
     }
@@ -51,6 +71,9 @@ public final class BenchmarkResults {
         return runs;
     }
 
+    /**
+     * Data container class, used for direct JSON serialization of the results.
+     */
     private static final class JsonRun {
         private final String domain;
         private final String problem;
@@ -59,6 +82,16 @@ public final class BenchmarkResults {
         private final List<String> actions;
         private final BenchmarkRun.Results results;
 
+        /**
+         * Default constructor.
+         *
+         * @param domain the domain
+         * @param problem the problem
+         * @param planner the planner
+         * @param temporalPlanActions the temporal actions
+         * @param actions the actions
+         * @param results the results
+         */
         private JsonRun(String domain, String problem, String planner, List<String> temporalPlanActions,
                 List<String> actions, BenchmarkRun.Results results) {
             this.domain = domain;
@@ -69,6 +102,12 @@ public final class BenchmarkResults {
             this.results = results;
         }
 
+        /**
+         * Construct a JSON run instance from the benchmark run instance. Serializes the plan to actions.
+         *
+         * @param run the benchmark run to serialize
+         * @return the initialized JSON run
+         */
         public static JsonRun of(BenchmarkRun run) {
             Plan plan = run.getRunResults().getPlan();
             List<String> actions = Arrays.asList(new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan)

@@ -11,6 +11,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A immutable single benchmark planning run. Essentially represents and element in the benchmark matrix.
+ * <p>
+ * Has two stages:
+ * <ol>
+ * <li>Basic - contains only the information necessary to run the planner.</li>
+ * <li>With results - after the run finishes, fills in the results. A new instance is returned from the
+ * {@link #execute()} method.</li>
+ * </ol>
+ */
 public class BenchmarkRun {
 
     private static final Logger logger = LoggerFactory.getLogger(BenchmarkRun.class);
@@ -20,14 +30,37 @@ public class BenchmarkRun {
     private final ScoreFunction scoreFunction;
     private final Results runResults;
 
+    /**
+     * Ammend the run results to a benchmark run.
+     *
+     * @param run the benchmark run
+     * @param runResults the run results
+     */
     public BenchmarkRun(BenchmarkRun run, Results runResults) {
         this(run.getDomain(), run.getProblem(), run.getPlanner(), run.scoreFunction, runResults);
     }
 
+    /**
+     * Create a benchmark run with no results yet.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @param planner the planner
+     * @param scoreFunction the score function
+     */
     public BenchmarkRun(Domain domain, Problem problem, Planner planner, ScoreFunction scoreFunction) {
         this(domain, problem, planner, scoreFunction, null);
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @param planner the planner
+     * @param scoreFunction the score function
+     * @param runResults the run results
+     */
     protected BenchmarkRun(Domain domain, Problem problem, Planner planner, ScoreFunction scoreFunction,
             Results runResults) {
         this.domain = domain;
@@ -37,6 +70,11 @@ public class BenchmarkRun {
         this.runResults = runResults;
     }
 
+    /**
+     * Execute this benchmark run. This is a blocking call.
+     *
+     * @return the benchmark run with results
+     */
     public BenchmarkRun execute() {
         logger.info("Starting benchmark run for domain {}, problem {}, planner {}", domain.getName(), problem.getName(),
                 planner.getName());
@@ -102,6 +140,9 @@ public class BenchmarkRun {
                 getRunResults()).toHashCode();
     }
 
+    /**
+     * Results of a benchmark run.
+     */
     public static class Results {
 
         private final Plan plan;
@@ -109,6 +150,14 @@ public class BenchmarkRun {
         private final long startTimeMs;
         private final long endTimeMs;
 
+        /**
+         * Default constructor.
+         *
+         * @param plan the plan
+         * @param score the score
+         * @param startTimeMs the start time in milliseconds
+         * @param endTimeMs the end time in milliseconds
+         */
         public Results(Plan plan, Integer score, long startTimeMs, long endTimeMs) {
             this.plan = plan;
             this.score = score;
@@ -144,6 +193,5 @@ public class BenchmarkRun {
             return score;
         }
     }
-
 
 }

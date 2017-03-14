@@ -12,18 +12,35 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
+/**
+ * Data container representing the matrix to be benchmarked - all planners with all problems in the given domain.
+ */
 public class BenchmarkMatrix {
 
     private final Domain domain;
     private final List<Problem> problems;
     private final List<Planner> planners;
 
+    /**
+     * Default constructor.
+     *
+     * @param domain the domain
+     * @param problems the problems
+     * @param planners the planners
+     */
     public BenchmarkMatrix(Domain domain, List<Problem> problems, List<Planner> planners) {
         this.domain = domain;
         this.problems = problems;
         this.planners = planners;
     }
 
+    /**
+     * Create individual benchmark runs from the matrix and given parameters.
+     *
+     * @param skipFunction whether to skip the given benchmark run
+     * @param scoreFunction the score function to use for evaluating the run results
+     * @return an iterator of initialized benchmark runs
+     */
     public Iterator<BenchmarkRun> toBenchmarkRuns(Function2<Problem, Planner, Boolean> skipFunction,
             ScoreFunction scoreFunction) {
         return Stream.ofAll(getProblems()).crossProduct(getPlanners()).filter(t -> !skipFunction.apply(t._1, t._2)).map(

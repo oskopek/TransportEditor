@@ -150,7 +150,7 @@ public class SequentialPlanIO implements DataIO<Plan> {
     @Override
     public synchronized String serialize(Plan plan) {
         if (plan == null) {
-            return "";
+            return null;
         }
         StringBuilder builder = new StringBuilder();
         planState = new DefaultPlanState(domain, problem);

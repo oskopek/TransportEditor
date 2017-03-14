@@ -59,7 +59,7 @@ public class TemporalPlanIO implements DataIO<Plan> {
     @Override
     public String serialize(Plan plan) {
         if (plan == null) {
-            return "";
+            return null;
         }
         StringBuilder str = new StringBuilder();
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
