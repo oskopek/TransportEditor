@@ -17,13 +17,7 @@ public class Benchmarker {
         String benchmarkConfigPath = args[0];
         BenchmarkConfig benchmarkConfig = BenchmarkConfig.from(benchmarkConfigPath);
         Benchmark benchmark = benchmarkConfig.toBenchmark();
-
-        Integer threadCount = benchmarkConfig.getThreadCount();
-        if (threadCount == null) {
-            threadCount = Runtime.getRuntime().availableProcessors();
-        }
-
-        BenchmarkResults results =  benchmark.benchmark(threadCount);
+        BenchmarkResults results =  benchmark.benchmark(benchmarkConfig.getThreadCount());
         System.out.println(results.toJson());
     }
 }

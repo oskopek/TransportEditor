@@ -41,7 +41,7 @@ public class PrologBFSExternalPlannerIT {
 
     @Test
     public void plansP01Sequential() throws Exception {
-        assumeTrue(planner.isAvailable());
+        assumeTrue("SWIPL has to be installed.", planner.isAvailable());
         Plan plan = planner.startAndWait(domain, problem);
         assertThat(plan).isNotNull().isEqualTo(PrologBFSExternalPlannerIT.plan);
     }

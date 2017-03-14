@@ -1,7 +1,10 @@
 package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
+import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.plan.Plan;
+import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transporteditor.model.planner.ExternalPlanner;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
@@ -12,6 +15,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FastDownwardExternalPlannerIT {
 
@@ -34,24 +40,53 @@ public class FastDownwardExternalPlannerIT {
     }
 
     @Test
-    @Ignore("SWIPL has to be installed.")
+    @Ignore("Fast Downward has to be installed.")
     public void isAvailable() throws Exception {
         assertThat(planner.isAvailable()).isTrue();
     }
 
     @Test
     public void plansP01Sequential() throws Exception {
-        assumeTrue(planner.isAvailable());
-        Plan plan = planner.startAndWait(domain, problem);
-        assertThat(plan).isNotNull().isEqualTo(FastDownwardExternalPlannerIT.plan);
+        assumeTrue("Fast Downward planner is not available.", planner.isAvailable());
+        final Plan plan = planner.startAndWait(domain, problem);
+        assertThat(plan).isNotNull();
+        if (!plan.equals(FastDownwardExternalPlannerIT.plan)) {
+            List<Action> actions = FastDownwardExternalPlannerIT.plan.getActions().stream().collect(Collectors.toList());
+            Action action0 = actions.remove(0);
+            actions.add(1, action0);
+            Plan newPlan = new SequentialPlan(actions);
+            assertThat(plan).isEqualTo(newPlan); // two valid plan variants
+        }
     }
 
     @Test
     public void plansP01SequentialAlias() throws Exception {
-        assumeTrue(planner.isAvailable());
-        planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011");
+        assumeTrue("Fast Downward planner is not available.", planner.isAvailable());
+        planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
         Plan plan = planner.startAndWait(domain, problem);
-        assertThat(plan).isNotNull().isEqualTo(FastDownwardExternalPlannerIT.plan);
+        assertThat(plan).isNotNull();
+        if (!plan.equals(FastDownwardExternalPlannerIT.plan)) {
+            List<Action> actions = FastDownwardExternalPlannerIT.plan.getActions().stream().collect(Collectors.toList());
+            Action action0 = actions.remove(0);
+            actions.add(1, action0);
+            Plan newPlan = new SequentialPlan(actions);
+            assertThat(plan).isEqualTo(newPlan); // two valid plan variants
+        }
+    }
+
+    @Test
+    public void plansP01SequentialDifferentSearch() throws Exception {
+        assumeTrue("Fast Downward planner is not available.", planner.isAvailable());
+        planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
+        Plan plan = planner.startAndWait(domain, problem);
+        assertThat(plan).isNotNull();
+        if (!plan.equals(FastDownwardExternalPlannerIT.plan)) {
+            List<Action> actions = FastDownwardExternalPlannerIT.plan.getActions().stream().collect(Collectors.toList());
+            Action action0 = actions.remove(0);
+            actions.add(1, action0);
+            Plan newPlan = new SequentialPlan(actions);
+            assertThat(plan).isEqualTo(newPlan); // two valid plan variants
+        }
     }
 
 }

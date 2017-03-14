@@ -86,7 +86,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @return the computed plan, or null in case of an error
      * @throws IllegalStateException if an error occurred during planning
      */
-    private synchronized Plan startPlanning(Domain domain, Problem problem) {
+    private synchronized Plan plan(Domain domain, Problem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             String executableCommand = executable.getExecutable();
             List<String> parameters = executable.getCommandParameterList(serializer.getDomainTmpFile().toAbsolutePath(),
@@ -187,7 +187,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         if (isPlanning().getValue()) {
             throw new IllegalStateException("Already planning!");
         }
-        return startPlanning(domain, problem);
+        return plan(domain, problem);
     }
 
     @Override

@@ -1,12 +1,12 @@
 {
-  "domain": "../../../persistence/variableDomainSeq.pddl",
+  "domain": "${transport.root}/../../../persistence/variableDomainSeq.pddl",
   "problems": [
-    "../../../persistence/p01SeqProblem.pddl",
-    "../../../persistence/p01SeqProblemEasier.pddl"
+    "${transport.root}/../../../persistence/p01SeqProblem.pddl",
+    "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl"
   ],
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
-    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "--alias seq-sat-lama-2011",
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "{0} {1} --search astar(ff())",
     "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner": null
   },
   "threadCount": 2

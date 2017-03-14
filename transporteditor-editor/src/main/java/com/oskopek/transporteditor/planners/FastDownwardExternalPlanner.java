@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.planners;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
-import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
+import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
 
 /**
  * Wrapper of the wrapper script ({@code fast-down-plan.sh})
@@ -11,26 +11,25 @@ import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParamet
 public class FastDownwardExternalPlanner extends ExternalPlanner {
 
     private static final String executable = "fast-down-plan.sh";
-    private static final String defaultParamaters = "--search astar(lmcut())";
+    private static final String defaultSearchParameters = "--search astar(lmcut())";
 
     /**
      * Default empty constructor.
      */
     public FastDownwardExternalPlanner() {
-        this(defaultParamaters);
+        this("", defaultSearchParameters);
     }
 
-    /**
-     * Constructor with fast-downward command line arguments.
-     *
-     * @param defaultParamaters the command line args
-     */
-    public FastDownwardExternalPlanner(String defaultParamaters) {
-        this(executable, "{0} {1} " + defaultParamaters);
-    }
-
-    protected FastDownwardExternalPlanner(String executable, String parameters) {
+    public FastDownwardExternalPlanner(String parameters) {
         super(executable, parameters);
+    }
+
+    public FastDownwardExternalPlanner(String beforeArgs, String afterArgs) {
+        super(executable, beforeArgs + " {0} {1} " + afterArgs);
+    }
+
+    protected FastDownwardExternalPlanner(ExecutableWithParameters executableWithParameters) {
+        super(executableWithParameters);
     }
 
     /**
@@ -47,7 +46,6 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
 
     @Override
     public FastDownwardExternalPlanner copy() {
-        return new FastDownwardExternalPlanner(getExecutableWithParameters().getExecutable(),
-                getExecutableWithParameters().getParameters());
+        return new FastDownwardExternalPlanner(getExecutableWithParameters());
     }
 }

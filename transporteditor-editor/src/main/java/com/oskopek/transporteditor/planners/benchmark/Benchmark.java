@@ -9,6 +9,8 @@ import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
 import javaslang.*;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,6 +24,8 @@ public class Benchmark {
     private final ScoreFunction scoreFunction;
     private final Function2<Problem, Planner, Boolean> skipFunction;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public Benchmark(BenchmarkMatrix matrix, ScoreFunction scoreFunction,
             Function2<Problem, Planner, Boolean> skipFunction) {
         this.matrix = matrix;
@@ -29,7 +33,12 @@ public class Benchmark {
         this.skipFunction = skipFunction;
     }
 
-    public BenchmarkResults benchmark(int threadCount) {
+    public BenchmarkResults benchmark(Integer threadCount) {
+        if (threadCount == null) {
+            threadCount = Runtime.getRuntime().availableProcessors();
+            logger.warn("Thread count not set in config, using default: {}", threadCount);
+        }
+
         ExecutorService service = Executors.newFixedThreadPool(threadCount);
         BenchmarkResults results = null;
         try {
@@ -44,15 +53,13 @@ public class Benchmark {
         return results;
     }
 
-    private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix,
-            ExecutorService executor) {
+    private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService executor) {
         return matrix.toBenchmarkRuns(skipFunction, scoreFunction)
-                .map(benchmarkRun -> CompletableFuture.supplyAsync(() -> benchmarkRun.run(), executor))
+                .map(benchmarkRun -> CompletableFuture.supplyAsync(() -> benchmarkRun.execute(), executor))
                 .toJavaList();
     }
 
-    private static Stream<BenchmarkRun> waitFor(
-            List<CompletableFuture<BenchmarkRun>> futures)
+    private static Stream<BenchmarkRun> waitFor(List<CompletableFuture<BenchmarkRun>> futures)
             throws ExecutionException, InterruptedException {
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
         allOf.get();
@@ -60,8 +67,8 @@ public class Benchmark {
                 .getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
     }
 
-    private static ArrayTable<Problem, Planner, BenchmarkRun> populateRunTable(
-            BenchmarkMatrix matrix, Stream<BenchmarkRun> intermediates) {
+    private static ArrayTable<Problem, Planner, BenchmarkRun> populateRunTable(BenchmarkMatrix matrix,
+            Stream<BenchmarkRun> intermediates) {
             ArrayTable<Problem, Planner, BenchmarkRun> table = ArrayTable.create(matrix.getProblems(),
                     matrix.getPlanners());
             intermediates.forEach(intermediate -> {
