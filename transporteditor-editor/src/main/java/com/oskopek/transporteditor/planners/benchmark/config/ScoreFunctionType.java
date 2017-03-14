@@ -2,10 +2,27 @@ package com.oskopek.transporteditor.planners.benchmark.config;
 
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 
+/**
+ * Used for deserializing common score functions.
+ */
 public enum ScoreFunctionType {
 
-    ACTION_COUNT, TOTAL_TIME;
+    /**
+     * The number of actions in a plan.
+     */
+    ACTION_COUNT,
 
+    /**
+     * The end time of the last action.
+     */
+    TOTAL_TIME;
+
+    /**
+     * Create a {@link ScoreFunction} instance from the given score function type.
+     *
+     * @return the score function
+     * @throws IllegalStateException if the given score function type is not recognized
+     */
     public ScoreFunction toScoreFunction() {
         switch (this) {
             case ACTION_COUNT:

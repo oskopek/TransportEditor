@@ -1,21 +1,23 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.oskopek.transporteditor.persistence.DataIO;
+import com.oskopek.transporteditor.planners.benchmark.JsonUtils;
 import javaslang.control.Try;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
+/**
+ * Serializer/parser for {@link BenchmarkConfig}.
+ */
 public class BenchmarkConfigIO implements DataIO<BenchmarkConfig> {
 
     private final ObjectMapper mapper;
 
+    /**
+     * Default constructor.
+     */
     public BenchmarkConfigIO() {
-        mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        mapper.enable(JsonParser.Feature.ALLOW_TRAILING_COMMA);
+        mapper = JsonUtils.createDefaultMapper();
     }
 
     @Override

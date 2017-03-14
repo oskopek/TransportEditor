@@ -20,14 +20,33 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
         this("", defaultSearchParameters);
     }
 
+    /**
+     * Constructor for the {@code fast-down-plan.sh} script with any parameters.
+     * <p>
+     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     *
+     * @param parameters in the format: "... {0} ... {1} ..."
+     */
     public FastDownwardExternalPlanner(String parameters) {
         super(executable, parameters);
     }
 
+    /**
+     * Constructor for the {@code fast-down-plan.sh} script with parameters before domain-problem files
+     * and any parameters afterwards. Final format: "{@code beforeArgs} {0} {1} {@code afterArgs}".
+     *
+     * @param beforeArgs arguments before domain
+     * @param afterArgs arguments after problem
+     */
     public FastDownwardExternalPlanner(String beforeArgs, String afterArgs) {
         super(executable, beforeArgs + " {0} {1} " + afterArgs);
     }
 
+    /**
+     * Overriden constructor, used in {@link #copy()}.
+     *
+     * @param executableWithParameters the executable with parameters
+     */
     protected FastDownwardExternalPlanner(ExecutableWithParameters executableWithParameters) {
         super(executableWithParameters);
     }

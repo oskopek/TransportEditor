@@ -87,8 +87,19 @@ public interface Planner extends LogStreamable, Cancellable {
      */
     boolean isAvailable();
 
+    /**
+     * Get a string representation of the planner. Used mainly for benchmarking logs.
+     *
+     * @return the planner name
+     */
     String getName();
 
+    /**
+     * Copy constructor. Do note, that this method should return the exact type that it was called on, i.e. all
+     * subclasses should override this method.
+     *
+     * @return the planner copy
+     */
     Planner copy();
 
 }

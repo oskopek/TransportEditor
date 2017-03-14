@@ -1,17 +1,22 @@
 package com.oskopek.transporteditor.planners.benchmark.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.oskopek.transporteditor.persistence.DataIO;
+import com.oskopek.transporteditor.planners.benchmark.JsonUtils;
 import javaslang.control.Try;
 
+/**
+ * Serializer/parser for {@link BenchmarkResults}.
+ */
 public class BenchmarkResultsIO implements DataIO<BenchmarkResults> {
 
     private final ObjectMapper mapper;
 
+    /**
+     * Default constructor.
+     */
     public BenchmarkResultsIO() {
-        mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper = JsonUtils.createDefaultMapper();
     }
 
     @Override
