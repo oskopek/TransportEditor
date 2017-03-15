@@ -4,6 +4,7 @@ import javaslang.collection.Stream;
 import javaslang.control.Try;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,5 +116,10 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
         return new EqualsBuilder().append(getExecutable(), that.getExecutable())
                 .append(parameters, that.parameters)
                 .isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("executable", executable).append("parameters", parameters).toString();
     }
 }

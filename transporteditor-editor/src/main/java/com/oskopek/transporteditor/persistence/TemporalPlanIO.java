@@ -58,6 +58,9 @@ public class TemporalPlanIO implements DataIO<Plan> {
 
     @Override
     public String serialize(Plan plan) {
+        if (plan == null) {
+            return null;
+        }
         StringBuilder str = new StringBuilder();
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
         actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);

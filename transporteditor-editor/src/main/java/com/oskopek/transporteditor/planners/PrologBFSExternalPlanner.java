@@ -32,4 +32,9 @@ public final class PrologBFSExternalPlanner extends ExternalPlanner {
         return Files.isExecutable(executable) && new DefaultExecutableWithParameters("swipl", "").isExecutableValid()
                 && new DefaultExecutableWithParameters("sh", "").isExecutableValid();
     }
+
+    @Override
+    public PrologBFSExternalPlanner copy() {
+        return new PrologBFSExternalPlanner();
+    }
 }

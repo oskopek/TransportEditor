@@ -17,8 +17,8 @@ import java.util.Optional;
  * A planner implementation for simple Java-based planners. Handles listeners
  * and all needed JavaFX properties. Extensions only need to handle:
  * <ul>
- *     <li>planning: {@link #plan(Domain, Problem)}</li>
- *     <li>logging, using {@link #log(String)}</li>
+ * <li>planning: {@link #plan(Domain, Problem)}</li>
+ * <li>logging, using {@link #log(String)}</li>
  * </ul>
  */
 public abstract class AbstractPlanner extends AbstractLogStreamable implements Planner {
@@ -66,4 +66,10 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
     public final boolean isAvailable() {
         return true;
     }
+
+    @Override
+    public abstract String getName();
+
+    @Override
+    public abstract AbstractPlanner copy();
 }

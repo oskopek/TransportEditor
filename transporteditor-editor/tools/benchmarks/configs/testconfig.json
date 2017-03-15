@@ -1,0 +1,11 @@
+{
+  "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
+  "problems": [
+    "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
+    "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl"
+  ],
+  "scoreFunctionType": "ACTION_COUNT",
+  "planners": {
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "--search astar(lmcut())"
+  }
+}

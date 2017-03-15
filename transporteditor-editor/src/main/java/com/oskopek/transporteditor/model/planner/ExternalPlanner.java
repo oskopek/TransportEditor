@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javaslang.control.Try;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @return the computed plan, or null in case of an error
      * @throws IllegalStateException if an error occurred during planning
      */
-    private synchronized Plan startPlanning(Domain domain, Problem problem) {
+    private synchronized Plan plan(Domain domain, Problem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             String executableCommand = executable.getExecutable();
             List<String> parameters = executable.getCommandParameterList(serializer.getDomainTmpFile().toAbsolutePath(),
@@ -186,7 +187,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         if (isPlanning().getValue()) {
             throw new IllegalStateException("Already planning!");
         }
-        return startPlanning(domain, problem);
+        return plan(domain, problem);
     }
 
     @Override
@@ -228,5 +229,21 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         return new EqualsBuilder()
                 .append(executable, that.executable)
                 .isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("executable", executable).toString();
+    }
+
+    @Override
+    public String getName() {
+        return new StringBuilder(getClass().getSimpleName()).append('[').append(executable.getExecutable()).append(' ')
+                .append(executable.getParameters()).append(']').toString();
+    }
+
+    @Override
+    public ExternalPlanner copy() {
+        return new ExternalPlanner(executable);
     }
 }

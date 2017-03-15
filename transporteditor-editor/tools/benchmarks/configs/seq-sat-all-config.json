@@ -1,0 +1,41 @@
+{
+  "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
+  "problems": [
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p01.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p02.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p03.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p04.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p05.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p06.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p07.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p08.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p09.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p10.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p11.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p12.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p13.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p14.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p15.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p16.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p17.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p18.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p19.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p20.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p21.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p22.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p23.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p24.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p25.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p26.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p27.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p28.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p29.pddl",
+    "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p30.pddl"
+  ],
+  "scoreFunctionType": "TOTAL_TIME",
+  "planners": {
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])",
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "--alias seq-sat-lama-2011 {0} {1}"
+  },
+  "threadCount": 4
+}
