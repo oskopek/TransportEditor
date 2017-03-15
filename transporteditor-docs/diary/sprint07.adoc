@@ -10,3 +10,9 @@
 
 * Added basic thesis outline
 * Started writing parts
+
+== 2017/03/15
+
+* Added benchmarks
+* More writing on the first chapter
+
