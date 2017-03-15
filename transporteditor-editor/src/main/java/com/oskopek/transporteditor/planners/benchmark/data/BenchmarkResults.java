@@ -10,6 +10,7 @@ import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.TemporalPlanIO;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,10 +111,10 @@ public final class BenchmarkResults {
          */
         public static JsonRun of(BenchmarkRun run) {
             Plan plan = run.getRunResults().getPlan();
-            List<String> actions = Arrays.asList(new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan)
-                    .split("\n"));
-            List<String> temporalPlanActions = Arrays.asList(new TemporalPlanIO(run.getDomain(), run.getProblem())
-                    .serialize(plan).split("\n"));
+            String sequential = new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan);
+            List<String> actions = sequential == null ? null : Arrays.asList(sequential.split("\n"));
+            String temporal = new TemporalPlanIO(run.getDomain(), run.getProblem()).serialize(plan);
+            List<String> temporalPlanActions = temporal == null ? null : Arrays.asList(temporal.split("\n"));
             return new JsonRun(run.getDomain().getName(), run.getProblem().getName(), run.getPlanner().getName(),
                     temporalPlanActions, actions, run.getRunResults());
         }

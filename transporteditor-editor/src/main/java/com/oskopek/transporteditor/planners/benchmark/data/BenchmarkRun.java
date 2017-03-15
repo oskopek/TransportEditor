@@ -81,6 +81,8 @@ public class BenchmarkRun {
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();
+        logger.info("Ending benchmark run for domain {}, problem {}, planner {}", domain.getName(), problem.getName(),
+                planner.getName());
         return new BenchmarkRun(this,
                 new Results(plan, plan == null ? -1 : scoreFunction.apply(domain, problem, plan), startTime, endTime));
     }
