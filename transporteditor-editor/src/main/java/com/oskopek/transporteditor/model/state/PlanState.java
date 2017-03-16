@@ -32,4 +32,8 @@ public interface PlanState extends Problem {
      */
     void applyEffects(Action action);
 
+    default boolean isGoalState() {
+        return getAllPackages().stream().allMatch(p -> p.getTarget().equals(p.getLocation()));
+    }
+
 }
