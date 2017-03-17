@@ -240,6 +240,13 @@ for a given time and then switched to manual layout.
 
 ==== Persisting problems
 
+Both rule pages of http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html[IPC-6]
+and https://helios.hud.ac.uk/scommv/IPC-14/rules.html[IPC-8]
+specify PDDL 3.1 as their official modelling language (language for domain
+and problem specification).
+Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
+https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf[definition of PDDL 3.1].
+
 Using a http://freemarker.org/[Freemarker] template and a lot of string manipulation it is persisted into PDDL.
 For parsing, we assume a correct and valid problem and use a formal grammar written in http://www.antlr.org/[ANTLR]
 to parse PDDL into a generated code structure provided by ANTLR and the `maven-antlr-plugin`. The same grammar as for
@@ -269,6 +276,9 @@ Using a http://freemarker.org/[Freemarker] template and a lot of string manipula
 For parsing, we assume a correct and valid problem and use a formal grammar written in http://www.antlr.org/[ANTLR]
 to parse PDDL into a generated code structure provided by ANTLR and the `maven-antlr-plugin`. The same grammar as for
 problems is used.
+
+TransportEditor doesn't load the PDDL domain definitions directly -- those are already built-in.
+We only read the domain files to check which subset of conditions the user has chosen to model.
 
 In the UI, we can also create a domain using a dialog backed by the `VariableDomainBuilder`.
 It is essentially switchboard for gathering the appropriate flags and other properties the domain should have.
