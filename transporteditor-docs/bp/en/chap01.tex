@@ -122,13 +122,110 @@ Both the set-theoretic and the classical representations follow the \textit{Clos
 
 \section{Transport domain definition}
 
-\TODO{Focus on a few domain variants, just show the others}
+Transport is a planning domain designed for
+the International Planning
+Competition\footnote{\url{http://www.icaps-conference.org/index.php/Main/Competitions}}
+(IPC), which is part of the International Conference on Automated Planning and
+Scheduling\footnote{\url{http://www.icaps-conference.org/index.php/Main/HomePage}} (ICAPS).
 
-\subsection{Key insights}
+Originally, Transport appeared at 
+IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Domains.html}} which took place in 2008.
+Since then, it has been used in two IPCs,
+specifically IPC-7\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/}} in 2011
+and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/}} in 2014.
 
-\TODO{degenerate cases, etc.}
+There are a few basic formulations of the Transport domain family (i.e.~``similar Transport domains'').
 
-\subsection{Sequential Transport's classical representation}
+\subsection{Common traits of Transport domains}
+
+Transport is a logistics domain -- vehicles drive around on a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way.
+All vehicles have limited capacities (the sum of package sizes they can carry).
+Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
+(in other words, the road length).
+The general goal is to minimize the total cost,
+while delivering all packages to their destination.
+
+\subsection{Transport STRIPS description}\label{transport-strips}
+
+In the STRIPS variant, all packages have a size of 1 and vehicles can drive around infinitely,
+only incurring the cost of the travel. This being a classical STRIPS domain, it does not factor in any sense
+of time, so actions have no duration and are applied one after the other.
+
+This formulation contains three basic planning operators:
+
+\begin{itemize}
+\item \verb+drive+:  where a vehicle drives to an adjacent location
+along a road that is connected to its current location;
+\item \verb+pick-up+:  where a vehicle that is stationary at a location picks up a co-located package; and
+\item \verb+drop+: where a stationary vehicle drops a package off at its location.
+\end{itemize}
+
+In all the datasets, this domain variant is denoted as \textit{Transport sequential}
+or \textit{transport-strips}.
+
+\subsection{Transport Numeric description}\label{transport-numeric}
+
+The numeric variant adds the concept of fuel on top of the STRIPS variant.
+All roads have an additional cost, called \verb+fuel-demand+, which is
+subtracted from a vehicles \verb+fuel-left+ value if it chooses to drive along that road.
+Additionally, all vehicles have a maximum fuel capacity \verb+fuel-max+,
+which they regain upon being the target of a \verb+refuel+ action. This action can only
+be executed at a location that is marked as having a petrol station. Petrol stations
+are static in respect to a given planning problem instance.
+
+This variant is usually denoted as \textit{Transport netbenefit} or \textit{transport-numeric}
+
+\TODO{mention weird goal requirements of netben problems?}
+
+\subsection{Transport Temporal description}\label{transport-temporal}
+
+The temporal Transport domain is usually denoted as \textit{Transport temporal} or, confusingly,
+also \textit{transport-numeric}. A major difference with respect to the numeric variant is
+the addition of time. All actions now have a duration (\verb+pick-up+ and \verb+drop+ both have a
+duration of 1, \verb+refuel+ has a duration of 10, and the duration of \verb+drive+ is
+equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
+
+The addition of time poses numerous technical complications when formalizing this variant
+-- its PDDL formulation significantly differs the two previous ones, but only in technical details.
+One important technicality is that a vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
+
+The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan (in practice, this translates to minimizing
+maximum end time over all actions).
+
+\subsection{TODO: Figure out name}
+
+These formulations have been used interchangeably in various competition tracks.
+The following is an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks):
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+\textbf{Dataset name} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
+\hline
+\hline
+netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
+seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
+seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
+tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
+\hline
+seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
+seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
+seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
+seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
+\end{tabular} 
+\end{center}
+
+Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
+and the rule pages of IPC-8\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}.
+Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
+
+\subsection{Transport's classical representation}
+
+\TODO{Remove me?}
+
+We are now able to show the sequential Transport domain in one representations previously defined, namely,
+the classical representation:
+
+\TODO{Add total-cost to the code below?}
 
 \begin{code}
 drive(v, l1, l2)
@@ -153,10 +250,30 @@ drop(v, l, p, s1, s2)
            not capacity(v, s1)
 \end{code}
 
-\TODO{The fuel variant adds another operator
-refuel along with a change to the operator drive}
+The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+:
 
-\subsection{Sequential Transport's state-variable representation}
+\begin{code}
+drive(v, l1, l2)
+  ;; vehicle v moves from location l1 to an adjacent location l2
+  precond: at(v, l1), road(l1, l2), fuel-left(v) >= fuel-demand(l1, l2)
+  effects: not at(v, l1), at(v, l2) decrease(fuel-left(v),  fuel-demand(l1, l2))
+  
+refuel(v, l)
+  ;; vehicle v is refueled to the maximum at location l
+  precond: at(v, l), has-petrol-station(l)
+  effects: assign(fuel-left(v), fuel-max(v))
+\end{code}
+
+\subsection{Temporal Transport's classical representation}
+
+\TODO{code + explanation}
+
+\subsection{Transport's state-variable representation}
+
+We are now able to show the sequential Transport domain in one representations previously defined, namely,
+the state-variable representation:
+
+\TODO{Add total-cost to the code below?}
 
 \begin{code}
 drive(v, l1, l2)
@@ -175,11 +292,23 @@ drop(v, l, p, s1, s2)
   ;; vehicle v drops package p at location l,
   ;; increasing its capacity from s1 to s2
   precond: at(v) = l, in(p) = v, capacity-predecessor(s1, s2),
-  		   capacity(v) = s1
+  		     capacity(v) = s1
   effects: in(p) <- nil, at(p) <- l, capacity(v) <- s2
 \end{code}
 
-\subsection{Sequential Transport's graphplan? representation}
+The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+:
+
+\begin{code}
+drive(v, l1, l2)
+  ;; vehicle v moves from location l1 to an adjacent location l2
+  precond: at(v) = l1, road(l1, l2), fuel-left(v) >= fuel-demand(l1, l2)
+  effects: at(v) <- l2, fuel-left(v) <-  fuel-demand(l1, l2)
+  
+refuel(v, l)
+  ;; vehicle v is refueled to the maximum at location l
+  precond: at(v) = l, has-petrol-station(l)
+  effects: fuel-left(v) <- fuel-max(v)
+\end{code}
 
 \subsection{PDDL}
 
@@ -191,8 +320,8 @@ research community and the needs of the IPC itself in the future years.
 
 It was inspired by the language used to describe STRIPS,
 the Stanford Research Institute Problem Solver\cite{Fikes1971},
-a planner proposed in the 1970's. Hence one of the more basic variants of PDDL is sometimes
-referred to as STRIPS.
+a planner proposed in the 1970's. \TODO{Verify: Hence one of the more basic variants of PDDL is sometimes
+referred to as STRIPS.}
 
 For reference, we show the PDDL representation of the sequential variant of
 the Transport domain.
@@ -237,6 +366,15 @@ the Transport domain.
         (not (capacity ?v ?s1)) (increase (total-cost) 1))))
 \end{code}
 
+
+
+
+
+
+
+\subsection{Key insights}
+
+\TODO{degenerate cases, etc.}
 
 \section{The Vehicle Routing Problem}
 
