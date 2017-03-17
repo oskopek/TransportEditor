@@ -71,7 +71,12 @@ a plan.
 to execute in order to achieve the objective.
 \end{itemize}
 
-\TODO{image of the system}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../img/planning_model}
+\end{center}
+\caption{Typical planning model for offline planning. Adapted from \cite[Figure 1.3]{Ghallab2004}.}
+\end{figure}
 
 \subsection{Classical planning}
 
@@ -197,7 +202,7 @@ maximum end time over all actions).
 These formulations have been used interchangeably in various competition tracks.
 The following is an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks):
 
-\begin{center}
+\begin{table}
 \begin{tabular}{c|c|c|c}
 \textbf{Dataset name} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
 \hline
@@ -211,8 +216,9 @@ seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Se
 seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
 seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
-\end{tabular} 
-\end{center}
+\end{tabular}
+\caption{Transport datasets from the IPC}
+\end{table}
 
 Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
 and the rule pages of IPC-8\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}.
