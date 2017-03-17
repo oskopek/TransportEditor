@@ -6,10 +6,34 @@
 
 \section{Problem features}
 
-\section{Planning environment -- TransportEditor}
+\section{TransportEditor -- a Transport domain planning environment}
 
-\TODO{Goal}
+TransportEditor aims to be a problem editor and plan visualizer for the Transport domain.
+It is an intuitive GUI desktop application for making quick changes and re-planning, but also designing a new problem dataset from scratch. TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
+A secondary motivation is to be able to test approaches for creating plans for the domain.
 
-\subsection{Features}
+The basic workflow of TransportEditor consists of the following user's steps:
+\begin{itemize}
+\item Select which formulation of the Transport domain they want to work with or create their own variant.
+\item Load or create their own problem of the given domain. See section \ref{input-output} for details on the input format.
+\item TransportEditor draws the given graph as good as it can.
+\item Iterate among the following options:
+\begin{itemize}
+\item Load a planner executable and let TransportEditor run the planner on the loaded problem instance for a given time, then load the resulting plan.
+\item Load a pre-generated plan.
+\item Step through the individual plan actions and let TransportEditor visualize them.
+The user can go forward and backward in the plan and inspect each step in great detail.
+\item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
+\item Save the currently generated plan.
+\item Save the problem (along with the graph drawing hints).
+\item Save the domain (export to a PDDL file).
+\end{itemize}
+\item Save and close the currently loaded problem. Exit the application or go back to the first step.
+\end{itemize}
 
-\subsection{Running TransportEditor}
+TransportEditor is a part of this thesis and you can find it on the attachment DVD, in the folder \TODO{releases}. If you want to find out more details about it, see the attached TransportEditor User Manual\ref{transporteditor-user-manual},
+the TransportEditor Developer Documentation\ref{transporteditor-developer-documentation}
+and the TransportEditor Developer JavaDoc\ref{transporteditor-developer-javadoc}.
+
+
+
