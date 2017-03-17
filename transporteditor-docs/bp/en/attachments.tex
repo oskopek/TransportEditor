@@ -63,7 +63,8 @@ You can find all the needed information in the menu, in ``Help'' $\to$ ``About''
 If you want to run a translated version of TransportEditor,
 set your system locale accordingly and restart TransportEditor.
 
-If you want to try out a translated version (on Linux) without changing your system locale permanently, try running:\\
+If you want to try out a translated version (on Linux) without changing your system locale permanently,
+run:\\
 \verb+LC_ALL="LOCALE" java -jar TransportEditor.jar+\\
 Substitute \texttt{LOCALE} for any locale available on your system. To view all available locales,
 run \verb+locale -a+.
@@ -72,8 +73,8 @@ TransportEditor currently does not support changing the language on the fly.
 
 \subsection*{Loading and saving}
 \subsubsection*{Session}
-Session is an abstraction over all the user workspace. It encompasses all your currently loaded data and options,
-including the domain, problem, plan, planner and validator.
+The session is an abstraction over all the user workspace. It encompasses all your currently loaded data and options,
+including the domain, problem, plan, planner, and validator.
 
 You can create a new session by clicking on ``Session'' $\to$ ``New''.
 
@@ -123,7 +124,7 @@ new minimization function -- total-time.
 There are several optional constraints you can place on your model:
 
 \begin{itemize}
-\item absence of capacity (vehicles have no maximum capacity)
+\item the absence of capacity (vehicles have no maximum capacity)
 
 \item fuel (introduces petrol stations, max fuel capacity of a vehicle and it's current status.
 Also introduces an additional edge-weight, fuel-demand -- equally long edges can have different
@@ -154,15 +155,15 @@ table at the bottom right -- either by rearranging the plan actions or changing 
 You can try all of this out on the datasets gathered from the IPC competitions, located in the folder \texttt{datasets/}.
 
 \subsection*{Editing the problem}
-Left-clicking and dragging will move the locations on screen. To attempt a new redraw of the graph,
+Left-clicking and dragging will move locations on the screen. To attempt a new redraw of the graph,
 press the ``Redraw'' button. If the layout doesn't get redrawn properly, try moving a few nodes from their
 positions to destabilize the algorithm and press redraw again.
 
 You can select graph elements by left-clicking and dragging in the graph area, creating a selection region.
 The buttons on the right will get enabled/disabled based on the selected elements in the graph.
 To be aware of all the selection options, it is recommended to read through the
-Shortcut quick-tip manual, located in ``About'' $\to$ ``Shortcut quicktips''. To deselect nodes,
-press Escape (Esc) or click on point in the graph containing no element.
+Shortcut quick-tip manual, located in ``About'' $\to$ ``Shortcut quick tips''. To deselect nodes,
+press Escape (Esc) or click on a point in the graph containing no element.
 
 The ``Lock'' button disables all graph editing. Clicking it again will unlock the graph.
 
@@ -185,11 +186,11 @@ that enforces these rules):
 
 \item The executable must exit with a 0 return code if and only if planning succeeded and a plan was output to stdout.
 
-\item The executable must take two filepath parameters -- the domain in PDDL and the problem in PDDL.
+\item The executable must take two file path parameters -- the domain in PDDL and the problem in PDDL.
 
 \begin{itemize}
 
-\item You can specify a parameter template while setting the external planner. For example, you can specify \texttt{fast-downard}
+\item You can specify a parameter template while setting the external planner. For example, you can specify \texttt{fast-downward}
 to be the executable and its parameters to be \verb+{0} {1} --search "astar(lmcut())"+. The template \verb+{0}+ will get
 substituted for the domain filename at runtime, the \verb+{1}+ will be the problem filename.
 
@@ -219,7 +220,7 @@ The validator executable must follow a few rules:
 
 \item The executable must exit with a 0 return code if and only if the plan is valid.
 
-\item The executable must take three filepath parameters -- the domain in PDDL, the problem in PDDL and the plan in a
+\item The executable must take three file path parameters -- the domain in PDDL, the problem in PDDL and the plan in a
 VAL-like format.
 
 \begin{itemize}
@@ -234,7 +235,7 @@ The template \verb+{0}+ will get substituted for the domain filename at runtime,
 \end{itemize}
 
 \subsection*{Plan views}
-On the lower right hand side when a plan is loaded, you can see a table with the plans actions. If the loaded domain
+On the lower right-hand side when a plan is loaded, you can see a table with the plan's actions. If the loaded domain
 is sequential, that table displays basic action info and its first column is draggable - you can reorder the plan's
 actions by dragging them from one place to another in the table. If the domain is temporal, you can double click and
 edit the action start time in the table.
@@ -243,7 +244,7 @@ Both of these tables are filterable -- if you right click on the table's headers
 and you can choose which values to show and which to hide. These choices will get propagated to the other plan views
 and they too will get filtered (if possible).
 
-One of the alternative table views is the Gantt chart. It displays action objects on the Y axis and time on the X axis.
+One of the alternative table views is the Gantt chart. It displays action objects on the Y-axis and time on the X-axis.
 The contents of the chart are individual actions involving the given action objects at the given time. The color
 corresponds to a type of action.
 
@@ -378,7 +379,7 @@ Or, preferably, use SSH:\\ \texttt{git clone \href{mailto:git@gitlab.com}{git@gi
 \end{enumerate}
 
 \subsection*{Short design description}
-The model for the Transport domain is pretty complicated,
+The model for the Transport domain is pretty complicated
 because it handles:
 
 \begin{itemize}
@@ -388,7 +389,7 @@ because it handles:
 \end{itemize}
 
 That's what this short section is for -- describing the ideas behind the model, so that reading the code
-afterwards is easier. The model is split into 4 parts:
+afterward is easier. The model is split into 4 parts:
 
 \begin{itemize}
 \item Session
@@ -419,13 +420,13 @@ There are currently two ways to visualize both plan types:
 \item Sequential: uses a simple drag-and-drop reorderable table of action arguments.
 See the screenshot on the top of the README for a preview. Is redrawn completely after every change.
 
-\item Temporal: in contrast to the sequential variant, this one cannot be reordered by dragging. The start times can however
+\item Temporal: in contrast to the sequential variant, this one cannot be reordered by dragging. The start times can, however,
 be edited, which will result in the table reordering itself. Is not redrawn completely, adjusts its internal state and
 redraws the necessary parts.
 \end{itemize}
 
-\item Gantt chart -- both sequential and temporal versions look alike, resembling a XY chart, the X axis being the time
-axis and the Y axis having all action objects. Both are redrawn every time the plan changes or it's filter
+\item Gantt chart -- both sequential and temporal versions look alike, resembling an XY chart, the X-axis being the time
+axis and the Y-axis having all action objects. Both are redrawn every time the plan changes or its filter
 in the simple list is changed.
 \begin{itemize}
 \item Sequential: using it to visualize sequential plans is not very interesting, as it offers almost no added insights on top of the simple list
@@ -444,13 +445,13 @@ is used in some places. See the \texttt{persistence} package for details.
 \subsection*{Problem}
 The problem is basically a graph (with multiple possible ``layers'', f.e. fuel) and a vehicle and package map.
 
-Currently we use \href{http://graphstream-project.org/}{GraphStream} for both the data storage and visualization of the graph.
+Currently, we use \href{http://graphstream-project.org/}{GraphStream} for both the data storage and visualization of the graph.
 Apart from nodes and edge arrows, everything else is visualized as
 ``\href{http://graphstream-project.org/doc/Tutorials/Graph-Visualisation/#sprites}{sprites}''.
 
 Fuel is added as different graph edge type (\verb+FuelRoad+ instead of \verb+DefaultRoad+) and a domain label change
 (see \verb+PddlLabel+s in the domain).
-If the domain is fuel enabled, the fuel properties of locations, roads and vehicles else will be displayed.
+If the domain is fuel enabled, the fuel properties of locations, roads, and vehicles else will be displayed.
 
 \subsubsection*{Visualizing problems}
 
@@ -458,12 +459,12 @@ Problem visualization does not fundamentally differ between different domains an
 Some problem tooltips/properties might dis/appear when changing the domain type.
 
 The graph is automatically laid out using a \texttt{SpringBox} algorithm from GraphStream
-for a given time and then switched to manual layout.
+for a given time and then switched to a manual layout.
 
 \subsubsection*{Persisting problems}
 Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{IPC-6}
 and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
-specify PDDL 3.1 as their official modelling language (language for domain
+specify PDDL 3.1 as their official modeling language (language for domain
 and problem specification).
 Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
 \href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definition of PDDL 3.1}.
@@ -479,7 +480,7 @@ but it is basically just an in-code hardcoded equivalent of loading the sequenti
 into a \texttt{VariableDomain}).
 
 The domain contains flags (labels), telling us which ``layers'' are enabled and which are not.
-The UI, validator, IO and planner all take these into account.
+The UI, validator, IO, and planner all take these into account.
 It also contains methods for action creation using their correct domain-specified definitions
 and provides other useful data (predicates, functions, \ldots).
 
@@ -500,7 +501,7 @@ In the UI, we can also create a domain using a popup dialog backed by a \texttt{
 It is essentially switchboard for gathering the appropriate flags and other properties the domain should have.
 
 \subsection*{Session}
-The session is where everything comes together. It keeps an instance of the domain, problem and plan (and planner and
+The session is where everything comes together. It keeps an instance of the domain, problem, and plan (and planner and
 validator, \ldots). We can use it to reason about what actions can be executed in the UI with the currently loaded
 objects and also as a quick persistence solution -- if you save a session, you can then load it next time and
 do not have to open all the individual parts again.
@@ -516,7 +517,7 @@ should be reasonably serializable (by reflection).
 \subsection*{Planning}
 Any class implementing the \texttt{Planner} interface can be set as the planner for a session and if it has all the properties
 that are needed (domain \& problem), we can generate a plan using an instance of that class. TransportEditor supports
-external (executable) planners out of the box, given that the executable adhere to a few rules (for details, see
+external (executable) planners out of the box, given that the executable adheres to a few rules (for details, see
 \texttt{ExternalPlanner}). An end of planning event is raised after planning finishes, for UI redrawing purposes.
 
 \subsection*{Validation}
@@ -538,7 +539,7 @@ reactive handling without tight coupling.
 
 \subsubsection*{JavaFX properties and bindings}
 The JavaFX based UI makes heavy use of bindings and properties, essential features of JavaFX. They enable
-reactive changes to the UI in an efficient manner, but can be a bit tricky when reading code that uses them.
+reactive changes to the UI in an efficient manner but can be a bit tricky when reading code that uses them.
 For even more power, we use the \href{http://fxexperience.com/controlsfx/}{ControlsFX} library, but try to avoid it,
 if possible.
 
@@ -559,7 +560,7 @@ TransportEditor currently has 3 types of tests:
 \item Unit tests (\texttt{*Test.java}) -- simple and quick to run tests that test one thing and test it well.
 
 \item Integration tests (\texttt{*IT.java}) -- complex tests that handle multiple moving parts at once. Usually involving IO or
-other not easily mockable things. Try to avoid abusively writing these in favour of unit tests, if possible.
+other not easily mockable things. Try to avoid abusively writing these in favor of unit tests, if possible.
 
 \item User interface tests (\texttt{*UI.java}) -- test the UI using \href{https://github.com/TestFX/TestFX}{TestFX}.
 At the moment, they are under-represented and not run very often. Currently, CI doesn't run them by default.
@@ -568,7 +569,7 @@ At the moment, they are under-represented and not run very often. Currently, CI 
 \subsubsection*{Comments, code style}
 TransportEditor employs a rigorous code style checker called \texttt{checkstyle} that is run automatically at every build.
 Please adhere to that style when extending/editing the code base. Multiple other unwritten and unspecified rules might
-apply. Please, do not take any style comments personally -- they are in place so that the code remains in tact and
+apply. Please, do not take any style comments personally -- they are in place so that the code remains intact and
 readable in the long term.
 
 As part of the \texttt{checkstyle} process, JavaDoc comments are enforced on every method and class (excluding tests).

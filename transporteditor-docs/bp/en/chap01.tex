@@ -66,7 +66,7 @@ $\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i$ and $s_k \in g$.
 \item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
 it receives.
 \item A \textit{controller} -- given an input state $s \in S$ provides an action $a \in A$ as output according
-a plan.
+to a plan.
 \item A \textit{planner} -- uses a description of $\Sigma$ to synthesize a plan for the controller
 to execute in order to achieve the objective.
 \end{itemize}
@@ -85,6 +85,8 @@ problems, it is a useful one.
 This simplification has historically been studied as classical planning.
 There are several theoretical domain-independent representations
 of planning problems in classical planning: \cite[Chapter 2]{Ghallab2004}
+
+\TODO{Move to sub sub sections* for clarity}
 
 \begin{itemize}
 
@@ -147,7 +149,7 @@ Transport is a logistics domain -- vehicles drive around on a (generally asymmet
 All vehicles have limited capacities (the sum of package sizes they can carry).
 Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
 (in other words, the road length).
-The general goal is to minimize the total cost,
+The general goal is to minimize the total cost
 while delivering all packages to their destination.
 
 \subsection{Transport STRIPS description}\label{transport-strips}
@@ -172,11 +174,11 @@ or \textit{transport-strips}.
 
 The numeric variant adds the concept of fuel on top of the STRIPS variant.
 All roads have an additional cost, called \verb+fuel-demand+, which is
-subtracted from a vehicles \verb+fuel-left+ value if it chooses to drive along that road.
+subtracted from a vehicle's \verb+fuel-left+ value if it chooses to drive along that road.
 Additionally, all vehicles have a maximum fuel capacity \verb+fuel-max+,
 which they regain upon being the target of a \verb+refuel+ action. This action can only
 be executed at a location that is marked as having a petrol station. Petrol stations
-are static in respect to a given planning problem instance.
+are static with respect to a given planning problem instance.
 
 This variant is usually denoted as \textit{Transport netbenefit} or \textit{transport-numeric}
 
@@ -228,11 +230,15 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \TODO{Remove me?}
 
-We are now able to show the sequential Transport domain in one representations previously defined, namely,
-the classical representation:
+We are now able to show the sequential Transport domain in one of the representations
+previously defined, namely,
+the classical representation (figure \ref{code:classical-strips}).
+
+\TODO{Expand description}
 
 \TODO{Add total-cost to the code below?}
 
+\begin{figure}[htb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -251,24 +257,32 @@ drop(v, l, p, s1, s2)
   ;; vehicle v drops package p at location l,
   ;; increasing its capacity from s1 to s2
   precond: at(v, l), in(p, v), capacity-predecessor(s1, s2),
-  		   capacity(v, s1)
+           capacity(v, s1)
   effects: not in(p, v), at(p, l), capacity(v, s2),
            not capacity(v, s1)
 \end{code}
+\caption{Classical formulation of \texttt{transport-strips}.}
+\label{code:classical-strips}
+\end{figure}
 
-The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+:
+The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+ (see figure \ref{code:classical-numeric}).
 
+\begin{figure}[htb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
   precond: at(v, l1), road(l1, l2), fuel-left(v) >= fuel-demand(l1, l2)
-  effects: not at(v, l1), at(v, l2) decrease(fuel-left(v),  fuel-demand(l1, l2))
+  effects: not at(v, l1), at(v, l2),
+           decrease(fuel-left(v),  fuel-demand(l1, l2))
   
 refuel(v, l)
   ;; vehicle v is refueled to the maximum at location l
   precond: at(v, l), has-petrol-station(l)
   effects: assign(fuel-left(v), fuel-max(v))
 \end{code}
+\caption{Classical formulation of \texttt{transport-numeric}'s differences.}
+\label{code:classical-numeric}
+\end{figure}
 
 \subsection{Temporal Transport's classical representation}
 
@@ -276,11 +290,15 @@ refuel(v, l)
 
 \subsection{Transport's state-variable representation}
 
-We are now able to show the sequential Transport domain in one representations previously defined, namely,
-the state-variable representation:
+We are now able to show the sequential Transport domain
+in one of the representations previously defined, namely,
+the state-variable representation (figure \ref{code:statevar-strips}).
+
+\TODO{expand description}
 
 \TODO{Add total-cost to the code below?}
 
+\begin{figure}[htb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -298,16 +316,20 @@ drop(v, l, p, s1, s2)
   ;; vehicle v drops package p at location l,
   ;; increasing its capacity from s1 to s2
   precond: at(v) = l, in(p) = v, capacity-predecessor(s1, s2),
-  		     capacity(v) = s1
+           capacity(v) = s1
   effects: in(p) <- nil, at(p) <- l, capacity(v) <- s2
 \end{code}
+\caption{State-variable formulation of \texttt{transport-strips}.}
+\label{code:statevar-strips}
+\end{figure}
 
-The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+:
+The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+ (figure \ref{code:statevar-numeric}).
 
+\begin{figure}[htb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
-  precond: at(v) = l1, road(l1, l2), fuel-left(v) >= fuel-demand(l1, l2)
+  precond: at(v) = l1, road(l1, l2), fuel-left(v) >= fuel-demand(l1,l2)
   effects: at(v) <- l2, fuel-left(v) <-  fuel-demand(l1, l2)
   
 refuel(v, l)
@@ -315,6 +337,9 @@ refuel(v, l)
   precond: at(v) = l, has-petrol-station(l)
   effects: fuel-left(v) <- fuel-max(v)
 \end{code}
+\caption{State-variable formulation of \texttt{transport-numeric}'s differences.}
+\label{code:statevar-numeric}
+\end{figure}
 
 \subsection{PDDL}
 
@@ -330,8 +355,9 @@ a planner proposed in the 1970's. \TODO{Verify: Hence one of the more basic vari
 referred to as STRIPS.}
 
 For reference, we show the PDDL representation of the sequential variant of
-the Transport domain.
+the Transport domain in figure \ref{code:pddl-strips}.
 
+\begin{figure}[htb]
 \begin{code}
 (define (domain transport)
   (:requirements :typing :action-costs)
@@ -371,16 +397,13 @@ the Transport domain.
     :effect (and (not (in ?p ?v)) (at ?p ?l) (capacity ?v ?s2)
         (not (capacity ?v ?s1)) (increase (total-cost) 1))))
 \end{code}
+\caption{PDDL formulation of \texttt{transport-strips}.}
+\label{code:pddl-strips}
+\end{figure}
 
 
 
 
-
-
-
-\subsection{Key insights}
-
-\TODO{degenerate cases, etc.}
 
 \section{The Vehicle Routing Problem}
 
