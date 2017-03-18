@@ -60,7 +60,7 @@ $\forall i \in [k] : a_i \in A$ such that
 $\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i$ and $s_k \in g$.
 \end{defn}
 
-\noindent A basic planning model consists of three components:
+\noindent A basic planning model (see figure \ref{fig:planning-model}) consists of three components:
 
 \begin{itemize}
 \item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
@@ -71,14 +71,15 @@ to a plan.
 to execute in order to achieve the objective.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[htb]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../img/planning_model}
 \end{center}
 \caption{Typical planning model for offline planning. Adapted from \cite[Figure 1.3]{Ghallab2004}.}
+\label{fig:planning-model}
 \end{figure}
 
-\subsection{Classical planning}
+\subsection{Classical planning}\label{classical-planning}
 
 Although the previously defined restricted state-transition system is a simplification of real-world
 problems, it is a useful one. 
@@ -127,7 +128,7 @@ Both the set-theoretic and the classical representations follow the \textit{Clos
 
 
 
-\section{Transport domain definition}
+\section{Transport domain description}
 
 Transport is a planning domain designed for
 the International Planning
@@ -154,21 +155,30 @@ while delivering all packages to their destination.
 
 \subsection{Transport STRIPS description}\label{transport-strips}
 
-In the STRIPS variant, all packages have a size of 1 and vehicles can drive around infinitely,
-only incurring the cost of the travel. This being a classical STRIPS domain, it does not factor in any sense
-of time, so actions have no duration and are applied one after the other.
+STRIPS, the Stanford Research Institute Problem Solver\cite{Fikes1971},
+was a planner proposed in the 1970's by Fikes and Nilsson.
+The influence of STRIPS was, however, not due to the planner,
+but the language used to describe its inputs -- the planning operators and goals.
+That is why we sometimes refer to classical planning (section \ref{classical-planning})
+as STRIPS planning. For the purposes of this text, we will use these terms interchangeably.
+
+In the STRIPS variant of the Transport domain,
+all packages have a size of 1 and vehicles can drive around infinitely,
+only incurring the cost of the travel. This being a classical STRIPS domain,
+it does not assume time in any sense,
+so actions have no duration and are applied one after the other, sequentially.
 
 This formulation contains three basic planning operators:
 
 \begin{itemize}
-\item \verb+drive+:  where a vehicle drives to an adjacent location
+\item \verb+drive+: where a vehicle drives to an adjacent location
 along a road that is connected to its current location;
-\item \verb+pick-up+:  where a vehicle that is stationary at a location picks up a co-located package; and
+\item \verb+pick-up+: where a vehicle that is stationary at a location picks up a co-located package; and
 \item \verb+drop+: where a stationary vehicle drops a package off at its location.
 \end{itemize}
 
 In all the datasets, this domain variant is denoted as \textit{Transport sequential}
-or \textit{transport-strips}.
+or \textit{transport-strips} and we will alternate between these terms in this text.
 
 \subsection{Transport Numeric description}\label{transport-numeric}
 
@@ -199,32 +209,11 @@ One important technicality is that a vehicle cannot pick up or drop packages con
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan (in practice, this translates to minimizing
 maximum end time over all actions).
 
-\subsection{TODO: Figure out name}
 
-These formulations have been used interchangeably in various competition tracks.
-The following is an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks):
 
-\begin{table}
-\begin{tabular}{c|c|c|c}
-\textbf{Dataset name} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
-\hline
-\hline
-netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
-seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
-seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
-tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
-\hline
-seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
-seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
-seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
-seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
-\end{tabular}
-\caption{Transport datasets from the IPC}
-\end{table}
+\section{Transport domain formulation}
 
-Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
-and the rule pages of IPC-8\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}.
-Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
+\TODO{intro}
 
 \subsection{Transport's classical representation}
 
@@ -346,13 +335,32 @@ refuel(v, l)
 Originally proposed by McDermott et al. in 1998 for the 1$^{\mathrm{st}}$ International Planning
 Competition\footnote{http://ipc98.icaps-conference.org/} (IPC),
 the Planning Domain Definition Language\cite{McDermott1998} (PDDL) has become
-a de facto standard language for planning problems, continually evolving to the needs of the
+a de facto standard language for modelling planning domains and problems,
+continually evolving to the needs of the
 research community and the needs of the IPC itself in the future years.
 
-It was inspired by the language used to describe STRIPS,
-the Stanford Research Institute Problem Solver\cite{Fikes1971},
-a planner proposed in the 1970's. \TODO{Verify: Hence one of the more basic variants of PDDL is sometimes
-referred to as STRIPS.}
+PDDL was inspired by the language used to describe STRIPS\cite{Fikes1971}
+and the numerous languages that sparked from it.
+It has a Lisp-like\footnote{\url{https://en.wikipedia.org/wiki/Lisp_(programming_language)}}
+declarative syntax and is very extensible.
+Not many planners support PDDL in its entirety -- they usually support 
+several ``feature subsets'', called \textit{requirements}.
+Over time, PDDL has evolved from the originally proposed version 1.2
+to the now standard version 3.1. Several extensions and successors were proposed,
+like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}}
+(MA-PDDL) and
+Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
+(PPDDL).
+
+All formulations of the Transport domain use the basic PDDL version, with the requirement \verb+typing+.
+The STRIPS variant additionally needs \verb+action-costs+, while the numeric variant
+requires \verb+numeric-fluents+ and \verb+goal-utilities+.
+The temporal domain is similar in requirements to the numeric one, except for
+substituting \verb+goal-utilities+ for \verb+durative-actions+.
+One problem with the diversity of these domain formulations is that rarely does
+a single planner support the union of all these requirements.
+We show the capabilities of individual studied planners
+later on, in table \ref{tab:plannner-requirements-comparison}.
 
 For reference, we show the PDDL representation of the sequential variant of
 the Transport domain in figure \ref{code:pddl-strips}.
@@ -408,6 +416,12 @@ the Transport domain in figure \ref{code:pddl-strips}.
 \section{The Vehicle Routing Problem}
 
 \TODO{mention Dantzig} \cite{Dantzig1959}
+
+\TODO{mention Braekers} \cite{Braekers2016}
+
+\TODO{mention Montoya} \cite{Montoya2015}
+
+\TODO{mention Neo} \cite{NeoVrp}
 
 \subsection{Constraint Satisfaction Problems}
 
