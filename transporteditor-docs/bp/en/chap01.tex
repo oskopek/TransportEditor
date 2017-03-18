@@ -1,5 +1,8 @@
 \chapter{Transport domain}
 
+In this chapter, we formalize the concept of planning and introduce the studied domain, Transport.
+We will also briefly discuss the context of the domain and mention similar studied problems.
+
 \section{Automated planning}
 
 Planning is usually defined as the reasoning side of acting -- an abstract deliberation
@@ -8,14 +11,12 @@ It seems only natural that we want to have computers to do this strenuous activi
 Automated planning is an attempt at just that -- it is an area of Artificial Intelligence (AI) that
 studies the planning process computationally. \cite[Section~1.1]{Ghallab2004}
 
-\TODO{Define domain and problem, planner?}
-
 Unfortunately, the specific situations in which we want to use automated planning are very diverse --
 from devising a sequence of actions to shut down a nuclear power plant to planning the robotic arm
 movements in an assembly line or devising the complex motor activations for space aircraft positioning.
 Due to this, people are often interested in domain-independent planning, where the planner gets information
 about both the domain and the specific problem and attempts to devise a plan using only the provided knowledge
-and its previously built-in processes. \cite[Section~1.3]{Ghallab2004}
+and the planner's previously built-in processes. \cite[Section~1.3]{Ghallab2004}
 
 On the other hand, domain-specific planning, where domain knowledge has been built into the planner,
 has obvious advantages when solving problems in that domain -- all the while being useless on problems of other
@@ -75,7 +76,7 @@ to execute in order to achieve the objective.
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../img/planning_model}
 \end{center}
-\caption{Typical planning model for offline planning. Adapted from \cite[Figure 1.3]{Ghallab2004}.}
+\caption{Typical planning model for offline planning. Adapted from \cite[Figure~1.3]{Ghallab2004}.}
 \label{fig:planning-model}
 \end{figure}
 
@@ -85,13 +86,11 @@ Although the previously defined restricted state-transition system is a simplifi
 problems, it is a useful one. 
 This simplification has historically been studied as classical planning.
 There are several theoretical domain-independent representations
-of planning problems in classical planning: \cite[Chapter 2]{Ghallab2004}
+of planning problems in classical planning. \cite[Chapter~2]{Ghallab2004}
 
-\TODO{Move to sub sub sections* for clarity}
+\subsubsection{Set-theoretic representation}
 
-\begin{itemize}
-
-\item \textbf{Set-theoretic representation}: both the planning domain and problem are represented with the notion
+Both the planning domain and problem are represented with the notion
 of proposition symbols $L = \{p_1, p_2, \ldots\}$. Each state is defined as a subset of $L$, each action
 is a 3-tuple of subsets of $L$: $a = (\precond(a), \effects^-(a), \effects^+(a))$ -- the preconditions and
 the negative and positive effects of $a \in A$. $S$ is closed under the application of effects
@@ -99,9 +98,11 @@ for each $a \in A$. The state-transition function is $\gamma(s, a) = (s - \effec
 \effects^+(a)$ if $a$ is applicable to $s$,
 otherwise $\gamma(s, a)$ is undefined. Goal states are defined inductively using the goal propositions
 $g \subseteq L$ as $S_g = \{s \in S \,|\, g \subseteq L\}$.
- 
-\item \textbf{Classical representation}:
-generalizes the set-theoretic representation using first-order logic, without functions.
+
+\subsubsection{Classical representation}
+
+The classical representation generalizes the set-theoretic representation using first-order logic,
+without functions.
 States are sets of ground atoms of a first-order language.
 Actions are ground instances of \textit{planning operators}
 -- triples $o = (\name(o), \precond(o), \effects(o))$,
@@ -112,19 +113,60 @@ The definition of the state-transition function is the same.
 Goal states are defined as the set of states that satisfy $g$, the goal, where $g$ is any set
 of ground literals.
 
-\TODO{Relation of $\Sigma$ to $\mathcal{P}$, Soundness, extensions?}
+\subsubsection{State-variable representation}
 
-\item \textbf{State-variable representation}: substitutes the use of relations of the two previous representations for functions, using the concept of state variables. State-variable functions are \TODO{def}.
+The state-variable representation substitutes the use of relations of the two previous
+representations for functions, using the concept of state variables. State-variable functions are \TODO{def}.
 
-\end{itemize}
 
-Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in the state.
+
+We will later extend these representations using types.
+To see that they fit into our previously defined representations, we can
+define a \textit{type} as a unary predicate, which has the value true
+if and only if the predicate's argument is of the given type.
+We can then add these predicates as preconditions of actions.
+Adding types will make the domain and problem formulations
+easier to read and gives additional information
+to planners, making them more efficient.
+\cite[Section 2.4.1]{Ghallab2004}
 
 \subsection{Neoclassical planning}
 
+Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in the state.
+Neoclassical planning
 
+\TODO{mention neoclassical planning}
 
 \subsection{Temporal planning}
+
+\TODO{temporal planning}
+
+
+\subsection{Planning in practice}
+
+In practice, many assumptions we made get violated and many additional requirements arise
+due to various business or social requirements. They allow us, however, to work
+on problems that are more general and can therefore be applied to multiple scenarios.
+Businesses can often add minor tweaks on top of the obtained results so that
+their needs are satisfied. 
+For example, online planning can often be foregone for some form of \textit{windowed} planning,
+where we plan a certain time window offline and move on to the next window,
+repeating the process regularly.
+
+Planners, in practice, are computer programs that are fed two files as input
+-- the domain file and the problem file. After that, they proceed with their internal calculations
+and upon finishing (or not) return a plan (or not). 
+We can then evaluate that plan, see if it meets our criteria and, potentially,
+execute it in the real world.
+
+What we are missing from a bare plan is the allocation of specific resources.
+Scheduling adresses the problem of how to perform a given set of actions (a plan)
+using a limited number of resources in a limited amount of time and
+this is crucial to practical usage of any such plan. \cite[Chapter~15]{Ghallab2004}
+
+In this text, we will only study the abstracted and simplified first part of this whole process
+-- finding the ``best'' actions that lead to a specified goal.
+
 
 
 
@@ -151,7 +193,7 @@ All vehicles have limited capacities (the sum of package sizes they can carry).
 Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
 (in other words, the road length).
 The general goal is to minimize the total cost
-while delivering all packages to their destination.
+while delivering all packages to their destination. \TODO{mention other potential goals}
 
 \subsection{Transport STRIPS description}\label{transport-strips}
 
@@ -330,10 +372,10 @@ refuel(v, l)
 \label{code:statevar-numeric}
 \end{figure}
 
-\subsection{PDDL}
+\subsection{PDDL}\label{pddl}
 
 Originally proposed by McDermott et al. in 1998 for the 1$^{\mathrm{st}}$ International Planning
-Competition\footnote{http://ipc98.icaps-conference.org/} (IPC),
+Competition\footnote{\url{http://ipc98.icaps-conference.org/}},
 the Planning Domain Definition Language\cite{McDermott1998} (PDDL) has become
 a de facto standard language for modelling planning domains and problems,
 continually evolving to the needs of the
