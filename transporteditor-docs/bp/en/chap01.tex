@@ -41,7 +41,18 @@ it only changes when an action is applied to it and does not change while planni
 In the basic version, all actions have no duration.
 \end{defn}
 
-\noindent \TODO{define goals and mention that planning domains correspond to state-transition systems}
+State transition systems approximately correspond to what we will refer to as \textit{planning domains}.
+They define which states and which actions we work with and how they
+are related, but they do not state anything about objectives, or what
+we want to achieve with planning.
+
+Given a state transition system $\Sigma$, planning aims to find which
+sequence of actions to apply to which states in order to achieve some objective.
+The objective can be defined in various ways -- we might want the planner
+to devise a plan that
+does not enter specific states, or contrary to that, visits each of a set of states,
+or just end at a chosen state.
+We will use the last choice to formalize the notion of a \textit{planning problem}.
 
 \begin{defn}[Planning problem]\label{defn:planning-problem}\cite[Part~I]{Ghallab2004}
 A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
@@ -52,7 +63,10 @@ A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
 \end{itemize}
 \end{defn}
 
-\noindent For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$
+Now that we have defined a \textit{planning problem} we can specify what we meant
+by the planner generating a sequence of actions to achieve a goal -- we will
+call this sequence a \textit{plan}.
+For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$
 
 \begin{defn}[Plan]\label{defn:plan}\cite[Section~1.5]{Ghallab2004}
 For a planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$,
@@ -83,45 +97,94 @@ to execute in order to achieve the objective.
 \subsection{Classical planning}\label{classical-planning}
 
 Although the previously defined restricted state-transition system is a simplification of real-world
-problems, it is a useful one. 
+domains, it is a useful one. 
 This simplification has historically been studied as classical planning.
 There are several theoretical domain-independent representations
 of planning problems in classical planning. \cite[Chapter~2]{Ghallab2004}
 
 \subsubsection{Set-theoretic representation}
 
-Both the planning domain and problem are represented with the notion
-of proposition symbols $L = \{p_1, p_2, \ldots\}$. Each state is defined as a subset of $L$, each action
-is a 3-tuple of subsets of $L$: $a = (\precond(a), \effects^-(a), \effects^+(a))$ -- the preconditions and
-the negative and positive effects of $a \in A$. $S$ is closed under the application of effects
-for each $a \in A$. The state-transition function is $\gamma(s, a) = (s - \effects^-(a)) \,\cup\,
+Leveraging propositional logic, both the planning domain and problem
+are represented with the notion
+of proposition symbols $L = \{p_1, p_2, \ldots\}$.
+Each state is defined as a subset of propositions of $L$ -- those propositions
+which hold in the given state. $S$ is closed under the application of each
+action $a \in A$.
+
+An action $a$
+is a triple of sets of propositions of $L$.
+We denote the sets $a = (\precond(a), \effects^-(a), \effects^+(a))$, where:
+\begin{itemize}
+\item $\precond(a)$ are the \textit{preconditions} of an action: the set of
+propositions that must hold in the current state for the action to be applicable to it;
+\item $\effects^-(a)$ are the \textit{negative effects} of an action:
+the set of propositions
+that will no longer hold in the state once the action is applied; and
+\item similarly, $\effects^+(a)$ are the \textit{positive effects} of an action:
+the set of propositions that will be true in the state once the action is applied.
+\end{itemize}
+
+The state-transition function is $\gamma(s, a) = (s - \effects^-(a)) \,\cup\,
 \effects^+(a)$ if $a$ is applicable to $s$,
-otherwise $\gamma(s, a)$ is undefined. Goal states are defined inductively using the goal propositions
-$g \subseteq L$ as $S_g = \{s \in S \,|\, g \subseteq L\}$.
+otherwise $\gamma(s, a)$ is undefined. Goal states $S_g$ are defined as
+$S_g = \{s \in S \,|\, g \subseteq s\}$, where
+$g \subseteq L$ is any chosen set of propositions. The propositions $g$ are called
+\textit{goal propositions}.
 
 \subsubsection{Classical representation}
 
 The classical representation generalizes the set-theoretic representation using first-order logic,
 without functions.
 States are sets of ground atoms of a first-order language.
-Actions are ground instances of \textit{planning operators}
--- triples $o = (\name(o), \precond(o), \effects(o))$,
-where $\name(o)$ is a syntactic expression of the given operator;
-$\precond(o)$ and $\effects(o)$ are sets of literals (atoms and their negations),
-similar to the set-theoretic case.
-The definition of the state-transition function is the same.
-Goal states are defined as the set of states that satisfy $g$, the goal, where $g$ is any set
-of ground literals.
+Actions are ground instances of \textit{planning operators},
+triples $o = (\name(o), \precond(o), \effects(o))$:
+
+\begin{itemize}
+\item $\name(o)$ is a syntactic expression of the given operator;
+\item $\precond(o)$ and $\effects(o)$ are sets of literals
+(atoms and their negations), similar in use to their equivalents
+in the set-theoretic case.
+\end{itemize}
+
+The definition of the state-transition function also stays the same.
+Goal states are defined as the set of states that satisfy $g$,
+the \textit{goal}, where $g$ is any set of ground literals.
+
+Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in the state.
 
 \subsubsection{State-variable representation}
 
-The state-variable representation substitutes the use of relations of the two previous
-representations for functions, using the concept of state variables. State-variable functions are \TODO{def}.
+The state-variable representation substitutes the use of relations of the previous
+representation for functions,
+using the concept of state variables. State variables are functions
+that take the state as an input and serve as characteristic attributes, defining the state. We usually use a more practical way of defining these functions -- we assume
+the current state as an input without denoting it, and instead add different inputs.
 
+For example, a useful set of state-variable functions for a domain that contains a road
+network and vehicles might be: $$\mathrm{location}_{v}: S \to \mathrm{locations},$$
+where $v \in \mathrm{vehicles}$.
+Instead, we could define a single function:
+$$\mathrm{location'}: \mathrm{vehicles} \times S \to \mathrm{locations},$$
+and afterwards 
+$$\mathrm{location''}: \mathrm{vehicles} \to \mathrm{locations},$$
+using $\mathrm{location''}(v) = \mathrm{location'}(v, state_{cur})$, where $state_{cur}$ is the current state.
 
+Planning operators are defined similarly to the classical representations, but
+$\precond(o)$ is now a set of expressions on state variables and relations.
+Also, $\effects(o)$ is defined as a set of assignments of values to state variables.
+The state transition function is defined analogously: an action $a$ (ground instance
+of operator $o$)
+is applicable to a state $s$ if the $\precond(o)$ condition is true given the values
+of state variables in state $s$. The effects of the action change the state variables
+according to the assignments in $\effects(o)$ and the corresponding values of state
+variables in state $s$, implicitly transitioning to a different state.
+The goal is defined as a set of ground state variables and their corresponding values.
+\cite[Section~2.5.2]{Ghallab2004}
+
+\subsubsection{Extensions of representations}
 
 We will later extend these representations using types.
-To see that they fit into our previously defined representations, we can
+To see how types fit into our previously defined representations, we can
 define a \textit{type} as a unary predicate, which has the value true
 if and only if the predicate's argument is of the given type.
 We can then add these predicates as preconditions of actions.
@@ -130,16 +193,31 @@ easier to read and gives additional information
 to planners, making them more efficient.
 \cite[Section 2.4.1]{Ghallab2004}
 
+\subsubsection{State-space planning and Plan-space planning}
+
+\TODO{add definitions and examples}
+
 \subsection{Neoclassical planning}
 
-Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in the state.
-Neoclassical planning
+Neoclassical planning uses largely the same theoretical foundations as classical 
+planning. What is different is the approach to planning using those foundations
+-- instead of search space nodes being a sequence of actions or a partially ordered
+set of actions, we view them as a set of several partial plans.
+\cite[Part~II]{Ghallab2004}
 
-\TODO{mention neoclassical planning}
+The most famous result in neoclassical planning is Blum's and Furst's the GraphPlan algorithm. \cite{Blum1997}
+It is out of the scope of this text to describe it in detail
+(see \cite[Section~6.3]{Ghallab2004}).
+GraphPlan makes heavy use of a data structure called a \textit{planning graph},
+which caused a breakthrough in the field of planning -- bigger problems could
+now be practically solved.
 
-\subsection{Temporal planning}
+\TODO{consider describing planning graphs}
 
-\TODO{temporal planning}
+\subsection{Temporal planning}\label{temporal-planning}
+
+\TODO{temporal planning \cite[Chapter~14]{Ghallab2004}, possibly \cite[Chapter~15]{Ghallab2004}, small reference to the temporal Transport domain variant}.
+
 
 
 \subsection{Planning in practice}
@@ -160,7 +238,7 @@ We can then evaluate that plan, see if it meets our criteria and, potentially,
 execute it in the real world.
 
 What we are missing from a bare plan is the allocation of specific resources.
-Scheduling adresses the problem of how to perform a given set of actions (a plan)
+Scheduling addresses the problem of how to perform a given set of actions (a plan)
 using a limited number of resources in a limited amount of time and
 this is crucial to practical usage of any such plan. \cite[Chapter~15]{Ghallab2004}
 
@@ -193,9 +271,11 @@ All vehicles have limited capacities (the sum of package sizes they can carry).
 Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
 (in other words, the road length).
 The general goal is to minimize the total cost
-while delivering all packages to their destination. \TODO{mention other potential goals}
+while delivering all packages to their destination. A few Transport problems
+also request that the trucks be positioned at certain locations in the graph
+after finishing their deliveries.
 
-\subsection{Transport STRIPS description}\label{transport-strips}
+\subsection{Transport STRIPS}\label{transport-strips}
 
 STRIPS, the Stanford Research Institute Problem Solver\cite{Fikes1971},
 was a planner proposed in the 1970's by Fikes and Nilsson.
@@ -222,7 +302,7 @@ along a road that is connected to its current location;
 In all the datasets, this domain variant is denoted as \textit{Transport sequential}
 or \textit{transport-strips} and we will alternate between these terms in this text.
 
-\subsection{Transport Numeric description}\label{transport-numeric}
+\subsection{Transport Numeric}\label{transport-numeric}
 
 The numeric variant adds the concept of fuel on top of the STRIPS variant.
 All roads have an additional cost, called \verb+fuel-demand+, which is
@@ -232,11 +312,9 @@ which they regain upon being the target of a \verb+refuel+ action. This action c
 be executed at a location that is marked as having a petrol station. Petrol stations
 are static with respect to a given planning problem instance.
 
-This variant is usually denoted as \textit{Transport netbenefit} or \textit{transport-numeric}
+This variant is usually denoted as \textit{Transport numeric} or \textit{transport-numeric}.
 
-\TODO{mention weird goal requirements of netben problems?}
-
-\subsection{Transport Temporal description}\label{transport-temporal}
+\subsection{Transport Temporal}\label{transport-temporal}
 
 The temporal Transport domain is usually denoted as \textit{Transport temporal} or, confusingly,
 also \textit{transport-numeric}. A major difference with respect to the numeric variant is
@@ -255,19 +333,28 @@ maximum end time over all actions).
 
 \section{Transport domain formulation}
 
-\TODO{intro}
+We will now translate the informal description of the Transport domain from the previous section to the formal representations we defined in section \ref{classical-planning}. We will not formulate all the domain variants in all representations as
+they are very much alike and not needed for the comprehension of the following chapters.
 
-\subsection{Transport's classical representation}
-
-\TODO{Remove me?}
+\subsection{Transport's classical representation}\label{transport-classical-representation}
 
 We are now able to show the sequential Transport domain in one of the representations
 previously defined, namely,
 the classical representation (figure \ref{code:classical-strips}).
+Note that this representations does not contain the notion of a \textit{total cost}
+of a plan that we will optimize for later.
+The predicates used are:
 
-\TODO{Expand description}
-
-\TODO{Add total-cost to the code below?}
+\begin{itemize}
+\item \verb+at(o, l)+: the package or vehicle \verb+o+ is at the
+location \verb+l+;
+\item \verb+capacity(v, s)+: the vehicle \verb+v+ currently has \verb+s+ free space -- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
+\item \verb+capacity-predecessor(s1, s2)+: the space literal represented by \verb+s1+
+is directly smaller than the literal represented by \verb+s2+;
+\item \verb+in(p, v)+: the package \verb+p+ is in the vehicle \verb+v+; and
+\item \verb+road(l1, l2)+: the location \verb+l1+ is directly adjacent to the location
+\verb+l2+ by a road.
+\end{itemize}
 
 \begin{figure}[htb]
 \begin{code}
@@ -296,7 +383,33 @@ drop(v, l, p, s1, s2)
 \label{code:classical-strips}
 \end{figure}
 
-The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+ (see figure \ref{code:classical-numeric}).
+The numeric variant  adds the \verb+refuel+ operator, changes the \verb+drive+
+operator, and adds a new fuel-related predicate \verb+has-petrol-station(l)+, that is true when the given location \verb+l+ has
+a petrol station.
+To model fuel, we need the addition of a few functions, namely:
+
+\begin{itemize}
+\item \verb+fuel-demand(l1, l2)+: the amount of fuel needed to drive
+from location \verb+l1+ to location \verb+l2+;
+\item \verb+fuel-left(v)+: the amount of fuel left in
+the vehicle \verb+v+; and
+\item \verb+fuel-max(v)+: the maximum amount of fuel
+the vehicle \verb+v+ can contain, i.e. its fuel tank capacity.
+\end{itemize}
+
+It is obvious that we could substitute the functions for relations
+and a finite amount of literals for any given problem instance of
+the domain in this representation,
+so that it adheres to the definition of a classical formulation.
+\TODO{proof?}
+
+We also abuse the notation with \verb+decrease+ and \verb+assign+;
+the left parameter's value is to be decreased by the right
+parameter's value or the left parameter's value is to be overridden
+by the right parameter's value, respectively.
+
+See figure \ref{code:classical-numeric} for exact differences
+in the representation after adding fuel.
 
 \begin{figure}[htb]
 \begin{code}
@@ -317,17 +430,16 @@ refuel(v, l)
 
 \subsection{Temporal Transport's classical representation}
 
-\TODO{code + explanation}
+\TODO{code + explanation after \ref{temporal-planning}} 
 
 \subsection{Transport's state-variable representation}
 
-We are now able to show the sequential Transport domain
-in one of the representations previously defined, namely,
-the state-variable representation (figure \ref{code:statevar-strips}).
-
-\TODO{expand description}
-
-\TODO{Add total-cost to the code below?}
+We are now also able to show the sequential Transport domain
+in the state-variable representation (figure \ref{code:statevar-strips}).
+Some predicates (\verb+at+, \verb+capacity+ and \verb+in+) have been transformed
+into state-variable functions with largely the same semantics as in
+the section \ref{transport-classical-representation}. Again, we leave out
+the \textit{total cost} notion.
 
 \begin{figure}[htb]
 \begin{code}
@@ -354,7 +466,9 @@ drop(v, l, p, s1, s2)
 \label{code:statevar-strips}
 \end{figure}
 
-The numeric variant adds the \verb+refuel+ operator and changes \verb+drive+ (figure \ref{code:statevar-numeric}).
+The numeric variant again adds the \verb+refuel+ operator along with
+a few fuel-related state-variable functions and predicates, and changes 
+the \verb+drive+ operator (figure \ref{code:statevar-numeric}).
 
 \begin{figure}[htb]
 \begin{code}
