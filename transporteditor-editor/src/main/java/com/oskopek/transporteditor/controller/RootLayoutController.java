@@ -184,7 +184,9 @@ public class RootLayoutController extends AbstractController {
                 .map(type -> Tuple.of(type, Try.of(type::newInstance).toJavaOptional()))
                 .map(tuple -> tuple.map((type, instance) -> Tuple.of(type.getSimpleName(), instance)))
                 .filter(tuple -> tuple._2.isPresent())
-                .forEach(tuple -> addPlanner(tuple._1, tuple._2.get()));
+                .map(tuple -> Tuple.of(tuple._1, tuple._2.get()))
+                .filter(tuple -> tuple._2.isAvailable())
+                .forEach(tuple -> addPlanner(tuple._1, tuple._2));
     }
 
     /**
