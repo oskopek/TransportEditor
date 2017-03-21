@@ -176,12 +176,12 @@ public class RootLayoutController extends AbstractController {
     private void populatePlanners() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forClass(Planner.class))
-                .setScanners(new SubTypesScanner())
-                .filterInputsBy(s -> s.matches("com\\.oskopek\\.transporteditor.*\\.class$"))
+                .setScanners(new SubTypesScanner(false))
+                .filterInputsBy(s -> s != null && s.startsWith("com.oskopek.transporteditor.") && s.endsWith(".class"))
         );
         Stream.ofAll(reflections.getSubTypesOf(Planner.class))
                 .filter(type -> !Modifier.isAbstract(type.getModifiers()))
-                .map(type -> Tuple.of(type, Try.of(() -> type.newInstance()).toJavaOptional()))
+                .map(type -> Tuple.of(type, Try.of(type::newInstance).toJavaOptional()))
                 .map(tuple -> tuple.map((type, instance) -> Tuple.of(type.getSimpleName(), instance)))
                 .filter(tuple -> tuple._2.isPresent())
                 .forEach(tuple -> addPlanner(tuple._1, tuple._2.get()));

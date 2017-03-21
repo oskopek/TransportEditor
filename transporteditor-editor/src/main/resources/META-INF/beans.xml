@@ -5,11 +5,14 @@
         <exclude name="ch.**"/>
         <exclude name="com.github.**"/>
         <exclude name="com.google.**"/>
+        <exclude name="com.fasterxml.**"/>
         <exclude name="com.keypoint.**"/>
         <exclude name="com.lowagie.**"/>
+        <exclude name="com.sun.**"/>
         <exclude name="com.thoughtworks.**"/>
         <exclude name="freemarker.**"/>
         <exclude name="javaslang.**"/>
+        <exclude name="javassist.**"/>
         <exclude name="javax.**"/>
         <exclude name="license.**"/>
         <exclude name="org.**"/>
