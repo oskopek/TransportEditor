@@ -16,3 +16,7 @@
 * Added benchmarks
 * More writing on the first chapter
 
+== 2017/03/21
+
+* Fixed release output format
+
