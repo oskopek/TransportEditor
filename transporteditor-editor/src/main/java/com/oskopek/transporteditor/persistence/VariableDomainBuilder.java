@@ -4,7 +4,6 @@ import com.oskopek.transporteditor.model.domain.DomainType;
 import com.oskopek.transporteditor.model.domain.VariableDomain;
 import javafx.beans.property.*;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -56,9 +55,10 @@ public final class VariableDomainBuilder {
      * @return the calculated filename
      */
     private String calculateDomainFilename() {
-        StringBuilder builder = new StringBuilder("domain-variants").append(File.separator);
+        char separator = '/';
+        StringBuilder builder = new StringBuilder("domain-variants").append(separator);
         builder.append(domainType.get().toString().toLowerCase());
-        builder.append(File.separator).append("domain").append(File.separator).append("domain-");
+        builder.append(separator).append("domain").append(separator).append("domain-");
 
         builder.append(isCapacity() ? "" : "No").append("Cap");
         builder.append("-");
