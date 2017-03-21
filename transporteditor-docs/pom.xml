@@ -12,8 +12,10 @@
     <artifactId>transporteditor-docs</artifactId>
     <name>TransportEditor documentation</name>
     <description>Visual editor for IPC Transport domain problems.</description>
+    <packaging>pom</packaging>
 
     <build>
+        <finalName>TransportEditor-docs</finalName>
         <plugins>
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -42,6 +44,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>config/assembly.xml</descriptor>
                             </descriptors>

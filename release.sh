@@ -73,12 +73,25 @@ git tag -a "$tagName" -m "Release $relVersion"
 tmpdir="TEMP`date +%s`"
 mkdir "$tmpdir"
 mvn clean install -P"$MVN_PROFILES"
+mvn install -Pbenchmarker # TODO: Remove me
+
 mkdir -p "$tmpdir"/datasets
 cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
-cp transporteditor-docs/target/*.zip "$tmpdir"/
-cp transporteditor-editor/target/*.jar "$tmpdir"/
+
+cp -r transporteditor-docs/target/docs "$tmpdir"/
+
+mkdir -p "$tmpdir"/docs/javadoc
+cp -r transporteditor-editor/target/apidocs/* "$tmpdir"/docs/javadoc/
+
+rsync -av --exclude='*/.git*' --exclude 'target/' --exclude 'tools/' transporteditor-editor/ "$tmpdir"/sources
+cp -r transporteditor-editor/target/TransportEditor-jar-with-dependencies.jar "$tmpdir"/
+
+cp -r transporteditor-editor/tools "$tmpdir"/
+cp -r transporteditor-editor/target/*Benchmarker*dependencies.jar "$tmpdir"/tools/benchmarks
+rm -rf "$tmpdir"/tools/benchmarks/results
+
 cp README.adoc LICENSE "$tmpdir"/
-cp "transporteditor-editor/NOTICE.txt" "transporteditor-editor/AUTHORS.adoc" "$tmpdir"/
+cp "NOTICE.adoc" "AUTHORS.adoc" "$tmpdir"/
 
 relName="TransportEditor-$relVersion"
 mv "$tmpdir" "$relName"
