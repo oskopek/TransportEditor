@@ -6,6 +6,6 @@
   ],
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
-    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "--search astar(lmcut())"
+    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "{0} {1} --search astar(lmcut())"
   }
 }

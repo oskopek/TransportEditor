@@ -1,6 +1,10 @@
 #!/bin/bash
-export transportroot="`realpath "../../"`"
+if [ -z "$transportroot" ]; then
+transportroot="`realpath "../../"`"
+fi
+if [ -z "$benchmarker" ]; then
 benchmarker="$transportroot/target/TransportEditor-Benchmarker-jar-with-dependencies.jar"
+fi
 
 set -e
 if [ -z "$1" ]; then
