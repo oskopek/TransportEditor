@@ -2,7 +2,7 @@
 set -e
 
 bash clean.sh
-bash update-biblio.sh
+#bash update-biblio.sh
 cd en
 make all
 cd ..
