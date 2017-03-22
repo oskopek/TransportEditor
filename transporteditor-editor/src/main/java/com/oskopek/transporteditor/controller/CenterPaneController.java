@@ -161,9 +161,14 @@ public class CenterPaneController extends AbstractController {
             viewer.close();
             viewer = null;
         }
-        SwingUtilities.invokeLater(() -> {
-            swingGraph.getContent().removeAll();
-            swingGraph.setContent(null);
+        Platform.runLater(() -> {
+            SwingUtilities.invokeLater(() -> {
+                logger.trace("Start disposing Graph viewer Swing.");
+                swingGraph.getContent().removeAll();
+                swingGraph.setContent(null);
+                logger.trace("Disposed Graph viewer Swing.");
+            });
+            logger.trace("Platform run finished");
         });
     }
 
