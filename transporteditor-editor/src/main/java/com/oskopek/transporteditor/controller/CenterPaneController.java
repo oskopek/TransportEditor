@@ -58,7 +58,7 @@ public class CenterPaneController extends AbstractController {
     private transient PropertyEditorDialogPaneCreator propertyEditorDialogPaneCreator;
 
     @FXML
-    private transient SwingNode problemGraph;
+    private transient SwingNode swingGraph;
 
     private transient Viewer viewer;
 
@@ -161,8 +161,10 @@ public class CenterPaneController extends AbstractController {
             viewer.close();
             viewer = null;
         }
-        problemGraph.getContent().removeAll();
-        problemGraph.setContent(null);
+        SwingUtilities.invokeLater(() -> {
+            swingGraph.getContent().removeAll();
+            swingGraph.setContent(null);
+        });
     }
 
     /**
@@ -173,12 +175,12 @@ public class CenterPaneController extends AbstractController {
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
         locked.setValue(false);
-        Platform.runLater(() -> problemGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
-
         RoadGraph graph = Try.of(() -> application.getPlanningSession().getProblem().getRoadGraph())
                 .onFailure(e -> logger.trace("Could not get graph for redrawing, got a NPE along the way.", e))
                 .getOrElse((RoadGraph) null);
         if (graph == null) {
+            SwingUtilities.invokeLater(() ->
+                    swingGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
             return;
         }
         graph.setDefaultStyling();
@@ -199,10 +201,10 @@ public class CenterPaneController extends AbstractController {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                Platform.runLater(() -> {
-                    problemGraph.requestFocus();
-                    if (problemGraph.getContent() != null) {
-                        problemGraph.getContent().requestFocus();
+                Platform.runLater(() -> swingGraph.requestFocus());
+                SwingUtilities.invokeLater(() -> {
+                    if (swingGraph.getContent() != null) {
+                        swingGraph.getContent().requestFocus();
                     }
                 });
                 logger.trace("Requested focus on SwingNode.");
@@ -262,8 +264,10 @@ public class CenterPaneController extends AbstractController {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         Platform.runLater(() -> {
-            problemGraph.setContent(viewPanel);
-            problemGraph.setDisable(false);
+            SwingUtilities.invokeLater(() -> {
+                swingGraph.setContent(viewPanel);
+                swingGraph.setDisable(false);
+            });
             Task<Void> springLayoutEarlyTermination = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
@@ -358,7 +362,7 @@ public class CenterPaneController extends AbstractController {
                         int showAtX = event.getXOnScreen();
                         int showAtY = event.getYOnScreen() - 15;
                         logger.trace("Showing popup at {}x{}", showAtX, showAtY);
-                        Platform.runLater(() -> popup.show(problemGraph, showAtX, showAtY));
+                        Platform.runLater(() -> popup.show(swingGraph, showAtX, showAtY));
                     }
                 }
             }

@@ -6,6 +6,6 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="400" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.92"
             fx:controller="com.oskopek.transporteditor.controller.CenterPaneController">
     <center>
-        <SwingNode fx:id="problemGraph" VBox.vgrow="ALWAYS"/>
+        <SwingNode fx:id="swingGraph" VBox.vgrow="ALWAYS"/>
     </center>
 </BorderPane>
