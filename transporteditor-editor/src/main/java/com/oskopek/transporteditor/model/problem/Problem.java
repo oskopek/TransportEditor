@@ -85,6 +85,14 @@ public interface Problem {
     Map<String, Package> getPackageMap();
 
     /**
+     * Update the name of the problem, creating a new problem.
+     *
+     * @param newName the new name
+     * @return the updated problem
+     */
+    Problem putName(String newName);
+
+    /**
      * Add or set a vehicle under the given name into the problem, creating a new problem.
      *
      * @param name the name

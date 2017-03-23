@@ -84,6 +84,7 @@ public class Benchmark {
             logger.warn("Thread count not set in config, using default: {}", threadCount);
         }
 
+        logger.info("Starting all benchmarks...");
         ExecutorService service = Executors.newFixedThreadPool(threadCount);
         BenchmarkResults results;
         try {

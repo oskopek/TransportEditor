@@ -10,6 +10,7 @@ import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import javaslang.Function2;
+import javaslang.Tuple;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
 
@@ -20,7 +21,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Configuration of the benchmark instance. To be used with JSON de/serialization.
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 public final class BenchmarkConfig {
 
     private Integer threadCount;
-    private Map<String, String> planners;
+    private Map<String, PlannerConfig> planners;
     private String domain;
-    private List<String> problems;
+    private Map<String, String> problems;
     private ScoreFunctionType scoreFunctionType;
 
     /**
@@ -47,25 +47,27 @@ public final class BenchmarkConfig {
      * @param plannerClassNamesAndParams the parsed class name - param map
      * @return a list of planners
      */
-    private static List<Planner> toPlanners(Map<String, String> plannerClassNamesAndParams) {
+    private static List<Planner> toPlanners(Map<String, PlannerConfig> plannerClassNamesAndParams) {
         if (plannerClassNamesAndParams == null || plannerClassNamesAndParams.isEmpty()) {
             throw new IllegalArgumentException("No planners configured.");
         }
 
-        List<Planner> planners = new ArrayList<>();
-        plannerClassNamesAndParams.forEach((className, parameters) -> {
-            Class<? extends Planner> planner = Try.of(() -> Class.forName(className)).getOrElseThrow(
-                    e -> new IllegalStateException("Couldn't find planner class: " + className, e)).asSubclass(
-                    Planner.class);
+        List<Planner> planners = new ArrayList<>(plannerClassNamesAndParams.size());
+        plannerClassNamesAndParams.forEach((plannerName, config) -> {
+            Class<? extends Planner> planner = Try.of(() -> Class.forName(config.getClassName())).getOrElseThrow(
+                    e -> new IllegalStateException("Couldn't find planner class: " + config.getClassName(), e))
+                    .asSubclass(Planner.class);
             Planner instance;
+            String parameters = config.getParams();
             if (parameters == null || parameters.isEmpty()) {
-                instance = Try.of(() -> planner.newInstance()).getOrElseThrow(e -> new IllegalStateException(
+                instance = Try.of(planner::newInstance).getOrElseThrow(e -> new IllegalStateException(
                         "Couldn't instantiate planner with empty constructor: " + planner, e));
             } else {
                 instance = Try.of(() -> planner.getConstructor(String.class)).flatMap(
                         c -> Try.of(() -> c.newInstance(parameters))).getOrElseThrow(e -> new IllegalStateException(
                         "Couldn't instantiate planner with parameters: " + planner + ", " + parameters, e));
             }
+            instance.setName(plannerName);
             planners.add(instance);
         });
         return planners;
@@ -81,7 +83,6 @@ public final class BenchmarkConfig {
      */
     public static BenchmarkConfig from(String configFile) throws IOException {
         Path configFilePath = Paths.get(configFile);
-        Path directory = configFilePath.getParent();
 
         BenchmarkConfigIO io = new BenchmarkConfigIO();
         BenchmarkConfig config = io.parse(IOUtils.concatReadAllLines(new FileInputStream(configFilePath.toFile())));
@@ -100,12 +101,11 @@ public final class BenchmarkConfig {
             throw new IllegalArgumentException("Failed to parse problem filenames.");
         }
 
-        config.problems = config.problems.stream().map(
-                problemFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(problemFilePath)))
-                        .getOrElseThrow(
+        config.problems = Stream.ofAll(config.problems.entrySet()).toMap(e -> Tuple.of(e.getKey(), e.getValue()))
+                .mapValues(problemFilePath -> Try.of(() ->
+                        IOUtils.concatReadAllLines(new FileInputStream(problemFilePath))).getOrElseThrow(
                                 () -> new IllegalStateException("Failed to read problem file: " + problemFilePath)))
-                .collect(Collectors.toList());
-
+                .toJavaMap();
         return config;
     }
 
@@ -123,7 +123,7 @@ public final class BenchmarkConfig {
      *
      * @return the planners
      */
-    public Map<String, String> getPlanners() {
+    public Map<String, PlannerConfig> getPlanners() {
         return planners;
     }
 
@@ -141,7 +141,7 @@ public final class BenchmarkConfig {
      *
      * @return the problems
      */
-    public List<String> getProblems() {
+    public Map<String, String> getProblems() {
         return problems;
     }
 
@@ -166,9 +166,8 @@ public final class BenchmarkConfig {
 
         List<Problem> problems = new ArrayList<>();
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
-        for (String problemFileContents : this.problems) {
-            problems.add(problemIO.parse(problemFileContents));
-        }
+        this.problems.forEach((name, problemFileContents) -> problems
+                .add(problemIO.parse(problemFileContents).putName(name)));
 
         List<Planner> planners = toPlanners(this.planners);
         Function2<Problem, Planner, Boolean> skipFunction = (problem, planner) -> false; // TODO: add skipping support
@@ -177,6 +176,58 @@ public final class BenchmarkConfig {
         }
         ScoreFunction scoreFunction = scoreFunctionType.toScoreFunction();
         return new Benchmark(new BenchmarkMatrix(domain, problems, planners), scoreFunction, skipFunction);
+    }
+
+    /**
+     * Simple data container for planner configuration de/serialization.
+     */
+    static class PlannerConfig {
+
+        private String className = "";
+        private String params;
+
+        /**
+         * Default empty constructor.
+         */
+        PlannerConfig() {
+            // intentionally empty
+        }
+
+        /**
+         * Get the planner class name.
+         *
+         * @return the planner class name
+         */
+        String getClassName() {
+            return className;
+        }
+
+        /**
+         * Get the planner's parameters.
+         *
+         * @return the parameters, may be null
+         */
+        String getParams() {
+            return params;
+        }
+
+        /**
+         * Set the planner class name.
+         *
+         * @param className the planner class name
+         */
+        public void setClassName(String className) {
+            this.className = className;
+        }
+
+        /**
+         * Set the planner's parameters.
+         *
+         * @param params the parameters, may be null
+         */
+        public void setParams(String params) {
+            this.params = params;
+        }
     }
 
 }

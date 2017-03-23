@@ -2,6 +2,8 @@ package com.oskopek.transporteditor.planners.benchmark.config;
 
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import static org.assertj.core.api.Assertions.*;
+
+import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -29,9 +31,12 @@ public class BenchmarkConfigIOIT {
         assertThat(config.getDomain()).isNotNull();
         assertThat(config.getProblems()).hasSize(2);
         assertThat(config.getPlanners()).hasSize(2);
-        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null,
-                "{0} {1} --search astar(ff())");
-        assertThat(config.getPlanners().keySet()).allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
+        assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getParams))
+                .containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+        assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getClassName))
+                .allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
+        assertThat(config.getPlanners().keySet())
+                .containsExactlyInAnyOrder("FastDownAstar", "PrologBFS");
         assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.ACTION_COUNT);
         assertThat(config.getThreadCount()).isNull();
     }
@@ -43,9 +48,12 @@ public class BenchmarkConfigIOIT {
         assertThat(config.getDomain()).isNotNull();
         assertThat(config.getProblems()).hasSize(2);
         assertThat(config.getPlanners()).hasSize(2);
-        assertThat(config.getPlanners().values()).containsExactlyInAnyOrder((String) null,
-                "{0} {1} --search astar(ff())");
-        assertThat(config.getPlanners().keySet()).allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
+        assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getParams))
+                .containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+        assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getClassName))
+                .allMatch(s -> s.startsWith("com.oskopek.transporteditor.planners."));
+        assertThat(config.getPlanners().keySet())
+                .containsExactlyInAnyOrder("FastDownAstar", "PrologBFS");
         assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.ACTION_COUNT);
         assertThat(config.getThreadCount()).isNotNull().isEqualTo(2);
     }
@@ -57,6 +65,9 @@ public class BenchmarkConfigIOIT {
         Benchmark benchmark = config.toBenchmark();
         assertThat(benchmark).isNotNull();
         Integer threadCount = config.getThreadCount();
-        benchmark.benchmark(threadCount); // TODO: Verify that uses correct arguments and threads
+        BenchmarkResults results = benchmark.benchmark(threadCount);
+        // TODO: Verify that uses correct arguments and threads
+        String plannerName = config.getPlanners().entrySet().stream().findAny().get().getKey();
+        assertThat(results.getRunTable().at(0, 0).getPlanner().getName()).isEqualTo(plannerName);
     }
 }

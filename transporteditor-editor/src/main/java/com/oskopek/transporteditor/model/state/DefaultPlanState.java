@@ -137,6 +137,11 @@ public class DefaultPlanState implements PlanState {
     }
 
     @Override
+    public Problem putName(String newName) {
+        return problem.putName(newName);
+    }
+
+    @Override
     public Problem putLocation(String name, Location location) {
         return problem.putLocation(name, location);
     }

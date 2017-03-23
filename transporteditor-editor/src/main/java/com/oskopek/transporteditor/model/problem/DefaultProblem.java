@@ -216,6 +216,11 @@ public class DefaultProblem implements Problem {
     }
 
     @Override
+    public Problem putName(String newName) {
+        return new DefaultProblem(newName, getRoadGraph(), getVehicleMap(), getPackageMap());
+    }
+
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
                 packageMap).toHashCode();

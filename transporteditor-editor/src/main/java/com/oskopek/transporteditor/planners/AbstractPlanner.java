@@ -23,6 +23,7 @@ import java.util.Optional;
  */
 public abstract class AbstractPlanner extends AbstractLogStreamable implements Planner {
 
+    private String name = "AbstractPlanner";
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
     private final BooleanProperty isPlanningProperty = new SimpleBooleanProperty(false);
 
@@ -31,6 +32,7 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
      */
     public AbstractPlanner() {
         // intentionally empty
+
     }
 
     /**
@@ -68,7 +70,14 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
     }
 
     @Override
-    public abstract String getName();
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public abstract AbstractPlanner copy();

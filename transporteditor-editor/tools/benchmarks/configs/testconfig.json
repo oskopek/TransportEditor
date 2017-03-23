@@ -1,11 +1,14 @@
 {
   "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
-  "problems": [
-    "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
-    "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl"
-  ],
+  "problems": {
+    "p01": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
+    "p01Easy": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl"
+  },
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
-    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "{0} {1} --search astar(lmcut())"
+    "FastDownAstar": {
+      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "params": "{0} {1} --search astar(lmcut())"
+    }
   }
 }

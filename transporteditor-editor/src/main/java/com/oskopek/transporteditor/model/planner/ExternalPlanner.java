@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExternalPlanner extends CancellableLogStreamable implements Planner {
 
+    private transient String name;
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutableWithParameters executable;
     private final transient ObjectProperty<Process> plannerProcessProperty = new SimpleObjectProperty<>();
@@ -62,11 +63,25 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @param executable an executable with correct parameter templates
      */
     public ExternalPlanner(ExecutableWithParameters executable) {
+        this(executable, "");
+        setName(getClass().getSimpleName() + '[' + executable.getExecutable() + ' ' + executable.getParameters() + ']');
+    }
+
+    /**
+     * Assumes stdout as plan, stderr for status updates.
+     * <p>
+     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     *
+     * @param executable an executable with correct parameter templates
+     * @param name the name of this planner
+     */
+    public ExternalPlanner(ExecutableWithParameters executable, String name) {
         String parameters = executable.getParameters();
         if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
             logger.warn("Executable command does not contain {0} and {1} parameter templates.");
         }
         this.executable = executable;
+        this.name = name;
     }
 
     /**
@@ -232,18 +247,22 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this).append("executable", executable).toString();
     }
 
     @Override
-    public String getName() {
-        return new StringBuilder(getClass().getSimpleName()).append('[').append(executable.getExecutable()).append(' ')
-                .append(executable.getParameters()).append(']').toString();
-    }
-
-    @Override
     public ExternalPlanner copy() {
-        return new ExternalPlanner(executable);
+        return new ExternalPlanner(executable, name);
     }
 }

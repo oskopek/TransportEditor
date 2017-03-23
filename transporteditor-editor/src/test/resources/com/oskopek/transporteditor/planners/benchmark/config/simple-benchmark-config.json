@@ -1,12 +1,17 @@
 {
   "domain": "${transport.root}/../../../persistence/variableDomainSeq.pddl",
-  "problems": [
-    "${transport.root}/../../../persistence/p01SeqProblem.pddl",
-    "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl"
-  ],
+  "problems": {
+    "p01": "${transport.root}/../../../persistence/p01SeqProblem.pddl",
+    "p01Easy": "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl"
+  },
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
-    "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner": "{0} {1} --search astar(ff())",
-    "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner": null
+    "FastDownAstar": {
+      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "params": "{0} {1} --search astar(ff())"
+    },
+    "PrologBFS": {
+      "className": "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner"
+    }
   }
 }

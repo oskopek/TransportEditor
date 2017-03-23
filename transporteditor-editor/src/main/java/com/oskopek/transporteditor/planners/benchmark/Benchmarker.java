@@ -27,8 +27,8 @@ public final class Benchmarker {
         }
 
         String benchmarkConfigPath = args[0];
-        BenchmarkConfig benchmarkConfig = Try.of(() -> BenchmarkConfig.from(benchmarkConfigPath)).getOrElseThrow(
-                () -> new IllegalStateException("Couldn't parse benchmark config."));
+        BenchmarkConfig benchmarkConfig = Try.of(() -> BenchmarkConfig.from(benchmarkConfigPath))
+                .getOrElseThrow(e -> new IllegalStateException("Couldn't parse benchmark config.", e));
         Benchmark benchmark = benchmarkConfig.toBenchmark();
         BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
         System.out.println(results.toJson());

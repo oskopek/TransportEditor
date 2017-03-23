@@ -35,6 +35,8 @@ public final class PrologBFSExternalPlanner extends ExternalPlanner {
 
     @Override
     public PrologBFSExternalPlanner copy() {
-        return new PrologBFSExternalPlanner();
+        PrologBFSExternalPlanner copy = new PrologBFSExternalPlanner();
+        copy.setName(getName());
+        return copy;
     }
 }

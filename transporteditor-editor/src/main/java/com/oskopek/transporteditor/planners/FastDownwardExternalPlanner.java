@@ -46,9 +46,10 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
      * Overriden constructor, used in {@link #copy()}.
      *
      * @param executableWithParameters the executable with parameters
+     * @param name the name
      */
-    protected FastDownwardExternalPlanner(ExecutableWithParameters executableWithParameters) {
-        super(executableWithParameters);
+    public FastDownwardExternalPlanner(ExecutableWithParameters executableWithParameters, String name) {
+        super(executableWithParameters, name);
     }
 
     /**
@@ -65,6 +66,6 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
 
     @Override
     public FastDownwardExternalPlanner copy() {
-        return new FastDownwardExternalPlanner(getExecutableWithParameters());
+        return new FastDownwardExternalPlanner(getExecutableWithParameters(), getName());
     }
 }

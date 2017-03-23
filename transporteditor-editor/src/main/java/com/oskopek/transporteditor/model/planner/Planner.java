@@ -88,11 +88,18 @@ public interface Planner extends LogStreamable, Cancellable {
     boolean isAvailable();
 
     /**
-     * Get a string representation of the planner. Used mainly for benchmarking logs.
+     * Get the string representation of the planner. Used mainly for benchmarking.
      *
      * @return the planner name
      */
     String getName();
+
+    /**
+     * Set the string representation of the planner. Used mainly for benchmarking.
+     *
+     * @param name the new planner name
+     */
+    void setName(String name);
 
     /**
      * Copy constructor. Do note, that this method should return the exact type that it was called on, i.e. all
