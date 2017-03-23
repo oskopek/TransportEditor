@@ -26,7 +26,7 @@ public class Benchmark {
     private final ScoreFunction scoreFunction;
     private final Function2<Problem, Planner, Boolean> skipFunction;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Benchmark.class);
 
     /**
      * Default constructor.
@@ -50,9 +50,10 @@ public class Benchmark {
      */
     private static Stream<BenchmarkRun> waitFor(List<CompletableFuture<BenchmarkRun>> futures) {
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
-        Try.run(() -> allOf.get()).onFailure(e -> new IllegalStateException("Waiting for all futures failed.", e));
+        Try.run(allOf::get).onFailure(e -> new IllegalStateException("Waiting for all futures failed.", e));
+        logger.info("All benchmarks finished, writing results...");
         return Stream.ofAll(futures).map(
-                f -> Try.of(() -> f.get()).getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
+                f -> Try.of(f::get).getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
     }
 
     /**
@@ -66,9 +67,8 @@ public class Benchmark {
             Stream<BenchmarkRun> intermediates) {
         ArrayTable<Problem, Planner, BenchmarkRun> table = ArrayTable.create(matrix.getProblems(),
                 matrix.getPlanners());
-        intermediates.forEach(intermediate -> {
-            table.put(intermediate.getProblem(), intermediate.getPlanner(), intermediate);
-        });
+        intermediates.forEach(intermediate -> table.put(intermediate.getProblem(), intermediate.getPlanner(),
+                intermediate));
         return table;
     }
 
@@ -85,12 +85,11 @@ public class Benchmark {
         }
 
         ExecutorService service = Executors.newFixedThreadPool(threadCount);
-        BenchmarkResults results = null;
+        BenchmarkResults results;
         try {
             results = Try.of(() -> schedule(matrix, service)).flatMap(futures -> Try.of(() -> waitFor(futures))).map(
-                    intermediates -> Benchmark.populateRunTable(matrix, intermediates)).map(
-                    table -> BenchmarkResults.from(table)).getOrElseThrow(
-                    t -> new IllegalStateException("Benchmark failed.", t));
+                    intermediates -> Benchmark.populateRunTable(matrix, intermediates)).map(BenchmarkResults::from)
+                    .getOrElseThrow(t -> new IllegalStateException("Benchmark failed.", t));
         } finally {
             service.shutdown();
         }
@@ -106,6 +105,6 @@ public class Benchmark {
      */
     private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService executor) {
         return matrix.toBenchmarkRuns(skipFunction, scoreFunction).map(
-                benchmarkRun -> CompletableFuture.supplyAsync(() -> benchmarkRun.execute(), executor)).toJavaList();
+                benchmarkRun -> CompletableFuture.supplyAsync(benchmarkRun::execute, executor)).toJavaList();
     }
 }
