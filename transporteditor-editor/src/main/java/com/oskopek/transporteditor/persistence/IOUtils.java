@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +17,8 @@ import java.util.stream.Collectors;
  * Utility class for input/output related methods.
  */
 public final class IOUtils {
+
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
     /**
      * Default empty constructor.
@@ -40,7 +46,7 @@ public final class IOUtils {
      * @throws IOException if an error during reading occurs
      */
     public static List<String> readAllLines(InputStream stream) throws IOException {
-        return readAllLines(stream, Charset.forName("UTF-8"));
+        return readAllLines(stream, UTF8);
     }
 
     /**
@@ -60,6 +66,17 @@ public final class IOUtils {
         } catch (IOException e) {
             throw new IOException("An error occurred during reading lines.", e);
         }
+    }
+
+    /**
+     * Writes the string to a file at the given path, overwriting any file present. Uses UTF-8.
+     *
+     * @param path the path to write to
+     * @param string the string to write
+     * @throws IOException if an error during writing occurs
+     */
+    public static void writeToFile(Path path, String string) throws IOException {
+        Files.write(path, Arrays.asList(string), UTF8, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
     }
 
 }

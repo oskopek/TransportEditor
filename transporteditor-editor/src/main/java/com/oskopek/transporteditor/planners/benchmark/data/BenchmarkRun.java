@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.planners.benchmark.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
@@ -151,6 +152,15 @@ public class BenchmarkRun {
         private final Integer score;
         private final long startTimeMs;
         private final long endTimeMs;
+        private final long durationMs;
+
+        /**
+         * Empty constructor for Jackson.
+         */
+        @JsonCreator
+        private Results() {
+            this(null, null, -1, -1);
+        }
 
         /**
          * Default constructor.
@@ -165,6 +175,7 @@ public class BenchmarkRun {
             this.score = score;
             this.startTimeMs = startTimeMs;
             this.endTimeMs = endTimeMs;
+            this.durationMs = endTimeMs - startTimeMs;
         }
 
         /**
@@ -183,7 +194,25 @@ public class BenchmarkRun {
          * @return the duration in milliseconds
          */
         public long getDurationMs() {
-            return endTimeMs - startTimeMs;
+            return durationMs;
+        }
+
+        /**
+         * Get the start time in milliseconds.
+         *
+         * @return the start time in millseconds
+         */
+        public long getStartTimeMs() {
+            return startTimeMs;
+        }
+
+        /**
+         * Get the end time in milliseconds.
+         *
+         * @return the end time in millseconds
+         */
+        public long getEndTimeMs() {
+            return endTimeMs;
         }
 
         /**

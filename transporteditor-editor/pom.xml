@@ -271,6 +271,15 @@
             </build>
         </profile>
         <profile>
+            <id>reportGenerator</id>
+            <properties>
+                <mainClass>com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator</mainClass>
+            </properties>
+            <build>
+                <finalName>TransportEditor-ReportGenerator</finalName>
+            </build>
+        </profile>
+        <profile>
             <id>it</id>
             <properties>
                 <skipTests>false</skipTests>
