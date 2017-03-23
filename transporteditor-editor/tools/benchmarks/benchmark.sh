@@ -21,6 +21,6 @@ mkdir -p "$resultdir"
 cp "$config" "$resultdir"
 export logdir="$resultdir"
 
-eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config > $resultdir/results.json"
+eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
 
 endtime="`date -u '+%Y%m%d-%H%M%S'`"

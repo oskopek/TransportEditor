@@ -40,7 +40,7 @@
     },
     "FastDownFF": {
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "--heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
     }
   },
   "threadCount": 4

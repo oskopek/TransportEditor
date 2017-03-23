@@ -17,7 +17,6 @@ import javaslang.control.Try;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,13 +76,11 @@ public final class BenchmarkConfig {
      * Construct a configuration instance from the given config file path.
      * Also loads the linked files, so as to contain all IO to this method.
      *
-     * @param configFile the config file path
+     * @param configFilePath the config file path
      * @return the loaded benchmark config instance
      * @throws IOException if an error during loading occurs
      */
-    public static BenchmarkConfig from(String configFile) throws IOException {
-        Path configFilePath = Paths.get(configFile);
-
+    public static BenchmarkConfig from(Path configFilePath) throws IOException {
         BenchmarkConfigIO io = new BenchmarkConfigIO();
         BenchmarkConfig config = io.parse(IOUtils.concatReadAllLines(new FileInputStream(configFilePath.toFile())));
 

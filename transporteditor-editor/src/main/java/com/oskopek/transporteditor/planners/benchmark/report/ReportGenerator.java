@@ -30,7 +30,11 @@ public class ReportGenerator {
 
     private final List<Reporter> reporters = new ArrayList<>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private static final String reportsFolder = "reports";
+
+    /**
+     * Denotes the name of the report folder in the result directory.
+     */
+    public static final String reportsFolder = "reports";
 
     /**
      * Takes a benchmark result JSON file as an argument and adds all {@link Reporter}s on the classpath,
@@ -45,7 +49,14 @@ public class ReportGenerator {
         }
         Path resultFile = Paths.get(args[0]);
         ReportGenerator generator = new ReportGenerator();
+        generator.populateReportersWithReflection();
+        generator.generate(resultFile);
+    }
 
+    /**
+     * Add all {@link Reporter}s found on the classpath.
+     */
+    public void populateReportersWithReflection() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forClass(Reporter.class))
                 .setScanners(new SubTypesScanner(false))
@@ -56,13 +67,11 @@ public class ReportGenerator {
                 .map(type -> Try.of(type::newInstance).toJavaOptional())
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(generator::addReporter);
-
-        generator.generate(resultFile);
+                .forEach(this::addReporter);
     }
 
     /**
-     * Generate a folder full of reports using the added {@link Reporter}s.
+     * Generate a folder full of reports from the {@code resultFile}, using the added {@link Reporter}s.
      * The report folder is located in the same directory as the {@code resultFile} and called {@code reports/}.
      *
      * @param resultFile the benchmark result JSON file
@@ -71,8 +80,19 @@ public class ReportGenerator {
     public void generate(Path resultFile) throws IOException {
         String resultFileContents = IOUtils.concatReadAllLines(Files.newInputStream(resultFile));
         BenchmarkResults results = new BenchmarkResultsIO().parse(resultFileContents);
+        generate(results, resultFile.getParent());
+    }
 
-        Path reportDir = resultFile.getParent().resolve(reportsFolder);
+    /**
+     * Generate a folder full of reports from the {@code results} using the added {@link Reporter}s.
+     * The report folder is located in the {@code resultDir} and called {@code reports/}.
+     *
+     * @param results the results to generate reports from
+     * @param resultDir the directory the results are contained in (reports will be a subdirectory)
+     * @throws IOException if an error during generation occurs
+     */
+    public void generate(BenchmarkResults results, Path resultDir) throws IOException {
+        Path reportDir = resultDir.resolve(reportsFolder);
         try {
             Files.createDirectory(reportDir);
         } catch (FileAlreadyExistsException e) {
