@@ -5,6 +5,8 @@ import com.oskopek.transporteditor.planners.benchmark.config.BenchmarkConfig;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator;
 import javaslang.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +17,8 @@ import java.nio.file.Paths;
  * Main class for the benchmarker jar.
  */
 public final class Benchmarker {
+
+    private static final Logger logger = LoggerFactory.getLogger(Benchmarker.class);
 
     /**
      * Empty constructor.
@@ -43,8 +47,9 @@ public final class Benchmarker {
 
         String benchmarkResultDir = args[1];
         Path benchmarkResultDirPath = Paths.get(benchmarkResultDir);
-        IOUtils.deleteDirectoryRecursively(benchmarkResultDirPath);
-        Files.createDirectory(benchmarkResultDirPath);
+        Try.run(() -> IOUtils.deleteDirectoryRecursively(benchmarkResultDirPath))
+                .onFailure(e -> logger.debug("Delete directory failed, continuing anyway: {}", e));
+        benchmarkResultDirPath.toFile().mkdirs();
         Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
 

@@ -34,14 +34,10 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "FastDownLama": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "--alias seq-sat-lama-2011 {0} {1}"
-    },
     "FastDownFF": {
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
       "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
     }
   },
-  "threadCount": 4
+  "threadCount": 8
 }

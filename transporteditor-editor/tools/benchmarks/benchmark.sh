@@ -18,8 +18,19 @@ origdir="`pwd`"
 
 resultdir="$origdir/results/$configName/$starttime"
 mkdir -p "$resultdir"
-export logdir="$resultdir"
+logdir="$resultdir"
 
 eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
 
 endtime="`date -u '+%Y%m%d-%H%M%S'`"
+
+reportdir="$resultdir"/reports
+
+if `which rsvg-convert >/dev/null`; then
+    for svg in `ls $reportdir/*.svg`; do
+        filename="$reportdir"/"`basename $svg | sed 's/\.svg//g'`"
+        rsvg-convert -f pdf -o "$filename".pdf "$filename".svg
+    done
+fi
+
+echo "Result dir: $resultdir"
