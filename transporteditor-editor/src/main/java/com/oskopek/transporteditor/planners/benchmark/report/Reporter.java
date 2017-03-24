@@ -3,6 +3,7 @@ package com.oskopek.transporteditor.planners.benchmark.report;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Represents a benchmark result report generator.
@@ -19,7 +20,7 @@ public interface Reporter {
      * @param results the results
      * @return the generated report, as if contents of a file
      */
-    String generateReport(BenchmarkResults results);
+    String generateReport(List<BenchmarkResults.JsonRun> results);
 
     /**
      * The local filename of the to-be-generated report.

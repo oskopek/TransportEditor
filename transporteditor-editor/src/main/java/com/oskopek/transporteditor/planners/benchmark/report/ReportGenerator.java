@@ -29,6 +29,7 @@ import java.util.Optional;
 public class ReportGenerator {
 
     private final List<Reporter> reporters = new ArrayList<>();
+    private final List<RunTableReporter> runTableReporters = new ArrayList<>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
@@ -68,6 +69,13 @@ public class ReportGenerator {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(this::addReporter);
+
+        Stream.ofAll(reflections.getSubTypesOf(RunTableReporter.class))
+                .filter(type -> !Modifier.isAbstract(type.getModifiers()))
+                .map(type -> Try.of(type::newInstance).toJavaOptional())
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(this::addRunTableReporter);
     }
 
     /**
@@ -99,7 +107,7 @@ public class ReportGenerator {
             logger.warn("Report directory already exists, will possibly overwrite files.");
         }
 
-        reporters.stream().map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results)))
+        reporters.stream().map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results.getRuns())))
                 .forEach(tuple -> {
                     String reportName = tuple._1;
                     logger.info("Generating report: " + reportName);
@@ -107,15 +115,36 @@ public class ReportGenerator {
                     Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2))
                             .onFailure(e -> new IllegalStateException("Failed to persist report: " + reportFile, e));
                 });
+
+        if (results.getRunTable() != null) {
+            runTableReporters.stream()
+                    .map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results.getRunTable())))
+                    .forEach(tuple -> {
+                        String reportName = tuple._1;
+                        logger.info("Generating run table report: " + reportName);
+                        Path reportFile = reportDir.resolve(reportName);
+                        Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2)).onFailure(e ->
+                                new IllegalStateException("Failed to persist report: " + reportFile, e));
+                    });
+        }
     }
 
     /**
      * Add a reporter to use when generating.
      *
-     * @param reporter the reported to add
+     * @param reporter the reporter to add
      */
     public void addReporter(Reporter reporter) {
         reporters.add(reporter);
+    }
+
+    /**
+     * Add a run table reporter to use when generating.
+     *
+     * @param runTableReporter the run table reporter to add
+     */
+    public void addRunTableReporter(RunTableReporter runTableReporter) {
+        runTableReporters.add(runTableReporter);
     }
 
 

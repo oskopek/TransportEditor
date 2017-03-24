@@ -18,7 +18,6 @@ origdir="`pwd`"
 
 resultdir="$origdir/results/$configName/$starttime"
 mkdir -p "$resultdir"
-cp "$config" "$resultdir"
 export logdir="$resultdir"
 
 eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"

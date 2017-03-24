@@ -7,6 +7,7 @@ import com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator;
 import javaslang.control.Try;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,6 +43,9 @@ public final class Benchmarker {
 
         String benchmarkResultDir = args[1];
         Path benchmarkResultDirPath = Paths.get(benchmarkResultDir);
+        IOUtils.deleteDirectoryRecursively(benchmarkResultDirPath);
+        Files.createDirectory(benchmarkResultDirPath);
+        Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
 
         ReportGenerator generator = new ReportGenerator();

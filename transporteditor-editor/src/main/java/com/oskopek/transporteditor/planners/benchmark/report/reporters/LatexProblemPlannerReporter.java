@@ -29,24 +29,23 @@ public abstract class LatexProblemPlannerReporter implements Reporter {
     }
 
     @Override
-    public String generateReport(BenchmarkResults results) {
+    public String generateReport(List<BenchmarkResults.JsonRun> results) {
         return FreemarkerFiller.generate("problem_planner_table.tex.ftl", fillInfo(results, dataGetter));
     }
 
     /**
      * Fill the Freemarker info map with the planners, problems and element data.
      *
-     * @param results the results to take data from
+     * @param runs the benchmark runs to take data from
      * @param dataGetter the getter to use for element data
      * @return the filled-in map to be passed to a Freemarker template
      */
-    private Map<String, Object> fillInfo(BenchmarkResults results,
+    private Map<String, Object> fillInfo(List<BenchmarkResults.JsonRun> runs,
             Function<BenchmarkResults.JsonRun, Object> dataGetter) {
-        List<BenchmarkResults.JsonRun> runs = results.getRuns();
 
         Map<String, Object> info = new HashMap<>();
         // all domains are the same
-        info.put("domain", results.getRuns().size() == 0 ? "" : results.getRuns().get(0).getDomain());
+        info.put("domain", runs.size() == 0 ? "" : runs.get(0).getDomain());
         info.put("planners", runs.stream().flatMap(r -> Stream.of(r.getPlanner())).sorted().distinct()
                 .collect(Collectors.toList()));
         info.put("problems", runs.stream().flatMap(r -> Stream.of(r.getProblem())).sorted().distinct()
