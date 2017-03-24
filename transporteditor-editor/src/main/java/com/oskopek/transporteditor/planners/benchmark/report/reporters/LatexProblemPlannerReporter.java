@@ -51,7 +51,6 @@ public abstract class LatexProblemPlannerReporter implements Reporter {
      */
     private Map<String, Object> fillInfo(List<BenchmarkResults.JsonRun> runs,
             Function<BenchmarkResults.JsonRun, Object> dataGetter) {
-
         Map<String, Object> info = new HashMap<>();
         // all domains are the same
         info.put("domain", runs.size() == 0 ? "" : runs.get(0).getDomain());

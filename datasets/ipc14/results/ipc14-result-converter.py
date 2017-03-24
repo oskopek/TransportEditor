@@ -64,10 +64,14 @@ def to_json(domain, finished, score):
         row_end = len(row)
         if not score:
             row_end -= 1
+            best_score[problem] = int(row[-1])
         for i in range(1, row_end):
             planner = planners[i-1]
-            finished_dict[problem][planner] = int(str(row[i]))
+            val = int(str(row[i])) # 0 or 1
+            finished_dict[problem][planner] = val
             score_dict[problem][planner] = None
+            if not score:
+                score_dict[problem][planner] = val
 
     if score:
         for row in score[1:]:
@@ -76,21 +80,17 @@ def to_json(domain, finished, score):
             for i in range(1, len(row)-1):
                 planner = planners[i-1]
                 score_dict[problem][planner] = float(row[i])
-    if not score:
-        for row in finished[1:]:
-            best_score[problem] = int(row[-1])
 
     rows = []
     for problem in problems:
         for planner in planners:
             best = best_score[problem]
-            quality = score_dict[problem][planner]
-            if quality:
-                score = int(quality * best)
-            else:
-                quality = 0.0
-                score = None
             status = statusTable[finished_dict[problem][planner]]
+            quality = score_dict[problem][planner]
+            if quality >= 0.01:
+                cur_score = int(best/(quality)) # quality = best/score => score = best/quality
+            else:
+                cur_score = None
             jsonrow = {
                 "domain": domain,
                 "problem": problem,
@@ -98,7 +98,7 @@ def to_json(domain, finished, score):
                 "temporalPlanActions": [],
                 "actions": [],
                 "results": {
-                    "score": score,
+                    "score": cur_score,
                     "bestScore": best,
                     "exitStatus": status,
                     "startTimeMs": 0,

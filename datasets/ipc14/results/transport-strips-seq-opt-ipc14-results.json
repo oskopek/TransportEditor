@@ -6,12 +6,12 @@
             "planner": "all-paca",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -22,12 +22,12 @@
             "planner": "cedalion",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -38,12 +38,12 @@
             "planner": "cgamer-bd",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -54,12 +54,12 @@
             "planner": "dpmplan",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -70,12 +70,12 @@
             "planner": "dynamic-gamer",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -86,12 +86,12 @@
             "planner": "gamer",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -102,12 +102,12 @@
             "planner": "hflow",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -118,11 +118,11 @@
             "planner": "hpp",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -134,11 +134,11 @@
             "planner": "hpp-ce",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -150,12 +150,12 @@
             "planner": "metis",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -166,11 +166,11 @@
             "planner": "miplan",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -182,12 +182,12 @@
             "planner": "nucelar",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -198,12 +198,12 @@
             "planner": "rida",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -214,12 +214,12 @@
             "planner": "rlazya",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -230,12 +230,12 @@
             "planner": "spmas",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -246,12 +246,12 @@
             "planner": "symba-1",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -262,12 +262,12 @@
             "planner": "symba-2",
             "problem": "p01",
             "results": {
-                "bestScore": null,
+                "bestScore": 148,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 148,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -278,12 +278,12 @@
             "planner": "all-paca",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -294,12 +294,12 @@
             "planner": "cedalion",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -310,12 +310,12 @@
             "planner": "cgamer-bd",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -326,12 +326,12 @@
             "planner": "dpmplan",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -342,12 +342,12 @@
             "planner": "dynamic-gamer",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -358,12 +358,12 @@
             "planner": "gamer",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -374,12 +374,12 @@
             "planner": "hflow",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -390,11 +390,11 @@
             "planner": "hpp",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -406,11 +406,11 @@
             "planner": "hpp-ce",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -422,12 +422,12 @@
             "planner": "metis",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -438,11 +438,11 @@
             "planner": "miplan",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -454,12 +454,12 @@
             "planner": "nucelar",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -470,12 +470,12 @@
             "planner": "rida",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -486,12 +486,12 @@
             "planner": "rlazya",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -502,12 +502,12 @@
             "planner": "spmas",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -518,12 +518,12 @@
             "planner": "symba-1",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -534,12 +534,12 @@
             "planner": "symba-2",
             "problem": "p02",
             "results": {
-                "bestScore": null,
+                "bestScore": 191,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 191,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -550,12 +550,12 @@
             "planner": "all-paca",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -566,12 +566,12 @@
             "planner": "cedalion",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -582,12 +582,12 @@
             "planner": "cgamer-bd",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -598,12 +598,12 @@
             "planner": "dpmplan",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -614,12 +614,12 @@
             "planner": "dynamic-gamer",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -630,12 +630,12 @@
             "planner": "gamer",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -646,12 +646,12 @@
             "planner": "hflow",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -662,11 +662,11 @@
             "planner": "hpp",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -678,11 +678,11 @@
             "planner": "hpp-ce",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -694,12 +694,12 @@
             "planner": "metis",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -710,11 +710,11 @@
             "planner": "miplan",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -726,12 +726,12 @@
             "planner": "nucelar",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -742,12 +742,12 @@
             "planner": "rida",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -758,12 +758,12 @@
             "planner": "rlazya",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -774,12 +774,12 @@
             "planner": "spmas",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -790,12 +790,12 @@
             "planner": "symba-1",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -806,12 +806,12 @@
             "planner": "symba-2",
             "problem": "p03",
             "results": {
-                "bestScore": null,
+                "bestScore": 300,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -822,11 +822,11 @@
             "planner": "all-paca",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -838,11 +838,11 @@
             "planner": "cedalion",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -854,12 +854,12 @@
             "planner": "cgamer-bd",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 250,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -870,11 +870,11 @@
             "planner": "dpmplan",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -886,11 +886,11 @@
             "planner": "dynamic-gamer",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -902,11 +902,11 @@
             "planner": "gamer",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -918,11 +918,11 @@
             "planner": "hflow",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -934,11 +934,11 @@
             "planner": "hpp",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -950,11 +950,11 @@
             "planner": "hpp-ce",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -966,11 +966,11 @@
             "planner": "metis",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -982,11 +982,11 @@
             "planner": "miplan",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -998,11 +998,11 @@
             "planner": "nucelar",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1014,11 +1014,11 @@
             "planner": "rida",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1030,11 +1030,11 @@
             "planner": "rlazya",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1046,12 +1046,12 @@
             "planner": "spmas",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 250,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1062,12 +1062,12 @@
             "planner": "symba-1",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 250,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1078,12 +1078,12 @@
             "planner": "symba-2",
             "problem": "p04",
             "results": {
-                "bestScore": null,
+                "bestScore": 250,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 250,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1094,11 +1094,11 @@
             "planner": "all-paca",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1110,11 +1110,11 @@
             "planner": "cedalion",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1126,11 +1126,11 @@
             "planner": "cgamer-bd",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1142,11 +1142,11 @@
             "planner": "dpmplan",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1158,11 +1158,11 @@
             "planner": "dynamic-gamer",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1174,11 +1174,11 @@
             "planner": "gamer",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1190,11 +1190,11 @@
             "planner": "hflow",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1206,11 +1206,11 @@
             "planner": "hpp",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1222,11 +1222,11 @@
             "planner": "hpp-ce",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1238,11 +1238,11 @@
             "planner": "metis",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1254,11 +1254,11 @@
             "planner": "miplan",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1270,11 +1270,11 @@
             "planner": "nucelar",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1286,11 +1286,11 @@
             "planner": "rida",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1302,11 +1302,11 @@
             "planner": "rlazya",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1318,11 +1318,11 @@
             "planner": "spmas",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1334,11 +1334,11 @@
             "planner": "symba-1",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1350,11 +1350,11 @@
             "planner": "symba-2",
             "problem": "p05",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1366,11 +1366,11 @@
             "planner": "all-paca",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1382,11 +1382,11 @@
             "planner": "cedalion",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1398,11 +1398,11 @@
             "planner": "cgamer-bd",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1414,11 +1414,11 @@
             "planner": "dpmplan",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1430,11 +1430,11 @@
             "planner": "dynamic-gamer",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1446,11 +1446,11 @@
             "planner": "gamer",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1462,11 +1462,11 @@
             "planner": "hflow",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1478,11 +1478,11 @@
             "planner": "hpp",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1494,11 +1494,11 @@
             "planner": "hpp-ce",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1510,11 +1510,11 @@
             "planner": "metis",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1526,11 +1526,11 @@
             "planner": "miplan",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1542,11 +1542,11 @@
             "planner": "nucelar",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1558,11 +1558,11 @@
             "planner": "rida",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1574,11 +1574,11 @@
             "planner": "rlazya",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1590,11 +1590,11 @@
             "planner": "spmas",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1606,11 +1606,11 @@
             "planner": "symba-1",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1622,11 +1622,11 @@
             "planner": "symba-2",
             "problem": "p06",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1638,12 +1638,12 @@
             "planner": "all-paca",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1654,12 +1654,12 @@
             "planner": "cedalion",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1670,12 +1670,12 @@
             "planner": "cgamer-bd",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1686,12 +1686,12 @@
             "planner": "dpmplan",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1702,12 +1702,12 @@
             "planner": "dynamic-gamer",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1718,12 +1718,12 @@
             "planner": "gamer",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1734,11 +1734,11 @@
             "planner": "hflow",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1750,11 +1750,11 @@
             "planner": "hpp",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1766,11 +1766,11 @@
             "planner": "hpp-ce",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1782,12 +1782,12 @@
             "planner": "metis",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1798,11 +1798,11 @@
             "planner": "miplan",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1814,12 +1814,12 @@
             "planner": "nucelar",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1830,12 +1830,12 @@
             "planner": "rida",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1846,12 +1846,12 @@
             "planner": "rlazya",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1862,12 +1862,12 @@
             "planner": "spmas",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1878,12 +1878,12 @@
             "planner": "symba-1",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1894,12 +1894,12 @@
             "planner": "symba-2",
             "problem": "p07",
             "results": {
-                "bestScore": null,
+                "bestScore": 967,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 967,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1910,11 +1910,11 @@
             "planner": "all-paca",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1926,11 +1926,11 @@
             "planner": "cedalion",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1942,12 +1942,12 @@
             "planner": "cgamer-bd",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1958,11 +1958,11 @@
             "planner": "dpmplan",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -1974,12 +1974,12 @@
             "planner": "dynamic-gamer",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1990,11 +1990,11 @@
             "planner": "gamer",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2006,11 +2006,11 @@
             "planner": "hflow",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2022,11 +2022,11 @@
             "planner": "hpp",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2038,11 +2038,11 @@
             "planner": "hpp-ce",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2054,11 +2054,11 @@
             "planner": "metis",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2070,11 +2070,11 @@
             "planner": "miplan",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2086,12 +2086,12 @@
             "planner": "nucelar",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2102,12 +2102,12 @@
             "planner": "rida",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2118,11 +2118,11 @@
             "planner": "rlazya",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2134,12 +2134,12 @@
             "planner": "spmas",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2150,12 +2150,12 @@
             "planner": "symba-1",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2166,12 +2166,12 @@
             "planner": "symba-2",
             "problem": "p08",
             "results": {
-                "bestScore": null,
+                "bestScore": 1173,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2182,11 +2182,11 @@
             "planner": "all-paca",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2198,11 +2198,11 @@
             "planner": "cedalion",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2214,11 +2214,11 @@
             "planner": "cgamer-bd",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2230,11 +2230,11 @@
             "planner": "dpmplan",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2246,11 +2246,11 @@
             "planner": "dynamic-gamer",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2262,11 +2262,11 @@
             "planner": "gamer",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2278,11 +2278,11 @@
             "planner": "hflow",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2294,11 +2294,11 @@
             "planner": "hpp",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2310,11 +2310,11 @@
             "planner": "hpp-ce",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2326,11 +2326,11 @@
             "planner": "metis",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2342,11 +2342,11 @@
             "planner": "miplan",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2358,11 +2358,11 @@
             "planner": "nucelar",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2374,11 +2374,11 @@
             "planner": "rida",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2390,11 +2390,11 @@
             "planner": "rlazya",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2406,11 +2406,11 @@
             "planner": "spmas",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2422,11 +2422,11 @@
             "planner": "symba-1",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2438,11 +2438,11 @@
             "planner": "symba-2",
             "problem": "p09",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2454,11 +2454,11 @@
             "planner": "all-paca",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2470,11 +2470,11 @@
             "planner": "cedalion",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2486,11 +2486,11 @@
             "planner": "cgamer-bd",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2502,11 +2502,11 @@
             "planner": "dpmplan",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2518,11 +2518,11 @@
             "planner": "dynamic-gamer",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2534,11 +2534,11 @@
             "planner": "gamer",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2550,11 +2550,11 @@
             "planner": "hflow",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2566,11 +2566,11 @@
             "planner": "hpp",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2582,11 +2582,11 @@
             "planner": "hpp-ce",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2598,11 +2598,11 @@
             "planner": "metis",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2614,11 +2614,11 @@
             "planner": "miplan",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2630,11 +2630,11 @@
             "planner": "nucelar",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2646,11 +2646,11 @@
             "planner": "rida",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2662,11 +2662,11 @@
             "planner": "rlazya",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2678,11 +2678,11 @@
             "planner": "spmas",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2694,11 +2694,11 @@
             "planner": "symba-1",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2710,11 +2710,11 @@
             "planner": "symba-2",
             "problem": "p10",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2726,11 +2726,11 @@
             "planner": "all-paca",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2742,11 +2742,11 @@
             "planner": "cedalion",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2758,11 +2758,11 @@
             "planner": "cgamer-bd",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2774,11 +2774,11 @@
             "planner": "dpmplan",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2790,11 +2790,11 @@
             "planner": "dynamic-gamer",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2806,11 +2806,11 @@
             "planner": "gamer",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2822,11 +2822,11 @@
             "planner": "hflow",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2838,11 +2838,11 @@
             "planner": "hpp",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2854,11 +2854,11 @@
             "planner": "hpp-ce",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2870,11 +2870,11 @@
             "planner": "metis",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2886,11 +2886,11 @@
             "planner": "miplan",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2902,11 +2902,11 @@
             "planner": "nucelar",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2918,11 +2918,11 @@
             "planner": "rida",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2934,11 +2934,11 @@
             "planner": "rlazya",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2950,11 +2950,11 @@
             "planner": "spmas",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2966,11 +2966,11 @@
             "planner": "symba-1",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2982,11 +2982,11 @@
             "planner": "symba-2",
             "problem": "p11",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -2998,11 +2998,11 @@
             "planner": "all-paca",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3014,11 +3014,11 @@
             "planner": "cedalion",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3030,11 +3030,11 @@
             "planner": "cgamer-bd",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3046,11 +3046,11 @@
             "planner": "dpmplan",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3062,11 +3062,11 @@
             "planner": "dynamic-gamer",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3078,11 +3078,11 @@
             "planner": "gamer",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3094,11 +3094,11 @@
             "planner": "hflow",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3110,11 +3110,11 @@
             "planner": "hpp",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3126,11 +3126,11 @@
             "planner": "hpp-ce",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3142,11 +3142,11 @@
             "planner": "metis",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3158,11 +3158,11 @@
             "planner": "miplan",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3174,11 +3174,11 @@
             "planner": "nucelar",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3190,11 +3190,11 @@
             "planner": "rida",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3206,11 +3206,11 @@
             "planner": "rlazya",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3222,11 +3222,11 @@
             "planner": "spmas",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3238,11 +3238,11 @@
             "planner": "symba-1",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3254,11 +3254,11 @@
             "planner": "symba-2",
             "problem": "p12",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3270,12 +3270,12 @@
             "planner": "all-paca",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3286,12 +3286,12 @@
             "planner": "cedalion",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3302,12 +3302,12 @@
             "planner": "cgamer-bd",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3318,12 +3318,12 @@
             "planner": "dpmplan",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3334,12 +3334,12 @@
             "planner": "dynamic-gamer",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3350,12 +3350,12 @@
             "planner": "gamer",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3366,12 +3366,12 @@
             "planner": "hflow",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3382,11 +3382,11 @@
             "planner": "hpp",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3398,11 +3398,11 @@
             "planner": "hpp-ce",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3414,12 +3414,12 @@
             "planner": "metis",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3430,11 +3430,11 @@
             "planner": "miplan",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3446,12 +3446,12 @@
             "planner": "nucelar",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3462,12 +3462,12 @@
             "planner": "rida",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3478,12 +3478,12 @@
             "planner": "rlazya",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3494,12 +3494,12 @@
             "planner": "spmas",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3510,12 +3510,12 @@
             "planner": "symba-1",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3526,12 +3526,12 @@
             "planner": "symba-2",
             "problem": "p13",
             "results": {
-                "bestScore": null,
+                "bestScore": 594,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 594,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3542,11 +3542,11 @@
             "planner": "all-paca",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3558,12 +3558,12 @@
             "planner": "cedalion",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3574,12 +3574,12 @@
             "planner": "cgamer-bd",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3590,12 +3590,12 @@
             "planner": "dpmplan",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3606,12 +3606,12 @@
             "planner": "dynamic-gamer",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3622,12 +3622,12 @@
             "planner": "gamer",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3638,12 +3638,12 @@
             "planner": "hflow",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3654,11 +3654,11 @@
             "planner": "hpp",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3670,11 +3670,11 @@
             "planner": "hpp-ce",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3686,12 +3686,12 @@
             "planner": "metis",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3702,11 +3702,11 @@
             "planner": "miplan",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3718,12 +3718,12 @@
             "planner": "nucelar",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3734,12 +3734,12 @@
             "planner": "rida",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3750,12 +3750,12 @@
             "planner": "rlazya",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3766,12 +3766,12 @@
             "planner": "spmas",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3782,12 +3782,12 @@
             "planner": "symba-1",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3798,12 +3798,12 @@
             "planner": "symba-2",
             "problem": "p14",
             "results": {
-                "bestScore": null,
+                "bestScore": 526,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 526,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3814,11 +3814,11 @@
             "planner": "all-paca",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3830,11 +3830,11 @@
             "planner": "cedalion",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3846,11 +3846,11 @@
             "planner": "cgamer-bd",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3862,11 +3862,11 @@
             "planner": "dpmplan",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3878,11 +3878,11 @@
             "planner": "dynamic-gamer",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3894,11 +3894,11 @@
             "planner": "gamer",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3910,11 +3910,11 @@
             "planner": "hflow",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3926,11 +3926,11 @@
             "planner": "hpp",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3942,11 +3942,11 @@
             "planner": "hpp-ce",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3958,11 +3958,11 @@
             "planner": "metis",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3974,11 +3974,11 @@
             "planner": "miplan",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -3990,11 +3990,11 @@
             "planner": "nucelar",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4006,12 +4006,12 @@
             "planner": "rida",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 753,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4022,11 +4022,11 @@
             "planner": "rlazya",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4038,12 +4038,12 @@
             "planner": "spmas",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 753,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4054,12 +4054,12 @@
             "planner": "symba-1",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 753,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4070,12 +4070,12 @@
             "planner": "symba-2",
             "problem": "p15",
             "results": {
-                "bestScore": null,
+                "bestScore": 753,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
+                "quality": 1,
+                "score": 753,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4086,11 +4086,11 @@
             "planner": "all-paca",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4102,11 +4102,11 @@
             "planner": "cedalion",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4118,11 +4118,11 @@
             "planner": "cgamer-bd",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4134,11 +4134,11 @@
             "planner": "dpmplan",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4150,11 +4150,11 @@
             "planner": "dynamic-gamer",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4166,11 +4166,11 @@
             "planner": "gamer",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4182,11 +4182,11 @@
             "planner": "hflow",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4198,11 +4198,11 @@
             "planner": "hpp",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4214,11 +4214,11 @@
             "planner": "hpp-ce",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4230,11 +4230,11 @@
             "planner": "metis",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4246,11 +4246,11 @@
             "planner": "miplan",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4262,11 +4262,11 @@
             "planner": "nucelar",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4278,11 +4278,11 @@
             "planner": "rida",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4294,11 +4294,11 @@
             "planner": "rlazya",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4310,11 +4310,11 @@
             "planner": "spmas",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4326,11 +4326,11 @@
             "planner": "symba-1",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4342,11 +4342,11 @@
             "planner": "symba-2",
             "problem": "p16",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4358,11 +4358,11 @@
             "planner": "all-paca",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4374,11 +4374,11 @@
             "planner": "cedalion",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4390,11 +4390,11 @@
             "planner": "cgamer-bd",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4406,11 +4406,11 @@
             "planner": "dpmplan",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4422,11 +4422,11 @@
             "planner": "dynamic-gamer",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4438,11 +4438,11 @@
             "planner": "gamer",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4454,11 +4454,11 @@
             "planner": "hflow",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4470,11 +4470,11 @@
             "planner": "hpp",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4486,11 +4486,11 @@
             "planner": "hpp-ce",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4502,11 +4502,11 @@
             "planner": "metis",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4518,11 +4518,11 @@
             "planner": "miplan",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4534,11 +4534,11 @@
             "planner": "nucelar",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4550,11 +4550,11 @@
             "planner": "rida",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4566,11 +4566,11 @@
             "planner": "rlazya",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4582,11 +4582,11 @@
             "planner": "spmas",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4598,11 +4598,11 @@
             "planner": "symba-1",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4614,11 +4614,11 @@
             "planner": "symba-2",
             "problem": "p17",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4630,11 +4630,11 @@
             "planner": "all-paca",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4646,11 +4646,11 @@
             "planner": "cedalion",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4662,11 +4662,11 @@
             "planner": "cgamer-bd",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4678,11 +4678,11 @@
             "planner": "dpmplan",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4694,11 +4694,11 @@
             "planner": "dynamic-gamer",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4710,11 +4710,11 @@
             "planner": "gamer",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4726,11 +4726,11 @@
             "planner": "hflow",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4742,11 +4742,11 @@
             "planner": "hpp",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4758,11 +4758,11 @@
             "planner": "hpp-ce",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4774,11 +4774,11 @@
             "planner": "metis",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4790,11 +4790,11 @@
             "planner": "miplan",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4806,11 +4806,11 @@
             "planner": "nucelar",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4822,11 +4822,11 @@
             "planner": "rida",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4838,11 +4838,11 @@
             "planner": "rlazya",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4854,11 +4854,11 @@
             "planner": "spmas",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4870,11 +4870,11 @@
             "planner": "symba-1",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4886,11 +4886,11 @@
             "planner": "symba-2",
             "problem": "p18",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4902,11 +4902,11 @@
             "planner": "all-paca",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4918,11 +4918,11 @@
             "planner": "cedalion",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4934,11 +4934,11 @@
             "planner": "cgamer-bd",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4950,11 +4950,11 @@
             "planner": "dpmplan",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4966,11 +4966,11 @@
             "planner": "dynamic-gamer",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4982,11 +4982,11 @@
             "planner": "gamer",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -4998,11 +4998,11 @@
             "planner": "hflow",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5014,11 +5014,11 @@
             "planner": "hpp",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5030,11 +5030,11 @@
             "planner": "hpp-ce",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5046,11 +5046,11 @@
             "planner": "metis",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5062,11 +5062,11 @@
             "planner": "miplan",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5078,11 +5078,11 @@
             "planner": "nucelar",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5094,11 +5094,11 @@
             "planner": "rida",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5110,11 +5110,11 @@
             "planner": "rlazya",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5126,11 +5126,11 @@
             "planner": "spmas",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5142,11 +5142,11 @@
             "planner": "symba-1",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5158,11 +5158,11 @@
             "planner": "symba-2",
             "problem": "p19",
             "results": {
-                "bestScore": null,
+                "bestScore": -1,
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5178,7 +5178,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5194,7 +5194,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5210,7 +5210,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5226,7 +5226,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5242,7 +5242,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5258,7 +5258,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5274,7 +5274,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5290,7 +5290,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5306,7 +5306,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5322,7 +5322,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5338,7 +5338,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5354,7 +5354,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5370,7 +5370,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5386,7 +5386,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5402,7 +5402,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5418,7 +5418,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },
@@ -5434,7 +5434,7 @@
                 "durationMs": -1,
                 "endTimeMs": 0,
                 "exitStatus": "UNSOLVED",
-                "quality": 0.0,
+                "quality": 0,
                 "score": null,
                 "startTimeMs": 0
             },

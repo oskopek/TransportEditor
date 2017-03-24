@@ -31,11 +31,15 @@ public class ReportGenerator {
     private final List<Reporter> reporters = new ArrayList<>();
     private final List<RunTableReporter> runTableReporters = new ArrayList<>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final String reportsFolderName;
 
     /**
-     * Denotes the name of the report folder in the result directory.
+     * Default constructor.
+     * @param reportsFolderName the name of the generated reports folder
      */
-    public static final String reportsFolder = "reports";
+    public ReportGenerator(String reportsFolderName) {
+        this.reportsFolderName = reportsFolderName;
+    }
 
     /**
      * Takes a benchmark result JSON file as an argument and adds all {@link Reporter}s on the classpath,
@@ -45,11 +49,16 @@ public class ReportGenerator {
      * @throws IOException if report generation fails
      */
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Args: [resultFile.json]");
+        if (args.length < 1 || args.length > 2) {
+            throw new IllegalArgumentException("Args: [resultFile.json] ([report-folder-name])");
+        }
+
+        String reportsFolderName = "reports";
+        if (args.length == 2) {
+                reportsFolderName = args[1];
         }
         Path resultFile = Paths.get(args[0]);
-        ReportGenerator generator = new ReportGenerator();
+        ReportGenerator generator = new ReportGenerator(reportsFolderName);
         generator.populateReportersWithReflection();
         generator.generate(resultFile);
     }
@@ -100,7 +109,7 @@ public class ReportGenerator {
      * @throws IOException if an error during generation occurs
      */
     public void generate(BenchmarkResults results, Path resultDir) throws IOException {
-        Path reportDir = resultDir.resolve(reportsFolder);
+        Path reportDir = resultDir.resolve(reportsFolderName);
         try {
             Files.createDirectory(reportDir);
         } catch (FileAlreadyExistsException e) {

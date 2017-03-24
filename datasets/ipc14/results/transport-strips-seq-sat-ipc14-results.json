@@ -11,7 +11,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.67,
-                "score": 877,
+                "score": 1953,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -27,7 +27,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.68,
-                "score": 890,
+                "score": 1924,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -59,7 +59,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 628,
+                "score": 2727,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -75,7 +75,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 759,
+                "score": 2256,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -107,7 +107,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.29,
-                "score": 379,
+                "score": 4513,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -123,7 +123,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 575,
+                "score": 2975,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -139,7 +139,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 837,
+                "score": 2045,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -171,7 +171,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 562,
+                "score": 3044,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -187,7 +187,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 759,
+                "score": 2256,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -203,7 +203,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 837,
+                "score": 2045,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -235,7 +235,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 575,
+                "score": 2975,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -251,7 +251,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.79,
-                "score": 1034,
+                "score": 1656,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -267,7 +267,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 575,
+                "score": 2975,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -315,7 +315,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.66,
-                "score": 863,
+                "score": 1983,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -331,7 +331,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.79,
-                "score": 1678,
+                "score": 2689,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -347,7 +347,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 1360,
+                "score": 3320,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -379,7 +379,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.35,
-                "score": 743,
+                "score": 6071,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -395,7 +395,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.67,
-                "score": 1423,
+                "score": 3171,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -427,7 +427,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 850,
+                "score": 5312,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -443,7 +443,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 913,
+                "score": 4941,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -459,7 +459,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.36,
-                "score": 765,
+                "score": 5902,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -491,7 +491,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.5,
-                "score": 1062,
+                "score": 4250,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -507,7 +507,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.61,
-                "score": 1296,
+                "score": 3483,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -523,7 +523,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 1105,
+                "score": 4086,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -555,7 +555,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.32,
-                "score": 680,
+                "score": 6640,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -571,7 +571,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.97,
-                "score": 2061,
+                "score": 2190,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -587,7 +587,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 913,
+                "score": 4941,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -635,7 +635,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.73,
-                "score": 1551,
+                "score": 2910,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -651,7 +651,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.82,
-                "score": 1261,
+                "score": 1876,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -667,7 +667,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.77,
-                "score": 1185,
+                "score": 1998,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -699,7 +699,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.39,
-                "score": 600,
+                "score": 3946,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -715,7 +715,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.56,
-                "score": 861,
+                "score": 2748,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -747,7 +747,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.36,
-                "score": 554,
+                "score": 4275,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -763,7 +763,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.62,
-                "score": 954,
+                "score": 2482,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -779,7 +779,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 892,
+                "score": 2653,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -811,7 +811,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.47,
-                "score": 723,
+                "score": 3274,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -827,7 +827,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.53,
-                "score": 815,
+                "score": 2903,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -843,7 +843,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 892,
+                "score": 2653,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -875,7 +875,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.37,
-                "score": 569,
+                "score": 4159,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -891,7 +891,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.84,
-                "score": 1292,
+                "score": 1832,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -907,7 +907,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 661,
+                "score": 3579,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -955,7 +955,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.82,
-                "score": 1261,
+                "score": 1876,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1019,7 +1019,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2725,
+                "score": 11829,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1067,7 +1067,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 3293,
+                "score": 9789,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1099,7 +1099,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 3633,
+                "score": 8871,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1131,7 +1131,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.69,
-                "score": 3917,
+                "score": 8228,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1147,7 +1147,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 2555,
+                "score": 12617,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1163,7 +1163,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 3633,
+                "score": 8871,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1195,7 +1195,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.6,
-                "score": 3406,
+                "score": 9463,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1275,7 +1275,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2611,
+                "score": 12343,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1387,7 +1387,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 2494,
+                "score": 15587,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1419,7 +1419,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 2743,
+                "score": 14170,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1451,7 +1451,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.57,
-                "score": 3553,
+                "score": 10938,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1467,7 +1467,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 2494,
+                "score": 15587,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1483,7 +1483,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 2743,
+                "score": 14170,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1515,7 +1515,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.49,
-                "score": 3055,
+                "score": 12724,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1595,7 +1595,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.39,
-                "score": 2431,
+                "score": 15987,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1659,7 +1659,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2725,
+                "score": 11829,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1707,7 +1707,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 3293,
+                "score": 9789,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1739,7 +1739,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 3633,
+                "score": 8871,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1771,7 +1771,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.69,
-                "score": 3917,
+                "score": 8228,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1787,7 +1787,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 2555,
+                "score": 12617,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1803,7 +1803,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 3633,
+                "score": 8871,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1835,7 +1835,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.6,
-                "score": 3406,
+                "score": 9463,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1915,7 +1915,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2611,
+                "score": 12343,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1979,7 +1979,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.59,
-                "score": 2855,
+                "score": 8201,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2027,7 +2027,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 1983,
+                "score": 11802,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2059,7 +2059,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 1983,
+                "score": 11802,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2091,7 +2091,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.62,
-                "score": 3000,
+                "score": 7804,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2155,7 +2155,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2225,
+                "score": 10519,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2171,7 +2171,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.75,
-                "score": 3629,
+                "score": 6452,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2347,7 +2347,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.36,
-                "score": 1608,
+                "score": 12408,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2379,7 +2379,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.35,
-                "score": 1563,
+                "score": 12762,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2411,7 +2411,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 2322,
+                "score": 8590,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2475,7 +2475,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.49,
-                "score": 2188,
+                "score": 9116,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2619,7 +2619,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.59,
-                "score": 2855,
+                "score": 8201,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2667,7 +2667,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 1983,
+                "score": 11802,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2699,7 +2699,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 1983,
+                "score": 11802,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2731,7 +2731,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.63,
-                "score": 3048,
+                "score": 7680,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2795,7 +2795,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2225,
+                "score": 10519,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2811,7 +2811,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.75,
-                "score": 3629,
+                "score": 6452,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2939,7 +2939,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 1989,
+                "score": 10758,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2987,7 +2987,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2127,
+                "score": 10056,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3019,7 +3019,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.56,
-                "score": 2590,
+                "score": 8260,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3051,7 +3051,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 2544,
+                "score": 8410,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3115,7 +3115,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.37,
-                "score": 1711,
+                "score": 12502,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3147,7 +3147,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2220,
+                "score": 9637,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3195,7 +3195,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.53,
-                "score": 2451,
+                "score": 8728,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3211,7 +3211,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.75,
-                "score": 1002,
+                "score": 1781,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3227,7 +3227,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.69,
-                "score": 921,
+                "score": 1936,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3259,7 +3259,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 534,
+                "score": 3340,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3275,7 +3275,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.66,
-                "score": 881,
+                "score": 2024,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3307,7 +3307,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.38,
-                "score": 507,
+                "score": 3515,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3323,7 +3323,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 694,
+                "score": 2569,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3339,7 +3339,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.62,
-                "score": 828,
+                "score": 2154,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3371,7 +3371,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 734,
+                "score": 2429,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3387,7 +3387,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 734,
+                "score": 2429,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3403,7 +3403,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.61,
-                "score": 814,
+                "score": 2190,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3435,7 +3435,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 734,
+                "score": 2429,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3451,7 +3451,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.71,
-                "score": 948,
+                "score": 1881,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3467,7 +3467,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 694,
+                "score": 2569,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3515,7 +3515,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 855,
+                "score": 2087,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3531,7 +3531,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.85,
-                "score": 1394,
+                "score": 1930,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3547,7 +3547,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.67,
-                "score": 1099,
+                "score": 2449,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3579,7 +3579,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.42,
-                "score": 689,
+                "score": 3907,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3595,7 +3595,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 951,
+                "score": 2829,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3627,7 +3627,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.33,
-                "score": 541,
+                "score": 4972,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3643,7 +3643,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 787,
+                "score": 3418,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3659,7 +3659,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.65,
-                "score": 1066,
+                "score": 2524,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3691,7 +3691,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 738,
+                "score": 3646,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3707,7 +3707,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.22,
-                "score": 361,
+                "score": 7459,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3723,7 +3723,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.65,
-                "score": 1066,
+                "score": 2524,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3755,7 +3755,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 705,
+                "score": 3816,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3771,7 +3771,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.89,
-                "score": 1460,
+                "score": 1843,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3787,7 +3787,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 787,
+                "score": 3418,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3835,7 +3835,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.77,
-                "score": 1263,
+                "score": 2131,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3851,7 +3851,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.65,
-                "score": 745,
+                "score": 1764,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3867,7 +3867,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.6,
-                "score": 688,
+                "score": 1911,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3899,7 +3899,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.35,
-                "score": 401,
+                "score": 3277,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3915,7 +3915,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.53,
-                "score": 607,
+                "score": 2164,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3947,7 +3947,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.19,
-                "score": 217,
+                "score": 6036,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3963,7 +3963,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.35,
-                "score": 401,
+                "score": 3277,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3979,7 +3979,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 630,
+                "score": 2085,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4011,7 +4011,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.31,
-                "score": 355,
+                "score": 3700,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4027,7 +4027,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 630,
+                "score": 2085,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4043,7 +4043,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 596,
+                "score": 2205,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4075,7 +4075,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.33,
-                "score": 378,
+                "score": 3475,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4091,7 +4091,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.67,
-                "score": 768,
+                "score": 1711,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4107,7 +4107,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.35,
-                "score": 401,
+                "score": 3277,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4155,7 +4155,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 665,
+                "score": 1977,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4267,7 +4267,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.51,
-                "score": 3046,
+                "score": 11713,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4299,7 +4299,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.56,
-                "score": 3345,
+                "score": 10667,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4331,7 +4331,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.64,
-                "score": 3823,
+                "score": 9334,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4347,7 +4347,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.42,
-                "score": 2509,
+                "score": 14223,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4363,7 +4363,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.56,
-                "score": 3345,
+                "score": 10667,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4395,7 +4395,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2867,
+                "score": 12445,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4475,7 +4475,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 2568,
+                "score": 13893,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4539,7 +4539,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 2128,
+                "score": 13300,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4587,7 +4587,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 2287,
+                "score": 12372,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4619,7 +4619,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 2181,
+                "score": 12975,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4651,7 +4651,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 2394,
+                "score": 11822,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4683,7 +4683,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.41,
-                "score": 2181,
+                "score": 12975,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4715,7 +4715,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.42,
-                "score": 2234,
+                "score": 12666,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4795,7 +4795,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.38,
-                "score": 2021,
+                "score": 14000,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4859,7 +4859,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2253,
+                "score": 9781,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4907,7 +4907,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.34,
-                "score": 1596,
+                "score": 13808,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4939,7 +4939,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 2018,
+                "score": 10918,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4971,7 +4971,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 2582,
+                "score": 8536,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4987,7 +4987,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.39,
-                "score": 1831,
+                "score": 12038,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5003,7 +5003,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 2018,
+                "score": 10918,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5035,7 +5035,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.51,
-                "score": 2394,
+                "score": 9205,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5051,7 +5051,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.5,
-                "score": 2347,
+                "score": 9390,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5115,7 +5115,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 1878,
+                "score": 11737,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5227,7 +5227,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 1952,
+                "score": 10558,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5259,7 +5259,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.47,
-                "score": 2133,
+                "score": 9659,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5291,7 +5291,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.56,
-                "score": 2542,
+                "score": 8107,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5355,7 +5355,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2088,
+                "score": 9869,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5435,7 +5435,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.47,
-                "score": 2133,
+                "score": 9659,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5547,7 +5547,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.38,
-                "score": 1839,
+                "score": 12736,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5579,7 +5579,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 2178,
+                "score": 10755,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5611,7 +5611,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 2226,
+                "score": 10521,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5675,7 +5675,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.48,
-                "score": 2323,
+                "score": 10083,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5755,7 +5755,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.55,
-                "score": 2662,
+                "score": 8800,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5819,7 +5819,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 1668,
+                "score": 9025,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5867,7 +5867,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.34,
-                "score": 1319,
+                "score": 11414,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5883,7 +5883,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.68,
-                "score": 2639,
+                "score": 5707,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5899,7 +5899,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.36,
-                "score": 1397,
+                "score": 10780,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5931,7 +5931,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.53,
-                "score": 2056,
+                "score": 7322,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5963,7 +5963,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.36,
-                "score": 1397,
+                "score": 10780,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5995,7 +5995,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.32,
-                "score": 1241,
+                "score": 12128,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6011,7 +6011,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.7,
-                "score": 2716,
+                "score": 5544,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6027,7 +6027,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.45,
-                "score": 1746,
+                "score": 8624,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6075,7 +6075,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.52,
-                "score": 2018,
+                "score": 7463,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6187,7 +6187,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.43,
-                "score": 1656,
+                "score": 8960,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6219,7 +6219,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.4,
-                "score": 1541,
+                "score": 9632,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6251,7 +6251,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.58,
-                "score": 2234,
+                "score": 6643,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6315,7 +6315,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.44,
-                "score": 1695,
+                "score": 8756,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6395,7 +6395,7 @@
                 "endTimeMs": 0,
                 "exitStatus": "VALID",
                 "quality": 0.46,
-                "score": 1772,
+                "score": 8376,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []

@@ -60,20 +60,22 @@ public class IpcQualityLatexTableReporter implements Reporter {
                         .mapToDouble(r -> r.getResults().getQuality()).sum())
                 .mapValues(qualityFormat::format).toJavaMap();
 
-        javaslang.collection.Map<String, List<String>> bestList = javaslang.collection.Stream.ofAll(runs)
-                .groupBy(BenchmarkResults.JsonRun::getProblem)
+        javaslang.collection.Map<String, javaslang.collection.List<Integer>> bestList
+                = javaslang.collection.Stream.ofAll(runs).groupBy(BenchmarkResults.JsonRun::getProblem)
                 .mapValues(v -> v
                         .map(BenchmarkResults.JsonRun::getResults)
                         .map(BenchmarkRun.Results::getBestScore)
-                        .map(score2 -> score2 == null ? null : score2.toString())
+                        .filter(l -> l != null && l != 0)
                         .distinct()
-                        .toJavaList());
+                        .toList())
+                .mapValues(list -> list.isEmpty() ? list.append(null) : list);
         bestList.forEach((problem, bestScores) -> {
             if (bestScores.size() != 1) {
                 throw new IllegalStateException("Problem does not have equal best scores: " + bestScores);
             }
         });
-        Map<String, String> best = bestList.filter(t -> t._2.size() == 1).mapValues(l -> l.get(0)).toJavaMap();
+        Map<String, String> best = bestList.mapValues(l -> l.get(0)).mapValues(l -> l == null ? null : l.toString())
+                .toJavaMap();
 
         Map<String, Map<String, String>> status = grouped.mapValues(v ->
                 v.mapValues(r -> r.getResults().getExitStatus().toString()).toJavaMap()).toJavaMap();

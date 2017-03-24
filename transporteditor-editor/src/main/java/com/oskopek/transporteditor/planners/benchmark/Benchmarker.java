@@ -53,7 +53,7 @@ public final class Benchmarker {
         Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
 
-        ReportGenerator generator = new ReportGenerator();
+        ReportGenerator generator = new ReportGenerator("reports");
         generator.populateReportersWithReflection();
         generator.generate(results, benchmarkResultDirPath);
 
