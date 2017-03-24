@@ -6,6 +6,7 @@ import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
+import com.oskopek.transporteditor.validation.Validator;
 import javaslang.Function2;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
@@ -25,6 +26,7 @@ public class Benchmark {
     private final BenchmarkMatrix matrix;
     private final ScoreFunction scoreFunction;
     private final Function2<Problem, Planner, Boolean> skipFunction;
+    private final Validator validator;
 
     private static final Logger logger = LoggerFactory.getLogger(Benchmark.class);
 
@@ -34,12 +36,14 @@ public class Benchmark {
      * @param matrix the benchmarking matrix to execute
      * @param scoreFunction the score function to use
      * @param skipFunction the skipping function to use
+     * @param validator the validator to use
      */
     public Benchmark(BenchmarkMatrix matrix, ScoreFunction scoreFunction,
-            Function2<Problem, Planner, Boolean> skipFunction) {
+            Function2<Problem, Planner, Boolean> skipFunction, Validator validator) {
         this.matrix = matrix;
         this.scoreFunction = scoreFunction;
         this.skipFunction = skipFunction;
+        this.validator = validator;
     }
 
     /**
@@ -105,7 +109,8 @@ public class Benchmark {
      * @return a list of futures of the scheduled runs
      */
     private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService executor) {
-        return matrix.toBenchmarkRuns(skipFunction, scoreFunction).map(
-                benchmarkRun -> CompletableFuture.supplyAsync(benchmarkRun::execute, executor)).toJavaList();
+        return matrix.toBenchmarkRuns(skipFunction, scoreFunction)
+                .map(benchmarkRun -> CompletableFuture.supplyAsync(() -> benchmarkRun.execute(validator), executor))
+                .toJavaList();
     }
 }

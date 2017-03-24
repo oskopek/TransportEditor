@@ -15,6 +15,8 @@ import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
 import static org.assertj.core.api.Assertions.*;
+
+import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.assertj.core.api.IterableAssert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -43,7 +45,7 @@ public class BenchmarkIT {
     @Test
     public void benchmark() throws Exception {
         Benchmark benchmark = new Benchmark(matrix, ScoreFunctionType.ACTION_COUNT.toScoreFunction(),
-                (problem, planner) -> !planner.isAvailable());
+                (problem, planner) -> !planner.isAvailable(), new SequentialPlanValidator());
 
         BenchmarkResults results = benchmark.benchmark(4);
         ArrayTable<Problem, Planner, BenchmarkRun> runTable = results.getRunTable();
@@ -54,6 +56,7 @@ public class BenchmarkIT {
         for (BenchmarkRun run : runTable.values()) {
             assertThat(run.getRunResults().getDurationMs()).isGreaterThan(0);
             assertThat(run.getRunResults().getScore()).isEqualTo(6);
+            assertThat(run.getRunResults().getExitStatus()).isEqualTo(BenchmarkRun.RunExitStatus.VALID);
         }
     }
 

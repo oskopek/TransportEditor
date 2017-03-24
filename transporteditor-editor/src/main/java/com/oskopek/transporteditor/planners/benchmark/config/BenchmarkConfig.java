@@ -9,6 +9,7 @@ import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
+import com.oskopek.transporteditor.validation.ValValidator;
 import javaslang.Function2;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
@@ -172,7 +173,8 @@ public final class BenchmarkConfig {
             throw new IllegalArgumentException("No score function type present.");
         }
         ScoreFunction scoreFunction = scoreFunctionType.toScoreFunction();
-        return new Benchmark(new BenchmarkMatrix(domain, problems, planners), scoreFunction, skipFunction);
+        return new Benchmark(new BenchmarkMatrix(domain, problems, planners), scoreFunction, skipFunction,
+                new ValValidator());
     }
 
     /**
