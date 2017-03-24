@@ -1,36 +1,126 @@
 {
   "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
   "problems": {
-    "p01": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p01.pddl",
-    "p02": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p02.pddl",
-    "p03": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p03.pddl",
-    "p04": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p04.pddl",
-    "p05": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p05.pddl",
-    "p06": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p06.pddl",
-    "p07": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p07.pddl",
-    "p08": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p08.pddl",
-    "p09": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p09.pddl",
-    "p10": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p10.pddl",
-    "p11": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p11.pddl",
-    "p12": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p12.pddl",
-    "p13": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p13.pddl",
-    "p14": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p14.pddl",
-    "p15": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p15.pddl",
-    "p16": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p16.pddl",
-    "p17": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p17.pddl",
-    "p18": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p18.pddl",
-    "p19": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p19.pddl",
-    "p20": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p20.pddl",
-    "p21": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p21.pddl",
-    "p22": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p22.pddl",
-    "p23": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p23.pddl",
-    "p24": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p24.pddl",
-    "p25": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p25.pddl",
-    "p26": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p26.pddl",
-    "p27": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p27.pddl",
-    "p28": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p28.pddl",
-    "p29": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p29.pddl",
-    "p30": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p30.pddl"
+    "p01": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p01.pddl",
+      "bestScore": 0
+    },
+    "p02": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p02.pddl",
+      "bestScore": 0
+    },
+    "p03": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p03.pddl",
+      "bestScore": 0
+    },
+    "p04": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p04.pddl",
+      "bestScore": 0
+    },
+    "p05": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p05.pddl",
+      "bestScore": 0
+    },
+    "p06": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p06.pddl",
+      "bestScore": 0
+    },
+    "p07": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p07.pddl",
+      "bestScore": 0
+    },
+    "p08": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p08.pddl",
+      "bestScore": 0
+    },
+    "p09": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p09.pddl",
+      "bestScore": 0
+    },
+    "p10": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p10.pddl",
+      "bestScore": 0
+    },
+    "p11": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p11.pddl",
+      "bestScore": 0
+    },
+    "p12": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p12.pddl",
+      "bestScore": 0
+    },
+    "p13": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p13.pddl",
+      "bestScore": 0
+    },
+    "p14": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p14.pddl",
+      "bestScore": 0
+    },
+    "p15": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p15.pddl",
+      "bestScore": 0
+    },
+    "p16": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p16.pddl",
+      "bestScore": 0
+    },
+    "p17": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p17.pddl",
+      "bestScore": 0
+    },
+    "p18": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p18.pddl",
+      "bestScore": 0
+    },
+    "p19": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p19.pddl",
+      "bestScore": 0
+    },
+    "p20": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p20.pddl",
+      "bestScore": 0
+    },
+    "p21": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p21.pddl",
+      "bestScore": 0
+    },
+    "p22": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p22.pddl",
+      "bestScore": 0
+    },
+    "p23": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p23.pddl",
+      "bestScore": 0
+    },
+    "p24": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p24.pddl",
+      "bestScore": 0
+    },
+    "p25": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p25.pddl",
+      "bestScore": 0
+    },
+    "p26": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p26.pddl",
+      "bestScore": 0
+    },
+    "p27": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p27.pddl",
+      "bestScore": 0
+    },
+    "p28": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p28.pddl",
+      "bestScore": 0
+    },
+    "p29": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p29.pddl",
+      "bestScore": 0
+    },
+    "p30": {
+      "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p30.pddl",
+      "bestScore": 0
+    }
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {

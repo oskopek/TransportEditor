@@ -1,10 +1,16 @@
 {
   "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
   "problems": {
-    "p01": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
-    "p01Easy": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl"
+    "p01": {
+      "filePath": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
+      "bestScore": 54
+    },
+    "p01Easy": {
+      "filePath": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl",
+      "bestScore": 54
+    }
   },
-  "scoreFunctionType": "ACTION_COUNT",
+  "scoreFunctionType": "TOTAL_TIME",
   "planners": {
     "FastDownAstar": {
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",

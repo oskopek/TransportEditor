@@ -29,8 +29,10 @@ public class BenchmarkRun {
     private final Domain domain;
     private final Problem problem;
     private final Planner planner;
+    private final Integer bestScore;
     private final ScoreFunction scoreFunction;
     private final Results runResults;
+
 
     /**
      * Ammend the run results to a benchmark run.
@@ -39,7 +41,7 @@ public class BenchmarkRun {
      * @param runResults the run results
      */
     public BenchmarkRun(BenchmarkRun run, Results runResults) {
-        this(run.getDomain(), run.getProblem(), run.getPlanner(), run.scoreFunction, runResults);
+        this(run.getDomain(), run.getProblem(), run.getPlanner(), run.bestScore, run.scoreFunction, runResults);
     }
 
     /**
@@ -48,10 +50,12 @@ public class BenchmarkRun {
      * @param domain the domain
      * @param problem the problem
      * @param planner the planner
+     * @param bestScore the best available score
      * @param scoreFunction the score function
      */
-    public BenchmarkRun(Domain domain, Problem problem, Planner planner, ScoreFunction scoreFunction) {
-        this(domain, problem, planner, scoreFunction, null);
+    public BenchmarkRun(Domain domain, Problem problem, Planner planner, Integer bestScore,
+            ScoreFunction scoreFunction) {
+        this(domain, problem, planner, bestScore, scoreFunction, null);
     }
 
     /**
@@ -60,14 +64,16 @@ public class BenchmarkRun {
      * @param domain the domain
      * @param problem the problem
      * @param planner the planner
+     * @param bestScore the best available score
      * @param scoreFunction the score function
      * @param runResults the run results
      */
-    protected BenchmarkRun(Domain domain, Problem problem, Planner planner, ScoreFunction scoreFunction,
-            Results runResults) {
+    protected BenchmarkRun(Domain domain, Problem problem, Planner planner, Integer bestScore,
+            ScoreFunction scoreFunction, Results runResults) {
         this.domain = domain;
         this.problem = problem;
         this.planner = planner;
+        this.bestScore = bestScore;
         this.scoreFunction = scoreFunction;
         this.runResults = runResults;
     }
@@ -98,7 +104,7 @@ public class BenchmarkRun {
                 exitStatus = validator.isValid(domain, problem, plan) ? RunExitStatus.VALID : RunExitStatus.INVALID;
             }
         }
-        return new BenchmarkRun(this, new Results(plan, score, exitStatus, startTime, endTime));
+        return new BenchmarkRun(this, new Results(plan, score, bestScore, exitStatus, startTime, endTime));
     }
 
     /**
@@ -188,17 +194,19 @@ public class BenchmarkRun {
 
         private final Plan plan;
         private final Integer score;
+        private final Integer bestScore;
         private final RunExitStatus exitStatus;
         private final long startTimeMs;
         private final long endTimeMs;
         private final long durationMs;
+        private final double quality;
 
         /**
          * Empty constructor for Jackson.
          */
         @JsonCreator
         private Results() {
-            this(null, null, null, -1, -1);
+            this(null, null, null, null, -1, -1);
         }
 
         /**
@@ -206,17 +214,21 @@ public class BenchmarkRun {
          *
          * @param plan the plan
          * @param score the score
+         * @param bestScore the best score for this problem, used to calculate the quality (bestScore / score)
          * @param exitStatus the exit status
          * @param startTimeMs the start time in milliseconds
          * @param endTimeMs the end time in milliseconds
          */
-        public Results(Plan plan, Integer score, RunExitStatus exitStatus, long startTimeMs, long endTimeMs) {
+        public Results(Plan plan, Integer score, Integer bestScore, RunExitStatus exitStatus, long startTimeMs,
+                long endTimeMs) {
             this.plan = plan;
             this.score = score;
+            this.bestScore = bestScore;
             this.exitStatus = exitStatus;
             this.startTimeMs = startTimeMs;
             this.endTimeMs = endTimeMs;
             this.durationMs = endTimeMs - startTimeMs;
+            this.quality = bestScore == null || score == null ? Double.NaN : bestScore / (double) score;
         }
 
         /**
@@ -266,12 +278,29 @@ public class BenchmarkRun {
         }
 
         /**
+         * Get the best score known for this domain.
+         *
+         * @return the best score
+         */
+        public Integer getBestScore() {
+            return bestScore;
+        }
+
+        /**
          * Get the exit status.
          *
          * @return the exit status
          */
         public RunExitStatus getExitStatus() {
             return exitStatus;
+        }
+
+        /**
+         * Get the quality. Defined as {@code bestScore / achievedScore}.
+         * @return the quality, NaN if either of the scores is null
+         */
+        public double getQuality() {
+            return quality;
         }
     }
 

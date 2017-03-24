@@ -16,6 +16,7 @@ import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
 import static org.assertj.core.api.Assertions.*;
 
+import com.oskopek.transporteditor.planners.benchmark.data.ProblemInfo;
 import com.oskopek.transporteditor.validation.SequentialPlanValidator;
 import org.assertj.core.api.IterableAssert;
 import org.junit.Before;
@@ -23,7 +24,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Ignore("Use internal planners for this test") // TODO un-ignore
 public class BenchmarkIT {
@@ -31,6 +34,7 @@ public class BenchmarkIT {
     private BenchmarkMatrix matrix;
     private List<Planner> planners;
     private List<Problem> problems;
+    private Map<Problem, ProblemInfo> problemInfo;
     private Domain domain;
 
     @Before
@@ -38,8 +42,11 @@ public class BenchmarkIT {
         domain = new SequentialDomain("");
         problems = Arrays.asList(SequentialPlanIOIT.P01SequentialProblem(), SequentialPlanIOIT.P01SequentialProblem()
                 .removeVehicle("truck-2"));
+        problemInfo = new HashMap<>();
+        problemInfo.put(problems.get(0), new ProblemInfo("", 54, ""));
+        problemInfo.put(problems.get(1), new ProblemInfo("", 54, ""));
         planners = Arrays.asList(new FastDownwardExternalPlanner(), new PrologBFSExternalPlanner());
-        matrix = new BenchmarkMatrix(domain, problems, planners);
+        matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo);
     }
 
     @Test
