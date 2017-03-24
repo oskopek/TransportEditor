@@ -4,7 +4,7 @@
 \hline
 \hline
 <#list problems as problem>
-${problem}<#list planners as planner> & ${elements[planner][problem]}</#list>\\
+${problem}<#list planners as planner> & <#if (((status[planner][problem])!"") == "VALID")>${elements[planner][problem]}<#elseif (((status[planner][problem])!"") == "INVALID")>inv.<#elseif (((status[planner][problem])!"") == "UNSOLVED")>uns.<#else>ERR</#if></#list>\\
 </#list>
 \end{tabular}
 \caption{Problem/planner table\TODO{Fix the caption, fix the label}}

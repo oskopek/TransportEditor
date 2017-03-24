@@ -52,18 +52,20 @@ public class IpcQualityLatexTableReporter implements Reporter {
         Map<String, Map<String, String>> quality = grouped
                 .mapValues(v -> v.mapValues(jsonRun -> jsonRun.getResults().getQuality())
                         .mapValues(qualityFormat::format).toJavaMap()).toJavaMap();
-        Map<String, Map<String, Integer>> score = grouped
-                .mapValues(v -> v.mapValues(jsonRun -> jsonRun.getResults().getScore()).toJavaMap()).toJavaMap();
+        Map<String, Map<String, String>> score = grouped
+                .mapValues(v -> v.mapValues(jsonRun -> jsonRun.getResults().getScore())
+                        .mapValues(score2 -> score2 == null ? null : score2.toString()).toJavaMap()).toJavaMap();
         Map<String, String> total = javaslang.collection.Stream.ofAll(runs)
                 .groupBy(BenchmarkResults.JsonRun::getPlanner).mapValues(groupedRuns -> groupedRuns.toJavaStream()
                         .mapToDouble(r -> r.getResults().getQuality()).sum())
                 .mapValues(qualityFormat::format).toJavaMap();
 
-        javaslang.collection.Map<String, List<Integer>> bestList = javaslang.collection.Stream.ofAll(runs)
+        javaslang.collection.Map<String, List<String>> bestList = javaslang.collection.Stream.ofAll(runs)
                 .groupBy(BenchmarkResults.JsonRun::getProblem)
                 .mapValues(v -> v
                         .map(BenchmarkResults.JsonRun::getResults)
                         .map(BenchmarkRun.Results::getBestScore)
+                        .map(score2 -> score2 == null ? null : score2.toString())
                         .distinct()
                         .toJavaList());
         bestList.forEach((problem, bestScores) -> {
@@ -71,12 +73,16 @@ public class IpcQualityLatexTableReporter implements Reporter {
                 throw new IllegalStateException("Problem does not have equal best scores: " + bestScores);
             }
         });
-        Map<String, Integer> best = bestList.filter(t -> t._2.size() == 1).mapValues(l -> l.get(0)).toJavaMap();
+        Map<String, String> best = bestList.filter(t -> t._2.size() == 1).mapValues(l -> l.get(0)).toJavaMap();
+
+        Map<String, Map<String, String>> status = grouped.mapValues(v ->
+                v.mapValues(r -> r.getResults().getExitStatus().toString()).toJavaMap()).toJavaMap();
 
         info.put("quality", quality);
         info.put("score", score);
         info.put("total", total);
         info.put("best", best);
+        info.put("status", status);
         return info;
     }
 

@@ -9,7 +9,7 @@ public class ScoreLatexTableReporter extends LatexProblemPlannerReporter {
      * Default constructor.
      */
     public ScoreLatexTableReporter() {
-        super(r -> r.getResults().getScore());
+        super(r -> r.getResults().getScore() == null ? null : r.getResults().getScore().toString());
     }
 
     @Override

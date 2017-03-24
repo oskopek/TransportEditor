@@ -4,8 +4,11 @@ import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.report.FreemarkerFiller;
 import com.oskopek.transporteditor.planners.benchmark.report.Reporter;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,6 +21,12 @@ import java.util.stream.Stream;
 public abstract class LatexProblemPlannerReporter implements Reporter {
 
     private final Function<BenchmarkResults.JsonRun, Object> dataGetter;
+    protected static final DecimalFormat decimalFormat;
+
+    static {
+        decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
+    }
 
     /**
      * Default constructor.
@@ -51,14 +60,17 @@ public abstract class LatexProblemPlannerReporter implements Reporter {
         info.put("problems", runs.stream().flatMap(r -> Stream.of(r.getProblem())).sorted().distinct()
                 .collect(Collectors.toList()));
 
-        info.put("elements", javaslang.collection.Stream.ofAll(runs)
+        javaslang.collection.Map<String, javaslang.collection.Map<String, BenchmarkResults.JsonRun>> grouped
+                = javaslang.collection.Stream.ofAll(runs)
                 .groupBy(BenchmarkResults.JsonRun::getPlanner)
                 .mapValues(v -> v
                         .groupBy(BenchmarkResults.JsonRun::getProblem)
-                        .mapValues(v2 -> v2.map(dataGetter).toJavaOptional().get()) // TODO: fixme
-                        .toJavaMap())
-                .toJavaMap()
-        );
+                        .mapValues(v2 -> v2.getOrElse((BenchmarkResults.JsonRun) null)));
+        Map<String, Map<String, String>> status = grouped.mapValues(v ->
+                v.mapValues(r -> r.getResults().getExitStatus().toString()).toJavaMap()).toJavaMap();
+        info.put("status", status);
+
+        info.put("elements", grouped.mapValues(v -> v.mapValues(dataGetter).toJavaMap()).toJavaMap());
         return info;
     }
 }

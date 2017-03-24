@@ -184,7 +184,12 @@ public class BenchmarkRun {
         /**
          * A plan was generated but not validated.
          */
-        NOTVALIDATED
+        NOTVALIDATED,
+
+        /**
+         * A plan was generated and is valid, but not optimal. Not used at the moment.
+         */
+        SUBOPT
     }
 
     /**

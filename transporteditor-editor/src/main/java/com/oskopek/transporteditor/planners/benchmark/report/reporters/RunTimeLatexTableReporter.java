@@ -9,7 +9,7 @@ public class RunTimeLatexTableReporter extends LatexProblemPlannerReporter {
      * Default constructor.
      */
     public RunTimeLatexTableReporter() {
-        super(r -> r.getResults().getDurationMs() / 1000d);
+        super(r -> decimalFormat.format(r.getResults().getDurationMs() / 1000d));
     }
 
     @Override
