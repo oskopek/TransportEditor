@@ -51,8 +51,14 @@ echo "Result dir: $resultdir"
 
 
 echo "`date -u '+[%H:%M:%S]'` Adding IPC results..."
+
+if `echo $configName | grep 'ipc08' > /dev/null`; then
 ipc="08"
-#ipc="14" # TODO: Fixme
+fi
+if `echo $configName | grep 'ipc14' > /dev/null`; then
+ipc="14"
+fi
+
 if `echo $configName | grep '^seq-sat' > /dev/null`; then
 ref_results="$transportroot/../datasets/ipc$ipc/results/transport-strips-seq-sat-ipc$ipc-results.json"
 fi

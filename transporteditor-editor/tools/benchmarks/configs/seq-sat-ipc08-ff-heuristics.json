@@ -3,123 +3,123 @@
   "problems": {
     "p01": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p01.pddl",
-      "bestScore": 0
+      "bestScore": 54
     },
     "p02": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p02.pddl",
-      "bestScore": 0
+      "bestScore": 270
     },
     "p03": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p03.pddl",
-      "bestScore": 0
+      "bestScore": 369
     },
     "p04": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p04.pddl",
-      "bestScore": 0
+      "bestScore": 363
     },
     "p05": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p05.pddl",
-      "bestScore": 0
+      "bestScore": 597
     },
     "p06": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p06.pddl",
-      "bestScore": 0
+      "bestScore": 755
     },
     "p07": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p07.pddl",
-      "bestScore": 0
+      "bestScore": 1260
     },
     "p08": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p08.pddl",
-      "bestScore": 0
+      "bestScore": 1216
     },
     "p09": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p09.pddl",
-      "bestScore": 0
+      "bestScore": 1001
     },
     "p10": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p10.pddl",
-      "bestScore": 0
+      "bestScore": 1285
     },
     "p11": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p11.pddl",
-      "bestScore": 0
+      "bestScore": 473
     },
     "p12": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p12.pddl",
-      "bestScore": 0
+      "bestScore": 795
     },
     "p13": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p13.pddl",
-      "bestScore": 0
+      "bestScore": 1125
     },
     "p14": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p14.pddl",
-      "bestScore": 0
+      "bestScore": 2157
     },
     "p15": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p15.pddl",
-      "bestScore": 0
+      "bestScore": 2954
     },
     "p16": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p16.pddl",
-      "bestScore": 0
+      "bestScore": 4928
     },
     "p17": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p17.pddl",
-      "bestScore": 0
+      "bestScore": 4193
     },
     "p18": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p18.pddl",
-      "bestScore": 0
+      "bestScore": 4151
     },
     "p19": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p19.pddl",
-      "bestScore": 0
+      "bestScore": 7648
     },
     "p20": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p20.pddl",
-      "bestScore": 0
+      "bestScore": 6773
     },
     "p21": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p21.pddl",
-      "bestScore": 0
+      "bestScore": 431
     },
     "p22": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p22.pddl",
-      "bestScore": 0
+      "bestScore": 675
     },
     "p23": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p23.pddl",
-      "bestScore": 0
+      "bestScore": 837
     },
     "p24": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p24.pddl",
-      "bestScore": 0
+      "bestScore": 1301
     },
     "p25": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p25.pddl",
-      "bestScore": 0
+      "bestScore": 1833
     },
     "p26": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p26.pddl",
-      "bestScore": 0
+      "bestScore": 2502
     },
     "p27": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p27.pddl",
-      "bestScore": 0
+      "bestScore": 3317
     },
     "p28": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p28.pddl",
-      "bestScore": 0
+      "bestScore": 3027
     },
     "p29": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p29.pddl",
-      "bestScore": 0
+      "bestScore": 3294
     },
     "p30": {
       "filePath": "${transport.root}/../datasets/ipc08/seq-sat/transport-strips/p30.pddl",
-      "bestScore": 0
+      "bestScore": 5513
     }
   },
   "scoreFunctionType": "TOTAL_TIME",
