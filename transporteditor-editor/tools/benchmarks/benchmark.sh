@@ -39,8 +39,6 @@ eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transpo
 endtime="`date -u '+%Y%m%d-%H%M%S'`"
 
 echo "End time UTC: $endtime"
-duration="$(date -d@$(( ( $(date -ud '2003-08-02 17:24:33' +'%s') - $(date -ud '2003-04-21 22:55:02' +'%s') ) )) +'%m months %d days %H hours %M minutes %S seconds')"
-echo "Duration: $duration"
 
 echo "`date -u '+[%H:%M:%S]'` Converting plots..."
 reportdir="$resultdir"/reports
@@ -80,6 +78,7 @@ else
     python3 scripts/merge-results.py "$resultdir/results.json" "$ref_results" "$ipc_results"
     ipc_reportdir_name="ipc-reports"
     eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $reportGenerator $resultdir/results-ipc.json $ipc_reportdir_name"
+    reportdir="$resultdir/$ipc_reportdir_name"
     convertToPdf
 fi
 echo "`date -u '+[%H:%M:%S]'` Added IPC results."
