@@ -26,6 +26,7 @@ public class DefaultProblemIOIT {
     private static String seqProblemFileContents;
     private static String fuelSeqProblemFileContents;
     private static String tempProblemFileContents;
+    private static String tempBigProblemFileContents;
     private static String numProblemFileContents;
 
     @BeforeClass
@@ -48,6 +49,9 @@ public class DefaultProblemIOIT {
                 Collectors.joining("\n")) + "\n";
         tempProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream().collect(
+                Collectors.joining("\n")) + "\n";
+        tempBigProblemFileContents = readAllLines(
+                VariableDomainIOIT.class.getResourceAsStream("p30TempProblem.pddl")).stream().collect(
                 Collectors.joining("\n")) + "\n";
         numProblemFileContents = readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01NetProblem.pddl")).stream().collect(
@@ -151,10 +155,21 @@ public class DefaultProblemIOIT {
 
     @Test
     public void serializeTemporal() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
+        serializeTemporalInternal(tempProblemFileContents);
+    }
+
+    @Test
+    public void serializeBigTemporal() throws Exception {
+        serializeTemporalInternal(tempBigProblemFileContents);
+    }
+
+    private void serializeTemporalInternal(String problemFileContents) {
+        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(problemFileContents);
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() != null);
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getMaxFuelCapacity() != null);
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
-        TestUtils.assertPDDLContentEquals(tempProblemFileContents, serialized);
+        TestUtils.assertPDDLContentEquals(problemFileContents, serialized);
     }
 
     @Test

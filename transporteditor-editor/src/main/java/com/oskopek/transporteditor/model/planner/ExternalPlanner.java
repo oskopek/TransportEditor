@@ -62,6 +62,19 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * <p>
      * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
      *
+     * @param executableWithParametersString an executable in the system path or an executable file and parameters
+     * in the format: "... {0} ... {1} ..." in a single string
+     */
+    public ExternalPlanner(String executableWithParametersString) {
+        this(executableWithParametersString.split(" ")[0],
+                executableWithParametersString.substring(executableWithParametersString.indexOf(" ") + 1));
+    }
+
+    /**
+     * Assumes stdout as plan, stderr for status updates.
+     * <p>
+     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     *
      * @param executable an executable with correct parameter templates
      */
     public ExternalPlanner(ExecutableWithParameters executable) {
