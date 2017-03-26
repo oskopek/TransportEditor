@@ -114,6 +114,7 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
+        logger.debug("Deleting serialized files...");
         if (!Files.deleteIfExists(planTmpFile)) {
             logger.warn("Couldn't delete plan temp file: {}", planTmpFile);
         }

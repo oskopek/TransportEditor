@@ -1,0 +1,1444 @@
+{
+    "runs": [
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p01",
+            "results": {
+                "bestScore": 52,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 1.0,
+                "score": 52,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p02",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.566820276498,
+                "score": 217,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p03",
+            "results": {
+                "bestScore": 189,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.777777777778,
+                "score": 243,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p04",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p05",
+            "results": {
+                "bestScore": 263,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p06",
+            "results": {
+                "bestScore": 260,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p07",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p08",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p09",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p10",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p11",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.527821939587,
+                "score": 629,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p12",
+            "results": {
+                "bestScore": 433,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.529987760098,
+                "score": 817,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p13",
+            "results": {
+                "bestScore": 389,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.319901315789,
+                "score": 1216,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p14",
+            "results": {
+                "bestScore": 595,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.288975230695,
+                "score": 2059,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p15",
+            "results": {
+                "bestScore": 824,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p16",
+            "results": {
+                "bestScore": 748,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p17",
+            "results": {
+                "bestScore": 789,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p18",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p19",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p20",
+            "results": {
+                "bestScore": 1084,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p21",
+            "results": {
+                "bestScore": 63,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.557522123894,
+                "score": 113,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p22",
+            "results": {
+                "bestScore": 94,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.394957983193,
+                "score": 238,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p23",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.290780141844,
+                "score": 423,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p24",
+            "results": {
+                "bestScore": 140,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.137389597645,
+                "score": 1019,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p25",
+            "results": {
+                "bestScore": 156,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.111111111111,
+                "score": 1404,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p26",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p27",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p28",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p29",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "base",
+            "problem": "p30",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p01",
+            "results": {
+                "bestScore": 52,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 1.0,
+                "score": 52,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p02",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.566820276498,
+                "score": 217,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p03",
+            "results": {
+                "bestScore": 189,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.4375,
+                "score": 432,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p04",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.392899408284,
+                "score": 845,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p05",
+            "results": {
+                "bestScore": 263,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.732590529248,
+                "score": 359,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p06",
+            "results": {
+                "bestScore": 260,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.269430051813,
+                "score": 965,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p07",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p08",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p09",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p10",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p11",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.527821939587,
+                "score": 629,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p12",
+            "results": {
+                "bestScore": 433,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.529987760098,
+                "score": 817,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p13",
+            "results": {
+                "bestScore": 389,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.598461538462,
+                "score": 650,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p14",
+            "results": {
+                "bestScore": 595,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p15",
+            "results": {
+                "bestScore": 824,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.366385060027,
+                "score": 2249,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p16",
+            "results": {
+                "bestScore": 748,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.398933333333,
+                "score": 1875,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p17",
+            "results": {
+                "bestScore": 789,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.236865806064,
+                "score": 3331,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p18",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p19",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p20",
+            "results": {
+                "bestScore": 1084,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.170386670858,
+                "score": 6362,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p21",
+            "results": {
+                "bestScore": 63,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.557522123894,
+                "score": 113,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p22",
+            "results": {
+                "bestScore": 94,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.394957983193,
+                "score": 238,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p23",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.191588785047,
+                "score": 642,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p24",
+            "results": {
+                "bestScore": 140,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.125448028674,
+                "score": 1116,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p25",
+            "results": {
+                "bestScore": 156,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p26",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p27",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p28",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p29",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "sgplan6",
+            "problem": "p30",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p01",
+            "results": {
+                "bestScore": 52,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 1.0,
+                "score": 52,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p02",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.591346153846,
+                "score": 208,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p03",
+            "results": {
+                "bestScore": 189,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.282511210762,
+                "score": 669,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p04",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p05",
+            "results": {
+                "bestScore": 263,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p06",
+            "results": {
+                "bestScore": 260,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p07",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p08",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p09",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p10",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p11",
+            "results": {
+                "bestScore": 332,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.604735883424,
+                "score": 549,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p12",
+            "results": {
+                "bestScore": 433,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.440936863544,
+                "score": 982,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p13",
+            "results": {
+                "bestScore": 389,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.114986698197,
+                "score": 3383,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p14",
+            "results": {
+                "bestScore": 595,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p15",
+            "results": {
+                "bestScore": 824,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p16",
+            "results": {
+                "bestScore": 748,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p17",
+            "results": {
+                "bestScore": 789,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p18",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p19",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p20",
+            "results": {
+                "bestScore": 1084,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p21",
+            "results": {
+                "bestScore": 63,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "VALID",
+                "quality": 0.391304347826,
+                "score": 161,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p22",
+            "results": {
+                "bestScore": 94,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p23",
+            "results": {
+                "bestScore": 123,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p24",
+            "results": {
+                "bestScore": 140,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p25",
+            "results": {
+                "bestScore": 156,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p26",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p27",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p28",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p29",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        },
+        {
+            "actions": [],
+            "domain": "transport-numeric",
+            "planner": "temporal-fast-downward",
+            "problem": "p30",
+            "results": {
+                "bestScore": null,
+                "durationMs": -1,
+                "endTimeMs": 0,
+                "exitStatus": "UNSOLVED",
+                "quality": 0.0,
+                "score": null,
+                "startTimeMs": 0
+            },
+            "temporalPlanActions": []
+        }
+    ]
+}

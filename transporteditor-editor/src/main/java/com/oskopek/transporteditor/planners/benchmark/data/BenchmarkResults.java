@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.planners.benchmark.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ArrayTable;
@@ -20,6 +21,14 @@ public final class BenchmarkResults {
 
     private final transient ArrayTable<Problem, Planner, BenchmarkRun> runTable;
     private final List<JsonRun> runs;
+
+    /**
+     * Empty constructor for Jackson.
+     */
+    @JsonCreator
+    private BenchmarkResults() {
+        this(null, null);
+    }
 
     /**
      * Default constructor.
@@ -67,20 +76,28 @@ public final class BenchmarkResults {
      * @return the runs
      */
     @JsonSerialize
-    private List<JsonRun> getRuns() {
+    public List<JsonRun> getRuns() {
         return runs;
     }
 
     /**
      * Data container class, used for direct JSON serialization of the results.
      */
-    private static final class JsonRun {
+    public static final class JsonRun {
         private final String domain;
         private final String problem;
         private final String planner;
         private final List<String> temporalPlanActions;
         private final List<String> actions;
         private final BenchmarkRun.Results results;
+
+        /**
+         * Empty constructor for Jackson.
+         */
+        @JsonCreator
+        private JsonRun() {
+            this(null, null, null, null, null, null);
+        }
 
         /**
          * Default constructor.

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Data container representing the matrix to be benchmarked - all planners with all problems in the given domain.
@@ -21,17 +22,25 @@ public class BenchmarkMatrix {
     private final List<Problem> problems;
     private final List<Planner> planners;
 
+    private final Map<Problem, ProblemInfo> problemInfo;
+    private final Integer timeout;
+
     /**
      * Default constructor.
      *
      * @param domain the domain
      * @param problems the problems
      * @param planners the planners
+     * @param problemInfo the problem information
+     * @param timeout the timeout for benchmark runs in seconds
      */
-    public BenchmarkMatrix(Domain domain, List<Problem> problems, List<Planner> planners) {
+    public BenchmarkMatrix(Domain domain, List<Problem> problems, List<Planner> planners,
+            Map<Problem, ProblemInfo> problemInfo, Integer timeout) {
         this.domain = domain;
         this.problems = problems;
         this.planners = planners;
+        this.problemInfo = problemInfo;
+        this.timeout = timeout;
     }
 
     /**
@@ -44,7 +53,8 @@ public class BenchmarkMatrix {
     public Iterator<BenchmarkRun> toBenchmarkRuns(Function2<Problem, Planner, Boolean> skipFunction,
             ScoreFunction scoreFunction) {
         return Stream.ofAll(getProblems()).crossProduct(getPlanners()).filter(t -> !skipFunction.apply(t._1, t._2)).map(
-                t -> new BenchmarkRun(domain, t._1, t._2.copy(), scoreFunction));
+                t -> new BenchmarkRun(domain, t._1, t._2.copy(), problemInfo.get(t._1).getBestScore(), timeout,
+                        scoreFunction));
     }
 
     /**

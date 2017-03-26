@@ -9,14 +9,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class BenchmarkConfigIOIT {
 
-    private final String basePath = "src/test/resources/com/oskopek/transporteditor/planners/benchmark/config/";
-    private final String simpleConfigPath = basePath + "simple-benchmark-config.json";
+    private final Path basePath
+            = Paths.get("src/test/resources/com/oskopek/transporteditor/planners/benchmark/config/");
+    private final Path simpleConfigPath = basePath.resolve("simple-benchmark-config.json");
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("transport.root", basePath);
+        System.setProperty("transport.root", basePath.toAbsolutePath().toString());
     }
 
     @After
@@ -43,7 +47,7 @@ public class BenchmarkConfigIOIT {
 
     @Test
     public void parseWithThreadCount() throws Exception {
-        BenchmarkConfig config = BenchmarkConfig.from(basePath + "simple-benchmark-config-threadcount.json");
+        BenchmarkConfig config = BenchmarkConfig.from(basePath.resolve("simple-benchmark-config-threadcount.json"));
         assertThat(config).isNotNull();
         assertThat(config.getDomain()).isNotNull();
         assertThat(config.getProblems()).hasSize(2);
@@ -69,5 +73,6 @@ public class BenchmarkConfigIOIT {
         // TODO: Verify that uses correct arguments and threads
         String plannerName = config.getPlanners().entrySet().stream().findAny().get().getKey();
         assertThat(results.getRunTable().at(0, 0).getPlanner().getName()).isEqualTo(plannerName);
+        assertThat(config.getTimeout()).isEqualTo(15);
     }
 }

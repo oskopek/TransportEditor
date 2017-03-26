@@ -1,13 +1,24 @@
 package com.oskopek.transporteditor.planners.benchmark;
 
+import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.planners.benchmark.config.BenchmarkConfig;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
+import com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator;
 import javaslang.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Main class for the benchmarker jar.
  */
 public final class Benchmarker {
+
+    private static final Logger logger = LoggerFactory.getLogger(Benchmarker.class);
 
     /**
      * Empty constructor.
@@ -20,17 +31,30 @@ public final class Benchmarker {
      * Parses the benchmark config from the first command line argument and executes it.
      *
      * @param args the command line arguments
+     * @throws IOException if an error during parsing or reporting occurs
      */
-    public static void main(String[] args) {
-        if (args == null || args.length != 1) {
-            throw new IllegalArgumentException("Arguments: benchmark_config_path");
+    public static void main(String[] args) throws IOException {
+        if (args == null || args.length != 2) {
+            throw new IllegalArgumentException("Arguments: benchmark_config_path benchmark_result_dir");
         }
 
-        String benchmarkConfigPath = args[0];
+        String benchmarkConfigFile = args[0];
+        Path benchmarkConfigPath = Paths.get(benchmarkConfigFile);
         BenchmarkConfig benchmarkConfig = Try.of(() -> BenchmarkConfig.from(benchmarkConfigPath))
                 .getOrElseThrow(e -> new IllegalStateException("Couldn't parse benchmark config.", e));
+
+        String benchmarkResultDir = args[1];
+        Path benchmarkResultDirPath = Paths.get(benchmarkResultDir);
+        benchmarkResultDirPath.toFile().mkdirs();
+
+        Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
         Benchmark benchmark = benchmarkConfig.toBenchmark();
         BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
-        System.out.println(results.toJson());
+        IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
+
+        ReportGenerator generator = new ReportGenerator("reports");
+        generator.populateReportersWithReflection();
+        generator.generate(results, benchmarkResultDirPath);
+
     }
 }

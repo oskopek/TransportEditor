@@ -2,6 +2,8 @@ package com.oskopek.transporteditor.view.executables;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple JavaFX motivated cancellable extension of {@link AbstractLogStreamable}.
@@ -10,6 +12,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 public abstract class CancellableLogStreamable extends AbstractLogStreamable implements Cancellable {
 
     private final transient BooleanProperty shouldCancelProperty = new SimpleBooleanProperty(false);
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Test if we should cancel.
@@ -35,6 +38,7 @@ public abstract class CancellableLogStreamable extends AbstractLogStreamable imp
 
     @Override
     public boolean cancel() {
+        logger.debug("Cancelling...");
         setShouldCancel(true);
         return true;
     }

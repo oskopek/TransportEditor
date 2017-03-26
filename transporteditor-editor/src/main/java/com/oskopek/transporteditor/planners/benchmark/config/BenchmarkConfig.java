@@ -9,6 +9,8 @@ import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
+import com.oskopek.transporteditor.planners.benchmark.data.ProblemInfo;
+import com.oskopek.transporteditor.validation.ValValidator;
 import javaslang.Function2;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
@@ -17,7 +19,6 @@ import javaslang.control.Try;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,11 @@ import java.util.Map;
  */
 public final class BenchmarkConfig {
 
+    private Integer timeout;
     private Integer threadCount;
     private Map<String, PlannerConfig> planners;
     private String domain;
-    private Map<String, String> problems;
+    private Map<String, ProblemInfo> problems;
     private ScoreFunctionType scoreFunctionType;
 
     /**
@@ -77,13 +79,11 @@ public final class BenchmarkConfig {
      * Construct a configuration instance from the given config file path.
      * Also loads the linked files, so as to contain all IO to this method.
      *
-     * @param configFile the config file path
+     * @param configFilePath the config file path
      * @return the loaded benchmark config instance
      * @throws IOException if an error during loading occurs
      */
-    public static BenchmarkConfig from(String configFile) throws IOException {
-        Path configFilePath = Paths.get(configFile);
-
+    public static BenchmarkConfig from(Path configFilePath) throws IOException {
         BenchmarkConfigIO io = new BenchmarkConfigIO();
         BenchmarkConfig config = io.parse(IOUtils.concatReadAllLines(new FileInputStream(configFilePath.toFile())));
 
@@ -94,7 +94,7 @@ public final class BenchmarkConfig {
         config.domain = Stream.of(config.domain).map(
                 domainFilePath -> Try.of(() -> IOUtils.concatReadAllLines(new FileInputStream(domainFilePath)))
                         .getOrElseThrow(
-                                () -> new IllegalStateException("Failed to read domain file: " + domainFilePath)))
+                                e -> new IllegalStateException("Failed to read domain file: " + domainFilePath, e)))
                 .get();
 
         if (config.problems == null) {
@@ -102,11 +102,23 @@ public final class BenchmarkConfig {
         }
 
         config.problems = Stream.ofAll(config.problems.entrySet()).toMap(e -> Tuple.of(e.getKey(), e.getValue()))
-                .mapValues(problemFilePath -> Try.of(() ->
-                        IOUtils.concatReadAllLines(new FileInputStream(problemFilePath))).getOrElseThrow(
-                                () -> new IllegalStateException("Failed to read problem file: " + problemFilePath)))
+                .mapValues(problemFilePath ->
+                        problemFilePath.updateFileContents(Try.of(() ->
+                                IOUtils.concatReadAllLines(new FileInputStream(problemFilePath.getFilePath())))
+                                .getOrElseThrow(e ->
+                                        new IllegalStateException("Failed to read problem file: " + problemFilePath,
+                                                e))))
                 .toJavaMap();
         return config;
+    }
+
+    /**
+     * Get the timeoutPerBenchmark.
+     *
+     * @return the timeoutPerBenchmark
+     */
+    public Integer getTimeout() {
+        return timeout;
     }
 
     /**
@@ -141,7 +153,7 @@ public final class BenchmarkConfig {
      *
      * @return the problems
      */
-    public Map<String, String> getProblems() {
+    public Map<String, ProblemInfo> getProblems() {
         return problems;
     }
 
@@ -166,8 +178,8 @@ public final class BenchmarkConfig {
 
         List<Problem> problems = new ArrayList<>();
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
-        this.problems.forEach((name, problemFileContents) -> problems
-                .add(problemIO.parse(problemFileContents).putName(name)));
+        this.problems.forEach((name, problemInfo) -> problems
+                .add(problemIO.parse(problemInfo.getFileContents()).putName(name)));
 
         List<Planner> planners = toPlanners(this.planners);
         Function2<Problem, Planner, Boolean> skipFunction = (problem, planner) -> false; // TODO: add skipping support
@@ -175,7 +187,12 @@ public final class BenchmarkConfig {
             throw new IllegalArgumentException("No score function type present.");
         }
         ScoreFunction scoreFunction = scoreFunctionType.toScoreFunction();
-        return new Benchmark(new BenchmarkMatrix(domain, problems, planners), scoreFunction, skipFunction);
+        Map<String, Problem> problemNames = Stream.ofAll(problems)
+                .toJavaMap(problem -> Tuple.of(problem.getName(), problem));
+        Map<Problem, ProblemInfo> problemInfo = Stream.ofAll(this.problems.entrySet())
+                .toJavaMap(t -> Tuple.of(problemNames.get(t.getKey()), t.getValue()));
+        return new Benchmark(new BenchmarkMatrix(domain, problems, planners, problemInfo, timeout), scoreFunction,
+                skipFunction, new ValValidator());
     }
 
     /**

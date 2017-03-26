@@ -1,8 +1,14 @@
 {
   "domain": "${transport.root}/../../../persistence/variableDomainSeq.pddl",
   "problems": {
-    "p01": "${transport.root}/../../../persistence/p01SeqProblem.pddl",
-    "p01Easy": "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl"
+    "p01": {
+      "filePath": "${transport.root}/../../../persistence/p01SeqProblem.pddl",
+      "bestScore": 54
+    },
+    "p01Easy": {
+      "filePath": "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl",
+      "bestScore": 54
+    }
   },
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
@@ -13,5 +19,6 @@
     "PrologBFS": {
       "className": "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner"
     }
-  }
+  },
+  "timeout": 5
 }
