@@ -159,6 +159,39 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     }
 
     /**
+     * Update the vehicle with a new current capacity. Returns a new vehicle instance.
+     *
+     * @param curCapacity the new current capacity
+     * @return the updated vehicle
+     */
+    public Vehicle updateCurCapacity(ActionCost curCapacity) {
+        return new Vehicle(getName(), getLocation(), curCapacity, getMaxCapacity(), getCurFuelCapacity(),
+                getMaxFuelCapacity(), isReadyLoading(), getPackageList());
+    }
+
+    /**
+     * Update the vehicle with a new maximum capacity. Returns a new vehicle instance.
+     *
+     * @param maxCapacity the new maximum capacity
+     * @return the updated vehicle
+     */
+    public Vehicle updateMaxCapacity(ActionCost maxCapacity) {
+        return new Vehicle(getName(), getLocation(), getCurCapacity(), maxCapacity, getCurFuelCapacity(),
+                getMaxFuelCapacity(), isReadyLoading(), getPackageList());
+    }
+
+    /**
+     * Update the vehicle with a new maximum fuel capacity. Returns a new vehicle instance.
+     *
+     * @param maxFuelCapacity the new maximum fuel capacity
+     * @return the updated vehicle
+     */
+    public Vehicle updateMaxFuelCapacity(ActionCost maxFuelCapacity) {
+        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
+                maxFuelCapacity, isReadyLoading(), getPackageList());
+    }
+
+    /**
      * Update the vehicle with a new package. Returns a new vehicle instance.
      *
      * @param oldPackage the old package

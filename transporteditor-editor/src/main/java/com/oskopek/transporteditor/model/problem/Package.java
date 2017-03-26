@@ -69,6 +69,16 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
         return new Package(newName, getLocation(), getTarget(), getSize());
     }
 
+    /**
+     * Update the package size. Returns a new package instance.
+     *
+     * @param size the new size
+     * @return the updated package
+     */
+    public Package updateSize(ActionCost size) {
+        return new Package(getName(), getLocation(), getTarget(), size);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
