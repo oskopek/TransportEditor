@@ -23,6 +23,7 @@ public class BenchmarkMatrix {
     private final List<Planner> planners;
 
     private final Map<Problem, ProblemInfo> problemInfo;
+    private final Integer timeout;
 
     /**
      * Default constructor.
@@ -31,13 +32,15 @@ public class BenchmarkMatrix {
      * @param problems the problems
      * @param planners the planners
      * @param problemInfo the problem information
+     * @param timeout the timeout for benchmark runs in seconds
      */
     public BenchmarkMatrix(Domain domain, List<Problem> problems, List<Planner> planners,
-            Map<Problem, ProblemInfo> problemInfo) {
+            Map<Problem, ProblemInfo> problemInfo, Integer timeout) {
         this.domain = domain;
         this.problems = problems;
         this.planners = planners;
         this.problemInfo = problemInfo;
+        this.timeout = timeout;
     }
 
     /**
@@ -50,7 +53,8 @@ public class BenchmarkMatrix {
     public Iterator<BenchmarkRun> toBenchmarkRuns(Function2<Problem, Planner, Boolean> skipFunction,
             ScoreFunction scoreFunction) {
         return Stream.ofAll(getProblems()).crossProduct(getPlanners()).filter(t -> !skipFunction.apply(t._1, t._2)).map(
-                t -> new BenchmarkRun(domain, t._1, t._2.copy(), problemInfo.get(t._1).getBestScore(), scoreFunction));
+                t -> new BenchmarkRun(domain, t._1, t._2.copy(), problemInfo.get(t._1).getBestScore(), timeout,
+                        scoreFunction));
     }
 
     /**

@@ -45,9 +45,6 @@ reportdir="$resultdir"/reports
 convertToPdf
 echo "`date -u '+[%H:%M:%S]'` Plots converted."
 
-echo "Result dir: $resultdir"
-
-
 echo "`date -u '+[%H:%M:%S]'` Adding IPC results..."
 
 if `echo $configName | grep 'ipc08' > /dev/null`; then
@@ -77,8 +74,8 @@ else
     ipc_results="$resultdir/results-ipc.json"
     python3 scripts/merge-results.py "$resultdir/results.json" "$ref_results" "$ipc_results"
     ipc_reportdir_name="ipc-reports"
-    eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $reportGenerator $resultdir/results-ipc.json $ipc_reportdir_name"
     reportdir="$resultdir/$ipc_reportdir_name"
+    eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $reportGenerator $resultdir/results-ipc.json $ipc_reportdir_name"
     convertToPdf
 fi
 echo "`date -u '+[%H:%M:%S]'` Added IPC results."

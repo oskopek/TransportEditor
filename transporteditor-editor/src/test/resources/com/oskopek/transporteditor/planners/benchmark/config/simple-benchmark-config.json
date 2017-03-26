@@ -19,5 +19,6 @@
     "PrologBFS": {
       "className": "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner"
     }
-  }
+  },
+  "timeout": 5
 }

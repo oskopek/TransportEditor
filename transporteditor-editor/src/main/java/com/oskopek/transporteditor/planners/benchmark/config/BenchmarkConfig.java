@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public final class BenchmarkConfig {
 
+    private Integer timeout;
     private Integer threadCount;
     private Map<String, PlannerConfig> planners;
     private String domain;
@@ -112,6 +113,15 @@ public final class BenchmarkConfig {
     }
 
     /**
+     * Get the timeoutPerBenchmark.
+     *
+     * @return the timeoutPerBenchmark
+     */
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    /**
      * Get the threadCount.
      *
      * @return the threadCount
@@ -181,7 +191,7 @@ public final class BenchmarkConfig {
                 .toJavaMap(problem -> Tuple.of(problem.getName(), problem));
         Map<Problem, ProblemInfo> problemInfo = Stream.ofAll(this.problems.entrySet())
                 .toJavaMap(t -> Tuple.of(problemNames.get(t.getKey()), t.getValue()));
-        return new Benchmark(new BenchmarkMatrix(domain, problems, planners, problemInfo), scoreFunction,
+        return new Benchmark(new BenchmarkMatrix(domain, problems, planners, problemInfo, timeout), scoreFunction,
                 skipFunction, new ValValidator());
     }
 

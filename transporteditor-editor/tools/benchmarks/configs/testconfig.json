@@ -20,5 +20,7 @@
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
       "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
     }
-  }
+  },
+  "threadCount": 2,
+  "timeout": 30
 }

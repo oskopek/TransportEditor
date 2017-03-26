@@ -129,5 +129,6 @@
       "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
     }
   },
-  "threadCount": 8
+  "threadCount": 8,
+  "timeout": 1800
 }

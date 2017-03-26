@@ -20,5 +20,6 @@
       "className": "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner"
     }
   },
-  "threadCount": 2
+  "threadCount": 2,
+  "timeout": 1
 }

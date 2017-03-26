@@ -46,7 +46,7 @@ public class BenchmarkIT {
         problemInfo.put(problems.get(0), new ProblemInfo("", 54, ""));
         problemInfo.put(problems.get(1), new ProblemInfo("", 54, ""));
         planners = Arrays.asList(new FastDownwardExternalPlanner(), new PrologBFSExternalPlanner());
-        matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo);
+        matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, 100);
     }
 
     @Test

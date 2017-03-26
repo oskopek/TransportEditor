@@ -12,6 +12,26 @@
 
 ###################################################################################
 
+function cleanup {
+. tooutput.sh "$tmpout" > "$tmpout2"
+
+if [ -n "$outputfile" ]; then
+    cp "$tmpout2" "$outputfile"
+else
+    cat "$tmpout2"
+fi
+
+if command -v validate > /dev/null 2>&1; then # if we have validate on the system, run it
+    echo -e '\nValidating:' 1>&2
+    validate "$domain" "$inputfile" "$tmpout2" 1>&2
+fi
+
+rm "$tmpout" "$tmpout2" "$tmpin" debug 2>/dev/null
+
+cd $wd
+exit $EXIT_STATUS
+}
+
 inputfile=`realpath "$1"`
 outputfile=""
 if [ -n "$2" ]; then
@@ -25,6 +45,7 @@ cd "$dir"
 
 tmpout="`mktemp`"
 tmpout2="`mktemp`"
+tmpin="`mktemp`"
 domain="inputs/domain.pddl"
 
 
@@ -35,21 +56,15 @@ fi
 
 echo -e "Planning...\n" 1>&2
 
-bash toinput.sh "$inputfile" | swipl 2> /dev/null | tee debug > "$tmpout"
-bash tooutput.sh "$tmpout" > "$tmpout2"
+. toinput.sh "$inputfile" > "$tmpin"
 
-if [ -n "$outputfile" ]; then
-    cp "$tmpout2" "$outputfile"
-else
-    cat "$tmpout2"
-fi
 
-if command -v validate > /dev/null 2>&1; then # if we have validate on the system, run it
-    echo -e '\nValidating:' 1>&2
-    validate "$domain" "$inputfile" "$tmpout2" 1>&2
-fi
+trap 'kill -TERM $PID; cleanup' SIGINT SIGTERM EXIT
+swipl < "$tmpin" 2>/dev/null 1>"$tmpout" &
+PID=$!
+wait $PID
+trap - SIGINT SIGTERM EXIT
+wait $PID
+EXIT_STATUS=$?
 
-rm "$tmpout" "$tmpout2" debug
-
-cd $wd
-
+cleanup

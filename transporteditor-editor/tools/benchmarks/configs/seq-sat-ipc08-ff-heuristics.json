@@ -124,10 +124,15 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
+//    "FastDownAstar": {
+//      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+//      "params": "{0} {1} --search astar(lmcut()) --overall-time-limit 30m"
+//    },
     "FastDownFF": {
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea]) --overall-time-limit 30m"
     }
   },
-  "threadCount": 8
+  "threadCount": 8,
+  "timeout": 1800
 }

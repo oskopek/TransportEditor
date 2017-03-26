@@ -73,5 +73,6 @@ public class BenchmarkConfigIOIT {
         // TODO: Verify that uses correct arguments and threads
         String plannerName = config.getPlanners().entrySet().stream().findAny().get().getKey();
         assertThat(results.getRunTable().at(0, 0).getPlanner().getName()).isEqualTo(plannerName);
+        assertThat(config.getTimeout()).isEqualTo(15);
     }
 }

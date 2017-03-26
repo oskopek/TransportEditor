@@ -11,7 +11,14 @@ public class RunTimeLineChartReporter extends LineChartReporter implements Repor
      * Default constructor.
      */
     public RunTimeLineChartReporter() {
-        super(r -> r.getResults().getDurationMs() / 1000d, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Planner runtimes",
+        super(r -> {
+                    long duration = r.getResults().getDurationMs();
+                    if (duration == 0L) {
+                        return null;
+                    } else {
+                        return duration / 1000d;
+                    }
+                }, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Planner runtimes",
                 "Runtime in seconds");
     }
 

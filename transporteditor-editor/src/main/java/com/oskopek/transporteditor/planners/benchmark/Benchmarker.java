@@ -42,15 +42,14 @@ public final class Benchmarker {
         Path benchmarkConfigPath = Paths.get(benchmarkConfigFile);
         BenchmarkConfig benchmarkConfig = Try.of(() -> BenchmarkConfig.from(benchmarkConfigPath))
                 .getOrElseThrow(e -> new IllegalStateException("Couldn't parse benchmark config.", e));
-        Benchmark benchmark = benchmarkConfig.toBenchmark();
-        BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
 
         String benchmarkResultDir = args[1];
         Path benchmarkResultDirPath = Paths.get(benchmarkResultDir);
-        Try.run(() -> IOUtils.deleteDirectoryRecursively(benchmarkResultDirPath))
-                .onFailure(e -> logger.debug("Delete directory failed, continuing anyway: {}", e));
         benchmarkResultDirPath.toFile().mkdirs();
+
         Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
+        Benchmark benchmark = benchmarkConfig.toBenchmark();
+        BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
 
         ReportGenerator generator = new ReportGenerator("reports");

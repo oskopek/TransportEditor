@@ -14,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Facilitates the benchmarking process on top of the data.
@@ -89,14 +87,17 @@ public class Benchmark {
         }
 
         logger.info("Starting all benchmarks...");
+        ScheduledExecutorService schedule = Executors.newScheduledThreadPool(threadCount);
         ExecutorService service = Executors.newFixedThreadPool(threadCount);
         BenchmarkResults results;
         try {
-            results = Try.of(() -> schedule(matrix, service)).flatMap(futures -> Try.of(() -> waitFor(futures))).map(
-                    intermediates -> Benchmark.populateRunTable(matrix, intermediates)).map(BenchmarkResults::from)
+            results = Try.of(() -> schedule(matrix, service, schedule))
+                    .flatMap(futures -> Try.of(() -> waitFor(futures)))
+                    .map(intermediates -> Benchmark.populateRunTable(matrix, intermediates)).map(BenchmarkResults::from)
                     .getOrElseThrow(t -> new IllegalStateException("Benchmark failed.", t));
         } finally {
             service.shutdown();
+            schedule.shutdown();
         }
         return results;
     }
@@ -105,12 +106,56 @@ public class Benchmark {
      * Schedule all the {@link BenchmarkRun}s into the executor. Doesn't block.
      *
      * @param matrix the benchmark matrix
-     * @param executor the executor
+     * @param service the executor service
+     * @param schedule the timeout-keeping executor service
      * @return a list of futures of the scheduled runs
      */
-    private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService executor) {
+    private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService service,
+            ScheduledExecutorService schedule) {
         return matrix.toBenchmarkRuns(skipFunction, scoreFunction)
-                .map(benchmarkRun -> CompletableFuture.supplyAsync(() -> benchmarkRun.execute(validator), executor))
+                .map(benchmarkRun -> {
+                    CompletableFuture<BenchmarkRun> runFuture = new CompletableFuture<>();
+                    CompletableFuture<BenchmarkRun> planningFuture = new CompletableFuture<>();
+                    Callable<CompletableFuture<BenchmarkRun>> timeoutHandler = () -> {
+                        logger.debug("Schedule timeout for {}, {}", benchmarkRun.getPlanner(),
+                                benchmarkRun.getProblem());
+                        if (!planningFuture.isDone()) {
+                            BenchmarkRun defaultRun = new BenchmarkRun(benchmarkRun, new BenchmarkRun.Results(null,
+                                    null, benchmarkRun.getBestScore(), BenchmarkRun.RunExitStatus.UNSOLVED,
+                                    0, 0));
+                            logger.trace("Not done {}, {}", benchmarkRun.getPlanner(), benchmarkRun.getProblem());
+                            boolean result = benchmarkRun.getPlanner().cancel();
+                            logger.trace("Cancel result {} for {}, {}", result, benchmarkRun.getPlanner(),
+                                    benchmarkRun.getProblem());
+                            if (!result) {
+                                runFuture.complete(defaultRun);
+                            } else {
+                                logger.trace("Getting cancelled planner result {}, {}", benchmarkRun.getPlanner(),
+                                        benchmarkRun.getProblem());
+                                BenchmarkRun planned = Try.of(() -> planningFuture.get(5, TimeUnit.SECONDS))
+                                        .getOrElse(defaultRun);
+                                runFuture.complete(planned);
+                            }
+                        } else {
+                            logger.trace("Done {}, {}", benchmarkRun.getPlanner(), benchmarkRun.getProblem());
+                            runFuture.complete(Try.of(planningFuture::get).getOrElseThrow(e ->
+                                    new IllegalStateException("Getting finished future failed.", e)));
+                        }
+                        return runFuture;
+                    };
+
+                    CompletableFuture.runAsync(() -> {
+                                ScheduledFuture<CompletableFuture<BenchmarkRun>> future = schedule.schedule(
+                                        timeoutHandler, benchmarkRun.getTimeout(), TimeUnit.SECONDS);
+                                BenchmarkRun results = benchmarkRun.execute(validator);
+                                future.cancel(false);
+                                planningFuture.complete(results);
+                                if (future.isCancelled()) {
+                                    Try.run(timeoutHandler::call);
+                                }
+                            }, service);
+                    return runFuture;
+                })
                 .toJavaList();
     }
 }
