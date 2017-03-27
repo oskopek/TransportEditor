@@ -10,6 +10,8 @@ import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.ImmutablePlanState;
+import javaslang.Tuple;
+import javaslang.Tuple2;
 import javaslang.collection.*;
 import javaslang.collection.List;
 import javaslang.collection.Set;
@@ -72,7 +74,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             generateActions(state, actions, originalAPSPGraph).forEach(action -> state.apply(action).ifPresent(states::addLast));
 
             counter++;
-            if (counter % 200_000 == 0) {
+            if (counter % 100_000 == 0) {
                 logger.debug("Explored {} states, left: {}", counter, states.size());
 //                if (counter % 1_000_000 == 0) {
 //                    logger.debug("GC");
@@ -82,6 +84,21 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         }
 
         return Optional.empty();
+    }
+
+    private static java.util.Set<Tuple2<String, String>> didDropThisJustNow(List<Action> plannedActions) {
+        java.util.Set<Tuple2<String, String>> drops = new HashSet<>();
+        int index;
+        for (index = plannedActions.size() - 1; index >= 0; index--) {
+            Action plannedAction = plannedActions.get(index);
+            if (plannedAction instanceof Drop) {
+                drops.add(Tuple.of(plannedAction.getWho().getName(), plannedAction.getWhat().getName()));
+            } else if (plannedAction instanceof PickUp) {
+                continue;
+            }
+            break;
+        }
+        return drops;
     }
 
     private static boolean hasCycle(List<Action> plannedActions) {
@@ -166,7 +183,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                 }
             }
         } else {
-            Optional<Action> wasDrop = lastAction.filter(a -> a instanceof Drop);
+            java.util.Set<Tuple2<String, String>> dropped = didDropThisJustNow(plannedActions);
             packageMap.keySet().forEach(location -> {
                 List<Package> packages = packageMap.get(location);
                 List<Vehicle> vehicles = vehicleMap.get(location);
@@ -176,7 +193,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
                 for (Package pkg : packages) {
                     for (Vehicle vehicle : vehicles) {
-                        if (wasDrop.filter(a -> a.getWho().getName().equals(vehicle.getName()) && a.getWhat().getName().equals(pkg.getName())).isPresent()) {
+                        if (dropped.contains(Tuple.of(vehicle.getName(), pkg.getName()))) {
                             continue;
                         }
                         generated.add(domain.buildPickUp(vehicle, location, pkg));
