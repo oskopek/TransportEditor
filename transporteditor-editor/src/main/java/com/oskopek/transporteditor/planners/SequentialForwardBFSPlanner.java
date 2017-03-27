@@ -160,7 +160,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             }
         }
 
-        Optional<Action> lastAction = plannedActions.lastOption().toJavaOptional();
+        Optional<Action> lastAction = plannedActions.isEmpty() ? Optional.empty() : Optional.of(plannedActions.get(plannedActions.size() - 1));
         // pick-up
         Optional<Vehicle> lastVehicleAndLastDrive = lastAction
                 .filter(a -> a instanceof Drive).map(a -> (Vehicle) a.getWho())
@@ -242,7 +242,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {
             Location target = graph.getLocation(edge.getTargetNode().getId());
-            vehicleActions.add(domain.buildDrive(vehicle, current, target, graph)); // TODO: use a faster buildDrive method
+            vehicleActions.add(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
         }
         if (!vehicle.getPackageList().isEmpty()) {
             Map<Location, Integer> sumOfDistancesToPackageTargets = calculateSumOfDistancesToPackageTargets(vehicle,

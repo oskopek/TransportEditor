@@ -54,6 +54,7 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
      * Build the drive action from the supplied arguments according to this template.
      * Searches in the supplied road graph for the shortest edge between the two locations.
      *
+     * @deprecated Should not be used in performance-sensitive code.
      * @param who the vehicle
      * @param where the source location
      * @param what the destination location

@@ -81,6 +81,7 @@ public abstract class DefaultDomain implements Domain {
     }
 
     @Override
+    @Deprecated
     public Drive buildDrive(Vehicle vehicle, Location from, Location to, RoadGraph graph) {
         return driveBuilder.build(vehicle, from, to, graph);
     }
