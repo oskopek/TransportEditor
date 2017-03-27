@@ -7,6 +7,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -24,6 +26,7 @@ public abstract class LineChartReporter implements Reporter {
     private final int height;
     private final String title;
     private final String valueAxis;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected static final int DEFAULT_WIDTH = 500;
     protected static final int DEFAULT_HEIGHT = 500;
@@ -52,6 +55,11 @@ public abstract class LineChartReporter implements Reporter {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         results.stream().sorted(Comparator.comparing(BenchmarkResults.JsonRun::getProblem))
                 .forEach(r -> dataset.addValue(dataGetter.apply(r), r.getPlanner(), r.getProblem()));
+
+        if (GraphicsEnvironment.isHeadless()) {
+            logger.warn("Headless environment, skipping JFreeChart chart creation.");
+            return "";
+        }
 
         JFreeChart chart = ChartFactory.createLineChart(title, "Problem", valueAxis,
                 dataset, PlotOrientation.VERTICAL, true, false, false);
