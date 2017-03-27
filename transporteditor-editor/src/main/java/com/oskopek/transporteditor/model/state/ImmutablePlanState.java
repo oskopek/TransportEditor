@@ -152,38 +152,43 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
     }
 
     @Override
-    public Problem putVehicle(String name, Vehicle vehicle) {
-        return problem.putVehicle(name, vehicle);
+    public ImmutablePlanState putVehicle(String name, Vehicle vehicle) {
+        return new ImmutablePlanState(getDomain(), problem.putVehicle(name, vehicle), getActions());
     }
 
     @Override
-    public Problem putPackage(String name, Package pkg) {
-        return problem.putPackage(name, pkg);
+    public ImmutablePlanState putPackage(String name, Package pkg) {
+        return new ImmutablePlanState(getDomain(), problem.putPackage(name, pkg), getActions());
     }
 
     @Override
-    public Problem changeActionObjectName(ActionObject actionObject, String newName) {
-        return problem.changeActionObjectName(actionObject, newName);
+    public ImmutablePlanState changeActionObjectName(ActionObject actionObject, String newName) {
+        return new ImmutablePlanState(getDomain(), problem.changeActionObjectName(actionObject, newName), getActions());
     }
 
     @Override
-    public Problem putLocation(String name, Location location) {
-        return problem.putLocation(name, location);
+    public ImmutablePlanState putLocation(String name, Location location) {
+        return new ImmutablePlanState(getDomain(), problem.putLocation(name, location), getActions());
     }
 
     @Override
-    public Problem removeVehicle(String name) {
-        return problem.removeVehicle(name);
+    public ImmutablePlanState removeVehicle(String name) {
+        return new ImmutablePlanState(getDomain(), problem.removeVehicle(name), getActions());
     }
 
     @Override
-    public Problem removePackage(String name) {
-        return problem.removePackage(name);
+    public ImmutablePlanState removePackage(String name) {
+        return new ImmutablePlanState(getDomain(), problem.removePackage(name), getActions());
     }
 
     @Override
-    public Problem removeLocation(String name) {
-        return problem.removeLocation(name);
+    public ImmutablePlanState removeLocation(String name) {
+        return new ImmutablePlanState(getDomain(), problem.removeLocation(name), getActions());
+    }
+
+    @Override
+    public ImmutablePlanState putName(String newName) {
+        return new ImmutablePlanState(getDomain(), problem.putName(newName), getActions());
     }
 
     @Override

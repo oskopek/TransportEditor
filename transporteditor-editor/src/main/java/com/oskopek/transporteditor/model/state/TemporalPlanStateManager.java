@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    private static final Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
+    public static final Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
             .append(t1.getStartTimestamp(), t2.getStartTimestamp()).append(t1.getEndTimestamp(), t2.getEndTimestamp())
             .toComparison();
     private final Domain domain;
