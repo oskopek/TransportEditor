@@ -1,0 +1,10 @@
+= Planners
+
+== Temporal Fast Downward (TFD)
+
+* http://gki.informatik.uni-freiburg.de/tools/tfd/downloads.html
+
+== Fast Downward
+
+* http://www.fast-downward.org/
+

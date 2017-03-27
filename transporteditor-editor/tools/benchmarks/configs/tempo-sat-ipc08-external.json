@@ -124,9 +124,9 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "FastDownFF": { // TODO: Find a planner
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+    "TemporalFastDownward": {
+      "className": "com.oskopek.transporteditor.model.planner.ExternalPlanner",
+      "params": "tfd-plan.sh {0} {1}"
     }
   },
   "threadCount": 8,

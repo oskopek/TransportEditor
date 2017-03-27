@@ -65,6 +65,11 @@ capacity-${i} - capacity-number
 <#list packageList as package>
 (at ${package.name} ${package.target.name})
 </#list>
+<#list vehicleList as vehicle>
+<#if vehicle.target??>
+(at ${vehicle.name} ${vehicle.target.name})
+</#if>
+</#list>
 ))
 <#if domain.getPddlLabels()?seq_contains(temporal)>
 (:metric minimize (total-time))

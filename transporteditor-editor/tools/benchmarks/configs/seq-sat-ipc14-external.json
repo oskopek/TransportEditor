@@ -86,7 +86,11 @@
   "planners": {
     "FastDownFF": {
       "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+      "params": "--overall-time-limit 30m {0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+    },
+    "FastDownLama": {
+      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "params": "--alias seq-sat-lama-2011 {0} {1}"
     }
   },
   "threadCount": 8,

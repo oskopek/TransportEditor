@@ -103,9 +103,9 @@ public class SequentialPlanIOIT {
         graph.addRoad(new DefaultRoad("l4l5", ActionCost.valueOf(32)), graph.getLocation("city-loc-4"),
                 graph.getLocation("city-loc-5"));
 
-        Vehicle vehicle1 = new Vehicle("truck-1", graph.getLocation("city-loc-4"), ActionCost.valueOf(2),
+        Vehicle vehicle1 = new Vehicle("truck-1", graph.getLocation("city-loc-4"), null, ActionCost.valueOf(2),
                 ActionCost.valueOf(2), true, new ArrayList<>());
-        Vehicle vehicle2 = new Vehicle("truck-2", graph.getLocation("city-loc-5"), ActionCost.valueOf(4),
+        Vehicle vehicle2 = new Vehicle("truck-2", graph.getLocation("city-loc-5"), null, ActionCost.valueOf(4),
                 ActionCost.valueOf(4), true, new ArrayList<>());
         Map<String, Vehicle> vehicles = new HashMap<>();
         vehicles.put(vehicle1.getName(), vehicle1);

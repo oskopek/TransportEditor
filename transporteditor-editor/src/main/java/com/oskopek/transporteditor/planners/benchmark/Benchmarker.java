@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Main class for the benchmarker jar.
@@ -47,7 +48,8 @@ public final class Benchmarker {
         Path benchmarkResultDirPath = Paths.get(benchmarkResultDir);
         benchmarkResultDirPath.toFile().mkdirs();
 
-        Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()));
+        Files.copy(benchmarkConfigPath, benchmarkResultDirPath.resolve(benchmarkConfigPath.getFileName()),
+                StandardCopyOption.REPLACE_EXISTING);
         Benchmark benchmark = benchmarkConfig.toBenchmark();
         BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());

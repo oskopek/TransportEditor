@@ -171,16 +171,13 @@ public class DefaultProblemIO implements DataIO<Problem> {
             case "at": {
                 Vehicle vehicle = parsed.vehicleMap().get(arg1);
                 if (vehicle != null) {
-                    Vehicle newVehicle = new Vehicle(vehicle.getName(), parsed.graph().getLocation(arg2),
-                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(), true, vehicle.getPackageList());
+                    Vehicle newVehicle = vehicle.updateLocation(parsed.graph().getLocation(arg2));
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
                 Package pkg = parsed.packageMap().get(arg1);
                 if (pkg != null) {
-                    Package newpkg = new Package(pkg.getName(), parsed.graph().getLocation(arg2),
-                            pkg.getTarget(),
-                            pkg.getSize());
+                    Package newpkg = pkg.updateLocation(parsed.graph().getLocation(arg2));
                     parsed.packageMap().put(newpkg.getName(), newpkg);
                     break;
                 }
@@ -190,8 +187,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Vehicle vehicle = parsed.vehicleMap().get(arg1);
                 if (vehicle != null) {
                     ActionCost capacity = ActionCost.valueOf(Integer.parseInt(arg2.split("-")[1]));
-                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                            capacity, true, vehicle.getPackageList());
+                    Vehicle newVehicle = vehicle.updateCurCapacity(capacity).updateMaxCapacity(capacity);
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -243,7 +239,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Package pkg = parsed.packageMap().get(packageName);
                 if (pkg != null) {
                     ActionCost size = ActionCost.valueOf(number);
-                    Package newPackage = new Package(pkg.getName(), pkg.getLocation(), pkg.getTarget(), size);
+                    Package newPackage = pkg.updateSize(size);
                     parsed.packageMap().put(newPackage.getName(), newPackage);
                     break;
                 }
@@ -254,8 +250,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                 if (vehicle != null) {
                     ActionCost capacity = ActionCost.valueOf(number);
-                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(), capacity,
-                            capacity, true, vehicle.getPackageList());
+                    Vehicle newVehicle = vehicle.updateCurCapacity(capacity).updateMaxCapacity(capacity);
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -271,13 +266,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                 if (vehicle != null) {
                     ActionCost fuelLeft = ActionCost.valueOf(number);
-                    ActionCost fuelMax = null;
-                    if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
-                        fuelMax = vehicle.getMaxFuelCapacity();
-                    }
-                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
-                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                            fuelLeft, fuelMax, true, vehicle.getPackageList());
+                    Vehicle newVehicle = vehicle.updateCurFuelCapacity(fuelLeft);
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -293,13 +282,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                 Vehicle vehicle = parsed.vehicleMap().get(vehicleName);
                 if (vehicle != null) {
                     ActionCost fuelMax = ActionCost.valueOf(number);
-                    ActionCost fuelLeft = null;
-                    if (Vehicle.class.isAssignableFrom(vehicle.getClass())) {
-                        fuelLeft = vehicle.getCurFuelCapacity();
-                    }
-                    Vehicle newVehicle = new Vehicle(vehicle.getName(), vehicle.getLocation(),
-                            vehicle.getCurCapacity(), vehicle.getMaxCapacity(),
-                            fuelLeft, fuelMax, true, vehicle.getPackageList());
+                    Vehicle newVehicle = vehicle.updateMaxFuelCapacity(fuelMax);
                     parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                     break;
                 }
@@ -338,7 +321,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
             String objectName = typeNameListContext.NAME(0).getText();
             switch (typeName) {
                 case "vehicle":
-                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, true,
+                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, null, true,
                             new ArrayList<>()));
                     break;
                 case "package":
@@ -377,11 +360,19 @@ public class DefaultProblemIO implements DataIO<Problem> {
             String arg2 = goalDescContext.atomicTermFormula().term(1).getText();
             switch (predicate) {
                 case "at": {
-                    Package pkg = parsed.packageMap().get(arg1);
                     Location target = parsed.graph().getLocation(arg2);
+
+                    Package pkg = parsed.packageMap().get(arg1);
                     if (pkg != null) {
-                        Package newpkg = new Package(pkg.getName(), pkg.getLocation(), target, pkg.getSize());
+                        Package newpkg = pkg.updateTarget(target);
                         parsed.packageMap().put(newpkg.getName(), newpkg);
+                        break;
+                    }
+
+                    Vehicle vehicle = parsed.vehicleMap().get(arg1);
+                    if (vehicle != null) {
+                        Vehicle newVehicle = vehicle.updateTarget(target);
+                        parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                         break;
                     }
                     break;

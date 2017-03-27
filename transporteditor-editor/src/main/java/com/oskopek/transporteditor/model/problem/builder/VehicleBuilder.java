@@ -1,6 +1,7 @@
 package com.oskopek.transporteditor.model.problem.builder;
 
 import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.problem.Vehicle;
 
@@ -11,6 +12,7 @@ import java.util.List;
  */
 public class VehicleBuilder extends LocatableBuilder<Vehicle> {
 
+    private Location target;
     private ActionCost curCapacity;
     private ActionCost maxCapacity;
     private ActionCost curFuelCapacity;
@@ -23,6 +25,25 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
      */
     public VehicleBuilder() {
         // intentionally empty
+    }
+
+    /**
+     * Get the target location.
+     *
+     * @return the target location
+     */
+    @FieldLocalization(key = "location.target", priority = 2)
+    public Location getTarget() {
+        return target;
+    }
+
+    /**
+     * Set the target location.
+     *
+     * @param target the target location
+     */
+    public void setTarget(Location target) {
+        this.target = target;
     }
 
     /**
@@ -141,8 +162,8 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
 
     @Override
     public Vehicle build() {
-        return new Vehicle(getName(), getLocation(), getCurCapacity(), getMaxCapacity(), getCurFuelCapacity(),
-                getMaxFuelCapacity(), true, getPackageList());
+        return new Vehicle(getName(), getLocation(), getTarget(), getCurCapacity(), getMaxCapacity(),
+                getCurFuelCapacity(), getMaxFuelCapacity(), true, getPackageList());
     }
 
     @Override
