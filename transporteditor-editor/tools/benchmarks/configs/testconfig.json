@@ -5,22 +5,17 @@
       "filePath": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblem.pddl",
       "bestScore": 54
     },
-    "p01Easy": {
-      "filePath": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p01SeqProblemEasier.pddl",
+    "p02": {
+      "filePath": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/p02SeqProblem.pddl",
       "bestScore": 54
     }
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "FastDownAstar": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "{0} {1} --search astar(lmcut())"
-    },
-    "FastDownFF": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
-      "params": "{0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+    "SequentialForwardBFS": {
+      "className": "com.oskopek.transporteditor.planners.SequentialForwardBFSPlanner"
     }
   },
-  "threadCount": 2,
-  "timeout": 30
+  "threadCount": 1,
+  "timeout": 300
 }

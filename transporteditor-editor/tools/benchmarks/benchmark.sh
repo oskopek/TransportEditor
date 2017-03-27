@@ -34,7 +34,7 @@ resultdir="$origdir/results/$configName/$starttime"
 mkdir -p "$resultdir"
 logdir="$resultdir"
 
-eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
+eval "$JAVA_HOME/bin/java -Xverify:none -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
 
 endtime="`date -u '+%Y%m%d-%H%M%S'`"
 
