@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -160,16 +162,36 @@ public class DefaultProblemIOIT {
 
     @Test
     public void serializeBigTemporal() throws Exception {
-        //serializeTemporalInternal(tempBigProblemFileContents); // TODO: fixme
+        DefaultProblem problem = serializeTemporalInternal(tempBigProblemFileContents);
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getTarget() != null);
+        Map<String, String> truckGoals = new HashMap<>(4 + 7);
+        truckGoals.put("truck-0", "hub-0");
+        truckGoals.put("truck-1", "hub-1");
+        truckGoals.put("truck-2", "hub-2");
+        truckGoals.put("truck-3", "hub-3");
+        truckGoals.put("ctruck-0-0", "hub-0");
+        truckGoals.put("ctruck-1-0", "hub-1");
+        truckGoals.put("ctruck-2-0", "hub-2");
+        truckGoals.put("ctruck-3-0", "hub-3");
+        truckGoals.put("ctruck-4-0", "hub-4");
+        truckGoals.put("ctruck-5-0", "hub-5");
+        truckGoals.put("ctruck-6-0", "hub-6");
+        truckGoals.forEach((key, value) -> assertThat(problem.getVehicle(key).getTarget())
+                .isEqualTo(problem.getRoadGraph().getLocation(value)));
     }
 
-    private void serializeTemporalInternal(String problemFileContents) {
+    private DefaultProblem serializeTemporalInternal(String problemFileContents) {
         DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(problemFileContents);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() != null);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getMaxFuelCapacity() != null);
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
+
+        DefaultProblem problemAgain = new DefaultProblemIO(variableDomainTemp).parse(serialized);
+        assertThat(problem).isEqualTo(problemAgain);
+
         TestUtils.assertPDDLContentEquals(problemFileContents, serialized);
+        return problem;
     }
 
     @Test
@@ -231,6 +253,7 @@ public class DefaultProblemIOIT {
         assertEquals(424, truck1.getCurFuelCapacity().getCost());
         assertNotNull(truck1.getMaxFuelCapacity());
         assertEquals(424, truck1.getMaxFuelCapacity().getCost());
+        assertThat(problem.getAllVehicles()).allMatch(v -> v.getTarget() == null);
     }
 
     @Test

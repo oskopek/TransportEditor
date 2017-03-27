@@ -321,7 +321,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
             String objectName = typeNameListContext.NAME(0).getText();
             switch (typeName) {
                 case "vehicle":
-                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, true,
+                    parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, null, true,
                             new ArrayList<>()));
                     break;
                 case "package":
@@ -360,11 +360,19 @@ public class DefaultProblemIO implements DataIO<Problem> {
             String arg2 = goalDescContext.atomicTermFormula().term(1).getText();
             switch (predicate) {
                 case "at": {
-                    Package pkg = parsed.packageMap().get(arg1);
                     Location target = parsed.graph().getLocation(arg2);
+
+                    Package pkg = parsed.packageMap().get(arg1);
                     if (pkg != null) {
-                        Package newpkg = new Package(pkg.getName(), pkg.getLocation(), target, pkg.getSize());
+                        Package newpkg = pkg.updateTarget(target);
                         parsed.packageMap().put(newpkg.getName(), newpkg);
+                        break;
+                    }
+
+                    Vehicle vehicle = parsed.vehicleMap().get(arg1);
+                    if (vehicle != null) {
+                        Vehicle newVehicle = vehicle.updateTarget(target);
+                        parsed.vehicleMap().put(newVehicle.getName(), newVehicle);
                         break;
                     }
                     break;

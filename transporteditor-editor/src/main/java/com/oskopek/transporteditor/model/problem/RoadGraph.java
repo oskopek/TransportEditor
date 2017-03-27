@@ -580,9 +580,9 @@ public class RoadGraph extends MultiGraph implements Graph { // TODO: Refactor G
             return false;
         }
         RoadGraph that = (RoadGraph) o;
-        return new EqualsBuilder()
-                .append(getAllLocations().toArray(), that.getAllLocations().toArray())
-                .append(getAllRoads().toArray(), that.getAllRoads().toArray())
+        return new EqualsBuilder().append(getAllLocations().collect(Collectors.toSet()),
+                that.getAllLocations().collect(Collectors.toSet()))
+                .append(getAllRoads().collect(Collectors.toSet()), that.getAllRoads().collect(Collectors.toSet()))
                 .isEquals();
     }
 
