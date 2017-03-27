@@ -169,6 +169,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     @Override
     public void from(Vehicle instance) {
         super.from(instance);
+        setTarget(instance.getTarget());
         setCurCapacity(instance.getCurCapacity());
         setMaxCapacity(instance.getMaxCapacity());
         setCurFuelCapacity(instance.getCurFuelCapacity());
