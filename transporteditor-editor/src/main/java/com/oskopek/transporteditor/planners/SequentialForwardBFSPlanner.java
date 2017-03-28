@@ -17,6 +17,7 @@ import javaslang.collection.List;
 import javaslang.collection.Set;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
+import javaslang.control.Try;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.Graphs;
@@ -57,7 +58,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         List<Action> actions = List.empty();
         while (!states.isEmpty()) {
             if (shouldCancel()) {
-                return Optional.empty();
+                logger.debug("Returning current hypothesis plan after cancellation.");
+                return Optional.of(new SequentialPlan(actions.toJavaList()));
             }
             ImmutablePlanState state = states.removeFirst();
             if (state.getActions().size() > actions.size()) {
@@ -71,15 +73,18 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                 return Optional.of(new SequentialPlan(actions.toJavaList()));
             }
 
-            generateActions(state, actions, originalAPSPGraph).forEach(action -> state.apply(action).ifPresent(states::addLast));
+            java.util.List<Action> generatedActions = generateActions(state, actions, originalAPSPGraph);
+            for (int i = 0; i < generatedActions.size(); i++) {
+                state.apply(generatedActions.get(i)).ifPresent(states::addLast);
+            }
 
             counter++;
-            if (counter % 100_000 == 0) {
+            if (counter % 500_000 == 0) {
                 logger.debug("Explored {} states, left: {}", counter, states.size());
-//                if (counter % 1_000_000 == 0) {
-//                    logger.debug("GC");
-//                    System.gc();
-//                }
+                if (counter % 1_000_000 == 0) {
+                    logger.debug("GC");
+                    System.gc();
+                }
             }
         }
 

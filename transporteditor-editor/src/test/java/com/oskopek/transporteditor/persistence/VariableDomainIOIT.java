@@ -16,6 +16,7 @@ import com.oskopek.transporteditor.model.domain.action.predicates.*;
 import com.oskopek.transporteditor.model.problem.DefaultRoad;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.RoadGraph;
+import com.oskopek.transporteditor.model.problem.Vehicle;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -74,12 +76,11 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
-                        .getCost());
-        assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
-                        .getDuration());
+
+        assertEquals(ActionCost.valueOf(11), parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"),
+                roadGraph.getLocation("b"), roadGraph).getCost());
+        assertEquals(ActionCost.valueOf(11), parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"),
+                roadGraph.getLocation("b"), roadGraph).getDuration());
 
         // drive
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new WhoAtWhere());

@@ -32,7 +32,7 @@ public class Drive extends DefaultAction<Vehicle, Location> {
         super("drive", vehicle, from, to, preconditions, effects, road.getLength(), road.getLength());
         this.road = road;
         this.dest = to;
-        this.vehicleName = vehicle.getName();
+        this.vehicleName = vehicle != null ? vehicle.getName() : null;
     }
 
     @Override

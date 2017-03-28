@@ -17,5 +17,5 @@
     }
   },
   "threadCount": 1,
-  "timeout": 300
+  "timeout": 1800
 }
