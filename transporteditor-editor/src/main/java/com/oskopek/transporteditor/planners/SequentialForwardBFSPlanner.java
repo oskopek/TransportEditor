@@ -68,6 +68,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             }
             actions = state.getActions();
 
+//            verifyActionsOfOptimalP02Plan(actions);
+
             if (state.isGoalState()) {
                 logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter, states.size());
                 return Optional.of(new SequentialPlan(actions.toJavaList()));
@@ -108,8 +110,12 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
     private static boolean hasCycle(List<Action> plannedActions) {
         java.util.Set<String> drives = new HashSet<>();
-        int index;
-        for (index = plannedActions.size() - 1; index >= 0; index--) {
+        int lastActionIndex = plannedActions.size() - 1;
+        Action lastAction = plannedActions.get(lastActionIndex);
+        if (lastAction instanceof Drive) { // add last target
+            drives.add(lastAction.getWhat().getName());
+        }
+        for (int index = lastActionIndex; index >= 0; index--) {
             Action plannedAction = plannedActions.get(index);
             if (plannedAction instanceof Drive) {
                 if (!drives.add(plannedAction.getWhere().getName())) {
@@ -120,24 +126,19 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                 break;
             }
         }
-        if (index + 1 <= plannedActions.size()) {
-            if (!drives.add(plannedActions.get(index + 1).getWhat().getName())) { // add last target
-                // CYCLE!
-                return true;
-            }
-        }
         return false;
     }
 
     private static java.util.List<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions, RoadGraph originalAPSPGraph) {
         java.util.List<Action> generated = new ArrayList<>();
-        List<Package> packagesUnfinished = Stream.ofAll(state.getAllPackages()).filter(p -> !p.getTarget().equals(p.getLocation())).toList();
+        java.util.List<Package> packagesUnfinished = state.getAllPackages().stream().filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
+        java.util.List<Vehicle> vehicles = Collections.singletonList(state.getVehicle("truck-2"));
 
         Domain domain = state.getDomain();
         RoadGraph graph = state.getRoadGraph();
 
         Map<Location, List<Vehicle>> vehicleMap = new HashMap<>();
-        for (Vehicle vehicle : state.getAllVehicles()) {
+        for (Vehicle vehicle : vehicles) {
             Location current = vehicle.getLocation();
             vehicleMap.put(current, vehicleMap.getOrDefault(current, List.empty()).append(vehicle));
         }
@@ -153,9 +154,9 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         for (Package pkg : packagesUnfinished) {
             if (pkg.getLocation() == null) { // unfinished package is in vehicle
                 Location target = pkg.getTarget();
-                List<Vehicle> vehicles = vehicleMap.get(target);
-                if (vehicles != null) {
-                    for (Vehicle vehicle : vehicles) { // vehicles at target
+                List<Vehicle> vehiclesAtLoc = vehicleMap.get(target);
+                if (vehiclesAtLoc != null) {
+                    for (Vehicle vehicle : vehiclesAtLoc) { // vehicles at target
                         if (vehicle.getPackageList().contains(pkg)) {
                             generated.add(domain.buildDrop(vehicle, target, pkg));
                             return generated;
@@ -184,24 +185,28 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             List<Package> packages = packageMap.get(location);
             if (packages != null) {
                 for (Package pkg : packages) {
-                    generated.add(domain.buildPickUp(vehicle, location, pkg));
+                    if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
+                        generated.add(domain.buildPickUp(vehicle, location, pkg));
+                    }
                 }
             }
         } else {
             java.util.Set<Tuple2<String, String>> dropped = didDropThisJustNow(plannedActions);
             packageMap.keySet().forEach(location -> {
                 List<Package> packages = packageMap.get(location);
-                List<Vehicle> vehicles = vehicleMap.get(location);
-                if (packages == null || vehicles == null) {
+                List<Vehicle> vehiclesAtLoc = vehicleMap.get(location);
+                if (packages == null || vehiclesAtLoc == null) {
                     return;
                 }
 
                 for (Package pkg : packages) {
-                    for (Vehicle vehicle : vehicles) {
+                    for (Vehicle vehicle : vehiclesAtLoc) {
                         if (dropped.contains(Tuple.of(vehicle.getName(), pkg.getName()))) {
                             continue;
                         }
-                        generated.add(domain.buildPickUp(vehicle, location, pkg));
+                        if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
+                            generated.add(domain.buildPickUp(vehicle, location, pkg));
+                        }
                     }
                 }
             });
@@ -217,7 +222,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                     generated.add(domain.buildDrop(vehicle, current, pkg));
                 }
             } else {
-                for (Vehicle vehicle : state.getAllVehicles()) {
+                for (Vehicle vehicle : vehicles) {
                     Location current = vehicle.getLocation();
                     for (Package pkg : vehicle.getPackageList()) {
                         generated.add(domain.buildDrop(vehicle, current, pkg));
@@ -234,7 +239,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             Vehicle vehicle = lastVehicleAndNotDrop.get();
             generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph));
         } else {
-            for (Vehicle vehicle : state.getAllVehicles()) {
+            for (Vehicle vehicle : vehicles) {
                 generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph));
             }
         }
@@ -273,6 +278,32 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             map.put(location, (int) sum);
         });
         return map;
+    }
+
+    private static List<String> optimalActions = List.of("pick-up",
+            "drive",
+            "drop",
+            "pick-up",
+            "drive",
+            "drive",
+            "drive",
+            "pick-up",
+            "drive",
+            "drop",
+            "drive",
+            "drop",
+            "drive",
+            "pick-up",
+            "drive",
+            "drive",
+            "drive",
+            "drive",
+            "drop");
+
+    private static void verifyActionsOfOptimalP02Plan(List<Action> actions) {
+        if (actions.map(Action::getName).zip(optimalActions).filter(t -> !t._1.equals(t._2)).isEmpty()) {
+            System.out.println("Found optimal plan");
+        }
     }
 
     @Override

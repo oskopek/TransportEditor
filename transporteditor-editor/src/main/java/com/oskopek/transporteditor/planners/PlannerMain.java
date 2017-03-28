@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 
 public class PlannerMain {
 
+//    private static final Planner planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
+//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}  --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
     private static final Planner planner = new SequentialForwardBFSPlanner();
 
     public static void main(String[] args) throws IOException {
