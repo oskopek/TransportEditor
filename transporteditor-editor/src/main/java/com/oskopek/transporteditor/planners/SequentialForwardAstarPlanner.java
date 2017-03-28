@@ -12,12 +12,7 @@ import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.ImmutablePlanState;
 import javaslang.Tuple;
 import javaslang.Tuple2;
-import javaslang.collection.*;
 import javaslang.collection.List;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
-import javaslang.control.Option;
-import javaslang.control.Try;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.Graphs;
@@ -25,17 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.stream.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class SequentialForwardBFSPlanner extends AbstractPlanner {
+public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public SequentialForwardBFSPlanner() {
+    public SequentialForwardAstarPlanner() {
         // intentionally empty
     }
 
@@ -49,55 +41,63 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName()).addAttribute("weight", roadEdge.getRoad().getLength().getCost()));
         computeAPSP(originalAPSPGraph);
 
-        Deque<ImmutablePlanState> states = new ArrayDeque<>();
-        states.add(new ImmutablePlanState(domain, problem, List.empty()));
-
+        Set<ImmutablePlanState> closedSet = new HashSet<>();
+        PriorityQueue<ImmutablePlanState> openSet = new PriorityQueue<>(Comparator.comparing(s -> calculateHeuristic(s, originalAPSPGraph)));
+        ImmutablePlanState start = new ImmutablePlanState(domain, problem, List.empty());
+        openSet.add(start);
         logger.debug("Starting planning...");
 
-        long counter = 0;
-        List<Action> actions = List.empty();
-        while (!states.isEmpty()) {
-            if (shouldCancel()) {
-                logger.debug("Returning current hypothesis plan after cancellation.");
-                return Optional.of(new SequentialPlan(actions.toJavaList()));
-            }
-            ImmutablePlanState state = states.removeFirst();
-            if (state.getActions().size() > actions.size()) {
-                logger.debug("Enlarged plan: {} actions", state.getActions().size());
-                logger.debug("Explored {} states, left: {}", counter, states.size());
-            }
-            actions = state.getActions();
-//            verifyActionsOfOptimalP02Plan(actions);
+        Map<ImmutablePlanState, Integer> gScore = new HashMap<>();
+        Function<ImmutablePlanState, Integer> gScoreGetter = immutablePlanState ->
+                gScore.getOrDefault(immutablePlanState, Integer.MAX_VALUE);
+        gScore.put(start, 0);
 
-            if (state.isGoalState()) {
-                logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter, states.size());
-                return Optional.of(new SequentialPlan(actions.toJavaList()));
+        Map<ImmutablePlanState, Integer> fScore = new HashMap<>();
+        Function<ImmutablePlanState, Integer> fScoreGetter = immutablePlanState ->
+                fScore.getOrDefault(immutablePlanState, Integer.MAX_VALUE);
+        fScore.put(start, calculateHeuristic(start, originalAPSPGraph));
+
+        while (!openSet.isEmpty()) {
+            ImmutablePlanState current = openSet.poll();
+            if (current.isGoalState()) {
+                logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", closedSet.size(),
+                        openSet.size());
+                return Optional.of(new SequentialPlan(current.getActions().toJavaList()));
             }
 
-            java.util.List<Action> generatedActions = generateActions(state, actions, originalAPSPGraph);
+            closedSet.add(current);
 
+            java.util.List<Action> generatedActions = generateActions(current, current.getActions(), originalAPSPGraph);
             java.util.List<ImmutablePlanState> generatedStates = new ArrayList<>(generatedActions.size());
-            int minTotalTime = Integer.MAX_VALUE;
             for (Action generatedAction : generatedActions) {
-                Optional<ImmutablePlanState> maybeNewState = state.apply(generatedAction);
-                if (maybeNewState.isPresent()) {
-                    ImmutablePlanState newState = maybeNewState.get();
-                    int totalTime = newState.getTotalTime();
-                    if (totalTime < minTotalTime) {
-                        minTotalTime = totalTime;
+                // Ignore the neighbor state which is already evaluated or invalid
+                Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction).filter(state -> !closedSet.contains(state));
+                if (maybeNeighbor.isPresent()) {
+                    ImmutablePlanState neighbor = maybeNeighbor.get();
+                    // The distance from start to a neighbor
+                    int neighborHeuristic = calculateHeuristic(neighbor, originalAPSPGraph);
+                    int tentativeGScore = gScoreGetter.apply(current) + generatedAction.getDuration().getCost();
+
+                    if (!openSet.contains(neighbor)) {
+                        openSet.add(neighbor);
+                    } else if (tentativeGScore >= gScoreGetter.apply(neighbor)) {
+                        continue; // not a better path, continuing
                     }
-                    generatedStates.add(newState);
+
+                    // This path is the best until now. Record it!
+                    // cameFrom[neighbor] := current skipping this, as we already added the actions implicitly
+                    gScore.put(neighbor, tentativeGScore);
+                    fScore.put(neighbor, tentativeGScore + neighborHeuristic);
                 }
             }
-            generatedStates.stream().sorted(Comparator.comparing(ImmutablePlanState::getTotalTime)).forEach(states::addLast);
 
-            counter++;
-            if (counter % 100_000 == 0) {
-                logger.debug("Explored {} states, left: {}", counter, states.size());
-            }
         }
 
         return Optional.empty();
+    }
+
+    private static Integer calculateHeuristic(ImmutablePlanState state, RoadGraph apspGraph) {
+        return calculateSumOfDistancesToPackageTargets(getUnfinishedPackage(state), apspGraph);
     }
 
     private static java.util.Set<Tuple2<String, String>> didDropThisJustNow(List<Action> plannedActions) {
@@ -136,9 +136,13 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         return false;
     }
 
+    private static java.util.List<Package> getUnfinishedPackage(ImmutablePlanState state) {
+        return state.getAllPackages().stream().filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
+    }
+
     private static java.util.List<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions, RoadGraph originalAPSPGraph) {
         java.util.List<Action> generated = new ArrayList<>();
-        java.util.List<Package> packagesUnfinished = state.getAllPackages().stream().filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
+        java.util.List<Package> packagesUnfinished = getUnfinishedPackage(state);
 //        java.util.List<Vehicle> vehicles = Collections.singletonList(state.getVehicle("truck-2"));
         java.util.List<Vehicle> vehicles = new ArrayList<>(state.getAllVehicles());
 
@@ -264,19 +268,19 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             vehicleActions.add(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
         }
         if (!vehicle.getPackageList().isEmpty()) {
-            Map<Location, Integer> sumOfDistancesToPackageTargets = calculateSumOfDistancesToPackageTargets(vehicle,
-                    originalAPSPGraph);
+            Map<Location, Integer> sumOfDistancesToPackageTargets = calculateSumOfDistancesToPackageTargetsMap(
+                    vehicle.getPackageList(), originalAPSPGraph);
             vehicleActions.sort(Comparator.comparing(d -> sumOfDistancesToPackageTargets.get(d.getWhat())));
         }
         return vehicleActions;
     }
 
-    private static Map<Location, Integer> calculateSumOfDistancesToPackageTargets(Vehicle vehicle, RoadGraph graph) {
+    private static Map<Location, Integer> calculateSumOfDistancesToPackageTargetsMap(java.util.List<Package> packageList, RoadGraph graph) {
         Map<Location, Integer> map = new HashMap<>(graph.getNodeCount());
         graph.getAllLocations().forEach(location -> {
             double sum = 0;
             APSP.APSPInfo info = graph.getNode(location.getName()).getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
-            for (Package pkg : vehicle.getPackageList()) {
+            for (Package pkg : packageList) {
                 Location target = pkg.getTarget();
                 double distance = 0d;
                 if (!target.getName().equals(location.getName())) { // fix weird behavior of APSP in GraphStream
@@ -287,6 +291,22 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             map.put(location, (int) sum);
         });
         return map;
+    }
+
+    private static Integer calculateSumOfDistancesToPackageTargets(java.util.List<Package> packageList, RoadGraph graph) {
+        int sum = 0;
+        for (Location location : graph.getAllLocations().collect(Collectors.toList())) {
+            APSP.APSPInfo info = graph.getNode(location.getName()).getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+            for (Package pkg : packageList) {
+                Location target = pkg.getTarget();
+                double distance = 0d;
+                if (!target.getName().equals(location.getName())) { // fix weird behavior of APSP in GraphStream
+                    distance = info.getLengthTo(target.getName());
+                }
+                sum += (int) distance;
+            }
+        }
+        return sum;
     }
 
     private static List<String> optimalActions = List.of("pick-up",
@@ -317,12 +337,12 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
     @Override
     public String getName() {
-        return SequentialForwardBFSPlanner.class.getName();
+        return SequentialForwardAstarPlanner.class.getName();
     }
 
     @Override
-    public SequentialForwardBFSPlanner copy() {
-        return new SequentialForwardBFSPlanner();
+    public SequentialForwardAstarPlanner copy() {
+        return new SequentialForwardAstarPlanner();
     }
 
     @Override
@@ -332,6 +352,6 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SequentialForwardBFSPlanner;
+        return obj instanceof SequentialForwardAstarPlanner;
     }
 }

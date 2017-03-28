@@ -24,6 +24,7 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
     private final transient Logger logger = LoggerFactory.getLogger(ImmutablePlanState.class);
     private final Problem problem;
     private final List<Action> actions;
+    private final int totalTime;
 
     /**
      * Default constructor.
@@ -35,6 +36,25 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
         this.domain = domain;
         this.problem = problem;
         this.actions = actions;
+        totalTime = actions.map(a -> a.getDuration().getCost()).sum().intValue(); // TODO: non sequential domains?
+    }
+
+    public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem, Action addedAction) {
+        this.domain = oldState.getDomain();
+        this.problem = newProblem;
+        this.actions = oldState.getActions().append(addedAction);
+        totalTime = oldState.getTotalTime() + addedAction.getDuration().getCost(); // TODO: non sequential domains?
+    }
+
+    public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem) {
+        this.domain = oldState.getDomain();
+        this.problem = newProblem;
+        this.actions = oldState.getActions();
+        totalTime = oldState.getTotalTime();
+    }
+
+    public int getTotalTime() {
+        return totalTime;
     }
 
     /**
@@ -70,7 +90,7 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
             return Optional.empty();
         }
         logger.trace("Applying preconditions of action {}.", action.getName());
-        return Optional.of(new ImmutablePlanState(domain, action.applyPreconditions(domain, problem), actions));
+        return Optional.of(new ImmutablePlanState(this, action.applyPreconditions(domain, problem)));
     }
 
     private Optional<ImmutablePlanState> applyEffects(Action action) {
@@ -83,7 +103,7 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
                             + newProblem + ").");
             return Optional.empty();
         }
-        return Optional.of(new ImmutablePlanState(domain, newProblem, actions.append(action)));
+        return Optional.of(new ImmutablePlanState(this, newProblem, action));
     }
 
     @Override
