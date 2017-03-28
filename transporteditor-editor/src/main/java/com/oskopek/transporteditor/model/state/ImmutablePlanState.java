@@ -220,12 +220,12 @@ public class ImmutablePlanState implements Problem { // TODO: consolidate with t
             return false;
         }
         ImmutablePlanState that = (ImmutablePlanState) o;
-        return new EqualsBuilder().append(domain, that.domain).append(problem, that.problem).isEquals();
+        return new EqualsBuilder().append(problem, that.problem).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(domain).append(problem)
+        return new HashCodeBuilder(17, 37).append(problem)
                 .toHashCode();
     }
 }

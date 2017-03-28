@@ -41,28 +41,45 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName()).addAttribute("weight", roadEdge.getRoad().getLength().getCost()));
         computeAPSP(originalAPSPGraph);
 
-        Set<ImmutablePlanState> closedSet = new HashSet<>();
-        PriorityQueue<ImmutablePlanState> openSet = new PriorityQueue<>(Comparator.comparing(s -> calculateHeuristic(s, originalAPSPGraph)));
+        Map<ImmutablePlanState, Integer> hScore = new HashMap<>();
+        Function<ImmutablePlanState, Integer> hScoreGetter = immutablePlanState -> {
+            Integer hScoreVal = hScore.get(immutablePlanState);
+            if (hScoreVal == null) {
+                hScoreVal = calculateHeuristic(immutablePlanState, originalAPSPGraph);
+                hScore.put(immutablePlanState, hScoreVal);
+            }
+            return hScoreVal;
+        };
+
         ImmutablePlanState start = new ImmutablePlanState(domain, problem, List.empty());
+
+        Map<ImmutablePlanState, Integer> fScore = new HashMap<>();
+        Function<ImmutablePlanState, Integer> fScoreGetter = immutablePlanState ->
+                fScore.getOrDefault(immutablePlanState, Integer.MAX_VALUE);
+        fScore.put(start, hScoreGetter.apply(start));
+
+        Set<ImmutablePlanState> closedSet = new HashSet<>();
+        PriorityQueue<ImmutablePlanState> openSet = new PriorityQueue<>(Comparator.comparing(s -> fScoreGetter.apply(s)));
         openSet.add(start);
-        logger.debug("Starting planning...");
 
         Map<ImmutablePlanState, Integer> gScore = new HashMap<>();
         Function<ImmutablePlanState, Integer> gScoreGetter = immutablePlanState ->
                 gScore.getOrDefault(immutablePlanState, Integer.MAX_VALUE);
         gScore.put(start, 0);
+        logger.debug("Starting planning...");
 
-        Map<ImmutablePlanState, Integer> fScore = new HashMap<>();
-        Function<ImmutablePlanState, Integer> fScoreGetter = immutablePlanState ->
-                fScore.getOrDefault(immutablePlanState, Integer.MAX_VALUE);
-        fScore.put(start, calculateHeuristic(start, originalAPSPGraph));
-
+        int counter = 0;
         while (!openSet.isEmpty()) {
             ImmutablePlanState current = openSet.poll();
             if (current.isGoalState()) {
                 logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", closedSet.size(),
                         openSet.size());
                 return Optional.of(new SequentialPlan(current.getActions().toJavaList()));
+            }
+
+            if (shouldCancel()) {
+                logger.debug("Cancelling, returning empty plan.");
+                return Optional.empty();
             }
 
             closedSet.add(current);
@@ -74,23 +91,32 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
                 Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction).filter(state -> !closedSet.contains(state));
                 if (maybeNeighbor.isPresent()) {
                     ImmutablePlanState neighbor = maybeNeighbor.get();
+                    if (closedSet.contains(neighbor)) {
+                        throw new IllegalStateException("Should not occur.");
+                    }
+
                     // The distance from start to a neighbor
-                    int neighborHeuristic = calculateHeuristic(neighbor, originalAPSPGraph);
                     int tentativeGScore = gScoreGetter.apply(current) + generatedAction.getDuration().getCost();
 
                     if (!openSet.contains(neighbor)) {
                         openSet.add(neighbor);
                     } else if (tentativeGScore >= gScoreGetter.apply(neighbor)) {
-                        continue; // not a better path, continuing
+//                        verifyActionsOfOptimalP02Plan(neighbor.getActions()); // TODO: remove me
+                        System.out.println("Try not to generate these plans");
+                        continue;
                     }
 
-                    // This path is the best until now. Record it!
-                    // cameFrom[neighbor] := current skipping this, as we already added the actions implicitly
+                    // this path is the best until now
                     gScore.put(neighbor, tentativeGScore);
-                    fScore.put(neighbor, tentativeGScore + neighborHeuristic);
+                    fScore.put(neighbor, gScoreGetter.apply(neighbor) + hScoreGetter.apply(neighbor));
                 }
             }
 
+            counter++;
+            if (counter % 1_000 == 0) {
+                logger.debug("Explored {} ({}) states, left: {}", counter, closedSet.size(), openSet.size());
+                logger.debug("Current plan depth: {}", current.getActions().size());
+            }
         }
 
         return Optional.empty();
@@ -145,7 +171,6 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         java.util.List<Package> packagesUnfinished = getUnfinishedPackage(state);
 //        java.util.List<Vehicle> vehicles = Collections.singletonList(state.getVehicle("truck-2"));
         java.util.List<Vehicle> vehicles = new ArrayList<>(state.getAllVehicles());
-
 
         Domain domain = state.getDomain();
         RoadGraph graph = state.getRoadGraph();
@@ -248,23 +273,65 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         Optional<Vehicle> lastVehicleAndNotDrop = lastAction
                 .filter(a -> !(a instanceof Drop)).map(a -> (Vehicle) a.getWho())
                 .map(v -> state.getVehicle(v.getName()));
+
         if (lastVehicleAndNotDrop.isPresent()) { // continue driving if driving
             Vehicle vehicle = lastVehicleAndNotDrop.get();
-            generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph));
+            generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph, plannedActions));
         } else {
             for (Vehicle vehicle : vehicles) {
-                generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph));
+                generated.addAll(generateDrivesForVehicle(vehicle, graph, domain, originalAPSPGraph, plannedActions));
             }
         }
 
         return generated;
     }
 
-    private static java.util.List<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain, RoadGraph originalAPSPGraph) {
+    private static boolean doesShorterPathExist(Vehicle vehicle, Location target, List<Action> plannedActions, RoadGraph apspGraph) {
+        if (plannedActions.isEmpty()) {
+            return false;
+        } // TODO: memoize this
+
+        Drive lastDrive = null;
+        int lengthOfPath = 0;
+        Location sourceOfPreviousDrives = null;
+        Location targetOfPreviousDrives = null;
+
+        for (int i = plannedActions.size() - 1; i >= 0; i--) {
+            Action plannedAction = plannedActions.get(i);
+            if (plannedAction instanceof Drive) {
+                if (lastDrive == null) { // last drive
+                    targetOfPreviousDrives = (Location) plannedAction.getWhat();
+                }
+                lastDrive = (Drive) plannedAction;
+                lengthOfPath += lastDrive.getDuration().getCost();
+                continue;
+            }
+            break;
+        }
+
+        if (lastDrive == null) {
+            return false; // no drives
+        } else {
+            sourceOfPreviousDrives = lastDrive.getWhere();
+        }
+
+        // TODO: figure out how target comes into play
+
+        APSP.APSPInfo info = apspGraph.getNode(sourceOfPreviousDrives.getName()).getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+        if (info.getLengthTo(targetOfPreviousDrives.getName()) < lengthOfPath) {
+            return true; // shorter path exists
+        }
+        return false;
+    }
+
+    private static java.util.List<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain, RoadGraph originalAPSPGraph, List<Action> plannedActions) {
         java.util.List<Drive> vehicleActions = new ArrayList<>();
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {
             Location target = graph.getLocation(edge.getTargetNode().getId());
+            if (doesShorterPathExist(vehicle, target, plannedActions, originalAPSPGraph)) {
+                continue;
+            }
             vehicleActions.add(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
         }
         if (!vehicle.getPackageList().isEmpty()) {
@@ -331,7 +398,9 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
     private static void verifyActionsOfOptimalP02Plan(List<Action> actions) {
         if (actions.map(Action::getName).zip(optimalActions).filter(t -> !t._1.equals(t._2)).isEmpty()) {
-            System.out.println("Found optimal plan");
+            if (actions.size() > 1 && actions.get(0).getWho().getName().equals("truck-2")) {
+                System.out.println("Found optimal plan");
+            }
         }
     }
 
