@@ -354,6 +354,7 @@
                                         <module name="JavadocPackage">
                                             <property name="severity" value="${checkstyle.javadoc.severity}"
                                                       default="error"/>
+                                            <property name="allowLegacy" value="true"/>
                                         </module>
                                         <!-- Miscellaneous other checks.                   -->
                                         <!-- See http://checkstyle.sf.net/config_misc.html -->

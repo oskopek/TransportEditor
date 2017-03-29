@@ -1,6 +1,7 @@
 = Notice
 
-All libraries imported via Maven are listed automatically in `transporteditor-editor/NOTICE.txt` and `transporteditor-planners/NOTICE.txt`.
+All libraries imported via Maven are listed automatically in the
+respective `NOTICE.txt` files in all modules.
 
 == Pddl Antlr grammar
 
@@ -21,4 +22,17 @@ The implementation is an updated version of https://github.com/kevinjdolan/inter
 Original author:
 Kevin J Dolan
 
+License: MIT
+
 Files in: `transporteditor-editor/src/main/java/com/github/kevinjdolan/intervaltree/`
+
+== Heaps
+
+The implementations is a forked and updated version of the Heaps 2.0 release from: https://code.google.com/archive/p/java-heaps/
+
+Original author:
+Fran Lattanzio
+
+License: MIT
+
+Files in: `transporteditor-editor/src/main/java/org/teneighty/heap/`

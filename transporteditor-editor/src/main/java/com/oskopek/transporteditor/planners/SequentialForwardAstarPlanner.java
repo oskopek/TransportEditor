@@ -19,7 +19,9 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.Graphs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.util.parsing.combinator.testing.Str;
+import org.teneighty.heap.AbstractHeap;
+import org.teneighty.heap.BinaryHeap;
+import org.teneighty.heap.Heap;
 
 import java.util.*;
 import java.util.function.Function;
@@ -33,10 +35,10 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     private Map<ImmutablePlanState, Integer> fScore;
     private Map<ImmutablePlanState, Integer> gScore;
     private Map<ImmutablePlanState, Integer> hScore;
-    private Set<ImmutablePlanState> openSetContains;
+    private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
     private Set<ImmutablePlanState> closedSet;
     private RoadGraph originalAPSPGraph;
-    private PriorityQueue<ImmutablePlanState> openSet;
+    private AbstractHeap<Integer, ImmutablePlanState> openSet;
     private Plan bestPlan;
     private int bestPlanScore;
 
@@ -69,8 +71,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         hScore = new HashMap<>();
         fScore = new HashMap<>();
         closedSet = new HashSet<>();
-        openSet = new PriorityQueue<>(Comparator.comparing(this::getFScore));
-        openSetContains = new HashSet<>();
+        openSet = new BinaryHeap<>();
+        entryMap = new HashMap<>();
         gScore = new HashMap<>();
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
@@ -83,9 +85,9 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         computeAPSP(originalAPSPGraph);
 
         ImmutablePlanState start = new ImmutablePlanState(domain, problem, List.empty());
-        fScore.put(start, getHScore(start));
-        openSet.offer(start);
-        openSetContains.add(start);
+        int startHScore = getHScore(start);
+        fScore.put(start, startHScore);
+        entryMap.put(start, openSet.insert(startHScore, start));
         gScore.put(start, 0);
     }
 
@@ -95,14 +97,14 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         initialize(domain, problem);
         logger.debug("Starting planning...");
 
-        while (!openSetContains.isEmpty()) {
-            ImmutablePlanState current = openSet.poll();
-            openSetContains.remove(current);
+        while (!entryMap.isEmpty()) {
+            ImmutablePlanState current = openSet.extractMinimum().getValue();
+            entryMap.remove(current);
 //            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current.getActions().toJavaList())));
 //            logger.debug("F: {}, G: {}, H: {}", getFScore(current), getGScore(current), getHScore(current));
             if (current.isGoalState()) {
                 logger.debug("Found goal state! Explored {} states. Left out {} states.", closedSet.size(),
-                        openSet.size());
+                        openSet.getKeys().size());
                 if (bestPlanScore > current.getTotalTime()) {
                     logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
                     bestPlanScore = current.getTotalTime();
@@ -128,13 +130,13 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
                     // The distance from start to a neighbor
                     int tentativeGScore = getGScore(current) + generatedAction.getDuration().getCost();
-
+                    int neighborFScore = tentativeGScore + getHScore(neighbor);
                     int neighborGScore = getGScore(neighbor);
-                    boolean added = false;
-                    if (!openSetContains.contains(neighbor)) {
-                        openSet.offer(neighbor);
-                        openSetContains.add(neighbor);
-                        added = true;
+
+                    Heap.Entry<Integer, ImmutablePlanState> neighborEntry = entryMap.get(neighbor);
+                    if (neighborEntry == null) {
+                        neighborEntry = openSet.insert(neighborFScore, neighbor);
+                        entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborGScore) {
 //                        if (tentativeGScore > neighborGScore) {
 //                            logger.debug("Try not to generate these plans"); // TODO: P22 fails.
@@ -143,16 +145,13 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
                     }
 
                     // this path is the best until now
-                    if (!added) {
-                        openSet.offer(neighbor); // overwrites the correct state with shorter actions
-                        // openSetContains doesn't care
-                    }
+                    openSet.decreaseKey(neighborEntry, neighborFScore); // TODO overwrites the correct state with shorter actions
                     gScore.put(neighbor, tentativeGScore);
-                    fScore.put(neighbor, tentativeGScore + getHScore(neighbor));
+                    fScore.put(neighbor, neighborFScore);
                 }
             });
-            if (closedSet.size() % 1_000 == 0) {
-                logger.debug("Explored {} states, left: {}", closedSet.size(), openSet.size());
+            if (closedSet.size() % 100_000 == 0) {
+                logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(), entryMap.size());
                 logger.debug("Current plan depth: {}", current.getActions().size());
             }
         }
