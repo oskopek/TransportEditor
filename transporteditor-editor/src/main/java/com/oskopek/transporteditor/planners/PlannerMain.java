@@ -9,6 +9,8 @@ import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
 import javaslang.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,20 +22,22 @@ public class PlannerMain {
 
 //    private static final Planner planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}  --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
-    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}   --search astar(ff())");
+//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
 //    private static final Planner planner = new SequentialForwardBFSPlanner();
-//    private static final Planner planner = new SequentialForwardAstarPlanner();
+    private static final Planner planner = new SequentialForwardAstarPlanner();
+
+    private static final Logger logger = LoggerFactory.getLogger(PlannerMain.class);
 
     public static void main(String[] args) throws IOException {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Try.run(() -> Thread.sleep(200));
-            System.out.println("Shutting down ...");
+            logger.debug("Shutting down ...");
 
             if (planner.isPlanning().getValue()) {
                 planner.cancel();
                 Try.run(() -> Thread.sleep(5000));
             }
-            System.out.println("Shut down.");
+            logger.debug("Shut down.");
         }));
 
 
@@ -52,10 +56,9 @@ public class PlannerMain {
                 writer.write(new SequentialPlanIO(domain, problem).serialize(plan));
             }
         } else {
-            System.out.println("Planner returned null plan.");
+            logger.debug("Planner returned null plan.");
         }
-        System.out.println("Written results, exiting.");
-        System.exit(0);
+        logger.debug("Written results, exiting.");
     }
 
 }
