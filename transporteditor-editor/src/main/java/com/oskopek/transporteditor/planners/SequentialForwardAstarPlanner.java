@@ -33,6 +33,7 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     private Map<ImmutablePlanState, Integer> fScore;
     private Map<ImmutablePlanState, Integer> gScore;
     private Map<ImmutablePlanState, Integer> hScore;
+    private Set<ImmutablePlanState> openSetContains;
     private Set<ImmutablePlanState> closedSet;
     private RoadGraph originalAPSPGraph;
     private PriorityQueue<ImmutablePlanState> openSet;
@@ -69,6 +70,7 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         fScore = new HashMap<>();
         closedSet = new HashSet<>();
         openSet = new PriorityQueue<>(Comparator.comparing(this::getFScore));
+        openSetContains = new HashSet<>();
         gScore = new HashMap<>();
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
@@ -82,7 +84,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
         ImmutablePlanState start = new ImmutablePlanState(domain, problem, List.empty());
         fScore.put(start, getHScore(start));
-        openSet.add(start);
+        openSet.offer(start);
+        openSetContains.add(start);
         gScore.put(start, 0);
     }
 
@@ -92,8 +95,9 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         initialize(domain, problem);
         logger.debug("Starting planning...");
 
-        while (!openSet.isEmpty()) {
+        while (!openSetContains.isEmpty()) {
             ImmutablePlanState current = openSet.poll();
+            openSetContains.remove(current);
 //            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current.getActions().toJavaList())));
 //            logger.debug("F: {}, G: {}, H: {}", getFScore(current), getGScore(current), getHScore(current));
             if (current.isGoalState()) {
@@ -127,21 +131,21 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
                     int neighborGScore = getGScore(neighbor);
                     boolean added = false;
-                    if (!openSet.contains(neighbor)) {
-                        openSet.add(neighbor);
+                    if (!openSetContains.contains(neighbor)) {
+                        openSet.offer(neighbor);
+                        openSetContains.add(neighbor);
                         added = true;
                     } else if (tentativeGScore >= neighborGScore) {
 //                        if (tentativeGScore > neighborGScore) {
-//                            logger.debug("Try not to generate these plans"); // TODO: P02, P22 fails.
+//                            logger.debug("Try not to generate these plans"); // TODO: P22 fails.
 //                        }
                         return;
                     }
 
                     // this path is the best until now
-                    // TODO: hack:
                     if (!added) {
-                        openSet.remove(neighbor); // removes the state that looks the same but has different actions
-                        openSet.add(neighbor); // adds the correct state with shorter actions
+                        openSet.offer(neighbor); // overwrites the correct state with shorter actions
+                        // openSetContains doesn't care
                     }
                     gScore.put(neighbor, tentativeGScore);
                     fScore.put(neighbor, tentativeGScore + getHScore(neighbor));
