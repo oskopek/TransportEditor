@@ -98,9 +98,7 @@ import java.util.NoSuchElementException;
  * <p>
  * This class is not synchronized (by choice). You must ensure sequential access
  * externally, or you may damage instances of this class. Damage may be subtle
- * and difficult to detect, or it may be pronounced. You can use the
- * {@link Heaps#synchronizedHeap(Heap)} to obtain synchronized instances of this
- * class.
+ * and difficult to detect, or it may be pronounced.
  * <p>
  * Also, unlike other heap implementations, this class implements the
  * {@link java.lang.Cloneable} interface.

@@ -13,7 +13,6 @@ import com.oskopek.transporteditor.model.state.ImmutablePlanState;
 import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.collection.*;
-import javaslang.collection.List;
 import javaslang.collection.Set;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
@@ -28,6 +27,7 @@ import java.util.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.*;
 
@@ -36,7 +36,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public SequentialForwardBFSPlanner() {
-        // intentionally empty
+        setName(SequentialForwardAstarPlanner.class.getSimpleName());
     }
 
     private static void computeAPSP(RoadGraph graph) {
@@ -50,16 +50,16 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         computeAPSP(originalAPSPGraph);
 
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
-        states.add(new ImmutablePlanState(domain, problem, List.empty()));
+        states.add(new ImmutablePlanState(domain, problem, Collections.emptyList()));
 
         logger.debug("Starting planning...");
 
         long counter = 0;
-        List<Action> actions = List.empty();
+        List<Action> actions = Collections.emptyList();
         while (!states.isEmpty()) {
             if (shouldCancel()) {
                 logger.debug("Returning current hypothesis plan after cancellation.");
-                return Optional.of(new SequentialPlan(actions.toJavaList()));
+                return Optional.of(new SequentialPlan(actions));
             }
             ImmutablePlanState state = states.removeFirst();
             if (state.getActions().size() > actions.size()) {
@@ -71,7 +71,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
             if (state.isGoalState()) {
                 logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter, states.size());
-                return Optional.of(new SequentialPlan(actions.toJavaList()));
+                return Optional.of(new SequentialPlan(actions));
             }
 
             java.util.List<Action> generatedActions = generateActions(state, actions, originalAPSPGraph);
@@ -128,13 +128,21 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         Map<Location, List<Vehicle>> vehicleMap = new HashMap<>();
         for (Vehicle vehicle : vehicles) {
             Location current = vehicle.getLocation();
-            vehicleMap.put(current, vehicleMap.getOrDefault(current, List.empty()).append(vehicle));
+            vehicleMap.computeIfAbsent(current, c -> {
+                List<Vehicle> list = new ArrayList<>();
+                list.add(vehicle);
+                return list;
+            });
         }
         Map<Location, List<Package>> packageMap = new HashMap<>();
         for (Package pkg : packagesUnfinished) {
             Location current = pkg.getLocation();
             if (current != null) {
-                packageMap.put(current, packageMap.getOrDefault(current, List.empty()).append(pkg));
+                packageMap.computeIfAbsent(current, c -> {
+                    List<Package> list = new ArrayList<>();
+                    list.add(pkg);
+                    return list;
+                });
             }
         }
 
@@ -167,9 +175,6 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                 return Collections.emptyList();
             }
 
-            if (!location.equals(plannedActions.last().getWhat())) {
-                throw new IllegalStateException("Planner assumptions broken.");
-            }
             List<Package> packages = packageMap.get(location);
             if (packages != null) {
                 for (Package pkg : packages) {
@@ -258,43 +263,12 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             for (Package pkg : vehicle.getPackageList()) {
                 Location target = pkg.getTarget();
                 double distance = 0d;
-                distance = SequentialForwardAstarPlanner.getLengthToCorrect(info, target);
+                distance = SequentialForwardAstarPlanner.getLengthToCorrect(info, target.getName());
                 sum += distance;
             }
             map.put(location, (int) sum);
         });
         return map;
-    }
-
-    private static List<String> optimalActions = List.of("pick-up",
-            "drive",
-            "drop",
-            "pick-up",
-            "drive",
-            "drive",
-            "drive",
-            "pick-up",
-            "drive",
-            "drop",
-            "drive",
-            "drop",
-            "drive",
-            "pick-up",
-            "drive",
-            "drive",
-            "drive",
-            "drive",
-            "drop");
-
-    private static void verifyActionsOfOptimalP02Plan(List<Action> actions) {
-        if (actions.map(Action::getName).zip(optimalActions).filter(t -> !t._1.equals(t._2)).isEmpty()) {
-            System.out.println("Found optimal plan");
-        }
-    }
-
-    @Override
-    public String getName() {
-        return SequentialForwardBFSPlanner.class.getName();
     }
 
     @Override

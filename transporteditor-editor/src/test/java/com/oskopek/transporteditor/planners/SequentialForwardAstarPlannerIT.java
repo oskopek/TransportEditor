@@ -110,10 +110,11 @@ public class SequentialForwardAstarPlannerIT {
         Vehicle truck2 = p02Problem.getVehicle("truck-2");
         RoadGraph g = p02Problem.getRoadGraph();
 
-        javaslang.collection.List<Action> planPart = javaslang.collection.List.of(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
-        planPart = planPart.append(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
-        planPart = planPart.append(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
-        assertThat(SequentialForwardAstarPlanner.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getOriginalAPSPGraph())).isTrue();
+        List<Action> planPart = new ArrayList<>();
+        planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
+        planPart.add(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
+        planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
+        assertThat(SequentialForwardAstarPlanner.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getDistanceMatrix())).isTrue();
     }
 
     @Test
