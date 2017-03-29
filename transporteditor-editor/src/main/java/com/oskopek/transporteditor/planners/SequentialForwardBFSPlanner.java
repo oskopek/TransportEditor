@@ -115,27 +115,6 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         return drops;
     }
 
-    private static boolean hasCycle(List<Action> plannedActions) {
-        java.util.Set<String> drives = new HashSet<>();
-        int lastActionIndex = plannedActions.size() - 1;
-        Action lastAction = plannedActions.get(lastActionIndex);
-        if (lastAction instanceof Drive) { // add last target
-            drives.add(lastAction.getWhat().getName());
-        }
-        for (int index = lastActionIndex; index >= 0; index--) {
-            Action plannedAction = plannedActions.get(index);
-            if (plannedAction instanceof Drive) {
-                if (!drives.add(plannedAction.getWhere().getName())) {
-                    // CYCLE!
-                    return true;
-                }
-            } else {
-                break;
-            }
-        }
-        return false;
-    }
-
     private static java.util.List<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions, RoadGraph originalAPSPGraph) {
         java.util.List<Action> generated = new ArrayList<>();
         java.util.List<Package> packagesUnfinished = state.getAllPackages().stream().filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
@@ -184,7 +163,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             Vehicle vehicle = lastVehicleAndLastDrive.get();
             Location location = vehicle.getLocation();
 
-            if (hasCycle(plannedActions)) {
+            if (SequentialForwardAstarPlanner.hasCycle(plannedActions)) {
                 return Collections.emptyList();
             }
 
@@ -279,9 +258,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             for (Package pkg : vehicle.getPackageList()) {
                 Location target = pkg.getTarget();
                 double distance = 0d;
-                if (!target.getName().equals(location.getName())) { // fix weird behavior of APSP in GraphStream
-                    distance = info.getLengthTo(target.getName());
-                }
+                distance = SequentialForwardAstarPlanner.getLengthToCorrect(info, target);
                 sum += distance;
             }
             map.put(location, (int) sum);
