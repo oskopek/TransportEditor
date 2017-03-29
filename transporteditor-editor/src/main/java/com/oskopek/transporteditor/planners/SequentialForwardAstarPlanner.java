@@ -96,7 +96,7 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
                         openSet.add(neighbor);
                     } else if (tentativeGScore >= gScoreGetter.apply(neighbor)) {
 //                        verifyActionsOfOptimalP02Plan(neighbor.getActions()); // TODO: remove me
-                        System.out.println("Try not to generate these plans"); // TODO : successive drops?
+                        System.out.println("Try not to generate these plans"); // TODO : successive drops? // TODO: P22 fails.
                         continue;
                     }
 
