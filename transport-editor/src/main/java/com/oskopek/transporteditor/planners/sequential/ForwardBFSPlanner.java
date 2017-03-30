@@ -1,12 +1,11 @@
 package com.oskopek.transporteditor.planners.sequential;
 
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.problem.*;
-import com.oskopek.transporteditor.model.state.ImmutablePlanState;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.domain.action.Action;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.plan.SequentialPlan;
+import com.oskopek.transport.model.state.ImmutablePlanState;
 import com.oskopek.transporteditor.planners.AbstractPlanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

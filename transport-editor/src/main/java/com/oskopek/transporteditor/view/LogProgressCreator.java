@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.view;
 
 import com.oskopek.transporteditor.controller.LogProgressController;
-import com.oskopek.transporteditor.view.executables.LogListener;
-import com.oskopek.transporteditor.view.executables.LogStreamable;
+import com.oskopek.transport.tools.executables.LogListener;
+import com.oskopek.transport.tools.executables.LogStreamable;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

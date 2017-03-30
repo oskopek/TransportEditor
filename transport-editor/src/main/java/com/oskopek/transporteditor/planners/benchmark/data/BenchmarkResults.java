@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.persistence.SequentialPlanIO;
-import com.oskopek.transporteditor.persistence.TemporalPlanIO;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.persistence.SequentialPlanIO;
+import com.oskopek.transport.persistence.TemporalPlanIO;
 
 import java.util.Arrays;
 import java.util.List;

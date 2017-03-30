@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.planners.benchmark;
 
-import com.oskopek.transporteditor.persistence.IOUtils;
+import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transporteditor.planners.benchmark.config.BenchmarkConfig;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import javaslang.control.Try;

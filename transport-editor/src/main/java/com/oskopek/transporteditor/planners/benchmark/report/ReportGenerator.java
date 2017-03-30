@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.planners.benchmark.report;
 
-import com.oskopek.transporteditor.persistence.IOUtils;
+import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResultsIO;
 import javaslang.Tuple;

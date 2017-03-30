@@ -1,10 +1,10 @@
 package com.oskopek.transporteditor.planners;
 
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.view.executables.CancellableLogStreamable;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.tools.executables.CancellableLogStreamable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;

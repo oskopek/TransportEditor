@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.persistence.DataReader;
-import com.oskopek.transporteditor.persistence.DataWriter;
+import com.oskopek.transport.persistence.DataReader;
+import com.oskopek.transport.persistence.DataWriter;
 import com.oskopek.transporteditor.view.AlertCreator;
 import com.oskopek.transporteditor.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transporteditor.view.TransportEditorApplication;

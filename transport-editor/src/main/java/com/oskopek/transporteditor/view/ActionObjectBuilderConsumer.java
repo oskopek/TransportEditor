@@ -1,14 +1,13 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.model.problem.*;
-import com.oskopek.transporteditor.model.problem.Package;
-import com.oskopek.transporteditor.model.problem.builder.*;
+import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.builder.*;
 
 import java.util.function.Consumer;
 
 /**
  * Abstract class that serves as a backend for creating popups and edit dialogs for {@link ActionObject}s.
- * Creates an appropriate builder ({@link com.oskopek.transporteditor.model.problem.builder}) in the background and
+ * Creates an appropriate builder ({@link com.oskopek.transport.model.problem.builder}) in the background and
  * later should build and call the update callback when the builder's {@link ActionObjectBuilder#update()} method
  * is called.
  *

@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view.plan;
 
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.view.NumberDoubleStringConverter;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.*;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 /**
  * Filterable {@link TableView} of {@link TemporalPlanAction}s with editable start times, used for visualizing
- * {@link com.oskopek.transporteditor.model.plan.TemporalPlan}s.
+ * {@link com.oskopek.transport.model.plan.TemporalPlan}s.
  */
 public final class TemporalPlanTable {
 

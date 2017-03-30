@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.view;
 
 import com.oskopek.transporteditor.controller.ExecutableParametersController;
-import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
-import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
+import com.oskopek.transport.tools.executables.DefaultExecutableWithParameters;
+import com.oskopek.transport.tools.executables.ExecutableWithParameters;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

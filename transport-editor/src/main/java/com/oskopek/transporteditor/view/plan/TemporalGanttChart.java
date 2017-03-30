@@ -1,9 +1,9 @@
 package com.oskopek.transporteditor.view.plan;
 
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.problem.ActionObject;
-import com.oskopek.transporteditor.model.problem.Location;
-import com.oskopek.transporteditor.persistence.SequentialPlanIO;
+import com.oskopek.transport.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.problem.ActionObject;
+import com.oskopek.transport.model.problem.Location;
+import com.oskopek.transport.persistence.SequentialPlanIO;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;

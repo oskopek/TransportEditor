@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.planners.benchmark;
 
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.problem.Problem;
 import javaslang.Function3;
 
 /**

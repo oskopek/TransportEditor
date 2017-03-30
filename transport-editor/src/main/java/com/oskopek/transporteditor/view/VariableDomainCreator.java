@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.view;
 
 import com.oskopek.transporteditor.controller.VariableDomainController;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transport.model.domain.VariableDomain;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 /**
  * Dialog for creating a {@link VariableDomain}. Creates a DialogPane, shows it and waits.
- * Uses {@link com.oskopek.transporteditor.persistence.VariableDomainBuilder} to back itself.
+ * Uses {@link com.oskopek.transport.persistence.VariableDomainBuilder} to back itself.
  */
 @Singleton
 public class VariableDomainCreator {

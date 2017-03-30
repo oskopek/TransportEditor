@@ -1,12 +1,12 @@
 package com.oskopek.transporteditor.planners.benchmark;
 
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
-import com.oskopek.transporteditor.validation.Validator;
+import com.oskopek.transport.validation.Validator;
 import javaslang.Function2;
 import javaslang.collection.Stream;
 import javaslang.control.Try;

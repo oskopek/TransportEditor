@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.planners.benchmark.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oskopek.transporteditor.persistence.DataIO;
+import com.oskopek.transport.persistence.DataIO;
 import com.oskopek.transporteditor.planners.benchmark.JsonUtils;
 import javaslang.control.Try;
 

@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.model.domain.DomainType;
-import com.oskopek.transporteditor.model.domain.VariableDomain;
-import com.oskopek.transporteditor.persistence.VariableDomainBuilder;
+import com.oskopek.transport.model.domain.DomainType;
+import com.oskopek.transport.model.domain.VariableDomain;
+import com.oskopek.transport.persistence.VariableDomainBuilder;
 import com.oskopek.transporteditor.view.ExecutableParametersCreator;
 import com.oskopek.transporteditor.view.ObservableStringValidator;
 import com.oskopek.transporteditor.view.ValidationProperty;

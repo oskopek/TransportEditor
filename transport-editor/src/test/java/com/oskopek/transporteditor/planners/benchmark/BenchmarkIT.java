@@ -1,13 +1,13 @@
 package com.oskopek.transporteditor.planners.benchmark;
 
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.SequentialDomain;
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.persistence.SequentialPlanIOIT;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.domain.SequentialDomain;
+import com.oskopek.transport.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.persistence.SequentialPlanIOIT;
 import com.oskopek.transporteditor.planners.sequential.FastDownwardExternalPlanner;
 import com.oskopek.transporteditor.planners.sequential.PrologBFSExternalPlanner;
 import com.oskopek.transporteditor.planners.benchmark.config.ScoreFunctionType;
@@ -17,7 +17,7 @@ import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
 import static org.assertj.core.api.Assertions.*;
 
 import com.oskopek.transporteditor.planners.benchmark.data.ProblemInfo;
-import com.oskopek.transporteditor.validation.SequentialPlanValidator;
+import com.oskopek.transport.validation.SequentialPlanValidator;
 import org.assertj.core.api.IterableAssert;
 import org.junit.Before;
 import org.junit.Ignore;

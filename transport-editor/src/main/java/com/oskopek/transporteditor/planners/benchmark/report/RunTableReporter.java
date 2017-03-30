@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.planners.benchmark.report;
 
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkRun;
 
 /**

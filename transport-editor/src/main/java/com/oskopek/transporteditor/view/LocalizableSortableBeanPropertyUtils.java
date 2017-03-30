@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.model.problem.builder.FieldLocalization;
+import com.oskopek.transport.model.problem.builder.FieldLocalization;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javaslang.Tuple;

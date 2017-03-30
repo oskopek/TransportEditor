@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.view.plan;
 
-import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.model.plan.SequentialPlan;
+import com.oskopek.transport.model.domain.action.Action;
+import com.oskopek.transport.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.plan.SequentialPlan;
 import impl.org.controlsfx.table.ColumnFilter;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;

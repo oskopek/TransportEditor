@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.model.problem.*;
-import com.oskopek.transporteditor.model.problem.Package;
+import com.oskopek.transport.model.problem.Package;
 import javafx.beans.*;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;

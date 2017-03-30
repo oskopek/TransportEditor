@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.planners.sequential;
 
-import com.oskopek.transporteditor.model.planner.ExternalPlanner;
-import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;
-import com.oskopek.transporteditor.view.executables.ExecutableWithParameters;
+import com.oskopek.transport.model.planner.ExternalPlanner;
+import com.oskopek.transport.tools.executables.DefaultExecutableWithParameters;
+import com.oskopek.transport.tools.executables.ExecutableWithParameters;
 
 /**
  * Wrapper of the wrapper script ({@code fast-down-plan.sh})

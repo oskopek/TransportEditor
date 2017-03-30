@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.event;
 
 /**
- * Event for announcing that a planning process in a {@link com.oskopek.transporteditor.model.planner.Planner}
+ * Event for announcing that a planning process in a {@link com.oskopek.transport.model.planner.Planner}
  * was completed.
  */
 public final class PlanningFinishedEvent {

@@ -1,16 +1,16 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.persistence.DefaultProblemIO;
-import com.oskopek.transporteditor.persistence.IOUtils;
-import com.oskopek.transporteditor.persistence.VariableDomainIO;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.persistence.DefaultProblemIO;
+import com.oskopek.transport.persistence.IOUtils;
+import com.oskopek.transport.persistence.VariableDomainIO;
 import com.oskopek.transporteditor.planners.benchmark.Benchmark;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.data.ProblemInfo;
-import com.oskopek.transporteditor.validation.ValValidator;
+import com.oskopek.transport.validation.ValValidator;
 import javaslang.Function2;
 import javaslang.Tuple;
 import javaslang.collection.Stream;

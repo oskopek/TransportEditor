@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.model.problem.builder.*;
+import com.oskopek.transport.model.problem.builder.*;
 import com.oskopek.transporteditor.view.plan.ActionObjectDetailPopup;
 import org.controlsfx.control.PropertySheet;
 

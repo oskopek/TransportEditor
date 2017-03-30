@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view.editor;
 
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
+import com.oskopek.transport.model.domain.action.ActionCost;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;

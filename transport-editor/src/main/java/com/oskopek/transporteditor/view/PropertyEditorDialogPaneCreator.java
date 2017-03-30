@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.view;
 
-import com.oskopek.transporteditor.model.problem.builder.ActionObjectBuilder;
+import com.oskopek.transport.model.problem.builder.ActionObjectBuilder;
 import com.oskopek.transporteditor.view.editor.ActionObjectPropertyEditorFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 /**
  * Create and display a dialog for editing properties of
- * an {@link com.oskopek.transporteditor.model.problem.ActionObject}.
+ * an {@link com.oskopek.transport.model.problem.ActionObject}.
  */
 @Singleton
 public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer<Supplier<Void>> {

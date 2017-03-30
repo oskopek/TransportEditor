@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.controller;
 
-import com.oskopek.transporteditor.persistence.DataReader;
-import com.oskopek.transporteditor.persistence.DataWriter;
+import com.oskopek.transport.persistence.DataReader;
+import com.oskopek.transport.persistence.DataWriter;
 import javafx.beans.property.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

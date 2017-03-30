@@ -1,13 +1,13 @@
 package com.oskopek.transporteditor.planners.sequential;
 
-import com.oskopek.transporteditor.model.domain.SequentialDomain;
-import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.plan.Plan;
-import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.persistence.DefaultProblemIO;
-import com.oskopek.transporteditor.persistence.IOUtils;
-import com.oskopek.transporteditor.persistence.SequentialPlanIO;
+import com.oskopek.transport.model.domain.SequentialDomain;
+import com.oskopek.transport.model.domain.action.Action;
+import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.plan.SequentialPlan;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.persistence.DefaultProblemIO;
+import com.oskopek.transport.persistence.IOUtils;
+import com.oskopek.transport.persistence.SequentialPlanIO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 

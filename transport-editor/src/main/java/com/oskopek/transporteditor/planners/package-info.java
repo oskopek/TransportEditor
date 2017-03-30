@@ -1,4 +1,4 @@
 /**
- * Various {@link com.oskopek.transporteditor.model.planner.Planner} implementations.
+ * Various {@link com.oskopek.transport.model.planner.Planner} implementations.
  */
 package com.oskopek.transporteditor.planners;

@@ -1,8 +1,8 @@
 package com.oskopek.transporteditor.planners.benchmark.data;
 
-import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.planner.Planner;
-import com.oskopek.transporteditor.model.problem.Problem;
+import com.oskopek.transport.model.domain.Domain;
+import com.oskopek.transport.model.planner.Planner;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 import javaslang.Function2;
 import javaslang.collection.Iterator;

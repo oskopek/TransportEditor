@@ -1,6 +1,6 @@
 package com.oskopek.transporteditor.planners.benchmark.config;
 
-import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.planners.benchmark.ScoreFunction;
 
 /**
