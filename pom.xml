@@ -1,12 +1,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.oskopek.transporteditor</groupId>
-    <artifactId>transporteditor</artifactId>
+    <groupId>com.oskopek.transport</groupId>
+    <artifactId>transport</artifactId>
     <version>0.8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>TransportEditor multiproject parent</name>
-    <description>A problem editor and plan visualizer for the Transport domain from the IPC 2008.</description>
+    <name>Transport multiproject parent</name>
+    <description>A problem editor, plan visualizer and set of planners for the Transport domain from the IPC 2008.</description>
     <inceptionYear>2016</inceptionYear>
     <licenses>
         <license>
@@ -16,7 +16,9 @@
         </license>
     </licenses>
     <modules>
-        <module>transporteditor-editor</module>
+        <module>transport-editor</module>
+        <module>transport-core</module>
+        <module>transport-planners</module>
     </modules>
     <scm>
         <url>https://github.com/oskopek/TransportEditor.git</url>
