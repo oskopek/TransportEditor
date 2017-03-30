@@ -1,5 +1,5 @@
 {
-  "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainSeq.pddl",
+  "domain": "${transport.root}/src/test/resources/com/oskopek/transport/persistence/variableDomainSeq.pddl",
   "problems": {
     "p01": {
       "filePath": "${transport.root}/../datasets/ipc14/seq-sat/Transport/p01.pddl",
@@ -85,11 +85,11 @@
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
     "FastDownFF": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "className": "com.oskopek.transport.planners.FastDownwardExternalPlanner",
       "params": "--overall-time-limit 30m {0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
     },
     "FastDownLama": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "className": "com.oskopek.transport.planners.FastDownwardExternalPlanner",
       "params": "--alias seq-sat-lama-2011 {0} {1}"
     }
   },

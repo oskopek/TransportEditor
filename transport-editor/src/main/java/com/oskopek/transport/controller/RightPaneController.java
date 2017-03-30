@@ -5,10 +5,13 @@ import com.google.common.eventbus.Subscribe;
 import com.oskopek.transport.event.GraphUpdatedEvent;
 import com.oskopek.transport.event.PlanningFinishedEvent;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.state.TemporalPlanStateManager;
+import com.oskopek.transport.session.PlanningSession;
 import com.oskopek.transport.view.*;
 import com.oskopek.transport.view.plan.SequentialPlanTable;
 import com.oskopek.transport.event.DisableShowStepEvent;
-import com.oskopek.transport.model.PlanningSession;
 import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.domain.action.TemporalPlanAction;
@@ -18,7 +21,6 @@ import com.oskopek.transport.model.plan.TemporalPlan;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.state.PlanStateManager;
-import com.oskopek.transport.model.state.TemporalPlanStateManager;
 import com.oskopek.transport.validation.Validator;
 import com.oskopek.transport.view.plan.TemporalGanttChart;
 import com.oskopek.transport.view.plan.TemporalPlanTable;
@@ -55,7 +57,7 @@ import java.util.function.Supplier;
 public class RightPaneController extends AbstractController {
 
     private final BooleanProperty stepPreviewEnabled = new SimpleBooleanProperty(false);
-    private ObjectProperty<PlanStateManager> planStateManager;
+    private ObjectProperty<TemporalPlanStateManager> planStateManager;
     @Inject
     private transient Logger logger;
     @Inject
@@ -124,8 +126,8 @@ public class RightPaneController extends AbstractController {
     private void initialize() {
         planStateManager = new SimpleObjectProperty<>();
         eventBus.register(this);
-        stepUpdated = l -> centerPaneController.getProblemSupplier().get().ifPresent(p ->
-                p.getRoadGraph().redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState()));
+        stepUpdated = l -> centerPaneController.getProblemSupplier().get().getVisualRoadGraph()
+                .redrawPackagesVehiclesFromPlanState(planStateManager.get().getCurrentPlanState());
 
         stepRow.managedProperty().bind(stepPreviewEnabled);
         stepRow.visibleProperty().bind(stepRow.managedProperty());
@@ -567,7 +569,7 @@ public class RightPaneController extends AbstractController {
         problem = problem.putVehicle(name, vehicle);
         application.getPlanningSession().setProblem(problem);
         centerPaneController.refreshGraphSelectionHandler();
-        problem.getRoadGraph().redrawActionObjectSprites(problem);
+        problem.getVisualRoadGraph().redrawActionObjectSprites(problem);
         Platform.runLater(() -> {
             Try.run(() -> Thread.sleep(100)).get(); // TODO: Hack - needs to happen later
             centerPaneController.getGraphSelectionHandler().selectOnly(vehicle);
@@ -593,7 +595,7 @@ public class RightPaneController extends AbstractController {
         problem = problem.putPackage(name, pkg);
         application.getPlanningSession().setProblem(problem);
         centerPaneController.refreshGraphSelectionHandler();
-        problem.getRoadGraph().redrawActionObjectSprites(problem);
+        problem.getVisualRoadGraph().redrawActionObjectSprites(problem);
         Platform.runLater(() -> {
             Try.run(() -> Thread.sleep(100)).get(); // TODO: Hack - needs to happen later
             centerPaneController.getGraphSelectionHandler().selectOnly(pkg);
@@ -656,9 +658,8 @@ public class RightPaneController extends AbstractController {
             unlock();
 
             Problem problem = application.getPlanningSession().getProblem();
-            centerPaneController.setProblemSupplier(() -> application.getPlanningSessionOptional()
-                    .map(PlanningSession::getProblem));
-            problem.getRoadGraph().redrawActionObjectSprites(problem);
+            centerPaneController.setProblemSupplier(() -> application.getPlanningSession().getProblem());
+            problem.getVisualRoadGraph().redrawActionObjectSprites(problem);
             planStateManager.set(null);
         } else {
             stepButton.setText(messages.getString("steps.hide"));
@@ -668,8 +669,7 @@ public class RightPaneController extends AbstractController {
             PlanningSession session = application.getPlanningSession();
             planStateManager.set(new TemporalPlanStateManager(session.getDomain(), session.getProblem(),
                     session.getPlan()));
-            centerPaneController.setProblemSupplier(() -> Optional.ofNullable(planStateManager.get()
-                    .getCurrentPlanState()));
+            centerPaneController.setProblemSupplier(() -> planStateManager.get().getCurrentPlanState());
 
             redrawState();
             updateTimeSpinner();

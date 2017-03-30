@@ -2,11 +2,13 @@ package com.oskopek.transport.controller;
 
 import com.google.common.eventbus.Subscribe;
 import com.oskopek.transport.event.GraphUpdatedEvent;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import com.oskopek.transport.view.*;
 import com.oskopek.transport.event.DisposeGraphViewerEvent;
-import com.oskopek.transport.model.PlanningSession;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transporteditor.view.*;
 import com.oskopek.transport.view.plan.ActionObjectDetailPopup;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -36,7 +38,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -66,8 +67,7 @@ public class CenterPaneController extends AbstractController {
 
     private BooleanProperty locked = new SimpleBooleanProperty(false);
 
-    private transient Supplier<Optional<Problem>> problemSupplier = () -> application.getPlanningSessionOptional()
-            .map(PlanningSession::getProblem);
+    private transient Supplier<Problem> problemSupplier = () -> application.getPlanningSession().getProblem();
 
     /**
      * Get the problem supplier. Used for showing data in the graph (differentiating between the problem
@@ -75,7 +75,7 @@ public class CenterPaneController extends AbstractController {
      *
      * @return the currently shown problem
      */
-    public Supplier<Optional<Problem>> getProblemSupplier() {
+    public Supplier<Problem> getProblemSupplier() {
         return problemSupplier;
     }
 
@@ -85,7 +85,7 @@ public class CenterPaneController extends AbstractController {
      *
      * @param problemSupplier supplier of the currently shown problem
      */
-    public void setProblemSupplier(Supplier<Optional<Problem>> problemSupplier) {
+    public void setProblemSupplier(Supplier<Problem> problemSupplier) {
         this.problemSupplier = problemSupplier;
     }
 
@@ -180,24 +180,22 @@ public class CenterPaneController extends AbstractController {
     @Subscribe
     public void redrawGraph(GraphUpdatedEvent graphUpdatedEvent) {
         locked.setValue(false);
-        RoadGraph graph = Try.of(() -> application.getPlanningSession().getProblem().getRoadGraph())
-                .onFailure(e -> logger.trace("Could not get graph for redrawing, got a NPE along the way.", e))
-                .getOrElse((RoadGraph) null);
+        VisualRoadGraph graph = Try.of(() -> application.getPlanningSession().getProblem().getVisualRoadGraph())
+                .onFailure(e -> logger.debug("Could not get graph for redrawing, got a NPE along the way."))
+                .getOrElse((VisualRoadGraph) null);
         if (graph == null) {
             SwingUtilities.invokeLater(() ->
                     swingGraph.setContent(new JLabel(messages.getString("problem.noproblemloaded"))));
             return;
         }
-        graph.setDefaultStyling();
 
         // TODO: move this to appropriate listener and possibly refactor
-        Problem problem = application.getPlanningSession().getProblem();
-
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);
         GraphicGraph graphicGraph = viewer.getGraphicGraph();
-        graphSelectionHandler.setValue(new GraphSelectionHandler(problem, graphicGraph));
+        graphSelectionHandler.setValue(new GraphSelectionHandler(application.getPlanningSession().getProblem(),
+                graphicGraph));
         ProxyPipe proxyPipe = viewer.newViewerPipe();
         proxyPipe.addAttributeSink(graph);
         ViewPanel viewPanel = viewer.addView("graph", new J2DGraphRenderer(), false);
@@ -265,7 +263,7 @@ public class CenterPaneController extends AbstractController {
                 newProblem = newProblem.changeVehicle(vehicle, vehicle.updateLocation(newLoc));
             }
             application.getPlanningSession().setProblem(newProblem);
-            newProblem.getRoadGraph().redrawActionObjectSprites(newProblem);
+            newProblem.getVisualRoadGraph().redrawActionObjectSprites(newProblem);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         Platform.runLater(() -> {
@@ -294,7 +292,8 @@ public class CenterPaneController extends AbstractController {
                         throw new IllegalStateException("Sleep broken.", e);
                     }
                     logger.debug("Killing spring layout early ({}ms).", total);
-                    graph.redrawActionObjectSprites(problem);
+                    Problem problem = application.getPlanningSession().getProblem();
+                    problem.getVisualRoadGraph().redrawActionObjectSprites(problem);
                     return null;
                 }
             };
@@ -325,7 +324,7 @@ public class CenterPaneController extends AbstractController {
         private final Logger logger = LoggerFactory.getLogger(getClass());
         private final GraphSelectionHandler selectionHandler;
         private ActionObjectDetailPopup popup;
-        private RoadGraph graph;
+        private VisualRoadGraph graph;
 
         /**
          * Default constructor.
@@ -333,7 +332,7 @@ public class CenterPaneController extends AbstractController {
          * @param selectionHandler the selection handler
          * @param graph the graph to manage
          */
-        SpriteUnClickableMouseManager(GraphSelectionHandler selectionHandler, RoadGraph graph) {
+        SpriteUnClickableMouseManager(GraphSelectionHandler selectionHandler, VisualRoadGraph graph) {
             this.selectionHandler = selectionHandler;
             this.graph = graph;
         }
@@ -362,7 +361,7 @@ public class CenterPaneController extends AbstractController {
                 } else {
                     selectionHandler.unSelectAll();
 
-                    popup = createResponse(problemSupplier.get().get(), element, actionObjectDetailPopupCreator);
+                    popup = createResponse(getProblemSupplier().get(), element, actionObjectDetailPopupCreator);
                     if (popup != null) {
                         int showAtX = event.getXOnScreen();
                         int showAtY = event.getYOnScreen() - 15;
@@ -388,7 +387,7 @@ public class CenterPaneController extends AbstractController {
             Consumer<Problem> problemUpdater = p -> {
                 application.getPlanningSession().setProblem(p);
                 // TODO: Hack
-                application.getPlanningSession().getProblem().getRoadGraph().redrawActionObjectSprites(p);
+                application.getPlanningSession().getProblem().getVisualRoadGraph().redrawActionObjectSprites(p);
             };
             if (element instanceof Node) { // TODO: Hack
                 Location oldLocation = graph.getLocation(element.getId());
@@ -396,7 +395,7 @@ public class CenterPaneController extends AbstractController {
                         .changeLocation(oldLocation, newLocation)));
             } else if (element instanceof GraphicSprite) {
                 String name = element.getId().substring("sprite-".length());
-                RoadGraph.RoadEdge roadEdge = graph.getRoadEdge(name);
+                RoadEdge roadEdge = graph.getRoadEdge(name);
                 if (roadEdge != null) {
                     return creator.create(roadEdge, newRoad -> graph.putRoad(newRoad, roadEdge.getFrom(),
                             roadEdge.getTo()));
@@ -435,7 +434,7 @@ public class CenterPaneController extends AbstractController {
                     Platform.runLater(() -> popup.hide());
                 }
             } else if (SwingUtilities.isRightMouseButton(event) && !locked.get()) {
-                Supplier<Void> editDialog = createResponse(problemSupplier.get().get(), element,
+                Supplier<Void> editDialog = createResponse(getProblemSupplier().get(), element,
                         propertyEditorDialogPaneCreator);
                 Platform.runLater(editDialog::get);
             }

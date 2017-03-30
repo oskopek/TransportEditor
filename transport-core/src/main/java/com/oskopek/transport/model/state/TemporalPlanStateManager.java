@@ -43,6 +43,15 @@ public class TemporalPlanStateManager implements PlanStateManager {
         this.pointer = new PlanActionPointer(0, false);
     }
 
+    /**
+     * Get the domain.
+     *
+     * @return the domain
+     */
+    protected Domain getDomain() {
+        return domain;
+    }
+
     @Override
     public PlanState getCurrentPlanState() {
         return state;

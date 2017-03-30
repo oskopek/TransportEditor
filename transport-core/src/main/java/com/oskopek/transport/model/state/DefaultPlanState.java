@@ -3,8 +3,10 @@ package com.oskopek.transport.model.state;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
@@ -65,6 +67,11 @@ public class DefaultPlanState implements PlanState {
     @Override
     public RoadGraph getRoadGraph() {
         return problem.getRoadGraph();
+    }
+
+    @Override
+    public VisualRoadGraph getVisualRoadGraph() {
+        return problem.getVisualRoadGraph();
     }
 
     @Override

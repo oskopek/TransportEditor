@@ -4,7 +4,6 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
-import com.oskopek.transport.model.problem.DefaultProblem;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.state.DefaultPlanState;
 import com.oskopek.transport.model.state.PlanState;
@@ -24,7 +23,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
         if (!SequentialPlan.class.isInstance(plan)) {
             throw new IllegalArgumentException("Cannot validate non-sequential plan with sequential validator.");
         }
-        return isValid(domain, (DefaultProblem) problem, (SequentialPlan) plan);
+        return isValid(domain, problem, (SequentialPlan) plan);
     }
 
     /**
@@ -35,7 +34,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
      * @param plan the sequential plan to validate
      * @return true iff the plan is valid in the domain according to this validator
      */
-    public boolean isValid(Domain domain, DefaultProblem problem, SequentialPlan plan) {
+    public boolean isValid(Domain domain, Problem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
         PlanState state = new DefaultPlanState(domain, problem);
         log("Starting validation. Actions: " + actionList.size());

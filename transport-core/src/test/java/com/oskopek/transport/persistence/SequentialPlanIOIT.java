@@ -2,7 +2,7 @@ package com.oskopek.transport.persistence;
 
 import com.oskopek.transport.model.domain.*;
 import com.oskopek.transport.model.plan.SequentialPlan;
-import com.oskopek.transport.model.problem.DefaultProblem;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertNotNull;
 public class SequentialPlanIOIT {
 
     private static final SequentialDomain domain = new SequentialDomain("Transport sequential");
-    public static final DefaultProblem p01Problem = TestUtils.P01SequentialProblem();
-    public static DefaultProblem p20Problem;
+    public static final Problem p01Problem = TestUtils.P01SequentialProblem();
+    public static Problem p20Problem;
     public static String P01SequentialPlanFileContents;
     public static String P20SequentialPlanFileContents;
 

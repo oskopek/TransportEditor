@@ -1,7 +1,10 @@
 package com.oskopek.transport.view;
 
+import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.builder.*;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
 
 import java.util.function.Consumer;
 
@@ -35,7 +38,7 @@ public abstract class ActionObjectBuilderConsumer<T> {
      * @param updateCallback the update callback
      * @return the return value of {@code createInternal}
      */
-    public T create(RoadGraph.RoadEdge roadEdge, Consumer<Road> updateCallback) {
+    public T create(RoadEdge roadEdge, Consumer<Road> updateCallback) {
         Road road = roadEdge.getRoad();
         if (road instanceof FuelRoad) {
             FuelRoad fuelRoad = (FuelRoad) road;

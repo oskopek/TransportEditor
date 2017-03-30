@@ -40,6 +40,15 @@ public abstract class XStreamGenericIO<Persistable_> implements DataIO<Persistab
         xStream.setMode(XStream.ID_REFERENCES);
     }
 
+    /**
+     * Get the xStream.
+     *
+     * @return the xStream
+     */
+    protected XStream getXStream() {
+        return xStream;
+    }
+
     @Override
     public <T extends Persistable_> String serialize(T object) {
         return xStream.toXML(object);

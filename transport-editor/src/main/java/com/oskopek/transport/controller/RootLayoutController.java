@@ -3,12 +3,15 @@ package com.oskopek.transport.controller;
 import com.oskopek.transport.event.DisableShowStepEvent;
 import com.oskopek.transport.event.GraphUpdatedEvent;
 import com.oskopek.transport.event.PlanningFinishedEvent;
+import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
+import com.oskopek.transport.persistence.*;
+import com.oskopek.transport.session.DefaultPlanningSession;
+import com.oskopek.transport.session.DefaultPlanningSessionIO;
+import com.oskopek.transport.session.PlanningSession;
 import com.oskopek.transport.view.AlertCreator;
 import com.oskopek.transport.view.ExecutableParametersCreator;
 import com.oskopek.transport.view.SaveDiscardDialogPaneCreator;
 import com.oskopek.transport.view.VariableDomainCreator;
-import com.oskopek.transport.model.DefaultPlanningSession;
-import com.oskopek.transport.model.PlanningSession;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.VariableDomain;
@@ -16,13 +19,14 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.planner.ExternalPlanner;
 import com.oskopek.transport.model.planner.Planner;
-import com.oskopek.transport.model.problem.DefaultProblem;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.problem.RoadGraph;
 import com.oskopek.transport.validation.ExternalValidator;
 import com.oskopek.transport.validation.SequentialPlanValidator;
 import com.oskopek.transport.tools.executables.ExecutableWithParameters;
+import com.oskopek.transport.view.problem.VisualProblem;
+import com.oskopek.transport.view.problem.VisualProblemIO;
+import com.oskopek.transport.view.problem.DefaultVisualRoadGraph;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -169,14 +173,14 @@ public class RootLayoutController extends AbstractController {
 
     /**
      * Populate the {@link #fileSetPlannerMenu} using all non-abstract {@link Planner}s with a default empty constructor
-     * from the {@link com.oskopek.transporteditor} package.
+     * from the {@link com.oskopek.transport} package.
      * Uses {@link Reflections} internally.
      */
     private void populatePlanners() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forClass(Planner.class))
                 .setScanners(new SubTypesScanner(false))
-                .filterInputsBy(s -> s != null && s.startsWith("com.oskopek.transporteditor.") && s.endsWith(".class"))
+                .filterInputsBy(s -> s != null && s.startsWith("com.oskopek.transport.") && s.endsWith(".class"))
         );
         Stream.ofAll(reflections.getSubTypesOf(Planner.class))
                 .filter(type -> !Modifier.isAbstract(type.getModifiers()))
@@ -258,7 +262,7 @@ public class RootLayoutController extends AbstractController {
                                 "Cannot load problem from session, because no domain is loaded.");
                     }
                     problemFileHandler.setObject(problem);
-                    problemFileHandler.setIO(new DefaultProblemIO(application.getPlanningSession().getDomain()));
+                    problemFileHandler.setIO(new VisualProblemIO(application.getPlanningSession().getDomain()));
                     session.problemProperty().bindBidirectional(problemFileHandler.objectProperty());
                     Plan plan = session.getPlan();
                     if (plan != null) {
@@ -439,15 +443,15 @@ public class RootLayoutController extends AbstractController {
             throw new IllegalStateException("Cannot create new problem, because no domain is loaded.");
         }
         Domain domain = application.getPlanningSession().getDomain();
-        DefaultProblemIO io = new DefaultProblemIO(domain);
-        RoadGraph graph = new RoadGraph("graph");
+        VisualProblemIO io = new VisualProblemIO(domain);
+        VisualRoadGraph graph = new DefaultVisualRoadGraph("graph");
         Location location = new Location("loc0", 0, 0, null);
         if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
             location = location.updateHasPetrolStation(false);
         }
         graph.addLocation(location);
 
-        boolean overwritten = problemFileHandler.newObject(new DefaultProblem("problem" + new Date().getTime(),
+        boolean overwritten = problemFileHandler.newObject(new VisualProblem("problem" + new Date().getTime(),
                 graph, new HashMap<>(), new HashMap<>()), io, io);
         if (!overwritten) {
             logger.debug("Not overwritten, returning");
@@ -467,7 +471,7 @@ public class RootLayoutController extends AbstractController {
         if (application.getPlanningSession().getDomain() == null) {
             throw new IllegalStateException("Cannot load problem, because no domain is loaded.");
         }
-        DefaultProblemIO io = new DefaultProblemIO(application.getPlanningSession().getDomain());
+        VisualProblemIO io = new VisualProblemIO(application.getPlanningSession().getDomain());
 
         boolean overwritten = problemFileHandler.loadWithDefaultFileChooser(
                 messages.getString("load.problem"), io, io);

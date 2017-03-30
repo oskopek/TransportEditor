@@ -75,7 +75,7 @@ public class VariableDomainBuilderFilesIT {
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
         logger.debug("Parsing problem from {}", problemFile);
         DefaultProblem problem = problemIO
-                .parse(concatReadAllLines(getClass().getResourceAsStream(problemFile)));
+                .parseDefault(concatReadAllLines(getClass().getResourceAsStream(problemFile)));
         assertNotNull(problem);
     }
 

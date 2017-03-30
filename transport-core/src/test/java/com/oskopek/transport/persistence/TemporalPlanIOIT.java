@@ -29,7 +29,7 @@ public class TemporalPlanIOIT {
         temporalDomain = new VariableDomainIO().parse(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("variableDomainTemp.pddl")).stream()
                 .collect(Collectors.joining("\n")));
-        p01Temporal = new DefaultProblemIO(temporalDomain).parse(readAllLines(
+        p01Temporal = new DefaultProblemIO(temporalDomain).parseDefault(readAllLines(
                 VariableDomainIOIT.class.getResourceAsStream("p01TempProblem.pddl")).stream()
                 .collect(Collectors.joining("\n")));
     }

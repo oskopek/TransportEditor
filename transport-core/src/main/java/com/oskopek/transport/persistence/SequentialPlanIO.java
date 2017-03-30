@@ -9,6 +9,7 @@ import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Vehicle;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.state.DefaultPlanState;
 
 import java.util.Arrays;

@@ -1,5 +1,7 @@
 package com.oskopek.transport.model.problem;
 
+import com.oskopek.transport.model.problem.graph.RoadGraph;
+import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -26,7 +28,7 @@ public class DefaultProblem implements Problem {
     public DefaultProblem(Problem problem) {
         // vehicles are immutable
         // packages are immutable
-        this(problem.getName(), new RoadGraph(problem.getRoadGraph()),
+        this(problem.getName(), problem.getRoadGraph().copy(),
                 new HashMap<>(problem.getVehicleMap()), new HashMap<>(problem.getPackageMap()));
     }
 
@@ -44,6 +46,11 @@ public class DefaultProblem implements Problem {
         this.roadGraph = roadGraph;
         this.vehicleMap = vehicleMap;
         this.packageMap = packageMap;
+    }
+
+    @Override
+    public VisualRoadGraph getVisualRoadGraph() {
+        return null;
     }
 
     @Override
@@ -173,7 +180,7 @@ public class DefaultProblem implements Problem {
 //        } else if (actionObject instanceof Location) {
 //            throw new UnsupportedOperationException("Changing location names is not supported.");
 //        } else if (actionObject instanceof Road) { // TODO: Should this be immutable too? Yes!
-//            RoadGraph.RoadEdge edge = getRoadGraph().getRoadEdge(actionObject.getName());
+//            RoadEdge edge = getRoadGraph().getRoadEdge(actionObject.getName());
 //            getRoadGraph().removeRoad(actionObject.getName());
 //            if (actionObject instanceof FuelRoad) {
 //                FuelRoad fuelRoad = (FuelRoad) actionObject;

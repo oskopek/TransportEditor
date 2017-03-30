@@ -24,13 +24,13 @@
                 </encoder>
             </appender>
 
-            <logger name="com.oskopek.transporteditor" level="DEBUG"/>
+            <logger name="com.oskopek.transport" level="DEBUG"/>
             <root level="debug">
                 <appender-ref ref="FILE"/>
             </root>
         </then>
         <else>
-            <logger name="com.oskopek.transporteditor" level="DEBUG"/>
+            <logger name="com.oskopek.transport" level="DEBUG"/>
             <root level="debug">
                 <appender-ref ref="STDOUT"/>
             </root>

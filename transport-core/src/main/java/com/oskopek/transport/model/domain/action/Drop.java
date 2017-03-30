@@ -5,6 +5,7 @@ import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.Problem;
 
 import java.util.List;
 

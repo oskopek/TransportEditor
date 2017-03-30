@@ -1,5 +1,5 @@
 {
-  "domain": "${transport.root}/src/test/resources/com/oskopek/transporteditor/persistence/variableDomainTemp.pddl",
+  "domain": "${transport.root}/src/test/resources/com/oskopek/transport/persistence/variableDomainTemp.pddl",
   "problems": {
     "p01": {
       "filePath": "${transport.root}/../datasets/ipc08/tempo-sat/transport-numeric/p01.pddl",
@@ -125,7 +125,7 @@
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
     "TemporalFastDownward": {
-      "className": "com.oskopek.transporteditor.model.planner.ExternalPlanner",
+      "className": "com.oskopek.transport.model.planner.ExternalPlanner",
       "params": "tfd-plan.sh {0} {1}"
     }
   },

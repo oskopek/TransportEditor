@@ -6,6 +6,7 @@ import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.Test;

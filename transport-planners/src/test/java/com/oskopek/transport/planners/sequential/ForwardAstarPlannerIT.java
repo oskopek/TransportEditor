@@ -5,7 +5,7 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.problem.RoadGraph;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.persistence.DefaultProblemIO;
 import com.oskopek.transport.persistence.SequentialPlanIO;

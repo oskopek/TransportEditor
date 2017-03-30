@@ -4,7 +4,7 @@ import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Road;
-import com.oskopek.transport.model.problem.RoadGraph;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Vehicle;
 
 import java.util.List;

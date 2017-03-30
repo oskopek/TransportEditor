@@ -1,5 +1,8 @@
 package com.oskopek.transport.model.problem;
 
+import com.oskopek.transport.model.problem.graph.RoadGraph;
+import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,6 +26,13 @@ public interface Problem {
      * @return the road graph
      */
     RoadGraph getRoadGraph();
+
+    /**
+     * Get the visual road graph.
+     *
+     * @return the visual road graph, may return null if not in a UI setting
+     */
+    VisualRoadGraph getVisualRoadGraph();
 
     /**
      * Get the vehicle.

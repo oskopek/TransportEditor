@@ -1,10 +1,10 @@
 package com.oskopek.transport.persistence;
 
-import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.domain.VariableDomain;
-import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.BeforeClass;
@@ -61,56 +61,9 @@ public class DefaultProblemIOIT {
                 Collectors.joining("\n")) + "\n";
     }
 
-    public static void assertP01Sequential(Domain domain, Problem problem) {
-        assertNotNull(problem);
-        assertEquals("transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed",
-                problem.getName());
-        assertEquals(2, problem.getAllPackages().size());
-        assertEquals(2, problem.getAllVehicles().size());
-
-        assertNotNull(problem.getVehicle("truck-2"));
-        assertNotNull(problem.getVehicle("truck-2").getLocation());
-        assertEquals("city-loc-5", problem.getVehicle("truck-2").getLocation().getName());
-
-        assertNotNull(problem.getPackage("package-1"));
-        assertNotNull(problem.getPackage("package-1").getLocation());
-        assertEquals("city-loc-4", problem.getPackage("package-1").getLocation().getName());
-        assertNotNull(problem.getPackage("package-1").getSize());
-        assertEquals(1, problem.getPackage("package-1").getSize().getCost());
-
-        assertNotNull(problem.getVehicle("truck-1").getCurCapacity());
-        assertEquals(2, problem.getVehicle("truck-1").getCurCapacity().getCost());
-        assertNotNull(problem.getVehicle("truck-1").getMaxCapacity());
-        assertEquals(2, problem.getVehicle("truck-1").getMaxCapacity().getCost());
-        assertNotNull(problem.getVehicle("truck-1").getPackageList());
-        assertEquals(0, problem.getVehicle("truck-1").getPackageList().size());
-
-        RoadGraph rg = problem.getRoadGraph();
-        assertNotNull(rg);
-        assertEquals(5, rg.getNodeCount());
-        assertEquals(12, rg.getEdgeCount());
-        Road road = rg.getShortestRoadBetween(rg.getLocation("city-loc-4"), rg.getLocation("city-loc-5"));
-        assertNotNull(road);
-        assertNotNull(road.getLength());
-        assertEquals(32, road.getLength().getCost());
-        for (int i = 1; i <= 5; i++) {
-            if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
-                assertNotNull(rg.getLocation("city-loc-" + i).getPetrolStation());
-            } else {
-                assertNull(rg.getLocation("city-loc-" + i).getPetrolStation());
-            }
-            assertFalse(rg.getLocation("city-loc-" + i).hasPetrolStation());
-        }
-
-        assertNotNull(problem.getPackage("package-1").getTarget());
-        assertEquals("city-loc-5", problem.getPackage("package-1").getTarget().getName());
-        assertNotNull(problem.getPackage("package-2").getTarget());
-        assertEquals("city-loc-2", problem.getPackage("package-2").getTarget().getName());
-    }
-
     @Test
     public void serializeSequential() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parseDefault(seqProblemFileContents);
 
         String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
         assertNotNull(serialized);
@@ -120,7 +73,7 @@ public class DefaultProblemIOIT {
     @Test
     @Ignore("TODO: Parse point locations from comments")
     public void serializeSequentialExact() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parseDefault(seqProblemFileContents);
 
         String serialized = new DefaultProblemIO(sequentialDomain).serialize(problem);
         assertNotNull(serialized);
@@ -129,17 +82,17 @@ public class DefaultProblemIOIT {
 
     @Test
     public void parseSequential() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(seqProblemFileContents);
-        assertP01Sequential(sequentialDomain, problem);
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parseDefault(seqProblemFileContents);
+        TestUtils.assertP01Sequential(sequentialDomain, problem);
     }
 
     @Test
     public void parseFuelSequentialWithFuel() throws Exception {
         assertThat(variableDomainFuelSeq.getPddlLabels()).contains(PddlLabel.Fuel);
-        DefaultProblem problem = new DefaultProblemIO(variableDomainFuelSeq).parse(fuelSeqProblemFileContents);
-        assertP01Sequential(variableDomainFuelSeq, problem);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainFuelSeq).parseDefault(fuelSeqProblemFileContents);
+        TestUtils.assertP01Sequential(variableDomainFuelSeq, problem);
         assertThat(problem.getRoadGraph().getAllLocations()).allMatch(l -> !l.hasPetrolStation());
-        assertThat(problem.getRoadGraph().getAllRoads().map(RoadGraph.RoadEdge::getRoad).map(Object::getClass))
+        assertThat(problem.getRoadGraph().getAllRoads().map(RoadEdge::getRoad).map(Object::getClass))
                 .allMatch(FuelRoad.class::equals);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() != null)
                 .allMatch(v -> v.getMaxFuelCapacity() != null);
@@ -147,10 +100,10 @@ public class DefaultProblemIOIT {
 
     @Test
     public void parseSequentialWithFuel() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parse(fuelSeqProblemFileContents);
-        assertP01Sequential(sequentialDomain, problem);
+        DefaultProblem problem = new DefaultProblemIO(sequentialDomain).parseDefault(fuelSeqProblemFileContents);
+        TestUtils.assertP01Sequential(sequentialDomain, problem);
         assertThat(problem.getRoadGraph().getAllLocations().map(Location::getPetrolStation)).allMatch(Objects::isNull);
-        assertThat(problem.getRoadGraph().getAllRoads().map(RoadGraph.RoadEdge::getRoad).map(Object::getClass))
+        assertThat(problem.getRoadGraph().getAllRoads().map(RoadEdge::getRoad).map(Object::getClass))
                 .allMatch(DefaultRoad.class::equals);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() == null)
                 .allMatch(v -> v.getMaxFuelCapacity() == null);
@@ -182,13 +135,13 @@ public class DefaultProblemIOIT {
     }
 
     private DefaultProblem serializeTemporalInternal(String problemFileContents) {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(problemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parseDefault(problemFileContents);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getCurFuelCapacity() != null);
         assertThat(problem.getAllVehicles()).allMatch(v -> v.getMaxFuelCapacity() != null);
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
 
-        DefaultProblem problemAgain = new DefaultProblemIO(variableDomainTemp).parse(serialized);
+        DefaultProblem problemAgain = new DefaultProblemIO(variableDomainTemp).parseDefault(serialized);
         assertThat(problem).isEqualTo(problemAgain);
 
         TestUtils.assertPDDLContentEquals(problemFileContents, serialized);
@@ -198,7 +151,7 @@ public class DefaultProblemIOIT {
     @Test
     @Ignore("TODO: Parse point locations from comments")
     public void serializeTemporalExact() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parseDefault(tempProblemFileContents);
         String serialized = new DefaultProblemIO(variableDomainTemp).serialize(problem);
         assertNotNull(serialized);
         assertEquals(tempProblemFileContents, serialized);
@@ -206,7 +159,7 @@ public class DefaultProblemIOIT {
 
     @Test
     public void parseTemporal() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parse(tempProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainTemp).parseDefault(tempProblemFileContents);
         assertNotNull(problem);
         assertEquals("transport-p01-10-city-5nodes-1000size-3degree-100mindistance-2trucks-2packagespercity-2008seed",
                 problem.getName());
@@ -260,7 +213,7 @@ public class DefaultProblemIOIT {
     @Test
     @Ignore("Numeric tests are ignored for now")
     public void serializeNumeric() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parseDefault(numProblemFileContents);
         String serialized = new DefaultProblemIO(variableDomainNum).serialize(problem);
         assertNotNull(serialized);
         TestUtils.assertPDDLContentEquals(numProblemFileContents, serialized);
@@ -269,7 +222,7 @@ public class DefaultProblemIOIT {
     @Test
     @Ignore("TODO: Parse point locations from comments")
     public void serializeNumericExact() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parseDefault(numProblemFileContents);
         String serialized = new DefaultProblemIO(variableDomainNum).serialize(problem);
         assertNotNull(serialized);
         assertEquals(numProblemFileContents, serialized);
@@ -278,7 +231,7 @@ public class DefaultProblemIOIT {
     @Test
     @Ignore("Numeric tests are ignored for now")
     public void parseNumeric() throws Exception {
-        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parse(numProblemFileContents);
+        DefaultProblem problem = new DefaultProblemIO(variableDomainNum).parseDefault(numProblemFileContents);
         assertNotNull(problem);
         assertEquals(
                 "transport-city-netbenefit-0petrol-station-6nodes-1000size-3degree-100mindistance-2trucks"

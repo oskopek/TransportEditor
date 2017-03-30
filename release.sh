@@ -78,16 +78,16 @@ mvn install -Pbenchmarker # TODO: Remove me
 mkdir -p "$tmpdir"/datasets
 cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
 
-cp -r transporteditor-docs/target/docs "$tmpdir"/
+cp -r transport-docs/target/docs "$tmpdir"/
 
 mkdir -p "$tmpdir"/docs/javadoc
-cp -r transporteditor-editor/target/apidocs/* "$tmpdir"/docs/javadoc/
+cp -r transport-editor/target/apidocs/* "$tmpdir"/docs/javadoc/
 
-rsync -av --exclude='*/.git*' --exclude 'target/' --exclude 'tools/' transporteditor-editor/ "$tmpdir"/sources
-cp -r transporteditor-editor/target/TransportEditor-jar-with-dependencies.jar "$tmpdir"/
+rsync -av --exclude='*/.git*' --exclude 'target/' --exclude 'tools/' transport-editor/ "$tmpdir"/sources
+cp -r transport-editor/target/TransportEditor-jar-with-dependencies.jar "$tmpdir"/
 
-cp -r transporteditor-editor/tools "$tmpdir"/
-cp -r transporteditor-editor/target/*Benchmarker*dependencies.jar "$tmpdir"/tools/benchmarks
+cp -r transport-editor/tools "$tmpdir"/
+cp -r transport-editor/target/*Benchmarker*dependencies.jar "$tmpdir"/tools/benchmarks
 rm -rf "$tmpdir"/tools/benchmarks/results
 
 cp README.adoc LICENSE "$tmpdir"/

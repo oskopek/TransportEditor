@@ -4,6 +4,7 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.Problem;
 
 import java.util.List;
 

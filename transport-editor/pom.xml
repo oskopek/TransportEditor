@@ -87,9 +87,12 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+        </dependency>
     </dependencies>
     <build>
-        <finalName>TransportEditor</finalName>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -139,7 +142,7 @@
         <profile>
             <id>reportGenerator</id>
             <properties>
-                <mainClass>com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator</mainClass>
+                <mainClass>com.oskopek.transport.planners.benchmark.report.ReportGenerator</mainClass>
             </properties>
             <build>
                 <finalName>TransportEditor-ReportGenerator</finalName>

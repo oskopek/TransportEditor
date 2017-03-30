@@ -6,7 +6,7 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.state.ImmutablePlanState;
+import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.AbstractPlanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

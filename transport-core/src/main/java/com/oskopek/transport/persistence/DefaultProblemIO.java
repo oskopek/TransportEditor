@@ -5,6 +5,9 @@ import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.graph.DefaultRoadGraph;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
+import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.antlr4.PddlLexer;
 import com.oskopek.transport.persistence.antlr4.PddlParser;
 import freemarker.template.Configuration;
@@ -101,8 +104,14 @@ public class DefaultProblemIO implements DataIO<Problem> {
         return writer.toString().replaceAll("\\r\\n", "\n");
     }
 
-    @Override
-    public DefaultProblem parse(String contents) {
+    /**
+     * Parse a default problem from a string.
+     *
+     * @param contents the string representation of the problem
+     * @return an initialized instance of the problem object
+     * @throws IllegalArgumentException if the contents cannot be parsed
+     */
+    public DefaultProblem parseDefault(String contents) {
         PddlParser parser = new PddlParser(new CommonTokenStream(new PddlLexer(new ANTLRInputStream(contents))));
         ErrorDetectionListener listener = new ErrorDetectionListener();
         parser.addErrorListener(listener);
@@ -125,6 +134,12 @@ public class DefaultProblemIO implements DataIO<Problem> {
         parseInit(context.init(), parsed);
         parseGoalDescContext(context.goal(), parsed);
         return new DefaultProblem(parsed.name(), parsed.graph(), parsed.vehicleMap(), parsed.packageMap());
+    }
+
+
+    @Override
+    public Problem parse(String contents) {
+        return parseDefault(contents);
     }
 
     /**
@@ -400,7 +415,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
          */
         ParsedProblemContainer(String name) {
             this.name = name;
-            graph = new RoadGraph(name + "_graph");
+            graph = new DefaultRoadGraph(name + "_graph");
         }
 
         /**

@@ -13,7 +13,7 @@ Zeyn Saigol,
 School of Computer Science,
 University of Birmingham
 
-File: `transport-editor/src/main/antlr4/com/oskopek/transporteditor/persistence/Pddl.g4`
+File: `transport-core/src/main/antlr4/com/oskopek/transport/persistence/Pddl.g4`
 
 == Interval Tree
 

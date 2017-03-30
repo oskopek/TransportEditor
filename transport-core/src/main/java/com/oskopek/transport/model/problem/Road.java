@@ -1,6 +1,7 @@
 package com.oskopek.transport.model.problem;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 
 /**
  * Attributes of an edge in the {@link RoadGraph}.

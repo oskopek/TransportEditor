@@ -1,6 +1,9 @@
 package com.oskopek.transport.controller;
 
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
 import javafx.beans.*;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -61,7 +64,7 @@ public class GraphSelectionHandler implements Observable {
     private void populateCollectionsFromGraph() {
         problem.getRoadGraph().getAllLocations().filter(l -> problem.getRoadGraph().getNode(l.getName())
                 .hasAttribute(SELECTED)).forEach(selectedLocations::add);
-        problem.getRoadGraph().getAllRoads().map(RoadGraph.RoadEdge::getRoad).filter(r -> problem.getRoadGraph()
+        problem.getRoadGraph().getAllRoads().map(RoadEdge::getRoad).filter(r -> problem.getRoadGraph()
                 .getEdge(r.getName()).hasAttribute(SELECTED)).forEach(selectedRoads::add);
         problem.getAllPackages().stream().map(p -> Tuple.of(p, graphicGraph.getSprite("sprite-" + p.getName())))
                 .filter(t -> t._2 != null && t._2.hasAttribute(SELECTED)).map(t -> t._1).forEach(selectedPackages::add);

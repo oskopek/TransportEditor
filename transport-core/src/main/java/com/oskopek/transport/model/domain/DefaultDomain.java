@@ -10,6 +10,7 @@ import com.oskopek.transport.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transport.model.domain.actionbuilder.RefuelBuilder;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -17,7 +17,7 @@ public class MessagesProducer {
     @Produces
     @Singleton
     public ResourceBundle createMessagesResourceBundle() {
-        return ResourceBundle.getBundle("com.oskopek.transporteditor.view.messages");
+        return ResourceBundle.getBundle("com.oskopek.transport.view.messages");
     }
 
 }

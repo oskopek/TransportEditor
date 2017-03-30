@@ -1,9 +1,9 @@
 package com.oskopek.transport.view;
 
 import com.google.common.eventbus.EventBus;
+import com.oskopek.transport.session.PlanningSession;
 import com.oskopek.transport.weld.StartupStage;
 import com.oskopek.transport.event.DisposeGraphViewerEvent;
-import com.oskopek.transport.model.PlanningSession;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;

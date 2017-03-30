@@ -2,7 +2,7 @@ package com.oskopek.transport.view.editor;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.Location;
-import com.oskopek.transport.model.problem.RoadGraph;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
 import org.controlsfx.property.editor.Editors;

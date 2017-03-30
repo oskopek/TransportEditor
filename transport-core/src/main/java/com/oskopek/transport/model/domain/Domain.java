@@ -12,6 +12,7 @@ import com.oskopek.transport.model.domain.actionbuilder.PickUpBuilder;
 import com.oskopek.transport.model.domain.actionbuilder.RefuelBuilder;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 
 import java.util.Map;
 import java.util.Set;

@@ -1,5 +1,6 @@
 package com.oskopek.transport.view;
 
+import com.oskopek.transport.model.problem.graph.RoadGraph;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
@@ -8,7 +9,7 @@ import org.graphstream.ui.spriteManager.SpriteManager;
 
 /**
  * Sprite builder utility class used for building stylized sprites for
- * a {@link com.oskopek.transport.model.problem.RoadGraph}.
+ * a {@link RoadGraph}.
  *
  * @param <T> the class of the built sprite
  */

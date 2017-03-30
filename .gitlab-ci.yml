@@ -25,7 +25,7 @@ build-job:
     - "mvn clean compile $MAVEN_CLI_OPTS"
   artifacts:
     paths:
-      - transporteditor-editor/target/
+      - transport-editor/target/
 
 unittest-job:
   stage: test
@@ -33,10 +33,10 @@ unittest-job:
     - build-job
   script:
     - "mvn package $MAVEN_CLI_OPTS  -Dcheckstyle.skip=true"
-    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+    - echo "TotalInstructionCoverage:" `cat transport-editor/target/site/jacoco/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - transporteditor-editor/target/
+      - transport-editor/target/
 
 integrationtest-job:
   stage: test
@@ -44,10 +44,10 @@ integrationtest-job:
     - build-job
   script:
     - "mvn verify $MAVEN_CLI_OPTS -Pit -Dcheckstyle.skip=true"
-    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+    - echo "TotalInstructionCoverage:" `cat transport-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
   artifacts:
     paths:
-      - transporteditor-editor/target/
+      - transport-editor/target/
 
 #uitest-headless-job:
 #  stage: test
@@ -55,10 +55,10 @@ integrationtest-job:
 #    - build-job
 #  script:
 #    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only-headless -Dcheckstyle.skip=true"
-#    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+#    - echo "TotalInstructionCoverage:" `cat transport-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
 #  artifacts:
 #    paths:
-#      - transporteditor-editor/target/
+#      - transport-editor/target/
 
 #uitest-headful-job:
 #  stage: test
@@ -72,10 +72,10 @@ integrationtest-job:
 #    - sleep 3 # give xvfb some time to start
 #  script:
 #    - "mvn verify $MAVEN_CLI_OPTS -Pit,ut-only -Dcheckstyle.skip=true"
-#    - echo "TotalInstructionCoverage:" `cat transporteditor-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
+#    - echo "TotalInstructionCoverage:" `cat transport-editor/target/site/jacoco-it/jacoco.xml | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@scale=2;100*(\2)/(\1+\2)@' | bc`
 #  artifacts:
 #    paths:
-#      - transporteditor-editor/target/
+#      - transport-editor/target/
 
 deploy-job:
   stage: deploy
@@ -83,7 +83,7 @@ deploy-job:
     - "true"
   artifacts:
     paths:
-      - "transporteditor-editor/target/*.jar"
+      - "transport-editor/target/*.jar"
 
 #build-docs:
 #  stage: build
@@ -94,9 +94,9 @@ deploy-job:
 #    - bash .lfs_install.sh
 #  script:
 #    - 'old="`pwd`"'
-#    - 'cd transporteditor-docs'
+#    - 'cd transport-docs'
 #    - 'bash build.sh'
 #    - 'cd "$old"'
 #  artifacts:
 #     paths:
-#        - "transporteditor-docs/target/docs"
+#        - "transport-docs/target/docs"
