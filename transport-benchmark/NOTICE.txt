@@ -1,9 +1,13 @@
 
-Lists of 25 third-party dependencies.
+Lists of 29 third-party dependencies.
      (Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Classic Module (ch.qos.logback:logback-classic:1.1.8 - http://logback.qos.ch/logback-classic)
      (Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Core Module (ch.qos.logback:logback-core:1.1.8 - http://logback.qos.ch/logback-core)
+     (The Apache Software License, Version 2.0) Jackson-annotations (com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr1 - http://github.com/FasterXML/jackson)
+     (The Apache Software License, Version 2.0) Jackson-core (com.fasterxml.jackson.core:jackson-core:2.9.0.pr1 - https://github.com/FasterXML/jackson-core)
+     (The Apache Software License, Version 2.0) jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1 - http://github.com/FasterXML/jackson)
      (The Apache Software License, Version 2.0) Guava: Google Core Libraries for Java (com.google.guava:guava:20.0 - https://github.com/google/guava/guava)
      (The MIT License) Transport Core (com.oskopek.transport:transport-core:0.8.0-SNAPSHOT - https://www.ohloh.net/p/TransportEditor/transport-core)
+     (The MIT License) Transport Planners (com.oskopek.transport:transport-planners:0.8.0-SNAPSHOT - https://www.ohloh.net/p/TransportEditor/transport-planners)
      (The MIT License) (WTFPL) Transport Third Party Dependencies (com.oskopek.transport:transport-thirdparty:0.8.0-SNAPSHOT - https://www.ohloh.net/p/TransportEditor/transport-thirdparty)
      (BSD style) XStream Core (com.thoughtworks.xstream:xstream:1.4.8 - http://codehaus.org/xstream-parent/xstream/)
      (The Apache Software License, Version 2.0) Javaslang (io.javaslang:javaslang:2.0.5 - http://javaslang.io)
