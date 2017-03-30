@@ -273,7 +273,7 @@
         <profile>
             <id>planner</id>
             <properties>
-                <mainClass>com.oskopek.transporteditor.planners.PlannerMain</mainClass>
+                <mainClass>com.oskopek.transporteditor.planners.SequentialPlannerMain</mainClass>
             </properties>
             <build>
                 <finalName>TransportEditor-Planner</finalName>

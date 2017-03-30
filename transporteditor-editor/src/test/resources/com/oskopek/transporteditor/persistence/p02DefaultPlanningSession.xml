@@ -83,8 +83,8 @@
       </entry>
     </functionMap>
   </domain>
-  <planner class="com.oskopek.transporteditor.planners.SequentialForwardBFSPlanner" id="34">
-    <name>com.oskopek.transporteditor.planners.SequentialForwardBFSPlanner</name>
+  <planner class="com.oskopek.transporteditor.planners.sequential.ForwardBFSPlanner" id="34">
+    <name>com.oskopek.transporteditor.planners.sequential.ForwardBFSPlanner</name>
   </planner>
   <problem class="com.oskopek.transporteditor.model.problem.DefaultProblem" id="35">
     <name>transport-city-sequential-10nodes-1000size-2degree-100mindistance-2trucks-4packages-2008seed</name>

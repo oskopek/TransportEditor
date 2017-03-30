@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.domain.action.Action;
@@ -10,6 +10,7 @@ import com.oskopek.transporteditor.model.plan.SequentialPlan;
 import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.ImmutablePlanState;
+import com.oskopek.transporteditor.planners.AbstractPlanner;
 import javaslang.Tuple;
 import javaslang.Tuple2;
 import org.graphstream.algorithm.APSP;
@@ -21,12 +22,20 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SequentialForwardBFSPlanner extends AbstractPlanner {
+/**
+ * Breadth-first forward search planner. Still has bugs, highly experimental and very slow.
+ *
+ * @deprecated Probably not correct.
+ */
+public class ForwardBFSPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public SequentialForwardBFSPlanner() {
-        setName(SequentialForwardAstarPlanner.class.getSimpleName());
+    /**
+     * Default constructor.
+     */
+    public ForwardBFSPlanner() {
+        setName(ForwardAstarPlanner.class.getSimpleName());
     }
 
     private static void computeAPSP(RoadGraph graph) {
@@ -166,7 +175,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             Vehicle vehicle = lastVehicleAndLastDrive.get();
             Location location = vehicle.getLocation();
 
-            if (SequentialForwardAstarPlanner.hasCycle(plannedActions)) {
+            if (ForwardAstarPlanner.hasCycle(plannedActions)) {
                 return Collections.emptyList();
             }
 
@@ -259,7 +268,7 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             for (Package pkg : vehicle.getPackageList()) {
                 Location target = pkg.getTarget();
                 double distance = 0d;
-                distance = SequentialForwardAstarPlanner.getLengthToCorrect(info, target.getName());
+                distance = ForwardAstarPlanner.getLengthToCorrect(info, target.getName());
                 sum += distance;
             }
             map.put(location, (int) sum);
@@ -268,8 +277,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
     }
 
     @Override
-    public SequentialForwardBFSPlanner copy() {
-        return new SequentialForwardBFSPlanner();
+    public ForwardBFSPlanner copy() {
+        return new ForwardBFSPlanner();
     }
 
     @Override
@@ -279,6 +288,6 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SequentialForwardBFSPlanner;
+        return obj instanceof ForwardBFSPlanner;
     }
 }

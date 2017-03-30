@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.google.common.collect.ArrayTable;
 import com.oskopek.transporteditor.model.domain.Domain;
@@ -12,6 +12,7 @@ import com.oskopek.transporteditor.model.problem.*;
 import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.ImmutablePlanState;
 import com.oskopek.transporteditor.model.state.ProblemPlanningWrapper;
+import com.oskopek.transporteditor.planners.AbstractPlanner;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.graphstream.algorithm.APSP;
@@ -28,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SequentialForwardAstarPlanner extends AbstractPlanner {
+public class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -42,8 +43,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     private Plan bestPlan;
     private int bestPlanScore;
 
-    public SequentialForwardAstarPlanner() {
-        setName(SequentialForwardAstarPlanner.class.getSimpleName());
+    public ForwardAstarPlanner() {
+        setName(ForwardAstarPlanner.class.getSimpleName());
     }
 
     static void computeAPSP(RoadGraph graph) {
@@ -489,8 +490,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     }
 
     @Override
-    public SequentialForwardAstarPlanner copy() {
-        return new SequentialForwardAstarPlanner();
+    public ForwardAstarPlanner copy() {
+        return new ForwardAstarPlanner();
     }
 
     @Override
@@ -500,6 +501,6 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SequentialForwardAstarPlanner;
+        return obj instanceof ForwardAstarPlanner;
     }
 }

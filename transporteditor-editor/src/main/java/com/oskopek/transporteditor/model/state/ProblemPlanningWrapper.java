@@ -6,11 +6,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 
-public class ProblemPlanningWrapper implements Problem {
+/**
+ * Wrapper of a problem used in planning: does not use standard hash code and equals,
+ * but assumes the graph (and other things, like the action object names) do not change and does not compare them.
+ */
+public class ProblemPlanningWrapper implements Problem { // TODO: consolidate with the plan state interface
 
-    private final Problem problem;
+    private final Problem problem; // TODO: do not store the entire problem?
     private int planningHashCode;
 
+    /**
+     * Default constructor.
+     *
+     * @param problem the problem to wrap
+     */
     public ProblemPlanningWrapper(Problem problem) {
         this.problem = problem;
     }
@@ -23,6 +32,26 @@ public class ProblemPlanningWrapper implements Problem {
     @Override
     public RoadGraph getRoadGraph() {
         return problem.getRoadGraph();
+    }
+
+    /**
+     * Check if this state is a goal state.
+     *
+     * @return true iff this state is a goal state, i.e. if all packages and vehicles are at their targets, if specified
+     */
+    public boolean isGoalState() { // TODO: merge this into the PlanState interface
+        for (Package p : getAllPackages()) {
+            if (!p.getTarget().equals(p.getLocation())) {
+                return false;
+            }
+        }
+        for (Vehicle v : getAllVehicles()) {
+            Location target = v.getTarget();
+            if (target != null && !target.equals(v.getLocation())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -40,6 +69,11 @@ public class ProblemPlanningWrapper implements Problem {
         return vehicle;
     }
 
+    /**
+     * Get the internal problem that is wrapped.
+     *
+     * @return the internal problem
+     */
     protected Problem getProblem() {
         return problem;
     }
@@ -83,10 +117,6 @@ public class ProblemPlanningWrapper implements Problem {
     @Override
     public Map<String, Package> getPackageMap() {
         return problem.getPackageMap();
-    }
-
-    public boolean isGoalState() {
-        return getAllPackages().stream().allMatch(p -> p.getTarget().equals(p.getLocation()));
     }
 
     @Override
@@ -141,6 +171,14 @@ public class ProblemPlanningWrapper implements Problem {
         return equalsDuringPlanning(problem, that.problem);
     }
 
+    /**
+     * Internal implementation of a fast assumption-dependent equals. For example, totally omits the graph
+     * from comparison.
+     *
+     * @param problem the problem to compare
+     * @param other the other problem to compare
+     * @return true iff they are equal, assuming all assumptions hold
+     */
     private static boolean equalsDuringPlanning(Problem problem, Problem other) {
         if (hashCodeDuringPlanning(problem) != hashCodeDuringPlanning(other)) {
             return false;
@@ -185,6 +223,12 @@ public class ProblemPlanningWrapper implements Problem {
         return planningHashCode;
     }
 
+    /**
+     * Internal implementation of a fast assumption-dependent hash code.
+     *
+     * @param problem the problem to calculate a hash code for
+     * @return the hash code
+     */
     private static int hashCodeDuringPlanning(Problem problem) {
         HashCodeBuilder builder = new HashCodeBuilder(13, 17);
         for (Vehicle vehicle : problem.getVehicleMap().values()) {
@@ -202,6 +246,13 @@ public class ProblemPlanningWrapper implements Problem {
         return builder.toHashCode();
     }
 
+    /**
+     * Util method for calculating a packages hash code fast. Assumption-dependent.
+     *
+     * @param builder the builder to append to
+     * @param pkg the package
+     * @param location the location of the package
+     */
     private static void packageHashCodeDuringPlanning(HashCodeBuilder builder, Package pkg, String location) {
         builder.append(pkg.getName());
         builder.append(location);

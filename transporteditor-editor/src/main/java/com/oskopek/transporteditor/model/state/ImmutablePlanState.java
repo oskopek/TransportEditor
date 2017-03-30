@@ -15,11 +15,10 @@ import java.util.*;
  * An immutable {@link PlanState} implementation used for planning.
  */
 public class ImmutablePlanState extends ProblemPlanningWrapper implements Problem {
-    // TODO: consolidate with the plan state interface
 
     private final Domain domain;
     private final transient Logger logger = LoggerFactory.getLogger(ImmutablePlanState.class);
-    private final List<Action> actions;
+    private final List<Action> actions; // TODO: non sequential domains?
     private final int totalTime;
 
     /**
@@ -33,17 +32,29 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         super(problem);
         this.domain = domain;
         this.actions = actions;
-        totalTime = actions.stream().mapToInt(a -> a.getDuration().getCost()).sum(); // TODO: non sequential domains?
+        totalTime = actions.stream().mapToInt(a -> a.getDuration().getCost()).sum();
     }
 
+    /**
+     * Constructor for updating the problem and appending an action.
+     *
+     * @param oldState the old state to copy all properties from
+     * @param newProblem the new problem
+     * @param addedAction the added action
+     */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem, Action addedAction) {
         super(newProblem);
         this.domain = oldState.getDomain();
         this.actions = new ArrayList<>(oldState.getActions());
         this.actions.add(addedAction);
-        totalTime = oldState.getTotalTime() + addedAction.getDuration().getCost(); // TODO: non sequential domains?
+        totalTime = oldState.getTotalTime() + addedAction.getDuration().getCost();
     }
 
+    /**
+     * Constructor for updating the problem.
+     * @param oldState the old state to copy from
+     * @param newProblem the new problem
+     */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem) {
         super(newProblem);
         this.domain = oldState.getDomain();
@@ -51,6 +62,11 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         totalTime = oldState.getTotalTime();
     }
 
+    /**
+     * Get the pre-calculated total time it takes this plan to reach this state.
+     *
+     * @return the total time
+     */
     public int getTotalTime() {
         return totalTime;
     }
@@ -73,33 +89,62 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         return domain;
     }
 
+    /**
+     * Applies the specified action and returns the new state.
+     *
+     * @param action the action to apply
+     * @return the updated state or empty if the preconditions or the effects were not valid in the resulting state
+     */
     public Optional<ImmutablePlanState> apply(Action action) {
         return applyPreconditions(action).flatMap(t -> t.applyEffects(action));
     }
 
+    /**
+     * Applies the specified action's preconditions and returns the new state.
+     *
+     * @param action the action's preconditions to apply
+     * @return the updated state or empty if the preconditions were not valid before application
+     */
     private Optional<ImmutablePlanState> applyPreconditions(Action action) {
-        logger.trace("Checking preconditions of action {}.", action.getName());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Checking preconditions of action {}.", action.getName());
+        }
         if (!action.arePreconditionsValid(getProblem())) {
-            logger.trace("Preconditions of action " + action + " are invalid in problem " + getProblem());
+            if (logger.isTraceEnabled()) {
+                logger.trace("Preconditions of action " + action + " are invalid in problem " + getProblem());
+            }
             return Optional.empty();
         }
-        logger.trace("Applying preconditions of action {}.", action.getName());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Applying preconditions of action {}.", action.getName());
+        }
         return Optional.of(new ImmutablePlanState(this, action.applyPreconditions(domain, getProblem())));
     }
 
+    /**
+     * Applies the specified action's effects and returns the new state.
+     *
+     * @param action the action's effects to apply
+     * @return the updated state or empty if the effects were not valid after application
+     */
     private Optional<ImmutablePlanState> applyEffects(Action action) {
-        logger.trace("Applying effects of action {}.", action.getName());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Applying effects of action {}.", action.getName());
+        }
         Problem newProblem = action.applyEffects(domain, getProblem());
-        logger.trace("Checking effects of action {}.", action.getName());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Checking effects of action {}.", action.getName());
+        }
         if (!action.areEffectsValid(newProblem)) {
-            logger.trace(
-                    "Effects of action " + action + " are invalid after applying to problem " + getProblem()
-                            + "(result: " + newProblem + ").");
+            if (logger.isTraceEnabled()) {
+                logger.trace(
+                        "Effects of action " + action + " are invalid after applying to problem " + getProblem()
+                                + "(result: " + newProblem + ").");
+            }
             return Optional.empty();
         }
         return Optional.of(new ImmutablePlanState(this, newProblem, action));
     }
-
 
     @Override
     public ImmutablePlanState putVehicle(String name, Vehicle vehicle) {

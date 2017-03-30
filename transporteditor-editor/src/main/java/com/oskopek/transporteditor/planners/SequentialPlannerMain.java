@@ -8,6 +8,7 @@ import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import com.oskopek.transporteditor.persistence.VariableDomainIO;
+import com.oskopek.transporteditor.planners.sequential.ForwardAstarPlanner;
 import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,21 +19,34 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public final class PlannerMain {
+/**
+ * Main class for running sequential planners.
+ */
+public final class SequentialPlannerMain {
 
 //    private static final Planner planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}"
 // + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
-//    private static final Planner planner = new SequentialForwardBFSPlanner();
-    private static final Planner planner = new SequentialForwardAstarPlanner();
+//    private static final Planner planner = new ForwardBFSPlanner();
+    private static final Planner planner = new ForwardAstarPlanner();
 
-    private static final Logger logger = LoggerFactory.getLogger(PlannerMain.class);
+    private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
 
-    private PlannerMain() {
+    /**
+     * Private empty constructor.
+     */
+    private SequentialPlannerMain() {
         // intentionally empty
     }
 
+    /**
+     * The main method. Takes two args, the domain and the problem file in PDDL. The domain
+     * has to be a sequential transport domain.
+     *
+     * @param args the command-line arguments
+     * @throws IOException if an error during loading the problem or saving the plan occurs
+     */
     public static void main(String[] args) throws IOException {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Try.run(() -> Thread.sleep(200));
@@ -44,7 +58,6 @@ public final class PlannerMain {
             }
             logger.debug("Shut down.");
         }));
-
 
         Domain domain;
         try (InputStream inputStream = Files.newInputStream(Paths.get(args[0]))) {

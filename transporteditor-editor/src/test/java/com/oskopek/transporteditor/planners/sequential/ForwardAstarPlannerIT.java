@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.action.Action;
@@ -21,9 +21,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class SequentialForwardAstarPlannerIT {
+public class ForwardAstarPlannerIT {
 
-    private SequentialForwardAstarPlanner planner;
+    private ForwardAstarPlanner planner;
     private static final SequentialDomain domain = new SequentialDomain("");
     private static Problem problem;
     private static Problem p02Problem;
@@ -35,15 +35,15 @@ public class SequentialForwardAstarPlannerIT {
     @BeforeClass
     public static void setUpClass() throws Exception {
         problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p01SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
         p02Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p02SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p02SeqProblem.pddl")));
         p03Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p03SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p03SeqProblem.pddl")));
         plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p01SeqPlan.val")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
         p02Plan = new SequentialPlanIO(domain, p02Problem).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p02SeqPlan.val")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p02SeqPlan.val")));
 
         List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);
@@ -53,7 +53,7 @@ public class SequentialForwardAstarPlannerIT {
 
     @Before
     public void setUp() throws Exception {
-        planner = new SequentialForwardAstarPlanner();
+        planner = new ForwardAstarPlanner();
     }
 
     @Test
@@ -64,8 +64,8 @@ public class SequentialForwardAstarPlannerIT {
     @Test
     public void plansP01Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, problem);
-        SequentialForwardBFSPlannerIT
-                .assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan, planEquivalent);
+        ForwardBFSPlannerIT
+                .assertThatPlanIsEqualToAny(plan, ForwardAstarPlannerIT.plan, planEquivalent);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class SequentialForwardAstarPlannerIT {
 
         assertThat(Stream.ofAll(plan.getTemporalPlanActions()).last().getEndTimestamp())
                 .isEqualTo(Stream.ofAll(p02Plan.getTemporalPlanActions()).last().getEndTimestamp());
-        SequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
+        ForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class SequentialForwardAstarPlannerIT {
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
-//        aSequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan,
+//        aSequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, ForwardAstarPlannerIT.plan,
 // planEquivalent);
     }
 
@@ -116,7 +116,7 @@ public class SequentialForwardAstarPlannerIT {
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
         planPart.add(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
-        assertThat(SequentialForwardAstarPlanner
+        assertThat(ForwardAstarPlanner
                 .doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getDistanceMatrix()))
                 .isTrue();
     }

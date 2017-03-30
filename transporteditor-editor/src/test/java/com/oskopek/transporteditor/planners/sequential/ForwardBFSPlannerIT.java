@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.action.Action;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class SequentialForwardBFSPlannerIT {
+public class ForwardBFSPlannerIT {
 
-    private SequentialForwardBFSPlanner planner;
+    private ForwardBFSPlanner planner;
     private static final SequentialDomain domain = new SequentialDomain("");
     private static Problem problem;
     private static Problem p02Problem;
@@ -33,13 +33,13 @@ public class SequentialForwardBFSPlannerIT {
     @BeforeClass
     public static void setUpClass() throws Exception {
         problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p01SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
         p02Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p02SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p02SeqProblem.pddl")));
         p03Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p03SeqProblem.pddl")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p03SeqProblem.pddl")));
         plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                SequentialForwardBFSPlannerIT.class.getResourceAsStream("../persistence/p01SeqPlan.val")));
+                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
 
         List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);
@@ -49,7 +49,7 @@ public class SequentialForwardBFSPlannerIT {
 
     @Before
     public void setUp() throws Exception {
-        planner = new SequentialForwardBFSPlanner();
+        planner = new ForwardBFSPlanner();
     }
 
     @Test
@@ -60,7 +60,7 @@ public class SequentialForwardBFSPlannerIT {
     @Test
     public void plansP01Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, problem);
-        assertThatPlanIsEqualToAny(plan, SequentialForwardBFSPlannerIT.plan, planEquivalent);
+        assertThatPlanIsEqualToAny(plan, ForwardBFSPlannerIT.plan, planEquivalent);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SequentialForwardBFSPlannerIT {
     public void plansP02Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p02Problem);
         System.out.println(new SequentialPlanIO(domain, p02Problem).serialize(plan));
-//        assertThatPlanIsEqualToAny(plan, SequentialForwardBFSPlannerIT.plan, planEquivalent);
+//        assertThatPlanIsEqualToAny(plan, ForwardBFSPlannerIT.plan, planEquivalent);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class SequentialForwardBFSPlannerIT {
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
-//        assertThatPlanIsEqualToAny(plan, SequentialForwardBFSPlannerIT.plan, planEquivalent);
+//        assertThatPlanIsEqualToAny(plan, ForwardBFSPlannerIT.plan, planEquivalent);
     }
 
     private static void assertThatActionsAreEqual(Action left, Action right) {
