@@ -1,0 +1,22 @@
+; Makespan: 549.1218
+; Wasted time: 0.1218
+; Adjusted makespan: 549.000
+; validate with -t 0.00005
+0.0041: (drive truck-2 city-2-loc-2 city-2-loc-3) [33.000]
+33.0122: (drive truck-2 city-2-loc-3 city-1-loc-1) [98.000]
+131.0203: (drive truck-2 city-1-loc-1 city-1-loc-3) [15.000]
+146.0284: (drive truck-2 city-1-loc-3 city-1-loc-2) [35.000]
+181.0365: (pick-up truck-2 city-1-loc-2 package-1) [1.000]
+182.0406: (drive truck-2 city-1-loc-2 city-1-loc-3) [35.000]
+217.0487: (drive truck-2 city-1-loc-3 city-1-loc-1) [15.000]
+217.0528: (drive truck-1 city-2-loc-1 city-2-loc-3) [34.000]
+251.0609: (drive truck-1 city-2-loc-3 city-1-loc-1) [98.000]
+251.0650: (drive truck-2 city-1-loc-1 city-2-loc-3) [98.000]
+349.0731: (drop truck-2 city-2-loc-3 package-1) [1.000]
+349.0772: (drive truck-1 city-1-loc-1 city-1-loc-3) [15.000]
+364.0853: (drive truck-1 city-1-loc-3 city-1-loc-2) [35.000]
+399.0934: (pick-up truck-1 city-1-loc-2 package-2) [1.000]
+400.0975: (drive truck-1 city-1-loc-2 city-1-loc-3) [35.000]
+435.1056: (drive truck-1 city-1-loc-3 city-1-loc-1) [15.000]
+450.1137: (drive truck-1 city-1-loc-1 city-2-loc-3) [98.000]
+548.1218: (drop truck-1 city-2-loc-3 package-2) [1.000]
