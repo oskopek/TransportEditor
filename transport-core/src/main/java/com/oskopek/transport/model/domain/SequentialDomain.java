@@ -1,6 +1,5 @@
 package com.oskopek.transport.model.domain;
 
-import com.google.common.collect.ImmutableSet;
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.domain.action.functions.Function;
 import com.oskopek.transport.model.domain.action.functions.RoadLength;
@@ -9,6 +8,7 @@ import com.oskopek.transport.model.domain.action.predicates.*;
 import com.oskopek.transport.model.domain.actionbuilder.DriveBuilder;
 import com.oskopek.transport.model.domain.actionbuilder.DropBuilder;
 import com.oskopek.transport.model.domain.actionbuilder.PickUpBuilder;
+import javaslang.collection.HashSet;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,7 +37,8 @@ public class SequentialDomain extends DefaultDomain {
                 new PickUpBuilder(Arrays.asList(new WhoAtWhere(), new WhatAtWhere()),
                         Arrays.asList(new Not(new WhatAtWhere()), new In()), ActionCost.valueOf(1),
                         ActionCost.valueOf(1)), null,
-                ImmutableSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity));
+                HashSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity)
+                        .toJavaSet());
     }
 
     @Override

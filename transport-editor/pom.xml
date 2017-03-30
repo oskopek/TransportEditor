@@ -8,7 +8,7 @@
     </parent>
     <artifactId>transport-editor</artifactId>
     <packaging>jar</packaging>
-    <name>transport-editor</name>
+    <name>Transport Editor</name>
     <description>Visualizer and editor for IPC Transport domain problems.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

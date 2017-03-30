@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>transport-thirdparty</artifactId>
     <packaging>jar</packaging>
-    <name>transport-thirdparty</name>
+    <name>Transport Third Party Dependencies</name>
     <description>Third party dependencies for the Transport module.</description>
     <licenses>
         <license>
