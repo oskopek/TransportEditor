@@ -35,4 +35,4 @@ Fran Lattanzio
 
 License: MIT
 
-Files in: `transporteditor-editor/src/main/java/org/teneighty/heap/`
+Files in: `transporteditor-editor/src/main/java/org/teneighty/org.teneighty.heap/`

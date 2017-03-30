@@ -31,7 +31,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
- * A heap interface.
+ * A org.teneighty.heap interface.
  * <p>
  * Heaps can be used as very efficient priority queues. Heaps do not work well
  * as general purpose maps: They do not naturally support any sort of searching
@@ -46,14 +46,14 @@ import java.util.function.Consumer;
  * of the available implementations, as well as their runtime performance.</li>
  * <li>In general, the order of items in the Sets/Collections returned from
  * collection-view methods is arbitrary. However, it should always be the case
- * that (barring any changes to the heap) they are consistent and deterministic.
+ * that (barring any changes to the org.teneighty.heap) they are consistent and deterministic.
  * </li>
  * <li>The iterators returned by implementations should generally be
- * <i>fail-fast</i>, meaning they should detect changes to the backing heap and
- * throw a <code>ConcurrentModificationException</code> if the backing heap is
+ * <i>fail-fast</i>, meaning they should detect changes to the backing org.teneighty.heap and
+ * throw a <code>ConcurrentModificationException</code> if the backing org.teneighty.heap is
  * changed during iteration.</li>
  * <li>Heaps do not maintain insertion order between elements with equal keys.
- * This is not the general contract of the heap ADT. If you need this
+ * This is not the general contract of the org.teneighty.heap ADT. If you need this
  * functionality, it should be programmed externally.</li>
  * <li>It is generally not a problem to use as a key <code>Comparable</code>
  * class whose <code>compareTo()</code> method is inconsistent with equals,
@@ -77,9 +77,9 @@ public interface Heap<TKey, TValue>
         extends Iterable<Heap.Entry<TKey, TValue>> {
 
     /**
-     * Get the comparator used for decision in this heap.
+     * Get the comparator used for decision in this org.teneighty.heap.
      * <p>
-     * If this method returns <code>null</code> then this heap uses the keys'
+     * If this method returns <code>null</code> then this org.teneighty.heap uses the keys'
      * <i>natural ordering</i>.
      *
      * @return the comparator or <code>null</code>.
@@ -89,31 +89,31 @@ public interface Heap<TKey, TValue>
     Comparator<? super TKey> getComparator();
 
     /**
-     * Add a key/value pair to this heap.
+     * Add a key/value pair to this org.teneighty.heap.
      *
      * @param key the node key.
      * @param value the node value.
      * @return the entry created.
      * @throws ClassCastException If the specified key is not mutually
      * comparable
-     * with the other keys of this heap.
+     * with the other keys of this org.teneighty.heap.
      * @throws NullPointerException If <code>key</code> is <code>null</code> and
-     * this heap does not support <code>null</code> keys.
+     * this org.teneighty.heap does not support <code>null</code> keys.
      */
     Entry<TKey, TValue> insert(TKey key, TValue value)
             throws ClassCastException, NullPointerException;
 
     /**
-     * Insert all the entries of the specified heap into this heap.
+     * Insert all the entries of the specified org.teneighty.heap into this org.teneighty.heap.
      * <p>
-     * The other heap will not be cleared, and this heap will simply <i>hold</i>
+     * The other org.teneighty.heap will not be cleared, and this org.teneighty.heap will simply <i>hold</i>
      * the entries of <code>other</code>, not <i>contain</i> them.
      *
-     * @param other the other heap.
+     * @param other the other org.teneighty.heap.
      * @throws NullPointerException If <code>other</code> is <code>null</code>.
      * @throws ClassCastException If the keys of <code>other</code> are not
-     * mutually comparable to the keys of this heap.
-     * @throws IllegalArgumentException If you attempt to insert a heap into
+     * mutually comparable to the keys of this org.teneighty.heap.
+     * @throws IllegalArgumentException If you attempt to insert a org.teneighty.heap into
      * itself.
      * @see #union(Heap)
      */
@@ -127,7 +127,7 @@ public interface Heap<TKey, TValue>
      * This method does <u>not</u> remove the returned entry.
      *
      * @return the entry.
-     * @throws NoSuchElementException If this heap is empty.
+     * @throws NoSuchElementException If this org.teneighty.heap is empty.
      * @see #extractMinimum()
      */
     Entry<TKey, TValue> getMinimum()
@@ -137,7 +137,7 @@ public interface Heap<TKey, TValue>
      * Remove and return the entry minimum key.
      *
      * @return the entry.
-     * @throws NoSuchElementException If the heap is empty.
+     * @throws NoSuchElementException If the org.teneighty.heap is empty.
      * @see #getMinimum()
      */
     Entry<TKey, TValue> extractMinimum()
@@ -146,16 +146,16 @@ public interface Heap<TKey, TValue>
     /**
      * Decrease the key of the given element.
      * <p>
-     * Note that <code>e</code> must be <i>held</i> by this heap, or a
+     * Note that <code>e</code> must be <i>held</i> by this org.teneighty.heap, or a
      * <code>IllegalArgumentException</code> will be tossed.
      *
      * @param e the entry for which to decrease the key.
      * @param key the new key.
      * @throws IllegalArgumentException If <code>k</code> is larger than
      * <code>e</code>'s current key or <code>e</code> is not held by
-     * this heap.
+     * this org.teneighty.heap.
      * @throws ClassCastException If the new key is not mutually comparable with
-     * other keys in the heap.
+     * other keys in the org.teneighty.heap.
      * @throws NullPointerException If <code>e</code> is <code>null</code>.
      * @see #holdsEntry(Heap.Entry)
      */
@@ -164,14 +164,14 @@ public interface Heap<TKey, TValue>
             NullPointerException;
 
     /**
-     * Delete the entry from this heap.
+     * Delete the entry from this org.teneighty.heap.
      * <p>
-     * Note that <code>e</code> must be <i>held</i> by this heap, or a
+     * Note that <code>e</code> must be <i>held</i> by this org.teneighty.heap, or a
      * <code>IllegalArgumentException</code> will be tossed.
      *
      * @param e the entry to delete.
      * @throws IllegalArgumentException If <code>e</code> is not held by this
-     * heap.
+     * org.teneighty.heap.
      * @throws NullPointerException If <code>e</code> is <code>null</code>.
      * @see #holdsEntry(Heap.Entry)
      */
@@ -179,23 +179,23 @@ public interface Heap<TKey, TValue>
             throws IllegalArgumentException, NullPointerException;
 
     /**
-     * Union this heap with another heap.
+     * Union this org.teneighty.heap with another org.teneighty.heap.
      * <p>
      * Only instances of the same class are capable of being unioned together.
      * This is a change from previous versions, when the union of different
      * types resulting in "insertAll" type behavior. However, this meant that
      * the union method had different semantics based on the runtime-type of the
-     * other heap, which is definitely a bad thing.
+     * other org.teneighty.heap, which is definitely a bad thing.
      * <p>
-     * After a union operation, this heap will both <i>contain</i> and
-     * <i>hold</i> the entries of the other heap. The other heap is cleared in
+     * After a union operation, this org.teneighty.heap will both <i>contain</i> and
+     * <i>hold</i> the entries of the other org.teneighty.heap. The other org.teneighty.heap is cleared in
      * the process of union.
      *
-     * @param other the other heap.
+     * @param other the other org.teneighty.heap.
      * @throws NullPointerException If <code>other</code> is <code>null</code>.
      * @throws ClassCastException If the keys of the nodes are not mutually
      * comparable or the classes do not match.
-     * @throws IllegalArgumentException If you attempt to union a heap with
+     * @throws IllegalArgumentException If you attempt to union a org.teneighty.heap with
      * itself
      * (i.e if <code>other == this</code>).
      * @see #insertAll(Heap)
@@ -205,30 +205,30 @@ public interface Heap<TKey, TValue>
             IllegalArgumentException;
 
     /**
-     * Clear this heap.
+     * Clear this org.teneighty.heap.
      */
     void clear();
 
     /**
-     * Get the number of entries in this heap.
+     * Get the number of entries in this org.teneighty.heap.
      *
-     * @return the number of entries in this heap.
+     * @return the number of entries in this org.teneighty.heap.
      */
     int getSize();
 
     /**
-     * Is this heap empty?
+     * Is this org.teneighty.heap empty?
      *
-     * @return <code>true</code> if this heap is empty; <code>false</code>
+     * @return <code>true</code> if this org.teneighty.heap is empty; <code>false</code>
      * otherwise.
      * @see #getSize()
      */
     boolean isEmpty();
 
     /**
-     * Does this heap hold the specified entry? This method returns true iff
+     * Does this org.teneighty.heap hold the specified entry? This method returns true iff
      * there
-     * exists some entry <code>e</code> within this heap such that
+     * exists some entry <code>e</code> within this org.teneighty.heap such that
      * <code>e == entry</code>.
      * <p>
      * This method can generally be implemented efficiently (i.e. using
@@ -237,17 +237,17 @@ public interface Heap<TKey, TValue>
      * <p>
      * Note there is a subtle, but very important, difference between this
      * method and <code>containsEntry</code>. This method checks to see if the
-     * specified entry is held by this heap in the sense that the specific
+     * specified entry is held by this org.teneighty.heap in the sense that the specific
      * object <code>entry</code> could be reached by hopping some arbitrary set
      * of references (be they weak, strong, etc.) starting from a strong
      * reference directly held by this object. This is different from
-     * <code>containsEntry</code>, which checks if this heap contains an entry
-     * with exactly the same key and value values. Obviously, if a heap
+     * <code>containsEntry</code>, which checks if this org.teneighty.heap contains an entry
+     * with exactly the same key and value values. Obviously, if a org.teneighty.heap
      * <i>holds</i> a specific entry it also <i>contains</i> that entry;
      * however, the reverse is not true.
      *
      * @param entry the entry to check.
-     * @return <code>true</code> if this heap holds the specified entry;
+     * @return <code>true</code> if this org.teneighty.heap holds the specified entry;
      * <code>false</code> otherwise.
      * @throws NullPointerException If <code>entry</code> is <code>null</code>.
      * @see #containsEntry(Heap.Entry)
@@ -256,8 +256,8 @@ public interface Heap<TKey, TValue>
             throws NullPointerException;
 
     /**
-     * Does this heap contain the specified entry? In other words, does this
-     * heap
+     * Does this org.teneighty.heap contain the specified entry? In other words, does this
+     * org.teneighty.heap
      * contain entry <code>e</code> such that
      * <code>e.equals( entry ) == true</code>. Note that this does <b>not</b>
      * imply that <code>e == entry</code>: See {@link Heap.Entry#equals(Object)}
@@ -270,7 +270,7 @@ public interface Heap<TKey, TValue>
      * the difference between that method and this one.
      *
      * @param entry the entry to check.
-     * @return <code>true</code> if this heap contains the specified entry;
+     * @return <code>true</code> if this org.teneighty.heap contains the specified entry;
      * <code>false</code> otherwise.
      * @throws NullPointerException If <code>entry</code> is <code>null</code>.
      * @see #holdsEntry(Heap.Entry)
@@ -279,7 +279,7 @@ public interface Heap<TKey, TValue>
             throws NullPointerException;
 
     /**
-     * Compare this heap for equality with the specified object.
+     * Compare this org.teneighty.heap for equality with the specified object.
      * <p>
      * Equality for two heaps is defined to be that they <i>contain</i>, not
      * <i>hold</i>, the exact same set of entries. (Otherwise, two heaps could
@@ -290,8 +290,8 @@ public interface Heap<TKey, TValue>
      * <p>
      * Efficiency of this method interesting question, since it depends only on
      * which elements are stored, not <u>how</u> they are stored. For example,
-     * it's difficult to efficiently compare a Fibonacci heap and a Binomial
-     * heap, even if they contain the same elements, since their underlying
+     * it's difficult to efficiently compare a Fibonacci org.teneighty.heap and a Binomial
+     * org.teneighty.heap, even if they contain the same elements, since their underlying
      * representations are very different. (In fact, it's very difficult to
      * compare two Fibonacci heaps with the same set of entries!)
      *
@@ -303,10 +303,10 @@ public interface Heap<TKey, TValue>
     /**
      * Return the hashcode for this Heap.
      * <p>
-     * The hashcode for <i>any</i> heap is hereby defined to be sum of the
-     * hashcodes of the entries which this heap <i>holds</i>. Like the equality
+     * The hashcode for <i>any</i> org.teneighty.heap is hereby defined to be sum of the
+     * hashcodes of the entries which this org.teneighty.heap <i>holds</i>. Like the equality
      * definition, this is not debatable. Note that this definition does not
-     * violate the definition of <code>equals</code>, since if a heap
+     * violate the definition of <code>equals</code>, since if a org.teneighty.heap
      * <i>holds</i> a set of entries it must also <i>contain</i> them.
      * <p>
      * If you choose to override the equals method, you must also override this
@@ -320,23 +320,23 @@ public interface Heap<TKey, TValue>
     int hashCode();
 
     /**
-     * Get an iterator over the entries of this heap.
+     * Get an iterator over the entries of this org.teneighty.heap.
      * <p>
      * This the method of <code>java.lang.Iterable</code> fame, allowing you to
      * use the Heap interface within the <code>foreach(...)</code> construct.
      *
-     * @return an iterator over the entries of this heap.
+     * @return an iterator over the entries of this org.teneighty.heap.
      */
     Iterator<Heap.Entry<TKey, TValue>> iterator();
 
     /**
-     * Perform the specified action on each element of this heap.
+     * Perform the specified action on each element of this org.teneighty.heap.
      * <p>
-     * It's extremely unwise to attempt to modify the heap (e.g. decrease the
+     * It's extremely unwise to attempt to modify the org.teneighty.heap (e.g. decrease the
      * keys of all elements by one). Most implementations of this method are
-     * likely to be implemented atop an iterator over the heap, and thus, if the
+     * likely to be implemented atop an iterator over the org.teneighty.heap, and thus, if the
      * iterator is fail-fast and detects concurrent modification, any changes to
-     * the heap will cause the iterator to die.
+     * the org.teneighty.heap will cause the iterator to die.
      *
      * @param action the action to perform.
      * @throws NullPointerException If <code>action</code> is <code>null</code>.
@@ -374,7 +374,7 @@ public interface Heap<TKey, TValue>
     Collection<Heap.Entry<TKey, TValue>> getEntries();
 
     /**
-     * The heap entry interface.
+     * The org.teneighty.heap entry interface.
      *
      * @param <TKey> the key type.
      * @param <TValue> the value type.
@@ -424,7 +424,7 @@ public interface Heap<TKey, TValue>
         /**
          * A reminder to override hashcode.
          * <p>
-         * The hashcode of a heap entry is defined to be the hashcodes of this
+         * The hashcode of a org.teneighty.heap entry is defined to be the hashcodes of this
          * entry's key and value objects (or 0 if these objects are
          * <code>null</code>) XOR'ed with each other.
          *

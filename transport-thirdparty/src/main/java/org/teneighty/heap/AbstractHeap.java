@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * A base class for heap implementations.
+ * A base class for org.teneighty.heap implementations.
  * <p>
  * This class is capable of supporting both the {@link java.lang.Cloneable} and
  * {@link java.io.Serializable} interfaces (although it implements neither
@@ -118,7 +118,7 @@ public abstract class AbstractHeap<TKey, TValue>
     /**
      * Key compare utility method.
      * <p>
-     * Note that if this heap uses natural ordering, a <code>null</code> key is
+     * Note that if this org.teneighty.heap uses natural ordering, a <code>null</code> key is
      * always considered <i>smaller</i> than a non-null key. This is different
      * from <code>SortedMap</code>, which will generally reject
      * <code>null</code> keys when using natural ordering. This behavior is
@@ -140,18 +140,18 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Insert all the entries of the specified heap into this heap.
+     * Insert all the entries of the specified org.teneighty.heap into this org.teneighty.heap.
      * <p>
      * This method takes time <code>O(n * f(m + n))</code>, where <code>n</code>
-     * is number of entries in the other heap, <code>m</code> is the number of
-     * entries in this heap and <code>f(x)</code> is time taken by the insert
-     * function of this heap.
+     * is number of entries in the other org.teneighty.heap, <code>m</code> is the number of
+     * entries in this org.teneighty.heap and <code>f(x)</code> is time taken by the insert
+     * function of this org.teneighty.heap.
      *
-     * @param other the other heap.
+     * @param other the other org.teneighty.heap.
      * @throws NullPointerException If <code>other</code> is <code>null</code>.
      * @throws ClassCastException If the keys of <code>other</code> are not
-     * mutually comparable to the keys of this heap.
-     * @throws IllegalArgumentException If you attempt to insert a heap into
+     * mutually comparable to the keys of this org.teneighty.heap.
+     * @throws IllegalArgumentException If you attempt to insert a org.teneighty.heap into
      * itself.
      */
     public void insertAll(final Heap<? extends TKey, ? extends TValue> other)
@@ -191,13 +191,13 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Perform the specified action on each element of this heap.
+     * Perform the specified action on each element of this org.teneighty.heap.
      * <p>
-     * It's extremely unwise to attempt to modify the heap (e.g. decrease the
+     * It's extremely unwise to attempt to modify the org.teneighty.heap (e.g. decrease the
      * keys of all elements by one). Most implementations of this method are
-     * likely to be implemented atop an iterator over the heap, and thus, if the
+     * likely to be implemented atop an iterator over the org.teneighty.heap, and thus, if the
      * iterator is fail-fast and detects concurrent modification, any changes to
-     * the heap will cause the iterator to die.
+     * the org.teneighty.heap will cause the iterator to die.
      *
      * @param action the action to perform.
      * @throws NullPointerException If <code>action</code> is <code>null</code>.
@@ -208,7 +208,7 @@ public abstract class AbstractHeap<TKey, TValue>
             throw new NullPointerException();
         }
 
-        // note that if action changes the state of this heap - and the
+        // note that if action changes the state of this org.teneighty.heap - and the
         // iterator detects concurrent modification - we'll die right here
         // with a ConcurrentModificationException (or something equally
         // sinister).
@@ -228,9 +228,9 @@ public abstract class AbstractHeap<TKey, TValue>
      * This method works by comparing the entry sets of each class, a process
      * that takes time <code>O(n<sup>2</sup>)</code> in the worst case.
      *
-     * @param other the object to which to compare this heap.
+     * @param other the object to which to compare this org.teneighty.heap.
      * @return <code>true</code> if <code>other</code> is logically equal to
-     * this heap; <code>false</code> otherwise.
+     * this org.teneighty.heap; <code>false</code> otherwise.
      * @see java.lang.Object#equals(Object)
      * @see #hashCode()
      */
@@ -258,14 +258,14 @@ public abstract class AbstractHeap<TKey, TValue>
     /**
      * Return the hashcode for this Heap.
      * <p>
-     * The hashcode for <i>any</i> heap is hereby defined to be sum of the
-     * hashcodes of the entries which this heap <i>holds</i>. Like the equality
+     * The hashcode for <i>any</i> org.teneighty.heap is hereby defined to be sum of the
+     * hashcodes of the entries which this org.teneighty.heap <i>holds</i>. Like the equality
      * definition, this is not debatable. Note that this definition does not
-     * violate the definition of <code>equals</code>, since if a heap
+     * violate the definition of <code>equals</code>, since if a org.teneighty.heap
      * <i>holds</i> a set of entries it must also <i>contain</i> them.
      * <p>
      * Assume, of course, that you're assuming the canonically defined hashcode
-     * for heap entries. (More precisely, this implementation will be correct if
+     * for org.teneighty.heap entries. (More precisely, this implementation will be correct if
      * you use the hashcode supplied by <code>AbstractHeapEntry</code>.)
      *
      * @return the hashcode.
@@ -284,7 +284,7 @@ public abstract class AbstractHeap<TKey, TValue>
     /**
      * A happier to string.
      * <p>
-     * You can override this method if your heap implementation is extra
+     * You can override this method if your org.teneighty.heap implementation is extra
      * special.
      *
      * @return a string representation of this object.
@@ -326,15 +326,15 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Does this heap contain the specified entry? In other words, does this
-     * heap
+     * Does this org.teneighty.heap contain the specified entry? In other words, does this
+     * org.teneighty.heap
      * contain entry <code>e</code> such that <code>e.equals( entry )</code>.
      * Note that this does <i>not</i>
      * imply that <code>e == entry</code>: See {@link Heap.Entry#equals(Object)}
      * .
      *
      * @param entry the entry to check.
-     * @return <code>true</code> if this heap contains the specified entry;
+     * @return <code>true</code> if this org.teneighty.heap contains the specified entry;
      * <code>false</code> otherwise.
      * @throws NullPointerException If <code>entry</code> is <code>null</code>.
      */
@@ -359,9 +359,9 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Returns a Collection view of the keys contained in this heap. The
-     * Collection is backed by the heap, so changes to the heap are reflected in
-     * the Collection, and vice-versa. (If the heap is modified while an
+     * Returns a Collection view of the keys contained in this org.teneighty.heap. The
+     * Collection is backed by the org.teneighty.heap, so changes to the org.teneighty.heap are reflected in
+     * the Collection, and vice-versa. (If the org.teneighty.heap is modified while an
      * iteration
      * over the Collection is in progress, the results of the iteration are
      * undefined.) The returned collection is readonly.
@@ -371,7 +371,7 @@ public abstract class AbstractHeap<TKey, TValue>
      * performed, so there is a slight chance that multiple calls to this method
      * will not all return the same Collection.
      *
-     * @return a Collection view of the keys contained in this heap.
+     * @return a Collection view of the keys contained in this org.teneighty.heap.
      */
     public Collection<TKey> getKeys() {
         if (this.keys == null) {
@@ -382,9 +382,9 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Returns a collection view of the values contained in this heap. The
-     * collection is backed by the heap, so changes to the heap are reflected in
-     * the collection, and vice-versa. (If the heap is modified while an
+     * Returns a collection view of the values contained in this org.teneighty.heap. The
+     * collection is backed by the org.teneighty.heap, so changes to the org.teneighty.heap are reflected in
+     * the collection, and vice-versa. (If the org.teneighty.heap is modified while an
      * iteration
      * over the collection is in progress, the results of the iteration are
      * undefined.) The returned collection is read-only.
@@ -394,7 +394,7 @@ public abstract class AbstractHeap<TKey, TValue>
      * performed, so there is a slight chance that multiple calls to this method
      * will not all return the same Collection.
      *
-     * @return a collection view of the values contained in this heap.
+     * @return a collection view of the values contained in this org.teneighty.heap.
      */
     public Collection<TValue> getValues() {
         if (this.values == null) {
@@ -405,9 +405,9 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Returns a Collection view of the entries contained in this heap. The
-     * Collection is backed by the heap, so changes to the heap are reflected in
-     * the Collection, and vice-versa. (If the heap is modified while an
+     * Returns a Collection view of the entries contained in this org.teneighty.heap. The
+     * Collection is backed by the org.teneighty.heap, so changes to the org.teneighty.heap are reflected in
+     * the Collection, and vice-versa. (If the org.teneighty.heap is modified while an
      * iteration
      * over the Collection is in progress, the results of the iteration are
      * undefined.) The returned collection is readonly.
@@ -417,7 +417,7 @@ public abstract class AbstractHeap<TKey, TValue>
      * performed, so there is a slight chance that multiple calls to this method
      * will not all return the same Collection.
      *
-     * @return a Collection view of the entries contained in this heap.
+     * @return a Collection view of the entries contained in this org.teneighty.heap.
      */
     public Collection<Heap.Entry<TKey, TValue>> getEntries() {
         if (this.entries == null) {
@@ -452,8 +452,8 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Basic implementation of a collection that's backed by a heap (or, more
-     * precisely, the enclosing heap instance, as this is an inner class).
+     * Basic implementation of a collection that's backed by a org.teneighty.heap (or, more
+     * precisely, the enclosing org.teneighty.heap instance, as this is an inner class).
      *
      * @param <TElement> the collection elemtn type.
      * @author Fran Lattanzio
@@ -477,7 +477,7 @@ public abstract class AbstractHeap<TKey, TValue>
         /**
          * Get the size of this collection.
          * <p>
-         * Defers to the enclosing heap.
+         * Defers to the enclosing org.teneighty.heap.
          *
          * @return the size.
          */
@@ -734,7 +734,7 @@ public abstract class AbstractHeap<TKey, TValue>
         }
 
         /**
-         * Get an iterator over this heap's entries.
+         * Get an iterator over this org.teneighty.heap's entries.
          *
          * @return Iterator {@literal <Heap.Entry<K,V>>}
          */
@@ -744,9 +744,9 @@ public abstract class AbstractHeap<TKey, TValue>
         }
 
         /**
-         * Check if this heap contains the specified entry.
+         * Check if this org.teneighty.heap contains the specified entry.
          * <p>
-         * Defers to enclosing heap, since if the enclosing heap holds the
+         * Defers to enclosing org.teneighty.heap, since if the enclosing org.teneighty.heap holds the
          * specified entry, we'll (probably) get much better performance.
          *
          * @param o the object to check.
@@ -770,7 +770,7 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Collection view over the keys in this enclosing heap.
+     * Collection view over the keys in this enclosing org.teneighty.heap.
      * <p>
      * Instances of this class are readonly (readonly collections, that is).
      *
@@ -802,7 +802,7 @@ public abstract class AbstractHeap<TKey, TValue>
         }
 
         /**
-         * Iterator over the keys in enclosing heap.
+         * Iterator over the keys in enclosing org.teneighty.heap.
          *
          * @author Fran Lattanzio
          * @version $Revision: 14 $ $Date: 2009-10-29 23:54:44 -0400 (Thu, 29 Oct
@@ -855,7 +855,7 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Collection view over the values in this heap.
+     * Collection view over the values in this org.teneighty.heap.
      *
      * @author Fran Lattanzio
      * @version $Revision: 14 $ $Date: 2009-10-29 23:54:44 -0400 (Thu, 29 Oct
@@ -886,7 +886,7 @@ public abstract class AbstractHeap<TKey, TValue>
         }
 
         /**
-         * Iterates over the values in this heap.
+         * Iterates over the values in this org.teneighty.heap.
          *
          * @author Fran Lattanzio
          * @version $Revision: 14 $ $Date: 2009-10-29 23:54:44 -0400 (Thu, 29 Oct
@@ -941,7 +941,7 @@ public abstract class AbstractHeap<TKey, TValue>
     }
 
     /**
-     * Basic heap entry/node.
+     * Basic org.teneighty.heap entry/node.
      * <p>
      * This entry stores the keys and values for the node, provides basic
      * <code>get/set</code> methods on them, and contains the "correct"
@@ -1035,7 +1035,7 @@ public abstract class AbstractHeap<TKey, TValue>
         /**
          * Returns <code>true</code> if <code>o</code> equals this object.
          * <p>
-         * Two heap nodes are defined to be equal if they have the same keys and
+         * Two org.teneighty.heap nodes are defined to be equal if they have the same keys and
          * values. This method works even in the face of <code>null</code> keys
          * and values.
          * <p>

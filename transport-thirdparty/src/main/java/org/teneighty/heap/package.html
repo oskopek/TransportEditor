@@ -1,6 +1,6 @@
 <html>
 <body>
-This package contains the teneighty.org heap collection.
+This package contains the teneighty.org org.teneighty.heap collection.
 <p>The table below summarizes the available implementations:
 <table cellspacing="1" cellpadding="3" border="0" bgcolor="#999999">
     <tr bgcolor="#FFFFFF">
@@ -128,7 +128,7 @@ This package contains the teneighty.org heap collection.
             <li>The {@link org.teneighty.heap.Heap} interface now extends
                 {@link java.lang.Iterable}, allowing you to use instances of the <code>Heap</code>
                 interface within Java's <code>for( ... )</code> construct.
-                Specifically, this allows you to iterate over the entries in the heap.
+                Specifically, this allows you to iterate over the entries in the org.teneighty.heap.
             </li>
             <li>The {@link org.teneighty.heap.Heap#getEntries()} method now
                 returns a {@link java.util.Collection} rather than a {@link
@@ -155,11 +155,11 @@ This package contains the teneighty.org heap collection.
                 expanded:
                 <ul>
                     <li>A base-class test provides a fairly decent set of unit
-                        tests, for any <code>Heap</code> instances. In order to test any heap
+                        tests, for any <code>Heap</code> instances. In order to test any org.teneighty.heap
                         implementation, you need only extend this class and implement one
-                        method (a method that returns an empty heap, as it were).
+                        method (a method that returns an empty org.teneighty.heap, as it were).
                     </li>
-                    <li>There are now individual test suites for each heap
+                    <li>There are now individual test suites for each org.teneighty.heap
                         implementation.
                     </li>
                     <li>There are specific tests to ensure that all heaps and their
@@ -186,7 +186,7 @@ This package contains the teneighty.org heap collection.
                 this is one step in making them more robust.)
             </li>
             <li>I reduced the number accesses via synthetic accessors in all
-                heap implementations. There are still a few, but I refuse to make
+                org.teneighty.heap implementations. There are still a few, but I refuse to make
                 these fields package protected like various classes in the <code>java.util</code>
                 package (I prefer to keep them private).
             </li>
@@ -214,9 +214,9 @@ This package contains the teneighty.org heap collection.
         <p>
     </li>
 
-    <li><b>Which heap implementation should I use? ...or... Which
-        heap implementation is the best?</b> <br>
-        This depends on your problem (i.e. which methods of the heap interface
+    <li><b>Which org.teneighty.heap implementation should I use? ...or... Which
+        org.teneighty.heap implementation is the best?</b> <br>
+        This depends on your problem (i.e. which methods of the org.teneighty.heap interface
         will you be using, how often etc.), the size of your dataset, your
         virtual machine, and your hardware. Several things to keep in mind:
 
@@ -270,13 +270,13 @@ This package contains the teneighty.org heap collection.
         Object) decrease the key of an arbitrary entry}, and {@linkplain
         org.teneighty.heap.Heap#union(Heap) union/meld two heaps together} (and
         other lame utility methods). These additional operations should
-        generally be supported in sublinear time by a heap, whereas they are
+        generally be supported in sublinear time by a org.teneighty.heap, whereas they are
         generally not available for queues or must be performed externally at
         significant expense. Every CS student learns that the job of creating a
-        queue is reduced to the one of creating a heap - with a binary heap
+        queue is reduced to the one of creating a org.teneighty.heap - with a binary org.teneighty.heap
         implemenation e.g., one can easily create a priority, FIFO, or LIFO
         queue. However, the ability to reduce the problem of implementing a
-        queue to the problem of implenting of a heap does not mean they are the
+        queue to the problem of implenting of a org.teneighty.heap does not mean they are the
         same thing.
         <p>
     </li>
@@ -294,12 +294,12 @@ This package contains the teneighty.org heap collection.
         <br>
         This is a legitimate question. The main reason is that the items passed
         to <code>delete</code> and <code>decreaseKey</code> are allocated
-        internally by the creating heap and generally contain
-        heap/implementation specific information - they are, in fact, the
+        internally by the creating org.teneighty.heap and generally contain
+        org.teneighty.heap/implementation specific information - they are, in fact, the
         objects returned from the <code>insert</code> method. Contrast this to
         a standard <code>Collection</code>, in which the objects to be removed
         (or retained) are, in fact, not returned from the add/insert method,
-        but rather allocated externally. The heap interface would thus have
+        but rather allocated externally. The org.teneighty.heap interface would thus have
         some ill-defined methods and generally be less elegant (IMHO).
         <p>
     </li>
@@ -392,7 +392,7 @@ This package contains the teneighty.org heap collection.
 
 
     <li><b>Under what license is this software distributed?</b> <br>
-        The teneighty.org heap collection is distributed under the very liberal
+        The teneighty.org org.teneighty.heap collection is distributed under the very liberal
         MIT License. (This is known as the X or X11 License in some circles.)
         You can incorporate this package, in source or binary forms, with or
         without modification, into open or closed source projects. The MIT
@@ -427,13 +427,13 @@ This package contains the teneighty.org heap collection.
 
 
     <li><b>What's next for the Heap Collection?</b> <br>
-        I am currently implementing and testing a <i>thin heap</i>, a spiffy
+        I am currently implementing and testing a <i>thin org.teneighty.heap</i>, a spiffy
         new data structure from Robert Tarjan and Haim Kaplan. The <i>fat
-            heap</i> should offer superior performance for a wide range of problems.
-        <p>Also in the works in the notion of a mapped heap - one which
-            provides not only all the wonders of a regular heap, but it also
+            org.teneighty.heap</i> should offer superior performance for a wide range of problems.
+        <p>Also in the works in the notion of a mapped org.teneighty.heap - one which
+            provides not only all the wonders of a regular org.teneighty.heap, but it also
             capable of doing lookup by key in sublinear time. I am attempting to
-            implement a bi-parental heap and/or van Emde-Boas heap as the first two
+            implement a bi-parental org.teneighty.heap and/or van Emde-Boas org.teneighty.heap as the first two
             mapped heaps.
         <p>Finally, I'm working on a C# port/re-implementation of this
             package, because C# is pretty badass (even if it is backed by the Evil

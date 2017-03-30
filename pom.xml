@@ -19,6 +19,7 @@
         <module>transport-editor</module>
         <module>transport-core</module>
         <module>transport-planners</module>
+        <module>transport-thirdparty</module>
     </modules>
     <scm>
         <url>https://github.com/oskopek/TransportEditor.git</url>
@@ -484,7 +485,7 @@
         <profile>
             <id>docs</id>
             <modules>
-                <module>transporteditor-docs</module>
+                <module>transport-docs</module>
             </modules>
         </profile>
     </profiles>

@@ -1,5 +1,5 @@
-This package contains a free, open source implementation of 
-various heap data structures, including a binary, binomial, pairing,
+This package contains a free, open source implementation of
+various org.teneighty.heap data structures, including a binary, binomial, pairing,
 leftist, skew, and Fibonacci flavors.
 
 

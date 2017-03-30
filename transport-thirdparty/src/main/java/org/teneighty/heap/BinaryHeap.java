@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A binary heap implementation. A binary heap is basically a binary tree with
+ * A binary org.teneighty.heap implementation. A binary org.teneighty.heap is basically a binary tree with
  * two additional properties:
  * <ol>
  * <li>The i<sup>th</sup> node in the tree is the child of the
@@ -45,14 +45,14 @@ import java.util.NoSuchElementException;
  * This structure is maintained across inserts, extract-mins, deletes, and
  * decrease-keys in the following fashion:
  * <ul>
- * <li>For inserts, the we make the new node the "last" element of the heap and
- * swap it with it's parent, if necessary, to ensure the heap property holds.
+ * <li>For inserts, the we make the new node the "last" element of the org.teneighty.heap and
+ * swap it with it's parent, if necessary, to ensure the org.teneighty.heap property holds.
  * This is generally called bubbling or percolating the element upwards.</li>
  * <li>For a decrease key operation, we do the reverse: We percolate (or bubble)
  * the affected element down the tree (by swapping with a child) until we
- * restore the heap property.</li>
+ * restore the org.teneighty.heap property.</li>
  * <li>For deletes, we remove the specified node, designate the last element of
- * the heap as replacing the removed node, and percolate it down until the heap
+ * the org.teneighty.heap as replacing the removed node, and percolate it down until the org.teneighty.heap
  * order is restored.</li>
  * <li>Extract-min is nothing more than a special case of delete, wherein the
  * node to be deleted is "well known", in that it doesn't require an externally
@@ -60,7 +60,7 @@ import java.util.NoSuchElementException;
  * </ul>
  * <p>
  * The collection-view methods of this class are backed by iterators over the
- * heap structure which are are <i>fail-fast</i>: If the heap is structurally
+ * org.teneighty.heap structure which are are <i>fail-fast</i>: If the org.teneighty.heap is structurally
  * modified at any time after the iterator is created, the iterator throws a
  * {@link ConcurrentModificationException}. Thus, in the face of concurrent
  * modification, the iterator fails quickly and cleanly, rather than risking
@@ -69,17 +69,17 @@ import java.util.NoSuchElementException;
  * The collection-views returned by this class do not support the
  * <code>remove</code> and <code>add</code> family of operations. This is change
  * from earlier versions, in which the iterators (and thus the collection-views)
- * did support the <code>remove</code> family of operations. The binary heap is
- * unique in that can support such operations; for other heap implementations,
+ * did support the <code>remove</code> family of operations. The binary org.teneighty.heap is
+ * unique in that can support such operations; for other org.teneighty.heap implementations,
  * this operation is either technically infeasible or prohibitively expensive.
- * However, just because the binary heap <i>can</i> support it, doesn't mean it
+ * However, just because the binary org.teneighty.heap <i>can</i> support it, doesn't mean it
  * <i>should</i> support it. A colleague of mine made the following fine points
  * and convinced me to change it:
  * <ul>
  * <li>It breaks the encapsulation of this class. Although not exposing the
  * internal structure directly, you are able to manipulate the internal
  * structure of this object indirectly; namely, through the iterator (and thus
- * collection-views thereby backed) objects returned by this heap. This is a
+ * collection-views thereby backed) objects returned by this org.teneighty.heap. This is a
  * feature (or mis-feature, depending on your point of view) of many of the Java
  * Collections classes, so it seems appropriate here.</li>
  * <li>There's a nasty degree of symmetry loss, since the collection-view
@@ -88,10 +88,10 @@ import java.util.NoSuchElementException;
  * not the <code>add</code> family. While it would be possible to implement the
  * <code>add</code> method, it would be done in a counter-intuitive way - the
  * user would have to externally allocate a "fake" {@link Heap.Entry}.
- * Furthermore, this entry would not be added directly to the heap, but rather
+ * Furthermore, this entry would not be added directly to the org.teneighty.heap, but rather
  * its key and value objects would be referenced by a newly inserted node.
  * Basically, it amounts to high degree of goofiness we should probably avoid.</li>
- * <li>None of the other heap implementations support the <code>remove</code>
+ * <li>None of the other org.teneighty.heap implementations support the <code>remove</code>
  * operation in their iterators or collection-view objects. For consistency's
  * sake, this class should follow the precedent.</li>
  * </ul>
@@ -100,7 +100,7 @@ import java.util.NoSuchElementException;
  * externally, or you may damage instances of this class. Damage may be subtle
  * and difficult to detect, or it may be pronounced.
  * <p>
- * Also, unlike other heap implementations, this class implements the
+ * Also, unlike other org.teneighty.heap implementations, this class implements the
  * {@link java.lang.Cloneable} interface.
  *
  * @param <TKey> the key type.
@@ -119,7 +119,7 @@ public class BinaryHeap<TKey, TValue>
     private static final long serialVersionUID = 3874378L;
 
     /**
-     * The default minimum array size (capacity) of any binary heap ({@value} ).
+     * The default minimum array size (capacity) of any binary org.teneighty.heap ({@value} ).
      */
     private static final int DEFAULT_HEAP_CAPACITY = 16;
 
@@ -129,7 +129,7 @@ public class BinaryHeap<TKey, TValue>
     private DynamicArray<BinaryHeapEntry<TKey, TValue>> heap;
 
     /**
-     * The size of this heap.
+     * The size of this org.teneighty.heap.
      */
     private int size;
 
@@ -151,14 +151,14 @@ public class BinaryHeap<TKey, TValue>
     /**
      * The constructor.
      * <p>
-     * The nodes of this heap will be ordered by their keys' <i>natural
+     * The nodes of this org.teneighty.heap will be ordered by their keys' <i>natural
      * ordering</i>.
      * <p>
-     * The keys of all nodes inserted into the heap must implement the
+     * The keys of all nodes inserted into the org.teneighty.heap must implement the
      * <code>Comparable</code> interface. Furthermore, all such keys must be
      * <i>mutually comparable</i>:<code>k1.compareTo(k2)</code> must not throw a
      * <code>ClassCastException</code> for any elements <code>k1</code> and
-     * <code>k2</code> in the heap.
+     * <code>k2</code> in the org.teneighty.heap.
      */
     public BinaryHeap() {
         this(null, DEFAULT_HEAP_CAPACITY);
@@ -167,16 +167,16 @@ public class BinaryHeap<TKey, TValue>
     /**
      * Constructor.
      * <p>
-     * The nodes of this heap will be ordered by their keys' <i>natural
+     * The nodes of this org.teneighty.heap will be ordered by their keys' <i>natural
      * ordering</i>.
      * <p>
-     * The keys of all nodes inserted into the heap must implement the
+     * The keys of all nodes inserted into the org.teneighty.heap must implement the
      * <code>Comparable</code> interface. Furthermore, all such keys must be
      * <i>mutually comparable</i>:<code>k1.compareTo(k2)</code> must not throw a
      * <code>ClassCastException</code> for any elements <code>k1</code> and
-     * <code>k2</code> in the heap.
+     * <code>k2</code> in the org.teneighty.heap.
      *
-     * @param initial_capacity the initial capacity of this heap.
+     * @param initial_capacity the initial capacity of this org.teneighty.heap.
      * @throws IllegalArgumentException If <code>initial_capacity</code> &lt; 0.
      */
     public BinaryHeap(final int initial_capacity)
@@ -187,11 +187,11 @@ public class BinaryHeap<TKey, TValue>
     /**
      * Constructor.
      * <p>
-     * The keys of all nodes inserted into the heap must be <i>mutually
+     * The keys of all nodes inserted into the org.teneighty.heap must be <i>mutually
      * comparable</i> by the given <code>Comparator</code>:
      * <code>comparator.compare(k1,k2)</code> must not throw a
      * <code>ClassCastException</code> for any keys <code>k1</code> and
-     * <code>k2</code> in the heap.
+     * <code>k2</code> in the org.teneighty.heap.
      *
      * @param comp the comparator to use. A <code>null</code> means the keys
      * natural ordering will be used.
@@ -203,15 +203,15 @@ public class BinaryHeap<TKey, TValue>
     /**
      * Constructor.
      * <p>
-     * The keys of all nodes inserted into the heap must be <i>mutually
+     * The keys of all nodes inserted into the org.teneighty.heap must be <i>mutually
      * comparable</i> by the given <code>Comparator</code>:
      * <code>comparator.compare(k1,k2)</code> must not throw a
      * <code>ClassCastException</code> for any keys <code>k1</code> and
-     * <code>k2</code> in the heap.
+     * <code>k2</code> in the org.teneighty.heap.
      *
      * @param comp the comparator to use. A <code>null</code> means the keys
      * natural ordering will be used.
-     * @param initial_capacity the initial capacity of this heap.
+     * @param initial_capacity the initial capacity of this org.teneighty.heap.
      * @throws IllegalArgumentException If <code>initial_capacity</code> &lt; 0.
      */
     public BinaryHeap(final Comparator<? super TKey> comp,
@@ -246,7 +246,7 @@ public class BinaryHeap<TKey, TValue>
     /**
      * Get the the Comparator.
      * <p>
-     * If this method returns <code>null</code>, then this heap uses the keys'
+     * If this method returns <code>null</code>, then this org.teneighty.heap uses the keys'
      * <i>natural ordering</i>.
      *
      * @return the Comparator or <code>null</code>.
@@ -256,7 +256,7 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Get the capacity of this heap.
+     * Get the capacity of this org.teneighty.heap.
      * <p>
      * This method is not specified by the <code>Heap</code> interface.
      *
@@ -267,7 +267,7 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Clear this heap.
+     * Clear this org.teneighty.heap.
      * <p>
      * This method clears all references in the backing array, and thus takes
      * time <code>O(n)</code>.
@@ -287,14 +287,14 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Add a key/value pair to this heap.
+     * Add a key/value pair to this org.teneighty.heap.
      *
      * @param key the node key.
      * @param value the node value.
      * @return the entry created.
      * @throws ClassCastException If the specified key is not mutually
      * comparable
-     * with the other keys of this heap.
+     * with the other keys of this org.teneighty.heap.
      */
     public Heap.Entry<TKey, TValue> insert(final TKey key, final TValue value)
             throws ClassCastException {
@@ -317,7 +317,7 @@ public class BinaryHeap<TKey, TValue>
         this.heap.set(index, node);
         node.heap_index = index;
 
-        // Turn this nonsense back into a heap...
+        // Turn this nonsense back into a org.teneighty.heap...
         this.heapify(index);
 
         // Inc mod.
@@ -333,7 +333,7 @@ public class BinaryHeap<TKey, TValue>
      * This method does <u>not</u> remove the returned entry.
      *
      * @return the entry.
-     * @throws NoSuchElementException If this heap is empty.
+     * @throws NoSuchElementException If this org.teneighty.heap is empty.
      * @see #extractMinimum()
      */
     public Heap.Entry<TKey, TValue> getMinimum()
@@ -349,7 +349,7 @@ public class BinaryHeap<TKey, TValue>
      * Remove and return the entry minimum key.
      *
      * @return the entry.
-     * @throws NoSuchElementException If the heap is empty.
+     * @throws NoSuchElementException If the org.teneighty.heap is empty.
      * @see #getMinimum()
      */
     public Heap.Entry<TKey, TValue> extractMinimum()
@@ -372,15 +372,15 @@ public class BinaryHeap<TKey, TValue>
      * Decrease the key of the given element.
      * <p>
      * This implementation always knows if <code>e</code> is not a member of
-     * this heap.
+     * this org.teneighty.heap.
      *
      * @param e the entry for which to decrease the key.
      * @param k the new key.
      * @throws IllegalArgumentException If <code>k</code> is larger than
      * <code>e</code>'s current key or <code>e</code> is not in this
-     * heap.
+     * org.teneighty.heap.
      * @throws ClassCastException If the new key is not mutually comparable with
-     * other keys in this heap.
+     * other keys in this org.teneighty.heap.
      * @throws NullPointerException If <code>e</code> is <code>null</code>.
      */
     public void decreaseKey(final Heap.Entry<TKey, TValue> e, final TKey k)
@@ -410,15 +410,15 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Delete the entry from this heap.
+     * Delete the entry from this org.teneighty.heap.
      * <p>
      * This implementation always knows if <code>e</code> is not a member of
-     * this heap.
+     * this org.teneighty.heap.
      *
      * @param e the entry to delete.
      * @throws IllegalArgumentException If <code>k</code> is larger than
      * <code>e</code>'s current key or <code>e</code> is not in this
-     * heap.
+     * org.teneighty.heap.
      * @throws NullPointerException If <code>e</code> is <code>null</code>.
      */
     @SuppressWarnings("unchecked")
@@ -466,10 +466,10 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Does this heap hold the specified entry?
+     * Does this org.teneighty.heap hold the specified entry?
      *
      * @param e the entry to check.
-     * @return <code>true</code> if this heap holds <code>e</code>;
+     * @return <code>true</code> if this org.teneighty.heap holds <code>e</code>;
      * <code>false</code> otherwise.
      * @throws NullPointerException If <code>e</code> is <code>null</code>.
      */
@@ -499,17 +499,17 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Union this heap with another heap.
+     * Union this org.teneighty.heap with another org.teneighty.heap.
      * <p>
      * This method takes linearithmic (<code>O(n log n)</code>) time. This is
-     * not that fast (considering a fibonacci heap can merge in
+     * not that fast (considering a fibonacci org.teneighty.heap can merge in
      * <code>O(1)</code>).
      *
-     * @param other the other heap.
+     * @param other the other org.teneighty.heap.
      * @throws NullPointerException If <code>other</code> is <code>null</code>.
      * @throws ClassCastException If the keys of the nodes are not mutally
      * comparable or the classes do not match.
-     * @throws IllegalArgumentException If you attempt to union a heap with
+     * @throws IllegalArgumentException If you attempt to union a org.teneighty.heap with
      * itself
      * (i.e if <code>other == this</code>).
      * @see #insertAll(Heap)
@@ -539,10 +539,10 @@ public class BinaryHeap<TKey, TValue>
 
                 // start copying and heapifying and stuff.
                 for (int index = this.size + 1, jindex = 1; jindex <= that.size; jindex++, index++) {
-                    // set into heap - we have to set the heap index here,
+                    // set into org.teneighty.heap - we have to set the org.teneighty.heap index here,
                     // because
                     // heapifying
-                    // may not move the entry (and hence set/reset the heap
+                    // may not move the entry (and hence set/reset the org.teneighty.heap
                     // index).
                     thatEntry = that.heap.get(jindex);
                     thatEntry.heap_index = index;
@@ -687,15 +687,15 @@ public class BinaryHeap<TKey, TValue>
             this.heap.set(smallest, tmp);
             tmp.heap_index = smallest;
 
-            // Keep going up the heap.
+            // Keep going up the org.teneighty.heap.
             at_node = smallest;
         }
     }
 
     /**
-     * Create and return a shallow clone of this heap.
+     * Create and return a shallow clone of this org.teneighty.heap.
      *
-     * @return a shallow copy of this heap.
+     * @return a shallow copy of this org.teneighty.heap.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -705,7 +705,7 @@ public class BinaryHeap<TKey, TValue>
             BinaryHeap<TKey, TValue> clone = (BinaryHeap<TKey, TValue>) super
                     .clone();
 
-            // Make a copy of the underlying "heap" structure.
+            // Make a copy of the underlying "org.teneighty.heap" structure.
             clone.heap = new DynamicArray<BinaryHeapEntry<TKey, TValue>>(this
                     .getCapacity());
 
@@ -732,7 +732,7 @@ public class BinaryHeap<TKey, TValue>
      * Serialize the object to the specified output stream.
      * <p>
      * This method takes time <code>O(n)</code> where <code>n</code> is the size
-     * this heap.
+     * this org.teneighty.heap.
      *
      * @param out the stream to which to serialize this object.
      * @throws IOException If this object cannot be serialized.
@@ -760,7 +760,7 @@ public class BinaryHeap<TKey, TValue>
      * Deserialize and restore this object from the specified stream.
      * <p>
      * This method takes time <code>O(n)</code>, where <code>n</code> is the
-     * size of the heap.
+     * size of the org.teneighty.heap.
      *
      * @param in the stream from which to read data.
      * @throws IOException If this object cannot properly read from the
@@ -774,12 +774,12 @@ public class BinaryHeap<TKey, TValue>
             throws IOException, ClassNotFoundException {
         this.comp = (Comparator<? super TKey>) in.readObject();
 
-        // Read old heap size.
+        // Read old org.teneighty.heap size.
         int capacity = in.readInt();
         this.size = in.readInt();
         this.rec_capacity = in.readInt();
 
-        // Re-alloc heap.
+        // Re-alloc org.teneighty.heap.
         this.heap = new DynamicArray<BinaryHeapEntry<TKey, TValue>>(capacity);
 
         // Read keys and values.
@@ -792,13 +792,13 @@ public class BinaryHeap<TKey, TValue>
             // Restore index...
             entry.heap_index = index;
 
-            // Store int heap.
+            // Store int org.teneighty.heap.
             this.heap.set(index, entry);
         }
     }
 
     /**
-     * Get an iterator over this heap's entry collection.
+     * Get an iterator over this org.teneighty.heap's entry collection.
      *
      * @return an iterator over the entries.
      */
@@ -807,10 +807,10 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Binary heap iterator class.
+     * Binary org.teneighty.heap iterator class.
      * <p>
      * Cheats a little bit and touches the dynamic array and mod count fields of
-     * the enclosing heap.
+     * the enclosing org.teneighty.heap.
      *
      * @author Fran Lattanzio
      * @version $Revision: 14 $ $Date: 2009-10-29 23:54:44 -0400 (Thu, 29 Oct
@@ -890,10 +890,10 @@ public class BinaryHeap<TKey, TValue>
     }
 
     /**
-     * Binary heap entry. Stores the entry's index in the heapified array.
+     * Binary org.teneighty.heap entry. Stores the entry's index in the heapified array.
      * <p>
      * This class also implements the {@link java.lang.Cloneable} interface
-     * (quite unlike most other heap entry implementations.
+     * (quite unlike most other org.teneighty.heap entry implementations.
      *
      * @param <TKey> the key type.
      * @param <TValue> the value type.
@@ -911,9 +911,9 @@ public class BinaryHeap<TKey, TValue>
         private static final long serialVersionUID = 23498234L;
 
         /**
-         * Index of this entry in containing heap's array.
+         * Index of this entry in containing org.teneighty.heap's array.
          * <p>
-         * Package protected because the enclosing heap needs to access it. This
+         * Package protected because the enclosing org.teneighty.heap needs to access it. This
          * isn't such a big deal, because this class is already
          * <code>private</code> (c.f. <code>mod_count</code>).
          */
