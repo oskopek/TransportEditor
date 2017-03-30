@@ -81,4 +81,21 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
 
     @Override
     public abstract AbstractPlanner copy();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AbstractPlanner)) {
+            return false;
+        }
+        AbstractPlanner that = (AbstractPlanner) o;
+        return getName().equals(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
+    }
 }
