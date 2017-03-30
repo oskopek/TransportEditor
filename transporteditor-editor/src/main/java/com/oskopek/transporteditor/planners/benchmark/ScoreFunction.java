@@ -8,7 +8,7 @@ import javaslang.Function3;
 /**
  * Type alias for plan score functions.
  */
-public interface ScoreFunction extends Function3<Domain, Problem, Plan, Integer> {
+public interface ScoreFunction extends Function3<Domain, Problem, Plan, Double> {
 
     // intentionally empty
 

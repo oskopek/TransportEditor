@@ -112,8 +112,8 @@ public class DefaultPlanningSessionIOIT {
         PlanningSession session = new DefaultPlanningSession();
         Action emptyRefuel = new Refuel(null, null, Collections.emptyList(), Collections.emptyList(), null, null);
         TemporalPlan plan = new TemporalPlan(Arrays.asList(
-                new TemporalPlanAction(emptyRefuel, 0, 1),
-                new TemporalPlanAction(emptyRefuel, 0, 5)
+                new TemporalPlanAction(emptyRefuel, 0d, 1d),
+                new TemporalPlanAction(emptyRefuel, 0d, 5d)
         ));
         session.setPlan(plan);
         String serialized = defaultPlanningSessionIO.serialize(session);

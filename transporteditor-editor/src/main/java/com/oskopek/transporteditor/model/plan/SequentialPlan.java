@@ -58,7 +58,7 @@ public final class SequentialPlan implements Plan {
                 throw new IllegalStateException("Action duration cannot be null: " + action);
             }
             i += action.getDuration().getCost();
-            temporalActions.add(new TemporalPlanAction(action, begin, i));
+            temporalActions.add(new TemporalPlanAction(action, (double) begin, (double) i));
         }
         return temporalActions;
     }

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -55,8 +56,8 @@ public class TemporalPlanStateManager implements PlanStateManager {
     }
 
     @Override
-    public ActionCost getCurrentTime() {
-        return ActionCost.valueOf(pointer.getTime());
+    public Double getCurrentTime() {
+        return pointer.getTime();
     }
 
     /**
@@ -69,10 +70,10 @@ public class TemporalPlanStateManager implements PlanStateManager {
     }
 
     @Override
-    public void goToTime(ActionCost time, boolean applyStarts) {
+    public void goToTime(Double time, boolean applyStarts) {
         state = getBeginningState();
-        int simulationTime = applyAll(time.getCost(), applyStarts);
-        pointer = new PlanActionPointer(time.getCost(), applyStarts);
+        double simulationTime = applyAll(time, applyStarts);
+        pointer = new PlanActionPointer(time, applyStarts);
     }
 
     /**
@@ -83,7 +84,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @param applyStarts if true, will apply the "at start" effects of actions at time {@code upToIncluding}
      * @return the last time an action effect was applied
      */
-    private int applyAll(int upToIncluding, boolean applyStarts) {
+    private double applyAll(double upToIncluding, boolean applyStarts) {
         Stream<TimeElement<TemporalPlanAction>> actions = temporalPlanActions.stream()
                 .flatMap(t -> Stream.of(new TimeElement<>(t.getStartTimestamp(), false, t),
                         new TimeElement<>(t.getEndTimestamp(), true, t)))
@@ -96,7 +97,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
         PriorityQueue<TimeElement<TemporalPlanAction>> applyQueue = new PriorityQueue<>(
                 actions.collect(Collectors.toList()));
 
-        int simulationTime = 0;
+        double simulationTime = 0;
         TimeElement<TemporalPlanAction> head;
         while ((head = applyQueue.poll()) != null) {
             TemporalPlanAction action = head.getPayload();
@@ -115,16 +116,15 @@ public class TemporalPlanStateManager implements PlanStateManager {
 
     @Override
     public void goToNextCheckpoint() {
-        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res),
-                false));
+        temporalPlanActions.stream().flatMapToDouble(t -> DoubleStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(res,false));
     }
 
     @Override
     public void goToPreviousCheckpoint() {
-        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+        temporalPlanActions.stream().flatMapToDouble(t -> DoubleStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
                 .filter(t -> t < pointer.getTime()).max()
-                .ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
+                .ifPresent(res -> goToTime(res, false));
     }
 
     @Override
@@ -145,7 +145,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      */
     private static class TimeElement<Payload> implements Comparable<TimeElement<Payload>> {
 
-        private final int time;
+        private final double time;
         private final boolean isEnd;
         private final Payload payload;
 
@@ -156,7 +156,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
          * @param isEnd true iff this element represent an end of an action (not a start)
          * @param payload the payload object
          */
-        TimeElement(int time, boolean isEnd, Payload payload) {
+        TimeElement(double time, boolean isEnd, Payload payload) {
             this.payload = payload;
             this.isEnd = isEnd;
             this.time = time;
@@ -185,7 +185,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
          *
          * @return the time
          */
-        public int getTime() {
+        public double getTime() {
             return time;
         }
 

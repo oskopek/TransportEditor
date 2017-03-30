@@ -46,11 +46,11 @@ public class TemporalPlanIO implements DataIO<Plan> {
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
         String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
         StringBuilder str = new StringBuilder();
-        DecimalFormat df = new DecimalFormat("0.000");
+        DecimalFormat df = new DecimalFormat("0.00000");
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(symbols);
-        Integer duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();
+        Double duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();
         str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(" ").append(action).append(
                 " [").append(df.format(duration)).append("]\n");
         return str.toString();
@@ -65,9 +65,9 @@ public class TemporalPlanIO implements DataIO<Plan> {
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
         actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
 
-        Integer totalTime = 0;
-        Optional<Integer> last = actionSet.stream().map(TemporalPlanAction::getEndTimestamp).max(Integer::compare);
-        Optional<Integer> first = actionSet.stream().map(TemporalPlanAction::getStartTimestamp).min(Integer::compare);
+        Double totalTime = 0d;
+        Optional<Double> last = actionSet.stream().map(TemporalPlanAction::getEndTimestamp).max(Double::compare);
+        Optional<Double> first = actionSet.stream().map(TemporalPlanAction::getStartTimestamp).min(Double::compare);
         if (last.isPresent() && first.isPresent()) {
             totalTime = last.get() - first.get();
         }
@@ -94,19 +94,12 @@ public class TemporalPlanIO implements DataIO<Plan> {
                         + " There's no need for them in most Transport domains.");
             }
             double time = Double.parseDouble(action.time().NUMBER().getText());
-            if ((time != Math.floor(time)) || Double.isInfinite(time)) {
-                throw new IllegalArgumentException("We do not support non-integer times. There's no need for them in"
-                        + " most Transport domains.");
-            }
-
             String actionString = String.format("(%s)",
                     String.join(" ", action.sequentialAction().action().NAME().getText(),
                             action.sequentialAction().object().stream().map(o -> o.NAME().getText())
                                     .collect(Collectors.joining(" "))));
             Action actionObj = SequentialPlanIO.parsePlanAction(domain, problem, actionString);
-            int timeInt = (int) time;
-            int durationInt = (int) duration;
-            TemporalPlanAction temporalPlanAction = new TemporalPlanAction(actionObj, timeInt, timeInt + durationInt);
+            TemporalPlanAction temporalPlanAction = new TemporalPlanAction(actionObj, time, time + duration);
             actions.add(temporalPlanAction);
         }
 

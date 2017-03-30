@@ -29,7 +29,7 @@ public class BenchmarkRun {
     private final Domain domain;
     private final Problem problem;
     private final Planner planner;
-    private final Integer bestScore;
+    private final Double bestScore;
     private final Integer timeout;
     private final ScoreFunction scoreFunction;
     private final Results runResults;
@@ -56,7 +56,7 @@ public class BenchmarkRun {
      * @param timeout the maximum allowed run time
      * @param scoreFunction the score function
      */
-    public BenchmarkRun(Domain domain, Problem problem, Planner planner, Integer bestScore, Integer timeout,
+    public BenchmarkRun(Domain domain, Problem problem, Planner planner, Double bestScore, Integer timeout,
             ScoreFunction scoreFunction) {
         this(domain, problem, planner, bestScore, timeout, scoreFunction, null);
     }
@@ -72,7 +72,7 @@ public class BenchmarkRun {
      * @param scoreFunction the score function
      * @param runResults the run results
      */
-    protected BenchmarkRun(Domain domain, Problem problem, Planner planner, Integer bestScore, Integer timeout,
+    protected BenchmarkRun(Domain domain, Problem problem, Planner planner, Double bestScore, Integer timeout,
             ScoreFunction scoreFunction, Results runResults) {
         this.domain = domain;
         this.problem = problem;
@@ -98,7 +98,7 @@ public class BenchmarkRun {
         logger.info("Ending benchmark run for domain {}, problem {}, planner {}", domain.getName(), problem.getName(),
                 planner.getName());
 
-        Integer score = plan == null ? null : scoreFunction.apply(domain, problem, plan);
+        Double score = plan == null ? null : scoreFunction.apply(domain, problem, plan);
         RunExitStatus exitStatus;
         if (plan == null) {
             exitStatus = RunExitStatus.UNSOLVED;
@@ -162,7 +162,7 @@ public class BenchmarkRun {
      *
      * @return the bestScore
      */
-    public Integer getBestScore() {
+    public Double getBestScore() {
         return bestScore;
     }
 
@@ -221,8 +221,8 @@ public class BenchmarkRun {
     public static class Results {
 
         private final Plan plan;
-        private final Integer score;
-        private final Integer bestScore;
+        private final Double score;
+        private final Double bestScore;
         private final RunExitStatus exitStatus;
         private final long startTimeMs;
         private final long endTimeMs;
@@ -247,7 +247,7 @@ public class BenchmarkRun {
          * @param startTimeMs the start time in milliseconds
          * @param endTimeMs the end time in milliseconds
          */
-        public Results(Plan plan, Integer score, Integer bestScore, RunExitStatus exitStatus, long startTimeMs,
+        public Results(Plan plan, Double score, Double bestScore, RunExitStatus exitStatus, long startTimeMs,
                 long endTimeMs) {
             this.plan = plan;
             this.score = score;
@@ -301,7 +301,7 @@ public class BenchmarkRun {
          *
          * @return the score
          */
-        public Integer getScore() {
+        public Double getScore() {
             return score;
         }
 
@@ -310,7 +310,7 @@ public class BenchmarkRun {
          *
          * @return the best score
          */
-        public Integer getBestScore() {
+        public Double getBestScore() {
             return bestScore;
         }
 

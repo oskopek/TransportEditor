@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class ProblemInfo {
 
     private final String filePath;
-    private final Integer bestScore;
+    private final Double bestScore;
     private final transient String fileContents;
 
     /**
@@ -29,7 +29,7 @@ public class ProblemInfo {
      * @param bestScore the best score
      * @param fileContents the file contents
      */
-    public ProblemInfo(String filePath, Integer bestScore, String fileContents) {
+    public ProblemInfo(String filePath, Double bestScore, String fileContents) {
         this.filePath = filePath;
         this.bestScore = bestScore;
         this.fileContents = fileContents;
@@ -49,7 +49,7 @@ public class ProblemInfo {
      *
      * @return the best score
      */
-    public Integer getBestScore() {
+    public Double getBestScore() {
         return bestScore;
     }
 

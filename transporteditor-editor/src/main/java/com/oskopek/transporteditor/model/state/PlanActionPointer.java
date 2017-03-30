@@ -6,7 +6,7 @@ package com.oskopek.transporteditor.model.state;
  */
 public class PlanActionPointer {
 
-    private final int time;
+    private final double time;
 
     private final boolean startsApplied;
 
@@ -16,7 +16,7 @@ public class PlanActionPointer {
      * @param time the time to pointing to
      * @param startsApplied are "at start" effects of actions at time {@code time} applied to this state?
      */
-    public PlanActionPointer(int time, boolean startsApplied) {
+    public PlanActionPointer(double time, boolean startsApplied) {
         this.time = time;
         this.startsApplied = startsApplied;
     }
@@ -26,7 +26,7 @@ public class PlanActionPointer {
      *
      * @return the time
      */
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 

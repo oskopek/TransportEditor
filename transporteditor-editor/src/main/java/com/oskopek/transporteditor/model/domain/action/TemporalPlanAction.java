@@ -4,14 +4,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * Wrapper around {@link Action} containg start and end times.
+ * Wrapper around {@link Action} containing start and end times.
  */
 public class TemporalPlanAction {
 
     private final Action action;
 
-    private final Integer startTimestamp;
-    private final Integer endTimestamp;
+    private final Double startTimestamp;
+    private final Double endTimestamp;
 
     /**
      * Default constructor.
@@ -20,7 +20,7 @@ public class TemporalPlanAction {
      * @param startTimestamp the start time
      * @param endTimestamp the end time
      */
-    public TemporalPlanAction(Action action, Integer startTimestamp, Integer endTimestamp) {
+    public TemporalPlanAction(Action action, Double startTimestamp, Double endTimestamp) {
         this.action = action;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -33,7 +33,7 @@ public class TemporalPlanAction {
      * @return the updated temporal action
      * @see Action#getDuration()
      */
-    public TemporalPlanAction updateStartTimestampSmart(Integer startTimestamp) {
+    public TemporalPlanAction updateStartTimestampSmart(Double startTimestamp) {
         return new TemporalPlanAction(getAction(), startTimestamp,
                 startTimestamp + getAction().getDuration().getCost());
     }
@@ -43,7 +43,7 @@ public class TemporalPlanAction {
      *
      * @return the start time
      */
-    public Integer getStartTimestamp() {
+    public Double getStartTimestamp() {
         return startTimestamp;
     }
 
@@ -52,7 +52,7 @@ public class TemporalPlanAction {
      *
      * @return the end time
      */
-    public Integer getEndTimestamp() {
+    public Double getEndTimestamp() {
         return endTimestamp;
     }
 

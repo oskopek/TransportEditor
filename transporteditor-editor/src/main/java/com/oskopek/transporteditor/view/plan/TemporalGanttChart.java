@@ -36,7 +36,7 @@ public final class TemporalGanttChart extends GanttChart {
                 Color.VIOLET).put("drop", Color.RED).toJavaMap();
         setData(FXCollections.observableList(computeData()));
         double minWidth = temporalPlanActionSet.stream().map(TemporalPlanAction::getEndTimestamp)
-                .max(Integer::compareTo).map(Double::valueOf).map(d -> d * 10).orElse(0d);
+                .max(Double::compareTo).map(d -> d * 10).orElse(0d);
         setMinWidth(Math.max(minWidth, 300d));
     }
 

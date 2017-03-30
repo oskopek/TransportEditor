@@ -40,52 +40,52 @@ public class TemporalPlanStateManagerTest {
 
     @Test
     public void getCurrentTime() throws Exception {
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
-        planStateManager.goToTime(ActionCost.valueOf(1), false);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(1));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
+        planStateManager.goToTime(1d, false);
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
     @Test
     public void getCurrentTimeRightAfter() throws Exception {
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
-        planStateManager.goToTime(ActionCost.valueOf(1), true);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(1));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
+        planStateManager.goToTime(1d, true);
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
     @Test
     public void goToTimeZero() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(0), false);
+        planStateManager.goToTime(0d, false);
 
         assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
     @Test
     public void goToTimeZeroWithStarts() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         Package pkg = problem.getPackage("package-1").updateLocation(null);
         Vehicle truck = problem.getVehicle("truck-1").updateReadyLoading(false);
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg.getName(), pkg);
 
-        planStateManager.goToTime(ActionCost.valueOf(0), true);
+        planStateManager.goToTime(0d, true);
 
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
     @Test
     public void goToTimeOne() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(1), false);
+        planStateManager.goToTime(1d, false);
 
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
 
@@ -94,13 +94,13 @@ public class TemporalPlanStateManagerTest {
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg.getName(), pkg);
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(1));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
     @Test
     public void goToTimeOneWithStarts() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         Package pkg1 = problem.getPackage("package-1").updateLocation(null);
         Package pkg2 = problem.getPackage("package-2").updateLocation(null);
@@ -108,20 +108,20 @@ public class TemporalPlanStateManagerTest {
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg1.getName(), pkg1)
                 .putPackage(pkg2.getName(), pkg2);
 
-        planStateManager.goToTime(ActionCost.valueOf(1), true);
+        planStateManager.goToTime(1d, true);
 
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(1));
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(1));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
     @Test
     public void goToTimeWholePlan() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(54), false);
+        planStateManager.goToTime(54d, false);
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(5));
 
         Package pkg1 = problem.getPackage("package-1");
@@ -133,13 +133,13 @@ public class TemporalPlanStateManagerTest {
                 .putPackage(pkg2.getName(), pkg2);
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(54));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(54d);
     }
 
     @Test
     public void goToNextCheckpointWholePlan() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         for (int i = 0; i < 50; i++) {
             planStateManager.goToNextCheckpoint();
@@ -154,13 +154,13 @@ public class TemporalPlanStateManagerTest {
                 .putPackage(pkg2.getName(), pkg2);
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(54));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(54d);
     }
 
     @Test
     public void goToNextAndPreviousCheckpointOne() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         planStateManager.goToNextCheckpoint();
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
@@ -168,13 +168,13 @@ public class TemporalPlanStateManagerTest {
         assertThat(planStateManager.getLastAction()).isEmpty();
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
     @Test
     public void goToNextAndPreviousCheckpoint() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         final int n = 5;
         for (int i = 0; i < n; i++) {
@@ -187,13 +187,13 @@ public class TemporalPlanStateManagerTest {
         }
         assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
     @Test
     public void goToPreviousCheckpointWholePlan() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         for (int i = 0; i < 50; i++) {
             planStateManager.goToNextCheckpoint();
@@ -209,13 +209,13 @@ public class TemporalPlanStateManagerTest {
                 .putPackage(pkg2.getName(), pkg2);
 
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(53));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(53d);
     }
 
     @Test
     public void goToPreviousCheckpointWholePlanAndBack() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
         final int n = 50;
         for (int i = 0; i < n; i++) {
@@ -226,38 +226,38 @@ public class TemporalPlanStateManagerTest {
         }
         assertThat(planStateManager.getLastAction()).isEmpty();
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
     @Test
     public void goToInProgressAndLastActionTest() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(25), false);
+        planStateManager.goToTime(25d, false);
         assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(2)); // drive is in progress
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(25));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(25d);
     }
 
     @Test
     public void goToBeginningWithoutApplyStartsAndLastActionTest() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(2), false);
+        planStateManager.goToTime(2d, false);
         // pickup ended, drive didn't begin yet
         assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(1));
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(2));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(2d);
     }
 
     @Test
     public void goToBeginningWithApplyStartsAndLastActionTest() throws Exception {
         assertThat(planStateManager.getCurrentPlanState()).isEqualTo(planState);
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(0));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
 
-        planStateManager.goToTime(ActionCost.valueOf(2), true);
+        planStateManager.goToTime(2d, true);
         assertThat(planStateManager.getLastAction()).isNotEmpty().hasValue(actions.get(2)); // drive has started
-        assertThat(planStateManager.getCurrentTime()).isEqualTo(ActionCost.valueOf(2));
+        assertThat(planStateManager.getCurrentTime()).isEqualTo(2d);
     }
 
 }

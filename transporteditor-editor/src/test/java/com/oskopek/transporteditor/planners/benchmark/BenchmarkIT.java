@@ -43,8 +43,8 @@ public class BenchmarkIT {
         problems = Arrays.asList(SequentialPlanIOIT.P01SequentialProblem(), SequentialPlanIOIT.P01SequentialProblem()
                 .removeVehicle("truck-2"));
         problemInfo = new HashMap<>();
-        problemInfo.put(problems.get(0), new ProblemInfo("", 54, ""));
-        problemInfo.put(problems.get(1), new ProblemInfo("", 54, ""));
+        problemInfo.put(problems.get(0), new ProblemInfo("", 54d, ""));
+        problemInfo.put(problems.get(1), new ProblemInfo("", 54d, ""));
         planners = Arrays.asList(new FastDownwardExternalPlanner(), new PrologBFSExternalPlanner());
         matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, 100);
     }

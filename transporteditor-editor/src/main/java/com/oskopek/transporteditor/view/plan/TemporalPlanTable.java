@@ -1,7 +1,7 @@
 package com.oskopek.transporteditor.view.plan;
 
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
-import com.oskopek.transporteditor.view.NumberIntegerStringConverter;
+import com.oskopek.transporteditor.view.NumberDoubleStringConverter;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -60,15 +60,15 @@ public final class TemporalPlanTable {
         displayActionList.setValue(sort(actionList));
         TableView<TemporalPlanAction> tableView = new TableView<>(displayActionList);
 
-        TableColumn<TemporalPlanAction, Integer> startColumn = new TableColumn<>("Start");
+        TableColumn<TemporalPlanAction, Double> startColumn = new TableColumn<>("Start");
         startColumn.cellValueFactoryProperty().setValue(param -> {
-            SimpleIntegerProperty startTimeProperty = new SimpleIntegerProperty(param.getValue().getStartTimestamp());
+            SimpleDoubleProperty startTimeProperty = new SimpleDoubleProperty(param.getValue().getStartTimestamp());
             return startTimeProperty.asObject();
         });
-        startColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberIntegerStringConverter()));
+        startColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberDoubleStringConverter()));
         startColumn.editableProperty().setValue(true);
         startColumn.setOnEditCommit(event -> {
-            Integer newValue = event.getNewValue();
+            Double newValue = event.getNewValue();
             if (newValue == null) {
                 newValue = event.getOldValue();
             }
@@ -81,7 +81,7 @@ public final class TemporalPlanTable {
         });
         TableColumn<TemporalPlanAction, Number> endColumn = new TableColumn<>("End");
         endColumn.cellValueFactoryProperty().setValue(
-                param -> new ReadOnlyIntegerWrapper(param.getValue().getEndTimestamp()));
+                param -> new ReadOnlyDoubleWrapper(param.getValue().getEndTimestamp()));
         TableColumn<TemporalPlanAction, String> actionColumn = new TableColumn<>("Action");
         actionColumn.cellValueFactoryProperty().setValue(
                 param -> new ReadOnlyStringWrapper(param.getValue().getAction().getName()));
