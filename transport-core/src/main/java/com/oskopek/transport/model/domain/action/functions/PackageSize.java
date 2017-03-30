@@ -1,7 +1,8 @@
 package com.oskopek.transport.model.domain.action.functions;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
-import com.oskopek.transport.model.problem.ActionObject;
+import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.*;
 
 /**
  * The package-size function. Returns the the size that the {@link Package} has.

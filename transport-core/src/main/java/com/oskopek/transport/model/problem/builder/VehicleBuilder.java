@@ -1,8 +1,8 @@
 package com.oskopek.transport.model.problem.builder;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
-import com.oskopek.transport.model.problem.Location;
-import com.oskopek.transport.model.problem.Vehicle;
+import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.Package;
 
 import java.util.List;
 

@@ -2,6 +2,7 @@ package com.oskopek.transport.model.problem.builder;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.Location;
+import com.oskopek.transport.model.problem.Package;
 
 /**
  * Action object builder for {@link Package}s.

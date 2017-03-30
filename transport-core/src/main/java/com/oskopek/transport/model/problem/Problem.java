@@ -3,8 +3,6 @@ package com.oskopek.transport.model.problem;
 import java.util.Collection;
 import java.util.Map;
 
-import com.oskopek.transport.model.problem.Package;
-
 /**
  * Transport domain's problem instance. Contains a lot of immutable data and mutator methods.
  * There are un-documented constraints on the behavior of some of the methods (see the Transport domain PDDL files

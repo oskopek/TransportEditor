@@ -1,10 +1,12 @@
-package com.oskopek.transport.model.problem.builder;
+package com.oskopek.transporteditor.view;
 
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.builder.PackageBuilder;
 import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
 import javafx.collections.ObservableList;
+import org.assertj.core.api.Assertions;
 import org.controlsfx.control.PropertySheet;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,10 +79,10 @@ public class PackageBuilderTest {
         builder.from(new Package("test", null, location2, ActionCost.valueOf(1)));
         ObservableList<PropertySheet.Item> properties
                 = LocalizableSortableBeanPropertyUtils.getProperties(builder, defaultBundle);
-        assertThat(properties).hasSize(3);
+        Assertions.assertThat(properties).hasSize(3);
         Optional<PropertySheet.Item> location = properties.stream().filter(i -> i.getName().equals("location"))
                 .findAny();
-        assertThat(location).isNotNull().isEmpty();
+        Assertions.assertThat(location).isNotNull().isEmpty();
         builder.setLocation(location1);
         assertThat(builder.build()).isEqualTo(defaultPackage);
     }

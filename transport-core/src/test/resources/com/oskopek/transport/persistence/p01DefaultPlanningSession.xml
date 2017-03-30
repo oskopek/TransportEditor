@@ -1,0 +1,2154 @@
+<com.oskopek.transport.model.DefaultPlanningSession id="1">
+  <domain class="com.oskopek.transport.model.domain.VariableDomain" id="2">
+    <name>Transport sequential</name>
+    <driveBuilder id="3">
+      <preconditions id="4">
+        <com.oskopek.transport.model.domain.action.predicates.WhoAtWhere id="5"/>
+        <com.oskopek.transport.model.domain.action.predicates.IsRoad id="6"/>
+      </preconditions>
+      <effects id="7">
+        <com.oskopek.transport.model.domain.action.predicates.Not id="8">
+          <internal class="com.oskopek.transport.model.domain.action.predicates.WhoAtWhere" id="9"/>
+        </com.oskopek.transport.model.domain.action.predicates.Not>
+        <com.oskopek.transport.model.domain.action.predicates.WhoAtWhat id="10"/>
+      </effects>
+    </driveBuilder>
+    <dropBuilder id="11">
+      <preconditions id="12">
+        <com.oskopek.transport.model.domain.action.predicates.WhoAtWhere id="13"/>
+        <com.oskopek.transport.model.domain.action.predicates.In id="14"/>
+      </preconditions>
+      <effects id="15">
+        <com.oskopek.transport.model.domain.action.predicates.Not id="16">
+          <internal class="com.oskopek.transport.model.domain.action.predicates.In" id="17"/>
+        </com.oskopek.transport.model.domain.action.predicates.Not>
+        <com.oskopek.transport.model.domain.action.predicates.WhatAtWhere id="18"/>
+      </effects>
+      <cost id="19">
+        <cost>1</cost>
+      </cost>
+      <duration id="20">
+        <cost>1</cost>
+      </duration>
+    </dropBuilder>
+    <pickUpBuilder id="21">
+      <preconditions id="22">
+        <com.oskopek.transport.model.domain.action.predicates.WhoAtWhere id="23"/>
+        <com.oskopek.transport.model.domain.action.predicates.WhatAtWhere id="24"/>
+      </preconditions>
+      <effects id="25">
+        <com.oskopek.transport.model.domain.action.predicates.Not id="26">
+          <internal class="com.oskopek.transport.model.domain.action.predicates.WhatAtWhere" id="27"/>
+        </com.oskopek.transport.model.domain.action.predicates.Not>
+        <com.oskopek.transport.model.domain.action.predicates.In id="28"/>
+      </effects>
+      <cost id="29">
+        <cost>1</cost>
+      </cost>
+      <duration id="30">
+        <cost>1</cost>
+      </duration>
+    </pickUpBuilder>
+    <pddlLabelSet id="31">
+      <com.oskopek.transport.model.domain.PddlLabel>MaxCapacity</com.oskopek.transport.model.domain.PddlLabel>
+      <com.oskopek.transport.model.domain.PddlLabel>ActionCost</com.oskopek.transport.model.domain.PddlLabel>
+      <com.oskopek.transport.model.domain.PddlLabel>Capacity</com.oskopek.transport.model.domain.PddlLabel>
+    </pddlLabelSet>
+    <predicateMap id="32">
+      <entry>
+        <string>at</string>
+        <java-class>com.oskopek.transport.model.domain.action.predicates.WhoAtWhere</java-class>
+      </entry>
+      <entry>
+        <string>in</string>
+        <java-class>com.oskopek.transport.model.domain.action.predicates.In</java-class>
+      </entry>
+      <entry>
+        <string>road</string>
+        <java-class>com.oskopek.transport.model.domain.action.predicates.IsRoad</java-class>
+      </entry>
+      <entry>
+        <string>capacity</string>
+        <java-class>com.oskopek.transport.model.domain.action.predicates.HasCapacity</java-class>
+      </entry>
+    </predicateMap>
+    <functionMap id="33">
+      <entry>
+        <string>total-cost</string>
+        <java-class>com.oskopek.transport.model.domain.action.functions.TotalCost</java-class>
+      </entry>
+      <entry>
+        <string>road-length</string>
+        <java-class>com.oskopek.transport.model.domain.action.functions.RoadLength</java-class>
+      </entry>
+    </functionMap>
+  </domain>
+  <plan class="com.oskopek.transport.model.plan.SequentialPlan" id="34">
+    <actionList id="35">
+      <com.oskopek.transport.model.domain.action.PickUp id="36">
+        <name>pick-up</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" id="37">
+          <name>truck-1</name>
+          <location id="38">
+            <name>city-loc-4</name>
+            <xCoordinate>0</xCoordinate>
+            <yCoordinate>0</yCoordinate>
+          </location>
+          <curCapacity id="39">
+            <cost>2</cost>
+          </curCapacity>
+          <maxCapacity reference="39"/>
+          <packageList id="40"/>
+          <readyLoading>true</readyLoading>
+        </who>
+        <where reference="38"/>
+        <what class="com.oskopek.transport.model.problem.Package" id="41">
+          <name>package-1</name>
+          <location reference="38"/>
+          <target id="42">
+            <name>city-loc-5</name>
+            <xCoordinate>0</xCoordinate>
+            <yCoordinate>0</yCoordinate>
+          </target>
+          <size id="43">
+            <cost>1</cost>
+          </size>
+        </what>
+        <preconditions reference="22"/>
+        <effects reference="25"/>
+        <cost reference="29"/>
+        <duration reference="30"/>
+      </com.oskopek.transport.model.domain.action.PickUp>
+      <com.oskopek.transport.model.domain.action.PickUp id="44">
+        <name>pick-up</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" reference="37"/>
+        <where reference="38"/>
+        <what class="com.oskopek.transport.model.problem.Package" id="45">
+          <name>package-2</name>
+          <location reference="38"/>
+          <target id="46">
+            <name>city-loc-2</name>
+            <xCoordinate>0</xCoordinate>
+            <yCoordinate>0</yCoordinate>
+          </target>
+          <size id="47">
+            <cost>1</cost>
+          </size>
+        </what>
+        <preconditions reference="22"/>
+        <effects reference="25"/>
+        <cost reference="29"/>
+        <duration reference="30"/>
+      </com.oskopek.transport.model.domain.action.PickUp>
+      <com.oskopek.transport.model.domain.action.Drive id="48">
+        <name>drive</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" reference="37"/>
+        <where reference="38"/>
+        <what class="com.oskopek.transport.model.problem.Location" reference="42"/>
+        <preconditions reference="4"/>
+        <effects reference="7"/>
+        <cost id="49">
+          <cost>32</cost>
+        </cost>
+        <duration reference="49"/>
+      </com.oskopek.transport.model.domain.action.Drive>
+      <com.oskopek.transport.model.domain.action.Drop id="50">
+        <name>drop</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" reference="37"/>
+        <where reference="42"/>
+        <what class="com.oskopek.transport.model.problem.Package" reference="41"/>
+        <preconditions reference="12"/>
+        <effects reference="15"/>
+        <cost reference="19"/>
+        <duration reference="20"/>
+      </com.oskopek.transport.model.domain.action.Drop>
+      <com.oskopek.transport.model.domain.action.Drive id="51">
+        <name>drive</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" reference="37"/>
+        <where reference="42"/>
+        <what class="com.oskopek.transport.model.problem.Location" reference="46"/>
+        <preconditions reference="4"/>
+        <effects reference="7"/>
+        <cost id="52">
+          <cost>18</cost>
+        </cost>
+        <duration reference="52"/>
+      </com.oskopek.transport.model.domain.action.Drive>
+      <com.oskopek.transport.model.domain.action.Drop id="53">
+        <name>drop</name>
+        <who class="com.oskopek.transport.model.problem.Vehicle" reference="37"/>
+        <where reference="46"/>
+        <what class="com.oskopek.transport.model.problem.Package" reference="45"/>
+        <preconditions reference="12"/>
+        <effects reference="15"/>
+        <cost reference="19"/>
+        <duration reference="20"/>
+      </com.oskopek.transport.model.domain.action.Drop>
+    </actionList>
+  </plan>
+  <problem class="com.oskopek.transport.model.problem.DefaultProblem" id="54">
+    <name>transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed</name>
+    <roadGraph id="55">
+      <id>transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed_graph</id>
+      <index>0</index>
+      <attributes id="56">
+        <entry>
+          <string>city-loc-1</string>
+          <com.oskopek.transport.model.problem.Location id="57">
+            <name>city-loc-1</name>
+            <xCoordinate>0</xCoordinate>
+            <yCoordinate>0</yCoordinate>
+          </com.oskopek.transport.model.problem.Location>
+        </entry>
+        <entry>
+          <string>city-loc-2</string>
+          <com.oskopek.transport.model.problem.Location reference="46"/>
+        </entry>
+        <entry>
+          <string>city-loc-5</string>
+          <com.oskopek.transport.model.problem.Location reference="42"/>
+        </entry>
+        <entry>
+          <string>city-loc-3</string>
+          <com.oskopek.transport.model.problem.Location id="58">
+            <name>city-loc-3</name>
+            <xCoordinate>0</xCoordinate>
+            <yCoordinate>0</yCoordinate>
+          </com.oskopek.transport.model.problem.Location>
+        </entry>
+        <entry>
+          <string>city-loc-4</string>
+          <com.oskopek.transport.model.problem.Location reference="38"/>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-4</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="59">
+            <name>city-loc-5-&gt;city-loc-4</name>
+            <length id="60">
+              <cost>32</cost>
+            </length>
+            <location id="61">
+              <name>city-loc-5-&gt;city-loc-4</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-4-&gt;city-loc-1</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="62">
+            <name>city-loc-4-&gt;city-loc-1</name>
+            <length id="63">
+              <cost>28</cost>
+            </length>
+            <location id="64">
+              <name>city-loc-4-&gt;city-loc-1</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-1</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="65">
+            <name>city-loc-5-&gt;city-loc-1</name>
+            <length id="66">
+              <cost>35</cost>
+            </length>
+            <location id="67">
+              <name>city-loc-5-&gt;city-loc-1</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-4-&gt;city-loc-5</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="68">
+            <name>city-loc-4-&gt;city-loc-5</name>
+            <length reference="49"/>
+            <location id="69">
+              <name>city-loc-4-&gt;city-loc-5</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-3</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="70">
+            <name>city-loc-5-&gt;city-loc-3</name>
+            <length id="71">
+              <cost>24</cost>
+            </length>
+            <location id="72">
+              <name>city-loc-5-&gt;city-loc-3</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-2</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="73">
+            <name>city-loc-5-&gt;city-loc-2</name>
+            <length reference="52"/>
+            <location id="74">
+              <name>city-loc-5-&gt;city-loc-2</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-1-&gt;city-loc-5</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="75">
+            <name>city-loc-1-&gt;city-loc-5</name>
+            <length id="76">
+              <cost>35</cost>
+            </length>
+            <location id="77">
+              <name>city-loc-1-&gt;city-loc-5</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-1-&gt;city-loc-4</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="78">
+            <name>city-loc-1-&gt;city-loc-4</name>
+            <length id="79">
+              <cost>28</cost>
+            </length>
+            <location id="80">
+              <name>city-loc-1-&gt;city-loc-4</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-2-&gt;city-loc-3</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="81">
+            <name>city-loc-2-&gt;city-loc-3</name>
+            <length id="82">
+              <cost>30</cost>
+            </length>
+            <location id="83">
+              <name>city-loc-2-&gt;city-loc-3</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-3-&gt;city-loc-5</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="84">
+            <name>city-loc-3-&gt;city-loc-5</name>
+            <length id="85">
+              <cost>24</cost>
+            </length>
+            <location id="86">
+              <name>city-loc-3-&gt;city-loc-5</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-2-&gt;city-loc-5</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="87">
+            <name>city-loc-2-&gt;city-loc-5</name>
+            <length id="88">
+              <cost>18</cost>
+            </length>
+            <location id="89">
+              <name>city-loc-2-&gt;city-loc-5</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+        <entry>
+          <string>city-loc-3-&gt;city-loc-2</string>
+          <com.oskopek.transport.model.problem.DefaultRoad id="90">
+            <name>city-loc-3-&gt;city-loc-2</name>
+            <length id="91">
+              <cost>30</cost>
+            </length>
+            <location id="92">
+              <name>city-loc-3-&gt;city-loc-2</name>
+              <xCoordinate>0</xCoordinate>
+              <yCoordinate>0</yCoordinate>
+            </location>
+          </com.oskopek.transport.model.problem.DefaultRoad>
+        </entry>
+      </attributes>
+      <attributesBeingRemoved id="125"/>
+      <strictChecking>true</strictChecking>
+      <autoCreate>false</autoCreate>
+      <listeners id="126">
+        <attrSinks id="127">
+          <org.graphstream.stream.thread.ThreadProxyPipe id="179"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe id="231"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe id="283"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe id="335"/>
+        </attrSinks>
+        <eltsSinks id="387">
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="179"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="231"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="283"/>
+          <org.graphstream.stream.thread.ThreadProxyPipe reference="335"/>
+        </eltsSinks>
+        <eventQueue id="388"/>
+        <eventProcessing>false</eventProcessing>
+        <sourceId>transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed_graph</sourceId>
+        <sourceTime id="389">
+          <sinkTime id="390"/>
+          <sourceId>transport-city-sequential-5nodes-1000size-2degree-100mindistance-2trucks-2packages-2008seed_graph</sourceId>
+        </sourceTime>
+        <sinkTime reference="390"/>
+        <passYourWay>false</passYourWay>
+        <g class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+      </listeners>
+      <nodeFactory class="org.graphstream.graph.implementations.MultiGraph$1" id="391">
+        <outer-class class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+      </nodeFactory>
+      <edgeFactory class="org.graphstream.graph.implementations.AdjacencyListGraph$2" id="392">
+        <outer-class class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+      </edgeFactory>
+      <step>0.0</step>
+      <nullAttributesAreErrors>false</nullAttributesAreErrors>
+      <replayId>4</replayId>
+      <nodeMap id="393">
+        <entry>
+          <string>city-loc-1</string>
+          <org.graphstream.graph.implementations.MultiNode id="394">
+            <id>city-loc-1</id>
+            <index>0</index>
+            <attributes id="395">
+              <entry>
+                <string>ui.class</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>xyz</string>
+                <object-array id="396">
+                  <double>1.6437770067319684</double>
+                  <double>2.1665509920797787</double>
+                  <double>0.0</double>
+                </object-array>
+              </entry>
+              <entry>
+                <string>ui.label</string>
+                <string>city-loc-1</string>
+              </entry>
+            </attributes>
+            <attributesBeingRemoved id="398"/>
+            <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+            <edges id="399">
+              <org.graphstream.graph.implementations.AbstractEdge id="400">
+                <id>city-loc-4-&gt;city-loc-1</id>
+                <index>6</index>
+                <attributes id="401">
+                  <entry>
+                    <string>road</string>
+                    <com.oskopek.transport.model.problem.DefaultRoad reference="62"/>
+                  </entry>
+                </attributes>
+                <source class="org.graphstream.graph.implementations.MultiNode" id="403">
+                  <id>city-loc-4</id>
+                  <index>3</index>
+                  <attributes id="404">
+                    <entry>
+                      <string>ui.class</string>
+                      <string></string>
+                    </entry>
+                    <entry>
+                      <string>xyz</string>
+                      <object-array id="405">
+                        <double>1.3878095210832004</double>
+                        <double>1.3878095210832004</double>
+                        <double>0.0</double>
+                      </object-array>
+                    </entry>
+                    <entry>
+                      <string>ui.label</string>
+                      <string>city-loc-4</string>
+                    </entry>
+                  </attributes>
+                  <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                  <edges id="407">
+                    <org.graphstream.graph.implementations.AbstractEdge id="408">
+                      <id>city-loc-1-&gt;city-loc-4</id>
+                      <index>0</index>
+                      <attributes id="409">
+                        <entry>
+                          <string>road</string>
+                          <com.oskopek.transport.model.problem.DefaultRoad reference="78"/>
+                        </entry>
+                      </attributes>
+                      <source class="org.graphstream.graph.implementations.MultiNode" reference="394"/>
+                      <target class="org.graphstream.graph.implementations.MultiNode" reference="403"/>
+                      <directed>true</directed>
+                      <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                    </org.graphstream.graph.implementations.AbstractEdge>
+                    <org.graphstream.graph.implementations.AbstractEdge id="411">
+                      <id>city-loc-5-&gt;city-loc-4</id>
+                      <index>11</index>
+                      <attributes id="412">
+                        <entry>
+                          <string>road</string>
+                          <com.oskopek.transport.model.problem.DefaultRoad reference="59"/>
+                        </entry>
+                      </attributes>
+                      <source class="org.graphstream.graph.implementations.MultiNode" id="414">
+                        <id>city-loc-5</id>
+                        <index>4</index>
+                        <attributes id="415">
+                          <entry>
+                            <string>ui.class</string>
+                            <string></string>
+                          </entry>
+                          <entry>
+                            <string>xyz</string>
+                            <object-array id="416">
+                              <double>2.1415467932554066</double>
+                              <double>1.8101810128061924</double>
+                              <double>0.0</double>
+                            </object-array>
+                          </entry>
+                        </attributes>
+                        <attributesBeingRemoved id="418"/>
+                        <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                        <edges id="419">
+                          <org.graphstream.graph.implementations.AbstractEdge id="420">
+                            <id>city-loc-1-&gt;city-loc-5</id>
+                            <index>1</index>
+                            <attributes id="421">
+                              <entry>
+                                <string>road</string>
+                                <com.oskopek.transport.model.problem.DefaultRoad reference="75"/>
+                              </entry>
+                            </attributes>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="394"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                            <directed>true</directed>
+                            <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                          </org.graphstream.graph.implementations.AbstractEdge>
+                          <org.graphstream.graph.implementations.AbstractEdge id="423">
+                            <id>city-loc-2-&gt;city-loc-5</id>
+                            <index>3</index>
+                            <attributes id="424">
+                              <entry>
+                                <string>road</string>
+                                <com.oskopek.transport.model.problem.DefaultRoad reference="87"/>
+                              </entry>
+                            </attributes>
+                            <source class="org.graphstream.graph.implementations.MultiNode" id="426">
+                              <id>city-loc-2</id>
+                              <index>1</index>
+                              <attributes id="427">
+                                <entry>
+                                  <string>ui.class</string>
+                                  <string></string>
+                                </entry>
+                                <entry>
+                                  <string>xyz</string>
+                                  <object-array id="428">
+                                    <double>1.6693815128711105</double>
+                                    <double>1.6693815128711105</double>
+                                    <double>0.0</double>
+                                  </object-array>
+                                </entry>
+                                <entry>
+                                  <string>ui.label</string>
+                                  <string>city-loc-2</string>
+                                </entry>
+                              </attributes>
+                              <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                              <edges id="430">
+                                <org.graphstream.graph.implementations.AbstractEdge id="431">
+                                  <id>city-loc-3-&gt;city-loc-2</id>
+                                  <index>4</index>
+                                  <attributes id="432">
+                                    <entry>
+                                      <string>road</string>
+                                      <com.oskopek.transport.model.problem.DefaultRoad reference="90"/>
+                                    </entry>
+                                  </attributes>
+                                  <source class="org.graphstream.graph.implementations.MultiNode" id="434">
+                                    <id>city-loc-3</id>
+                                    <index>2</index>
+                                    <attributes id="435">
+                                      <entry>
+                                        <string>ui.class</string>
+                                        <string></string>
+                                      </entry>
+                                      <entry>
+                                        <string>xyz</string>
+                                        <object-array id="436">
+                                          <double>2.2524293341704076</double>
+                                          <double>1.626267830189219</double>
+                                          <double>0.0</double>
+                                        </object-array>
+                                      </entry>
+                                      <entry>
+                                        <string>ui.label</string>
+                                        <string>city-loc-3</string>
+                                      </entry>
+
+                                    </attributes>
+                                    <attributesBeingRemoved id="438"/>
+                                    <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                    <edges id="439">
+                                      <org.graphstream.graph.implementations.AbstractEdge id="440">
+                                        <id>city-loc-2-&gt;city-loc-3</id>
+                                        <index>2</index>
+                                        <attributes id="441">
+                                          <entry>
+                                            <string>road</string>
+                                            <com.oskopek.transport.model.problem.DefaultRoad reference="81"/>
+                                          </entry>
+                                        </attributes>
+                                        <source class="org.graphstream.graph.implementations.MultiNode" reference="426"/>
+                                        <target class="org.graphstream.graph.implementations.MultiNode" reference="434"/>
+                                        <directed>true</directed>
+                                        <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                      </org.graphstream.graph.implementations.AbstractEdge>
+                                      <org.graphstream.graph.implementations.AbstractEdge id="443">
+                                        <id>city-loc-5-&gt;city-loc-3</id>
+                                        <index>10</index>
+                                        <attributes id="444">
+                                          <entry>
+                                            <string>road</string>
+                                            <com.oskopek.transport.model.problem.DefaultRoad reference="70"/>
+                                          </entry>
+                                        </attributes>
+                                        <source class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                                        <target class="org.graphstream.graph.implementations.MultiNode" reference="434"/>
+                                        <directed>true</directed>
+                                        <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                      </org.graphstream.graph.implementations.AbstractEdge>
+                                      <org.graphstream.graph.implementations.AbstractEdge id="446">
+                                        <id>city-loc-3-&gt;city-loc-5</id>
+                                        <index>5</index>
+                                        <attributes id="447">
+                                          <entry>
+                                            <string>road</string>
+                                            <com.oskopek.transport.model.problem.DefaultRoad reference="84"/>
+                                          </entry>
+                                        </attributes>
+                                        <source class="org.graphstream.graph.implementations.MultiNode" reference="434"/>
+                                        <target class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                                        <directed>true</directed>
+                                        <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                      </org.graphstream.graph.implementations.AbstractEdge>
+                                      <org.graphstream.graph.implementations.AbstractEdge reference="431"/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                      <null/>
+                                    </edges>
+                                    <ioStart>2</ioStart>
+                                    <oStart>2</oStart>
+                                    <degree>4</degree>
+                                    <neighborMap id="449">
+                                      <entry>
+                                        <org.graphstream.graph.implementations.MultiNode reference="414"/>
+                                        <linked-list id="450">
+                                          <org.graphstream.graph.implementations.AbstractEdge reference="446"/>
+                                          <org.graphstream.graph.implementations.AbstractEdge reference="443"/>
+                                        </linked-list>
+                                      </entry>
+                                      <entry>
+                                        <org.graphstream.graph.implementations.MultiNode reference="426"/>
+                                        <linked-list id="451">
+                                          <org.graphstream.graph.implementations.AbstractEdge reference="440"/>
+                                          <org.graphstream.graph.implementations.AbstractEdge reference="431"/>
+                                        </linked-list>
+                                      </entry>
+                                    </neighborMap>
+                                  </source>
+                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="426"/>
+                                  <directed>true</directed>
+                                  <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                </org.graphstream.graph.implementations.AbstractEdge>
+                                <org.graphstream.graph.implementations.AbstractEdge id="452">
+                                  <id>city-loc-5-&gt;city-loc-2</id>
+                                  <index>9</index>
+                                  <attributes id="453">
+                                    <entry>
+                                      <string>road</string>
+                                      <com.oskopek.transport.model.problem.DefaultRoad reference="73"/>
+                                    </entry>
+                                  </attributes>
+                                  <source class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                                  <target class="org.graphstream.graph.implementations.MultiNode" reference="426"/>
+                                  <directed>true</directed>
+                                  <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                                </org.graphstream.graph.implementations.AbstractEdge>
+                                <org.graphstream.graph.implementations.AbstractEdge reference="440"/>
+                                <org.graphstream.graph.implementations.AbstractEdge reference="423"/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                                <null/>
+                              </edges>
+                              <ioStart>2</ioStart>
+                              <oStart>2</oStart>
+                              <degree>4</degree>
+                              <neighborMap id="455">
+                                <entry>
+                                  <org.graphstream.graph.implementations.MultiNode reference="414"/>
+                                  <linked-list id="456">
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="423"/>
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="452"/>
+                                  </linked-list>
+                                </entry>
+                                <entry>
+                                  <org.graphstream.graph.implementations.MultiNode reference="434"/>
+                                  <linked-list id="457">
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="440"/>
+                                    <org.graphstream.graph.implementations.AbstractEdge reference="431"/>
+                                  </linked-list>
+                                </entry>
+                              </neighborMap>
+                            </source>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                            <directed>true</directed>
+                            <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                          </org.graphstream.graph.implementations.AbstractEdge>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="446"/>
+                          <org.graphstream.graph.implementations.AbstractEdge id="458">
+                            <id>city-loc-4-&gt;city-loc-5</id>
+                            <index>7</index>
+                            <attributes id="459">
+                              <entry>
+                                <string>road</string>
+                                <com.oskopek.transport.model.problem.DefaultRoad reference="68"/>
+                              </entry>
+                            </attributes>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="403"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                            <directed>true</directed>
+                            <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                          </org.graphstream.graph.implementations.AbstractEdge>
+                          <org.graphstream.graph.implementations.AbstractEdge id="461">
+                            <id>city-loc-5-&gt;city-loc-1</id>
+                            <index>8</index>
+                            <attributes id="462">
+                              <entry>
+                                <string>road</string>
+                                <com.oskopek.transport.model.problem.DefaultRoad reference="65"/>
+                              </entry>
+                            </attributes>
+                            <source class="org.graphstream.graph.implementations.MultiNode" reference="414"/>
+                            <target class="org.graphstream.graph.implementations.MultiNode" reference="394"/>
+                            <directed>true</directed>
+                            <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                          </org.graphstream.graph.implementations.AbstractEdge>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="452"/>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="443"/>
+                          <org.graphstream.graph.implementations.AbstractEdge reference="411"/>
+                          <null/>
+                          <null/>
+                          <null/>
+                          <null/>
+                          <null/>
+                          <null/>
+                          <null/>
+                          <null/>
+                        </edges>
+                        <ioStart>4</ioStart>
+                        <oStart>4</oStart>
+                        <degree>8</degree>
+                        <neighborMap id="464">
+                          <entry>
+                            <org.graphstream.graph.implementations.MultiNode reference="394"/>
+                            <linked-list id="465">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="420"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+                            </linked-list>
+                          </entry>
+                          <entry>
+                            <org.graphstream.graph.implementations.MultiNode reference="426"/>
+                            <linked-list id="466">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="423"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="452"/>
+                            </linked-list>
+                          </entry>
+                          <entry>
+                            <org.graphstream.graph.implementations.MultiNode reference="403"/>
+                            <linked-list id="467">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="458"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="411"/>
+                            </linked-list>
+                          </entry>
+                          <entry>
+                            <org.graphstream.graph.implementations.MultiNode reference="434"/>
+                            <linked-list id="468">
+                              <org.graphstream.graph.implementations.AbstractEdge reference="446"/>
+                              <org.graphstream.graph.implementations.AbstractEdge reference="443"/>
+                            </linked-list>
+                          </entry>
+                        </neighborMap>
+                      </source>
+                      <target class="org.graphstream.graph.implementations.MultiNode" reference="403"/>
+                      <directed>true</directed>
+                      <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+                    </org.graphstream.graph.implementations.AbstractEdge>
+                    <org.graphstream.graph.implementations.AbstractEdge reference="458"/>
+                    <org.graphstream.graph.implementations.AbstractEdge reference="400"/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                    <null/>
+                  </edges>
+                  <ioStart>2</ioStart>
+                  <oStart>2</oStart>
+                  <degree>4</degree>
+                  <neighborMap id="469">
+                    <entry>
+                      <org.graphstream.graph.implementations.MultiNode reference="394"/>
+                      <linked-list id="470">
+                        <org.graphstream.graph.implementations.AbstractEdge reference="408"/>
+                        <org.graphstream.graph.implementations.AbstractEdge reference="400"/>
+                      </linked-list>
+                    </entry>
+                    <entry>
+                      <org.graphstream.graph.implementations.MultiNode reference="414"/>
+                      <linked-list id="471">
+                        <org.graphstream.graph.implementations.AbstractEdge reference="458"/>
+                        <org.graphstream.graph.implementations.AbstractEdge reference="411"/>
+                      </linked-list>
+                    </entry>
+                  </neighborMap>
+                </source>
+                <target class="org.graphstream.graph.implementations.MultiNode" reference="394"/>
+                <directed>true</directed>
+                <graph class="com.oskopek.transport.model.problem.RoadGraph" reference="55"/>
+              </org.graphstream.graph.implementations.AbstractEdge>
+              <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="408"/>
+              <org.graphstream.graph.implementations.AbstractEdge reference="420"/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+              <null/>
+            </edges>
+            <ioStart>2</ioStart>
+            <oStart>2</oStart>
+            <degree>4</degree>
+            <neighborMap id="472">
+              <entry>
+                <org.graphstream.graph.implementations.MultiNode reference="414"/>
+                <linked-list id="473">
+                  <org.graphstream.graph.implementations.AbstractEdge reference="420"/>
+                  <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+                </linked-list>
+              </entry>
+              <entry>
+                <org.graphstream.graph.implementations.MultiNode reference="403"/>
+                <linked-list id="474">
+                  <org.graphstream.graph.implementations.AbstractEdge reference="408"/>
+                  <org.graphstream.graph.implementations.AbstractEdge reference="400"/>
+                </linked-list>
+              </entry>
+            </neighborMap>
+          </org.graphstream.graph.implementations.MultiNode>
+        </entry>
+        <entry>
+          <string>city-loc-2</string>
+          <org.graphstream.graph.implementations.MultiNode reference="426"/>
+        </entry>
+        <entry>
+          <string>city-loc-5</string>
+          <org.graphstream.graph.implementations.MultiNode reference="414"/>
+        </entry>
+        <entry>
+          <string>city-loc-3</string>
+          <org.graphstream.graph.implementations.MultiNode reference="434"/>
+        </entry>
+        <entry>
+          <string>city-loc-4</string>
+          <org.graphstream.graph.implementations.MultiNode reference="403"/>
+        </entry>
+      </nodeMap>
+      <edgeMap id="475">
+        <entry>
+          <string>city-loc-1-&gt;city-loc-5</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="420"/>
+        </entry>
+        <entry>
+          <string>city-loc-1-&gt;city-loc-4</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="408"/>
+        </entry>
+        <entry>
+          <string>city-loc-2-&gt;city-loc-3</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="440"/>
+        </entry>
+        <entry>
+          <string>city-loc-3-&gt;city-loc-5</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="446"/>
+        </entry>
+        <entry>
+          <string>city-loc-2-&gt;city-loc-5</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="423"/>
+        </entry>
+        <entry>
+          <string>city-loc-3-&gt;city-loc-2</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="431"/>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-4</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="411"/>
+        </entry>
+        <entry>
+          <string>city-loc-4-&gt;city-loc-1</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="400"/>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-1</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-3</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="443"/>
+        </entry>
+        <entry>
+          <string>city-loc-4-&gt;city-loc-5</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="458"/>
+        </entry>
+        <entry>
+          <string>city-loc-5-&gt;city-loc-2</string>
+          <org.graphstream.graph.implementations.AbstractEdge reference="452"/>
+        </entry>
+      </edgeMap>
+      <nodeArray id="476">
+        <org.graphstream.graph.implementations.MultiNode reference="394"/>
+        <org.graphstream.graph.implementations.MultiNode reference="426"/>
+        <org.graphstream.graph.implementations.MultiNode reference="434"/>
+        <org.graphstream.graph.implementations.MultiNode reference="403"/>
+        <org.graphstream.graph.implementations.MultiNode reference="414"/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+      </nodeArray>
+      <edgeArray id="477">
+        <org.graphstream.graph.implementations.AbstractEdge reference="408"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="420"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="440"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="423"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="431"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="446"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="400"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="458"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="461"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="452"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="443"/>
+        <org.graphstream.graph.implementations.AbstractEdge reference="411"/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+        <null/>
+      </edgeArray>
+      <nodeCount>5</nodeCount>
+      <edgeCount>12</edgeCount>
+      <logger class="ch.qos.logback.classic.Logger" id="478">
+        <name>com.oskopek.transport.model.problem.RoadGraph</name>
+      </logger>
+    </roadGraph>
+    <vehicleMap id="479">
+      <entry>
+        <string>truck-1</string>
+        <com.oskopek.transport.model.problem.Vehicle reference="37"/>
+      </entry>
+      <entry>
+        <string>truck-2</string>
+        <com.oskopek.transport.model.problem.Vehicle id="480">
+          <name>truck-2</name>
+          <location reference="42"/>
+          <curCapacity id="481">
+            <cost>4</cost>
+          </curCapacity>
+          <maxCapacity reference="481"/>
+          <packageList id="482"/>
+          <readyLoading>true</readyLoading>
+        </com.oskopek.transport.model.problem.Vehicle>
+      </entry>
+    </vehicleMap>
+    <packageMap id="483">
+      <entry>
+        <string>package-2</string>
+        <com.oskopek.transport.model.problem.Package reference="45"/>
+      </entry>
+      <entry>
+        <string>package-1</string>
+        <com.oskopek.transport.model.problem.Package reference="41"/>
+      </entry>
+    </packageMap>
+  </problem>
+  <validator class="com.oskopek.transport.validation.SequentialPlanValidator" id="484"/>
+</com.oskopek.transport.model.DefaultPlanningSession>

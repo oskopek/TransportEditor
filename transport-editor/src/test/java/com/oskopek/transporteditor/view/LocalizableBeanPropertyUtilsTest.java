@@ -1,7 +1,7 @@
-package com.oskopek.transport.model.problem.builder;
+package com.oskopek.transporteditor.view;
 
 import com.oskopek.transport.model.problem.Location;
-import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
+import com.oskopek.transport.model.problem.builder.LocationBuilder;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class LocationBuilderTest {
+public class LocalizableBeanPropertyUtilsTest {
 
     private LocationBuilder builder;
 

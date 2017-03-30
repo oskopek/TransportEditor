@@ -6,6 +6,8 @@ import com.oskopek.transport.model.problem.DefaultRoad;
 import com.oskopek.transport.model.problem.Road;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class RoadLengthTest {
 
     @Test

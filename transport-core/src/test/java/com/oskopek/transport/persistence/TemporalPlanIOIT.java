@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.stream.Collectors;
 
 import static com.oskopek.transport.persistence.IOUtils.readAllLines;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

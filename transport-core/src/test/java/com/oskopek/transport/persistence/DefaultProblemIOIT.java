@@ -4,6 +4,8 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.domain.VariableDomain;
+import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
