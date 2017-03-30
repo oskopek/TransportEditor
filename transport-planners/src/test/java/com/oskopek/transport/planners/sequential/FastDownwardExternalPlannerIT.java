@@ -6,7 +6,6 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.DefaultProblemIO;
-import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;

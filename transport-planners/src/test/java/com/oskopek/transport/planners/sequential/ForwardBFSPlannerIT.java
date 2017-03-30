@@ -7,8 +7,8 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.DefaultProblemIO;
-import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
+import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -32,14 +32,10 @@ public class ForwardBFSPlannerIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
-        p02Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p02SeqProblem.pddl")));
-        p03Problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p03SeqProblem.pddl")));
-        plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                ForwardBFSPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
+        problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p01SeqProblem.pddl"));
+        p02Problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p02SeqProblem.pddl"));
+        p03Problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p03SeqProblem.pddl"));
+        plan = new SequentialPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01SeqPlan.val"));
 
         List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);

@@ -4,8 +4,8 @@ import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.DefaultProblemIO;
-import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
+import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -23,10 +23,8 @@ public class PrologBFSExternalPlannerIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                PrologBFSExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
-        plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                PrologBFSExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
+        problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p01SeqProblem.pddl"));
+        plan = new SequentialPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01SeqPlan.val"));
     }
 
     @Before

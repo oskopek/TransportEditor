@@ -38,6 +38,13 @@ public final class TestUtils {
         }
     }
 
+    /**
+     * Gets the contents of a file in the test resource persistence directory (usually problems, domain, plans, ...).
+     *
+     * @param name the name of the file, relative to the persistence directory
+     * @return the contents of the text file
+     * @throws IOException if an error during reading occurs
+     */
     public static String getPersistenceTestFile(String name) throws IOException {
         return IOUtils.concatReadAllLines(Files.newInputStream(
                 Paths.get("../transport-core/src/test/resources/com/oskopek/transport/persistence/" + name)));
