@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.weld;
 
+import com.oskopek.transport.weld.MessagesProducer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

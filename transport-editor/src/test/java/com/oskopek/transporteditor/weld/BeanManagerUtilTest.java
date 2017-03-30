@@ -1,5 +1,7 @@
 package com.oskopek.transporteditor.weld;
 
+import com.oskopek.transport.weld.BeanManagerUtil;
+import com.oskopek.transport.weld.FXMLLoaderProducer;
 import org.junit.Test;
 
 import javax.enterprise.inject.spi.CDI;

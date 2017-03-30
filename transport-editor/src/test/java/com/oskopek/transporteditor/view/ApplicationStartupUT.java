@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.view;
 
+import com.oskopek.transport.view.TransportEditorApplication;
 import javafx.stage.Stage;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.AfterClass;

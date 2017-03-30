@@ -1,5 +1,6 @@
 package com.oskopek.transporteditor.weld;
 
+import com.oskopek.transport.weld.FXMLLoaderProducer;
 import javafx.fxml.FXMLLoader;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;

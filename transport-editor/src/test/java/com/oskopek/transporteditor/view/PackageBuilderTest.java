@@ -4,7 +4,7 @@ import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.builder.PackageBuilder;
-import com.oskopek.transporteditor.view.LocalizableSortableBeanPropertyUtils;
+import com.oskopek.transport.view.LocalizableSortableBeanPropertyUtils;
 import javafx.collections.ObservableList;
 import org.assertj.core.api.Assertions;
 import org.controlsfx.control.PropertySheet;

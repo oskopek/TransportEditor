@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <skipTests>false</skipTests>
         <skipITs>true</skipITs>
-        <mainClass>com.oskopek.transporteditor.view.TransportEditorApplication</mainClass>
+        <mainClass>com.oskopek.transport.view.TransportEditorApplication</mainClass>
         <rootLevelDir>${project.basedir}/..</rootLevelDir>
     </properties>
     <!-- IMPORTANT: Every time a dependency is changed, make sure to check beans.xml and add excludes -->

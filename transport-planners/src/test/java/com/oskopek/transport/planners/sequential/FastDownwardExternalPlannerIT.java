@@ -8,6 +8,7 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.DefaultProblemIO;
 import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
+import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -29,10 +30,8 @@ public class FastDownwardExternalPlannerIT {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                FastDownwardExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
-        plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                FastDownwardExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
+        problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p01SeqProblem.pddl"));
+        plan = new SequentialPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01SeqPlan.val"));
 
         List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);

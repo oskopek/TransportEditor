@@ -2,6 +2,7 @@ package com.oskopek.transporteditor.view;
 
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.builder.LocationBuilder;
+import com.oskopek.transport.view.LocalizableSortableBeanPropertyUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
