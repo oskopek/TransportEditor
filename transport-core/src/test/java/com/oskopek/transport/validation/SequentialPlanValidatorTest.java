@@ -7,6 +7,7 @@ import com.oskopek.transport.model.plan.TemporalPlan;
 import com.oskopek.transport.model.problem.DefaultProblem;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.SequentialPlanIOIT;
+import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,8 +31,8 @@ public class SequentialPlanValidatorTest {
         validator = new SequentialPlanValidator();
 
         domain = new SequentialDomain("seq");
-        problem = SequentialPlanIOIT.P01SequentialProblem();
-        plan = SequentialPlanIOIT.P01SequentialPlan(problem);
+        problem = TestUtils.P01SequentialProblem();
+        plan = TestUtils.P01SequentialPlan();
     }
 
     @Test

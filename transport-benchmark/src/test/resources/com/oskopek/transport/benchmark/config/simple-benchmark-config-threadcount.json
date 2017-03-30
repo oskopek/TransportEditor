@@ -1,23 +1,23 @@
 {
-  "domain": "${transport.root}/../../../persistence/variableDomainSeq.pddl",
+  "domain": "${transport.root}/transport-core/src/test/resources/com/oskopek/transport/persistence/variableDomainSeq.pddl",
   "problems": {
     "p01": {
-      "filePath": "${transport.root}/../../../persistence/p01SeqProblem.pddl",
+      "filePath": "${transport.root}/transport-core/src/test/resources/com/oskopek/transport/persistence/p01SeqProblem.pddl",
       "bestScore": 54
     },
     "p01Easy": {
-      "filePath": "${transport.root}/../../../persistence/p01SeqProblemEasier.pddl",
+      "filePath": "${transport.root}/transport-core/src/test/resources/com/oskopek/transport/persistence/p01SeqProblemEasier.pddl",
       "bestScore": 54
     }
   },
   "scoreFunctionType": "ACTION_COUNT",
   "planners": {
     "FastDownAstar": {
-      "className": "com.oskopek.transporteditor.planners.FastDownwardExternalPlanner",
+      "className": "com.oskopek.transport.planners.FastDownwardExternalPlanner",
       "params": "{0} {1} --search astar(ff())"
     },
     "PrologBFS": {
-      "className": "com.oskopek.transporteditor.planners.PrologBFSExternalPlanner"
+      "className": "com.oskopek.transport.planners.PrologBFSExternalPlanner"
     }
   },
   "threadCount": 2,

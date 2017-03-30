@@ -7,6 +7,7 @@ import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.tools.test.TestUtils;
 import com.oskopek.transport.validation.SequentialPlanValidator;
 import com.oskopek.transport.benchmark.config.ScoreFunctionType;
 import com.oskopek.transport.benchmark.data.BenchmarkMatrix;
@@ -39,8 +40,8 @@ public class BenchmarkIT {
     @Before
     public void setUp() throws Exception {
         domain = new SequentialDomain("");
-        problems = Arrays.asList(SequentialPlanIOIT.P01SequentialProblem(), SequentialPlanIOIT.P01SequentialProblem()
-                .removeVehicle("truck-2"));
+        Problem seqProblem = TestUtils.P01SequentialProblem();
+        problems = Arrays.asList(seqProblem, seqProblem.removeVehicle("truck-2"));
         problemInfo = new HashMap<>();
         problemInfo.put(problems.get(0), new ProblemInfo("", 54d, ""));
         problemInfo.put(problems.get(1), new ProblemInfo("", 54d, ""));

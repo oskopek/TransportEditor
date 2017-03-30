@@ -16,11 +16,13 @@ public class BenchmarkConfigIOIT {
 
     private final Path basePath
             = Paths.get("src/test/resources/com/oskopek/transport/benchmark/config/");
+    private final Path transportRoot
+            = Paths.get("..");
     private final Path simpleConfigPath = basePath.resolve("simple-benchmark-config.json");
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("transport.root", basePath.toAbsolutePath().toString());
+        System.setProperty("transport.root", transportRoot.toAbsolutePath().toString());
     }
 
     @After

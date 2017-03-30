@@ -1,10 +1,7 @@
 
-Lists of 43 third-party dependencies.
+Lists of 40 third-party dependencies.
      (Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Classic Module (ch.qos.logback:logback-classic:1.1.8 - http://logback.qos.ch/logback-classic)
      (Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Core Module (ch.qos.logback:logback-core:1.1.8 - http://logback.qos.ch/logback-core)
-     (The Apache Software License, Version 2.0) Jackson-annotations (com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr1 - http://github.com/FasterXML/jackson)
-     (The Apache Software License, Version 2.0) Jackson-core (com.fasterxml.jackson.core:jackson-core:2.9.0.pr1 - https://github.com/FasterXML/jackson-core)
-     (The Apache Software License, Version 2.0) jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1 - http://github.com/FasterXML/jackson)
      (GNU Lesser Public License) FindBugs-Annotations (com.google.code.findbugs:annotations:3.0.1u2 - http://findbugs.sourceforge.net/)
      (The Apache Software License, Version 2.0) FindBugs-jsr305 (com.google.code.findbugs:jsr305:3.0.1 - http://findbugs.sourceforge.net/)
      (The Apache Software License, Version 2.0) Guava: Google Core Libraries for Java (com.google.guava:guava:20.0 - https://github.com/google/guava/guava)
@@ -33,7 +30,6 @@ Lists of 43 third-party dependencies.
      (Apache License, Version 2.0) Weld SE (Uber Jar) (org.jboss.weld.se:weld-se:2.3.5.Final - http://weld.cdi-spec.org)
      (GNU Lesser General Public Licence) JCommon (org.jfree:jcommon:1.0.23 - http://www.jfree.org/jcommon/)
      (GNU Lesser General Public Licence) JFreeChart (org.jfree:jfreechart:1.0.19 - http://www.jfree.org/jfreechart/)
-     (GNU General Public License (GPL)) JFreeSVG (org.jfree:jfreesvg:2.1 - http://www.jfree.org/jfreesvg)
      (The MIT License) Mockito (org.mockito:mockito-core:2.0.0-beta.112 - http://mockito.org)
      (Apache 2) Objenesis (org.objenesis:objenesis:2.4 - http://objenesis.org)
      (The New BSD License) (WTFPL) Reflections (org.reflections:reflections:0.9.11 - http://github.com/ronmamo/reflections)

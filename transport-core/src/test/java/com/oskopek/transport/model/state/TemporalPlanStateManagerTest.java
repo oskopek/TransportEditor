@@ -6,7 +6,7 @@ import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.*;
-import com.oskopek.transport.persistence.SequentialPlanIOIT;
+import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.*;
 public class TemporalPlanStateManagerTest {
 
     private static final Domain domain = new SequentialDomain("Transport sequential");
-    private static final Problem problem = SequentialPlanIOIT.P01SequentialProblem();
-    private static final Plan plan = SequentialPlanIOIT.P01SequentialPlan(problem);
+    private static final Problem problem = TestUtils.P01SequentialProblem();
+    private static final Plan plan = TestUtils.P01SequentialPlan();
     private static final List<TemporalPlanAction> actions = new ArrayList<>(plan.getTemporalPlanActions());
 
     private TemporalPlanStateManager planStateManager;
