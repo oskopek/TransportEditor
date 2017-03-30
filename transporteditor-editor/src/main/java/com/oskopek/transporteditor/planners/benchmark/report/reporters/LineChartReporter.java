@@ -2,11 +2,18 @@ package com.oskopek.transporteditor.planners.benchmark.report.reporters;
 
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
 import com.oskopek.transporteditor.planners.benchmark.report.Reporter;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -23,7 +30,8 @@ public abstract class LineChartReporter implements Reporter {
     private final int width;
     private final int height;
     private final String title;
-    private final String valueAxis;
+    private final String valueAxisLabel;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected static final int DEFAULT_WIDTH = 500;
     protected static final int DEFAULT_HEIGHT = 500;
@@ -35,27 +43,47 @@ public abstract class LineChartReporter implements Reporter {
      * @param width the width of the plot
      * @param height the height of the plot
      * @param title the title of the plot
-     * @param valueAxis the value axis (Y-axis) label
+     * @param valueAxisLabel the value axis (Y-axis) label
      */
     public LineChartReporter(Function<BenchmarkResults.JsonRun, Number> dataGetter, int width, int height,
-            String title, String valueAxis) {
+            String title, String valueAxisLabel) {
         this.dataGetter = dataGetter;
         this.width = width;
         this.height = height;
         this.title = title;
-        this.valueAxis = valueAxis;
+        this.valueAxisLabel = valueAxisLabel;
+    }
+
+    /**
+     * Renders the actual chart.
+     *
+     * @param dataset the dataset to render
+     * @return the rendered chart
+     */
+    private JFreeChart renderLineChart(CategoryDataset dataset) {
+        CategoryAxis categoryAxis = new CategoryAxis("Problem");
+        ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
+
+        LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
+        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+                renderer);
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        return new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
+                plot, true);
     }
 
     @Override
     public String generateReport(List<BenchmarkResults.JsonRun> results) {
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         results.stream().sorted(Comparator.comparing(BenchmarkResults.JsonRun::getProblem))
                 .forEach(r -> dataset.addValue(dataGetter.apply(r), r.getPlanner(), r.getProblem()));
 
-        JFreeChart chart = ChartFactory.createLineChart(title, "Problem", valueAxis,
-                dataset, PlotOrientation.VERTICAL, true, false, false);
+        if (GraphicsEnvironment.isHeadless()) {
+            logger.warn("Headless environment, skipping JFreeChart chart creation.");
+            return "";
+        }
 
+        JFreeChart chart = renderLineChart(dataset);
         int efficientWidth = width + width * Math.round(dataset.getColumnCount() * 25 / (float) width);
         SVGGraphics2D g2 = new SVGGraphics2D(efficientWidth, height);
         Rectangle r = new Rectangle(0, 0, efficientWidth, height);

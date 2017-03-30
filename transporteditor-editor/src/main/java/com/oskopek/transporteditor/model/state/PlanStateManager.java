@@ -1,6 +1,5 @@
 package com.oskopek.transporteditor.model.state;
 
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 
 import java.util.Optional;
@@ -24,7 +23,7 @@ public interface PlanStateManager {
      *
      * @return the current time
      */
-    ActionCost getCurrentTime();
+    Double getCurrentTime();
 
     /**
      * Go to the specified time in the plan using the given problem instance.
@@ -32,7 +31,7 @@ public interface PlanStateManager {
      * @param time the time to go to
      * @param applyStarts should we apply action "at start" effects for actions at time {@code time}?
      */
-    void goToTime(ActionCost time, boolean applyStarts);
+    void goToTime(Double time, boolean applyStarts);
 
     /**
      * Go to the next checkpoint, a time unit. Checkpoints are defined by the implementation.

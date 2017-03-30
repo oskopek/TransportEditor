@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class Drive extends DefaultAction<Vehicle, Location> {
 
+    private final Road road;
+    private final Location dest;
+    private final String vehicleName;
+
     /**
      * Default constructor.
      *
@@ -26,30 +30,27 @@ public class Drive extends DefaultAction<Vehicle, Location> {
     public Drive(Vehicle vehicle, Location from, Location to, List<Predicate> preconditions,
             List<Predicate> effects, Road road) {
         super("drive", vehicle, from, to, preconditions, effects, road.getLength(), road.getLength());
+        this.road = road;
+        this.dest = to;
+        this.vehicleName = vehicle != null ? vehicle.getName() : null;
     }
 
     @Override
     public Problem applyPreconditions(Domain domain, Problem problemState) {
-        String name = this.getWho().getName();
-        Location source = problemState.getRoadGraph().getLocation(getWhere().getName());
-        Location destination = problemState.getRoadGraph().getLocation(getWhat().getName());
-        Vehicle vehicle = problemState.getVehicle(name);
+        Vehicle vehicle = problemState.getVehicle(vehicleName);
         ActionCost curFuelCapacity = vehicle.getCurFuelCapacity();
-        Road road = problemState.getRoadGraph().getShortestRoadBetween(source, destination);
         if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
             FuelRoad fuelRoad = (FuelRoad) road;
             curFuelCapacity = curFuelCapacity.subtract(fuelRoad.getFuelCost());
         }
-        return problemState
-                .putVehicle(name, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(road.getLocation()));
+        return problemState.putVehicle(vehicleName, vehicle.updateCurFuelCapacity(curFuelCapacity)
+                .updateLocation(road.getLocation()));
     }
 
     @Override
     public Problem applyEffects(Domain domain, Problem problemState) {
-        String name = this.getWho().getName();
-        Location destination = problemState.getRoadGraph().getLocation(getWhat().getName());
-        Vehicle vehicle = problemState.getVehicle(name);
+        Vehicle vehicle = problemState.getVehicle(vehicleName);
         return problemState
-                .putVehicle(name, vehicle.updateLocation(destination));
+                .putVehicle(vehicleName, vehicle.updateLocation(dest));
     }
 }

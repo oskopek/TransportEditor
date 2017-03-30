@@ -2,5 +2,4 @@
 transportroot="`realpath "../../"`"
 benchmarker="TransportEditor-Benchmarker-jar-with-dependencies.jar"
 reportGenerator="TransportEditor-ReportGenerator-jar-with-dependencies.jar"
-
-. benchmark.sh
+exec ./benchmark.sh

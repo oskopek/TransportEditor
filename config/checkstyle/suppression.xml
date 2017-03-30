@@ -7,6 +7,7 @@
 <suppressions>
     <suppress checks="Javadoc.*" files="src/test/java/.*.java"/>
     <suppress checks="Javadoc.*" files="src\\test\\java\\.*.java"/>
+    <suppress checks="Javadoc.*" files=".*sequential/.*Planner.*.java"/> <!-- TODO: Planners need javadoc too! -->
     <suppress checks=".*" files="antlr4.*.java"/>
     <suppress checks=".*" files="target/.*"/>
     <suppress checks=".*" files="target\\.*"/>

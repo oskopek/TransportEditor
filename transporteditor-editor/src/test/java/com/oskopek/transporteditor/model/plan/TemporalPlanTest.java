@@ -10,7 +10,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TemporalPlanTest {
 
@@ -20,15 +21,17 @@ public class TemporalPlanTest {
     public void setUp() throws Exception {
         Set<TemporalPlanAction> planActionSet = new HashSet<>();
         planActionSet
-                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(1)), 0,
-                        1));
+                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(1)), 0d,
+                        1d));
         planActionSet
-                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(2)), 0,
-                        2));
+                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(2)), 0d,
+                        2d));
         planActionSet
-                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(1)), 1, 2));
+                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(1)), 1d,
+                        2d));
         planActionSet
-                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1, 3));
+                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1d,
+                        3d));
         plan = new TemporalPlan(planActionSet);
     }
 
@@ -51,7 +54,7 @@ public class TemporalPlanTest {
         assertEquals(1, plan.getTemporalActionsAt(2).size());
         assertEquals(0, plan.getTemporalActionsAt(3).size());
         assertTrue(plan.getTemporalActionsAt(2).contains(
-                new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1, 3)));
+                new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1d, 3d)));
         assertEquals(0, plan.getTemporalActionsAt(4).size());
     }
 

@@ -1,0 +1,10 @@
+; Makespan: 52.030
+; Wasted time: 0.030
+; Adjusted makespan: 52.000
+; validate with -t 0.0005
+0.005: (pick-up truck-1 city-loc-3 package-1) [1.000]
+0.010: (pick-up truck-2 city-loc-4 package-2) [1.000]
+1.015: (drive truck-1 city-loc-3 city-loc-2) [50.000]
+1.020: (drive truck-2 city-loc-4 city-loc-3) [45.000]
+51.025: (drop truck-2 city-loc-3 package-2) [1.000]
+51.030: (drop truck-1 city-loc-2 package-1) [1.000]

@@ -60,7 +60,7 @@ public class IpcQualityLatexTableReporter implements Reporter {
                         .mapToDouble(r -> r.getResults().getQuality()).sum())
                 .mapValues(qualityFormat::format).toJavaMap();
 
-        javaslang.collection.Map<String, javaslang.collection.List<Integer>> bestList
+        javaslang.collection.Map<String, javaslang.collection.List<Double>> bestList
                 = javaslang.collection.Stream.ofAll(runs).groupBy(BenchmarkResults.JsonRun::getProblem)
                 .mapValues(v -> v
                         .map(BenchmarkResults.JsonRun::getResults)

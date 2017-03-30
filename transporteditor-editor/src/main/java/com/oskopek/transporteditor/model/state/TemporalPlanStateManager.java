@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.model.state;
 
 import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -9,12 +8,11 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 /**
@@ -24,9 +22,6 @@ import java.util.stream.Stream;
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    private static final Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
-            .append(t1.getStartTimestamp(), t2.getStartTimestamp()).append(t1.getEndTimestamp(), t2.getEndTimestamp())
-            .toComparison();
     private final Domain domain;
     private final Problem problem;
     private final List<TemporalPlanAction> temporalPlanActions;
@@ -43,8 +38,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
         this.domain = domain;
         this.problem = problem;
-        this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted(endStartTimeComparator)
-                .collect(Collectors.toList());
+        this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted().collect(Collectors.toList());
         this.state = getBeginningState();
         this.pointer = new PlanActionPointer(0, false);
     }
@@ -55,8 +49,8 @@ public class TemporalPlanStateManager implements PlanStateManager {
     }
 
     @Override
-    public ActionCost getCurrentTime() {
-        return ActionCost.valueOf(pointer.getTime());
+    public Double getCurrentTime() {
+        return pointer.getTime();
     }
 
     /**
@@ -69,10 +63,10 @@ public class TemporalPlanStateManager implements PlanStateManager {
     }
 
     @Override
-    public void goToTime(ActionCost time, boolean applyStarts) {
+    public void goToTime(Double time, boolean applyStarts) {
         state = getBeginningState();
-        int simulationTime = applyAll(time.getCost(), applyStarts);
-        pointer = new PlanActionPointer(time.getCost(), applyStarts);
+        double simulationTime = applyAll(time, applyStarts);
+        pointer = new PlanActionPointer(time, applyStarts);
     }
 
     /**
@@ -83,7 +77,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @param applyStarts if true, will apply the "at start" effects of actions at time {@code upToIncluding}
      * @return the last time an action effect was applied
      */
-    private int applyAll(int upToIncluding, boolean applyStarts) {
+    private double applyAll(double upToIncluding, boolean applyStarts) {
         Stream<TimeElement<TemporalPlanAction>> actions = temporalPlanActions.stream()
                 .flatMap(t -> Stream.of(new TimeElement<>(t.getStartTimestamp(), false, t),
                         new TimeElement<>(t.getEndTimestamp(), true, t)))
@@ -96,7 +90,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
         PriorityQueue<TimeElement<TemporalPlanAction>> applyQueue = new PriorityQueue<>(
                 actions.collect(Collectors.toList()));
 
-        int simulationTime = 0;
+        double simulationTime = 0;
         TimeElement<TemporalPlanAction> head;
         while ((head = applyQueue.poll()) != null) {
             TemporalPlanAction action = head.getPayload();
@@ -115,16 +109,15 @@ public class TemporalPlanStateManager implements PlanStateManager {
 
     @Override
     public void goToNextCheckpoint() {
-        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(ActionCost.valueOf(res),
-                false));
+        temporalPlanActions.stream().flatMapToDouble(t -> DoubleStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(res, false));
     }
 
     @Override
     public void goToPreviousCheckpoint() {
-        temporalPlanActions.stream().flatMapToInt(t -> IntStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
+        temporalPlanActions.stream().flatMapToDouble(t -> DoubleStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
                 .filter(t -> t < pointer.getTime()).max()
-                .ifPresent(res -> goToTime(ActionCost.valueOf(res), false));
+                .ifPresent(res -> goToTime(res, false));
     }
 
     @Override
@@ -145,7 +138,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      */
     private static class TimeElement<Payload> implements Comparable<TimeElement<Payload>> {
 
-        private final int time;
+        private final double time;
         private final boolean isEnd;
         private final Payload payload;
 
@@ -156,7 +149,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
          * @param isEnd true iff this element represent an end of an action (not a start)
          * @param payload the payload object
          */
-        TimeElement(int time, boolean isEnd, Payload payload) {
+        TimeElement(double time, boolean isEnd, Payload payload) {
             this.payload = payload;
             this.isEnd = isEnd;
             this.time = time;
@@ -185,7 +178,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
          *
          * @return the time
          */
-        public int getTime() {
+        public double getTime() {
             return time;
         }
 

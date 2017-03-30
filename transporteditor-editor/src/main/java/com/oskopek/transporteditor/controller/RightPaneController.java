@@ -107,7 +107,7 @@ public class RightPaneController extends AbstractController {
     @FXML
     private HBox stepRow;
     @FXML
-    private Spinner<Integer> timeSpinner;
+    private Spinner<Double> timeSpinner;
     @Inject
     private CenterPaneController centerPaneController;
     @Inject
@@ -132,7 +132,7 @@ public class RightPaneController extends AbstractController {
 
         updateTimeSpinner();
         timeSpinner.valueProperty().addListener(l -> {
-            Integer value = timeSpinner.getValue();
+            Double value = timeSpinner.getValue();
             if (value == null) {
                 return;
             }
@@ -141,7 +141,7 @@ public class RightPaneController extends AbstractController {
                 return;
             }
 
-            planStateManager.get().goToTime(ActionCost.valueOf(value), applyStartsButton.isSelected());
+            planStateManager.get().goToTime(value, applyStartsButton.isSelected());
             redrawState();
             updateTableSelection();
             if (applyStartsButton.isSelected()) {
@@ -766,12 +766,12 @@ public class RightPaneController extends AbstractController {
 
         Toggle timeProperties = actionTimeGroup.getSelectedToggle();
         if (startTimeButton.equals(timeProperties)) {
-            planStateManager.get().goToTime(ActionCost.valueOf(selected.getStartTimestamp()), false);
+            planStateManager.get().goToTime(selected.getStartTimestamp(), false);
         } else if (middleTimeButton.equals(timeProperties)) {
-            planStateManager.get().goToTime(ActionCost.valueOf((selected.getStartTimestamp()
-                    + selected.getEndTimestamp()) / 2), true);
+            planStateManager.get().goToTime((selected.getStartTimestamp()
+                    + selected.getEndTimestamp()) / 2d, true);
         } else if (endTimeButton.equals(timeProperties)) {
-            planStateManager.get().goToTime(ActionCost.valueOf(selected.getEndTimestamp()), false);
+            planStateManager.get().goToTime(selected.getEndTimestamp(), false);
         } else {
             throw new IllegalStateException("No time preference button selected.");
         }
@@ -804,11 +804,11 @@ public class RightPaneController extends AbstractController {
      * Update the selection in the time spinner according to the plan state. Used only during step showing.
      */
     private void updateTimeSpinner() {
-        ActionCost currentTime = Optional.ofNullable(planStateManager.get()).map(PlanStateManager::getCurrentTime)
-                .orElse(ActionCost.valueOf(0));
-        SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
-                Integer.MAX_VALUE, currentTime.getCost(), 1);
-        factory.setConverter(new NumberIntegerStringConverter());
+        Double currentTime = Optional.ofNullable(planStateManager.get()).map(PlanStateManager::getCurrentTime)
+                .orElse(0d);
+        SpinnerValueFactory<Double> factory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0d,
+                Double.MAX_VALUE, currentTime, 1d);
+        factory.setConverter(new NumberDoubleStringConverter());
         thirdPartySpinnerChange = true;
         timeSpinner.setValueFactory(factory);
     }

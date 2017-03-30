@@ -271,6 +271,15 @@
     </build>
     <profiles>
         <profile>
+            <id>planner</id>
+            <properties>
+                <mainClass>com.oskopek.transporteditor.planners.SequentialPlannerMain</mainClass>
+            </properties>
+            <build>
+                <finalName>TransportEditor-Planner</finalName>
+            </build>
+        </profile>
+        <profile>
             <id>benchmarker</id>
             <properties>
                 <mainClass>com.oskopek.transporteditor.planners.benchmark.Benchmarker</mainClass>

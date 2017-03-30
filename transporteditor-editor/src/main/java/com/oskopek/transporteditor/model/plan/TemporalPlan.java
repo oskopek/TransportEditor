@@ -20,14 +20,18 @@ public class TemporalPlan implements Plan {
 
     private final IntervalTree<TemporalPlanAction> actionIntervalTree = IntervalTree.empty();
 
+    // still allows for plans of about 100_000_000_000 duration
+    private static final long DISCRETIZATION_CONSTANT = 10_000_000L;
+
     /**
      * Default constructor. Blocks while building the interval tree.
      *
      * @param planActions the actions to add
      */
     public TemporalPlan(Collection<TemporalPlanAction> planActions) {
-        planActions.forEach(
-                t -> actionIntervalTree.addInterval(t.getStartTimestamp(), t.getEndTimestamp(), t));
+        planActions.forEach(t -> actionIntervalTree.addInterval(
+                Math.round(DISCRETIZATION_CONSTANT * t.getStartTimestamp()),
+                Math.round(DISCRETIZATION_CONSTANT * t.getEndTimestamp()), t));
         actionIntervalTree.build();
     }
 
@@ -37,8 +41,19 @@ public class TemporalPlan implements Plan {
      * @param timestamp the timestamp to query at
      * @return a set of actions occurring at the given time
      */
-    public Set<Action> getActionsAt(Integer timestamp) {
+    public Set<Action> getActionsAt(double timestamp) {
         return getTemporalActionsAt(timestamp).stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
+    }
+
+    /**
+     * Get actions occurring at given time.
+     *
+     * @param timestamp the timestamp to query at
+     * @return a set of actions occurring at the given time
+     */
+    public Set<Action> getActionsAt(int timestamp) {
+        return getTemporalActionsAt((double) timestamp).stream().map(TemporalPlanAction::getAction)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -47,8 +62,8 @@ public class TemporalPlan implements Plan {
      * @param timestamp the timestamp to query at
      * @return a set of temporal actions occurring at the given time
      */
-    public Set<TemporalPlanAction> getTemporalActionsAt(Integer timestamp) {
-        return actionIntervalTree.get(timestamp);
+    public Set<TemporalPlanAction> getTemporalActionsAt(double timestamp) {
+        return actionIntervalTree.get(Math.round(timestamp * DISCRETIZATION_CONSTANT));
     }
 
     @Override

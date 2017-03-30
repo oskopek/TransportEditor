@@ -3,10 +3,7 @@ package com.oskopek.transporteditor.planners.benchmark;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.planners.benchmark.config.BenchmarkConfig;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
-import com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator;
 import javaslang.control.Try;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,8 +15,6 @@ import java.nio.file.StandardCopyOption;
  * Main class for the benchmarker jar.
  */
 public final class Benchmarker {
-
-    private static final Logger logger = LoggerFactory.getLogger(Benchmarker.class);
 
     /**
      * Empty constructor.
@@ -53,10 +48,5 @@ public final class Benchmarker {
         Benchmark benchmark = benchmarkConfig.toBenchmark();
         BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
-
-        ReportGenerator generator = new ReportGenerator("reports");
-        generator.populateReportersWithReflection();
-        generator.generate(results, benchmarkResultDirPath);
-
     }
 }

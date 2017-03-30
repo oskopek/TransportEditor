@@ -1,6 +1,9 @@
 package com.oskopek.transporteditor.persistence;
 
 import com.oskopek.transporteditor.model.domain.VariableDomain;
+import com.oskopek.transporteditor.model.domain.action.Drive;
+import com.oskopek.transporteditor.model.domain.action.Drop;
+import com.oskopek.transporteditor.model.domain.action.PickUp;
 import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.DefaultProblem;
 import com.oskopek.transporteditor.test.TestUtils;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 import static com.oskopek.transporteditor.persistence.IOUtils.readAllLines;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.*;
 
 public class TemporalPlanIOIT {
 
@@ -50,12 +54,21 @@ public class TemporalPlanIOIT {
         assertNotNull(plan);
         assertEquals(6, plan.getActions().size());
         assertEquals(2, plan.getActionsAt(0).size());
-        assertEquals(2, plan.getActionsAt(1).size());
+        assertThat(plan.getActionsAt(0.99)).allMatch(p -> p instanceof PickUp).hasSize(2);
+        assertEquals(2, plan.getActionsAt(0.999).size());
+        assertEquals(0, plan.getActionsAt(1).size());
+        assertEquals(2, plan.getActionsAt(1.001).size());
         assertEquals(2, plan.getActionsAt(45).size());
-        assertEquals(1, plan.getActionsAt(46).size());
+        assertEquals(2, plan.getActionsAt(46).size());
+        assertThat(plan.getActionsAt(46)).allMatch(p -> p instanceof Drive);
         assertEquals(2, plan.getActionsAt(47).size());
         assertEquals(1, plan.getActionsAt(48).size());
-        assertEquals(0, plan.getActionsAt(51).size());
+        assertEquals(1, plan.getActionsAt(51).size());
+        assertEquals(1, plan.getActionsAt(51.01).size());
+        assertThat(plan.getActionsAt(51)).allMatch(p -> p instanceof Drive);
+        assertThat(plan.getActionsAt(51.000001)).allMatch(p -> p instanceof Drive);
+        assertThat(plan.getActionsAt(51.00001)).allMatch(p -> p instanceof Drop);
+        assertThat(plan.getActionsAt(51.001)).allMatch(p -> p instanceof Drop);
         assertEquals(1, plan.getActionsAt(52).size());
         assertEquals(0, plan.getActionsAt(53).size());
     }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A data-wrapping abstract action. Overrides equals and hashCode.
@@ -113,6 +114,8 @@ public abstract class DefaultAction<Who extends Locatable, What extends ActionOb
 
     @Override
     public String toString() {
-        return name + "[" + who + " @ " + where + " -> " + what + "]";
+        return name + "[" + Optional.ofNullable(who).map(ActionObject::getName).orElse("null") + " @ "
+                + Optional.ofNullable(where).map(ActionObject::getName).orElse("null")
+                + " -> " + Optional.ofNullable(what).map(ActionObject::getName).orElse("null") + "]";
     }
 }

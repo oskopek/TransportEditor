@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.oskopek.transporteditor.model.planner.ExternalPlanner;
 import com.oskopek.transporteditor.view.executables.DefaultExecutableWithParameters;

@@ -4,7 +4,7 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
+import com.oskopek.transporteditor.view.executables.CancellableLogStreamable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,7 +21,7 @@ import java.util.Optional;
  * <li>logging, using {@link #log(String)}</li>
  * </ul>
  */
-public abstract class AbstractPlanner extends AbstractLogStreamable implements Planner {
+public abstract class AbstractPlanner extends CancellableLogStreamable implements Planner {
 
     private String name = "AbstractPlanner";
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
@@ -81,4 +81,21 @@ public abstract class AbstractPlanner extends AbstractLogStreamable implements P
 
     @Override
     public abstract AbstractPlanner copy();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AbstractPlanner)) {
+            return false;
+        }
+        AbstractPlanner that = (AbstractPlanner) o;
+        return getName().equals(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
+    }
 }

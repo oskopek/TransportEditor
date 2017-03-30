@@ -1,4 +1,4 @@
-package com.oskopek.transporteditor.planners;
+package com.oskopek.transporteditor.planners.sequential;
 
 import com.oskopek.transporteditor.model.domain.SequentialDomain;
 import com.oskopek.transporteditor.model.domain.action.Action;
@@ -10,13 +10,14 @@ import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FastDownwardExternalPlannerIT {
 
@@ -29,11 +30,11 @@ public class FastDownwardExternalPlannerIT {
     @BeforeClass
     public static void setUpClass() throws Exception {
         problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(
-                FastDownwardExternalPlannerIT.class.getResourceAsStream("../persistence/p01SeqProblem.pddl")));
+                FastDownwardExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqProblem.pddl")));
         plan = new SequentialPlanIO(domain, problem).parse(IOUtils.concatReadAllLines(
-                FastDownwardExternalPlannerIT.class.getResourceAsStream("../persistence/p01SeqPlan.val")));
+                FastDownwardExternalPlannerIT.class.getResourceAsStream("../../persistence/p01SeqPlan.val")));
 
-        List<Action> actions = plan.getActions().stream().collect(Collectors.toList());
+        List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);
         actions.add(1, action0);
         planEquivalent = new SequentialPlan(actions);

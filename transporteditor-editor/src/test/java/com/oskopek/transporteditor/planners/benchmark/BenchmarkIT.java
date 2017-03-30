@@ -8,8 +8,8 @@ import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.persistence.SequentialPlanIOIT;
-import com.oskopek.transporteditor.planners.FastDownwardExternalPlanner;
-import com.oskopek.transporteditor.planners.PrologBFSExternalPlanner;
+import com.oskopek.transporteditor.planners.sequential.FastDownwardExternalPlanner;
+import com.oskopek.transporteditor.planners.sequential.PrologBFSExternalPlanner;
 import com.oskopek.transporteditor.planners.benchmark.config.ScoreFunctionType;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkMatrix;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
@@ -43,8 +43,8 @@ public class BenchmarkIT {
         problems = Arrays.asList(SequentialPlanIOIT.P01SequentialProblem(), SequentialPlanIOIT.P01SequentialProblem()
                 .removeVehicle("truck-2"));
         problemInfo = new HashMap<>();
-        problemInfo.put(problems.get(0), new ProblemInfo("", 54, ""));
-        problemInfo.put(problems.get(1), new ProblemInfo("", 54, ""));
+        problemInfo.put(problems.get(0), new ProblemInfo("", 54d, ""));
+        problemInfo.put(problems.get(1), new ProblemInfo("", 54d, ""));
         planners = Arrays.asList(new FastDownwardExternalPlanner(), new PrologBFSExternalPlanner());
         matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, 100);
     }
