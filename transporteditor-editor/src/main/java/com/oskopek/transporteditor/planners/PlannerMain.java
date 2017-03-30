@@ -18,15 +18,20 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class PlannerMain {
+public final class PlannerMain {
 
 //    private static final Planner planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
-//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}  --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
+//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}"
+// + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
 //    private static final Planner planner = new SequentialForwardBFSPlanner();
     private static final Planner planner = new SequentialForwardAstarPlanner();
 
     private static final Logger logger = LoggerFactory.getLogger(PlannerMain.class);
+
+    private PlannerMain() {
+        // intentionally empty
+    }
 
     public static void main(String[] args) throws IOException {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

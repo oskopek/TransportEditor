@@ -1,12 +1,13 @@
 package com.oskopek.transporteditor.model.domain.action;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Wrapper around {@link Action} containing start and end times.
  */
-public class TemporalPlanAction {
+public class TemporalPlanAction implements Comparable<TemporalPlanAction> {
 
     private final Action action;
 
@@ -88,6 +89,12 @@ public class TemporalPlanAction {
                 .append(getStartTimestamp(), that.getStartTimestamp())
                 .append(getEndTimestamp(), that.getEndTimestamp())
                 .isEquals();
+    }
+
+    @Override
+    public int compareTo(TemporalPlanAction other) {
+        return new CompareToBuilder().append(getStartTimestamp(), other.getStartTimestamp())
+                .append(getEndTimestamp(), other.getEndTimestamp()).toComparison();
     }
 
     @Override

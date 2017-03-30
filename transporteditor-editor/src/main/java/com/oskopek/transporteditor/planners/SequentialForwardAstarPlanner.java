@@ -52,7 +52,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     }
 
     private Integer getHScore(ImmutablePlanState state) {
-        return hScore.computeIfAbsent(state, s -> calculateHeuristic(s, distanceMatrix.get(), getUnfinishedPackages(s.getAllPackages())));
+        return hScore.computeIfAbsent(state,
+                s -> calculateHeuristic(s, distanceMatrix.get(), getUnfinishedPackages(s.getAllPackages())));
     }
 
     private Integer getFScore(ImmutablePlanState state) {
@@ -113,7 +114,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
-//            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current.getActions().toJavaList())));
+//            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current
+// .getActions().toJavaList())));
 //            logger.debug("F: {}, G: {}, H: {}", getFScore(current), getGScore(current), getHScore(current));
             if (current.isGoalState()) {
 //                logger.debug("Found goal state! Explored {} states. Left out {} states.", closedSet.size(),
@@ -153,19 +155,22 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
                         entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborGScore) {
 //                        if (tentativeGScore > neighborGScore) {
-//                            logger.debug("Try not to generate these plans"); // TODO: P22 nonopt, p03 nonopt, p04 nonopt?
+//                            logger.debug("Try not to generate these plans"); // TODO: P22 nonopt, p03 nonopt, p04
+// nonopt?
 //                        }
                         return;
                     }
 
                     // this path is the best until now
-                    openSet.decreaseKey(neighborEntry, neighborFScore); // TODO check if overwrites the correct state with shorter actions
+                    openSet.decreaseKey(neighborEntry,
+                            neighborFScore); // TODO check if overwrites the correct state with shorter actions
                     gScore.put(neighbor, tentativeGScore);
                     fScore.put(neighbor, neighborFScore);
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
-                logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(), entryMap.size());
+                logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
+                        entryMap.size());
                 logger.debug("Current plan depth: {}", current.getActions().size());
             }
         }
@@ -310,7 +315,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
                 }
             }
         } else {
-            Map<String, Set<String>> vehicleDroppedAfterLastMove = getPackagesDroppedAfterLastMoveMap(state.getVehicleMap().size(), plannedActions);
+            Map<String, Set<String>> vehicleDroppedAfterLastMove = getPackagesDroppedAfterLastMoveMap(
+                    state.getVehicleMap().size(), plannedActions);
             packageMap.keySet().forEach(location -> {
                 List<Package> packages = packageMap.get(location);
                 List<Vehicle> vehiclesAtLoc = vehicleMap.get(location);
@@ -369,7 +375,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
             generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, plannedActions).forEach(generated::add);
         } else {
             for (Vehicle vehicle : vehicles) {
-                generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, plannedActions).forEach(generated::add);
+                generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, plannedActions)
+                        .forEach(generated::add);
             }
         }
 
@@ -377,7 +384,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
     }
 
     // Vehicle -> [Package]
-    private static Map<String, Set<String>> getPackagesDroppedAfterLastMoveMap(int vehicleCount, List<Action> plannedActions) {
+    private static Map<String, Set<String>> getPackagesDroppedAfterLastMoveMap(int vehicleCount,
+            List<Action> plannedActions) {
         // Vehicle -> int (index into plannedActions)
         Map<String, Integer> lastDriveIndexMap = new HashMap<>(vehicleCount);
         for (int i = 0; i < plannedActions.size(); i++) {
@@ -398,7 +406,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
             for (int i = lastDriveIndex + 1; i < plannedActions.size(); i++) {
                 Action action = plannedActions.get(i);
                 if (action instanceof Drop && vehicleName.equals(action.getWho().getName())) {
-                    packagesDroppedAfterLastMoveMap.computeIfAbsent(vehicleName, v -> new HashSet<>()).add(action.getWhat().getName());
+                    packagesDroppedAfterLastMoveMap.computeIfAbsent(vehicleName, v -> new HashSet<>())
+                            .add(action.getWhat().getName());
                 }
             }
         }
@@ -419,7 +428,8 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         return vehicleActions.build();
     }
 
-    static boolean doesShorterPathExist(Vehicle vehicle, Location target, List<Action> plannedActions, // TODO: this is the bottleneck now + GC (List$Cons)
+    static boolean doesShorterPathExist(Vehicle vehicle, Location target, List<Action> plannedActions,
+            // TODO: this is the bottleneck now + GC (List$Cons)
             ArrayTable<String, String, Integer> distanceMatrix) {
         if (plannedActions.isEmpty()) {
             return false;
@@ -456,13 +466,15 @@ public class SequentialForwardAstarPlanner extends AbstractPlanner {
         int sumDistances = 0;
         for (Vehicle vehicle : vehicleList) { // vehicles are never in the middle of a drive
             for (Package pkg : vehicle.getPackageList()) {
-                sumDistances += distanceMatrix.get(vehicle.getLocation().getName(), pkg.getTarget().getName()) + 1; // + drop action
+                sumDistances += distanceMatrix.get(vehicle.getLocation().getName(), pkg.getTarget().getName())
+                        + 1; // + drop action
             }
         }
         for (Package pkg : packageList) {
             Location pkgLocation = pkg.getLocation();
             if (pkgLocation != null) {
-                sumDistances += distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName()) + 2; // + pickup and drop
+                sumDistances += distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName())
+                        + 2; // + pickup and drop
             }
         }
         return sumDistances;

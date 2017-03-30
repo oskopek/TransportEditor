@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.model.state;
 
 import com.oskopek.transporteditor.model.domain.Domain;
-import com.oskopek.transporteditor.model.domain.action.ActionCost;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.problem.Problem;
@@ -9,13 +8,11 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -25,9 +22,6 @@ import java.util.stream.Stream;
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    public static final Comparator<TemporalPlanAction> endStartTimeComparator = (t1, t2) -> new CompareToBuilder()
-            .append(t1.getStartTimestamp(), t2.getStartTimestamp()).append(t1.getEndTimestamp(), t2.getEndTimestamp())
-            .toComparison();
     private final Domain domain;
     private final Problem problem;
     private final List<TemporalPlanAction> temporalPlanActions;
@@ -44,8 +38,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
         this.domain = domain;
         this.problem = problem;
-        this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted(endStartTimeComparator)
-                .collect(Collectors.toList());
+        this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted().collect(Collectors.toList());
         this.state = getBeginningState();
         this.pointer = new PlanActionPointer(0, false);
     }
@@ -117,7 +110,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
     @Override
     public void goToNextCheckpoint() {
         temporalPlanActions.stream().flatMapToDouble(t -> DoubleStream.of(t.getStartTimestamp(), t.getEndTimestamp()))
-                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(res,false));
+                .filter(t -> t > pointer.getTime()).min().ifPresent(res -> goToTime(res, false));
     }
 
     @Override

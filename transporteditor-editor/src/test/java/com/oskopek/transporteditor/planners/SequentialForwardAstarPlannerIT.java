@@ -19,9 +19,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
-@Ignore
 public class SequentialForwardAstarPlannerIT {
 
     private SequentialForwardAstarPlanner planner;
@@ -65,10 +64,12 @@ public class SequentialForwardAstarPlannerIT {
     @Test
     public void plansP01Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, problem);
-        SequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan, planEquivalent);
+        SequentialForwardBFSPlannerIT
+                .assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan, planEquivalent);
     }
 
     @Test
+    @Ignore
     public void plansP02Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p02Problem);
         System.out.println(new SequentialPlanIO(domain, p02Problem).serialize(plan));
@@ -83,7 +84,8 @@ public class SequentialForwardAstarPlannerIT {
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
-//        aSequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan, planEquivalent);
+//        aSequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, SequentialForwardAstarPlannerIT.plan,
+// planEquivalent);
     }
 
     @Test
@@ -114,7 +116,9 @@ public class SequentialForwardAstarPlannerIT {
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
         planPart.add(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
-        assertThat(SequentialForwardAstarPlanner.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getDistanceMatrix())).isTrue();
+        assertThat(SequentialForwardAstarPlanner
+                .doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getDistanceMatrix()))
+                .isTrue();
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.oskopek.transporteditor.model.domain.action.predicates;
 
 import com.oskopek.transporteditor.model.domain.action.Action;
-import com.oskopek.transporteditor.model.problem.Locatable;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;

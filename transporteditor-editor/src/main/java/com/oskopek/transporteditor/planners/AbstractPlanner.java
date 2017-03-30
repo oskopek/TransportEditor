@@ -4,7 +4,6 @@ import com.oskopek.transporteditor.model.domain.Domain;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.planner.Planner;
 import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.view.executables.AbstractLogStreamable;
 import com.oskopek.transporteditor.view.executables.CancellableLogStreamable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;

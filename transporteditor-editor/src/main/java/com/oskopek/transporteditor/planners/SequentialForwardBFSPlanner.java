@@ -12,11 +12,6 @@ import com.oskopek.transporteditor.model.problem.Package;
 import com.oskopek.transporteditor.model.state.ImmutablePlanState;
 import javaslang.Tuple;
 import javaslang.Tuple2;
-import javaslang.collection.*;
-import javaslang.collection.Set;
-import javaslang.collection.Stream;
-import javaslang.control.Option;
-import javaslang.control.Try;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.Graphs;
@@ -24,12 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class SequentialForwardBFSPlanner extends AbstractPlanner {
 
@@ -46,7 +36,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
         final RoadGraph originalAPSPGraph = (RoadGraph) Graphs.clone(problem.getRoadGraph());
-        originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName()).addAttribute("weight", roadEdge.getRoad().getLength().getCost()));
+        originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName())
+                .addAttribute("weight", roadEdge.getRoad().getLength().getCost()));
         computeAPSP(originalAPSPGraph);
 
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
@@ -70,7 +61,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
 //            verifyActionsOfOptimalP02Plan(actions);
 
             if (state.isGoalState()) {
-                logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter, states.size());
+                logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter,
+                        states.size());
                 return Optional.of(new SequentialPlan(actions));
             }
 
@@ -89,7 +81,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
                     generatedStates.add(newState);
                 }
             }
-            generatedStates.stream().sorted(Comparator.comparing(ImmutablePlanState::getTotalTime)).forEach(states::addLast);
+            generatedStates.stream().sorted(Comparator.comparing(ImmutablePlanState::getTotalTime))
+                    .forEach(states::addLast);
 
             counter++;
             if (counter % 100_000 == 0) {
@@ -115,12 +108,13 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         return drops;
     }
 
-    private static java.util.List<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions, RoadGraph originalAPSPGraph) {
+    private static java.util.List<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions,
+            RoadGraph originalAPSPGraph) {
         java.util.List<Action> generated = new ArrayList<>();
-        java.util.List<Package> packagesUnfinished = state.getAllPackages().stream().filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
+        java.util.List<Package> packagesUnfinished = state.getAllPackages().stream()
+                .filter(p -> !p.getTarget().equals(p.getLocation())).collect(Collectors.toList());
 //        java.util.List<Vehicle> vehicles = Collections.singletonList(state.getVehicle("truck-2"));
         java.util.List<Vehicle> vehicles = new ArrayList<>(state.getAllVehicles());
-
 
         Domain domain = state.getDomain();
         RoadGraph graph = state.getRoadGraph();
@@ -162,7 +156,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
             }
         }
 
-        Optional<Action> lastAction = plannedActions.isEmpty() ? Optional.empty() : Optional.of(plannedActions.get(plannedActions.size() - 1));
+        Optional<Action> lastAction = plannedActions.isEmpty() ? Optional.empty()
+                : Optional.of(plannedActions.get(plannedActions.size() - 1));
         // pick-up
         Optional<Vehicle> lastVehicleAndLastDrive = lastAction
                 .filter(a -> a instanceof Drive).map(a -> (Vehicle) a.getWho())
@@ -240,7 +235,8 @@ public class SequentialForwardBFSPlanner extends AbstractPlanner {
         return generated;
     }
 
-    private static java.util.List<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain, RoadGraph originalAPSPGraph) {
+    private static java.util.List<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
+            RoadGraph originalAPSPGraph) {
         java.util.List<Drive> vehicleActions = new ArrayList<>();
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {

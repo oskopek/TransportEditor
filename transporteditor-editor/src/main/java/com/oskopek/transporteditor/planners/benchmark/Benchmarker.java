@@ -3,10 +3,7 @@ package com.oskopek.transporteditor.planners.benchmark;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.planners.benchmark.config.BenchmarkConfig;
 import com.oskopek.transporteditor.planners.benchmark.data.BenchmarkResults;
-import com.oskopek.transporteditor.planners.benchmark.report.ReportGenerator;
 import javaslang.control.Try;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;

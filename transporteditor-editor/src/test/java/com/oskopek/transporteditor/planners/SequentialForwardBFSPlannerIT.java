@@ -5,15 +5,10 @@ import com.oskopek.transporteditor.model.domain.action.Action;
 import com.oskopek.transporteditor.model.domain.action.TemporalPlanAction;
 import com.oskopek.transporteditor.model.plan.Plan;
 import com.oskopek.transporteditor.model.plan.SequentialPlan;
-import com.oskopek.transporteditor.model.plan.TemporalPlan;
 import com.oskopek.transporteditor.model.problem.Problem;
-import com.oskopek.transporteditor.model.state.TemporalPlanStateManager;
 import com.oskopek.transporteditor.persistence.DefaultProblemIO;
 import com.oskopek.transporteditor.persistence.IOUtils;
 import com.oskopek.transporteditor.persistence.SequentialPlanIO;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -23,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Ignore
+import static org.assertj.core.api.Assertions.*;
+
 public class SequentialForwardBFSPlannerIT {
 
     private SequentialForwardBFSPlanner planner;
@@ -68,6 +64,7 @@ public class SequentialForwardBFSPlannerIT {
     }
 
     @Test
+    @Ignore
     public void plansP02Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p02Problem);
         System.out.println(new SequentialPlanIO(domain, p02Problem).serialize(plan));
@@ -75,6 +72,7 @@ public class SequentialForwardBFSPlannerIT {
     }
 
     @Test
+    @Ignore
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
@@ -97,9 +95,9 @@ public class SequentialForwardBFSPlannerIT {
         assertThat(left).isNotNull();
         assertThat(right).isNotNull();
         List<TemporalPlanAction> leftActions = left.getTemporalPlanActions().stream()
-                .sorted(TemporalPlanStateManager.endStartTimeComparator).collect(Collectors.toList());
+                .sorted().collect(Collectors.toList());
         List<TemporalPlanAction> rightActions = right.getTemporalPlanActions().stream()
-                .sorted(TemporalPlanStateManager.endStartTimeComparator).collect(Collectors.toList());
+                .sorted().collect(Collectors.toList());
         assertThat(leftActions.size()).isEqualTo(rightActions.size());
         for (int index = 0; index < leftActions.size(); index++) {
             TemporalPlanAction leftAction = leftActions.get(index);

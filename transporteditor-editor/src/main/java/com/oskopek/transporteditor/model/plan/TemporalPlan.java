@@ -52,7 +52,8 @@ public class TemporalPlan implements Plan {
      * @return a set of actions occurring at the given time
      */
     public Set<Action> getActionsAt(int timestamp) {
-        return getTemporalActionsAt((double) timestamp).stream().map(TemporalPlanAction::getAction).collect(Collectors.toSet());
+        return getTemporalActionsAt((double) timestamp).stream().map(TemporalPlanAction::getAction)
+                .collect(Collectors.toSet());
     }
 
     /**

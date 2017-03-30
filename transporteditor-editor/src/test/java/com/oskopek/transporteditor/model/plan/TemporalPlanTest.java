@@ -10,7 +10,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TemporalPlanTest {
 
@@ -26,9 +27,11 @@ public class TemporalPlanTest {
                 .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(2)), 0d,
                         2d));
         planActionSet
-                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(1)), 1d, 2d));
+                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(1)), 1d,
+                        2d));
         planActionSet
-                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1d, 3d));
+                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1d,
+                        3d));
         plan = new TemporalPlan(planActionSet);
     }
 

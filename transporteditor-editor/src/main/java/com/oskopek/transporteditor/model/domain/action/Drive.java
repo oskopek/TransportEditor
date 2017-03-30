@@ -43,8 +43,8 @@ public class Drive extends DefaultAction<Vehicle, Location> {
             FuelRoad fuelRoad = (FuelRoad) road;
             curFuelCapacity = curFuelCapacity.subtract(fuelRoad.getFuelCost());
         }
-        return problemState
-                .putVehicle(vehicleName, vehicle.updateCurFuelCapacity(curFuelCapacity).updateLocation(road.getLocation()));
+        return problemState.putVehicle(vehicleName, vehicle.updateCurFuelCapacity(curFuelCapacity)
+                .updateLocation(road.getLocation()));
     }
 
     @Override

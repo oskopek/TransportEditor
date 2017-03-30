@@ -6,7 +6,6 @@ import com.oskopek.transporteditor.model.problem.ActionObject;
 import com.oskopek.transporteditor.model.problem.Location;
 import com.oskopek.transporteditor.model.problem.Problem;
 import com.oskopek.transporteditor.model.problem.Vehicle;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +14,8 @@ import java.util.*;
 /**
  * An immutable {@link PlanState} implementation used for planning.
  */
-public class ImmutablePlanState extends ProblemPlanningWrapper implements Problem { // TODO: consolidate with the plan state interface
+public class ImmutablePlanState extends ProblemPlanningWrapper implements Problem {
+    // TODO: consolidate with the plan state interface
 
     private final Domain domain;
     private final transient Logger logger = LoggerFactory.getLogger(ImmutablePlanState.class);
@@ -93,8 +93,8 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         logger.trace("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             logger.trace(
-                    "Effects of action " + action + " are invalid after applying to problem " + getProblem() + "(result: "
-                            + newProblem + ").");
+                    "Effects of action " + action + " are invalid after applying to problem " + getProblem()
+                            + "(result: " + newProblem + ").");
             return Optional.empty();
         }
         return Optional.of(new ImmutablePlanState(this, newProblem, action));
@@ -113,7 +113,8 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
 
     @Override
     public ImmutablePlanState changeActionObjectName(ActionObject actionObject, String newName) {
-        return new ImmutablePlanState(getDomain(), getProblem().changeActionObjectName(actionObject, newName), getActions());
+        return new ImmutablePlanState(getDomain(), getProblem().changeActionObjectName(actionObject, newName),
+                getActions());
     }
 
     @Override
