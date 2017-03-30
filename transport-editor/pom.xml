@@ -250,22 +250,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <verbose>false</verbose>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>third-party</id>
-                        <goals>
-                            <goal>add-third-party</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.basedir}</outputDirectory>
-                            <thirdPartyFilename>NOTICE.txt</thirdPartyFilename>
-                        </configuration>
-                        <phase>generate-resources</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
