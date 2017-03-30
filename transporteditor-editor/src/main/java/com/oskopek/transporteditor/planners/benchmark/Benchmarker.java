@@ -19,8 +19,6 @@ import java.nio.file.StandardCopyOption;
  */
 public final class Benchmarker {
 
-    private static final Logger logger = LoggerFactory.getLogger(Benchmarker.class);
-
     /**
      * Empty constructor.
      */
@@ -53,10 +51,5 @@ public final class Benchmarker {
         Benchmark benchmark = benchmarkConfig.toBenchmark();
         BenchmarkResults results = benchmark.benchmark(benchmarkConfig.getThreadCount());
         IOUtils.writeToFile(benchmarkResultDirPath.resolve("results.json"), results.toJson());
-
-        ReportGenerator generator = new ReportGenerator("reports");
-        generator.populateReportersWithReflection();
-        generator.generate(results, benchmarkResultDirPath);
-
     }
 }

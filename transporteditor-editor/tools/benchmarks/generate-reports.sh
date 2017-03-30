@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function convertToPdf {
-if `which rsvg-convert >/dev/null`; then
+if `which rsvg-convert >/dev/null`; then # TODO: PDF/1-A compliance!!!
     for svg in `ls $reportdir/*.svg`; do
         filename="$reportdir"/"`basename $svg | sed 's/\.svg//g'`"
         rsvg-convert -f pdf -o "$filename".pdf "$filename".svg
@@ -26,6 +26,10 @@ configName="`basename $config | sed 's/\.json//'`"
 results="`realpath "$2"`"
 resultdir="`echo $results | sed -E 's@/[^/]*$@@'`"
 logdir="$resultdir"
+
+echo "`date -u '+[%H:%M:%S]'` Generating reports..."
+eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $reportGenerator $resultdir/results.json reports"
+echo "`date -u '+[%H:%M:%S]'` Generating reports done."
 
 echo "`date -u '+[%H:%M:%S]'` Converting plots..."
 reportdir="$resultdir"/reports
