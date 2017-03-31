@@ -1,9 +1,0 @@
-#!/bin/sh
-set -e
-tmp="`mktemp`"
-validate $1 $2 $3 2>&1 | tee "$tmp"
-retval="`cat $tmp | grep -q 'Plan valid'; echo $?`"
-echo "Retval: $retval"
-rm -f "$tmp"
-exit "$retval"
-

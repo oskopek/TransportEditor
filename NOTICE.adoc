@@ -13,7 +13,7 @@ Zeyn Saigol,
 School of Computer Science,
 University of Birmingham
 
-File: `transporteditor-editor/src/main/antlr4/com/oskopek/transporteditor/persistence/Pddl.g4`
+File: `transport-core/src/main/antlr4/com/oskopek/transport/persistence/Pddl.g4`
 
 == Interval Tree
 
@@ -24,7 +24,7 @@ Kevin J Dolan
 
 License: MIT
 
-Files in: `transporteditor-editor/src/main/java/com/github/kevinjdolan/intervaltree/`
+Files in: `transport-thirdparty/src/main/java/com/github/kevinjdolan/intervaltree/`
 
 == Heaps
 
@@ -35,4 +35,4 @@ Fran Lattanzio
 
 License: MIT
 
-Files in: `transporteditor-editor/src/main/java/org/teneighty/heap/`
+Files in: `transport-thirdparty/src/main/java/org/teneighty/org.teneighty.heap/`

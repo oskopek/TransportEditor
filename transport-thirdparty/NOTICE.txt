@@ -1,0 +1,6 @@
+
+Lists of 4 third-party dependencies.
+     (Eclipse Public License 1.0) JUnit (junit:junit:4.12 - http://junit.org)
+     (Apache License, Version 2.0) Apache Commons Lang (org.apache.commons:commons-lang3:3.5 - http://commons.apache.org/proper/commons-lang/)
+     (Apache License, Version 2.0) AssertJ fluent assertions (org.assertj:assertj-core:3.6.2 - http://assertj.org/assertj-core)
+     (New BSD License) Hamcrest Core (org.hamcrest:hamcrest-core:1.3 - https://github.com/hamcrest/JavaHamcrest/hamcrest-core)

@@ -12,7 +12,7 @@ but also designing a new problem dataset from scratch.
 
 === Screenshot
 
-image:transporteditor-editor/docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
+image:transport-editor/docs/img/screenshot.png["TransportEditor screenshot", scalewidth="20%"]
 
 === Getting help
 
@@ -38,7 +38,7 @@ https://gitlab.com/oskopek/TransportEditor/issues[open an issue].
 * To build *docs* too: `mvn clean install -Pdocs`
 * *Run TransportEditor*:
 ** If you followed the build environment setup and want to run your version of TransportEditor,
-run `mvn exec:java` from the `transporteditor-editor` module directory.
+run `mvn exec:java` from the `transport-editor` module directory.
 ** If you want to run a translated version of TransportEditor, set your system locale accordingly and restart TransportEditor.
 If you want to try out a translated version (on Linux), try: `LC_ALL="LOCALE" java -jar TransportEditor.jar`, where
 `LOCALE` is any locale available on your system (run `locale -a` to view all available).
@@ -132,7 +132,7 @@ Here are some ways *you* can contribute:
 * by reporting bugs
 * by suggesting new features
 * by translating to a new language
-* by link:transporteditor-editor/docs/howto-write-documentation.adoc[writing or editing documentation]
+* by link:transport-editor/docs/howto-write-documentation.adoc[writing or editing documentation]
 * by writing specifications
 * by writing code (*no patch is too small*: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
@@ -146,7 +146,7 @@ Here are some ways *you* can contribute:
 please set-up https://github.com/oskopek/ide-config[IDE coding templates] first
 . Implement your feature or bug fix
 . If applicable, add tests and documentation for your feature or bug fix
-(see link:transporteditor-editor/docs/howto-write-documentation.adoc[How-to write documentation])
+(see link:transport-editor/docs/howto-write-documentation.adoc[How-to write documentation])
 . Run `mvn clean install -Pit`
 . If the tests fail, return to step 3 and 4
 . Add, commit, and push your changes
@@ -343,7 +343,7 @@ if possible.
 
 ==== Model immutability
 
-The model (mainly the package `com.oskopek.transporteditor.model`) is designed to be immutable
+The model (mainly the package `com.oskopek.transport.model`) is designed to be immutable
 (excluding a few exceptions). This makes it easier to reason about complex, possibly multithreaded operations
 on top of it. This note is useful to keep in mind when reading code that changes the model data.
 

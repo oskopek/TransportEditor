@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Insert the current time formatted as "yyyyMMdd'T'HHmmss" under
+       the key "bySecond" into the logger context. This value will be
+       available to all subsequent configuration elements. -->
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <if condition='isDefined("logging.path")'>
+        <then>
+            <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+                <file>${logging.path}/log-${bySecond}.txt</file>
+                <append>false</append>
+                <encoder>
+                    <!-- set immediateFlush to false for much higher logging throughput -->
+                    <immediateFlush>true</immediateFlush>
+                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0}: %msg%n</pattern>
+                </encoder>
+            </appender>
+
+            <logger name="com.oskopek.transport" level="DEBUG"/>
+            <root level="debug">
+                <appender-ref ref="FILE"/>
+            </root>
+        </then>
+        <else>
+            <logger name="com.oskopek.transport" level="DEBUG"/>
+            <root level="debug">
+                <appender-ref ref="STDOUT"/>
+            </root>
+        </else>
+    </if>
+</configuration>
