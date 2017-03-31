@@ -79,7 +79,7 @@ public class DefaultRoadGraphTest {
                 .hasMessageContaining("already in use");
         assertThatThrownBy(() -> graph.addRoad(road1, graph.getLocation("l2"), graph.getLocation("l1")))
                 .hasMessageContaining("already in use");
-        assertNotNull(graph.addRoad(new DefaultRoad("road2", ActionCost.valueOf(1)),
+        assertNotNull(graph.addRoad(new DefaultRoad("road2", ActionCost.ONE),
                 graph.getLocation("l1"), graph.getLocation("l2")));
         assertThat(graph.getAllRoads().count()).isEqualTo(2);
     }

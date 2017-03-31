@@ -19,7 +19,7 @@ public final class PrologBFSExternalPlanner extends ExternalPlanner {
      * Default empty constructor.
      */
     public PrologBFSExternalPlanner() {
-        super(executable.toAbsolutePath().toString(), "{1}");
+        super(executable.toAbsolutePath().toString(), "{1} {2}");
     }
 
     /**

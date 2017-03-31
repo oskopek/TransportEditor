@@ -189,7 +189,6 @@ public class CenterPaneController extends AbstractController {
             return;
         }
 
-        // TODO: move this to appropriate listener and possibly refactor
         disposeGraphViewer(null);
         final long nodeCount = graph.getNodeCount();
         viewer = graph.display(true);

@@ -38,7 +38,7 @@ public class BenchmarkConfigIOIT {
         assertThat(config.getProblems()).hasSize(2);
         assertThat(config.getPlanners()).hasSize(2);
         assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getParams))
-                .containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+                .containsExactlyInAnyOrder((String) null, "{2} {0} {1} --search astar(ff())");
         assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getClassName))
                 .allMatch(s -> s.startsWith("com.oskopek.transport.planners."));
         assertThat(config.getPlanners().keySet())
@@ -52,15 +52,15 @@ public class BenchmarkConfigIOIT {
         BenchmarkConfig config = BenchmarkConfig.from(basePath.resolve("simple-benchmark-config-threadcount.json"));
         assertThat(config).isNotNull();
         assertThat(config.getDomain()).isNotNull();
-        assertThat(config.getProblems()).hasSize(2);
-        assertThat(config.getPlanners()).hasSize(2);
+        assertThat(config.getProblems()).hasSize(1);
+        assertThat(config.getPlanners()).hasSize(1);
         assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getParams))
-                .containsExactlyInAnyOrder((String) null, "{0} {1} --search astar(ff())");
+                .containsExactlyInAnyOrder("{0} {1} {2}");
         assertThat(config.getPlanners().values().stream().map(BenchmarkConfig.PlannerConfig::getClassName))
                 .allMatch(s -> s.startsWith("com.oskopek.transport.planners."));
         assertThat(config.getPlanners().keySet())
-                .containsExactlyInAnyOrder("FastDownAstar", "PrologBFS");
-        assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.ACTION_COUNT);
+                .containsExactlyInAnyOrder("TFD");
+        assertThat(config.getScoreFunctionType()).isNotNull().isEqualTo(ScoreFunctionType.TOTAL_TIME);
         assertThat(config.getThreadCount()).isNotNull().isEqualTo(2);
     }
 
@@ -72,6 +72,24 @@ public class BenchmarkConfigIOIT {
         assertThat(benchmark).isNotNull();
         Integer threadCount = config.getThreadCount();
         BenchmarkResults results = benchmark.benchmark(threadCount);
+        assertThat(results.toJson()).isNotEmpty();
+        assertThat(results.getRuns().get(0).getTemporalPlanActions()).hasSize(7);
+        assertThat(results.getRuns().get(0).getActions()).hasSize(7);
+        // TODO: Verify that uses correct arguments and threads
+        String plannerName = config.getPlanners().entrySet().stream().findAny().get().getKey();
+        assertThat(results.getRunTable().at(0, 0).getPlanner().getName()).isEqualTo(plannerName);
+        assertThat(config.getTimeout()).isEqualTo(15);
+    }
+
+    @Test
+    @Ignore("Use internal planners for this test") // TODO un-ignore
+    public void toBenchmarkTemporal() throws Exception {
+        BenchmarkConfig config = BenchmarkConfig.from(basePath.resolve("simple-benchmark-config-threadcount.json"));
+        Benchmark benchmark = config.toBenchmark();
+        assertThat(benchmark).isNotNull();
+        BenchmarkResults results = benchmark.benchmark(1);
+        assertThat(results.toJson()).isNotEmpty();
+        assertThat(results.getRuns().get(0).getTemporalPlanActions()).hasSize(7);
         // TODO: Verify that uses correct arguments and threads
         String plannerName = config.getPlanners().entrySet().stream().findAny().get().getKey();
         assertThat(results.getRunTable().at(0, 0).getPlanner().getName()).isEqualTo(plannerName);

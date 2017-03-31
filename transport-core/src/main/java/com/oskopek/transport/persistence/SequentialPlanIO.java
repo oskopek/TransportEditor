@@ -10,10 +10,11 @@ import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.state.DefaultPlanState;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -26,7 +27,6 @@ public class SequentialPlanIO implements DataIO<Plan> {
 
     private final Problem problem;
     private final Domain domain;
-    private DefaultPlanState planState;
 
     /**
      * Default constructor.
@@ -129,20 +129,17 @@ public class SequentialPlanIO implements DataIO<Plan> {
      * Internal capacity-aware action serialization.
      *
      * @param action the action to serialize
-     * @param capacity true iff the action changes capacity of the vehicle
+     * @param curCapacity the current capacity of the current (who) vehicle
      * @return the serialized VAL-format plan action line
      */
-    private String serializeAction(Action action, boolean capacity) {
+    private String serializeAction(Action action, int curCapacity) {
         StringBuilder str = serializeActionSimple(action);
-        if (capacity) {
-            Integer capacityVal = planState.getVehicleSafe(action.getWho().getName()).getCurCapacity().getCost();
-            if (PickUp.class.isInstance(action)) {
-                str.append(" ").append("capacity-").append(capacityVal - 1).append(" ").append("capacity-")
-                        .append(capacityVal);
-            } else if (Drop.class.isInstance(action)) {
-                str.append(" ").append("capacity-").append(capacityVal).append(" ").append("capacity-")
-                        .append(capacityVal + 1);
-            }
+        if (PickUp.class.isInstance(action)) {
+            str.append(" ").append("capacity-").append(curCapacity - 1).append(" ").append("capacity-")
+                    .append(curCapacity);
+        } else if (Drop.class.isInstance(action)) {
+            str.append(" ").append("capacity-").append(curCapacity).append(" ").append("capacity-")
+                    .append(curCapacity + 1);
         }
         str.append(")");
         return str.toString();
@@ -153,13 +150,27 @@ public class SequentialPlanIO implements DataIO<Plan> {
         if (plan == null) {
             return null;
         }
+        Map<Vehicle, Integer> capacityMap = new HashMap<>();
         StringBuilder builder = new StringBuilder();
-        planState = new DefaultPlanState(domain, problem);
         for (Action action : plan.getActions()) {
-            builder.append(serializeAction(action, true)).append('\n');
-            planState.apply(action);
+            Vehicle vehicle = (Vehicle) action.getWho();
+            int capacity = capacityMap.computeIfAbsent(vehicle, v -> v.getCurCapacity().getCost());
+            builder.append(serializeAction(action, capacity)).append('\n');
+
+            if (action instanceof PickUp) {
+                capacity--;
+                if (capacity < 0) {
+                    throw new IllegalStateException("Cur capacity cannot be less than zero capacity.");
+                }
+            } else if (action instanceof Drop) {
+                capacity++;
+                if (capacity > vehicle.getMaxCapacity().getCost()) {
+                    throw new IllegalStateException("Cur capacity cannot be bigger than max capacity.");
+                }
+            }
+            capacityMap.put(vehicle, capacity);
         }
-        ActionCost totalCost = plan.getActions().stream().map(Action::getCost).reduce(ActionCost.valueOf(0),
+        ActionCost totalCost = plan.getActions().stream().map(Action::getCost).reduce(ActionCost.ZERO,
                 ActionCost::add);
         if (totalCost != null) {
             builder.append("; cost = ").append(totalCost.getCost()).append(" (general cost)");

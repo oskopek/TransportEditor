@@ -116,10 +116,10 @@ public final class TestUtils {
         assertThat(parsed.getPddlLabels()).contains(PddlLabel.ActionCost);
         assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.Fuel);
 
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getDuration());
 
         RoadGraph roadGraph = new DefaultRoadGraph("");
         roadGraph.addLocation(new Location("a", 0, 0));
@@ -254,9 +254,9 @@ public final class TestUtils {
         vehicles.put(vehicle2.getName(), vehicle2);
 
         Package package1 = new Package("package-1", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-5"),
-                ActionCost.valueOf(1));
+                ActionCost.ONE);
         Package package2 = new Package("package-2", graph.getLocation("city-loc-4"), graph.getLocation("city-loc-2"),
-                ActionCost.valueOf(1));
+                ActionCost.ONE);
         Map<String, Package> packages = new HashMap<>();
         packages.put(package1.getName(), package1);
         packages.put(package2.getName(), package2);

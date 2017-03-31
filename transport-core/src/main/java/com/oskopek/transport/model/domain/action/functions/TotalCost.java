@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 public class TotalCost extends DefaultFunction {
     // TODO how do we actually return the total cost of the plan? Do we even need this function? Only as a placeholder?
 
-    private final ObjectProperty<ActionCost> totalCost = new SimpleObjectProperty<>(ActionCost.valueOf(0));
+    private final ObjectProperty<ActionCost> totalCost = new SimpleObjectProperty<>(ActionCost.ZERO);
 
     @Override
     public ActionCost apply(ActionObject... actionObjects) {

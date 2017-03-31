@@ -8,19 +8,19 @@ public class ActionCostTest {
 
     @Test
     public void subtract() throws Exception {
-        assertEquals(ActionCost.valueOf(1), ActionCost.valueOf(2).subtract(ActionCost.valueOf(1)));
+        assertEquals(ActionCost.ONE, ActionCost.valueOf(2).subtract(ActionCost.ONE));
         assertEquals(ActionCost.valueOf(3), ActionCost.valueOf(2).subtract(ActionCost.valueOf(-1)));
     }
 
     @Test
     public void equalsAndHashCode() {
-        assertNotEquals(ActionCost.valueOf(1), null);
-        assertNotEquals(null, ActionCost.valueOf(1));
-        assertEquals(ActionCost.valueOf(1), ActionCost.valueOf(1));
-        assertNotEquals(ActionCost.valueOf(1), ActionCost.valueOf(2));
-        assertNotEquals(ActionCost.valueOf(2), ActionCost.valueOf(1));
+        assertNotEquals(ActionCost.ONE, null);
+        assertNotEquals(null, ActionCost.ONE);
+        assertEquals(ActionCost.valueOf(1), ActionCost.ONE);
+        assertNotEquals(ActionCost.ONE, ActionCost.valueOf(2));
+        assertNotEquals(ActionCost.valueOf(2), ActionCost.ONE);
 
-        assertEquals(ActionCost.valueOf(1).hashCode(), ActionCost.valueOf(1).hashCode());
+        assertEquals(ActionCost.valueOf(1).hashCode(), ActionCost.ONE.hashCode());
     }
 
     @Test

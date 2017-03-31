@@ -14,7 +14,7 @@
   "planners": {
     "FastDownAstar": {
       "className": "com.oskopek.transport.planners.sequential.FastDownwardExternalPlanner",
-      "params": "{0} {1} --search astar(ff())"
+      "params": "{2} {0} {1} --search astar(ff())"
     },
     "PrologBFS": {
       "className": "com.oskopek.transport.planners.sequential.PrologBFSExternalPlanner"

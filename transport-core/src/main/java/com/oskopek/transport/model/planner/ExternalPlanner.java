@@ -188,7 +188,6 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
                 throw new IllegalStateException("Error while reading plan file.", e);
             }
             this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
-
         } catch (IOException e) {
             setShouldCancel(false);
             plannerProcessProperty.setValue(null);

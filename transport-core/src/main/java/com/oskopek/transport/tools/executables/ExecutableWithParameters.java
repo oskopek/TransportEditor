@@ -66,7 +66,9 @@ public interface ExecutableWithParameters {
         List<String> parameters = new ArrayList<>(splitFilledIn.length + 1);
         parameters.add(getExecutable());
         for (String param : splitFilledIn) {
-            parameters.add(param);
+            if (!param.isEmpty()) {
+                parameters.add(param);
+            }
         }
         return parameters;
     }

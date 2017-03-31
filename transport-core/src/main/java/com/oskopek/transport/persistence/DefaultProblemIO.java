@@ -340,7 +340,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
                             new ArrayList<>()));
                     break;
                 case "package":
-                    parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.valueOf(1)));
+                    parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.ONE));
                     break;
                 case "location":
                     parsed.graph().addLocation(new Location(objectName, 0, 0,

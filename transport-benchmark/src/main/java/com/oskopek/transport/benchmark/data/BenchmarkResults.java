@@ -9,6 +9,7 @@ import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.TemporalPlanIO;
+import javaslang.control.Try;
 
 import java.util.Arrays;
 import java.util.List;
@@ -127,7 +128,8 @@ public final class BenchmarkResults {
          */
         public static JsonRun of(BenchmarkRun run) {
             Plan plan = run.getRunResults().getPlan();
-            String sequential = new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan);
+            String sequential = Try.of(() -> new SequentialPlanIO(run.getDomain(), run.getProblem()).serialize(plan))
+                    .getOrElse((String) null);
             List<String> actions = sequential == null ? null : Arrays.asList(sequential.split("\n"));
             String temporal = new TemporalPlanIO(run.getDomain(), run.getProblem()).serialize(plan);
             List<String> temporalPlanActions = temporal == null ? null : Arrays.asList(temporal.split("\n"));

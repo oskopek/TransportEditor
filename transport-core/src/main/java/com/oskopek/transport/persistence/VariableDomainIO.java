@@ -418,7 +418,7 @@ public class VariableDomainIO implements DataIO<Domain> {
             PddlParser.ActionDefBodyContext actionContext = context.actionDef().actionDefBody();
             preconditions = parsePreconditions(actionContext.goalDesc().goalDesc());
             cost = parseEffects(actionContext.effect().cEffect(), effects);
-            duration = ActionCost.valueOf(1);
+            duration = ActionCost.ONE;
         }
         return new PartialBuilder(preconditions, effects, cost, duration);
     }

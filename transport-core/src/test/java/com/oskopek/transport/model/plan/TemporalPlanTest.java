@@ -21,13 +21,13 @@ public class TemporalPlanTest {
     public void setUp() throws Exception {
         Set<TemporalPlanAction> planActionSet = new HashSet<>();
         planActionSet
-                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(1)), 0d,
+                .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.ONE), 0d,
                         1d));
         planActionSet
                 .add(new TemporalPlanAction(new PickUp(null, null, null, null, null, null, ActionCost.valueOf(2)), 0d,
                         2d));
         planActionSet
-                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(1)), 1d,
+                .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.ONE), 1d,
                         2d));
         planActionSet
                 .add(new TemporalPlanAction(new Drop(null, null, null, null, null, null, ActionCost.valueOf(2)), 1d,

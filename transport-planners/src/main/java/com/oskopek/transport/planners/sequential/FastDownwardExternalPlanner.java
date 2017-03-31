@@ -34,7 +34,7 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
 
     /**
      * Constructor for the {@code fast-down-plan.sh} script with parameters before domain-problem files
-     * and any parameters afterwards. Final format: "{@code beforeArgs} {0} {1} {@code afterArgs}".
+     * and any parameters afterwards. Final format: "{2} {@code beforeArgs} {0} {1} {@code afterArgs}".
      *
      * @param beforeArgs arguments before domain
      * @param afterArgs arguments after problem

@@ -21,7 +21,7 @@ public class PackageBuilderTest {
 
     private final Location location1 = new Location("loc1", 0, 1);
     private final Location location2 = new Location("loc2", 1, 0);
-    private final Package defaultPackage = new Package("test", location1, location2, ActionCost.valueOf(1));
+    private final Package defaultPackage = new Package("test", location1, location2, ActionCost.ONE);
     private final ResourceBundle defaultBundle = new ResourceBundle() {
         @Override
         protected Object handleGetObject(String key) {
@@ -45,7 +45,7 @@ public class PackageBuilderTest {
         builder.setName("test");
         builder.setLocation(location1);
         builder.setTarget(location2);
-        builder.setSize(ActionCost.valueOf(1));
+        builder.setSize(ActionCost.ONE);
         assertThat(builder.build()).isEqualTo(defaultPackage);
     }
 
@@ -58,7 +58,7 @@ public class PackageBuilderTest {
                 .orElseThrow(IllegalStateException::new);
         assertThat(location).isNotNull();
         location.setValue(location2);
-        assertThat(builder.build()).isEqualTo(new Package("test", location2, location2, ActionCost.valueOf(1)));
+        assertThat(builder.build()).isEqualTo(new Package("test", location2, location2, ActionCost.ONE));
     }
 
     @Test
@@ -70,12 +70,12 @@ public class PackageBuilderTest {
                 .orElseThrow(IllegalStateException::new);
         assertThat(location).isNotNull();
         location.setValue(null);
-        assertThat(builder.build()).isEqualTo(new Package("test", null, location2, ActionCost.valueOf(1)));
+        assertThat(builder.build()).isEqualTo(new Package("test", null, location2, ActionCost.ONE));
     }
 
     @Test
     public void testLocalizableBeanMethodsEditFromNull() throws Exception {
-        builder.from(new Package("test", null, location2, ActionCost.valueOf(1)));
+        builder.from(new Package("test", null, location2, ActionCost.ONE));
         ObservableList<PropertySheet.Item> properties
                 = LocalizableSortableBeanPropertyUtils.getProperties(builder, defaultBundle);
         Assertions.assertThat(properties).hasSize(3);

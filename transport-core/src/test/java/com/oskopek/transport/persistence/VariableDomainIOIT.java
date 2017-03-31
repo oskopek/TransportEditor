@@ -87,10 +87,10 @@ public class VariableDomainIOIT {
         assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.ActionCost);
         assertThat(parsed.getPddlLabels()).contains(PddlLabel.Fuel);
 
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(11),
                 parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
                         .getCost());
@@ -156,7 +156,7 @@ public class VariableDomainIOIT {
     public void parseSeqIllegalRoad() throws Exception {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
-        assertEquals(ActionCost.valueOf(0),
+        assertEquals(ActionCost.ZERO,
                 parsed.getDriveBuilder().build(null, roadGraph.getLocation("b"), roadGraph.getLocation("a"), roadGraph)
                         .getDuration());
     }
@@ -179,10 +179,10 @@ public class VariableDomainIOIT {
         assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.ActionCost);
         assertThat(parsed.getPddlLabels()).doesNotContain(PddlLabel.Fuel);
 
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getDropBuilder().build(null, null, null).getDuration());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getCost());
-        assertEquals(ActionCost.valueOf(1), parsed.getPickUpBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getDropBuilder().build(null, null, null).getDuration());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getCost());
+        assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getDuration());
         assertNull(parsed.getRefuelBuilder());
 
         // drive

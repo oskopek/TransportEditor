@@ -530,9 +530,9 @@ public class RightPaneController extends AbstractController {
 
             Edge edge;
             if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
-                edge = graph.addRoad(new FuelRoad(name, ActionCost.valueOf(1)), from, to);
+                edge = graph.addRoad(new FuelRoad(name, ActionCost.ONE), from, to);
             } else {
-                edge = graph.addRoad(new DefaultRoad(name, ActionCost.valueOf(1)), from, to);
+                edge = graph.addRoad(new DefaultRoad(name, ActionCost.ONE), from, to);
             }
 
             Platform.runLater(() -> {
@@ -559,10 +559,10 @@ public class RightPaneController extends AbstractController {
 
         Vehicle vehicle;
         if (application.getPlanningSession().getDomain().getPddlLabels().contains(PddlLabel.Fuel)) {
-            vehicle = new Vehicle(name, at, null, ActionCost.valueOf(0), ActionCost.valueOf(0), ActionCost.valueOf(0),
-                    ActionCost.valueOf(0), true, new ArrayList<>());
+            vehicle = new Vehicle(name, at, null, ActionCost.ZERO, ActionCost.ZERO, ActionCost.ZERO,
+                    ActionCost.ZERO, true, new ArrayList<>());
         } else {
-            vehicle = new Vehicle(name, at, null, ActionCost.valueOf(0), ActionCost.valueOf(0), true,
+            vehicle = new Vehicle(name, at, null, ActionCost.ZERO, ActionCost.ZERO, true,
                     new ArrayList<>());
         }
 
@@ -591,7 +591,7 @@ public class RightPaneController extends AbstractController {
         GraphSelectionHandler handler = centerPaneController.getGraphSelectionHandler();
         Location at = handler.getSelectedLocationList().get(0);
         Location target = handler.getSelectedLocationList().get(1);
-        Package pkg = new Package(name, at, target, ActionCost.valueOf(0));
+        Package pkg = new Package(name, at, target, ActionCost.ZERO);
         problem = problem.putPackage(name, pkg);
         application.getPlanningSession().setProblem(problem);
         centerPaneController.refreshGraphSelectionHandler();

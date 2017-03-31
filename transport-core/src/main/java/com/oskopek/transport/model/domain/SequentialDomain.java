@@ -33,10 +33,10 @@ public class SequentialDomain extends DefaultDomain {
                         Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
                 new DropBuilder(Arrays.asList(new WhoAtWhere(), new In()),
                         Arrays.asList(new Not(new In()), new WhatAtWhere()),
-                        ActionCost.valueOf(1), ActionCost.valueOf(1)),
+                        ActionCost.ONE, ActionCost.ONE),
                 new PickUpBuilder(Arrays.asList(new WhoAtWhere(), new WhatAtWhere()),
-                        Arrays.asList(new Not(new WhatAtWhere()), new In()), ActionCost.valueOf(1),
-                        ActionCost.valueOf(1)), null,
+                        Arrays.asList(new Not(new WhatAtWhere()), new In()), ActionCost.ONE,
+                        ActionCost.ONE), null,
                 HashSet.of(PddlLabel.ActionCost, PddlLabel.Capacity, PddlLabel.MaxCapacity)
                         .toJavaSet());
     }

@@ -33,7 +33,7 @@ cd "$tmpdir"
 echo fast-downward "$fastdownargs"
 
 trap 'pkill -TERM -P $PID; cleanup' SIGINT SIGTERM
-fast-downward --build release64 $fastdownargs &
+fast-downward $fastdownargs &
 PID=$!
 wait $PID
 trap - SIGINT SIGTERM

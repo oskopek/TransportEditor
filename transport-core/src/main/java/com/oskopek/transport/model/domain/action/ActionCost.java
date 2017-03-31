@@ -9,6 +9,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public final class ActionCost implements Comparable<ActionCost> {
 
+    /**
+     * Constant for 0.
+     */
+    public static final ActionCost ZERO = ActionCost.valueOf(0);
+
+    /**
+     * Constant for 1.
+     */
+    public static final ActionCost ONE = ActionCost.valueOf(1);
+
     private final Integer cost;
 
     /**

@@ -1,6 +1,6 @@
 <com.oskopek.transport.model.planner.ExternalPlanner id="1">
     <executable class="com.oskopek.transport.tools.executables.DefaultExecutableWithParameters" id="2">
         <executable>planner.jar</executable>
-        <parameters>-domain {0} -problem {1}</parameters>
+        <parameters>-domain {0} -problem {1} -out {2}</parameters>
     </executable>
 </com.oskopek.transport.model.planner.ExternalPlanner>

@@ -62,7 +62,7 @@ public class FastDownwardExternalPlannerIT {
     @Test
     public void plansP01SequentialAlias() throws Exception {
         assumeTrue("Fast Downward planner is not available.", planner.isAvailable());
-        planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
+        planner = new FastDownwardExternalPlanner("{2} --alias seq-sat-lama-2011 {0} {1}");
         Plan plan = planner.startAndWait(domain, problem);
         assertThat(plan).isNotNull();
         if (!plan.equals(FastDownwardExternalPlannerIT.plan)) {
@@ -73,7 +73,7 @@ public class FastDownwardExternalPlannerIT {
     @Test
     public void plansP01SequentialDifferentSearch() throws Exception {
         assumeTrue("Fast Downward planner is not available.", planner.isAvailable());
-        planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
+        planner = new FastDownwardExternalPlanner("{2} {0} {1} --search astar(ff())");
         Plan plan = planner.startAndWait(domain, problem);
         assertThat(plan).isNotNull();
         if (!plan.equals(FastDownwardExternalPlannerIT.plan)) {

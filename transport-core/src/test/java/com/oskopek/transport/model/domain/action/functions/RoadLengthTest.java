@@ -35,7 +35,7 @@ public class RoadLengthTest {
     @Test(expected = IllegalArgumentException.class)
     public void throwsOnMultipleArguments() {
         new RoadLength().apply(new DefaultRoad("", ActionCost.valueOf(12)),
-                new DefaultRoad(null, ActionCost.valueOf(1)));
+                new DefaultRoad(null, ActionCost.ONE));
     }
 
 }
