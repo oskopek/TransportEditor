@@ -1,15 +1,10 @@
 package com.oskopek.transport.planners.sequential;
 
 import com.oskopek.transport.model.domain.Domain;
-import com.oskopek.transport.model.domain.SequentialDomain;
-import com.oskopek.transport.model.domain.VariableDomain;
-import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
-import com.oskopek.transport.model.plan.SequentialPlan;
-import com.oskopek.transport.model.problem.DefaultProblem;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.DefaultProblemIO;
-import com.oskopek.transport.persistence.SequentialPlanIO;
+import com.oskopek.transport.persistence.TemporalPlanIO;
 import com.oskopek.transport.persistence.VariableDomainIO;
 import com.oskopek.transport.planners.temporal.TFDExternalPlanner;
 import com.oskopek.transport.tools.test.TestUtils;
@@ -19,9 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +32,7 @@ public class TFDExternalPlannerIT {
     public static void setUpClass() throws Exception {
         domain = new VariableDomainIO().parse(TestUtils.getPersistenceTestFile("variableDomainTemp.pddl"));
         problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p01TempProblem.pddl"));
-        plan = new SequentialPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01TempPlan.val"));
+        plan = new TemporalPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01TempPlan.val"));
     }
 
     @Before
@@ -58,12 +50,12 @@ public class TFDExternalPlannerIT {
     public void plansP01Temporal() throws Exception {
         assumeTrue("Temporal Fast Downward planner is not available.", planner.isAvailable());
         CompletableFuture<Plan> plan = planner.startAsync(domain, problem).toCompletableFuture();
-        Try.run(() -> Thread.sleep(10_000));
+        Try.run(() -> Thread.sleep(5_000));
         assertThat(planner.cancel()).isTrue();
-        Try.run(() -> Thread.sleep(8_000));
+        Try.run(() -> Thread.sleep(5_000));
         assertThat(plan.isDone()).isTrue();
         Plan result = plan.get();
-        assertThat(result).isNotNull().isEqualTo(plan);
+        assertThat(result).isNotNull().isEqualTo(TFDExternalPlannerIT.plan);
     }
 
     @Test

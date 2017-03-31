@@ -11,7 +11,7 @@ import com.oskopek.transport.tools.executables.ExecutableWithParameters;
 public class TFDExternalPlanner extends ExternalPlanner {
 
     private static final String executable = "tfd-plan.sh";
-    private static final String defaultSearchParameters = "{0} {1}";
+    private static final String defaultSearchParameters = "{0} {1} {2}";
 
     /**
      * Default empty constructor.
@@ -23,9 +23,10 @@ public class TFDExternalPlanner extends ExternalPlanner {
     /**
      * Constructor for the {@code tfd-plan.sh} script with any parameters.
      * <p>
-     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0}, {1} and {2} can be in any order. {0} is the domain filename, {1} is the path filename,
+     * and {2} is the output file.
      *
-     * @param parameters in the format: "... {0} ... {1} ..."
+     * @param parameters in the format: "... {0} ... {1} ... {2}"
      */
     public TFDExternalPlanner(String parameters) {
         super(executable, parameters);

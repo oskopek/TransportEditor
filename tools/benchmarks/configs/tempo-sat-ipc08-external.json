@@ -126,7 +126,7 @@
   "planners": {
     "TemporalFastDownward": {
       "className": "com.oskopek.transport.model.planner.ExternalPlanner",
-      "params": "tfd-plan.sh {0} {1}"
+      "params": "tfd-plan.sh {0} {1} {2}"
     }
   },
   "threadCount": 8,

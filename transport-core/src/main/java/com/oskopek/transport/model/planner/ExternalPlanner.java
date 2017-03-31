@@ -21,20 +21,19 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * A thin wrapper around an external executable planner for any Transport domain
  * variant representable in PDDL.
  * <p>
  * First exports the domain and problem to a PDDL file, then runs the executable on that and parses the exported plan
- * from stdout. Uses a Process. Logs the process' stderr via
+ * from a specified path. Uses a {@link Process}. Logs the process' stderr and stdout via
  * {@link com.oskopek.transport.tools.executables.AbstractLogStreamable#log(String)}.
- * Returns a success iff the process exits with a 0 return code. And the plan is parsable from stdout.
+ * Returns a success iff the process exits with a 0 return code and the plan is parsable from the output file.
  * Is cancellable via {@link Cancellable#cancel()}. Does not have a no-arg constructor, because it is a
  * special case, handled separately in the UI.
  */
@@ -49,10 +48,11 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     /**
      * Assumes stdout as plan, stderr for status updates.
      * <p>
-     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0} and {1} and {2} can be in any order. {0} is the domain filename,
+     * {1} is the path filename and {2} is the output filename.
      *
      * @param executableString an executable in the system path or an executable file
-     * @param parameters in the format: "... {0} ... {1} ..."
+     * @param parameters in the format: "... {0} ... {1} ... {2} .."
      */
     public ExternalPlanner(String executableString, String parameters) {
         this(new DefaultExecutableWithParameters(executableString, parameters));
@@ -61,10 +61,11 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     /**
      * Assumes stdout as plan, stderr for status updates.
      * <p>
-     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0}, {1} and {2} can be in any order. {0} is the domain filename, {1} is the path filename,
+     * and {2} is the output filename.
      *
      * @param executableWithParametersString an executable in the system path or an executable file and parameters
-     * in the format: "... {0} ... {1} ..." in a single string
+     * in the format: "... {0} ... {1} ... {2} ..." in a single string
      */
     public ExternalPlanner(String executableWithParametersString) {
         this(executableWithParametersString.split(" ")[0],
@@ -74,7 +75,8 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     /**
      * Assumes stdout as plan, stderr for status updates.
      * <p>
-     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0}, {1} and {2} can be in any order. {0} is the domain filename, {1} is the path filename
+     * and {2} is the output filename.
      *
      * @param executable an executable with correct parameter templates
      */
@@ -86,15 +88,16 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     /**
      * Assumes stdout as plan, stderr for status updates.
      * <p>
-     * Parameter templates: {0} and {1} can be in any order. {0} is the domain filename, {1} is the path filename.
+     * Parameter templates: {0}, {1} and {2} can be in any order. {0} is the domain filename, {1} is the path filename,
+     * and {2} is the output filename.
      *
      * @param executable an executable with correct parameter templates
      * @param name the name of this planner
      */
     public ExternalPlanner(ExecutableWithParameters executable, String name) {
         String parameters = executable.getParameters();
-        if (!parameters.contains("{0}") || !parameters.contains("{1}")) {
-            logger.warn("Executable command does not contain {0} and {1} parameter templates.");
+        if (!parameters.contains("{0}") || !parameters.contains("{1}") || !parameters.contains("{2}")) {
+            logger.warn("Executable command does not contain {0}, {1} and {2} parameter templates.");
         }
         this.executable = executable;
         this.name = name;
@@ -120,8 +123,9 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
     private synchronized Plan plan(Domain domain, Problem problem) {
         try (ExecutableTemporarySerializer serializer = new ExecutableTemporarySerializer(domain, problem, null)) {
             List<String> parameters = executable.getCommandParameterList(serializer.getDomainTmpFile().toAbsolutePath(),
-                    serializer.getProblemTmpFile().toAbsolutePath());
+                    serializer.getProblemTmpFile().toAbsolutePath(), serializer.getPlanTmpFile().toAbsolutePath());
             ProcessBuilder builder = new ProcessBuilder(parameters);
+            builder.redirectErrorStream(true);
             try {
                 plannerProcessProperty.set(builder.start());
             } catch (IOException e) {
@@ -147,49 +151,44 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
                 return plannerProcessProperty.get().exitValue();
             }).toCompletableFuture();
 
-            StringBuilder planOutput = new StringBuilder();
-            try (BufferedReader errReader = new BufferedReader(
-                    new InputStreamReader((plannerProcessProperty.get().getErrorStream())));
-                 BufferedReader outReader = new BufferedReader(
-                         new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
-                Optional<String> line;
-                while (true) {
-                    line = readLineTimeout(errReader);
-                    while (line != null && line.isPresent()) {
-                        line.ifPresent(line2 -> {
-                            logger.debug("stderr: {}", line2);
-                            log(line2);
-                        });
-                        line = readLineTimeout(errReader);
-                    }
-                    line = readLineTimeout(outReader);
-                    while (line != null && line.isPresent()) {
-                        line.ifPresent(line2 -> {
-                            logger.debug("stdout: {}", line2);
-                            log("out: " + line2);
-                            planOutput.append(line2).append('\n');
-                        });
-                        line = readLineTimeout(errReader);
-                    }
-                    if (line == null) {
-                        logger.debug("Break from std");
-                        break;
-                    }
-                    logger.debug("Finished whole cycle.");
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(plannerProcessProperty.get()
+                    .getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logger.debug(line);
+                    log(line);
                 }
-                logger.debug("Break total, closing...");
             } catch (IOException e) {
-                throw new IllegalStateException("Error while reading stderr/stdout of planner process.", e);
+                if (e.getMessage().contains("Stream closed")) {
+                    logger.warn("Stream closed while reading stdout.");
+
+                } else {
+                    throw new IllegalStateException("Error while reading stderr/out of planner process.", e);
+                }
             }
 
-            logger.debug("Getting retval");
             int retVal = Try.of(retValFuture::get)
-                    .getOrElseThrow((e) -> new IllegalStateException("Failed waiting for planner process.", e));
+                    .getOrElseThrow(e -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
                 logger.warn("Planning failed: return value " + retVal + ".");
                 bestPlan.setValue(null);
             }
+
+            // Try to parse a plan even if planning failed:
+            Try.run(() -> Thread.sleep(1500)); // sleep to let the filesystem rest
+            StringBuilder planOutput = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    Files.newInputStream(serializer.getPlanTmpFile())))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logger.debug("plan: {}", line);
+                    planOutput.append(line).append('\n');
+                }
+            } catch (IOException e) {
+                throw new IllegalStateException("Error while reading plan file.", e);
+            }
             this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
+
         } catch (IOException e) {
             setShouldCancel(false);
             plannerProcessProperty.setValue(null);
@@ -202,29 +201,6 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         setShouldCancel(false);
         plannerProcessProperty.setValue(null);
         return getCurrentPlan();
-    }
-
-    /**
-     * Reads a line from the reader timing out at 1 second.
-     *
-     * @param reader the reader to read from
-     * @return an empty optional if timed out, a non-empty one if we read a line and null if the reading failed
-     * (possibly end of stream)
-     */
-    private Optional<String> readLineTimeout(BufferedReader reader) {
-        String line;
-        try {
-            line = CompletableFuture.supplyAsync(() -> Try.of(reader::readLine).getOrElse((String) null))
-                    .get(1000, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException e) {
-            if (shouldCancel()) {
-                return null;
-            }
-            return Optional.empty();
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to complete line reading future.", e);
-        }
-        return line == null ? null : Optional.of(line);
     }
 
     /**

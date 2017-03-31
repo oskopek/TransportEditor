@@ -31,8 +31,8 @@ public class ExecutableTemporarySerializer implements AutoCloseable {
 
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final Path domainTmpFile;
-    private Path problemTmpFile;
-    private Path planTmpFile;
+    private final Path problemTmpFile;
+    private final Path planTmpFile;
 
     /**
      * Serializes the non-null objects and makes them available at a temporary location.

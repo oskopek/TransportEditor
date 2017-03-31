@@ -317,7 +317,7 @@ public class RootLayoutController extends AbstractController {
             // best effort, ignore exception
         }
         ExecutableWithParameters executableWithParameters = executableParametersCreator
-                .createExecutableWithParameters(2, messages.getString("planner.excreator.executable"),
+                .createExecutableWithParameters(3, messages.getString("planner.excreator.executable"),
                         messages.getString("planner.excreator.parameters"),
                         messages.getString("planner.excreator.note"), existing);
         if (executableWithParameters != null) {

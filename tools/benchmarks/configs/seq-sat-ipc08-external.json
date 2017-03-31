@@ -126,11 +126,11 @@
   "planners": {
 //    "FastDownFF": {
 //      "className": "com.oskopek.transport.planners.sequential.FastDownwardExternalPlanner",
-//      "params": "--overall-time-limit 30m {0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
+//      "params": "{2} --overall-time-limit 30m {0} {1} --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])"
 //    },
 //    "FastDownLama": {
 //      "className": "com.oskopek.transport.planners.sequential.FastDownwardExternalPlanner",
-//      "params": "--alias seq-sat-lama-2011 {0} {1}"
+//      "params": "{2} --alias seq-sat-lama-2011 {0} {1}"
 //    }
     "SFA*": {
       "className": "com.oskopek.transport.planners.sequential.ForwardAstarPlanner"
