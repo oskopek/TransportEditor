@@ -179,6 +179,7 @@ public class RootLayoutController extends AbstractController {
     private void populatePlanners() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forClass(Planner.class))
+                .addUrls(ClasspathHelper.forPackage("com.oskopek.transport.planners"))
                 .setScanners(new SubTypesScanner(false))
                 .filterInputsBy(s -> s != null && s.startsWith("com.oskopek.transport.") && s.endsWith(".class"))
         );
