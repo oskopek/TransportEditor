@@ -147,45 +147,49 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
                 return plannerProcessProperty.get().exitValue();
             }).toCompletableFuture();
 
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader((plannerProcessProperty.get().getErrorStream())))) {
-                Optional<String> line = readLineTimeout(reader);
-                while (line != null) {
-                    line.ifPresent(line2 -> {
-                        logger.debug("stderr: {}", line2);
-                        log(line2);
-                    });
-                    line = readLineTimeout(reader);
+            StringBuilder planOutput = new StringBuilder();
+            try (BufferedReader errReader = new BufferedReader(
+                    new InputStreamReader((plannerProcessProperty.get().getErrorStream())));
+                 BufferedReader outReader = new BufferedReader(
+                         new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
+                Optional<String> line;
+                while (true) {
+                    line = readLineTimeout(errReader);
+                    while (line != null && line.isPresent()) {
+                        line.ifPresent(line2 -> {
+                            logger.debug("stderr: {}", line2);
+                            log(line2);
+                        });
+                        line = readLineTimeout(errReader);
+                    }
+                    line = readLineTimeout(outReader);
+                    while (line != null && line.isPresent()) {
+                        line.ifPresent(line2 -> {
+                            logger.debug("stdout: {}", line2);
+                            log("out: " + line2);
+                            planOutput.append(line2).append('\n');
+                        });
+                        line = readLineTimeout(errReader);
+                    }
+                    if (line == null) {
+                        logger.debug("Break from std");
+                        break;
+                    }
+                    logger.debug("Finished whole cycle.");
                 }
+                logger.debug("Break total, closing...");
             } catch (IOException e) {
-                throw new IllegalStateException("Error while reading stderr of planner process.", e);
+                throw new IllegalStateException("Error while reading stderr/stdout of planner process.", e);
             }
 
+            logger.debug("Getting retval");
             int retVal = Try.of(retValFuture::get)
                     .getOrElseThrow((e) -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
                 logger.warn("Planning failed: return value " + retVal + ".");
                 bestPlan.setValue(null);
             }
-
-            // Try to parse a plan even if planning failed:
-            log("");
-            log("Planner output:");
-            StringBuilder planOutput = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader((plannerProcessProperty.get().getInputStream())))) {
-                String line = reader.readLine();
-                while (line != null) {
-                    logger.debug("stdout: {}", line);
-                    log(line);
-                    planOutput.append(line).append('\n');
-                    line = reader.readLine();
-                }
-            } catch (IOException e) {
-                throw new IllegalStateException("Error while reading stdout of planner process.", e);
-            }
             this.bestPlan.setValue(tryParsePlan(domain, problem, planOutput.toString()));
-
         } catch (IOException e) {
             setShouldCancel(false);
             plannerProcessProperty.setValue(null);
@@ -211,8 +215,11 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
         String line;
         try {
             line = CompletableFuture.supplyAsync(() -> Try.of(reader::readLine).getOrElse((String) null))
-                    .get(1, TimeUnit.SECONDS);
+                    .get(1000, TimeUnit.MILLISECONDS);
         } catch (TimeoutException e) {
+            if (shouldCancel()) {
+                return null;
+            }
             return Optional.empty();
         } catch (Exception e) {
             throw new IllegalStateException("Failed to complete line reading future.", e);

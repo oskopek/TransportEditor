@@ -23,15 +23,14 @@ domain="`realpath $1`"
 problem="`realpath $2`"
 
 function cleanup {
+echo "Yeah, destroying..."
 cat $(ls "$solution"* | tail -n 1)
 rm "$solution"*
-rm "output" "output.sas"
+rm "output" "output.sas" "all.groups" "variables.groups"
 exit "$EXIT_STATUS"
 }
 
-EXIT_STATUS="1"
-
-cd
+EXIT_STATUS="0"
 
 trap 'pkill -TERM -P $PID; cleanup' SIGINT SIGTERM
 plan "$tfd_dir" "$domain" "$problem" "$solution" 1>&2 &

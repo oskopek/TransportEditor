@@ -87,6 +87,9 @@ public class TemporalPlanIO implements DataIO<Plan> {
             throw new IllegalArgumentException("Plan failed to parse.");
         }
         PlanParser.TemporalPlanContext tempContext = context.temporalPlan();
+        if (tempContext == null) {
+            return null;
+        }
         for (PlanParser.TemporalActionContext action : tempContext.temporalAction()) {
             double duration = Double.parseDouble(action.duration().NUMBER().getText());
             if ((duration != Math.floor(duration)) || Double.isInfinite(duration)) {

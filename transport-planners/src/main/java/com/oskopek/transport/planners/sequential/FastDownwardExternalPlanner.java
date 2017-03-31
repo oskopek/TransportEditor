@@ -43,7 +43,7 @@ public class FastDownwardExternalPlanner extends ExternalPlanner {
     }
 
     /**
-     * Overriden constructor, used in {@link #copy()}.
+     * Overridden constructor, used in {@link #copy()}.
      *
      * @param executableWithParameters the executable with parameters
      * @param name the name
