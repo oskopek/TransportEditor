@@ -86,4 +86,13 @@ public class ForwardBFSPlanner extends AbstractPlanner {
     public ForwardBFSPlanner copy() {
         return new ForwardBFSPlanner();
     }
+
+    @Override
+    public int hashCode() {
+        return getClass().getSimpleName().hashCode();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ForwardBFSPlanner;
+    }
 }

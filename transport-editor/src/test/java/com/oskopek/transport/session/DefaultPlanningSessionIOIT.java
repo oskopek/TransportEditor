@@ -82,7 +82,7 @@ public class DefaultPlanningSessionIOIT {
         Problem problem = parsed.getProblem();
         TestUtils.assertP01Sequential(domain, problem);
         Plan plan = parsed.getPlan();
-//        assertEquals(plan, TestUtils.P01SequentialPlan()); // TODO: reinstate this check
+        assertEquals(plan, TestUtils.P01SequentialPlan());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class DefaultPlanningSessionIOIT {
         Problem problem = parsed.getProblem();
         TestUtils.assertP01Sequential(domain, problem);
         Plan plan = parsed.getPlan();
-//        assertEquals(plan, TestUtils.P01SequentialPlan()); // TODO: reinstate this check
+        assertEquals(plan, TestUtils.P01SequentialPlan());
     }
 
     @Test

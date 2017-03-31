@@ -161,4 +161,12 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         return new ForwardAstarPlanner();
     }
 
+    @Override
+    public int hashCode() {
+        return getClass().getSimpleName().hashCode();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ForwardAstarPlanner;
+    }
 }

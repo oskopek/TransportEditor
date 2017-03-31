@@ -13,7 +13,7 @@ if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
 fi
 if [ -z "$reportGenerator" ]; then
-benchmarker="$transportroot/transport-report/target/""`ls "$transportroot/transport-report/target/" | grep 'transport-report-.*-jar-with-dependencies.jar' | tail -n 1`"
+reportGenerator="$transportroot/transport-report/target/""`ls "$transportroot/transport-report/target/" | grep 'transport-report-.*-jar-with-dependencies.jar' | tail -n 1`"
 fi
 
 set -e
