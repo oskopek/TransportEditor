@@ -38,12 +38,12 @@ public class FuelRoadBuilder extends DefaultRoadBuilder<FuelRoad> {
 
     @Override
     public FuelRoad build() {
-        return new FuelRoad(getName(), getLength(), getFuelCost());
+        return new FuelRoad(getName(), getLength(), fuelCost);
     }
 
     @Override
     public void from(FuelRoad instance) {
         super.from(instance);
-        setFuelCost(instance.getFuelCost());
+        this.fuelCost = instance.getFuelCost();
     }
 }

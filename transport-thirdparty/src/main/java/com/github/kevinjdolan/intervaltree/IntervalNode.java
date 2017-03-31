@@ -187,11 +187,11 @@ public class IntervalNode<Type> {
             sb.append('\t');
         }
         sb.append(toText()).append('\n');
-        if (getLeft() != null) {
-            sb.append(getLeft().toText(level + 1));
+        if (leftNode != null) {
+            sb.append(leftNode.toText(level + 1));
         }
-        if (getRight() != null) {
-            sb.append(getRight().toText(level + 1));
+        if (rightNode != null) {
+            sb.append(rightNode.toText(level + 1));
         }
         return sb.toString();
     }

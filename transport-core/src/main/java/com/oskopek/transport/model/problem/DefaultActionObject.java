@@ -30,7 +30,7 @@ public abstract class DefaultActionObject implements ActionObject {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(name).toHashCode();
     }
 
     @Override
@@ -42,7 +42,7 @@ public abstract class DefaultActionObject implements ActionObject {
             return false;
         }
         DefaultActionObject that = (DefaultActionObject) o;
-        return new EqualsBuilder().append(getName(), that.getName()).isEquals();
+        return new EqualsBuilder().append(name, that.name).isEquals();
     }
 
     @Override

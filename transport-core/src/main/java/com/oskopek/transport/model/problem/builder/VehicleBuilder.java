@@ -161,19 +161,18 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
 
     @Override
     public Vehicle build() {
-        return new Vehicle(getName(), getLocation(), getTarget(), getCurCapacity(), getMaxCapacity(),
-                getCurFuelCapacity(), getMaxFuelCapacity(), true, getPackageList());
+        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity, true, packageList);
     }
 
     @Override
     public void from(Vehicle instance) {
         super.from(instance);
-        setTarget(instance.getTarget());
-        setCurCapacity(instance.getCurCapacity());
-        setMaxCapacity(instance.getMaxCapacity());
-        setCurFuelCapacity(instance.getCurFuelCapacity());
-        setMaxFuelCapacity(instance.getMaxFuelCapacity());
-        setReadyLoading(instance.isReadyLoading());
-        setPackageList(instance.getPackageList());
+        this.target = instance.getTarget();
+        this.curCapacity = instance.getCurCapacity();
+        this.maxCapacity = instance.getMaxCapacity();
+        this.curFuelCapacity = instance.getCurFuelCapacity();
+        this.maxFuelCapacity = instance.getMaxFuelCapacity();
+        this.readyLoading = instance.isReadyLoading();
+        this.packageList = instance.getPackageList();
     }
 }

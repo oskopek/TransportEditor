@@ -77,14 +77,14 @@ public class LocationBuilder extends DefaultActionObjectBuilder<Location> {
 
     @Override
     public Location build() {
-        return new Location(getName(), getxCoordinate(), getyCoordinate(), getPetrolStation());
+        return new Location(getName(), xCoordinate, yCoordinate, petrolStation);
     }
 
     @Override
     public void from(Location location) {
         super.from(location);
-        setxCoordinate(location.getxCoordinate());
-        setyCoordinate(location.getyCoordinate());
-        setPetrolStation(location.getPetrolStation());
+        this.xCoordinate = location.getxCoordinate();
+        this.yCoordinate = location.getyCoordinate();
+        this.petrolStation = location.getPetrolStation();
     }
 }

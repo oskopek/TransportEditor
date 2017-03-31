@@ -91,11 +91,11 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
             return false;
         }
         AbstractPlanner that = (AbstractPlanner) o;
-        return getName().equals(that.getName());
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return getName().hashCode();
+        return name.hashCode();
     }
 }

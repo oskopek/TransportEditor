@@ -60,8 +60,8 @@ public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Whe
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
-                .append(getCost())
-                .append(getDuration())
+                .append(cost)
+                .append(duration)
                 .toHashCode();
     }
 
@@ -76,8 +76,8 @@ public abstract class DefaultActionBuilderWithCost<Who extends DefaultAction<Whe
         DefaultActionBuilderWithCost<?, ?, ?> that = (DefaultActionBuilderWithCost<?, ?, ?>) o;
         return new EqualsBuilder()
                 .appendSuper(super.equals(that))
-                .append(getCost(), that.getCost())
-                .append(getDuration(), that.getDuration())
+                .append(cost, that.cost)
+                .append(duration, that.duration)
                 .isEquals();
     }
 }

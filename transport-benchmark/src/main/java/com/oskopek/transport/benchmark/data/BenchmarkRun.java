@@ -42,7 +42,7 @@ public class BenchmarkRun {
      * @param runResults the run results
      */
     public BenchmarkRun(BenchmarkRun run, Results runResults) {
-        this(run.getDomain(), run.getProblem(), run.getPlanner(), run.bestScore, run.timeout, run.scoreFunction,
+        this(run.domain, run.problem, run.planner, run.bestScore, run.timeout, run.scoreFunction,
                 runResults);
     }
 
@@ -175,14 +175,14 @@ public class BenchmarkRun {
             return false;
         }
         BenchmarkRun that = (BenchmarkRun) o;
-        return new EqualsBuilder().append(getDomain(), that.getDomain()).append(getProblem(), that.getProblem()).append(
-                getPlanner(), that.getPlanner()).append(getRunResults(), that.getRunResults()).isEquals();
+        return new EqualsBuilder().append(domain, that.domain).append(problem, that.problem).append(
+                planner, that.planner).append(runResults, that.runResults).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getDomain()).append(getProblem()).append(getPlanner()).append(
-                getRunResults()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(domain).append(problem).append(planner).append(
+                runResults).toHashCode();
     }
 
     /**

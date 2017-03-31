@@ -201,15 +201,15 @@ public class TemporalPlanStateManager implements PlanStateManager {
             }
             TimeElement<?> that = (TimeElement<?>) o;
 
-            return new EqualsBuilder().append(getTime(), that.getTime())
-                    .append(isEnd(), that.isEnd())
-                    .append(getPayload(), that.getPayload()).isEquals();
+            return new EqualsBuilder().append(time, that.time)
+                    .append(isEnd, that.isEnd)
+                    .append(payload, that.payload).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getTime()).append(isEnd())
-                    .append(getPayload()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(time).append(isEnd)
+                    .append(payload).toHashCode();
         }
 
         /**
@@ -220,8 +220,8 @@ public class TemporalPlanStateManager implements PlanStateManager {
          */
         @Override
         public int compareTo(TimeElement<Payload> o) {
-            return new CompareToBuilder().append(getTime(), o.getTime())
-                    .append(o.isEnd(), isEnd()) // reversed on purpose
+            return new CompareToBuilder().append(time, o.time)
+                    .append(o.isEnd, isEnd) // reversed on purpose
                     .toComparison();
         }
     }

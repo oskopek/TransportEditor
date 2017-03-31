@@ -1092,11 +1092,11 @@ public abstract class AbstractHeap<TKey, TValue>
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(this.getKey() == this ? "[self-reference]" : String
-                    .valueOf(this.getKey()));
+            sb.append(this.key == this ? "[self-reference]" : String
+                    .valueOf(this.key));
             sb.append("->");
-            sb.append(this.getValue() == this ? "[self-reference]" : String
-                    .valueOf(this.getValue()));
+            sb.append(this.value == this ? "[self-reference]" : String
+                    .valueOf(this.value));
             return sb.toString();
         }
 

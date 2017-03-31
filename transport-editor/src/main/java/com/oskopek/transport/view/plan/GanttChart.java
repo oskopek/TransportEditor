@@ -251,7 +251,7 @@ public class GanttChart extends XYChart<Number, String> {
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getColor()).append(getFrom()).append(getTo())
+            return new HashCodeBuilder(17, 37).append(color).append(from).append(to)
                     .append(tooltipText).toHashCode();
         }
 
@@ -264,8 +264,8 @@ public class GanttChart extends XYChart<Number, String> {
                 return false;
             }
             ExtraValue that = (ExtraValue) o;
-            return new EqualsBuilder().append(getColor(), that.getColor()).append(getFrom(), that.getFrom())
-                    .append(getTo(), that.getTo()).append(getTooltipText(), that.getTooltipText()).isEquals();
+            return new EqualsBuilder().append(color, that.color).append(from, that.from)
+                    .append(to, that.to).append(tooltipText, that.tooltipText).isEquals();
         }
 
         @Override

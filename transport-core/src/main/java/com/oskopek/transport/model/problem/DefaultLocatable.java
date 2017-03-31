@@ -23,7 +23,7 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
 
     @Override
     public DefaultLocatable updateName(String newName) {
-        return new DefaultLocatable(newName, getLocation());
+        return new DefaultLocatable(newName, location);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getLocation()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(location).toHashCode();
     }
 
     @Override
@@ -45,6 +45,6 @@ public class DefaultLocatable extends DefaultActionObject implements Locatable, 
             return false;
         }
         DefaultLocatable that = (DefaultLocatable) o;
-        return new EqualsBuilder().appendSuper(super.equals(o)).append(getLocation(), that.getLocation()).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(location, that.location).isEquals();
     }
 }

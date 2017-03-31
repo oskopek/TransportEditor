@@ -35,8 +35,8 @@ public class TemporalPlanAction implements Comparable<TemporalPlanAction> {
      * @see Action#getDuration()
      */
     public TemporalPlanAction updateStartTimestampSmart(Double startTimestamp) {
-        return new TemporalPlanAction(getAction(), startTimestamp,
-                startTimestamp + getAction().getDuration().getCost());
+        return new TemporalPlanAction(action, startTimestamp,
+                startTimestamp + action.getDuration().getCost());
     }
 
     /**
@@ -69,9 +69,9 @@ public class TemporalPlanAction implements Comparable<TemporalPlanAction> {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(getAction())
-                .append(getStartTimestamp())
-                .append(getEndTimestamp())
+                .append(action)
+                .append(startTimestamp)
+                .append(endTimestamp)
                 .toHashCode();
     }
 
@@ -85,16 +85,16 @@ public class TemporalPlanAction implements Comparable<TemporalPlanAction> {
         }
         TemporalPlanAction that = (TemporalPlanAction) o;
         return new EqualsBuilder()
-                .append(getAction(), that.getAction())
-                .append(getStartTimestamp(), that.getStartTimestamp())
-                .append(getEndTimestamp(), that.getEndTimestamp())
+                .append(action, that.action)
+                .append(startTimestamp, that.startTimestamp)
+                .append(endTimestamp, that.endTimestamp)
                 .isEquals();
     }
 
     @Override
     public int compareTo(TemporalPlanAction other) {
-        return new CompareToBuilder().append(getStartTimestamp(), other.getStartTimestamp())
-                .append(getEndTimestamp(), other.getEndTimestamp()).toComparison();
+        return new CompareToBuilder().append(startTimestamp, other.startTimestamp)
+                .append(endTimestamp, other.endTimestamp).toComparison();
     }
 
     @Override

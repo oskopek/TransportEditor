@@ -47,10 +47,10 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem, Action addedAction) {
         super(newProblem);
-        this.domain = oldState.getDomain();
-        this.actions = new ArrayList<>(oldState.getActions());
+        this.domain = oldState.domain;
+        this.actions = new ArrayList<>(oldState.actions);
         this.actions.add(addedAction);
-        totalTime = oldState.getTotalTime() + addedAction.getDuration().getCost();
+        totalTime = oldState.totalTime + addedAction.getDuration().getCost();
     }
 
     /**
@@ -60,9 +60,9 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem) {
         super(newProblem);
-        this.domain = oldState.getDomain();
-        this.actions = oldState.getActions();
-        totalTime = oldState.getTotalTime();
+        this.domain = oldState.domain;
+        this.actions = oldState.actions;
+        totalTime = oldState.totalTime;
     }
 
     /**
@@ -150,43 +150,42 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
 
     @Override
     public ImmutablePlanState putVehicle(String name, Vehicle vehicle) {
-        return new ImmutablePlanState(getDomain(), getProblem().putVehicle(name, vehicle), getActions());
+        return new ImmutablePlanState(domain, getProblem().putVehicle(name, vehicle), actions);
     }
 
     @Override
     public ImmutablePlanState putPackage(String name, com.oskopek.transport.model.problem.Package pkg) {
-        return new ImmutablePlanState(getDomain(), getProblem().putPackage(name, pkg), getActions());
+        return new ImmutablePlanState(domain, getProblem().putPackage(name, pkg), actions);
     }
 
     @Override
     public ImmutablePlanState changeActionObjectName(ActionObject actionObject, String newName) {
-        return new ImmutablePlanState(getDomain(), getProblem().changeActionObjectName(actionObject, newName),
-                getActions());
+        return new ImmutablePlanState(domain, getProblem().changeActionObjectName(actionObject, newName), actions);
     }
 
     @Override
     public ImmutablePlanState putLocation(String name, Location location) {
-        return new ImmutablePlanState(getDomain(), getProblem().putLocation(name, location), getActions());
+        return new ImmutablePlanState(domain, getProblem().putLocation(name, location), actions);
     }
 
     @Override
     public ImmutablePlanState removeVehicle(String name) {
-        return new ImmutablePlanState(getDomain(), getProblem().removeVehicle(name), getActions());
+        return new ImmutablePlanState(domain, getProblem().removeVehicle(name), actions);
     }
 
     @Override
     public ImmutablePlanState removePackage(String name) {
-        return new ImmutablePlanState(getDomain(), getProblem().removePackage(name), getActions());
+        return new ImmutablePlanState(domain, getProblem().removePackage(name), actions);
     }
 
     @Override
     public ImmutablePlanState removeLocation(String name) {
-        return new ImmutablePlanState(getDomain(), getProblem().removeLocation(name), getActions());
+        return new ImmutablePlanState(domain, getProblem().removeLocation(name), actions);
     }
 
     @Override
     public ImmutablePlanState putName(String newName) {
-        return new ImmutablePlanState(getDomain(), getProblem().putName(newName), getActions());
+        return new ImmutablePlanState(domain, getProblem().putName(newName), actions);
     }
 
 }

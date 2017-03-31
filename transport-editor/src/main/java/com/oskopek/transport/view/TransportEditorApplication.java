@@ -178,7 +178,7 @@ public final class TransportEditorApplication extends Application {
      * @return the top left corner point
      */
     private Point2D getTopLeft() {
-        return new Point2D(getPrimaryStage().getX(), getPrimaryStage().getY());
+        return new Point2D(primaryStage.getX(), primaryStage.getY());
     }
 
     /**
@@ -187,7 +187,7 @@ public final class TransportEditorApplication extends Application {
      * @return the bottom right corner point
      */
     private Point2D getBottomRight() {
-        return new Point2D(getPrimaryStage().getWidth(), getPrimaryStage().getHeight());
+        return new Point2D(primaryStage.getWidth(), primaryStage.getHeight());
     }
 
     /**

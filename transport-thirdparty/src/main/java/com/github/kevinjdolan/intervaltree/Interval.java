@@ -97,7 +97,7 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
      * @return true iff {@code |[start, end] intersection [other.start, other.end]| > 1}
      */
     public boolean intersects(Interval<?> other) {
-        return other.getEnd() > start && other.getStart() < end;
+        return other.end > start && other.start < end;
     }
 
     /**
@@ -109,13 +109,13 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
      */
     @Override
     public int compareTo(Interval<Type> other) {
-        if (start < other.getStart()) {
+        if (start < other.start) {
             return -1;
-        } else if (start > other.getStart()) {
+        } else if (start > other.start) {
             return 1;
-        } else if (end < other.getEnd()) {
+        } else if (end < other.end) {
             return -1;
-        } else if (end > other.getEnd()) {
+        } else if (end > other.end) {
             return 1;
         } else {
             return 0;
@@ -131,12 +131,12 @@ public class Interval<Type> implements Comparable<Interval<Type>> {
             return false;
         }
         Interval<?> interval = (Interval<?>) o;
-        return new EqualsBuilder().append(getStart(), interval.getStart()).append(getEnd(), interval.getEnd()).append(
-                getData(), interval.getData()).isEquals();
+        return new EqualsBuilder().append(start, interval.start).append(end, interval.end).append(
+                data, interval.data).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getStart()).append(getEnd()).append(getData()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(start).append(end).append(data).toHashCode();
     }
 }

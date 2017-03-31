@@ -47,8 +47,8 @@ public abstract class DefaultActionBuilder<Who extends DefaultAction<Where, What
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(getPreconditions())
-                .append(getEffects())
+                .append(preconditions)
+                .append(effects)
                 .toHashCode();
     }
 
@@ -62,8 +62,8 @@ public abstract class DefaultActionBuilder<Who extends DefaultAction<Where, What
         }
         DefaultActionBuilder<?, ?, ?> that = (DefaultActionBuilder<?, ?, ?>) o;
         return new EqualsBuilder()
-                .append(getPreconditions(), that.getPreconditions())
-                .append(getEffects(), that.getEffects())
+                .append(preconditions, that.preconditions)
+                .append(effects, that.effects)
                 .isEquals();
     }
 }

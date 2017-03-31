@@ -110,12 +110,12 @@ public abstract class DefaultDomain implements Domain {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(getName())
-                .append(getDriveBuilder())
-                .append(getDropBuilder())
-                .append(getPickUpBuilder())
-                .append(getRefuelBuilder())
-                .append(getPddlLabels())
+                .append(name)
+                .append(driveBuilder)
+                .append(dropBuilder)
+                .append(pickUpBuilder)
+                .append(refuelBuilder)
+                .append(pddlLabelSet)
                 .toHashCode();
     }
 
@@ -129,19 +129,19 @@ public abstract class DefaultDomain implements Domain {
         }
         DefaultDomain that = (DefaultDomain) o;
         return new EqualsBuilder()
-                .append(getName(), that.getName())
-                .append(getDriveBuilder(), that.getDriveBuilder())
-                .append(getDropBuilder(), that.getDropBuilder())
-                .append(getPickUpBuilder(), that.getPickUpBuilder())
-                .append(getRefuelBuilder(), that.getRefuelBuilder())
-                .append(getPddlLabels(), that.getPddlLabels())
+                .append(name, that.name)
+                .append(driveBuilder, that.driveBuilder)
+                .append(dropBuilder, that.dropBuilder)
+                .append(pickUpBuilder, that.pickUpBuilder)
+                .append(refuelBuilder, that.refuelBuilder)
+                .append(pddlLabelSet, that.pddlLabelSet)
                 .isEquals();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", name).append("pddlLabelSet", pddlLabelSet)
-                .append("pddlLabels", getPddlLabels()).append("functionMap", getFunctionMap())
+                .append("pddlLabels", pddlLabelSet).append("functionMap", getFunctionMap())
                 .append("predicateMap", getPredicateMap()).toString();
     }
 }

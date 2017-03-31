@@ -51,7 +51,7 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
      * @return the updated package
      */
     public Package updateLocation(Location location) {
-        return new Package(getName(), location, getTarget(), getSize());
+        return new Package(getName(), location, target, size);
     }
 
     /**
@@ -61,12 +61,12 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
      * @return the updated package
      */
     public Package updateTarget(Location target) {
-        return new Package(getName(), getLocation(), target, getSize());
+        return new Package(getName(), getLocation(), target, size);
     }
 
     @Override
     public Package updateName(String newName) {
-        return new Package(newName, getLocation(), getTarget(), getSize());
+        return new Package(newName, getLocation(), target, size);
     }
 
     /**
@@ -76,7 +76,7 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
      * @return the updated package
      */
     public Package updateSize(ActionCost size) {
-        return new Package(getName(), getLocation(), getTarget(), size);
+        return new Package(getName(), getLocation(), target, size);
     }
 
     @Override
@@ -91,19 +91,18 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
 
         Package aPackage = (Package) o;
 
-        return new EqualsBuilder().appendSuper(super.equals(o)).append(getTarget(), aPackage.getTarget()).append(
-                getSize(), aPackage.getSize()).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(target, aPackage.target).append(size, aPackage.size).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getTarget()).append(getSize())
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(target).append(size)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
-        return "Package[" + getName() + ", at=" + getLocation() + ", target=" + getTarget() + ", size=" + getSize()
+        return "Package[" + getName() + ", at=" + getLocation() + ", target=" + target + ", size=" + size
                 + ']';
     }
 }

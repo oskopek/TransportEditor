@@ -109,7 +109,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @return a new immutable external planner with correctly initialized transient fields
      */
     protected Object readResolve() {
-        return new ExternalPlanner(getExecutableWithParameters());
+        return new ExternalPlanner(executable);
     }
 
     /**
