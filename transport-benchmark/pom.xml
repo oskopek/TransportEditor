@@ -11,6 +11,8 @@
     <artifactId>transport-benchmark</artifactId>
     <packaging>jar</packaging>
     <name>Transport Benchmark</name>
+    <url>https://github.com/oskopek/TransportEditor/tree/master/${artifactId}</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

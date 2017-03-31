@@ -8,10 +8,11 @@
         <version>0.8.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>transport-report</artifactId>
     <packaging>jar</packaging>
     <name>Transport Report</name>
+    <url>https://github.com/oskopek/TransportEditor/tree/master/${artifactId}</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

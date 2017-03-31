@@ -13,7 +13,7 @@
     <name>Transport documentation</name>
     <description>Documentation for the Transport module (editor and planners for IPC Transport domain problems).</description>
     <packaging>pom</packaging>
-
+    <url>https://github.com/oskopek/TransportEditor/tree/master/${artifactId}</url>
     <build>
         <plugins>
             <plugin>

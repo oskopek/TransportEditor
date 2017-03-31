@@ -29,7 +29,7 @@
         <developerConnection>scm:git:https://github.com/oskopek/TransportEditor.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-    <url>https://www.ohloh.net/p/TransportEditor</url>
+    <url>https://github.com/oskopek/TransportEditor/</url>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/oskopek/TransportEditor/issues</url>
