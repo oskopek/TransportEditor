@@ -114,8 +114,8 @@ public abstract class DefaultAction<Who extends Locatable, What extends ActionOb
 
     @Override
     public String toString() {
-        return name + "[" + Optional.ofNullable(who).map(ActionObject::getName).orElse("null") + " @ "
+        return name + '[' + Optional.ofNullable(who).map(ActionObject::getName).orElse("null") + " @ "
                 + Optional.ofNullable(where).map(ActionObject::getName).orElse("null")
-                + " -> " + Optional.ofNullable(what).map(ActionObject::getName).orElse("null") + "]";
+                + " -> " + Optional.ofNullable(what).map(ActionObject::getName).orElse("null") + ']';
     }
 }

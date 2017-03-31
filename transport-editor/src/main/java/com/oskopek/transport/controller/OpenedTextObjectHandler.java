@@ -258,7 +258,7 @@ public class OpenedTextObjectHandler<Persistable_> implements AutoCloseable {
         try {
             return Files.readAllLines(getPath(), Charset.forName("UTF-8"));
         } catch (IOException e) {
-            logger.debug("Could not read lines from \"" + getPath() + "\".", e);
+            logger.debug("Could not read lines from \"{}\".", getPath(), e);
         }
         return null;
     }

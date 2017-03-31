@@ -104,6 +104,6 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
     @Override
     public String toString() {
         return "Package[" + getName() + ", at=" + getLocation() + ", target=" + getTarget() + ", size=" + getSize()
-                + "]";
+                + ']';
     }
 }

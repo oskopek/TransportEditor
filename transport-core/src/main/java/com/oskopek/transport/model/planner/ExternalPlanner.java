@@ -69,7 +69,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      */
     public ExternalPlanner(String executableWithParametersString) {
         this(executableWithParametersString.split(" ")[0],
-                executableWithParametersString.substring(executableWithParametersString.indexOf(" ") + 1));
+                executableWithParametersString.substring(executableWithParametersString.indexOf(' ') + 1));
     }
 
     /**
@@ -81,8 +81,8 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @param executable an executable with correct parameter templates
      */
     public ExternalPlanner(ExecutableWithParameters executable) {
-        this(executable, "");
-        setName(getClass().getSimpleName() + '[' + executable.getExecutable() + ' ' + executable.getParameters() + ']');
+        this(executable, ExternalPlanner.class.getSimpleName() + '[' + executable.getExecutable() + ' '
+                + executable.getParameters() + ']');
     }
 
     /**
@@ -170,7 +170,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
             int retVal = Try.of(retValFuture::get)
                     .getOrElseThrow(e -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
-                logger.warn("Planning failed: return value " + retVal + ".");
+                logger.warn("Planning failed: return value {}.", retVal);
                 bestPlan.setValue(null);
             }
 

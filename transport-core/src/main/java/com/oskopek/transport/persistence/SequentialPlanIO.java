@@ -48,14 +48,14 @@ public class SequentialPlanIO implements DataIO<Plan> {
     static StringBuilder serializeActionSimple(Action action) {
         StringBuilder str = new StringBuilder();
         String whoName = action.getWho().getName();
-        str.append("(").append(action.getName()).append(" ").append(whoName).append(" ")
+        str.append('(').append(action.getName()).append(' ').append(whoName).append(' ')
                 .append(action.getWhere().getName());
         if (Drive.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat().getName());
+            str.append(' ').append(action.getWhat().getName());
         } else if (PickUp.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat().getName());
+            str.append(' ').append(action.getWhat().getName());
         } else if (Drop.class.isInstance(action)) {
-            str.append(" ").append(action.getWhat().getName());
+            str.append(' ').append(action.getWhat().getName());
         } else if (Refuel.class.isInstance(action)) {
             str.append(""); // intentionally empty
         } else {
@@ -132,16 +132,16 @@ public class SequentialPlanIO implements DataIO<Plan> {
      * @param curCapacity the current capacity of the current (who) vehicle
      * @return the serialized VAL-format plan action line
      */
-    private String serializeAction(Action action, int curCapacity) {
+    private static String serializeAction(Action action, int curCapacity) {
         StringBuilder str = serializeActionSimple(action);
         if (PickUp.class.isInstance(action)) {
-            str.append(" ").append("capacity-").append(curCapacity - 1).append(" ").append("capacity-")
+            str.append(' ').append("capacity-").append(curCapacity - 1).append(' ').append("capacity-")
                     .append(curCapacity);
         } else if (Drop.class.isInstance(action)) {
-            str.append(" ").append("capacity-").append(curCapacity).append(" ").append("capacity-")
+            str.append(' ').append("capacity-").append(curCapacity).append(' ').append("capacity-")
                     .append(curCapacity + 1);
         }
-        str.append(")");
+        str.append(')');
         return str.toString();
     }
 

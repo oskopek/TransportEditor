@@ -234,11 +234,11 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      */
     public Vehicle addPackage(Package pkg) {
         if (getPackageList().contains(pkg)) {
-            throw new IllegalArgumentException("Package " + pkg + " already is in vehicle " + this + ".");
+            throw new IllegalArgumentException("Package " + pkg + " already is in vehicle " + this + '.');
         }
         if (pkg.getLocation() != null) {
             throw new IllegalStateException(
-                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + ".");
+                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + '.');
         }
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.add(pkg);
@@ -254,11 +254,11 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      */
     public Vehicle removePackage(Package pkg) {
         if (!getPackageList().contains(pkg)) {
-            throw new IllegalArgumentException("Package " + pkg + " is not in vehicle " + this + ".");
+            throw new IllegalArgumentException("Package " + pkg + " is not in vehicle " + this + '.');
         }
         if (pkg.getLocation() != null) {
             throw new IllegalStateException(
-                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + ".");
+                    "Package " + pkg + " is in vehicle and somewhere else at the same time " + pkg.getLocation() + '.');
         }
         List<Package> newPackageList = new ArrayList<>(getPackageList());
         newPackageList.remove(pkg);
@@ -296,7 +296,7 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     @Override
     public String toString() {
         return "Vehicle[" + getName() + ", at=" + getLocation() + ", target=" + getTarget() + ", capacity="
-                + getCurCapacity() + "/" + getMaxCapacity() + ", fuel=" + getCurFuelCapacity() + "/"
-                + getMaxFuelCapacity() + ", readyLoading=" + isReadyLoading() + ", packages=" + getPackageList() + "]";
+                + getCurCapacity() + '/' + getMaxCapacity() + ", fuel=" + getCurFuelCapacity() + '/'
+                + getMaxFuelCapacity() + ", readyLoading=" + isReadyLoading() + ", packages=" + getPackageList() + ']';
     }
 }

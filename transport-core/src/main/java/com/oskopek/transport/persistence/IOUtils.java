@@ -78,7 +78,7 @@ public final class IOUtils {
      * @throws IOException if an error during writing occurs
      */
     public static void writeToFile(Path path, String string) throws IOException {
-        Files.write(path, Arrays.asList(string), UTF8);
+        Files.write(path, Collections.singletonList(string), UTF8);
     }
 
     /**

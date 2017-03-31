@@ -105,7 +105,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                 return Optional.ofNullable(bestPlan);
             }
 
-            closedSet.add(new ProblemPlanningWrapper(current));
+            closedSet.add(new ProblemPlanningWrapper(current)); // TODO: Do we really need to allocate this here?
 
             Stream<Action> generatedActions = PlannerUtils.generateActions(current, current.getActions(),
                     distanceMatrix.get(), PlannerUtils.getUnfinishedPackages(current.getAllPackages()));

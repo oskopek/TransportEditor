@@ -176,7 +176,7 @@ public final class BenchmarkConfig {
         VariableDomainIO domainIO = new VariableDomainIO();
         Domain domain = domainIO.parse(this.domain);
 
-        List<Problem> problems = new ArrayList<>();
+        List<Problem> problems = new ArrayList<>(this.problems.size());
         DefaultProblemIO problemIO = new DefaultProblemIO(domain);
         this.problems.forEach((name, problemInfo) -> problems
                 .add(problemIO.parse(problemInfo.getFileContents()).putName(name)));

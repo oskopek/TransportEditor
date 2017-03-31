@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * The default implementation of a planning session.
  */
-public class DefaultPlanningSession implements PlanningSession {
+public final class DefaultPlanningSession implements PlanningSession {
 
     private final ObjectProperty<Planner> plannerProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<Validator> validatorProperty = new SimpleObjectProperty<>();

@@ -185,7 +185,7 @@ public final class PlannerUtils {
             for (int i = lastDriveIndex + 1; i < plannedActions.size(); i++) {
                 Action action = plannedActions.get(i);
                 if (action instanceof Drop && vehicleName.equals(action.getWho().getName())) {
-                    packagesDroppedAfterLastMoveMap.computeIfAbsent(vehicleName, v -> new HashSet<>())
+                    packagesDroppedAfterLastMoveMap.computeIfAbsent(vehicleName, v -> new HashSet<>(2))
                             .add(action.getWhat().getName());
                 }
             }
@@ -211,7 +211,7 @@ public final class PlannerUtils {
         for (Package pkg : pkgs) {
             Location current = pkg.getLocation();
             pkgMap.computeIfAbsent(current, c -> {
-                Set<Package> set = new HashSet<>();
+                Set<Package> set = new HashSet<>(2);
                 set.add(pkg);
                 return set;
             });
@@ -339,12 +339,12 @@ public final class PlannerUtils {
         Map<String, Set<String>> pickedUpAt = new HashMap<>(plannedActions.size() + 1);
         for (Action a : plannedActions) {
             if (a instanceof PickUp) {
-                pickedUpAt.computeIfAbsent(a.getWhat().getName(), s -> new HashSet<>())
+                pickedUpAt.computeIfAbsent(a.getWhat().getName(), s -> new HashSet<>(2))
                         .add(a.getWhere().getName());
             }
         }
         if (newAction instanceof PickUp) {
-            pickedUpAt.computeIfAbsent(newAction.getWhat().getName(), s -> new HashSet<>())
+            pickedUpAt.computeIfAbsent(newAction.getWhat().getName(), s -> new HashSet<>(2))
                     .add(newAction.getWhere().getName());
         } else if (newAction instanceof Drop) {
             Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());

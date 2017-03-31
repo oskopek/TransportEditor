@@ -49,9 +49,9 @@ public abstract class LatexProblemPlannerReporter implements Reporter {
      * @param dataGetter the getter to use for element data
      * @return the filled-in map to be passed to a Freemarker template
      */
-    private Map<String, Object> fillInfo(List<BenchmarkResults.JsonRun> runs,
+    private static Map<String, Object> fillInfo(List<BenchmarkResults.JsonRun> runs,
             Function<BenchmarkResults.JsonRun, Object> dataGetter) {
-        Map<String, Object> info = new HashMap<>();
+        Map<String, Object> info = new HashMap<>(10);
         // all domains are the same
         info.put("domain", runs.size() == 0 ? "" : runs.get(0).getDomain());
         info.put("planners", runs.stream().flatMap(r -> Stream.of(r.getPlanner())).sorted().distinct()

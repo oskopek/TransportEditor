@@ -44,14 +44,14 @@ public class TemporalPlanIO implements DataIO<Plan> {
      * @return the serialized action in a single line
      */
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
-        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
+        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(')').toString();
         StringBuilder str = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00000");
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(symbols);
         Double duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();
-        str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(" ").append(action).append(
+        str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(' ').append(action).append(
                 " [").append(df.format(duration)).append("]\n");
         return str.toString();
     }

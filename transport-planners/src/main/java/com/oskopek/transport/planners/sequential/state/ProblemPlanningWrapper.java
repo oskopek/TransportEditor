@@ -192,7 +192,7 @@ public class ProblemPlanningWrapper implements Problem { // TODO: consolidate wi
             return false;
         }
         Map<String, Vehicle> otherVehicleMap = other.getVehicleMap();
-        Set<String> pkgs = new HashSet<>();
+
         for (Vehicle vehicle : problem.getVehicleMap().values()) {
             String vehicleName = vehicle.getName();
             Vehicle otherVehicle = otherVehicleMap.get(vehicleName);
@@ -200,7 +200,9 @@ public class ProblemPlanningWrapper implements Problem { // TODO: consolidate wi
                 return false;
             }
 
-            for (Package pkg : vehicle.getPackageList()) {
+            Collection<Package> packages = vehicle.getPackageList();
+            Set<String> pkgs = new HashSet<>(packages.size());
+            for (Package pkg : packages) {
                 pkgs.add(pkg.getName());
             }
             for (Package pkg : otherVehicle.getPackageList()) {

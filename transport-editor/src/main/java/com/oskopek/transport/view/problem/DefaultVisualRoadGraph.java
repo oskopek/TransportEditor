@@ -188,8 +188,9 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
 
-        Map<Package, Location> packagesAtNodes = new HashMap<>();
-        Map<Package, Road> packagesAtEdges = new HashMap<>();
+        Collection<Package> allPackages = state.getAllPackages();
+        Map<Package, Location> packagesAtNodes = new HashMap<>(allPackages.size());
+        Map<Package, Road> packagesAtEdges = new HashMap<>(allPackages.size());
 
         // draw vehicles
         state.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName)).forEach(v -> {
@@ -220,7 +221,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         });
 
         // draw packages
-        state.getAllPackages().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
+        allPackages.stream().sorted(Comparator.comparing(DefaultActionObject::getName))
                 .forEach(p -> {
                     if (p.getLocation() != null) {
                         addPackageSprite(p, p.getLocation());

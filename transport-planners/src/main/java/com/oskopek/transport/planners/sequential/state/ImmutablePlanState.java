@@ -114,7 +114,7 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         }
         if (!action.arePreconditionsValid(getProblem())) {
             if (logger.isTraceEnabled()) {
-                logger.trace("Preconditions of action " + action + " are invalid in problem " + getProblem());
+                logger.trace("Preconditions of action {} are invalid in problem {}", action, getProblem());
             }
             return Optional.empty();
         }
@@ -140,9 +140,8 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
         }
         if (!action.areEffectsValid(newProblem)) {
             if (logger.isTraceEnabled()) {
-                logger.trace(
-                        "Effects of action " + action + " are invalid after applying to problem " + getProblem()
-                                + "(result: " + newProblem + ").");
+                logger.trace("Effects of action {} are invalid after applying to problem {}(result: {}).", action,
+                        getProblem(), newProblem);
             }
             return Optional.empty();
         }

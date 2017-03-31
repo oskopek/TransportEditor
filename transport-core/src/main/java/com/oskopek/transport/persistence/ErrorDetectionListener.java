@@ -51,7 +51,7 @@ public class ErrorDetectionListener implements ANTLRErrorListener {
     }
 
     @Override
-    public void syntaxError(Recognizer<?, ?> arg0, Object arg1, int arg2, int arg3, String arg4,
+    public synchronized void syntaxError(Recognizer<?, ?> arg0, Object arg1, int arg2, int arg3, String arg4,
             RecognitionException arg5) {
         fail = true;
         logger.error("Syntax Error: {}", arg4);

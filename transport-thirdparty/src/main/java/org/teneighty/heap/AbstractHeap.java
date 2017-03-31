@@ -293,10 +293,10 @@ public abstract class AbstractHeap<TKey, TValue>
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(this.getClass().getName());
-        buffer.append("(");
+        buffer.append('(');
         buffer.append(this.getSize());
         buffer.append(") ");
-        buffer.append("[");
+        buffer.append('[');
 
         Iterator<Heap.Entry<TKey, TValue>> it = this.getEntries().iterator();
         boolean next = it.hasNext();
@@ -321,7 +321,7 @@ public abstract class AbstractHeap<TKey, TValue>
             }
         }
 
-        buffer.append("]");
+        buffer.append(']');
         return buffer.toString();
     }
 

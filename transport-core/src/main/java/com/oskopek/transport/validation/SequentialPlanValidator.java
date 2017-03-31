@@ -55,7 +55,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
 
     @Override
     protected void log(String message) {
-        super.log(new Date().toString() + ": " + message + "\n");
+        super.log(new Date().toString() + ": " + message + '\n');
     }
 
     @Override

@@ -184,9 +184,9 @@ public class IntervalNode<Type> {
     public String toText(int level) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < level; i++) {
-            sb.append("\t");
+            sb.append('\t');
         }
-        sb.append(toText()).append("\n");
+        sb.append(toText()).append('\n');
         if (getLeft() != null) {
             sb.append(getLeft().toText(level + 1));
         }
@@ -205,10 +205,10 @@ public class IntervalNode<Type> {
         StringBuilder sb = new StringBuilder();
         sb.append(center).append(": ");
         for (Entry<Interval<Type>, List<Interval<Type>>> entry : intervals.entrySet()) {
-            sb.append("[").append(entry.getKey().getStart()).append(",").append(entry.getKey().getEnd()).append("]:{");
+            sb.append('[').append(entry.getKey().getStart()).append(',').append(entry.getKey().getEnd()).append("]:{");
             for (Interval<Type> interval : entry.getValue()) {
-                sb.append("(").append(interval.getStart()).append(",").append(interval.getEnd()).append(",").append(
-                        interval.getData()).append(")");
+                sb.append('(').append(interval.getStart()).append(',').append(interval.getEnd()).append(',').append(
+                        interval.getData()).append(')');
             }
             sb.append("} ");
         }

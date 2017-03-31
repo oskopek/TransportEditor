@@ -133,6 +133,6 @@ public class Location extends DefaultActionObject implements Locatable {
 
     @Override
     public String toString() {
-        return "Loc[" + getName() + "]";
+        return "Loc[" + getName() + ']';
     }
 }

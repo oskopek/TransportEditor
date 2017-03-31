@@ -108,7 +108,7 @@ import java.util.NoSuchElementException;
  * @author Fran Lattanzio
  * @version $Revision: 14 $ $Date: 2009-11-21 13:24:37 -0500 (Sat, 21 Nov 2009) $
  */
-public class BinaryHeap<TKey, TValue>
+public final class BinaryHeap<TKey, TValue>
         extends AbstractHeap<TKey, TValue>
         implements Heap<TKey, TValue>, Iterable<Heap.Entry<TKey, TValue>>,
         Serializable, Cloneable {

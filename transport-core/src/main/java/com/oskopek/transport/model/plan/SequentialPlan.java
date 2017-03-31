@@ -52,7 +52,7 @@ public final class SequentialPlan implements Plan {
      */
     @Override
     public List<TemporalPlanAction> getTemporalPlanActions() {
-        List<TemporalPlanAction> temporalActions = new ArrayList<>();
+        List<TemporalPlanAction> temporalActions = new ArrayList<>(actionList.size());
         int i = 0;
         for (Action action : actionList) {
             int begin = i;
