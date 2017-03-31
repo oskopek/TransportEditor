@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used for localizing bean properties in the view.
- *
- * @see com.oskopek.transport.view.LocalizableSortableBeanPropertyUtils
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -32,7 +30,6 @@ public @interface FieldLocalization {
      * A disambiguation field for finding the correct editor.
      *
      * @return the editor class hint
-     * @see com.oskopek.transport.view.editor.ActionObjectPropertyEditorFactory
      */
     Class<?> editor() default Void.class;
 

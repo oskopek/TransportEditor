@@ -80,14 +80,19 @@ cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
 cp -r transport-docs/target/docs "$tmpdir"/
 
 mkdir -p "$tmpdir"/docs/javadoc
-cp -r transport-editor/target/apidocs/* "$tmpdir"/docs/javadoc/
+for apidocs in `find . -wholename '*target/apidocs' -type d`; do
+    cp -r "$apidocs" "$tmpdir"/docs/javadoc/"`echo $apidocs | grep -E 'transport-[a-z]+' -o`"
+done
 
-rsync -av --exclude='*/.git*' --exclude 'target/' --exclude 'tools/' transport-*/ "$tmpdir"/sources
+for module in `ls | grep 'transport-.*'`; do
+    mkdir -p "$tmpdir/sources/$module"
+    rsync -av --exclude='*/.git*' --exclude='.idea/' --exclude='*.iml' --exclude 'target/' --exclude 'tools/' "$module"/ "$tmpdir"/sources/"$module"
+done
 
 mkdir -p "$tmpdir"/bin
-cp "`find . -wholename '*target/transport-*jar-with-dependencies.jar' | tr '\n' ' '`" "$tmpdir"/bin
+cp `find . -wholename '*target/*jar-with-dependencies.jar' | tr '\n' ' '` "$tmpdir"/bin
 
-cp -r transport-editor/tools "$tmpdir"/
+cp -r tools "$tmpdir"/
 rm -rf "$tmpdir"/tools/benchmarks/results
 mkdir -p "$tmpdir"/tools/benchmarks/results
 

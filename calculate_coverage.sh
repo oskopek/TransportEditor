@@ -9,7 +9,7 @@ fi
 
 for file in `find . -wholename '.*'"$reportFolder"'/jacoco.xml'`; do
 cat $file | grep -E '<counter type="INSTRUCTION"[^>]*/>' -o | tail -n 1 | sed -E 's@<counter type="INSTRUCTION"[ ]+missed="([0-9]+)"[ ]+covered="([0-9]+)"[ ]*/>@\2 (\1+\2)@'
-done |
+done | # awk transpose script from: http://stackoverflow.com/a/1729980/2713162
 awk '
 {
     for (i=1; i<=NF; i++)  {

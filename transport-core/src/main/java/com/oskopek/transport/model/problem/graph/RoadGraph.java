@@ -120,7 +120,7 @@ public interface RoadGraph extends Graph {
      *
      * @param l1 the from location
      * @param l2 the to location
-     * @return a stream of all the roads;@code l1 -> l2}
+     * @return a stream of all the roads from {@code l1 -> l2}
      */
     Stream<Road> getAllRoadsBetween(Location l1, Location l2);
 

@@ -15,7 +15,6 @@
     <packaging>pom</packaging>
 
     <build>
-        <finalName>transport-docs</finalName>
         <plugins>
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
