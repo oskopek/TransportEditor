@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
     <name>Transport Third Party Dependencies</name>
     <description>Third party dependencies for the Transport module.</description>
-    <url>https://github.com/oskopek/TransportEditor/tree/master/${artifactId}</url>
+    <url>https://github.com/oskopek/TransportEditor/tree/master/${project.artifactId}</url>
 
     <licenses>
         <license>

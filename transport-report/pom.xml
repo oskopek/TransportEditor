@@ -11,7 +11,7 @@
     <artifactId>transport-report</artifactId>
     <packaging>jar</packaging>
     <name>Transport Report</name>
-    <url>https://github.com/oskopek/TransportEditor/tree/master/${artifactId}</url>
+    <url>https://github.com/oskopek/TransportEditor/tree/master/${project.artifactId}</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
