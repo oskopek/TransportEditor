@@ -4,7 +4,7 @@ if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
 fi
 if [ -z "$benchmarker" ]; then
-benchmarker="$transportroot/target/TransportEditor-Benchmarker-jar-with-dependencies.jar"
+benchmarker="$transportroot/transport-benchmark/target/""`ls "$transportroot/transport-benchmark/target/" | grep 'transport-benchmark-.*-jar-with-dependencies.jar' | tail -n 1`"
 fi
 
 set -e

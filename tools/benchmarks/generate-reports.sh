@@ -13,7 +13,7 @@ if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
 fi
 if [ -z "$reportGenerator" ]; then
-reportGenerator="$transportroot/target/TransportEditor-ReportGenerator-jar-with-dependencies.jar"
+benchmarker="$transportroot/transport-report/target/""`ls "$transportroot/transport-report/target/" | grep 'transport-report-.*-jar-with-dependencies.jar' | tail -n 1`"
 fi
 
 set -e
@@ -46,16 +46,16 @@ ipc="14"
 fi
 
 if `echo $configName | grep '^seq-sat' > /dev/null`; then
-ref_results="$transportroot/../datasets/ipc$ipc/results/transport-strips-seq-sat-ipc$ipc-results.json"
+ref_results="$transportroot/datasets/ipc$ipc/results/transport-strips-seq-sat-ipc$ipc-results.json"
 fi
 if `echo $configName | grep '^seq-opt' > /dev/null`; then
-ref_results="$transportroot/../datasets/ipc$ipc/results/transport-strips-seq-opt-ipc$ipc-results.json"
+ref_results="$transportroot/datasets/ipc$ipc/results/transport-strips-seq-opt-ipc$ipc-results.json"
 fi
 if `echo $configName | grep '^tempo-sat' > /dev/null`; then
-ref_results="$transportroot/../datasets/ipc$ipc/results/transport-numeric-tempo-sat-ipc$ipc-results.json"
+ref_results="$transportroot/datasets/ipc$ipc/results/transport-numeric-tempo-sat-ipc$ipc-results.json"
 fi
 if `echo $configName | grep '^netben-opt' > /dev/null`; then
-ref_results="$transportroot/../datasets/ipc$ipc/results/transport-numeric-netben-opt-ipc$ipc-results.json"
+ref_results="$transportroot/datasets/ipc$ipc/results/transport-numeric-netben-opt-ipc$ipc-results.json"
 fi
 
 if [ -z "$ref_results" ]; then

@@ -17,7 +17,7 @@
         <skipTests>false</skipTests>
         <skipITs>true</skipITs>
         <rootLevelDir>${project.basedir}/..</rootLevelDir>
-        <mainClass>com.oskopek.transport.benchmark.Benchmark</mainClass>
+        <mainClass>com.oskopek.transport.benchmark.Benchmarker</mainClass>
     </properties>
 
     <dependencies>
