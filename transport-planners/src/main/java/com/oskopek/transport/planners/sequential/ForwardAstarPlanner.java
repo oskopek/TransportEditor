@@ -25,7 +25,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Map<ProblemPlanningWrapper, Integer> fScore;
     private Map<ProblemPlanningWrapper, Integer> gScore;
     private Map<ProblemPlanningWrapper, Integer> hScore;
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
@@ -44,10 +43,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                 PlannerUtils.getUnfinishedPackages(s.getAllPackages())));
     }
 
-    private Integer getFScore(ImmutablePlanState state) {
-        return fScore.getOrDefault(state, Integer.MAX_VALUE);
-    }
-
     private Integer getGScore(ImmutablePlanState state) {
         return gScore.getOrDefault(state, Integer.MAX_VALUE);
     }
@@ -58,7 +53,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     void resetState() {
         hScore = new HashMap<>();
-        fScore = new HashMap<>();
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
@@ -71,7 +65,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         this.distanceMatrix.setValue(PlannerUtils.computeAPSP(problem.getRoadGraph()));
         ImmutablePlanState start = new ImmutablePlanState(domain, problem, Collections.emptyList());
         int startHScore = getHScore(start);
-        fScore.put(start, startHScore);
         entryMap.put(start, openSet.insert(startHScore, start));
         gScore.put(start, 0);
     }
@@ -137,7 +130,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     openSet.decreaseKey(neighborEntry,
                             neighborFScore); // TODO check if overwrites the correct state with shorter actions
                     gScore.put(neighbor, tentativeGScore);
-                    fScore.put(neighbor, neighborFScore);
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
