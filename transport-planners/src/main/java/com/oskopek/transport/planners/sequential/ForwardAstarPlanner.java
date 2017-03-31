@@ -26,11 +26,10 @@ public class ForwardAstarPlanner extends AbstractPlanner {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Map<ProblemPlanningWrapper, Integer> gScore;
-    private Map<ProblemPlanningWrapper, Integer> hScore;
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
     private Set<ProblemPlanningWrapper> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
-    private ObjectProperty<ArrayTable<String, String, Integer>> distanceMatrix = new SimpleObjectProperty<>();
+    private ArrayTable<String, String, Integer> distanceMatrix;
     private Plan bestPlan;
     private int bestPlanScore;
 
@@ -38,21 +37,15 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         setName(ForwardAstarPlanner.class.getSimpleName());
     }
 
-    private Integer getHScore(ImmutablePlanState state) {
-        return hScore.computeIfAbsent(state, s -> calculateHeuristic(s, getDistanceMatrix(),
-                PlannerUtils.getUnfinishedPackages(s.getAllPackages())));
+    private Integer getHScore(ImmutablePlanState s) {
+        return calculateHeuristic(s, distanceMatrix, PlannerUtils.getUnfinishedPackages(s.getAllPackages()));
     }
 
     private Integer getGScore(ImmutablePlanState state) {
         return gScore.getOrDefault(state, Integer.MAX_VALUE);
     }
 
-    public ArrayTable<String, String, Integer> getDistanceMatrix() {
-        return distanceMatrix.get();
-    }
-
     void resetState() {
-        hScore = new HashMap<>();
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
@@ -62,7 +55,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
     }
 
     void initialize(Domain domain, Problem problem) {
-        this.distanceMatrix.setValue(PlannerUtils.computeAPSP(problem.getRoadGraph()));
+        distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
         ImmutablePlanState start = new ImmutablePlanState(domain, problem, Collections.emptyList());
         int startHScore = getHScore(start);
         entryMap.put(start, openSet.insert(startHScore, start));
@@ -101,7 +94,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
             closedSet.add(new ProblemPlanningWrapper(current)); // TODO: Do we really need to allocate this here?
 
             Stream<Action> generatedActions = PlannerUtils.generateActions(current, current.getActions(),
-                    distanceMatrix.get(), PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
+                    distanceMatrix, PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 // Ignore the neighbor state which is already evaluated or invalid
                 Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction)
