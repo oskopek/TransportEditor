@@ -22,7 +22,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Map<ImmutablePlanState, Integer> gScore;
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
     private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
@@ -38,10 +37,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         return calculateHeuristic(s, distanceMatrix, PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
     }
 
-    private Integer getGScore(ImmutablePlanState state) {
-        return gScore.getOrDefault(state, Integer.MAX_VALUE);
-    }
-
     public ArrayTable<String, String, Integer> getDistanceMatrix() {
         return distanceMatrix;
     }
@@ -50,7 +45,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
-        gScore = new HashMap<>();
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
     }
@@ -60,7 +54,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         ImmutablePlanState start = new ImmutablePlanState(problem);
         int startHScore = getHScore(start);
         entryMap.put(start, openSet.insert(startHScore, start));
-        gScore.put(start, 0);
     }
 
     @Override
@@ -88,7 +81,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
             }
 
             if (shouldCancel()) {
-                logger.debug("Cancelling, returning best found plan so with score: {}.", bestPlanScore);
+                logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
 
@@ -104,15 +97,14 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     ImmutablePlanState neighbor = maybeNeighbor.get();
 
                     // The distance from start to a neighbor
-                    int tentativeGScore = getGScore(current) + generatedAction.getDuration().getCost();
+                    int tentativeGScore = neighbor.getGScore();
                     int neighborFScore = tentativeGScore + getHScore(neighbor);
-                    int neighborGScore = getGScore(neighbor);
 
                     Heap.Entry<Integer, ImmutablePlanState> neighborEntry = entryMap.get(neighbor);
                     if (neighborEntry == null) {
                         neighborEntry = openSet.insert(neighborFScore, neighbor);
                         entryMap.put(neighbor, neighborEntry);
-                    } else if (tentativeGScore >= neighborGScore) {
+                    } else if (tentativeGScore >= neighborEntry.getValue().getGScore()) {
 //                        if (tentativeGScore > neighborGScore) {
 //                             TODO: P22 nonopt, p03 nonopt, p04
 //                            logger.debug("Try not to generate these plans");
@@ -123,7 +115,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     // this path is the best until now
                     openSet.decreaseKey(neighborEntry,
                             neighborFScore); // TODO check if overwrites the correct state with shorter actions
-                    gScore.put(neighbor, tentativeGScore);
                 }
             });
             if (closedSet.size() % 100_000 == 0) {

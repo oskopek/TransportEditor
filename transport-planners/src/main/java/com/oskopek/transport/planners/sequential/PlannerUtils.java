@@ -1,6 +1,7 @@
 package com.oskopek.transport.planners.sequential;
 
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Lists;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.domain.action.Drive;
@@ -79,7 +80,7 @@ public final class PlannerUtils {
             }
         } else {
             Map<String, Set<String>> vehicleDroppedAfterLastMove = PlannerUtils
-                    .getPackagesDroppedAfterLastMoveMap(state.getProblem().getVehicleMap().size(), state.getAllActionsInList());
+                    .getPackagesDroppedAfterLastMoveMap(vehicles.size(), state.getAllActionsInList());
             packageMap.keySet().forEach(location -> {
                 Set<Package> packages = packageMap.get(location);
                 Set<Vehicle> vehiclesAtLoc = vehicleMap.get(location);
@@ -133,13 +134,14 @@ public final class PlannerUtils {
                 .filter(a -> !(a instanceof Drop)).map(a -> (Vehicle) a.getWho())
                 .map(v -> state.getProblem().getVehicle(v.getName()));
 
+        List<Action> reversedActions = Lists.newArrayList(state.getAllActionsReversed());
         if (lastVehicleAndNotDrop.isPresent()) { // continue driving if driving
             Vehicle vehicle = lastVehicleAndNotDrop.get();
-            PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, state.getAllActionsReversed())
+            PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
                     .forEach(generated::add);
         } else {
             for (Vehicle vehicle : vehicles) {
-                PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, state.getAllActionsReversed())
+                PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
                         .forEach(generated::add);
             }
         }
@@ -147,12 +149,12 @@ public final class PlannerUtils {
     }
 
     public static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
-            ArrayTable<String, String, Integer> distanceMatrix, Iterator<Action> reversedActions) {
+            ArrayTable<String, String, Integer> distanceMatrix, Iterable<Action> reversedActions) {
         Stream.Builder<Drive> vehicleActions = Stream.builder();
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {
             Location target = graph.getLocation(edge.getTargetNode().getId());
-            if (PlannerUtils.doesShorterPathExist(vehicle, target, reversedActions, distanceMatrix)) {
+            if (PlannerUtils.doesShorterPathExist(vehicle, target, reversedActions.iterator(), distanceMatrix)) {
                 continue;
             }
             vehicleActions.accept(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
@@ -246,18 +248,20 @@ public final class PlannerUtils {
     }
 
 
-    public static boolean doesShorterPathExist(Vehicle vehicle, Location target, Iterator<Action> reversedActions,
+    public static boolean doesShorterPathExist(Vehicle vehicle, Location target, Iterator<Action> reversedActionsIterator,
             ArrayTable<String, String, Integer> distanceMatrix) {
-        if (!reversedActions.hasNext()) {
+
+        if (!reversedActionsIterator.hasNext()) {
             return false;
-        } // TODO: memoize
+        }
 
         Drive lastDrive = null;
         int lengthOfPath = 0;
         Location sourceOfPreviousDrives;
 
-        while (reversedActions.hasNext()) {
-            Action plannedAction = reversedActions.next();
+
+        while (reversedActionsIterator.hasNext()) {
+            Action plannedAction = reversedActionsIterator.next();
             if (!plannedAction.getWho().getName().equals(vehicle.getName())) {
                 continue;
             }
@@ -275,7 +279,7 @@ public final class PlannerUtils {
             sourceOfPreviousDrives = lastDrive.getWhere();
         }
 
-        return distanceMatrix.get(sourceOfPreviousDrives.getName(), target.getName()) <= lengthOfPath;
+        return distanceMatrix.get(sourceOfPreviousDrives.getName(), target.getName()) < lengthOfPath;
     }
 
     public static int calculateSumOfDistancesToPackageTargets(Collection<Package> packageList,

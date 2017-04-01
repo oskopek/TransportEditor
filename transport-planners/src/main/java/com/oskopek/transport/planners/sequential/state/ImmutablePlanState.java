@@ -5,6 +5,7 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.state.PlanState;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
@@ -17,7 +18,7 @@ import java.util.*;
  */
 public class ImmutablePlanState {
 
-    private final Action lastAction; // TODO: non sequential domains?
+    private final Action action; // TODO: non sequential domains?
     private final ImmutablePlanState lastState;
     private final int totalTime;
 
@@ -27,7 +28,7 @@ public class ImmutablePlanState {
     public ImmutablePlanState(Problem problem) {
         this.problem = problem;
         this.lastState = null;
-        this.lastAction = null;
+        this.action = null;
         this.totalTime = 0;
     }
 
@@ -36,13 +37,17 @@ public class ImmutablePlanState {
      *
      * @param problem the problem
      * @param lastState the last state
-     * @param lastAction the last action
+     * @param action the last action
      */
-    public ImmutablePlanState(Problem problem, ImmutablePlanState lastState, Action lastAction) {
+    public ImmutablePlanState(Problem problem, ImmutablePlanState lastState, Action action) {
         this.problem = problem;
         this.lastState = lastState;
-        this.lastAction = lastAction;
-        totalTime = lastState.totalTime + lastAction.getDuration().getCost();
+        this.action = action;
+        totalTime = lastState.totalTime + action.getDuration().getCost();
+    }
+
+    public int getGScore() {
+        return totalTime;
     }
 
     public Problem getProblem() {
@@ -158,38 +163,8 @@ public class ImmutablePlanState {
         if (hashCodeDuringPlanning(problem) != hashCodeDuringPlanning(other)) {
             return false;
         }
-        Map<String, Vehicle> otherVehicleMap = other.getVehicleMap();
-
-        for (Vehicle vehicle : problem.getVehicleMap().values()) {
-            String vehicleName = vehicle.getName();
-            Vehicle otherVehicle = otherVehicleMap.get(vehicleName);
-            if (otherVehicle == null || !otherVehicle.getLocation().getName().equals(vehicle.getLocation().getName())) {
-                return false;
-            }
-
-            Collection<Package> packages = vehicle.getPackageList();
-            Set<String> pkgs = new HashSet<>(packages.size());
-            for (Package pkg : packages) {
-                pkgs.add(pkg.getName());
-            }
-            for (Package pkg : otherVehicle.getPackageList()) {
-                if (!pkgs.remove(pkg.getName())) {
-                    return false;
-                }
-            }
-            if (!pkgs.isEmpty()) {
-                return false;
-            }
-        }
-
-        Map<String, Package> otherPackageMap = other.getPackageMap();
-        for (Package pkg : problem.getPackageMap().values()) {
-            Package otherPkg = otherPackageMap.get(pkg.getName());
-            if (otherPkg == null || !Objects.equals(pkg.getLocation(), otherPkg.getLocation())) {
-                return false;
-            }
-        }
-        return true;
+        return new EqualsBuilder().append(problem.getAllPackages(), other.getAllPackages())
+                .append(problem.getAllVehicles(), other.getAllVehicles()).isEquals();
     }
 
     @Override
@@ -239,20 +214,20 @@ public class ImmutablePlanState {
 
         private ImmutablePlanState current;
 
-        public ReversedActionIterator(ImmutablePlanState begin) {
+        ReversedActionIterator(ImmutablePlanState begin) {
             current = begin;
         }
 
         @Override
         public boolean hasNext() {
-            return current.lastAction != null;
+            return current.lastState != null;
         }
 
         @Override
         public Action next() {
-            Action popped = current.lastAction;
+            Action retVal = current.action;
             current = current.lastState;
-            return popped;
+            return retVal;
         }
     }
 
