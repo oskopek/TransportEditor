@@ -200,7 +200,7 @@ public final class PlannerUtils {
                         capacities.add(--lastCapacity);
                         if (packagesUntouchedSince.containsKey(action.getWhat().getName())) {
                             if (!capacities.subList(packagesUntouchedSince.get(action.getWhat().getName()), index).contains(0)) {
-                                System.out.println(action);
+//                                System.out.println(action);
                                 return true;
                             }
                         }

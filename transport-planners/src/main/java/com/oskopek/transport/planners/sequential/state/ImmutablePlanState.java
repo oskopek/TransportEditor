@@ -174,8 +174,8 @@ public class ImmutablePlanState {
         if (hashCode() != other.hashCode()) {
             return false;
         }
-        return new EqualsBuilder().append(problem.getAllPackages(), other.problem.getAllPackages())
-                .append(problem.getAllVehicles(), other.problem.getAllVehicles()).isEquals();
+        return problem.getAllPackages().equals(other.problem.getAllPackages()) &&
+                problem.getAllVehicles().equals(other.problem.getAllVehicles());
     }
 
     @Override
