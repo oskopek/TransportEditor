@@ -5,7 +5,6 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.state.PlanState;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
@@ -51,6 +50,11 @@ public class ImmutablePlanState {
         totalTime = lastState.totalTime + action.getDuration().getCost();
     }
 
+    /**
+     * Get the action.
+     *
+     * @return the action that led to this state
+     */
     public Action getAction() {
         return action;
     }
@@ -174,8 +178,8 @@ public class ImmutablePlanState {
         if (hashCode() != other.hashCode()) {
             return false;
         }
-        return problem.getAllPackages().equals(other.problem.getAllPackages()) &&
-                problem.getAllVehicles().equals(other.problem.getAllVehicles());
+        return problem.getAllPackages().equals(other.problem.getAllPackages())
+                && problem.getAllVehicles().equals(other.problem.getAllVehicles());
     }
 
     @Override

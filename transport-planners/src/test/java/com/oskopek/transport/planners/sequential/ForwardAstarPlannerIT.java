@@ -38,7 +38,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         p02Problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p02SeqProblem.pddl"));
         p03Problem = new DefaultProblemIO(domain).parse(TestUtils.getPersistenceTestFile("p03SeqProblem.pddl"));
         plan = new SequentialPlanIO(domain, problem).parse(TestUtils.getPersistenceTestFile("p01SeqPlan.val"));
-        p02Plan = new SequentialPlanIO(domain, p02Problem).parse(TestUtils.getPersistenceTestFile("p02SeqPlan.val"));
+        p02Plan = new SequentialPlanIO(domain, p02Problem).parse(
+                TestUtils.getPersistenceTestFile("p02SeqPlan.val"));
 
         List<Action> actions = new ArrayList<>(plan.getActions());
         Action action0 = actions.remove(0);
@@ -72,7 +73,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         assertThat(Stream.ofAll(plan.getTemporalPlanActions()).last().getEndTimestamp())
                 .isEqualTo(Stream.ofAll(p02Plan.getTemporalPlanActions()).last().getEndTimestamp());
 //        ForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
-        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p02Problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p02Problem.getAllVehicles(),
+                plan.getActions())).isFalse();
     }
 
     @Test
@@ -80,7 +82,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
         assertThat(plan).isNotNull();
-        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p03Problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p03Problem.getAllVehicles(),
+                plan.getActions())).isFalse();
         assertThat(plan.getTemporalPlanActions()).last().hasFieldOrPropertyWithValue("endTimestamp", 369);
     }
 
@@ -104,7 +107,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
 
     @Test
     public void simplePickupDrop() throws Exception {
-        SequentialPlan plan = new SequentialPlanIO(domain, p03Problem).parse(IOUtils.concatReadAllLines(getClass().getResourceAsStream("simpleDropPickup.val")));
+        SequentialPlan plan = new SequentialPlanIO(domain, p03Problem).parse(IOUtils.concatReadAllLines(getClass()
+                    .getResourceAsStream("simpleDropPickup.val")));
         assertThat(PlannerUtils.needlessDropAndPickupOccurred(p03Problem.getAllVehicles(), plan.getActions())).isTrue();
     }
 

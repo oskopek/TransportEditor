@@ -84,13 +84,10 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
         if (this == o) {
             return true;
         }
-
         if (!(o instanceof Package)) {
             return false;
         }
-
         Package aPackage = (Package) o;
-
         return new EqualsBuilder().appendSuper(super.equals(o)).append(target, aPackage.target)
                 .append(size, aPackage.size).isEquals();
     }

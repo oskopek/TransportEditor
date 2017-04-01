@@ -75,7 +75,8 @@ public final class PlannerUtils {
                 for (Package pkg : packages) {
                     if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
                         PickUp nextAction = domain.buildPickUp(vehicle, location, pkg);
-                        if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(), state.getAllActionsInList(), nextAction)) {
+                        if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(),
+                                state.getAllActionsInList(), nextAction)) {
                             continue;
                         }
                         generated.accept(nextAction);
@@ -100,7 +101,8 @@ public final class PlannerUtils {
                         }
                         if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
                             PickUp nextAction = domain.buildPickUp(vehicle, location, pkg);
-                            if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(), state.getAllActionsInList(), nextAction)) {
+                            if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(),
+                                    state.getAllActionsInList(), nextAction)) {
                                 continue;
                             }
                             generated.accept(nextAction);
@@ -178,7 +180,8 @@ public final class PlannerUtils {
     }
 
     @Deprecated // Slow, replace
-    public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions, PickUp lastAction) {
+    public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions,
+            PickUp lastAction) {
         List<Action> actionsNew = Lists.newArrayList(actions);
         actionsNew.add(lastAction);
         return needlessDropAndPickupOccurred(vehicles, actionsNew);
@@ -199,7 +202,8 @@ public final class PlannerUtils {
                     } else if (action instanceof PickUp) {
                         capacities.add(--lastCapacity);
                         if (packagesUntouchedSince.containsKey(action.getWhat().getName())) {
-                            if (!capacities.subList(packagesUntouchedSince.get(action.getWhat().getName()), index).contains(0)) {
+                            if (!capacities.subList(packagesUntouchedSince.get(action.getWhat().getName()), index)
+                                    .contains(0)) {
 //                                System.out.println(action);
                                 return true;
                             }
