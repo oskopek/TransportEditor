@@ -68,7 +68,9 @@ public final class SequentialPlannerMain {
             problem = new DefaultProblemIO(domain).parse(IOUtils.concatReadAllLines(inputStream));
         }
 
+        Runtime runtime = Runtime.getRuntime();
         Plan plan = planner.startAndWait(domain, problem);
+        logger.debug("Mem used in kB: {}", runtime.maxMemory()/1024 - runtime.freeMemory()/1024);
         if (plan != null) {
             try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("out.val"))) {
                 writer.write(new SequentialPlanIO(domain, problem).serialize(plan));
@@ -77,6 +79,8 @@ public final class SequentialPlannerMain {
             logger.debug("Planner returned null plan.");
         }
         logger.debug("Written results, exiting.");
+
+        logger.debug("Mem used in kB: {}", runtime.maxMemory()/1024 - runtime.freeMemory()/1024);
     }
 
 }

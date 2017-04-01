@@ -102,7 +102,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
     @Test
     public void doesShorterPathExist() throws Exception {
         planner.resetState();
-        planner.initialize(domain, p02Problem);
+        planner.initialize(p02Problem);
         Vehicle truck1 = p02Problem.getVehicle("truck-1");
         Vehicle truck2 = p02Problem.getVehicle("truck-2");
         RoadGraph g = p02Problem.getRoadGraph();

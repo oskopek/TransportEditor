@@ -35,7 +35,7 @@ public class ForwardBFSPlanner extends AbstractPlanner {
         ArrayTable<String, String, Integer> distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
 
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
-        states.add(new ImmutablePlanState(domain, problem, Collections.emptyList()));
+        states.add(new ImmutablePlanState(problem, Collections.emptyList()));
 
         logger.debug("Starting planning...");
 
@@ -60,8 +60,8 @@ public class ForwardBFSPlanner extends AbstractPlanner {
             }
 
             Stream.Builder<ImmutablePlanState> generatedStates = Stream.builder();
-            Stream<Action> generatedActions = PlannerUtils.generateActions(state, state.getActions(),
-                    distanceMatrix, PlannerUtils.getUnfinishedPackages(state.getAllPackages()));
+            Stream<Action> generatedActions = PlannerUtils.generateActions(domain, state, distanceMatrix,
+                    PlannerUtils.getUnfinishedPackages(state.getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 Optional<ImmutablePlanState> maybeNewState = state.apply(generatedAction);
                 if (maybeNewState.isPresent()) {

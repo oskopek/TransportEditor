@@ -8,7 +8,6 @@ import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
-import com.oskopek.transport.planners.sequential.state.ProblemPlanningWrapper;
 import com.oskopek.transport.planners.AbstractPlanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,9 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Map<ProblemPlanningWrapper, Integer> gScore;
+    private Map<ImmutablePlanState, Integer> gScore;
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
-    private Set<ProblemPlanningWrapper> closedSet;
+    private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
     private ArrayTable<String, String, Integer> distanceMatrix;
     private Plan bestPlan;
@@ -56,9 +55,9 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         bestPlanScore = Integer.MAX_VALUE;
     }
 
-    void initialize(Domain domain, Problem problem) {
+    void initialize(Problem problem) {
         distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
-        ImmutablePlanState start = new ImmutablePlanState(domain, problem, Collections.emptyList());
+        ImmutablePlanState start = new ImmutablePlanState(problem, Collections.emptyList());
         int startHScore = getHScore(start);
         entryMap.put(start, openSet.insert(startHScore, start));
         gScore.put(start, 0);
@@ -68,7 +67,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
     public Optional<Plan> plan(Domain domain, Problem problem) {
         logger.debug("Initializing planning...");
         resetState();
-        initialize(domain, problem);
+        initialize(problem);
         logger.debug("Starting planning...");
 
         while (!entryMap.isEmpty()) {
@@ -93,10 +92,10 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                 return Optional.ofNullable(bestPlan);
             }
 
-            closedSet.add(new ProblemPlanningWrapper(current)); // TODO: Do we really need to allocate this here?
+            closedSet.add(current);
 
-            Stream<Action> generatedActions = PlannerUtils.generateActions(current, current.getActions(),
-                    distanceMatrix, PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
+            Stream<Action> generatedActions = PlannerUtils.generateActions(domain, current, distanceMatrix,
+                    PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 // Ignore the neighbor state which is already evaluated or invalid
                 Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction)
@@ -137,7 +136,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         return Optional.ofNullable(bestPlan);
     }
 
-    private static Integer calculateHeuristic(ProblemPlanningWrapper state,
+    private static Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
         return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages, state.getAllVehicles(),
                 distanceMatrix);

@@ -32,15 +32,15 @@ public final class PlannerUtils {
         // intentionally empty
     }
 
-    public static Stream<Action> generateActions(ImmutablePlanState state, List<Action> plannedActions,
+    public static Stream<Action> generateActions(Domain domain, ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Set<Package> packagesUnfinished) {
+        List<Action> plannedActions = state.getActions();
         if (PlannerUtils.hasCycle(plannedActions)) { // TODO: Convert to non-generation
             return Stream.empty();
         }
 
         Stream.Builder<Action> generated = Stream.builder();
         Collection<Vehicle> vehicles = state.getAllVehicles();
-        Domain domain = state.getDomain();
         RoadGraph graph = state.getRoadGraph();
         Map<Location, Set<Vehicle>> vehicleMap = PlannerUtils.computeVehicleMap(vehicles);
         Map<Location, Set<Package>> packageMap = PlannerUtils.computePackageMap(packagesUnfinished);
