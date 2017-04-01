@@ -3,6 +3,8 @@ package com.oskopek.transport.planners.sequential;
 import com.google.common.collect.Lists;
 import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.domain.action.Action;
+import com.oskopek.transport.model.domain.action.Drop;
+import com.oskopek.transport.model.domain.action.PickUp;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
@@ -17,8 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -62,26 +63,47 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         Plan plan = planner.startAndWait(domain, problem);
         ForwardBFSPlannerIT
                 .assertThatPlanIsEqualToAny(plan, ForwardAstarPlannerIT.plan, planEquivalent);
+        assertThat(needlessDropAndPickupOccured(problem.getAllVehicles(), plan.getActions())).isFalse();
     }
 
     @Test
-    @Ignore
     public void plansP02Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p02Problem);
         System.out.println(new SequentialPlanIO(domain, p02Problem).serialize(plan));
 
         assertThat(Stream.ofAll(plan.getTemporalPlanActions()).last().getEndTimestamp())
                 .isEqualTo(Stream.ofAll(p02Plan.getTemporalPlanActions()).last().getEndTimestamp());
-        ForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
+//        ForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
+        assertThat(needlessDropAndPickupOccured(p02Problem.getAllVehicles(), plan.getActions())).isFalse();
     }
 
     @Test
-    @Ignore
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
-//        aSequentialForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, ForwardAstarPlannerIT.plan,
-// planEquivalent);
+        assertThat(plan).isNotNull();
+        assertThat(needlessDropAndPickupOccured(p03Problem.getAllVehicles(), plan.getActions())).isFalse();
+    }
+
+    private static boolean needlessDropAndPickupOccured(Collection<Vehicle> vehicles, Iterable<Action> actions) {
+        for (Vehicle v : vehicles) {
+            Set<String> packagesUntouched = new HashSet<>();
+            for (Action action : actions) {
+                if (action.getWho().getName().equals(v.getName())) {
+                    if (action instanceof Drop) {
+                        packagesUntouched.add(action.getWhat().getName());
+                    }
+                    if (action instanceof PickUp) {
+                        if (packagesUntouched.contains(action.getWhat().getName())) {
+                            return true;
+                        }
+                    }
+                } else {
+                    packagesUntouched.remove(action.getWhat().getName());
+                }
+            }
+        }
+        return false;
     }
 
     @Test
