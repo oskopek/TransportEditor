@@ -51,6 +51,10 @@ public class ImmutablePlanState {
         totalTime = lastState.totalTime + action.getDuration().getCost();
     }
 
+    public Action getAction() {
+        return action;
+    }
+
     /**
      * Get the underlying problem instance.
      *

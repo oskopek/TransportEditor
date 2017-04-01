@@ -3,20 +3,18 @@ package com.oskopek.transport.planners.sequential;
 import com.google.common.collect.Lists;
 import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.domain.action.Action;
-import com.oskopek.transport.model.domain.action.Drop;
-import com.oskopek.transport.model.domain.action.PickUp;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.persistence.DefaultProblemIO;
+import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.tools.test.TestUtils;
 import javaslang.collection.Stream;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -63,7 +61,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         Plan plan = planner.startAndWait(domain, problem);
         ForwardBFSPlannerIT
                 .assertThatPlanIsEqualToAny(plan, ForwardAstarPlannerIT.plan, planEquivalent);
-        assertThat(needlessDropAndPickupOccured(problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(problem.getAllVehicles(), plan.getActions())).isFalse();
     }
 
     @Test
@@ -74,7 +72,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         assertThat(Stream.ofAll(plan.getTemporalPlanActions()).last().getEndTimestamp())
                 .isEqualTo(Stream.ofAll(p02Plan.getTemporalPlanActions()).last().getEndTimestamp());
 //        ForwardBFSPlannerIT.assertThatPlanIsEqualToAny(plan, p02Plan);
-        assertThat(needlessDropAndPickupOccured(p02Problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p02Problem.getAllVehicles(), plan.getActions())).isFalse();
     }
 
     @Test
@@ -82,29 +80,11 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));
         assertThat(plan).isNotNull();
-        assertThat(needlessDropAndPickupOccured(p03Problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p03Problem.getAllVehicles(), plan.getActions())).isFalse();
+        assertThat(plan.getTemporalPlanActions()).last().hasFieldOrPropertyWithValue("endTimestamp", 369);
     }
 
-    private static boolean needlessDropAndPickupOccured(Collection<Vehicle> vehicles, Iterable<Action> actions) {
-        for (Vehicle v : vehicles) {
-            Set<String> packagesUntouched = new HashSet<>();
-            for (Action action : actions) {
-                if (action.getWho().getName().equals(v.getName())) {
-                    if (action instanceof Drop) {
-                        packagesUntouched.add(action.getWhat().getName());
-                    }
-                    if (action instanceof PickUp) {
-                        if (packagesUntouched.contains(action.getWhat().getName())) {
-                            return true;
-                        }
-                    }
-                } else {
-                    packagesUntouched.remove(action.getWhat().getName());
-                }
-            }
-        }
-        return false;
-    }
+
 
     @Test
     public void calculateHeuristic() throws Exception {
@@ -120,6 +100,12 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
 
     @Test
     public void pickupWhereDropoff() throws Exception {
+    }
+
+    @Test
+    public void simplePickupDrop() throws Exception {
+        SequentialPlan plan = new SequentialPlanIO(domain, p03Problem).parse(IOUtils.concatReadAllLines(getClass().getResourceAsStream("simpleDropPickup.val")));
+        assertThat(PlannerUtils.needlessDropAndPickupOccurred(p03Problem.getAllVehicles(), plan.getActions())).isTrue();
     }
 
     @Test

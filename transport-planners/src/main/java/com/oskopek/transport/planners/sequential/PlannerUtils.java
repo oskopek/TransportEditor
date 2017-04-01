@@ -61,7 +61,7 @@ public final class PlannerUtils {
             }
         }
 
-        Optional<Action> lastAction = Optional.ofNullable(state.getAllActionsReversed().next());
+        Optional<Action> lastAction = Optional.ofNullable(state.getAction());
         // pick-up
         Optional<Vehicle> lastVehicleAndLastDrive = lastAction
                 .filter(a -> a instanceof Drive).map(a -> (Vehicle) a.getWho())
@@ -74,7 +74,11 @@ public final class PlannerUtils {
             if (packages != null) {
                 for (Package pkg : packages) {
                     if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
-                        generated.accept(domain.buildPickUp(vehicle, location, pkg));
+                        PickUp nextAction = domain.buildPickUp(vehicle, location, pkg);
+                        if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(), state.getAllActionsInList(), nextAction)) {
+                            continue;
+                        }
+                        generated.accept(nextAction);
                     }
                 }
             }
@@ -95,7 +99,11 @@ public final class PlannerUtils {
                             continue;
                         }
                         if (pkg.getSize().compareTo(vehicle.getCurCapacity()) <= 0) {
-                            generated.accept(domain.buildPickUp(vehicle, location, pkg));
+                            PickUp nextAction = domain.buildPickUp(vehicle, location, pkg);
+                            if (PlannerUtils.needlessDropAndPickupOccurred(state.getProblem().getAllVehicles(), state.getAllActionsInList(), nextAction)) {
+                                continue;
+                            }
+                            generated.accept(nextAction);
                         }
                     }
                 }
@@ -110,7 +118,7 @@ public final class PlannerUtils {
                 Location current = vehicle.getLocation();
                 for (Package pkg : vehicle.getPackageList()) {
                     Drop drop = domain.buildDrop(vehicle, current, pkg);
-                    if (PlannerUtils.pickupWhereDropoff(state, drop)) {
+                    if (PlannerUtils.droppedPackageWhereWePickedItUp(state, drop)) {
                         continue;
                     }
                     generated.accept(drop);
@@ -120,7 +128,7 @@ public final class PlannerUtils {
                     Location current = vehicle.getLocation();
                     for (Package pkg : vehicle.getPackageList()) {
                         Drop drop = domain.buildDrop(vehicle, current, pkg);
-                        if (PlannerUtils.pickupWhereDropoff(state, drop)) {
+                        if (PlannerUtils.droppedPackageWhereWePickedItUp(state, drop)) {
                             continue;
                         }
                         generated.accept(drop);
@@ -146,6 +154,67 @@ public final class PlannerUtils {
             }
         }
         return generated.build();
+    }
+
+    @Deprecated // doesn't work, use ...Occurred
+    public static boolean needlessDropAndPickup(Iterator<Action> reverseActions, Vehicle vehicle, Package pkg) {
+        Map<String, String> pickedUpBy = new HashMap<>(); // Package -> Vehicle
+        pickedUpBy.put(pkg.getName(), vehicle.getName());
+
+        while (reverseActions.hasNext()) {
+            Action action = reverseActions.next();
+            if (action instanceof PickUp) {
+                pickedUpBy.put(action.getWhat().getName(), action.getWho().getName());
+            } else if (action instanceof Drop) {
+                String packageName = action.getWhat().getName();
+                if (action.getWho().getName().equals(pickedUpBy.get(packageName))) {
+                    return true;
+                } else {
+                    pickedUpBy.remove(packageName);
+                }
+            }
+        }
+        return false;
+    }
+
+    @Deprecated // Slow, replace
+    public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions, PickUp lastAction) {
+        List<Action> actionsNew = Lists.newArrayList(actions);
+        actionsNew.add(lastAction);
+        return needlessDropAndPickupOccurred(vehicles, actionsNew);
+    }
+
+    @Deprecated // Slow, replace
+    public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions) {
+        for (Vehicle v : vehicles) {
+            Map<String, Integer> packagesUntouchedSince = new HashMap<>();
+            List<Integer> capacities = new ArrayList<>();
+            int index = 0;
+            int lastCapacity = v.getMaxCapacity().getCost();
+            for (Action action : actions) {
+                if (action.getWho().getName().equals(v.getName())) {
+                    if (action instanceof Drop) {
+                        capacities.add(++lastCapacity);
+                        packagesUntouchedSince.put(action.getWhat().getName(), index);
+                    } else if (action instanceof PickUp) {
+                        capacities.add(--lastCapacity);
+                        if (packagesUntouchedSince.containsKey(action.getWhat().getName())) {
+                            if (!capacities.subList(packagesUntouchedSince.get(action.getWhat().getName()), index).contains(0)) {
+                                System.out.println(action);
+                                return true;
+                            }
+                        }
+                    } else {
+                        capacities.add(lastCapacity);
+                    }
+                } else {
+                    capacities.add(lastCapacity);
+                    packagesUntouchedSince.remove(action.getWhat().getName());
+                }
+                index++;
+            }
+        }
+        return false;
     }
 
     public static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
@@ -338,7 +407,7 @@ public final class PlannerUtils {
         return unfinishedPackages;
     }
 
-    public static boolean pickupWhereDropoff(ImmutablePlanState state, Action newAction) {
+    public static boolean droppedPackageWhereWePickedItUp(ImmutablePlanState state, Drop newAction) {
         Map<String, Set<String>> pickedUpAt = new HashMap<>();
         for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext();) {
             Action a = it.next();
@@ -347,20 +416,16 @@ public final class PlannerUtils {
                         .add(a.getWhere().getName());
             }
         }
-        if (newAction instanceof PickUp) {
-            pickedUpAt.computeIfAbsent(newAction.getWhat().getName(), s -> new HashSet<>(2))
-                    .add(newAction.getWhere().getName());
-        } else if (newAction instanceof Drop) {
-            Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
-            if (pickedBySameCar != null && pickedBySameCar.contains(newAction.getWhere().getName())) {
-                return true;
-            }
-        }
 
+
+        Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
+        if (pickedBySameCar != null && pickedBySameCar.contains(newAction.getWhere().getName())) {
+            return true;
+        }
         for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext();) {
             Action a = it.next();
             if (a instanceof Drop) {
-                Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
+                pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
                 if (pickedBySameCar != null && pickedBySameCar.contains(newAction.getWhere().getName())) {
                     return true;
                 }
