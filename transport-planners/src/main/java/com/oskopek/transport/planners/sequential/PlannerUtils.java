@@ -34,14 +34,13 @@ public final class PlannerUtils {
 
     public static Stream<Action> generateActions(Domain domain, ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Set<Package> packagesUnfinished) {
-        List<Action> plannedActions = state.getActions();
-        if (PlannerUtils.hasCycle(plannedActions)) { // TODO: Convert to non-generation
+        if (PlannerUtils.hasCycle(state.getAllActionsReversed())) { // TODO: Convert to non-generation
             return Stream.empty();
         }
 
         Stream.Builder<Action> generated = Stream.builder();
-        Collection<Vehicle> vehicles = state.getAllVehicles();
-        RoadGraph graph = state.getRoadGraph();
+        Collection<Vehicle> vehicles = state.getProblem().getAllVehicles();
+        RoadGraph graph = state.getProblem().getRoadGraph();
         Map<Location, Set<Vehicle>> vehicleMap = PlannerUtils.computeVehicleMap(vehicles);
         Map<Location, Set<Package>> packageMap = PlannerUtils.computePackageMap(packagesUnfinished);
 
@@ -61,12 +60,11 @@ public final class PlannerUtils {
             }
         }
 
-        Optional<Action> lastAction = plannedActions.isEmpty() ? Optional.empty()
-                : Optional.of(plannedActions.get(plannedActions.size() - 1));
+        Optional<Action> lastAction = Optional.ofNullable(state.getAllActionsReversed().next());
         // pick-up
         Optional<Vehicle> lastVehicleAndLastDrive = lastAction
                 .filter(a -> a instanceof Drive).map(a -> (Vehicle) a.getWho())
-                .map(v -> state.getVehicle(v.getName()));
+                .map(v -> state.getProblem().getVehicle(v.getName()));
         if (lastVehicleAndLastDrive.isPresent()) { // only use active vehicle
             Vehicle vehicle = lastVehicleAndLastDrive.get();
             Location location = vehicle.getLocation();
@@ -81,7 +79,7 @@ public final class PlannerUtils {
             }
         } else {
             Map<String, Set<String>> vehicleDroppedAfterLastMove = PlannerUtils
-                    .getPackagesDroppedAfterLastMoveMap(state.getVehicleMap().size(), plannedActions);
+                    .getPackagesDroppedAfterLastMoveMap(state.getProblem().getVehicleMap().size(), state.getAllActionsInList());
             packageMap.keySet().forEach(location -> {
                 Set<Package> packages = packageMap.get(location);
                 Set<Vehicle> vehiclesAtLoc = vehicleMap.get(location);
@@ -111,7 +109,7 @@ public final class PlannerUtils {
                 Location current = vehicle.getLocation();
                 for (Package pkg : vehicle.getPackageList()) {
                     Drop drop = domain.buildDrop(vehicle, current, pkg);
-                    if (PlannerUtils.pickupWhereDropoff(plannedActions, drop)) {
+                    if (PlannerUtils.pickupWhereDropoff(state, drop)) {
                         continue;
                     }
                     generated.accept(drop);
@@ -121,7 +119,7 @@ public final class PlannerUtils {
                     Location current = vehicle.getLocation();
                     for (Package pkg : vehicle.getPackageList()) {
                         Drop drop = domain.buildDrop(vehicle, current, pkg);
-                        if (PlannerUtils.pickupWhereDropoff(plannedActions, drop)) {
+                        if (PlannerUtils.pickupWhereDropoff(state, drop)) {
                             continue;
                         }
                         generated.accept(drop);
@@ -133,15 +131,15 @@ public final class PlannerUtils {
         // drive
         Optional<Vehicle> lastVehicleAndNotDrop = lastAction
                 .filter(a -> !(a instanceof Drop)).map(a -> (Vehicle) a.getWho())
-                .map(v -> state.getVehicle(v.getName()));
+                .map(v -> state.getProblem().getVehicle(v.getName()));
 
         if (lastVehicleAndNotDrop.isPresent()) { // continue driving if driving
             Vehicle vehicle = lastVehicleAndNotDrop.get();
-            PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, plannedActions)
+            PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, state.getAllActionsReversed())
                     .forEach(generated::add);
         } else {
             for (Vehicle vehicle : vehicles) {
-                PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, plannedActions)
+                PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, state.getAllActionsReversed())
                         .forEach(generated::add);
             }
         }
@@ -149,12 +147,12 @@ public final class PlannerUtils {
     }
 
     public static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
-            ArrayTable<String, String, Integer> distanceMatrix, List<Action> plannedActions) {
+            ArrayTable<String, String, Integer> distanceMatrix, Iterator<Action> reversedActions) {
         Stream.Builder<Drive> vehicleActions = Stream.builder();
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {
             Location target = graph.getLocation(edge.getTargetNode().getId());
-            if (PlannerUtils.doesShorterPathExist(vehicle, target, plannedActions, distanceMatrix)) {
+            if (PlannerUtils.doesShorterPathExist(vehicle, target, reversedActions, distanceMatrix)) {
                 continue;
             }
             vehicleActions.accept(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
@@ -248,10 +246,9 @@ public final class PlannerUtils {
     }
 
 
-    public static boolean doesShorterPathExist(Vehicle vehicle, Location target, List<Action> plannedActions,
+    public static boolean doesShorterPathExist(Vehicle vehicle, Location target, Iterator<Action> reversedActions,
             ArrayTable<String, String, Integer> distanceMatrix) {
-        // TODO: this is the bottleneck now + GC (List$Cons)
-        if (plannedActions.isEmpty()) {
+        if (!reversedActions.hasNext()) {
             return false;
         } // TODO: memoize
 
@@ -259,8 +256,8 @@ public final class PlannerUtils {
         int lengthOfPath = 0;
         Location sourceOfPreviousDrives;
 
-        for (int i = plannedActions.size() - 1; i >= 0; i--) {
-            Action plannedAction = plannedActions.get(i);
+        while (reversedActions.hasNext()) {
+            Action plannedAction = reversedActions.next();
             if (!plannedAction.getWho().getName().equals(vehicle.getName())) {
                 continue;
             }
@@ -300,18 +297,20 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
-    public static boolean hasCycle(List<Action> plannedActions) {
-        if (plannedActions.size() < 2) {
+    public static boolean hasCycle(Iterator<Action> reversedActions) {
+        Set<String> drives = new HashSet<>();
+        if (!reversedActions.hasNext()) {
             return false;
         }
-        Set<String> drives = new HashSet<>();
-        int lastActionIndex = plannedActions.size() - 1;
-        Action lastAction = plannedActions.get(lastActionIndex);
+        Action lastAction = reversedActions.next();
+        if (!reversedActions.hasNext()) { // has to have at least two actions
+            return false;
+        }
         if (lastAction instanceof Drive) { // add last target
             drives.add(lastAction.getWhat().getName());
         }
-        for (int index = lastActionIndex; index >= 0; index--) {
-            Action plannedAction = plannedActions.get(index);
+        while (reversedActions.hasNext()) {
+            Action plannedAction = reversedActions.next();
             if (plannedAction instanceof Drive) {
                 if (!drives.add(plannedAction.getWhere().getName())) {
                     return true;
@@ -335,9 +334,10 @@ public final class PlannerUtils {
         return unfinishedPackages;
     }
 
-    public static boolean pickupWhereDropoff(List<Action> plannedActions, Action newAction) {
-        Map<String, Set<String>> pickedUpAt = new HashMap<>(plannedActions.size() + 1);
-        for (Action a : plannedActions) {
+    public static boolean pickupWhereDropoff(ImmutablePlanState state, Action newAction) {
+        Map<String, Set<String>> pickedUpAt = new HashMap<>();
+        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext(); ) {
+            Action a = it.next();
             if (a instanceof PickUp) {
                 pickedUpAt.computeIfAbsent(a.getWhat().getName(), s -> new HashSet<>(2))
                         .add(a.getWhere().getName());
@@ -353,7 +353,8 @@ public final class PlannerUtils {
             }
         }
 
-        for (Action a : plannedActions) {
+        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext(); ) {
+            Action a = it.next();
             if (a instanceof Drop) {
                 Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
                 if (pickedBySameCar != null && pickedBySameCar.contains(newAction.getWhere().getName())) {

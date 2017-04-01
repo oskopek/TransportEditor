@@ -35,7 +35,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
     }
 
     private Integer getHScore(ImmutablePlanState s) {
-        return calculateHeuristic(s, distanceMatrix, PlannerUtils.getUnfinishedPackages(s.getAllPackages()));
+        return calculateHeuristic(s, distanceMatrix, PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
     }
 
     private Integer getGScore(ImmutablePlanState state) {
@@ -57,7 +57,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     void initialize(Problem problem) {
         distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
-        ImmutablePlanState start = new ImmutablePlanState(problem, Collections.emptyList());
+        ImmutablePlanState start = new ImmutablePlanState(problem);
         int startHScore = getHScore(start);
         entryMap.put(start, openSet.insert(startHScore, start));
         gScore.put(start, 0);
@@ -82,9 +82,9 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                 if (bestPlanScore > current.getTotalTime()) {
                     logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
                     bestPlanScore = current.getTotalTime();
-                    bestPlan = new SequentialPlan(current.getActions());
+                    bestPlan = new SequentialPlan(current.getAllActionsInList());
                 }
-                return Optional.of(new SequentialPlan(current.getActions())); // TODO: remove me?
+                return Optional.of(new SequentialPlan(current.getAllActionsInList())); // TODO: remove me?
             }
 
             if (shouldCancel()) {
@@ -95,7 +95,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
             closedSet.add(current);
 
             Stream<Action> generatedActions = PlannerUtils.generateActions(domain, current, distanceMatrix,
-                    PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
+                    PlannerUtils.getUnfinishedPackages(current.getProblem().getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 // Ignore the neighbor state which is already evaluated or invalid
                 Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction)
@@ -129,7 +129,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
             if (closedSet.size() % 100_000 == 0) {
                 logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
                         entryMap.size());
-                logger.debug("Current plan depth: {}", current.getActions().size());
             }
         }
 
@@ -138,7 +137,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private static Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages, state.getAllVehicles(),
+        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages, state.getProblem().getAllVehicles(),
                 distanceMatrix);
     }
 

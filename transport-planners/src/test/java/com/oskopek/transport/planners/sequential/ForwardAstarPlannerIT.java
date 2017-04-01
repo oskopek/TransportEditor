@@ -111,9 +111,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
         planPart.add(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
-        assertThat(PlannerUtils
-                .doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart, planner.getDistanceMatrix()))
-                .isTrue();
+        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
+                planner.getDistanceMatrix())).isTrue();
     }
 
     @Test

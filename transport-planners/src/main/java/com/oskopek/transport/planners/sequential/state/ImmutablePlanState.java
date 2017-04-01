@@ -1,65 +1,52 @@
 package com.oskopek.transport.planners.sequential.state;
 
+import com.google.common.collect.Lists;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import com.oskopek.transport.model.state.PlanState;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 
 /**
- * An immutable {@link PlanState} implementation used for planning.
+ * An immutable {@link PlanState} variant used for planning.
  * <p>
  * Wrapper of a problem used in planning: does not use standard hash code and equals,
  * but assumes the graph (and other things, like the action object names) do not change and does not compare them.
  */
-public class ImmutablePlanState implements Problem {
+public class ImmutablePlanState {
 
-    private final List<Action> actions; // TODO: non sequential domains?
+    private final Action lastAction; // TODO: non sequential domains?
+    private final ImmutablePlanState lastState;
     private final int totalTime;
 
     private final Problem problem; // TODO: do not store the entire problem?
     private int planningHashCode;
 
+    public ImmutablePlanState(Problem problem) {
+        this.problem = problem;
+        this.lastState = null;
+        this.lastAction = null;
+        this.totalTime = 0;
+    }
+
     /**
      * Default constructor.
      *
      * @param problem the problem
-     * @param actions the plan actions
+     * @param lastState the last state
+     * @param lastAction the last action
      */
-    public ImmutablePlanState(Problem problem, List<Action> actions) {
+    public ImmutablePlanState(Problem problem, ImmutablePlanState lastState, Action lastAction) {
         this.problem = problem;
-        this.actions = actions;
-        totalTime = actions.stream().mapToInt(a -> a.getDuration().getCost()).sum();
+        this.lastState = lastState;
+        this.lastAction = lastAction;
+        totalTime = lastState.totalTime + lastAction.getDuration().getCost();
     }
 
-    /**
-     * Constructor for updating the problem and appending an action.
-     *
-     * @param oldState the old state to copy all properties from
-     * @param newProblem the new problem
-     * @param addedAction the added action
-     */
-    public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem, Action addedAction) {
-        this.problem = newProblem;
-        this.actions = new ArrayList<>(oldState.actions);
-        this.actions.add(addedAction);
-        totalTime = oldState.totalTime + addedAction.getDuration().getCost();
-    }
-
-    /**
-     * Constructor for updating the problem.
-     *
-     * @param oldState the old state to copy from
-     * @param newProblem the new problem
-     */
-    public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem) {
-        this.problem = newProblem;
-        this.actions = oldState.actions;
-        totalTime = oldState.totalTime;
+    public Problem getProblem() {
+        return problem;
     }
 
     /**
@@ -76,8 +63,17 @@ public class ImmutablePlanState implements Problem {
      *
      * @return the actions
      */
-    public List<Action> getActions() {
-        return actions;
+    public List<Action> getAllActionsInList() {
+        return Lists.reverse(Lists.newArrayList(getAllActionsReversed()));
+    }
+
+    /**
+     * Get the actions.
+     *
+     * @return the actions
+     */
+    public Iterator<Action> getAllActionsReversed() {
+        return new ReversedActionIterator(this);
     }
 
     /**
@@ -87,7 +83,8 @@ public class ImmutablePlanState implements Problem {
      * @return the updated state or empty if the preconditions or the effects were not valid in the resulting state
      */
     public Optional<ImmutablePlanState> apply(Action action) {
-        return applyPreconditions(action).flatMap(t -> t.applyEffects(action));
+        return applyPreconditions(problem, action).flatMap(p -> applyEffects(p, action))
+                .map(p -> new ImmutablePlanState(p, this, action));
     }
 
     /**
@@ -96,11 +93,11 @@ public class ImmutablePlanState implements Problem {
      * @param action the action's preconditions to apply
      * @return the updated state or empty if the preconditions were not valid before application
      */
-    private Optional<ImmutablePlanState> applyPreconditions(Action action) {
-        if (!action.arePreconditionsValid(getProblem())) {
+    private static Optional<Problem> applyPreconditions(Problem problem, Action action) {
+        if (!action.arePreconditionsValid(problem)) {
             return Optional.empty();
         }
-        return Optional.of(new ImmutablePlanState(this, action.applyPreconditions(getProblem())));
+        return Optional.of(action.applyPreconditions(problem));
     }
 
     /**
@@ -109,67 +106,12 @@ public class ImmutablePlanState implements Problem {
      * @param action the action's effects to apply
      * @return the updated state or empty if the effects were not valid after application
      */
-    private Optional<ImmutablePlanState> applyEffects(Action action) {
-        Problem newProblem = action.applyEffects(getProblem());
+    private static Optional<Problem> applyEffects(Problem problem, Action action) {
+        Problem newProblem = action.applyEffects(problem);
         if (!action.areEffectsValid(newProblem)) {
             return Optional.empty();
         }
-        return Optional.of(new ImmutablePlanState(this, newProblem, action));
-    }
-
-    @Override
-    public ImmutablePlanState putVehicle(String name, Vehicle vehicle) {
-        return new ImmutablePlanState(getProblem().putVehicle(name, vehicle), actions);
-    }
-
-    @Override
-    public ImmutablePlanState putPackage(String name, com.oskopek.transport.model.problem.Package pkg) {
-        return new ImmutablePlanState(getProblem().putPackage(name, pkg), actions);
-    }
-
-    @Override
-    public ImmutablePlanState changeActionObjectName(ActionObject actionObject, String newName) {
-        return new ImmutablePlanState(getProblem().changeActionObjectName(actionObject, newName), actions);
-    }
-
-    @Override
-    public ImmutablePlanState putLocation(String name, Location location) {
-        return new ImmutablePlanState(getProblem().putLocation(name, location), actions);
-    }
-
-    @Override
-    public ImmutablePlanState removeVehicle(String name) {
-        return new ImmutablePlanState(getProblem().removeVehicle(name), actions);
-    }
-
-    @Override
-    public ImmutablePlanState removePackage(String name) {
-        return new ImmutablePlanState(getProblem().removePackage(name), actions);
-    }
-
-    @Override
-    public ImmutablePlanState removeLocation(String name) {
-        return new ImmutablePlanState(getProblem().removeLocation(name), actions);
-    }
-
-    @Override
-    public ImmutablePlanState putName(String newName) {
-        return new ImmutablePlanState(getProblem().putName(newName), actions);
-    }
-
-    @Override
-    public VisualRoadGraph getVisualRoadGraph() {
-        return problem.getVisualRoadGraph();
-    }
-
-    @Override
-    public String getName() {
-        return problem.getName();
-    }
-
-    @Override
-    public RoadGraph getRoadGraph() {
-        return problem.getRoadGraph();
+        return Optional.of(newProblem);
     }
 
     /**
@@ -178,83 +120,18 @@ public class ImmutablePlanState implements Problem {
      * @return true iff this state is a goal state, i.e. if all packages and vehicles are at their targets, if specified
      */
     public boolean isGoalState() { // TODO: merge this into the PlanState interface
-        for (com.oskopek.transport.model.problem.Package p : getAllPackages()) {
+        for (Package p : getProblem().getAllPackages()) {
             if (!p.getTarget().equals(p.getLocation())) {
                 return false;
             }
         }
-        for (Vehicle v : getAllVehicles()) {
+        for (Vehicle v : getProblem().getAllVehicles()) {
             Location target = v.getTarget();
             if (target != null && !target.equals(v.getLocation())) {
                 return false;
             }
         }
         return true;
-    }
-
-    /**
-     * Utility method for getting a vehicle by its name.
-     *
-     * @param name the name of the vehicle to get
-     * @return the vehicle
-     * @throws IllegalArgumentException if a vehicle with that name wasn't found
-     */
-    public Vehicle getVehicleSafe(String name) {
-        Vehicle vehicle = getVehicle(name);
-        if (vehicle == null) {
-            throw new IllegalArgumentException("Could not find vehicle with name \"" + name + "\".");
-        }
-        return vehicle;
-    }
-
-    /**
-     * Get the internal problem that is wrapped.
-     *
-     * @return the internal problem
-     */
-    protected Problem getProblem() {
-        return problem;
-    }
-
-    @Override
-    public Vehicle getVehicle(String name) {
-        return problem.getVehicle(name);
-    }
-
-
-    @Override
-    public Package getPackage(String name) {
-        return problem.getPackage(name);
-    }
-
-    @Override
-    public Locatable getLocatable(String name) {
-        return problem.getLocatable(name);
-    }
-
-    @Override
-    public ActionObject getActionObject(String name) {
-        return problem.getActionObject(name);
-    }
-
-    @Override
-    public Collection<Vehicle> getAllVehicles() {
-        return problem.getAllVehicles();
-    }
-
-    @Override
-    public Map<String, Vehicle> getVehicleMap() {
-        return problem.getVehicleMap();
-    }
-
-    @Override
-    public Collection<Package> getAllPackages() {
-        return problem.getAllPackages();
-    }
-
-    @Override
-    public Map<String, Package> getPackageMap() {
-        return problem.getPackageMap();
     }
 
     @Override
@@ -356,6 +233,27 @@ public class ImmutablePlanState implements Problem {
     private static void packageHashCodeDuringPlanning(HashCodeBuilder builder, Package pkg, String location) {
         builder.append(pkg.getName());
         builder.append(location);
+    }
+
+    private static final class ReversedActionIterator implements Iterator<Action> {
+
+        private ImmutablePlanState current;
+
+        public ReversedActionIterator(ImmutablePlanState begin) {
+            current = begin;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current.lastAction != null;
+        }
+
+        @Override
+        public Action next() {
+            Action popped = current.lastAction;
+            current = current.lastState;
+            return popped;
+        }
     }
 
 }
