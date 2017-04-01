@@ -156,23 +156,22 @@ public class ImmutablePlanState {
             return false;
         }
         ImmutablePlanState that = (ImmutablePlanState) o;
-        return equalsDuringPlanning(problem, that.problem);
+        return equalsDuringPlanning(that);
     }
 
     /**
      * Internal implementation of a fast assumption-dependent equals. For example, totally omits the graph
      * from comparison.
      *
-     * @param problem the problem to compare
-     * @param other the other problem to compare
+     * @param other the other state to compare
      * @return true iff they are equal, assuming all assumptions hold
      */
-    private static boolean equalsDuringPlanning(Problem problem, Problem other) {
-        if (hashCodeDuringPlanning(problem) != hashCodeDuringPlanning(other)) {
+    private boolean equalsDuringPlanning(ImmutablePlanState other) {
+        if (hashCode() != other.hashCode()) {
             return false;
         }
-        return new EqualsBuilder().append(problem.getAllPackages(), other.getAllPackages())
-                .append(problem.getAllVehicles(), other.getAllVehicles()).isEquals();
+        return new EqualsBuilder().append(problem.getAllPackages(), other.problem.getAllPackages())
+                .append(problem.getAllVehicles(), other.problem.getAllVehicles()).isEquals();
     }
 
     @Override
