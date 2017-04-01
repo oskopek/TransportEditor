@@ -67,12 +67,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
-//            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current
-// .getActions().toJavaList())));
-//            logger.debug("F: {}, G: {}, H: {}", getFScore(current), getGScore(current), getHScore(current));
             if (current.isGoalState()) {
-//                logger.debug("Found goal state! Explored {} states. Left out {} states.", closedSet.size(),
-//                        openSet.getKeys().size());
                 if (bestPlanScore > current.getTotalTime()) {
                     logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
                     bestPlanScore = current.getTotalTime();

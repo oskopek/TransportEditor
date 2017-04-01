@@ -130,7 +130,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
     /**
      * Set the default CSS stylesheet and various rendering properties.
      */
-    public void setDefaultStyling() {
+    public synchronized void setDefaultStyling() {
         String style;
         try {
             style = String.join("\n", IOUtils.concatReadAllLines(getClass().getResourceAsStream("stylesheet.css")));
@@ -141,6 +141,10 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
         getAllLocations().forEach(this::setPetrolStationStyle);
+        createNewSpriteManager();
+    }
+
+    private synchronized void createNewSpriteManager() {
         spriteManager = new SpriteManager(this);
     }
 
@@ -156,7 +160,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         spriteManager.sprites().forEach(s -> spriteNames.add(s.getId()));
         spriteNames.forEach(s -> spriteManager.removeSprite(s));
         spriteManager.detach();
-        setDefaultStyling(); // TODO: Hack
+        createNewSpriteManager();
     }
 
     /**
