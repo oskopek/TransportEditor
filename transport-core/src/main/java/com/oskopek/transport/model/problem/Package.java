@@ -91,7 +91,8 @@ public class Package extends DefaultLocatable implements ActionObject, Locatable
 
         Package aPackage = (Package) o;
 
-        return new EqualsBuilder().appendSuper(super.equals(o)).append(target, aPackage.target).append(size, aPackage.size).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(target, aPackage.target)
+                .append(size, aPackage.size).isEquals();
     }
 
     @Override

@@ -161,7 +161,8 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
 
     @Override
     public Vehicle build() {
-        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity, true, packageList);
+        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity,
+                true, packageList);
     }
 
     @Override

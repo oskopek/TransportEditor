@@ -10,8 +10,6 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ProblemPlanningWrapper;
 import com.oskopek.transport.planners.AbstractPlanner;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teneighty.heap.AbstractHeap;
@@ -43,6 +41,10 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private Integer getGScore(ImmutablePlanState state) {
         return gScore.getOrDefault(state, Integer.MAX_VALUE);
+    }
+
+    public ArrayTable<String, String, Integer> getDistanceMatrix() {
+        return distanceMatrix;
     }
 
     void resetState() {

@@ -178,7 +178,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * @return the updated vehicle
      */
     public Vehicle updateReadyLoading(boolean readyLoading) {
-        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity, readyLoading, packageList);
+        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity,
+                readyLoading, packageList);
     }
 
     /**
@@ -210,7 +211,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
      * @return the updated vehicle
      */
     public Vehicle updateMaxFuelCapacity(ActionCost maxFuelCapacity) {
-        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity, readyLoading, packageList);
+        return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity,
+                readyLoading, packageList);
     }
 
     /**
@@ -240,7 +242,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
         }
         List<Package> newPackageList = new ArrayList<>(packageList);
         newPackageList.add(pkg);
-        return new Vehicle(getName(), getLocation(), target, curCapacity.subtract(pkg.getSize()), maxCapacity, curFuelCapacity, maxFuelCapacity, readyLoading, newPackageList);
+        return new Vehicle(getName(), getLocation(), target, curCapacity.subtract(pkg.getSize()), maxCapacity,
+                curFuelCapacity, maxFuelCapacity, readyLoading, newPackageList);
     }
 
     /**
@@ -266,8 +269,8 @@ public class Vehicle extends DefaultLocatable implements Locatable, ActionObject
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-                .append(target).append(curCapacity).append(maxCapacity).append(curFuelCapacity).append(maxFuelCapacity).append(readyLoading)
-                .append(packageList).toHashCode();
+                .append(target).append(curCapacity).append(maxCapacity).append(curFuelCapacity).append(maxFuelCapacity)
+                .append(readyLoading).append(packageList).toHashCode();
     }
 
     @Override

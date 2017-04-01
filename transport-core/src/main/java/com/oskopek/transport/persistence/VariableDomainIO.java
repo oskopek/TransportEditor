@@ -150,7 +150,7 @@ public class VariableDomainIO implements DataIO<Domain> {
      * @return set of PDDL labels for the domain
      */
     private static Set<PddlLabel> parsePddlLabels(String contents) {
-        Set<PddlLabel> pddlLabels = EnumSet.allOf(PddlLabel.class);
+        Set<PddlLabel> pddlLabels = EnumSet.noneOf(PddlLabel.class);
         if (contents.contains(":action-costs")) {
             pddlLabels.add(PddlLabel.ActionCost);
         }
