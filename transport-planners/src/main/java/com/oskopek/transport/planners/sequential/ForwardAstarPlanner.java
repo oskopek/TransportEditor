@@ -34,7 +34,8 @@ public class ForwardAstarPlanner extends AbstractPlanner {
     }
 
     private Integer getHScore(ImmutablePlanState s) {
-        return calculateHeuristic(s, distanceMatrix, PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
+        return calculateHeuristic(s, distanceMatrix,
+                PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
     }
 
     public ArrayTable<String, String, Integer> getDistanceMatrix() {
@@ -97,14 +98,14 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     ImmutablePlanState neighbor = maybeNeighbor.get();
 
                     // The distance from start to a neighbor
-                    int tentativeGScore = neighbor.getGScore();
+                    int tentativeGScore = neighbor.getTotalTime(); // G score
                     int neighborFScore = tentativeGScore + getHScore(neighbor);
 
                     Heap.Entry<Integer, ImmutablePlanState> neighborEntry = entryMap.get(neighbor);
                     if (neighborEntry == null) {
                         neighborEntry = openSet.insert(neighborFScore, neighbor);
                         entryMap.put(neighbor, neighborEntry);
-                    } else if (tentativeGScore >= neighborEntry.getValue().getGScore()) {
+                    } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
 //                        if (tentativeGScore > neighborGScore) {
 //                             TODO: P22 nonopt, p03 nonopt, p04
 //                            logger.debug("Try not to generate these plans");
@@ -128,8 +129,8 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private static Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages, state.getProblem().getAllVehicles(),
-                distanceMatrix);
+        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages,
+                state.getProblem().getAllVehicles(), distanceMatrix);
     }
 
     @Override

@@ -248,8 +248,8 @@ public final class PlannerUtils {
     }
 
 
-    public static boolean doesShorterPathExist(Vehicle vehicle, Location target, Iterator<Action> reversedActionsIterator,
-            ArrayTable<String, String, Integer> distanceMatrix) {
+    public static boolean doesShorterPathExist(Vehicle vehicle, Location target,
+            Iterator<Action> reversedActionsIterator, ArrayTable<String, String, Integer> distanceMatrix) {
 
         if (!reversedActionsIterator.hasNext()) {
             return false;
@@ -340,7 +340,7 @@ public final class PlannerUtils {
 
     public static boolean pickupWhereDropoff(ImmutablePlanState state, Action newAction) {
         Map<String, Set<String>> pickedUpAt = new HashMap<>();
-        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext(); ) {
+        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext();) {
             Action a = it.next();
             if (a instanceof PickUp) {
                 pickedUpAt.computeIfAbsent(a.getWhat().getName(), s -> new HashSet<>(2))
@@ -357,7 +357,7 @@ public final class PlannerUtils {
             }
         }
 
-        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext(); ) {
+        for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext();) {
             Action a = it.next();
             if (a instanceof Drop) {
                 Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());

@@ -25,6 +25,11 @@ public class ImmutablePlanState {
     private final Problem problem; // TODO: do not store the entire problem?
     private int planningHashCode;
 
+    /**
+     * Default start constructor.
+     *
+     * @param problem the problem
+     */
     public ImmutablePlanState(Problem problem) {
         this.problem = problem;
         this.lastState = null;
@@ -46,10 +51,11 @@ public class ImmutablePlanState {
         totalTime = lastState.totalTime + action.getDuration().getCost();
     }
 
-    public int getGScore() {
-        return totalTime;
-    }
-
+    /**
+     * Get the underlying problem instance.
+     *
+     * @return the problem
+     */
     public Problem getProblem() {
         return problem;
     }
@@ -95,6 +101,7 @@ public class ImmutablePlanState {
     /**
      * Applies the specified action's preconditions and returns the new state.
      *
+     * @param problem the problem
      * @param action the action's preconditions to apply
      * @return the updated state or empty if the preconditions were not valid before application
      */
@@ -108,6 +115,7 @@ public class ImmutablePlanState {
     /**
      * Applies the specified action's effects and returns the new state.
      *
+     * @param problem the problem
      * @param action the action's effects to apply
      * @return the updated state or empty if the effects were not valid after application
      */
@@ -210,10 +218,18 @@ public class ImmutablePlanState {
         builder.append(location);
     }
 
+    /**
+     * Reverse iterator jumping from the current state back, returning actions on the way.
+     */
     private static final class ReversedActionIterator implements Iterator<Action> {
 
         private ImmutablePlanState current;
 
+        /**
+         * Default constructor.
+         *
+         * @param begin the current state
+         */
         ReversedActionIterator(ImmutablePlanState begin) {
             current = begin;
         }
