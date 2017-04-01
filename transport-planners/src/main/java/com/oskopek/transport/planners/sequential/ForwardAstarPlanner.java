@@ -102,15 +102,14 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                         entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
 //                        if (tentativeGScore > neighborGScore) {
-//                             TODO: P22 nonopt, p03 nonopt, p04
+//                             TODO: P22 nonopt, p04 ?
 //                            logger.debug("Try not to generate these plans");
 //                        }
                         return;
                     }
 
                     // this path is the best until now
-                    openSet.decreaseKey(neighborEntry,
-                            neighborFScore); // TODO check if overwrites the correct state with shorter actions
+                    openSet.decreaseKey(neighborEntry, neighborFScore);
                 }
             });
             if (closedSet.size() % 100_000 == 0) {

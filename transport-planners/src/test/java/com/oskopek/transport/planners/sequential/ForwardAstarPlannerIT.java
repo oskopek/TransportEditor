@@ -113,8 +113,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         planPart.add(domain.buildDrive(truck2, g.getLocation("city-loc-6"), g.getLocation("city-loc-1"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
         planPart = Lists.reverse(planPart);
-//        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
-//                planner.getDistanceMatrix())).isTrue();
+        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
+                planner.getDistanceMatrix())).isTrue();
     }
 
     @Test
@@ -128,8 +128,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-9"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-9"), g.getLocation("city-loc-4"), g));
         planPart = Lists.reverse(planPart);
-//        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
-//                planner.getDistanceMatrix())).isTrue();
+        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
+                planner.getDistanceMatrix())).isTrue();
     }
 
     @Test
@@ -143,8 +143,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-6"), g.getLocation("city-loc-4"), g));
         planPart.add(domain.buildDrive(truck1, g.getLocation("city-loc-4"), g.getLocation("city-loc-8"), g));
         planPart = Lists.reverse(planPart);
-//        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-8"), planPart.iterator(),
-//                planner.getDistanceMatrix())).isFalse();
+        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-8"), planPart.iterator(),
+                planner.getDistanceMatrix())).isFalse();
     }
 
     @Test
@@ -156,8 +156,8 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
 
         List<Action> planPart = new ArrayList<>();
         planPart = Lists.reverse(planPart);
-//        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
-//                planner.getDistanceMatrix())).isFalse();
+        assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
+                planner.getDistanceMatrix())).isFalse();
     }
 
     @Test
