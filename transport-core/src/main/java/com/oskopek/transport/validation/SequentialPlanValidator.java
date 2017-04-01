@@ -36,7 +36,7 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
      */
     public boolean isValid(Domain domain, Problem problem, SequentialPlan plan) {
         List<Action> actionList = plan.getActions();
-        PlanState state = new DefaultPlanState(domain, problem);
+        PlanState state = new DefaultPlanState(problem);
         log("Starting validation. Actions: " + actionList.size());
         for (Action action : actionList) {
             log("Validating: " + action);

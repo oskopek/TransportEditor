@@ -6,7 +6,6 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.TemporalPlanIO;
-import com.oskopek.transport.tools.executables.CancellableLogStreamable;
 import com.oskopek.transport.tools.executables.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

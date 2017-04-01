@@ -2,14 +2,11 @@ package com.oskopek.transport.persistence;
 
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.PddlLabel;
-import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.domain.action.*;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.Vehicle;
-import com.oskopek.transport.model.problem.Problem;
 
 import java.util.Arrays;
 import java.util.HashMap;

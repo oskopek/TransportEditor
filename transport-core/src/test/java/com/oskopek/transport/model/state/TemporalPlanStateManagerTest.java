@@ -6,7 +6,6 @@ import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.*;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.tools.test.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class TemporalPlanStateManagerTest {
     @Before
     public void setUp() throws Exception {
         planStateManager = new TemporalPlanStateManager(domain, problem, plan);
-        planState = new DefaultPlanState(domain, problem);
+        planState = new DefaultPlanState(problem);
     }
 
     @Test
@@ -75,7 +74,7 @@ public class TemporalPlanStateManagerTest {
         planStateManager.goToTime(0d, true);
 
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(0));
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(0d);
     }
 
@@ -92,7 +91,7 @@ public class TemporalPlanStateManagerTest {
         Vehicle truck = problem.getVehicle("truck-1").updateReadyLoading(true).addPackage(pkg);
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg.getName(), pkg);
 
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
@@ -111,7 +110,7 @@ public class TemporalPlanStateManagerTest {
 
         assertThat(planStateManager.getLastAction()).hasValue(actions.get(1));
 
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(1d);
     }
 
@@ -131,7 +130,7 @@ public class TemporalPlanStateManagerTest {
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg1.getName(), pkg1)
                 .putPackage(pkg2.getName(), pkg2);
 
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(54d);
     }
 
@@ -152,7 +151,7 @@ public class TemporalPlanStateManagerTest {
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg1.getName(), pkg1)
                 .putPackage(pkg2.getName(), pkg2);
 
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(54d);
     }
 
@@ -207,7 +206,7 @@ public class TemporalPlanStateManagerTest {
         Problem newProblem = problem.putVehicle(truck.getName(), truck).putPackage(pkg1.getName(), pkg1)
                 .putPackage(pkg2.getName(), pkg2);
 
-        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(domain, newProblem));
+        assertThat(planStateManager.getCurrentPlanState()).isEqualTo(new DefaultPlanState(newProblem));
         assertThat(planStateManager.getCurrentTime()).isEqualTo(53d);
     }
 

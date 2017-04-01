@@ -78,13 +78,13 @@ public abstract class DefaultDomain implements Domain {
 
     @Override
     public Drive buildDrive(Vehicle vehicle, Location from, Location to, Road road) {
-        return driveBuilder.build(vehicle, from, to, road);
+        return driveBuilder.build(vehicle, from, to, road, pddlLabelSet.contains(PddlLabel.Fuel));
     }
 
     @Override
     @Deprecated
     public Drive buildDrive(Vehicle vehicle, Location from, Location to, RoadGraph graph) {
-        return driveBuilder.build(vehicle, from, to, graph);
+        return driveBuilder.build(vehicle, from, to, graph, pddlLabelSet.contains(PddlLabel.Fuel));
     }
 
     @Override

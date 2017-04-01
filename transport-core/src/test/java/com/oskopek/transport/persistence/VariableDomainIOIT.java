@@ -92,10 +92,12 @@ public class VariableDomainIOIT {
         assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getCost());
         assertEquals(ActionCost.ONE, parsed.getPickUpBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"),
+                        roadGraph, true)
                         .getCost());
         assertEquals(ActionCost.valueOf(11),
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"), roadGraph)
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"), roadGraph.getLocation("b"),
+                        roadGraph, true)
                         .getDuration());
         assertEquals(ActionCost.valueOf(10), parsed.getRefuelBuilder().build(null, null, null).getDuration());
         assertEquals(ActionCost.valueOf(10), parsed.getRefuelBuilder().build(null, null, null).getCost());
@@ -157,7 +159,8 @@ public class VariableDomainIOIT {
         VariableDomain parsed = variableDomainIO.parse(variableDomainSeqPDDLContents);
         assertNotNull(parsed);
         assertEquals(ActionCost.ZERO,
-                parsed.getDriveBuilder().build(null, roadGraph.getLocation("b"), roadGraph.getLocation("a"), roadGraph)
+                parsed.getDriveBuilder().build(null, roadGraph.getLocation("b"), roadGraph.getLocation("a"),
+                        roadGraph, false)
                         .getDuration());
     }
 

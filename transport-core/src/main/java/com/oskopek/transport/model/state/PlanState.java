@@ -3,8 +3,6 @@ package com.oskopek.transport.model.state;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.Vehicle;
-import com.oskopek.transport.model.problem.Problem;
 
 /**
  * Simple interface for mutating a problem's state by applying actions on top of it.

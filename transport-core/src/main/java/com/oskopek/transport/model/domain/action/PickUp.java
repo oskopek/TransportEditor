@@ -1,6 +1,5 @@
 package com.oskopek.transport.model.domain.action;
 
-import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
@@ -31,7 +30,7 @@ public class PickUp extends DefaultAction<Vehicle, Package> {
     }
 
     @Override
-    public Problem applyPreconditions(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Problem problemState) {
         String vehicleName = this.getWho().getName();
         String packageName = this.getWhat().getName();
         Vehicle vehicle = problemState.getVehicle(vehicleName);
@@ -41,7 +40,7 @@ public class PickUp extends DefaultAction<Vehicle, Package> {
     }
 
     @Override
-    public Problem applyEffects(Domain domain, Problem problemState) {
+    public Problem applyEffects(Problem problemState) {
         String vehicleName = this.getWho().getName();
         String packageName = this.getWhat().getName();
         Vehicle vehicle = problemState.getVehicle(vehicleName);

@@ -22,7 +22,6 @@ import java.util.stream.Stream;
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    private final Domain domain;
     private final Problem problem;
     private final List<TemporalPlanAction> temporalPlanActions;
     private PlanActionPointer pointer;
@@ -36,20 +35,10 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @param plan the plan to simulate
      */
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
-        this.domain = domain;
         this.problem = problem;
         this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted().collect(Collectors.toList());
         this.state = getBeginningState();
         this.pointer = new PlanActionPointer(0, false);
-    }
-
-    /**
-     * Get the domain.
-     *
-     * @return the domain
-     */
-    protected Domain getDomain() {
-        return domain;
     }
 
     @Override
@@ -68,7 +57,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @return the beginning state
      */
     private PlanState getBeginningState() {
-        return new DefaultPlanState(domain, problem);
+        return new DefaultPlanState(problem);
     }
 
     @Override

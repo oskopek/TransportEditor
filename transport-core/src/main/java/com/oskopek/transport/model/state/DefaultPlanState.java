@@ -1,10 +1,8 @@
 package com.oskopek.transport.model.state;
 
-import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -20,18 +18,15 @@ import java.util.Map;
  */
 public class DefaultPlanState implements PlanState {
 
-    private final Domain domain;
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private Problem problem;
 
     /**
      * Default constructor.
      *
-     * @param domain the domain
      * @param problem the problem
      */
-    public DefaultPlanState(Domain domain, Problem problem) {
-        this.domain = domain;
+    public DefaultPlanState(Problem problem) {
         this.problem = problem;
     }
 
@@ -42,14 +37,14 @@ public class DefaultPlanState implements PlanState {
             throw new IllegalStateException("Preconditions of action " + action + " are invalid in problem " + problem);
         }
         logger.trace("Applying preconditions of action {}.", action.getName());
-        problem = action.applyPreconditions(domain, problem);
+        problem = action.applyPreconditions(problem);
         logger.trace("Applied preconditions of action {}.", action.getName());
     }
 
     @Override
     public void applyEffects(Action action) {
         logger.trace("Applying effects of action {}.", action.getName());
-        Problem newProblem = action.applyEffects(domain, problem);
+        Problem newProblem = action.applyEffects(problem);
         logger.trace("Checking effects of action {}.", action.getName());
         if (!action.areEffectsValid(newProblem)) {
             throw new IllegalStateException(
@@ -178,12 +173,12 @@ public class DefaultPlanState implements PlanState {
             return false;
         }
         DefaultPlanState that = (DefaultPlanState) o;
-        return new EqualsBuilder().append(domain, that.domain).append(problem, that.problem).isEquals();
+        return new EqualsBuilder().append(problem, that.problem).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(domain).append(problem)
+        return new HashCodeBuilder(17, 37).append(problem)
                 .toHashCode();
     }
 }

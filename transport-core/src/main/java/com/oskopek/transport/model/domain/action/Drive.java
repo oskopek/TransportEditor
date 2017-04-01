@@ -1,10 +1,7 @@
 package com.oskopek.transport.model.domain.action;
 
-import com.oskopek.transport.model.domain.Domain;
-import com.oskopek.transport.model.domain.PddlLabel;
 import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.*;
-import com.oskopek.transport.model.problem.Problem;
 
 import java.util.List;
 
@@ -17,6 +14,7 @@ public class Drive extends DefaultAction<Vehicle, Location> {
     private final Road road;
     private final Location dest;
     private final String vehicleName;
+    private final boolean isFuelDomain;
 
     /**
      * Default constructor.
@@ -27,20 +25,22 @@ public class Drive extends DefaultAction<Vehicle, Location> {
      * @param preconditions applicable preconditions
      * @param effects applicable effects
      * @param road the road to use
+     * @param isFuelDomain is the domain a fuel-enabled one
      */
     public Drive(Vehicle vehicle, Location from, Location to, List<Predicate> preconditions,
-            List<Predicate> effects, Road road) {
+            List<Predicate> effects, Road road, boolean isFuelDomain) {
         super("drive", vehicle, from, to, preconditions, effects, road.getLength(), road.getLength());
         this.road = road;
         this.dest = to;
         this.vehicleName = vehicle != null ? vehicle.getName() : null;
+        this.isFuelDomain = isFuelDomain;
     }
 
     @Override
-    public Problem applyPreconditions(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Problem problemState) {
         Vehicle vehicle = problemState.getVehicle(vehicleName);
         ActionCost curFuelCapacity = vehicle.getCurFuelCapacity();
-        if (domain.getPddlLabels().contains(PddlLabel.Fuel)) {
+        if (isFuelDomain) {
             FuelRoad fuelRoad = (FuelRoad) road;
             curFuelCapacity = curFuelCapacity.subtract(fuelRoad.getFuelCost());
         }
@@ -49,7 +49,7 @@ public class Drive extends DefaultAction<Vehicle, Location> {
     }
 
     @Override
-    public Problem applyEffects(Domain domain, Problem problemState) {
+    public Problem applyEffects(Problem problemState) {
         Vehicle vehicle = problemState.getVehicle(vehicleName);
         return problemState
                 .putVehicle(vehicleName, vehicle.updateLocation(dest));

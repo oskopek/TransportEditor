@@ -128,9 +128,9 @@ public final class TestUtils {
                 roadGraph.getLocation("b"));
 
         assertEquals(ActionCost.valueOf(11), parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"),
-                roadGraph.getLocation("b"), roadGraph).getCost());
+                roadGraph.getLocation("b"), roadGraph, false).getCost());
         assertEquals(ActionCost.valueOf(11), parsed.getDriveBuilder().build(null, roadGraph.getLocation("a"),
-                roadGraph.getLocation("b"), roadGraph).getDuration());
+                roadGraph.getLocation("b"), roadGraph, false).getDuration());
 
         // drive
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new WhoAtWhere());

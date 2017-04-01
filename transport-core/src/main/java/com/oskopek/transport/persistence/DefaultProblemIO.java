@@ -7,7 +7,6 @@ import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.DefaultRoadGraph;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.antlr4.PddlLexer;
 import com.oskopek.transport.persistence.antlr4.PddlParser;
 import freemarker.template.Configuration;

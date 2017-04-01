@@ -1,14 +1,11 @@
 package com.oskopek.transport.planners.sequential.state;
 
-import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.problem.ActionObject;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.state.PlanState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +16,17 @@ import java.util.Optional;
  */
 public class ImmutablePlanState extends ProblemPlanningWrapper implements Problem {
 
-    private final Domain domain;
-    private final transient Logger logger = LoggerFactory.getLogger(ImmutablePlanState.class);
     private final List<Action> actions; // TODO: non sequential domains?
     private final int totalTime;
 
     /**
      * Default constructor.
      *
-     * @param domain the domain
      * @param problem the problem
      * @param actions the plan actions
      */
-    public ImmutablePlanState(Domain domain, Problem problem, List<Action> actions) {
+    public ImmutablePlanState(Problem problem, List<Action> actions) {
         super(problem);
-        this.domain = domain;
         this.actions = actions;
         totalTime = actions.stream().mapToInt(a -> a.getDuration().getCost()).sum();
     }
@@ -47,7 +40,6 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem, Action addedAction) {
         super(newProblem);
-        this.domain = oldState.domain;
         this.actions = new ArrayList<>(oldState.actions);
         this.actions.add(addedAction);
         totalTime = oldState.totalTime + addedAction.getDuration().getCost();
@@ -60,7 +52,6 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      */
     public ImmutablePlanState(ImmutablePlanState oldState, Problem newProblem) {
         super(newProblem);
-        this.domain = oldState.domain;
         this.actions = oldState.actions;
         totalTime = oldState.totalTime;
     }
@@ -84,15 +75,6 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
     }
 
     /**
-     * Get the domain.
-     *
-     * @return the domain
-     */
-    public Domain getDomain() {
-        return domain;
-    }
-
-    /**
      * Applies the specified action and returns the new state.
      *
      * @param action the action to apply
@@ -109,19 +91,10 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      * @return the updated state or empty if the preconditions were not valid before application
      */
     private Optional<ImmutablePlanState> applyPreconditions(Action action) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Checking preconditions of action {}.", action.getName());
-        }
         if (!action.arePreconditionsValid(getProblem())) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Preconditions of action {} are invalid in problem {}", action, getProblem());
-            }
             return Optional.empty();
         }
-        if (logger.isTraceEnabled()) {
-            logger.trace("Applying preconditions of action {}.", action.getName());
-        }
-        return Optional.of(new ImmutablePlanState(this, action.applyPreconditions(domain, getProblem())));
+        return Optional.of(new ImmutablePlanState(this, action.applyPreconditions(getProblem())));
     }
 
     /**
@@ -131,18 +104,8 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
      * @return the updated state or empty if the effects were not valid after application
      */
     private Optional<ImmutablePlanState> applyEffects(Action action) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Applying effects of action {}.", action.getName());
-        }
-        Problem newProblem = action.applyEffects(domain, getProblem());
-        if (logger.isTraceEnabled()) {
-            logger.trace("Checking effects of action {}.", action.getName());
-        }
+        Problem newProblem = action.applyEffects(getProblem());
         if (!action.areEffectsValid(newProblem)) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Effects of action {} are invalid after applying to problem {}(result: {}).", action,
-                        getProblem(), newProblem);
-            }
             return Optional.empty();
         }
         return Optional.of(new ImmutablePlanState(this, newProblem, action));
@@ -150,42 +113,42 @@ public class ImmutablePlanState extends ProblemPlanningWrapper implements Proble
 
     @Override
     public ImmutablePlanState putVehicle(String name, Vehicle vehicle) {
-        return new ImmutablePlanState(domain, getProblem().putVehicle(name, vehicle), actions);
+        return new ImmutablePlanState(getProblem().putVehicle(name, vehicle), actions);
     }
 
     @Override
     public ImmutablePlanState putPackage(String name, com.oskopek.transport.model.problem.Package pkg) {
-        return new ImmutablePlanState(domain, getProblem().putPackage(name, pkg), actions);
+        return new ImmutablePlanState(getProblem().putPackage(name, pkg), actions);
     }
 
     @Override
     public ImmutablePlanState changeActionObjectName(ActionObject actionObject, String newName) {
-        return new ImmutablePlanState(domain, getProblem().changeActionObjectName(actionObject, newName), actions);
+        return new ImmutablePlanState(getProblem().changeActionObjectName(actionObject, newName), actions);
     }
 
     @Override
     public ImmutablePlanState putLocation(String name, Location location) {
-        return new ImmutablePlanState(domain, getProblem().putLocation(name, location), actions);
+        return new ImmutablePlanState(getProblem().putLocation(name, location), actions);
     }
 
     @Override
     public ImmutablePlanState removeVehicle(String name) {
-        return new ImmutablePlanState(domain, getProblem().removeVehicle(name), actions);
+        return new ImmutablePlanState(getProblem().removeVehicle(name), actions);
     }
 
     @Override
     public ImmutablePlanState removePackage(String name) {
-        return new ImmutablePlanState(domain, getProblem().removePackage(name), actions);
+        return new ImmutablePlanState(getProblem().removePackage(name), actions);
     }
 
     @Override
     public ImmutablePlanState removeLocation(String name) {
-        return new ImmutablePlanState(domain, getProblem().removeLocation(name), actions);
+        return new ImmutablePlanState(getProblem().removeLocation(name), actions);
     }
 
     @Override
     public ImmutablePlanState putName(String newName) {
-        return new ImmutablePlanState(domain, getProblem().putName(newName), actions);
+        return new ImmutablePlanState(getProblem().putName(newName), actions);
     }
 
 }
