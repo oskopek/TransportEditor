@@ -10,7 +10,13 @@ cd ..
 mkdir target
 mv en/thesis.pdf target/
 
-echo "Verifying PDF/A-2u..."
+
+if ! which verapdf >/dev/null; then
+    echo "WARNING: VeraPDF not installed, skipping validation."
+    exit 0
+fi
+
+echo "Validating PDF/A-2u..."
 verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/bp/target/thesis.pdf > target/validation-out.xml
 if which xmllint >/dev/null; then
     cat target/validation-out.xml | xmllint --format - > target/validation.xml
