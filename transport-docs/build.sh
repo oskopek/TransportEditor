@@ -11,7 +11,7 @@ mkdir -p "$projectdir"
 
 for dir in $subdirs; do
     cd "$dir"
-    bash ./build.sh
+    . build.sh
 
     cd "$projectdir"
     mkdir "$dir"
@@ -19,13 +19,12 @@ for dir in $subdirs; do
     cp -r "$origdir"/"$dir"/target/* .
 
     cd "$origdir"/"$dir"
-    bash ./clean.sh
+    . clean.sh
     cd "$origdir"
 done
 
 # Report:
 echo "Generating report..."
 report_out="`mktemp`"
-bash report.sh > $report_out
+. report.sh > $report_out
 mv "$report_out" "$projectdir"/report.html
-exit 0
