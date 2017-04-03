@@ -3,37 +3,55 @@
 
 With the advent of self-driving cars, automated warehouses and \TODO{remote navigation systems},
 transportation has become an even more current topic than it was a few years ago.
-People travel more than they used to. For economic, ecological and safety reasons, businesses need to
+Cheaper bus, rail and air travel has enabled people to travel more than they have ever before.
+Every day, thousands of companies need to deliver items from
+one place to the other. For economic, ecological, safety and a myriad of other reasons, making the use of transportation resources more efficient is bread and butter for a lot of people. It is only natural to try to automate the accompanying planning processes and make them faster, cheaper and of higher quality.
+
+Planning, as a process, is usually defined as the reasoning side of acting \citep[Section~1.1]{Ghallab2004}, meaning that we want to come up with some \textit{sequence of actions}, leading to a desired \textit{goal state}. In transportation, examples of planning problems include finding a sequence of orders for truck drivers to pick up and deliver packages for the day, or orchestrating robots in a warehouse to deliver ordered goods to the loading dock for shipping.
 
 Automated planning has historically been more focused on
-\textit{domain-independent} planning. 
+classical, \textit{domain-independent} planning -- planning without
+the use of specific knowledge about the problem's domain.
+This is mostly due to the field of planning wanting to
+establish itself among other, larger fields \TODO{cite Nao: planning review}. As a result, deeply theoretical results
+have been obtained and along with an advancement in computing power, can now be used to apply planning
+to a wider range of practical problems.
 
+In this thesis, we will study variants of a specific planning domain introduced in the 2008 International Planning Competition (IPC) called \textbf{Transport}. It serves as an abstract representation of a family of related transportation problems
+and an important benchmark for planning. On several variants
+of this domain, we will compare the results of our custom-built planners to the original competition results and discuss
+various shortcomings and advantages of both approaches.
 
-In this thesis, we will study variants of a planning domain introduced in the 2008 International Planning Competition (IPC)
-called \textbf{Transport}. On a road network, items located at specified locations on the network are delivered to their destinations
-using a fleet of vehicles. The goal is to deliver all items
-with the least cost, or in the shortest amount of time, depending on the
-specific planning domain variant.
-
-
+The Transport domain, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
+using a fleet of vehicles. Our aim is to deliver all items
+with the least total cost, or in the shortest amount of time, depending on the specific domain variant.
 
 This domain has naturally been interpreted as a set of trucks
-delivering packages, however, the exact same domain could be used to
-model a ride-sharing service, with cars driving around a city, picking up and dropping off people along the way.
+delivering packages. However,
+the exact same domain formulation could be used to
+model a ride-sharing service, with cars driving around a city, picking up and dropping off people along the way, or
+a means of modeling a public transportation system setup using
+data from a morning rush hour.
 
+To aid in the construction of planners and analysis of generated
+plans, we will also develop a planning system called TransportEditor. It will consist of a problem visualizer and editor for the Transport domain. To give insight into plan deficiencies, it will be possible to trace plan actions and see how the planning
+state evolves as the plan is executed. For fast prototyping,
+it will be possible to generate plans by using built-in and external planners without leaving the system. Currently, there only a handful of similar systems exist and to our best knowledge, none of them is specialized for problems containing a graph with
+agents on it.
 
-\TODO{Motivation, general intro}
+We aim to show that domain-dependent planning has an important
+role to play in the future and there are still problems to be solved, despite the loss of generality compared to domain-independent planning.
+To show this, we will design custom planners
+and try to come up with domain-specific heuristics and other tricks
+to aid the planners in solving the problems as best and as fast as
+it is possible.
 
-\TODO{Transport, logistics, explain the ``business'' need}
-
-\TODO{Scientific historic context -- see \citep{Skopek2017} for details}
-
-\TODO{Planning, define the problem (informally)}
-
-\TODO{State what we will do + \textbf{WHY} + methods \& approaches overview}
-
-\TODO{mention TransportEditor}
-
-\TODO{Restate our goal clearly}
-
-\TODO{Outline the individual chapters -- Medved: ``cesta pracou a co sa stane, co stretneme''}
+First, we will formalize and define the specific form of our
+chosen planning domain and its variants. We will show how
+it compares to other similarly themed problems that are being
+solved. Afterward, we will describe the approaches we used
+to build planners for both a
+simple, sequential transport domain and a more complicated
+temporal variant. Finally, we will design and run benchmarks,
+comparing the performance of our planners to the current
+state of the art domain-independent planners.
