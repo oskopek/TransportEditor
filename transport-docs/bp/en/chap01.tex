@@ -1,8 +1,6 @@
 \chapter{Problem analysis}
 
-In this chapter, we formalize the concept of planning to help us with introducing the studied domain,
-Transport.
-We will also briefly discuss the context of the domain and mention similar studied problems.
+In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also briefly discuss specifics of the Transport domain and mention similar studied problems.
 
 \section{Automated planning}
 
@@ -76,7 +74,7 @@ $\forall i \in [k] : a_i \in A$ such that
 $\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i$ and $s_k \in g$.
 \end{defn}
 
-\noindent A basic planning model (see figure \ref{fig:planning-model}) consists of three components:
+\noindent A basic planning model (see Figure~\ref{fig:planning-model}) consists of three components:
 
 \begin{itemize}
 \item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
@@ -278,11 +276,11 @@ after finishing their deliveries.
 
 \subsection{Transport STRIPS}\label{transport-strips}
 
-STRIPS, the Stanford Research Institute Problem Solver\citep{Fikes1971},
-was a planner proposed in the 1970's by Fikes and Nilsson.
+STRIPS, the Stanford Research Institute Problem Solver,
+was a planner proposed in the 1970's by \citet{Fikes1971}.
 The influence of STRIPS was, however, not due to the planner,
 but the language used to describe its inputs -- the planning operators and goals.
-That is why we sometimes refer to classical planning (section \ref{classical-planning})
+That is why we sometimes refer to classical planning (Section~\ref{classical-planning})
 as STRIPS planning. For the purposes of this text, we will use these terms interchangeably.
 
 In the STRIPS variant of the Transport domain,
@@ -334,14 +332,14 @@ maximum end time over all actions).
 
 \section{Transport domain formulation}
 
-We will now translate the informal description of the Transport domain from the previous section to the formal representations we defined in section \ref{classical-planning}. We will not formulate all the domain variants in all representations as
+We will now translate the informal description of the Transport domain from the previous section to the formal representations we defined in Section~\ref{classical-planning}. We will not formulate all the domain variants in all representations as
 they are very much alike and not needed for the comprehension of the following chapters.
 
 \subsection{Transport's classical representation}\label{transport-classical-representation}
 
 We are now able to show the sequential Transport domain in one of the representations
 previously defined, namely,
-the classical representation (figure \ref{code:classical-strips}).
+the classical representation (Figure~\ref{code:classical-strips}).
 Note that this representations does not contain the notion of a \textit{total cost}
 of a plan that we will optimize for later.
 The predicates used are:
@@ -409,7 +407,7 @@ the left parameter's value is to be decreased by the right
 parameter's value or the left parameter's value is to be overridden
 by the right parameter's value, respectively.
 
-See figure \ref{code:classical-numeric} for exact differences
+See Figure~\ref{code:classical-numeric} for exact differences
 in the representation after adding fuel.
 
 \begin{figure}[htb]
@@ -436,10 +434,10 @@ refuel(v, l)
 \subsection{Transport's state-variable representation}
 
 We are now also able to show the sequential Transport domain
-in the state-variable representation (figure \ref{code:statevar-strips}).
+in the state-variable representation (Figure~\ref{code:statevar-strips}).
 Some predicates (\verb+at+, \verb+capacity+ and \verb+in+) have been transformed
 into state-variable functions with largely the same semantics as in
-the section \ref{transport-classical-representation}. Again, we leave out
+Section~\ref{transport-classical-representation}. Again, we leave out
 the \textit{total cost} notion.
 
 \begin{figure}[htb]
@@ -469,7 +467,7 @@ drop(v, l, p, s1, s2)
 
 The numeric variant again adds the \verb+refuel+ operator along with
 a few fuel-related state-variable functions and predicates, and changes 
-the \verb+drive+ operator (figure \ref{code:statevar-numeric}).
+the \verb+drive+ operator (Figure~\ref{code:statevar-numeric}).
 
 \begin{figure}[htb]
 \begin{code}
@@ -517,10 +515,10 @@ substituting \verb+goal-utilities+ for \verb+durative-actions+.
 One problem with the diversity of these domain formulations is that rarely does
 a single planner support the union of all these requirements.
 We show the capabilities of individual studied planners
-later on, in table \ref{tab:plannner-requirements-comparison}.
+later on, in Table~\ref{tab:plannner-requirements-comparison}.
 
 For reference, we show the PDDL representation of the sequential variant of
-the Transport domain in figure \ref{code:pddl-strips}.
+the Transport domain in Figure~\ref{code:pddl-strips}.
 
 \begin{figure}[htb]
 \begin{code}
@@ -576,9 +574,9 @@ the Transport domain in figure \ref{code:pddl-strips}.
 
 \TODO{mention Braekers} \citep{Braekers2016}
 
-\TODO{mention Montoya} \citep{Montoya2015}
+\TODO{mention Montoya} \citep{Montoya-Torres2015}
 
-\TODO{mention Neo} \citep{NeoVrp}
+\TODO{mention Neo} \citep{ResearchGroup2013}
 
 \subsection{Constraint Satisfaction Problems}
 

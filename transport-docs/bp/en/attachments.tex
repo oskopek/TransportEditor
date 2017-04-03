@@ -1,5 +1,7 @@
 \chapwithtoc{Attachments}
 
+\TODO{Check and fix: typesetting errors, relevance, up2dateness of both manuals}
+
 \section*{CD contents}\label{cd-contents}
 
 The compact disk attached to this thesis contains the following:
@@ -11,11 +13,9 @@ The compact disk attached to this thesis contains the following:
 \begin{itemize}
 \item \verb+datasets/+: the datasets used at IPC;
 \item \verb+docs/+: JavaDoc documentation and specification for TransportEditor;
-\item \verb+sources/+: sources of TransportEditor;
-\item \verb+tools/+: the benchmarker and other tools used; and
-\item \verb+TransportEditor-jar-with-dependencies.jar+: the executable jar with all dependencies bundled in. \TODO{Remove, not applicable}
+\item \verb+sources/+: sources of TransportEditor along with source of planners, benchmarks and the report generator;
+\item \verb+tools/+: the benchmarker execution scripts and configuration files, along with other tools used; and
 \end{itemize}
-\item \TODO{other files on CD}
 \end{itemize}
 
 \subsubsection*{TransportEditor Developer JavaDoc}\label{transporteditor-developer-javadoc}
@@ -26,6 +26,8 @@ The generated API documentation using JavaDoc is also available on the attached 
 \newpage
 
 \section*{TransportEditor User Manual}\label{transporteditor-user-manual}
+
+\TODO{Add TE screenshots from the presentation to the manual illustrating the workflow}
 
 %%%% manual_en
 Welcome to TransportEditor's manual!
@@ -58,8 +60,8 @@ Read the following sections if you want to learn to work with TransportEditor qu
 If you can't find the answer to your question or request in this document
 (located in the menu, in ``Help'' $\to$ ``Help''),
 feel free to submit a pull request/issue in
-the \href{https://gitlab.com/oskopek/TransportEditor}{GitLab repository} of TransportEditor,
-post a question on \href{https://stackoverflow.com}{StackOverflow}, or email me personally.
+the GitLab repository\footnote{\url{https://gitlab.com/oskopek/TransportEditor}} of TransportEditor,
+post a question on Stack Overflow\footnote{\url{https://stackoverflow.com}}, or email me personally.
 You can find all the needed information in the menu, in ``Help'' $\to$ ``About''.
 
 \subsubsection*{Changing the language}
@@ -224,7 +226,7 @@ The validator executable must follow a few rules:
 \item The executable must exit with a 0 return code if and only if the plan is valid.
 
 \item The executable must take three file path parameters -- the domain in PDDL, the problem in PDDL and the plan in a
-VAL-like format.
+VAL-like format \citep[Figure~2]{Howey2003}.
 
 \begin{itemize}
 
@@ -292,13 +294,13 @@ but also designing a new problem dataset from scratch.
 in the upper menu bar item \textbf{Help $\to$ Help}.
 
 Post any development questions or comments you may have on Stack Overflow and/or don't hesitate to
-\href{https://gitlab.com/oskopek/TransportEditor/issues}{open an issue}.
+open an issue at \url{https://gitlab.com/oskopek/TransportEditor/issues}.
 
 \subsection*{Running TransportEditor releases}
 \begin{itemize}
 \item Download a release from:\\ \url{https://github.com/oskopek/TransportEditor/releases}
 
-\item Note: TransportEditor uses \href{http://semver.org/}{semantic versioning}.
+\item Note: TransportEditor uses semantic versioning (\url{http://semver.org/}).
 
 \item To directly run TransportEditor, download the \textbf{executable JAR file}: \texttt{TransportEditor-VERSION-jar-with-dependencies.jar}
 
@@ -346,9 +348,9 @@ run \verb+locale -a+.
 
 \end{itemize}
 
-\item \textbf{Install git-lfs} from \href{https://git-lfs.github.com/}{https://git-lfs.github.com/}
+\item \textbf{Install git-lfs} from \url{https://git-lfs.github.com/}
 
-\item \textbf{Install Java8 JDK} -- \href{http://www.oracle.com/technetwork/java/javase/downloads/index.html}{Oracle JDK Downloads} -- Select: Java Platform (JDK)
+\item \textbf{Install Java8 JDK} -- Oracle JDK Downloads (\url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}) -- Select: Java Platform (JDK)
 
 \begin{itemize}
 
@@ -365,16 +367,16 @@ Usually, your distribution's package management repository is enough:
 
 \item Ubuntu: \texttt{sudo apt-get install maven}
 
-\item Windows: See: \href{http://maven.apache.org/guides/getting-started/windows-prerequisites.html}{Maven on Windows}
- and \href{http://maven.apache.org/download.cgi}{Maven Downloads}.
+\item Windows: See
+Maven on Windows\footnote{\url{http://maven.apache.org/guides/getting-started/windows-prerequisites.html}} and 
+Maven Downloads.\footnote{\url{http://maven.apache.org/download.cgi}}
 
 \end{itemize}
 
-\item \textbf{Fork the repository} -- Create a fork of the \href{https://gitlab.com/oskopek/TransportEditor/}{oskopek/TransportEditor repository}
-(under the logo) on GitLab, usually the fork will be called: \texttt{yourusername/TransportEditor}.
+\item \textbf{Fork the repository} -- Create a fork of the oskopek/TransportEditor repository (\url{https://gitlab.com/oskopek/TransportEditor/}) using the button under the project logo on GitLab, usually the fork will be called: \texttt{yourusername/TransportEditor}.
 
-\item \textbf{Clone the your fork} -- run:\\ \texttt{git clone \href{https://gitlab.com/yourusername/TransportEditor.git}{https://gitlab.com/yourusername/TransportEditor.git}}\\
-Or, preferably, use SSH:\\ \texttt{git clone \href{mailto:git@gitlab.com}{git@gitlab.com}:yourusername/TransportEditor.git}
+\item \textbf{Clone the your fork} -- run:\\ \texttt{git clone https://gitlab.com/yourusername/TransportEditor.git}\\
+Or, preferably, use SSH:\\ \texttt{git clone git@gitlab.com:yourusername/TransportEditor.git}
 
 \item \textbf{Pull the LFS files} -- run: \texttt{git lfs pull}
 
@@ -409,7 +411,7 @@ There are two types of plans:
 \item Sequential -- these plans are strictly linear, actions do not overlap (imagine simple linked list).
 \item Temporal -- every action in this plan has a time interval in which it takes place.
 This plan is basically a set of intervals with associated actions. For storing it, we use an
-\href{https://en.wikipedia.org/wiki/Interval_tree}{Interval tree},
+Interval tree\footnote{\url{https://en.wikipedia.org/wiki/Interval_tree}},
 which allows efficient access to actions given a time or time range.
 \end{itemize}
 
@@ -440,17 +442,17 @@ and, to some extent, the cooperation of individual actors
 \end{itemize}
 
 \subsubsection*{Persisting plans}
-Using string manipulation and built-in constants and format, it is persisted into a VAL-like format.
+Using string manipulation and built-in constants and format, it is persisted into a VAL-like format \citep[Figure~2]{Howey2003}.
 For parsing, we assume a correct and valid VAL-like plan. A very simple string manipulation and Regex-based approach
-is used for both temporal and sequential plans. Additionally, a simple \href{http://www.antlr.org/}{ANTLR} grammar
-is used in some places. See the \texttt{persistence} package for details.
+is used for both temporal and sequential plans. Additionally, a simple ANTLR\footnote{\url{http://www.antlr.org/}} grammar
+is used in some places. See the \texttt{persistence} package in \verb+transport-core+ for details.
 
 \subsection*{Problem}
 The problem is basically a graph (with multiple possible ``layers'', f.e. fuel) and a vehicle and package map.
 
-Currently, we use \href{http://graphstream-project.org/}{GraphStream} for both the data storage and visualization of the graph.
+Currently, we use GraphStream\footnote{\url{http://graphstream-project.org/}} for both the data storage and visualization of the graph.
 Apart from nodes and edge arrows, everything else is visualized as
-``\href{http://graphstream-project.org/doc/Tutorials/Graph-Visualisation/#sprites}{sprites}''.
+``sprites\footnote{\url{http://graphstream-project.org/doc/Tutorials/Graph-Visualisation/\#sprites}}''.
 
 Fuel is added as different graph edge type (\verb+FuelRoad+ instead of \verb+DefaultRoad+) and a domain label change
 (see \verb+PddlLabel+s in the domain).
@@ -465,17 +467,16 @@ The graph is automatically laid out using a \texttt{SpringBox} algorithm from Gr
 for a given time and then switched to a manual layout.
 
 \subsubsection*{Persisting problems}
-Both rule pages of \href{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}{IPC-6}
-and \href{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}{IPC-8}
+Both rule pages of IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
 specify PDDL 3.1 as their official modeling language (language for domain
 and problem specification).
 Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
-\href{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}{definition of PDDL 3.1}.
+definition of PDDL 3.1.\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}}
 
-Using a \href{http://freemarker.org/}{Freemarker} template and a lot of string manipulation it is persisted into PDDL.
-For parsing, we assume a correct and valid problem and use a formal grammar written in \href{http://www.antlr.org/}{ANTLR}
-to parse PDDL into a generated code structure provided by ANTLR and the \texttt{maven-antlr-plugin}. The same grammar as for
-domains is used. See the \texttt{persistence} package and the \texttt{src/main/antlr4} folder for details.
+Using a Freemarker\footnote{\url{http://freemarker.org/}} template and a lot of string manipulation it is persisted into PDDL.
+For parsing, we assume a correct and valid problem and use a formal grammar written in ANTLR to parse PDDL into a generated code structure provided by ANTLR and the \texttt{maven-antlr-plugin}. The same grammar as for
+domains is used. See the \texttt{persistence} package of \verb+transport-core+ and the accompanying \texttt{src/main/antlr4} folder for details.
 
 \subsection*{Domain}
 There is basically only one domain type: \texttt{VariableDomain} (we also have the notion of a \texttt{SequentialDomain},
@@ -492,8 +493,8 @@ and provides other useful data (predicates, functions, \ldots).
 Domains are not visualizable per se.
 
 \subsubsection*{Persisting domains}
-Using a \href{http://freemarker.org/}{Freemarker} template and a lot of string manipulation it is persisted into PDDL.
-For parsing, we assume a correct and valid problem and use a formal grammar written in \href{http://www.antlr.org/}{ANTLR}
+Using a Freemarker template and a lot of string manipulation it is persisted into PDDL.
+For parsing, we assume a correct and valid problem and use a formal grammar written in ANTLR
 to parse PDDL into a generated code structure provided by ANTLR and the \texttt{maven-antlr-plugin}. The same grammar as for
 problems is used.
 
@@ -514,7 +515,7 @@ do not have to open all the individual parts again.
 Sessions are visualized by visualizing all their (possible) parts.
 
 \subsubsection*{Persisting sessions}
-Sessions are persisted automatically to XML using \href{https://x-stream.github.io/}{XStream}. This means, all its properties
+Sessions are persisted automatically to XML using XStream\footnote{\url{https://x-stream.github.io/}}. This means, all its properties
 should be reasonably serializable (by reflection).
 
 \subsection*{Planning}
@@ -528,13 +529,13 @@ Any class implementing the \texttt{Validator} interface can be used as a validat
 Validation happens automatically after planning in a session or it can be triggered manually. There are different
 validators with different strictness (used for different domain variants). Choosing a wrong combination of domain,
 problem and validator might cause false positives or false negatives, make sure to read the documentation of the
-individual validators. TransportEditor supports a popular external validator called VAL, out of the box.
+individual validators. TransportEditor supports a popular external validator called VAL \citep{Howey2003} out of the box.
 
 \subsection*{General notes}
 There are few other small features of the project worth mentioning.
 
 \subsubsection*{CDI \& the EventBus}
-CDI (Context and Dependency Injection) using \href{http://weld.cdi-spec.org/}{Weld} is used for inversion of control
+CDI (Context and Dependency Injection) using Weld\footnote{\url{http://weld.cdi-spec.org/}} is used for inversion of control
 and for communication without tight coupling. Should only be used in the UI part of the project.
 
 For event-driven communication on the front end, Guava's \texttt{EventBus} is used. Again, it enables persistent
@@ -543,11 +544,11 @@ reactive handling without tight coupling.
 \subsubsection*{JavaFX properties and bindings}
 The JavaFX based UI makes heavy use of bindings and properties, essential features of JavaFX. They enable
 reactive changes to the UI in an efficient manner but can be a bit tricky when reading code that uses them.
-For even more power, we use the \href{http://fxexperience.com/controlsfx/}{ControlsFX} library, but try to avoid it,
+For even more power, we use the ControlsFX\footnote{\url{http://fxexperience.com/controlsfx/}} library, but try to avoid it,
 if possible.
 
 \subsubsection*{Model immutability}
-The model (mainly the package \texttt{com.oskopek.transport.model}) is designed to be immutable
+The model (mainly the package \texttt{com.oskopek.transport.model} in the module \verb+transport-core+) is designed to be immutable
 (excluding a few exceptions). This makes it easier to reason about complex, possibly multithreaded operations
 on top of it. This note is useful to keep in mind when reading code that changes the model data.
 
@@ -565,7 +566,7 @@ TransportEditor currently has 3 types of tests:
 \item Integration tests (\texttt{*IT.java}) -- complex tests that handle multiple moving parts at once. Usually involving IO or
 other not easily mockable things. Try to avoid abusively writing these in favor of unit tests, if possible.
 
-\item User interface tests (\texttt{*UI.java}) -- test the UI using \href{https://github.com/TestFX/TestFX}{TestFX}.
+\item User interface tests (\texttt{*UI.java}) -- test the UI using TestFX\footnote{\url{https://github.com/TestFX/TestFX}}.
 At the moment, they are under-represented and not run very often. Currently, CI doesn't run them by default.
 \end{itemize}
 
