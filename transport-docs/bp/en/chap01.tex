@@ -603,6 +603,21 @@ In this chapter, we will delve more deeply into the Transport domain and try to 
 We will describe the problem instances that have been used in the IPC and discuss potential
 heuristics and approaches to creating plans for these problems.
 
+\subsection{Is solving Transport problems with domain knowledge easy?}
+
+\begin{thm}
+Sequential Transport is NP-hard.
+\end{thm}
+\begin{proof}
+As proven by Karp 1972 \TODO{} the problem of finding a Hamiltonian cycle (HC) in a graph is NP-Complete. We will show that we can transform the HC problem  into a Sequential Transport problem. \TODO{Verify}.
+
+Given an undirected graph $G$, the solution to HC is a cycle through all vertices of the graph, without visiting any single node twice. We can use the same graph in a Transport problem instance, with one vehicle of capacity $n-1$ where $n = |G|$ and  $n-1$ packages co-located with the vehicle at any graph vertex, and one package located elsewhere. All co-located packages will have different targets (one of the remaining $n-1$ points) and the final package will have the original vertex as the target. Assume all road lengths are $1$. The optimal plan will (without loss of generality) begin with $n-1$ \verb+pick-up+ actions.
+
+We conjecture that an HC exists if and only if an optimal plan visits each vertex only once. First, we prove the forward implication. Assume an HC exists and the optimal plan visits at least one node twice. We can now construct a plan with a lower total cost than the optimal plan, by driving along the HC and always greedily dropping any package that is at the destination location. If we find the final package, we pick it up greedily.
+
+Now, assume an HC does not exist. If the optimal plan only visits each node once, this means that we have found a path through the graph on which a node never repeats and the path starts and finishes at a given vertex. Hence, we have found a HC.
+\end{proof}
+
 \subsection{Domain features}
 
 \TODO{insights, degenerate cases, etc.}
