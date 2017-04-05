@@ -723,10 +723,29 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \section{TransportEditor -- A Transportation Planning System}
 
-\TODO{Expand this section with \citep{Skopek2017}}
-
 TransportEditor aims to be a problem editor and plan visualizer for the Transport domain.
-It is an intuitive GUI desktop application (Figure~\ref{fig:transporteditor-screenshot}) for making quick changes and re-planning, but also designing a new problem dataset from scratch. TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
+It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
+written in Java.
+
+It allows the user to create a planning session, where they
+select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
+The road network of the problem is automatically layed out and visualized for the user as a graph with locations as nodes and roads as edges.
+Users can then tweak the layout, make changes to vehicle and package properties
+and export the problem or domain back into PDDL.
+
+They can also select an external planner
+referencing its executable file, or select one of the built-in planners and try to solve
+the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify plans are correct.
+Once plans are loaded and verified, it will let the user see a list of actions
+in the plan, or plot a Gantt chart (useful for observing concurrent actions in temporal domain variants).
+
+The best feature of TransportEditor is the option of tracing plans. We can select
+any action, specify an exact timepoint or just step through the actions in order and
+the road network on the left will display the current state of the problem, as if
+all actions before the current point were applied to the start state.
+It is possible to do all of this, and more, without ever leaving the TransportEditor user interface.
+
+TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain.
 For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
 
@@ -738,7 +757,7 @@ For screenshots of typical TransportEditor usage, see the attached \nameref{tran
 \label{fig:transporteditor-screenshot}
 \end{figure}
 
-The basic workflow of TransportEditor consists of the following user's steps:
+The basic user workflow of TransportEditor consists of the following steps:
 \begin{itemize}
 \item Selecting which formulation of the Transport domain they want to work with or create their own variant;
 \item Loading the PDDL or creating their own problem of the given domain. TransportEditor then visualizes the given graph as good as it can;
@@ -758,4 +777,5 @@ The user can step forward and backward in the plan and inspect each action resul
 \end{itemize}
 
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
-the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format. 
+the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offerring guidance when
+using the program and providing an in-depth description.
