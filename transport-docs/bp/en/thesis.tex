@@ -58,7 +58,7 @@
 \def\ThesisTitle{Planning for Transportation Problems}
 
 % Author of the thesis
-\def\ThesisAuthor{Ondrej~Škopek}
+\def\ThesisAuthor{Ondrej~{\v{S}}kopek}
 
 % Year when the thesis is submitted
 \def\YearSubmitted{2017}
@@ -77,7 +77,7 @@
 \def\DeptType{Department}
 
 % Thesis supervisor: name, surname and titles
-\def\Supervisor{\mbox{prof.} \mbox{RNDr.} \mbox{Roman} \mbox{Barták}, \mbox{Ph.D.}}
+\def\Supervisor{\mbox{prof.} \mbox{RNDr.} \mbox{Roman} \mbox{Bart{\'{a}}k}, \mbox{Ph.D.}}
 
 % Supervisor's department (again according to Organizational structure of MFF)
 \def\SupervisorsDepartment{Department of Theoretical Computer Science and Mathematical Logic}
@@ -91,14 +91,16 @@
 \def\Dedication{%
 \TODO{Dedication}% TODO: Remove me
 \comment{% TODO: Uncomment me
-This work is dedicated to my parents, friends and girlfriend -- thanks for getting me through this. A big thank you goes out to my advisor, \Supervisor, for all the advice along the way.
+This work is dedicated to my parents -- thanks for supporting me on every step along the way.
+
+A big thank you goes to my advisor, \Supervisor{}, for~all the advice along the way.
 }
 }
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
 Today, a vast amount of resources is spent globally on ineffective transportation planning.
-Using techniques of automated planning, we study simplified variants of logistic problems, where items are delivered to their destinations using a fleet of vehicles moving on an oriented, non-negatively weighted graph, representing a road network.
+Using techniques of automated planning, we study simplified variants of logistic problems, where items are delivered to their destinations using a fleet of vehicles moving on an oriented, non-negatively weighted graph that represents a road network.
 We propose several planning systems for the effective solution of such problems. Experiments conducted on the original competition data show that our approach significantly improves the solution quality when compared to domain-independent planners from the competition. Last but not least, we developed TransportEditor, a visualizer and editor of these problems, for efficient problem analysis, planner construction, and evaluation.
 }
 
