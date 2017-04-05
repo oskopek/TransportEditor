@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+rm -rf log
 . clean.sh
 . convert-images.sh
 cd tex
@@ -8,6 +9,7 @@ make all
 cd ..
 mkdir target
 mv tex/*.pdf target/
+mkdir log
 
 
 if ! which verapdf >/dev/null; then
@@ -16,17 +18,17 @@ if ! which verapdf >/dev/null; then
 fi
 
 echo "Validating PDF/A-2u..."
-verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/manuals/target/TransportEditor-user-manual.pdf > target/validation-out-user.xml
-verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/manuals/target/TransportEditor-dev-manual.pdf > target/validation-out-dev.xml
+verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/manuals/target/TransportEditor-user-manual.pdf > log/validation-out-user.xml
+verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/manuals/target/TransportEditor-dev-manual.pdf > log/validation-out-dev.xml
 if which xmllint >/dev/null; then
-    cat target/validation-out-user.xml | xmllint --format - > target/validation-user.xml
-    cat target/validation-out-dev.xml | xmllint --format - > target/validation-dev.xml
+    cat log/validation-out-user.xml | xmllint --format - > log/validation-user.xml
+    cat log/validation-out-dev.xml | xmllint --format - > log/validation-dev.xml
 fi
-verification="`grep -qE 'inValid="0"' target/validation-out-user.xml && grep -qE 'inValid="0"' target/validation-out-dev.xml; echo $?`"
+verification="`grep -qE 'inValid="0"' log/validation-out-user.xml && grep -qE 'inValid="0"' log/validation-out-dev.xml; echo $?`"
 if [ "$verification" -ne 0 ]; then
     echo "PDF validation FAILED!"
-    exit "$verification"
+    return "$verification"
 fi
 echo "PDF validation PASSED!"
-exit 0
+return 0
 

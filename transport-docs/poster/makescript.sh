@@ -3,8 +3,9 @@ names="poster"
 parameters="-halt-on-error -file-line-error"
 #quiet="> /dev/null"
 
-rm -rvf pdf/ build/
+set +e
 
+rm -rvf pdf/ build/
 
 mkdir pdf
 mkdir build
@@ -32,3 +33,4 @@ mv *.toc ../build/ || true
 mv *.idx ../build/ || true
 
 mv *~* ../backups/ || true
+cd ..

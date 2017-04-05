@@ -3,3 +3,4 @@ imga/*.pdf
 *.xmpi
 .__afs*
 *.sav
+log/
