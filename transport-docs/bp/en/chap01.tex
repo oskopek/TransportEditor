@@ -617,6 +617,8 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 \label{code:pddl-strips}
 \end{figure}
 
+\TODO{Temporal formulation.}
+
 \TODO{Describe VAL \citep{Howey2003}.}
 
 \section{Transport domain analysis}
@@ -627,19 +629,57 @@ heuristics and approaches to creating plans for these problems.
 
 \subsection{Does domain knowledge make Transport easy to solve?}
 
-
+When domain-independent planners solve a sequential Transport problem,
+they face a harder task than our planners that have domain knowledge ahead of time.
+Deciding whether a plan of a given length exists is, in the case of Transport,
+an NEXPTIME-complete task \citep{Ghallab2004}[Section~3.4].
+That does not mean domain knowledge makes Transport easy. We will now show
+that even the sequential variant of Transport is NP-hard.
 
 \begin{thm}
-Sequential Transport is NP-hard.
+The problem of finding an optimal plan for an undirected connected graph in the sequential
+Transport domain is NP-hard. \TODO{Formulate better and revise proof}
 \end{thm}
 \begin{proof}
-As proven by \citet{Karp1972}, the problem of finding a Hamiltonian circuit (HC) in a graph is NP-Complete. We will show that we are able to transform the HC problem into a Sequential Transport problem. \TODO{Verify}.
+It is not evident if the problem is in NP: if we get a plan, there is no straigh-forward
+way of verifying whetherit is optimal.
 
-Given an undirected graph $G$, the solution to HC is a cycle through all vertices of the graph, without visiting any single node twice. We can use the same graph in a Transport problem instance, with one vehicle of capacity $n-1$ where $n = |G|$ and  $n-1$ packages co-located with the vehicle at any graph vertex, and one package located elsewhere. All co-located packages will have different targets (one of the remaining $n-1$ points) and the final package will have the original vertex as the target. Assume all road lengths are $1$. The optimal plan will (without loss of generality) begin with $n-1$ \verb+pick-up+ actions.
+We will now show that we can reduce an NP-complete problem to our problem in polynomial time,
+hence proving that all NP-complete problems are reducible to our problem,
+and therefore, our problem is NP-hard.
 
-We conjecture that an HC exists if and only if an optimal plan visits each vertex only once. First, we prove the forward implication. Assume an HC exists and the optimal plan visits at least one node twice. We can now construct a plan with a lower total cost than the optimal plan, by driving along the HC and always greedily dropping any package that is at the destination location. If we find the final package, we pick it up greedily.
+As proven by \citet{Karp1972}, the problem of existance of a Hamilton circuit (HC) in a (directed or undirected) graph is NP-complete. We will show that we are able to transform the HC problem into a sequential Transport problem.
 
-Now, assume an HC does not exist. If the optimal plan only visits each node once, this means that we have found a path through the graph on which a node never repeats and the path starts and finishes at a given vertex. Hence, we have found a HC.
+Given an undirected graph $G$, the solution to HC is a cycle through all the nodes of $G$,
+without visiting any single node twice.
+We can use the same graph to model a Transport problem instance.
+The problem will contain only one vehicle of capacity $n-1$,
+where $n = |G|$, the size of number of nodes in the graph.
+
+We will co-locate $n-1$ packages with the vehicle at any predetermined graph vertex $l \in G$.
+One package $p'$ will be located elsewhere, at $l' \in G,\, l \neq l'$.
+Each package positioned at $l$ will have a different target than the other packages at $l$
+and none of the targets will be $l$. The package at $l'$ will have the original node $l$
+as its target. We will set all road lengths to $1$. 
+
+An optimal plan for the designed translation has a total cost of at least $3n$.
+Any plan for this problem has to have at least $n$ \verb+drive+ actions, because
+there is a package to be delivered to every node, and the graph has $n$ nodes.
+Because it has to move $n$ packages, at least $n$ \verb+pick-up+ and $n$ \verb+drop+
+actions are needed. The costs of all actions are 1.
+We conjecture that an HC exists if and only if an optimal and valid plan visits each vertex only once.
+
+First, we prove the forward implication. Assume an HC exists and the optimal plan visits at least one node twice. We can now construct a plan with a lower total cost than the optimal plan: first, pick up all the $n-1$ co-located packages, then drive along the HC. At each
+visited node, drop the package that has this node as its destination. If we are at $l'$,
+pick up the package $p'$. The plan is trivially valid, as it delivers all packages
+and the vehicle never over-reaches its capacity. Also, its total cost is $3n$
+(the length of the HC is $n$, which implies $n$ drive actions) and for every of the $n$ packages, we do exactly one \verb+pick-up+ and exactly one \verb+drop+. Hence, the plan
+is optimal and visits each vertex only once.
+
+Now, assume an HC does not exist. If the found optimal plan only visits each node once,
+we can look at the source locations of all \verb+drive+ actions and the target
+location of the last \verb+drive+ action. They constitute a path through the graph on which a node never repeats and the path starts and finishes at the same node.
+Hence, we have constructed a HC.
 \end{proof}
 
 \subsection{Domain features}
@@ -651,7 +691,7 @@ Now, assume an HC does not exist. If the optimal plan only visits each node once
 We have acquired several datasets from previous runs of the IPC which we will use to test our planners.
 Table~\ref{tab:ipc-datasets} provides an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks).
 
-\begin{table}[htb]
+\begin{table}[tb]
 \begin{tabular}{c|c|c|c}
 \textbf{Dataset name} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
 \hline
@@ -684,13 +724,15 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \TODO{bridge to TransportEditor}
 
-\section{TransportEditor -- a planning environment}
+\section{TransportEditor -- A Transportation Planning System}
+
+\TODO{Expand this section with \citep{Skopek2017} and add screenshots to attachments}
 
 TransportEditor aims to be a problem editor and plan visualizer for the Transport domain.
-It is an intuitive GUI desktop application (see Figure~\ref{fig:transporteditor-screenshot}) for making quick changes and re-planning, but also designing a new problem dataset from scratch. TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
+It is an intuitive GUI desktop application (Figure~\ref{fig:transporteditor-screenshot}) for making quick changes and re-planning, but also designing a new problem dataset from scratch. TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain.
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/transporteditor_screenshot}
 \end{center}
@@ -700,24 +742,22 @@ A secondary motivation is to be able to test approaches for creating plans for t
 
 The basic workflow of TransportEditor consists of the following user's steps:
 \begin{itemize}
-\item Select which formulation of the Transport domain they want to work with or create their own variant.
-\item Load the PDDL or create their own problem of the given domain.
-\item TransportEditor draws the given graph as good as it can.
-\item Iterate among the following options:
+\item Selecting which formulation of the Transport domain they want to work with or create their own variant;
+\item Loading the PDDL or creating their own problem of the given domain. TransportEditor then visualizes the given graph as good as it can;
+\item Iterating among the following options:
 \begin{itemize}
-\item Load a planner executable and let TransportEditor run the planner on the loaded problem instance for a given time, then load the resulting plan.
-\item Load a pre-generated plan.
-\item Step through the individual plan actions and let TransportEditor visualize them.
-The user can go forward and backward in the plan and inspect each step in great detail.
-\item Edit the graph: add/remove/edit the location or properties of vehicles, packages, roads, locations and possibly petrol stations.
-\item Save the currently generated plan.
-\item Save the problem (along with the graph drawing hints).
-\item Save the domain (export to a PDDL file).
+\item Loading a planner executable and letting TransportEditor run the planner on the loaded problem instance for a given time (the user can cancel any time),
+then loading the resulting plan;
+\item Possibly loading a pre-generated plan;
+\item Stepping through the individual plan actions and letting TransportEditor visualize them.
+The user can step forward and backward in the plan and inspect each action result in great detail;
+\item Editing the graph: adding/removing/editing the location or properties of vehicles, packages, roads, locations and possibly petrol stations;
+\item Saving the currently generated plan;
+\item Saving the problem;
+\item Saving the domain (exporting to a PDDL file).
 \end{itemize}
-\item Save and close the currently loaded problem. Exit the application or go back to the first step.
+\item Saving and closing the currently loaded problem. Exit the application or go back to the first step.
 \end{itemize}
 
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual} and
 the \nameref{transporteditor-developer-documentation} are attached to this thesis, along with the \nameref{transporteditor-developer-javadoc} in a digital form.
-
-\TODO{Expand this section with \citep{Skopek2017}}
