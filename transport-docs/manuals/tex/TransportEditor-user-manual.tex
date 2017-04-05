@@ -1,0 +1,305 @@
+\documentclass[12pt,a4paper,twoside]{article}
+\setlength\textwidth{160mm}
+\setlength\textheight{247mm}
+\setlength\oddsidemargin{0mm}
+\setlength\evensidemargin{0mm}
+\setlength\topmargin{0mm}
+\setlength\headsep{0mm}
+\setlength\headheight{0mm}
+
+%% Generate PDF/A-2u
+\usepackage[a-2u]{pdfx}
+
+%% Character encoding: usually latin2, cp1250 or utf8:
+\usepackage[utf8]{inputenc}
+
+\hyphenation{Transport-Editor}
+
+%% Prefer Latin Modern fonts
+\usepackage{lmodern}
+
+%% Further useful packages (included in most LaTeX distributions)
+\usepackage{amsmath}        % extensions for typesetting of math
+\usepackage{amsfonts}       % math fonts
+\usepackage{amsthm}         % theorems, definitions, etc.
+\usepackage{bbding}         % various symbols (squares, asterisks, scissors, ...)
+\usepackage{bm}             % boldface symbols (\bm)
+\usepackage{graphicx}       % embedding of pictures
+\usepackage{fancyvrb}       % improved verbatim environment
+\usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+\setcitestyle{round} % TODO: round brackets for citep and citet
+\usepackage[nottoc]{tocbibind} % makes sure that bibliography and the lists
+			    % of figures/tables are included in the table
+			    % of contents
+\usepackage{dcolumn}        % improved alignment of table columns
+\usepackage{booktabs}       % improved horizontal lines in tables
+\usepackage{paralist}       % improved enumerate and itemize
+\usepackage[usenames]{xcolor}  % typesetting in color
+
+\title{TransportEditor User Manual}
+\author{Ondrej~{\v{S}}kopek}
+\date{\today}
+
+%% The hyperref package for clickable links in PDF and also for storing
+%% metadata to PDF (including the table of contents).
+%% Most settings are pre-set by the pdfx package.
+\hypersetup{unicode}
+\hypersetup{breaklinks=true}
+
+
+\begin{document}
+\maketitle
+
+%%%% manual_en
+Welcome to TransportEditor's manual!
+
+TransportEditor is a planning dashboard for the Transport planning domain.
+You can use it to study various Transport domain variants,
+create, edit and visualize problem instances, after which you can
+run various planners and validators and visualize the resulting plans.
+
+How TransportEditor works and what it can do:
+
+\begin{enumerate}
+\item Create a new session, create or load a domain.
+
+\item Create/load a problem. TransportEditor will display the road graph for you.
+You can use the buttons on the right to edit the graph and its elements.
+
+\item Go to ``Session'' $\to$ ``Set Planner'' to set a planner to use. Likewise, set a validator in
+``Session'' $\to$ ``Set Validator''
+
+\item{Click on the ``Plan'' button to run the planner. After some time, the planning will end and you can
+see the generated plan in the table on the right. There are several plan views available, f.e. the Gantt chart.}
+\end{enumerate}
+
+Now you can edit the graph, the vehicles, packages, rerun your planner and test the outcome. Happy planning!
+
+Read the following sections if you want to learn to work with TransportEditor quickly and effectively.
+
+\section{Getting help}
+If you can't find the answer to your question or request in this document
+(located in the menu, in ``Help'' $\to$ ``Help''),
+feel free to submit a pull request/issue in
+the GitLab repository\footnote{\url{https://gitlab.com/oskopek/TransportEditor}} of TransportEditor,
+post a question on Stack Overflow\footnote{\url{https://stackoverflow.com}}, or email me personally.
+You can find all the needed information in the menu, in ``Help'' $\to$ ``About''.
+
+\subsection{Changing the language}
+If you want to run a translated version of TransportEditor,
+set your system locale accordingly and restart TransportEditor.
+
+If you want to try out a translated version (on Linux) without changing your system locale permanently,
+run:\\
+\verb+LC_ALL="LOCALE" java -jar TransportEditor.jar+\\
+Substitute \texttt{LOCALE} for any locale available on your system. To view all available locales,
+run \verb+locale -a+.
+
+TransportEditor currently does not support changing the language on the fly.
+
+\section{Loading and saving}
+\subsection{Session}
+The session is an abstraction over all the user workspace. It encompasses all your currently loaded data and options,
+including the domain, problem, plan, planner, and validator.
+
+You can create a new session by clicking on ``Session'' $\to$ ``New''.
+
+Session can be saved to an XML file using ``Session'' $\to$ ``Save'' or ``Session'' $\to$ ``Save As''.
+After that, you can come back to your session any time by using ``Session'' $\to$ ``Load'', without
+having to load all the individual parts again.
+
+\subsection{Domain}
+Loading a domain from its PDDL file is as simple as clicking on ``Domain'' $\to$ ``Load''.
+A file chooser dialog will pop up, where you can select the correct file.
+
+\subsection{Domain variant creator}
+After clicking on ``Domain'' $\to$ ``New'', the domain variant creator will help
+you adjust the constraints and features available in your domain.
+The base of the domain includes a few predicates and functions, along with:
+
+\begin{itemize}
+\item the graph
+
+\item distances of edges
+
+\item locatables (packages, vehicles, …)
+\end{itemize}
+
+And actions:
+
+\begin{itemize}
+\item Pick up (a package into a vehicle)
+
+\item Drop (a package from a vehicle)
+
+\item Drive (a vehicle between two nodes on an edge)
+\end{itemize}
+
+Each action has an associated cost, and the minimization function is by default the total cost of a plan.
+
+There two basic domain types you can select:
+
+\begin{itemize}
+\item Sequential -- All actions are disjunct in time, the total-duration (sum of action durations) is minimized by default.
+
+\item Temporal -- Introduces start/end times of actions,
+preconditions/effects are now checked with temporal reasoning (at start/at end/over all),
+new minimization function -- total-time.
+\end{itemize}
+
+There are several optional constraints you can place on your model:
+
+\begin{itemize}
+\item the absence of capacity (vehicles have no maximum capacity)
+
+\item fuel (introduces petrol stations, max fuel capacity of a vehicle and it's current status.
+Also introduces an additional edge-weight, fuel-demand -- equally long edges can have different
+fuel-demands, for example)
+
+\item numerical minimization -- currently not implemented. Sorry for the inconvenience.
+\end{itemize}
+
+You can select any subset of these constraint packages, but only a single cost function to go with them.
+The domain variant creator will then create your chosen domain and TransportEditor enables you to export it to PDDL,
+so that you can use it in different (mainly domain-independent) planners.
+
+\subsection{Problem}
+Loading a problem from its PDDL file is as simple as clicking on ``Problem'' $\to$ ``Load''.
+A file chooser dialog will pop up, where you can select the correct file.
+
+Saving and creating new problems works quite simply with the appropriate button in the ``Problem'' menu.
+
+\subsection{Plan}
+Loading a plan from its PDDL file is as simple as clicking on ``Plan'' $\to$ ``Load''.
+A file chooser dialog will pop up, where you can select the correct file.
+
+Saving and creating new plans works quite simply with the appropriate button in the ``Plan'' menu.
+Plans can also be changed by the planner (see the ``Plan'' button on the right) and by the user, in the plan view
+table at the bottom right -- either by rearranging the plan actions or changing their start time.
+
+\subsection{Demo data}
+You can try all of this out on the datasets gathered from the IPC competitions, located in the folder \texttt{datasets/}.
+
+\section{Editing the problem}
+Left-clicking and dragging will move locations on the screen. To attempt a new redraw of the graph,
+press the ``Redraw'' button. If the layout doesn't get redrawn properly, try moving a few nodes from their
+positions to destabilize the algorithm and press redraw again.
+
+You can select graph elements by left-clicking and dragging in the graph area, creating a selection region.
+The buttons on the right will get enabled/disabled based on the selected elements in the graph.
+To be aware of all the selection options, it is recommended to read through the
+Shortcut quick-tip manual, located in ``About'' $\to$ ``Shortcut quick tips''. To deselect nodes,
+press Escape (Esc) or click on a point in the graph containing no element.
+
+The ``Lock'' button disables all graph editing. Clicking it again will unlock the graph.
+
+\section{Planning}
+To set a planner, go to the ``Session'' $\to$ ``Set Planner'' menu.
+
+\subsection{External planners}
+In the ``Set Planner'' menu, you can choose to set an external planner. An external planner is either an
+executable's name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.
+
+The planner executable must follow a few rules (usually these are enforced by wrapping your planner in a shell script
+that enforces these rules):
+
+\begin{itemize}
+
+\item Only the resulting plan is written to standard output.
+
+\item All logging, debugging and error messages are written to standard error output.
+
+\item The executable must exit with a 0 return code if and only if planning succeeded and a plan was output to stdout.
+
+\item The executable must take two file path parameters -- the domain in PDDL and the problem in PDDL.
+
+\begin{itemize}
+
+\item You can specify a parameter template while setting the external planner. For example, you can specify \texttt{fast-downward}
+to be the executable and its parameters to be \verb+{0} {1} --search "astar(lmcut())"+. The template \verb+{0}+ will get
+substituted for the domain filename at runtime, the \verb+{1}+ will be the problem filename.
+
+\end{itemize}
+
+\end{itemize}
+
+\subsection{Internal planners}
+Unfortunately, TransportEditor does not currently contain any internal planners.
+
+\subsection{Validating your plan}
+To set a validator, go to the ``Session'' $\to$ ``Set Validator'' menu.
+
+The ``Sequential Validator'' is a simple validator used for sequential domains that checks basic
+properties of the problem state, like predicates holding before and effects holding after applying an action.
+For more detailed information, see the class \texttt{SequentialValidator}.
+
+\subsection{External validators}
+In the ``Set Validator'' menu, you can choose to set an external validator. An validator planner is either an
+executable's name that is present in the filesystem executable path (based on the environment variable PATH)
+or directly a path to an executable file.
+
+The validator executable must follow a few rules:
+
+\begin{itemize}
+\item All logging, debugging and error messages are written to standard error output or standard output.
+
+\item The executable must exit with a 0 return code if and only if the plan is valid.
+
+\item The executable must take three file path parameters -- the domain in PDDL, the problem in PDDL and the plan in a
+VAL-like format \citep[Figure~2]{Howey2003}.
+
+\begin{itemize}
+
+\item You can specify a parameter template while setting the external validator.
+For example, you can specify \texttt{val} to be the executable and its parameters to be ``\verb+{0} {1} {2}+''.
+The template \verb+{0}+ will get substituted for the domain filename at runtime, the \verb+{1}+ will be the problem filename and
+\verb+{2}+ will be the plan filename.
+
+\end{itemize}
+
+\end{itemize}
+
+\section{Plan views}
+On the lower right-hand side when a plan is loaded, you can see a table with the plan's actions. If the loaded domain
+is sequential, that table displays basic action info and its first column is draggable - you can reorder the plan's
+actions by dragging them from one place to another in the table. If the domain is temporal, you can double click and
+edit the action start time in the table.
+
+Both of these tables are filterable -- if you right click on the table's headers a small dialog popup will show up
+and you can choose which values to show and which to hide. These choices will get propagated to the other plan views
+and they too will get filtered (if possible).
+
+One of the alternative table views is the Gantt chart. It displays action objects on the Y-axis and time on the X-axis.
+The contents of the chart are individual actions involving the given action objects at the given time. The color
+corresponds to a type of action.
+
+\section{Stepping through a plan}
+When a plan is loaded, there is an option of stepping through the plan's actions and visualizing the intermediate
+problem state. To enable this, press the ``Show steps'' button in the panel on the right -- this will disable graph editing.
+Do note that stepping through the plan does not change the
+actual problem -- if you press ``Hide steps'', the original problem will appear.
+
+When stepping through a plan, a new panel will display, showing navigation buttons.
+You can move in the plan in three different ways:
+
+\begin{itemize}
+
+\item Using the up (``$\wedge$'') and down (``$\vee$'') arrow buttons. This will de-apply or apply the previous
+or next action in the plan. Do note, that in temporal plans, this might not necessarily be the action
+above or beneath the currently selected one, although it probably will be.
+
+\item Selecting the appropriate action in the plan table. The plan state will change to before, during or after the
+selected action is applied -- depending on which time button is selected (``Start'', ``Middle'' or ``End'').
+
+\item Selecting a specific time in the text field on the right. You can input any positive number and the plan will move to
+that time step. It will either apply the ``at start'' effects of actions starting at the selected time or not, depending
+on the selection of the ``Apply starts'' button. If it is selected, the ``at start'' effects will be applied.
+Otherwise, only ``at end'' effects of actions ending at the selected time will be applied to the plan state.
+
+\end{itemize}
+
+%%% Bibliography
+\input{bibliography}
+
+\end{document}

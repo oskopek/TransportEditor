@@ -1,0 +1,5 @@
+target/
+imga/*.pdf
+*.xmpi
+.__afs*
+*.sav

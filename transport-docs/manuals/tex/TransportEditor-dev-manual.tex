@@ -1,0 +1,354 @@
+\documentclass[12pt,a4paper,twoside]{article}
+\setlength\textwidth{160mm}
+\setlength\textheight{247mm}
+\setlength\oddsidemargin{0mm}
+\setlength\evensidemargin{0mm}
+\setlength\topmargin{0mm}
+\setlength\headsep{0mm}
+\setlength\headheight{0mm}
+
+%% Generate PDF/A-2u
+\usepackage[a-2u]{pdfx}
+
+%% Character encoding: usually latin2, cp1250 or utf8:
+\usepackage[utf8]{inputenc}
+
+\hyphenation{Transport-Editor}
+
+%% Prefer Latin Modern fonts
+\usepackage{lmodern}
+
+%% Further useful packages (included in most LaTeX distributions)
+\usepackage{amsmath}        % extensions for typesetting of math
+\usepackage{amsfonts}       % math fonts
+\usepackage{amsthm}         % theorems, definitions, etc.
+\usepackage{bbding}         % various symbols (squares, asterisks, scissors, ...)
+\usepackage{bm}             % boldface symbols (\bm)
+\usepackage{graphicx}       % embedding of pictures
+\usepackage{fancyvrb}       % improved verbatim environment
+\usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+\setcitestyle{round} % TODO: round brackets for citep and citet
+\usepackage[nottoc]{tocbibind} % makes sure that bibliography and the lists
+			    % of figures/tables are included in the table
+			    % of contents
+\usepackage{dcolumn}        % improved alignment of table columns
+\usepackage{booktabs}       % improved horizontal lines in tables
+\usepackage{paralist}       % improved enumerate and itemize
+\usepackage[usenames]{xcolor}  % typesetting in color
+
+\title{TransportEditor Developer Manual}
+\author{Ondrej~{\v{S}}kopek}
+\date{\today}
+
+%% The hyperref package for clickable links in PDF and also for storing
+%% metadata to PDF (including the table of contents).
+%% Most settings are pre-set by the pdfx package.
+\hypersetup{unicode}
+\hypersetup{breaklinks=true}
+
+% Title page and various mandatory informational pages
+\begin{document}
+\maketitle
+
+%%%%%%%%% README
+TransportEditor aims to be a problem editor and plan visualizer for the Transport domain from the IPC 2008.
+The goal is to create an intuitive GUI desktop application for making quick changes and re-planning,
+but also designing a new problem dataset from scratch.
+
+\section{Getting help}
+
+\textbf{For users looking for help}: a manual describing all the available features of TransportEditor is available in the app itself:
+in the upper menu bar item \textbf{Help $\to$ Help}.
+
+Post any development questions or comments you may have on Stack Overflow and/or don't hesitate to
+open an issue at \url{https://gitlab.com/oskopek/TransportEditor/issues}.
+
+\section{Running TransportEditor releases}
+\begin{itemize}
+\item Download a release from:\\ \url{https://github.com/oskopek/TransportEditor/releases}
+
+\item Note: TransportEditor uses semantic versioning (\url{http://semver.org/}).
+
+\item To directly run TransportEditor, download the \textbf{executable JAR file}:\\ \texttt{TransportEditor-VERSION-jar-with-dependencies.jar}
+
+\item If you want to run a release, just try:\\ \texttt{java -jar TransportEditor-VERSION-jar-with-dependencies.jar}
+\end{itemize}
+
+\section{Building \& running TransportEditor}\label{readme-building}
+
+\begin{itemize}
+\item See the section (further down) on How-to setup your \textbf{build environment} first.
+
+\item \textbf{Recommended}: \texttt{mvn clean install -DskipTests}
+
+\item To run \textbf{unit tests}: \texttt{mvn clean install}
+
+\item To run \textbf{integration tests}: \texttt{mvn clean install -Pit}
+
+\item To \textbf{clean}, run: \texttt{mvn clean}
+
+\item To build \textbf{docs} too: \texttt{mvn clean install -Pdocs}
+
+\item \textbf{Run TransportEditor}:
+\begin{itemize}
+\item If you followed the build environment setup and you want to run your version of TransportEditor,
+run the command \texttt{mvn exec:java} from the \texttt{transport-editor} module directory.
+
+\item If you want to run a translated version of TransportEditor, set your system locale accordingly and restart TransportEditor. If you want to try out a translated version (on Linux), try:\\ \verb+LC_ALL="LOCALE" java -jar TransportEditor.jar+\\
+Substitute \texttt{LOCALE} for any locale available on your system. To view all available locales,
+run \verb+locale -a+.
+\end{itemize}
+\end{itemize}
+
+\section{Setup your build environment}
+\begin{enumerate}
+
+\item \textbf{Install Git}
+
+\begin{itemize}
+
+\item Fedora: \texttt{sudo dnf install git}
+
+\item Ubuntu: \texttt{sudo apt-get install git}
+
+\item Windows: Download and install Git for Windows at:\\ \url{https://git-scm.com/downloads}
+
+\end{itemize}
+
+\item \textbf{Install git-lfs} from \url{https://git-lfs.github.com/}
+
+\item \textbf{Install Java8 JDK} -- Oracle JDK Downloads\footnote{\url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}} -- Select: Java Platform (JDK)
+
+\begin{itemize}
+
+\item \textbf{NOTE}: You need \texttt{jdk-8u40} or newer (JavaFX 8 dependency).
+
+\end{itemize}
+
+\item \textbf{Install Maven} -- preferably the latest version you can.
+Usually, your distribution's package management repository is enough:
+
+\begin{itemize}
+
+\item Fedora: \texttt{sudo dnf install mvn}
+
+\item Ubuntu: \texttt{sudo apt-get install maven}
+
+\item Windows: See
+Maven on Windows\footnote{\url{http://maven.apache.org/guides/getting-started/windows-prerequisites.html}} and 
+Maven Downloads.\footnote{\url{http://maven.apache.org/download.cgi}}
+
+\end{itemize}
+
+\item \textbf{Fork the repository} -- Create a fork of the oskopek/TransportEditor repository\footnote{\url{https://gitlab.com/oskopek/TransportEditor/}} using the button under the project logo on GitLab, usually the fork will be called: \texttt{yourusername/TransportEditor}.
+
+\item \textbf{Clone the your fork} -- run:\\ \texttt{git clone https://gitlab.com/yourusername/TransportEditor.git}\\
+Or, preferably, use SSH:\\ \texttt{git clone git@gitlab.com:yourusername/TransportEditor.git}
+
+\item \textbf{Pull the LFS files} -- run: \texttt{git lfs pull}
+
+\item \textbf{Run the build} (see: \nameref{readme-building})
+\end{enumerate}
+
+\section{Short design description}
+The model for the Transport domain is pretty complicated
+because it handles:
+
+\begin{itemize}
+\item Multiple variants of the Transport domain
+
+\item Planning and visualization with the same model
+\end{itemize}
+
+That's what this short section is for -- describing the ideas behind the model, so that reading the code
+afterward is easier. The model is split into 4 parts:
+
+\begin{itemize}
+\item Session
+\item Domain
+\item Problem
+\item Plan
+\end{itemize}
+
+\section{Plan}
+The plan consists of an ordered list of actions.
+There are two types of plans:
+
+\begin{itemize}
+\item Sequential -- these plans are strictly linear, actions do not overlap (imagine simple linked list).
+\item Temporal -- every action in this plan has a time interval in which it takes place.
+This plan is basically a set of intervals with associated actions. For storing it, we use an
+Interval tree\footnote{\url{https://en.wikipedia.org/wiki/Interval_tree}},
+which allows efficient access to actions given a time or time range.
+\end{itemize}
+
+\subsection{Visualizing plans}
+
+There are currently two ways to visualize both plan types:
+
+\begin{itemize}
+\item Simple list -- both sequential and temporal versions look similar. Both are filterable by right clicking on the headers.
+\begin{itemize}
+\item Sequential: uses a simple drag-and-drop reorderable table of action arguments.
+See the screenshot on the top of the README for a preview. Is redrawn completely after every change.
+
+\item Temporal: in contrast to the sequential variant, this one cannot be reordered by dragging. The start times can, however,
+be edited, which will result in the table reordering itself. Is not redrawn completely, adjusts its internal state and
+redraws the necessary parts.
+\end{itemize}
+
+\item Gantt chart -- both sequential and temporal versions look alike, resembling an XY chart, the X-axis being the time
+axis and the Y-axis having all action objects. Both are redrawn every time the plan changes or its filter
+in the simple list is changed.
+\begin{itemize}
+\item Sequential: using it to visualize sequential plans is not very interesting, as it offers almost no added insights on top of the simple list
+
+\item Temporal: when visualizing temporal plans with a Gantt, we can observe the synchronicity of planned actions
+and, to some extent, the cooperation of individual actors
+\end{itemize}
+\end{itemize}
+
+\subsection{Persisting plans}
+Using string manipulation and built-in constants and format, it is persisted into a VAL-like format \citep[Figure~2]{Howey2003}.
+For parsing, we assume a correct and valid VAL-like plan. A very simple string manipulation and Regex-based approach
+is used for both temporal and sequential plans. Additionally, a simple ANTLR\footnote{\url{http://www.antlr.org/}} grammar
+is used in some places. See the \texttt{persistence} package in \verb+transport-core+ for details.
+
+\section{Problem}
+The problem is basically a graph (with multiple possible ``layers'', f.e. fuel) and a vehicle and package map.
+
+Currently, we use GraphStream\footnote{\url{http://graphstream-project.org/}} for both the data storage and visualization of the graph.
+Apart from nodes and edge arrows, everything else is visualized as
+``sprites\footnote{\url{http://graphstream-project.org/doc/Tutorials/Graph-Visualisation/\#sprites}}''.
+
+Fuel is added as different graph edge type (\verb+FuelRoad+ instead of \verb+DefaultRoad+) and a domain label change
+(see \verb+PddlLabel+s in the domain).
+If the domain is fuel enabled, the fuel properties of locations, roads, and vehicles else will be displayed.
+
+\subsection{Visualizing problems}
+
+Problem visualization does not fundamentally differ between different domains and problems.
+Some problem tooltips/properties might dis/appear when changing the domain type.
+
+The graph is automatically laid out using a \texttt{SpringBox} algorithm from GraphStream
+for a given time and then switched to a manual layout.
+
+\subsection{Persisting problems}
+Both rule pages of IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
+specify PDDL 3.1 as their official modeling language (language for domain
+and problem specification).
+Daniel L. Kovacs proposed an updated and corrected BNF (Backus-Naur Form)
+definition of PDDL 3.1.\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/repository/kovacs-pddl-3.1-2011.pdf}}
+
+Using a Freemarker\footnote{\url{http://freemarker.org/}} template and a lot of string manipulation it is persisted into PDDL.
+For parsing, we assume a correct and valid problem and use a formal grammar written in ANTLR to parse PDDL into a generated code structure provided by ANTLR and the \texttt{maven-antlr-plugin}. The same grammar as for
+domains is used. See the \texttt{persistence} package of \verb+transport-core+ and the accompanying \texttt{src/main/antlr4} folder for details.
+
+\section{Domain}
+There is basically only one domain type: \texttt{VariableDomain} (we also have the notion of a \texttt{SequentialDomain},
+but it is basically just an in-code hardcoded equivalent of loading the sequential Transport domain PDDL
+into a \texttt{VariableDomain}).
+
+The domain contains flags (labels), telling us which ``layers'' are enabled and which are not.
+The UI, validator, IO, and planner all take these into account.
+It also contains methods for action creation using their correct domain-specified definitions
+and provides other useful data (predicates, functions, \ldots).
+
+\subsection{Visualizing domains}
+
+Domains are not visualizable per se.
+
+\subsection{Persisting domains}
+Using a Freemarker template and a lot of string manipulation it is persisted into PDDL.
+For parsing, we assume a correct and valid problem and use a formal grammar written in ANTLR
+to parse PDDL into a generated code structure provided by ANTLR and the \texttt{maven-antlr-plugin}. The same grammar as for
+problems is used.
+
+TransportEditor doesn't load the PDDL domain definitions directly -- those are already built-in.
+We only read the domain files to check which subset of conditions the user has chosen to model.
+
+In the UI, we can also create a domain using a popup dialog backed internally by a \texttt{VariableDomainBuilder}.
+It is essentially switchboard for gathering the appropriate flags and other properties the domain should have.
+
+\section{Session}
+The session is where everything comes together. It keeps an instance of the domain, problem, and plan (and planner and
+validator, \ldots). We can use it to reason about what actions can be executed in the UI with the currently loaded
+objects and also as a quick persistence solution -- if you save a session, you can then load it next time and
+do not have to open all the individual parts again.
+
+\subsection{Visualizing sessions}
+
+Sessions are visualized by visualizing all their (possible) parts.
+
+\subsection{Persisting sessions}
+Sessions are persisted automatically to XML using XStream\footnote{\url{https://x-stream.github.io/}}. This means, all its properties
+should be reasonably serializable (by reflection).
+
+\section{Planning}
+Any class implementing the \texttt{Planner} interface can be set as the planner for a session and if it has all the properties
+that are needed (domain \& problem), we can generate a plan using an instance of that class. TransportEditor supports
+external (executable) planners out of the box, given that the executable adheres to a few rules (for details, see
+\texttt{ExternalPlanner}). An end of planning event is raised after planning finishes, for UI redrawing purposes.
+
+\section{Validation}
+Any class implementing the \texttt{Validator} interface can be used as a validator for plans in a planning session.
+Validation happens automatically after planning in a session or it can be triggered manually. There are different
+validators with different strictness (used for different domain variants). Choosing a wrong combination of domain,
+problem and validator might cause false positives or false negatives, make sure to read the documentation of the
+individual validators. TransportEditor supports a popular external validator called VAL \citep{Howey2003} out of the box.
+
+\section{General notes}
+There are few other small features of the project worth mentioning.
+
+\subsection{CDI \& the EventBus}
+CDI (Context and Dependency Injection) using Weld\footnote{\url{http://weld.cdi-spec.org/}} is used for inversion of control
+and for communication without tight coupling. Should only be used in the UI part of the project.
+
+For event-driven communication on the front end, Guava's \texttt{EventBus} is used. Again, it enables persistent
+reactive handling without tight coupling.
+
+\subsection{JavaFX properties and bindings}
+The JavaFX based UI makes heavy use of bindings and properties, essential features of JavaFX. They enable
+reactive changes to the UI in an efficient manner but can be a bit tricky when reading code that uses them.
+For even more power, we use the ControlsFX\footnote{\url{http://fxexperience.com/controlsfx/}} library, but try to avoid it,
+if possible.
+
+\subsection{Model immutability}
+The model (mainly the \texttt{model} package in the module \verb+transport-core+) is designed to be immutable
+(excluding a few exceptions). This makes it easier to reason about complex, possibly multithreaded operations
+on top of it. This note is useful to keep in mind when reading code that changes the model data.
+
+\subsection{Tests}
+The project aims to be well tested and verified. To stick to these goals, we have several levels of tests,
+that are run by a CI (Continuous Integration) system after every push and should also be run by developers
+(at least) after every commit. The displayed test coverage in the README is calculated as an average of unit
+and integration test coverage.
+
+TransportEditor currently has 3 types of tests:
+
+\begin{itemize}
+\item Unit tests (\texttt{*Test.java}) -- simple and quick to run tests that test one thing and test it well.
+
+\item Integration tests (\texttt{*IT.java}) -- complex tests that handle multiple moving parts at once. Usually involving IO or
+other not easily mockable things. Try to avoid abusively writing these in favor of unit tests, if possible.
+
+\item User interface tests (\texttt{*UI.java}) -- test the UI using TestFX\footnote{\url{https://github.com/TestFX/TestFX}}.
+At the moment, they are under-represented and not run very often. Currently, CI doesn't run them by default.
+\end{itemize}
+
+\subsection{Comments, code style}
+TransportEditor employs a rigorous code style checker called \texttt{checkstyle} that is run automatically at every build.
+Please adhere to that style when extending/editing the code base. Multiple other unwritten and unspecified rules might
+apply. Please, do not take any style comments personally -- they are in place so that the code remains intact and
+readable in the long term.
+
+As part of the \texttt{checkstyle} process, JavaDoc comments are enforced on every method and class (excluding tests).
+They should briefly describe the design/implementation choices, \textbf{why} they were made and any useful examples and or
+other quirks.
+
+
+%%% Bibliography
+\input{bibliography}
+
+\end{document}
