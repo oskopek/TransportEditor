@@ -2,9 +2,9 @@
 
 In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also briefly discuss specifics of the Transport domain and mention similar studied problems.
 
-\section{Context}
+\section{Related work}
 
-\TODO{Title + VRP, \citep{Dantzig1959}}
+\TODO{VRP, \citep{Dantzig1959}}
 
 
 \subsection{The Vehicle Routing Problem}
@@ -33,17 +33,20 @@ In this chapter, we formalize the concept of planning to help us with formally i
 
 \section{Automated planning}
 
-Planning is usually defined as the reasoning side of acting -- an abstract deliberation
+As previously stated, \textit{planning} is usually defined as the reasoning side of acting -- an abstract deliberation
 process that chooses and organizes actions by anticipating their outcomes. \citep[Section~1.1]{Ghallab2004}
-It seems only natural that we want to have computers to do this strenuous activity for us.
+It seems only natural that we want to have computers do this strenuous activity for us.
 Automated planning is an attempt at just that -- it is an area of Artificial Intelligence (AI) that
 studies the planning process computationally. \citep[Section~1.1]{Ghallab2004}
 
 Unfortunately, the specific situations in which we want to use automated planning are very diverse --
-from devising a sequence of actions to shut down a nuclear power plant to planning the robotic arm
-movements in an assembly line or devising the complex motor activations for space aircraft positioning.
-Due to this, people are often interested in domain-independent planning, where the planner gets information
-about both the domain and the specific problem and attempts to devise a plan using only the provided knowledge
+from devising a sequence of actions to shut down a nuclear power plant,
+planning the movements of a robotic arm
+on an assembly line, or devising the complex pattern of motor activations
+for space aircraft positioning.
+Due to this, researchers are often interested in domain-independent planning,
+where the planner gets information
+about both the domain and the specific problem at runtime and attempts to devise a plan using only the provided knowledge
 and the planner's previously built-in processes. \citep[Section~1.3]{Ghallab2004}
 
 On the other hand, domain-specific planning, where domain knowledge has been built into the planner,
@@ -58,7 +61,7 @@ a conceptual model similar to the restricted model in \citep[Section~1.4, Sectio
 \begin{defn}[State-transition system]\label{defn:state-transition-sys}
 A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma)$, where:
 \begin{itemize}
-\item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states,
+\item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states;
 \item $A = \{\noop, a_1, a_2, \ldots\}$ is a finite set of actions;
 \item $\gamma: S \times A \to S \cup \{\emptyset\}$ is a state-transition function,
 where $\forall s \in S : \gamma(s, \noop) = s$,
@@ -79,8 +82,8 @@ sequence of actions to apply to which states in order to achieve some objective.
 The objective can be defined in various ways -- we might want the planner
 to devise a plan that
 does not enter specific states, or contrary to that, visits each of a set of states,
-or just end at a chosen state.
-We will use the last choice to formalize the notion of a \textit{planning problem}.
+or one that just ends at a chosen state.
+We will use the last option for formalizing the notion of a \textit{planning problem}.
 
 \begin{defn}[Planning problem]\label{defn:planning-problem}\citep[Part~I]{Ghallab2004}
 A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
@@ -91,34 +94,35 @@ A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
 \end{itemize}
 \end{defn}
 
-Now that we have defined a \textit{planning problem} we can specify what we meant
-by the planner generating a sequence of actions to achieve a goal -- we will
+Now that we have defined a \textit{planning problem} we can specify what we mean
+by the planner generating a \textit{sequence of actions} to achieve a goal -- we will
 call this sequence a \textit{plan}.
-For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$
+For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$.
 
 \begin{defn}[Plan]\label{defn:plan}\citep[Section~1.5]{Ghallab2004}
 For a planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$,
-a plan is a finite ($k \in \N$) sequence of actions $(a_1, a_2, \ldots, a_k)$ where
-$\forall i \in [k] : a_i \in A$ such that
-$\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i$ and $s_k \in g$.
+a plan is a finite sequence of actions $(a_1, a_2, \ldots, a_k),\, k \in \N$ where
+$\forall i \in [k] : a_i \in A$ and
+$\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i \in S$, while $s_k \in g$.
 \end{defn}
 
-\noindent A basic planning model (see Figure~\ref{fig:planning-model}) consists of three components:
+A basic \textit{planning model}, i.e. the abstraction of a whole real-life scenario
+we want to plan for, consists of three components (Figure~\ref{fig:planning-model}):
 
 \begin{itemize}
 \item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
-it receives.
+it receives;
 \item A \textit{controller} -- given an input state $s \in S$ provides an action $a \in A$ as output according
-to a plan.
-\item A \textit{planner} -- uses a description of $\Sigma$ to synthesize a plan for the controller
-to execute in order to achieve the objective.
+to a plan; and
+\item A \textit{planner} -- uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
+to execute in order to reach a goal state from the initial state.
 \end{itemize}
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../imga/planning_model}
 \end{center}
-\caption{Typical planning model for offline planning. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
+\caption{A typical planning model for offline planning -- a state-transition system $\Sigma$, a controller executing a plan, and a planner devising the plan based on an initial state and goals. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
 \label{fig:planning-model}
 \end{figure}
 
@@ -127,8 +131,23 @@ to execute in order to achieve the objective.
 Although the previously defined restricted state-transition system is a simplification of real-world
 domains, it is a useful one. 
 This simplification has historically been studied as classical planning.
-There are several theoretical domain-independent representations
-of planning problems in classical planning. \citep[Chapter~2]{Ghallab2004}
+
+A different branch of automated planning, \textit{neoclassical planning},
+uses largely the same theoretical foundations as classical 
+planning. What is different is the approach to planning using those foundations
+-- instead of search space nodes being a sequence of actions or a partially ordered
+set of actions, we view them as a set of several partial plans
+\citep[Part~II]{Ghallab2004}.
+One of the most famous results in neoclassical planning is the GraphPlan algorithm
+published by \citet{Blum1997}. It is out of the scope of this text to describe it in detail
+-- see \citet[Section~6.3]{Ghallab2004}.
+GraphPlan makes heavy use of a data structure called a \textit{planning graph},
+which caused a breakthrough in the field of (domain-independent) planning
+-- bigger problems could now be practically solved.
+
+We will now describe several theoretical domain-independent representations
+of planning problems used in classical planning \citep[Chapter~2]{Ghallab2004},
+so that we can formulate our domain using them.
 
 \subsubsection{Set-theoretic representation}
 
@@ -178,7 +197,7 @@ The definition of the state-transition function also stays the same.
 Goal states are defined as the set of states that satisfy $g$,
 the \textit{goal}, where $g$ is any set of ground literals.
 
-Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in the state.
+Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in that state.
 
 \subsubsection{State-variable representation}
 
@@ -206,8 +225,9 @@ is applicable to a state $s$ if the $\precond(o)$ condition is true given the va
 of state variables in state $s$. The effects of the action change the state variables
 according to the assignments in $\effects(o)$ and the corresponding values of state
 variables in state $s$, implicitly transitioning to a different state.
-The goal is defined as a set of ground state variables and their corresponding values.
-\citep[Section~2.5.2]{Ghallab2004}
+The goal is defined as a set of ground state variables and their corresponding values
+\citep[Section~2.5.2]{Ghallab2004}.
+
 
 \subsubsection{Extensions of representations}
 
@@ -218,40 +238,44 @@ if and only if the predicate's argument is of the given type.
 We can then add these predicates as preconditions of actions.
 Adding types will make the domain and problem formulations
 easier to read and gives additional information
-to planners, making them more efficient.
-\citep[Section 2.4.1]{Ghallab2004}
+to planners, making them more efficient \citep[Section 2.4.1]{Ghallab2004}.
 
 \subsubsection{State-space planning and Plan-space planning}
 
 \TODO{add definitions and examples}
 
-\subsubsection{Neoclassical planning}
-
-Neoclassical planning uses largely the same theoretical foundations as classical 
-planning. What is different is the approach to planning using those foundations
--- instead of search space nodes being a sequence of actions or a partially ordered
-set of actions, we view them as a set of several partial plans.
-\citep[Part~II]{Ghallab2004}
-
-The most famous result in neoclassical planning is Blum's and Furst's the GraphPlan algorithm. \citep{Blum1997}
-It is out of the scope of this text to describe it in detail
-(see \citep[Section~6.3]{Ghallab2004}).
-GraphPlan makes heavy use of a data structure called a \textit{planning graph},
-which caused a breakthrough in the field of planning -- bigger problems could
-now be practically solved.
-
-\TODO{consider describing planning graphs}
-
 \subsubsection{Temporal planning}
 
 \TODO{temporal planning \citep[Chapter~14]{Ghallab2004}, possibly \citep[Chapter~15]{Ghallab2004}, small reference to the temporal Transport domain variant}.
 
+\subsection{PDDL}\label{pddl}
 
+Originally proposed by \citet{McDermott1998} for the 1$^{\mathrm{st}}$ International Planning
+Competition\footnote{\url{http://ipc98.icaps-conference.org/}},
+the Planning Domain Definition Language (PDDL) has become
+a de facto standard language for modelling planning domains and problems,
+continually evolving to the needs of the  
+research community and the needs of the IPC itself in the future years.
+We will also use it as input for our planners.
+
+PDDL was inspired by the language used to describe STRIPS \citep{Fikes1971}
+and the numerous languages that sparked from it.
+It has a Lisp-like\footnote{\url{https://en.wikipedia.org/wiki/Lisp_(programming_language)}}
+declarative syntax and is very extensible.
+Not many planners support PDDL in its entirety -- they usually support 
+several ``feature subsets'', called \textit{requirements}.
+Over time, PDDL has evolved from the originally proposed version 1.2
+to the now standard version 3.1. Several extensions and successors were proposed,
+like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}}
+(MA-PDDL) and
+Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
+(PPDDL).
 
 \subsection{Planning in practice}
 
-In practice, many assumptions we made get violated and many additional requirements arise
-due to various business or social requirements. They allow us, however, to work
+In practice, many of the assumptions we made will get violated and many additional requirements will arise,
+due to various business or social requirements.
+These assumptions allow us, however, to work
 on problems that are more general and can therefore be applied to multiple scenarios.
 Businesses can often add minor tweaks on top of the obtained results so that
 their needs are satisfied. 
@@ -261,14 +285,14 @@ repeating the process regularly.
 
 Planners, in practice, are computer programs that are fed two files as input
 -- the domain file and the problem file. After that, they proceed with their internal calculations
-and upon finishing (or not) return a plan (or not). 
-We can then evaluate that plan, see if it meets our criteria and, potentially,
+and upon finishing return a plan (or not). 
+We can then evaluate the plan, see if it meets our criteria and, potentially,
 execute it in the real world.
 
 What we are missing from a bare plan is the allocation of specific resources.
-Scheduling addresses the problem of how to perform a given set of actions (a plan)
-using a limited number of resources in a limited amount of time and
-this is crucial to practical usage of any such plan. \citep[Chapter~15]{Ghallab2004}
+\textit{Scheduling} addresses the problem of how to perform a given set of actions (a plan)
+using a limited number of resources in a limited amount of time, and
+that is crucial to practical usage of any plan \citep[Chapter~15]{Ghallab2004}.
 
 In this text, we will only study the abstracted and simplified first part of this whole process
 -- finding the ``best'' actions that lead to a specified goal.
@@ -276,21 +300,24 @@ In this text, we will only study the abstracted and simplified first part of thi
 
 
 
-\section{Transport domain description}
+
+
+
+
+\section{Description of Transport domain variants}
 
 Transport is a planning domain designed for
 the International Planning
 Competition\footnote{\url{http://www.icaps-conference.org/index.php/Main/Competitions}}
 (IPC), which is part of the International Conference on Automated Planning and
 Scheduling\footnote{\url{http://www.icaps-conference.org/index.php/Main/HomePage}} (ICAPS).
-
 Originally, Transport appeared at 
 IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Domains.html}} which took place in 2008.
 Since then, it has been used in two IPCs,
 specifically IPC-7\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/}} in 2011
 and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/}} in 2014.
 
-There are a few basic formulations of the Transport domain family (i.e.~``similar Transport domains'').
+There are a few basic formulations of the Transport domain family (i.e.~``similar'' Transport domain variants) which we will describe now.
 
 \subsection{Common traits of Transport domains}
 
@@ -298,33 +325,39 @@ Transport is a logistics domain -- vehicles drive around on a (generally asymmet
 All vehicles have limited capacities (the sum of package sizes they can carry).
 Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
 (in other words, the road length).
-The general goal is to minimize the total cost
-while delivering all packages to their destination. A few Transport problems
-also request that the trucks be positioned at certain locations in the graph
+The general goal is to minimize the \textit{total cost}
+while delivering all packages to their destination, where
+the total cost of a plan is defined as the sum of the costs of all actions in
+the plan.
+
+A few Transport problems also request that the trucks be positioned at certain
+locations in the graph
 after finishing their deliveries.
 
 \subsection{Transport STRIPS}\label{transport-strips}
 
 STRIPS, the Stanford Research Institute Problem Solver,
 was a planner proposed in the 1970's by \citet{Fikes1971}.
-The influence of STRIPS was, however, not due to the planner,
+The influence of STRIPS was, however, not only due to the planner,
 but the language used to describe its inputs -- the planning operators and goals.
 That is why we sometimes refer to classical planning (Section~\ref{classical-planning})
 as STRIPS planning. For the purposes of this text, we will use these terms interchangeably.
 
 In the STRIPS variant of the Transport domain,
-all packages have a size of 1 and vehicles can drive around infinitely,
-only incurring the cost of the travel. This being a classical STRIPS domain,
+all packages have a size of 1 and vehicles of a bounded capacity can drive around indefinitely
+(there is no notion of fuel or anything similar). The only reason for them not to, is that
+driving incures a cost of its own, usually much larger than pickin up or dropping off packages.
+This being a classical STRIPS domain,
 it does not assume time in any sense,
 so actions have no duration and are applied one after the other, sequentially.
 
 This formulation contains three basic planning operators:
 
 \begin{itemize}
-\item \verb+drive+: where a vehicle drives to an adjacent location
+\item \verb+drive+, where a vehicle drives to an adjacent location
 along a road that is connected to its current location;
-\item \verb+pick-up+: where a vehicle that is stationary at a location picks up a co-located package; and
-\item \verb+drop+: where a stationary vehicle drops a package off at its location.
+\item \verb+pick-up+, where a vehicle that is stationary at a location picks up a co-located package; and
+\item \verb+drop+, where a stationary vehicle drops a package off at its location.
 \end{itemize}
 
 In all the datasets, this domain variant is denoted as \textit{Transport sequential}
@@ -351,15 +384,14 @@ duration of 1, \verb+refuel+ has a duration of 10, and the duration of \verb+dri
 equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
 
 The addition of time poses numerous technical complications when formalizing this variant
--- its PDDL formulation significantly differs the two previous ones, but only in technical details.
+-- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details.
 One important technicality is that a vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
 
-The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan (in practice, this translates to minimizing
-maximum end time over all actions).
+The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
+defined as the maximum time where an action is still taking place.
+In practice, this translates to minimizing maximum end time over all actions.
 
-
-
-\section{Transport domain formulation}
+\section{Formalizing the Transport domain}
 
 We will now translate the informal description of the Transport domain from the previous section to the formal representations we defined in Section~\ref{classical-planning}. We will not formulate all the domain variants in all representations as
 they are very much alike and not needed for the comprehension of the following chapters.
@@ -374,17 +406,17 @@ of a plan that we will optimize for later.
 The predicates used are:
 
 \begin{itemize}
-\item \verb+at(o, l)+: the package or vehicle \verb+o+ is at the
+\item \verb+at(o, l)+, the package or vehicle \verb+o+ is at the
 location \verb+l+;
-\item \verb+capacity(v, s)+: the vehicle \verb+v+ currently has \verb+s+ free space -- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
-\item \verb+capacity-predecessor(s1, s2)+: the space literal represented by \verb+s1+
+\item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space -- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
+\item \verb+capacity-predecessor(s1, s2)+, the space literal represented by \verb+s1+
 is directly smaller than the literal represented by \verb+s2+;
-\item \verb+in(p, v)+: the package \verb+p+ is in the vehicle \verb+v+; and
-\item \verb+road(l1, l2)+: the location \verb+l1+ is directly adjacent to the location
+\item \verb+in(p, v)+, the package \verb+p+ is in the vehicle \verb+v+; and
+\item \verb+road(l1, l2)+, the location \verb+l1+ is directly adjacent to the location
 \verb+l2+ by a road.
 \end{itemize}
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -417,11 +449,11 @@ a petrol station.
 To model fuel, we need the addition of a few functions, namely:
 
 \begin{itemize}
-\item \verb+fuel-demand(l1, l2)+: the amount of fuel needed to drive
+\item \verb+fuel-demand(l1, l2)+, the amount of fuel needed to drive
 from location \verb+l1+ to location \verb+l2+;
-\item \verb+fuel-left(v)+: the amount of fuel left in
+\item \verb+fuel-left(v)+, the amount of fuel left in
 the vehicle \verb+v+; and
-\item \verb+fuel-max(v)+: the maximum amount of fuel
+\item \verb+fuel-max(v)+, the maximum amount of fuel
 the vehicle \verb+v+ can contain, i.e. its fuel tank capacity.
 \end{itemize}
 
@@ -429,17 +461,19 @@ It is obvious that we could substitute the functions for relations
 and a finite amount of literals for any given problem instance of
 the domain in this representation,
 so that it adheres to the definition of a classical formulation.
-\TODO{proof?}
+For example, we could add literals representing a finite set of
+natural numbers and predicate that represents
+\verb+successor+ defined as $\texttt{successor}(a, b) \equiv a + 1 = b$.
 
 We also abuse the notation with \verb+decrease+ and \verb+assign+;
 the left parameter's value is to be decreased by the right
 parameter's value or the left parameter's value is to be overridden
 by the right parameter's value, respectively.
 
-See Figure~\ref{code:classical-numeric} for exact differences
+See Figure~\ref{code:classical-numeric} for the exact differences
 in the representation after adding fuel.
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -452,13 +486,10 @@ refuel(v, l)
   precond: at(v, l), has-petrol-station(l)
   effects: assign(fuel-left(v), fuel-max(v))
 \end{code}
-\caption{Classical formulation of \texttt{transport-numeric}'s differences.}
+\caption{Classical formulation of \texttt{transport-numeric}'s differences compared to \texttt{transport-strips}.}
 \label{code:classical-numeric}
 \end{figure}
 
-\subsection{Temporal Transport's classical representation}
-
-\TODO{code + explanation}
 
 \subsection{Transport's state-variable representation}
 
@@ -469,7 +500,7 @@ into state-variable functions with largely the same semantics as in
 Section~\ref{transport-classical-representation}. Again, we leave out
 the \textit{total cost} notion.
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -498,7 +529,7 @@ The numeric variant again adds the \verb+refuel+ operator along with
 a few fuel-related state-variable functions and predicates, and changes 
 the \verb+drive+ operator (Figure~\ref{code:statevar-numeric}).
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -510,46 +541,39 @@ refuel(v, l)
   precond: at(v) = l, has-petrol-station(l)
   effects: fuel-left(v) <- fuel-max(v)
 \end{code}
-\caption{State-variable formulation of \texttt{transport-numeric}'s differences.}
+\caption{State-variable formulation of \texttt{transport-numeric}'s differences
+compared to \texttt{transport-strips}.}
 \label{code:statevar-numeric}
 \end{figure}
 
-\subsection{PDDL}\label{pddl}
+\TODO{Temporal Transport's state-variable representation + code}
 
-Originally proposed by McDermott et al. in 1998 for the 1$^{\mathrm{st}}$ International Planning
-Competition\footnote{\url{http://ipc98.icaps-conference.org/}},
-the Planning Domain Definition Language\citep{McDermott1998} (PDDL) has become
-a de facto standard language for modelling planning domains and problems,
-continually evolving to the needs of the
-research community and the needs of the IPC itself in the future years.
+\subsection{PDDL formulation of Transport}
 
-PDDL was inspired by the language used to describe STRIPS\citep{Fikes1971}
-and the numerous languages that sparked from it.
-It has a Lisp-like\footnote{\url{https://en.wikipedia.org/wiki/Lisp_(programming_language)}}
-declarative syntax and is very extensible.
-Not many planners support PDDL in its entirety -- they usually support 
-several ``feature subsets'', called \textit{requirements}.
-Over time, PDDL has evolved from the originally proposed version 1.2
-to the now standard version 3.1. Several extensions and successors were proposed,
-like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}}
-(MA-PDDL) and
-Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
-(PPDDL).
+All formulations of the Transport domain use the basic PDDL (Section~\ref{pddl}) version 2.1,
+with the requirement \verb+typing+, which adds the notion of types for individual
+literals. We will call these literals \textit{action objects}.
 
-All formulations of the Transport domain use the basic PDDL version, with the requirement \verb+typing+.
-The STRIPS variant additionally needs \verb+action-costs+, while the numeric variant
-requires \verb+numeric-fluents+ and \verb+goal-utilities+.
+The STRIPS variant additionally needs \verb+action-costs+, a requirement adding
+integer costs to indiviudal planning operators. These costs may be constant
+(like the ones for \verb+pick-up+, \verb+drop+ or \verb+refuel+),
+or they may be dependent on the parameters of the instantiated operator (like
+the cost of \verb+drive+).
+The numeric variant
+requires \verb+numeric-fluents+ (introduces native PDDL support for numbers) and
+\verb+goal-utilities+ (custom optimization functions and optional goal predicates).
 The temporal domain is similar in requirements to the numeric one, except for
-substituting \verb+goal-utilities+ for \verb+durative-actions+.
+substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
+and the duration of actions).
+
 One problem with the diversity of these domain formulations is that rarely does
 a single planner support the union of all these requirements.
 We show the capabilities of individual studied planners
 later on, in Table~\ref{tab:plannner-requirements-comparison}.
-
 For reference, we show the PDDL representation of the sequential variant of
 the Transport domain in Figure~\ref{code:pddl-strips}.
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \begin{code}
 (define (domain transport)
   (:requirements :typing :action-costs)
@@ -593,9 +617,7 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 \label{code:pddl-strips}
 \end{figure}
 
-\
-
-\subsection{VAL}\label{val}
+\TODO{Describe VAL \citep{Howey2003}.}
 
 \section{Transport domain analysis}
 
@@ -603,13 +625,15 @@ In this chapter, we will delve more deeply into the Transport domain and try to 
 We will describe the problem instances that have been used in the IPC and discuss potential
 heuristics and approaches to creating plans for these problems.
 
-\subsection{Is solving Transport problems with domain knowledge easy?}
+\subsection{Does domain knowledge make Transport easy to solve?}
+
+
 
 \begin{thm}
 Sequential Transport is NP-hard.
 \end{thm}
 \begin{proof}
-As proven by Karp 1972 \TODO{} the problem of finding a Hamiltonian cycle (HC) in a graph is NP-Complete. We will show that we can transform the HC problem  into a Sequential Transport problem. \TODO{Verify}.
+As proven by \citet{Karp1972}, the problem of finding a Hamiltonian circuit (HC) in a graph is NP-Complete. We will show that we are able to transform the HC problem into a Sequential Transport problem. \TODO{Verify}.
 
 Given an undirected graph $G$, the solution to HC is a cycle through all vertices of the graph, without visiting any single node twice. We can use the same graph in a Transport problem instance, with one vehicle of capacity $n-1$ where $n = |G|$ and  $n-1$ packages co-located with the vehicle at any graph vertex, and one package located elsewhere. All co-located packages will have different targets (one of the remaining $n-1$ points) and the final package will have the original vertex as the target. Assume all road lengths are $1$. The optimal plan will (without loss of generality) begin with $n-1$ \verb+pick-up+ actions.
 
