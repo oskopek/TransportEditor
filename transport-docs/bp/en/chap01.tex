@@ -122,7 +122,7 @@ to execute in order to reach a goal state from the initial state.
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../imga/planning_model}
 \end{center}
-\caption{A typical planning model for offline planning -- a state-transition system $\Sigma$, a controller executing a plan, and a planner devising the plan based on an initial state and goals. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
+\caption[A typical planning model for offline planning.]{A typical planning model for offline planning -- a state-transition system $\Sigma$, a controller executing a plan, and a planner devising the plan based on an initial state and goals. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
 \label{fig:planning-model}
 \end{figure}
 
@@ -723,17 +723,18 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \section{TransportEditor -- A Transportation Planning System}
 
-\TODO{Expand this section with \citep{Skopek2017} and add screenshots to attachments}
+\TODO{Expand this section with \citep{Skopek2017}}
 
 TransportEditor aims to be a problem editor and plan visualizer for the Transport domain.
 It is an intuitive GUI desktop application (Figure~\ref{fig:transporteditor-screenshot}) for making quick changes and re-planning, but also designing a new problem dataset from scratch. TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain.
+For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
 
 \begin{figure}[tb]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{../img/transporteditor_screenshot}
+\includegraphics[width=0.9\textwidth]{../img/transporteditor_temporal}
 \end{center}
-\caption{TransportEditor stepping through a plan of a simple sequential problem.}
+\caption{Screenshot of a user tracing actions of a plan for a smaller temporal problem in TransportEditor.}
 \label{fig:transporteditor-screenshot}
 \end{figure}
 
@@ -757,4 +758,4 @@ The user can step forward and backward in the plan and inspect each action resul
 \end{itemize}
 
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
-the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format.
+the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format. 
