@@ -2,35 +2,6 @@
 
 In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also briefly discuss specifics of the Transport domain and mention similar studied problems.
 
-\section{Related work}
-
-\TODO{VRP, \citep{Dantzig1959}}
-
-
-\subsection{The Vehicle Routing Problem}
-
-\TODO{mention Dantzig} \citep{Dantzig1959}
-
-\TODO{mention Braekers} \citep{Braekers2016}
-
-\TODO{mention Montoya} \citep{Montoya-Torres2015}
-
-\TODO{mention Neo} \citep{ResearchGroup2013}
-
-\subsubsection{Constraint Satisfaction Problems}
-
-\subsubsection{Problem formulation}
-
-\subsubsection{Comparison to the Transport domain formulation}
-
-\subsubsection{Formulating the sequential Transport domain as a VRP problem}
-
-\TODO{Ghallab 8.3}
-
-\subsection{Past solutions and approaches}
-
-\TODO{\ldots see \citep{Skopek2017}}
-
 \section{Automated planning}
 
 As previously stated, \textit{planning} is usually defined as the reasoning side of acting -- an abstract deliberation
@@ -270,6 +241,24 @@ like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}
 (MA-PDDL) and
 Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
 (PPDDL).
+
+PDDL does not handle plan representation. For a specific planning domain and problem in PDDL,
+the we represent the plan in a format that is a field-wide consensus -- we will refer to is
+as the \textit{VAL-like} format. VAL \citep{Howey2003} is a plan validator created for the IPC.
+It takes as input (among several options) three filenames: filename of a planning domain and
+problem in PDDL, and a filename for a plan in the mentioned format.
+As described in and around \citet[Figure~2]{Howey2003}, the approximate format
+consists of multiple lines in the following format:
+\begin{center}
+\verb+(action_name action_object_literals*)+
+\end{center}
+
+For temporal domains, the format adds a start time and duration for each line, like so:
+\begin{center}
+\verb+start_time: (action_name action_object_literals*) [duration]+
+\end{center}
+
+Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all parsers.
 
 \subsection{Planning in practice}
 
@@ -614,13 +603,136 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 \label{code:pddl-strips}
 \end{figure}
 
+
+
 \TODO{Temporal formulation.}
 
-\TODO{Describe VAL \citep{Howey2003}.}
+
+
+
+
+
+
+\section{Related problems}
+
+Most of the research done on transportation-related problems and their automation focuses
+on a famous combinatorial optimization problem, the \textit{Travelling Salesman Problem} (TSP), on which an
+exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}.
+Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
+
+\begin{quote}
+Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the citites.
+\end{quote}
+
+However, the problem we aim to study is more similar to a different optimization problem based on the TSP.
+
+\subsection{The Vehicle Routing Problem}
+
+The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
+with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today.
+
+Many different VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
+review and classify hundreds of papers related to the VRP, with many more left out.
+Most of these works tend to study the CVRP problem with minor modifications, hence creating
+a broad landscape of problems and a platform to build on for the future.
+According to the data in \citet[Table~4]{Braekers2016}, there has been a recent uptick
+in popularity for models relatively similar to Transport -- specially, VRPs with
+backhauls (returning items from customers to depots),
+multiple depots (multiple starting points for vehicles), and with allowed split deliveries (multiple
+vehicles can serve a single customer).
+The literature review on multiple depot VRP (MDVRP) in \citet{Montoya-Torres2015}
+suggests a big rise in popularity for MDVRP in the recent past,
+which provides further proof of relevance for studying the Transport domain.
+
+Traditional solutions for the VRP include exact approaches like branch and bound
+exploring the whole feasible search space,
+classical heuristics which limit the search space, and also metaheuristics (general heuristics for devising specific heuristics), like genetic algorithms, constraint satisfaction
+programming, local search, tabu search, and many more.
+
+\comment{
+\subsection{VRP Formulation}\citep{ResearchGroup2013}
+
+The VRP is a combinatorial problem whose ground set is the edges of a graph ${G(V,E)}$. The notation used for this problem is as follows:
+
+\begin{itemize}
+\item ${V = \left\lbrace v_{0}, v_{1}, \ldots, v_{n} \right\rbrace}$ is a vertex set, where:
+\begin{itemize}
+\item Consider a depot to be located at ${v_0}$.
+\item Let ${V' = V \backslash \left\lbrace v_{0} \right\rbrace}$ be used as the set of ${n}$ cities.
+\end{itemize}
+\item ${A = \left\lbrace(v_{i},v_{j}) | v_{i},v_{j} \in V; i \neq j \right\rbrace}$ is an arc set.
+\item ${C}$ is a matrix of non-negative costs or distances ${c_{ij}}$ between customers ${v_{i}}$ and ${v_{j}}$.
+\item ${d}$ is a vector of the customer demands.
+\item ${R_{i}}$ is the route for vehicle ${i}$.
+\item ${m}$ is the number of vehicles (all identical). One route is assigned to each vehicle.
+\end{itemize}
+
+When $c_{ij} = c_{ji}$ for all $(v_{i}, v_{j}) \in A$ the problem is said to be symmetric and it is then common to replace ${A}$ with the edge set $E = \lbrace (v_{i},v_{j}) | v_{i},v_{j} \in V; i < j \rbrace$.
+
+With each vertex ${v_{i}}$ in ${V'}$ is associated a quantity ${q_{i}}$ of some goods to be delivered by a vehicle. The VRP thus consists of determining a set of ${m}$ vehicle routes of minimal total cost, starting and ending at a depot, such that every vertex in ${V'}$ is visited exactly once by one vehicle.
+
+For easy computation, it can be defined ${b(V) = \left\lceil \sum_{v_{i} \in V} d_{i}) / C \right\rceil}$, an obvious lower bound on the number of trucks needed to service the customers in set ${V}$.
+
+We will consider a service time $\delta_{i}$ (time needed to unload all goods), required by a vehicle to unload the quantity ${q_{i}}$ at ${v_{i}}$. It is required that the total duration of any vehicle route (travel plus service times) may not surpass a given bound ${D}$, so, in this context the cost ${c_{ij}}$ is taken to be the travel time between the cities. The VRP defined above is NP-hard [Lenstra \& Rinnooy Kan 1981].
+
+A feasible solution is composed of:
+
+\begin{itemize}
+\item a partition ${R_{1}, \ldots, R_{m}}$ of ${V}$;
+\item a permutation ${\sigma_{i}}$ of ${R_{i} \bigcup {0}}$ specifying the order of the customers on route ${i}$.
+\end{itemize}
+
+
+The cost of a given route (${R_{i} = \left\lbrace v_{0}, v_{1}, \ldots, v_{m+1} \right\rbrace}$), where ${v_{i} \in V}$ and ${v_{0} = v_{m+1} = 0}$ (0 denotes the depot), is given by ${C(R_{i}) = \sum_{i=0}^{m} c_{i,i+1} + \sum_{i=1}^{m} \delta_{i}}$.
+
+A route ${R_{i}}$ is feasible if the vehicle stop exactly once in each customer and the total duration of the route does not exceed a prespecified bound ${D}$: ${C(R_{i}) \leq D}$.
+
+Finally, the cost of the problem solution ${S}$ is: ${F_{VRP} = \sum_{i=1}^{m} F(R_{i})}$.
+}
+
+\subsection{Comparison of Transport and VRP}
+
+In \citet{ResearchGroup2013}, a website was created, which serves as a comprehensive resource on the history of VRP,
+definitons of its various flavors, an overview of the popular solution methods and state-of-the-art results. According to the taxonomy proposed, we could characterize the Transport domain
+as a Multiple Depot Split Delivery Capacitated VRP with Satellite Facilities. Multiple Depot
+means that vehicles can start driving from multiple locations, split delivery
+means a single customer can be served by multiple vehicles, capacitated VRP adds maximum
+capacities to vehicles, and satellite facilities means that vehicles can pick items up
+while on a route. This does not characterize the Transport domain in every detail,
+but is fairly accurate.
+
+According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted similarly in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features in any single study, to the best of our knowledge.
+Usually, the studied problems are more constrained than Transport -- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
+makes cooperation of vehicles hard to model, whereas in Transport this is one of the fundamental elements.
+
+\comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
+
+The fundamental difference between Transport and the VRP is that Transport has a notion of single packages, or items, compared to the VRP, the transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
+interpretation, but also during problem solving -- \textit{customers} in VRP usually request
+a quantity of the delivered item, not specific item instances, like packages being ``requested''
+by their target locations in Transport.
+
+\subsection{Constraint Satisfaction Problems}
+
+Constraint satistfaction techniques are a popular means of solving problems in combinatorial optimization. \citet[Section~8.1]{Ghallab2004} give an informal definition of a \textit{Constraint Satisfaction
+Problem} (CSP):
+
+\begin{quote}
+Given (1) a set of variables and their respective domains, and (2) a set of constraints on the compatible values that the variables may take, the problem is to find a value for each variable within its domain such that these values meet all the constraints.
+\end{quote}
+
+\subsection{Formulating Transport as a CSP}
+
+We will now formulate the \TODO{sequential} Transport problem as a CSP using \citep[Section~8.3]{Ghallab2004}. \TODO{finish}
+
+
+\subsection{Past solutions and approaches to Transport}
+
+\TODO{\ldots see \citep{Skopek2017}}
 
 \section{Transport domain analysis}
 
-In this chapter, we will delve more deeply into the Transport domain and try to analyze its features.
+In this section, we will delve more deeply into the Transport domain and try to analyze its features.
 We will describe the problem instances that have been used in the IPC and discuss potential
 heuristics and approaches to creating plans for these problems.
 
