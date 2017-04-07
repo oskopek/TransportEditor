@@ -2,6 +2,22 @@
 
 In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also briefly discuss specifics of the Transport domain and mention similar studied problems.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Automated planning}
 
 As previously stated, \textit{planning} is usually defined as the reasoning side of acting -- an abstract deliberation
@@ -293,6 +309,16 @@ In this text, we will only study the abstracted and simplified first part of thi
 
 
 
+
+
+
+
+
+
+
+
+
+
 \section{Description of Transport domain variants}
 
 Transport is a planning domain designed for
@@ -379,6 +405,24 @@ One important technicality is that a vehicle cannot pick up or drop packages con
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
 defined as the maximum time where an action is still taking place.
 In practice, this translates to minimizing maximum end time over all actions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Formalizing the Transport domain}
 
@@ -562,7 +606,7 @@ later on, in Table~\ref{tab:plannner-requirements-comparison}.
 For reference, we show the PDDL representation of the sequential variant of
 the Transport domain in Figure~\ref{code:pddl-strips}.
 
-\begin{figure}[tb]
+\begin{figure}[tbp]
 \begin{code}
 (define (domain transport)
   (:requirements :typing :action-costs)
@@ -606,6 +650,13 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 
 
 \TODO{Temporal formulation.}
+
+
+
+
+
+
+
 
 
 
@@ -721,14 +772,24 @@ Problem} (CSP):
 Given (1) a set of variables and their respective domains, and (2) a set of constraints on the compatible values that the variables may take, the problem is to find a value for each variable within its domain such that these values meet all the constraints.
 \end{quote}
 
+\TODO{define state space + size}
+
 \TODO{Expand and quote an authoritative CSP source}
-
-
-
 
 \subsection{Past solutions and approaches to Transport}
 
 \TODO{\ldots see \citep{Skopek2017}}
+
+
+
+
+
+
+
+
+
+
+
 
 \section{TransportEditor -- A Transportation Planning System}
 
@@ -761,7 +822,7 @@ TransportEditor will help researchers working on this domain fine-tune their pla
 A secondary motivation is to be able to test approaches for creating plans for the domain.
 For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
 
-\begin{figure}[tb]
+\begin{figure}[tbp]
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../img/transporteditor_temporal}
 \end{center}
@@ -791,6 +852,19 @@ The user can step forward and backward in the plan and inspect each action resul
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
 the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offerring guidance when
 using the program and providing an in-depth description.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Transport domain analysis}
 
@@ -859,14 +933,32 @@ Hence, we have constructed a HC.
 
 \TODO{insights, degenerate cases, etc.}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Datasets}
 
 We have acquired several datasets from previous runs of the IPC which we will use to test our planners.
 Table~\ref{tab:ipc-datasets} provides an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks).
 
 \begin{table}[tb]
-\begin{tabular}{c|c|c|c}
-\textbf{Dataset name} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
+\begin{tabular}{c||ccc}
+\textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
 \hline
 \hline
 netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
@@ -895,37 +987,137 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \TODO{features and peculiarities of the problem instances}
 
-\subsection{Formulating Transport as a CSP}
 
-We can now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the encoding provided in \citet[Section~8.3]{Ghallab2004}.
-However, using that strategy, our problems ``blow up'' in size -- we will show that on
-the problems \textit{p01} and \textit{p20} from the \textit{seq-sat} track at the IPC 2008.
 
-\TODO{Explain calculations}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Formulating Transport as a CSP}
+
+\TODO{intro}
+
+\subsection{Na{\"{i}}ve formulation}
+
+We will now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the na{\"{i}}ve encoding provided in \citet[Section~8.3]{Ghallab2004}.
+However, using that strategy, our problems ``blow up'' in size -- as is expected due
+to the different complexities of planning versus solving CSPs \citep[Section~8.3.2]{Ghallab2004}. To visualize the difference in our case, we have constructed a state space estimation table (Table~\ref{tab:csp-trivial}) for conversions of two sample sequential Transport problems.
 
 \begin{table}[tb]
 \begin{center}
-\begin{tabular}{l|rr}
-\textbf{Ghallab} & \textbf{p01} & \textbf{p20} \\ 
+\begin{tabular}{l||rr}
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
 \hline 
 \hline 
-\textbf{Best known plan length} & • & • \\ 
-\textbf{Vehicles} & 6 & • \\ 
-\textbf{Packages} & 2 & • \\ 
-\textbf{Locations} & 5 & • \\ 
-\textbf{Max capacity} & 4 & • \\ 
+\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Vehicles} & 2 & 4 \\ 
+\textbf{Vehicle variables} & 14 & 1 408 \\ 
+\textbf{Packages} & 2 & 20 \\ 
+\textbf{Package variables} & 14 & 7 040 \\ 
+\textbf{Locations} & 5 & 60 \\ 
+\textbf{Roads} & 12 & 256 \\
+\textbf{Max capacity} & 4 & 4 \\ 
 \hline
-\textbf{Vehicle variables} & 2 & • \\ 
-\textbf{Package variables} & 14 & • \\ 
-\textbf{Ground Drive actions} & 168 & • \\ 
-\textbf{Ground PickUp actions} & 980 & • \\ 
-\textbf{Ground Drop actions} & 980 & • \\ 
+\textbf{Ground Drive actions} & 168 & 360 448 \\ 
+\textbf{Ground PickUp actions} & 140 & 1 689 600 \\ 
+\textbf{Ground Drop actions} & 140 & 1 689 600 \\ 
 \hline 
-\textbf{Variables total} & 48 & • \\ 
-\textbf{Grounded actions} & 2128 & • \\ 
-\textbf{Search Space Estimate} & • & • \\ 
+\textbf{Planning variables total} & 48 & 10 207 \\ 
+\textbf{Grounded actions total} & 448 & 1 189 838 848 \\ 
+\textbf{Search Space Estimate} & $\approx 1.1 \cdot 10^{52}$ & $\approx 1.4 \cdot 10^{27 952}$ \\ % https://www.wolframalpha.com/input/?i=(245120%5E351)+*+4%5E1408+*+60%5E1408+*+1468%5E7040
 \end{tabular}
 \end{center}
-\caption{asd}
-\label{tab:ipc-datasets}
+\caption{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using the general and domain-independent encoding from \citet[Section~8.3]{Ghallab2004}.}
+\label{tab:csp-trivial}
 \end{table}
+
+The first section of the table (rows 1--7) contains problem-specific constants.
+The two calcualted values in that section, \textit{Vehicle variables} and \textit{Package variables} are the amount of variables generated for the respective
+object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
+multiplied by the set plan length $+ 1$ (each state corresponds to the state before applying an action + the last state).
+
+In the second section (rows 8--10), we estimate the number of ground actions
+Step 1 from \citet[Section~8.3.1]{Ghallab2004} will generate.
+We calculate the number of \pickup{} and \drop{} actions the CSP encoding will generate
+as $$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations} \cdot \mt{\#packages},$$
+effectively counting all ground planning operators of the problem. Similarly,
+the number of \drive{} actions is calculated as
+$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#roads},$$
+which is more efficient than the na{\"{i}}ve way of
+counting all
+$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations}^2$$
+actions.
+
+As we can see from the third section of the table, the number of variables
+(planning variables and ground actions) is not extremely high --
+the problem is that the variables have very large domains,
+which makes the CSP problem exponentially larger \citep[Section~8.3.2]{Ghallab2004}.
+We calculated the \textit{Search Space Size Estimate} (SSE) as
+\begin{align*}
+\mt{SSE} =\; &\mt{\#ground\_actions}^{l-1} & \textit{\footnotesize select ground actions for the plan}\\
+&\cdot \mt{\#capacities}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select capacities for vehicle variables}\\
+&\cdot \mt{\#locations}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select locations for vehicle variables}\\
+&\cdot (\mt{\#locations} + \mt{\#vehicles})^{l \cdot \mt{\#pkg}}, & \textit{\footnotesize select locations/vehicles for package variables}
+\end{align*}
+where we set $l := \mt{length(plan) + 1}$.
+For comparison to the SSEs in the last table row, 
+the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
+
+\subsection{Domain-dependent formulation}\label{csp-custom-repr}
+
+\TODO{domain-dep formulation, note the shadow variable overhead}
+
+
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{l||rr}
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
+\hline 
+\hline 
+\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Vehicles} & 2 & 4 \\ 
+\textbf{Vehicle shadow vars} & 14 & 1 408 \\
+\textbf{Packages} & 2 & 20 \\ 
+\textbf{Package shadow vars} & 14 & 7 040 \\
+\textbf{Locations} & 5 & 60 \\ 
+\textbf{Roads} & 12 & 256 \\
+\textbf{Max capacity} & 4 & 4 \\ 
+\hline
+\textbf{Ground Drive actions} & 24 & 1024 \\ 
+\textbf{Ground PickUp actions} & 20 & 4800 \\ 
+\textbf{Ground Drop actions} & 20 & 4800 \\ 
+\hline 
+\textbf{Planning variables total} & 48 & 10 207 \\ 
+\textbf{Grounded actions in step} & 64 & 10 624 \\ 
+\textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\ 
+\textbf{Search Space Estimate} & $\approx 1.5 \cdot 10^{14}$ & $\approx 2.0 \cdot 10^{637}$ \\
+\end{tabular}
+\end{center}
+\caption{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using a custom domain-dependent CSP encoding for Transport sequential.}
+\label{tab:csp-custom}
+\end{table}
+
+Using the domain-dependent encoding specified previously, we are now able to construct
+a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). While the table rows look similar, sections 2 and 3 are calculated
+differently. The ground action counts in section 2 are not multiplied by $\mt{length(plan)} + 1$
+as done previously, because we only represent them once, not at every plan state.
+The total number of grounded actions is the same, but they are not explicitly represented as variables. The Search Space size Estimate is therefore calculated differently:
+\begin{align*}
+\mt{SSE} =\; &3^{\mt{length(plan)} + 1} & \textit{\footnotesize select the action type of each action}\\
+&\cdot \mt{\#ground\_actions}^{l-1}. & \textit{\footnotesize select the specific ground action}
+\end{align*}
+For comparison to the na{\"{i}}ve encoding SSEs which going from the p01 problem to the p20 grow by a logarithmic factor of approximately $538$,
+whereas the domain-dependent ones only grow by approximately $46$,
+which is a huge improvement.
+
+Given the search space reduction, we will attempt to use this representation
+for constructing a CSP-based planner in Section~\ref{csp-approach}.
