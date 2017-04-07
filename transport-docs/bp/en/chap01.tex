@@ -897,5 +897,35 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 
 \subsection{Formulating Transport as a CSP}
 
-We can now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp) using the encoding by \citet[Section~8.3]{Ghallab2004}.
-However, using that strategy, our problems ``blow up'' in size
+We can now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the encoding provided in \citet[Section~8.3]{Ghallab2004}.
+However, using that strategy, our problems ``blow up'' in size -- we will show that on
+the problems \textit{p01} and \textit{p20} from the \textit{seq-sat} track at the IPC 2008.
+
+\TODO{Explain calculations}
+
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{l|rr}
+\textbf{Ghallab} & \textbf{p01} & \textbf{p20} \\ 
+\hline 
+\hline 
+\textbf{Best known plan length} & • & • \\ 
+\textbf{Vehicles} & 6 & • \\ 
+\textbf{Packages} & 2 & • \\ 
+\textbf{Locations} & 5 & • \\ 
+\textbf{Max capacity} & 4 & • \\ 
+\hline
+\textbf{Vehicle variables} & 2 & • \\ 
+\textbf{Package variables} & 14 & • \\ 
+\textbf{Ground Drive actions} & 168 & • \\ 
+\textbf{Ground PickUp actions} & 980 & • \\ 
+\textbf{Ground Drop actions} & 980 & • \\ 
+\hline 
+\textbf{Variables total} & 48 & • \\ 
+\textbf{Grounded actions} & 2128 & • \\ 
+\textbf{Search Space Estimate} & • & • \\ 
+\end{tabular}
+\end{center}
+\caption{asd}
+\label{tab:ipc-datasets}
+\end{table}
