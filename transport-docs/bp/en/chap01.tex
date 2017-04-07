@@ -59,13 +59,16 @@ it only changes when an action is applied to it and does not change while planni
 In the basic version, all actions have no duration.
 \end{defn}
 
-State transition systems approximately correspond to what we will refer to as \textit{planning domains}.
-They define which states and which actions we work with and how they
-are related, but they do not state anything about objectives, or what
-we want to achieve with planning.
+For a state $s \in S$, the actions $A_s = \{a \in A | \gamma(s, a) \neq \emptyset\}$ are called \textit{applicable}
+to the given state $s$. The $\noop$ action is applicable to all states.
 
-Given a state transition system $\Sigma$, planning aims to find which
-sequence of actions to apply to which states in order to achieve some objective.
+The state-transition function $\gamma$ and the set of actions $A$ together loosely correspond to what we will call a \textit{planning domain}.
+Planning domains define an abstract representation of actions we work with
+and how they are related,
+but they do not state anything about specific states or actions.
+
+Given a state-transition system $\Sigma$, planning aims to find a
+sequence of actions to apply to the beginning state in order to achieve some objective.
 The objective can be defined in various ways -- we might want the planner
 to devise a plan that
 does not enter specific states, or contrary to that, visits each of a set of states,
@@ -203,15 +206,15 @@ and afterwards
 $$\mathrm{location''}: \mathrm{vehicles} \to \mathrm{locations},$$
 using $\mathrm{location''}(v) = \mathrm{location'}(v, state_{cur})$, where $state_{cur}$ is the current state.
 
-Planning operators are defined similarly to the classical representations, but
+Planning operators are defined similarly to the classical representation, but
 $\precond(o)$ is now a set of expressions on state variables and relations.
 Also, $\effects(o)$ is defined as a set of assignments of values to state variables.
-The state transition function is defined analogously: an action $a$ (ground instance
+The state-transition function is defined analogously: an action $a$ (ground instance
 of operator $o$)
 is applicable to a state $s$ if the $\precond(o)$ condition is true given the values
-of state variables in state $s$. The effects of the action change the state variables
+of state variables in state $s$. The resulting state is created by changing the state variables
 according to the assignments in $\effects(o)$ and the corresponding values of state
-variables in state $s$, implicitly transitioning to a different state.
+variables in state $s$.
 The goal is defined as a set of ground state variables and their corresponding values
 \citep[Section~2.5.2]{Ghallab2004}.
 
@@ -229,7 +232,26 @@ to planners, making them more efficient \citep[Section 2.4.1]{Ghallab2004}.
 
 \subsubsection{State-space planning and Plan-space planning}
 
-\TODO{add definitions and examples}
+A different way of viewing the state-transition system $\Sigma = (S, A, \gamma)$ in a
+planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$ (Definition~\ref{defn:state-transition-sys}~and~\ref{defn:planning-problem}), is that of a labeled, directed graph $G(S, E, w)$, where:
+\begin{itemize}
+\item $E = \{(u, v) \in S^2 \;|\; \exists a \in A : \; \gamma(u, a) = v\}$;
+\item $w: E \to A$; and
+\item $\forall (u, v) = e \in E : w(e) = \{a \in A \;|\; \gamma(u, a) = v\}$. 
+\end{itemize}
+From the definition above, we see that applicable actions correspond to state transitions. While planning, the plan represented by the current position in
+the state space is the sequence of transitions from the start
+state $s_0$ to the current state \citep[Section~4.1]{Ghallab2004}.
+\textit{State-space planning} is a term used for planning techniques
+that use the state space for searching for a plan.
+
+An alternative for using the state space is offered by \textit{plan-space planning}.
+The state space is substituted for the \textit{plan space}.
+Nodes in this space represent \textit{partially specified plans},
+edges are \textit{plan refinement operations} \citep[Section~5.1]{Ghallab2004}.
+We will not use plan-space planning in this work, as according to
+\citet[Section~5.6]{Ghallab2004} it is unfit for
+incorporating domain-specific knowledge.
 
 \subsubsection{Temporal planning}
 
@@ -449,7 +471,7 @@ is directly smaller than the literal represented by \verb+s2+;
 \verb+l2+ by a road.
 \end{itemize}
 
-\begin{figure}[tb]
+\begin{figure}[tbp]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -506,7 +528,7 @@ by the right parameter's value, respectively.
 See Figure~\ref{code:classical-numeric} for the exact differences
 in the representation after adding fuel.
 
-\begin{figure}[tb]
+\begin{figure}[tbp]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -523,7 +545,6 @@ refuel(v, l)
 \label{code:classical-numeric}
 \end{figure}
 
-
 \subsection{Transport's state-variable representation}
 
 We are now also able to show the sequential Transport domain
@@ -533,7 +554,7 @@ into state-variable functions with largely the same semantics as in
 Section~\ref{transport-classical-representation}. Again, we leave out
 the \textit{total cost} notion.
 
-\begin{figure}[tb]
+\begin{figure}[tbp]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -543,15 +564,13 @@ drive(v, l1, l2)
 pick-up(v, l, p, s1, s2)
   ;; vehicle v picks up package p at location l,
   ;; decreasing its capacity from s2 to s1
-  precond: at(v) = l, at(p) = l, capacity-predecessor(s1, s2),
-           capacity(v) = s2
+  precond: at(v) = l, at(p) = l, s1 + 1 = s2, s2 > 0, capacity(v) = s2
   effects: at(p) <- nil, in(p) <- v, capacity(v) <- s1
   
 drop(v, l, p, s1, s2)
   ;; vehicle v drops package p at location l,
   ;; increasing its capacity from s1 to s2
-  precond: at(v) = l, in(p) = v, capacity-predecessor(s1, s2),
-           capacity(v) = s1
+  precond: at(v) = l, in(p) = v, s1 = s2 - 1, capacity(v) = s1
   effects: in(p) <- nil, at(p) <- l, capacity(v) <- s2
 \end{code}
 \caption{State-variable formulation of \texttt{transport-strips}.}
