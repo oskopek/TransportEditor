@@ -255,7 +255,31 @@ incorporating domain-specific knowledge.
 
 \subsubsection{Temporal planning}
 
-\TODO{temporal planning \citep[Chapter~14]{Ghallab2004}, possibly \citep[Chapter~15]{Ghallab2004}, small reference to the temporal Transport domain variant}.
+The addition of time makes modelling planning problems difficult and
+solving them even more difficult.
+However, adding time makes most models more realistic and practically usable.
+
+For an exhaustive introduction to temporal planning, see \citet[Chapter~13~and~14]{Ghallab2004}. We will only use the \textit{durative action} modelling approach
+specified by \citet[Section~5]{Fox2003}. We will adapt the following concepts presented
+in \citet[Section~14.2]{Ghallab2004} that are relevant to modelling temporal transportation planning problems:
+\begin{itemize}
+\item A \textit{temporally qualified expression} (tqe) is any
+expression in the form $$p(x_1, x_2, \ldots, x_k)@[t_s, t_e),$$ where $p$
+is a relation of the planning domain and $x_1, \ldots, x_k$ are constants or \textit{object
+variables}. These are similar to state variables in the state-variable representation,
+but the values change in time, not between states).
+
+The temporal variables $t_s$ and $t_e$ do not specifically represent a numerical time value, but together with other variables and constraints form a consistent set (for a more precise definition, see \citet[Section~14.2.1]{Ghallab2004}).
+It holds that $t_s < t_e$.
+
+The tqe $p(x_1, \ldots, x_k)@[t_s, t_e)$
+asserts that the relation $p(x_1, \ldots, x_k)$ holds for any time $t$, where
+$t_s \leq t < t_e$.
+
+\item A \textit{temporal planning operator} is is a tuple $o$, defined similarly to the planning operator in classical representations, but $\precond(o)$ and $\effects(o)$ are tqes.
+\end{itemize}
+
+
 
 \subsection{PDDL}\label{pddl}
 
@@ -271,6 +295,12 @@ PDDL was inspired by the language used to describe STRIPS \citep{Fikes1971}
 and the numerous languages that sparked from it.
 It has a Lisp-like\footnote{\url{https://en.wikipedia.org/wiki/Lisp_(programming_language)}}
 declarative syntax and is very extensible.
+A basic (without using extensions) PDDL domain and problem definition essentially correspond to representation format of the already defined planning domains and problems. Confusingly, we call PDDL planning operators \textit{actions}.
+Each action has a list of \textit{parameters} to be grounded by the planner,
+a \textit{precondition} and an \textit{effect}. To denote multiple
+preconditions and effects, we use the n-ary predicate \texttt{and}.
+A full format specification applicable to our use case is available in \citet[Appendix A]{Fox2003}.
+
 Not many planners support PDDL in its entirety -- they usually support 
 several ``feature subsets'', called \textit{requirements}.
 Over time, PDDL has evolved from the originally proposed version 1.2
@@ -279,6 +309,20 @@ like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}
 (MA-PDDL) and
 Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
 (PPDDL).
+
+An important version of PDDL, version 2.1, added support for temporal
+planning using \textit{durative actions} \citep[Section~5]{Fox2003},
+an analog of the previously defined temporal planning operators.
+Specifically, every durative action has a \texttt{duration}, specified
+either by a constant or a numeric fluent (function with numerical values that
+can change over time). Also, instead of a precondition it introduces a \textit{condition} (it is not necessary that the condition take place before the action).
+Both a condition and an effect represent a temporally qualified expression,
+denoted using three unary PDDL predicates:
+\begin{itemize}
+\item \texttt{at start}, where the parameter predicate must hold or the parameter effect must be applied at the start of the action;
+\item \texttt{at end}, where it must hold or be applied at the end of the action; and
+\item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is not applicable to effects, as it is unclear what it would mean.
+\end{itemize}
 
 PDDL does not handle plan representation. For a specific planning domain and problem in PDDL,
 the we represent the plan in a format that is a field-wide consensus -- we will refer to is
@@ -323,8 +367,6 @@ that is crucial to practical usage of any plan \citep[Chapter~15]{Ghallab2004}.
 
 In this text, we will only study the abstracted and simplified first part of this whole process
 -- finding the ``best'' actions that lead to a specified goal.
-
-
 
 
 
@@ -421,7 +463,7 @@ duration of 1, \verb+refuel+ has a duration of 10, and the duration of \verb+dri
 equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
 
 The addition of time poses numerous technical complications when formalizing this variant
--- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details.
+-- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
 One important technicality is that a vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
 
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
@@ -586,7 +628,7 @@ the \verb+drive+ operator (Figure~\ref{code:statevar-numeric}).
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
   precond: at(v) = l1, road(l1, l2), fuel-left(v) >= fuel-demand(l1,l2)
-  effects: at(v) <- l2, fuel-left(v) <-  fuel-demand(l1, l2)
+  effects: at(v) <- l2, fuel-left(v) <- fuel-left(v)-fuel-demand(l1,l2)
   
 refuel(v, l)
   ;; vehicle v is refueled to the maximum at location l
@@ -598,11 +640,49 @@ compared to \texttt{transport-strips}.}
 \label{code:statevar-numeric}
 \end{figure}
 
-\TODO{Temporal Transport's state-variable representation + code}
+We will represent the temporal variant of Transport using a variant of the state-variable representation using temporal planning operators, further referred to as the \textit{temporal state-variable representation}.
+Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation. \TODO{more commentary, define road-length, package-size, ready-loading}
+
+\begin{figure}[tbp]
+\begin{code}
+drive(v, l1, l2)
+  ;; vehicle v moves from location l1 to an adjacent location l2
+  duration: road-length(l1, l2)
+  cond: (at(v) = l1)@s, (road(l1, l2))@s,
+        (fuel-left(v) >= fuel-demand(l1, l2))@s
+  effects: (at(v) != l1)@s, (at(v) = l2)@e,
+           (fuel-left(v) <- fuel-left(v) - fuel-demand(l1, l2))@s
+
+pick-up(v, l, p)
+  ;; vehicle v picks up package p at location l
+  duration: 1
+  cond: (at(v) = l1)@[s, e), (at(p) = l1)@s, (ready-loading(v))@s,
+        (capacity(v) >= package-size(p))@s
+  effects: (at(p) = nil)@s, (in(p) = v)@e, (not ready-loading(v))@s,
+           (capacity(v) <- capacity(v) - package-size(p))@s,
+           (ready-loading(v))@e
+  
+drop(v, l, p)
+  ;; vehicle v drops package p at location l
+  duration: 1
+  cond: (at(v) = l1)@[s, e), (in(p) = v)@s, (ready-loading(v))@s
+  effects: (in(p) = nil)@s, (at(p) = l)@e, (not ready-loading(v))@s,
+           (capacity(v) <- capacity(v) + package-size(p))@e,
+           (ready-loading(v))@e
+  
+refuel(v, l)
+  ;; vehicle v is refueled to the maximum at location l
+  duration: 10
+  cond: (at(v) = l1)@[s, e), (has-petrol-station(l))@s
+  effects: (fuel-left(v) <- fuel-max(v))@e
+\end{code}
+\caption{Temporal state-variable formulation of the temporal of Transport. The characters \texttt{s} and \texttt{e} represent the start and end temporal variables of the given action, respectively.}
+\label{code:statevar-temporal}
+\end{figure}
 
 \subsection{PDDL formulation of Transport}
 
-All formulations of the Transport domain use the basic PDDL (Section~\ref{pddl}) version 2.1,
+All formulations of the Transport domain use PDDL (Section~\ref{pddl}) version 2.1,
 with the requirement \verb+typing+, which adds the notion of types for individual
 literals. We will call these literals \textit{action objects}.
 
@@ -612,8 +692,8 @@ integer costs to indiviudal planning operators. These costs may be constant
 or they may be dependent on the parameters of the instantiated operator (like
 the cost of \verb+drive+).
 The numeric variant
-requires \verb+numeric-fluents+ (introduces native PDDL support for numbers) and
-\verb+goal-utilities+ (custom optimization functions and optional goal predicates).
+requires \verb+numeric-fluents+, which introduces native PDDL support for functions whose values correspond to numbers and can change over time. Also required are
+\verb+goal-utilities+, used for custom optimization functions and optional goal predicates.
 The temporal domain is similar in requirements to the numeric one, except for
 substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
 and the duration of actions).
@@ -662,13 +742,13 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
     :effect (and (not (in ?p ?v)) (at ?p ?l) (capacity ?v ?s2)
         (not (capacity ?v ?s1)) (increase (total-cost) 1))))
 \end{code}
-\caption{PDDL formulation of \texttt{transport-strips}.}
+\caption{PDDL formulation of \texttt{transport-strips}. \TODO{Move to attachments and dedicate page}}
 \label{code:pddl-strips}
 \end{figure}
 
 
-
-\TODO{Temporal formulation.}
+Discretised Durative Actions from \citep[Section~5]{Fox2003}.
+\TODO{Temporal formulation.} \TODO{add the temporal domain PDDL and move to attachments too}
 
 
 
