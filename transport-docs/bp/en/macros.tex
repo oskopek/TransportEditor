@@ -89,51 +89,6 @@
 %% Personal:
 \hyphenation{Transport-Editor}
 
-%%%
-\usepackage{minted}
-\usemintedstyle{xcode}
-
-
-\usepackage{etoolbox}
-\newtoggle{mint}
-\togglefalse{mint}
-
-\toggletrue{mint}
-
-
-%\syntaxonly
-\iftoggle{mint}{%
-  \newenvironment{pddl}
-  {%
-    \small
-    \VerbatimEnvironment
-    \begin{minted}[breaklines=false]{pddl}%
-    }{%
-    \end{minted}%
-  }%
-  \newcommand{\mcpin}{\mintinline{pddl}}
-} {%
-  \newenvironment{pddl}{\endgraf\verbatim}{ \endverbatim}
-  \newcommand{\mcpin}{\mintinline{text}}%
-}
-
-\iftoggle{mint}{%
-  \newenvironment{lisp}
-  {%
-    \small
-    \VerbatimEnvironment
-    \begin{minted}[breaklines=false]{common-list}%
-    }{%
-    \end{minted}%
-  }%
-  \newcommand{\mclin}{\mintinline{common-lisp}}
-} {%
-  \newenvironment{lisp}{\endgraf\verbatim}{ \endverbatim}
-  \newcommand{\mclin}{\mintinline{text}}%
-}
-%%%
-
-
 \newcommand{\TODO}[1]{\textbf{TODO} [{\color{red}#1}]}
 \newcommand{\comment}[1]{}
 \newcommand{\TEver}[0]{\mbox{\textbf{\texttt{0.9.0-SNAPSHOT}}}}
