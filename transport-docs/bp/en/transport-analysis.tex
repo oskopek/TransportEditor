@@ -3,13 +3,12 @@
 In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe a system we developed for the analysis
 and development of planners for Transport, describe and analyze the datasets
 used for devising experiments, and discuss the properties of Transport
-that will aid us in developing better quality planners.
+that will help us in developing better quality planners.
 
 \section{TransportEditor -- A Transportation Planning System}
 
-To aid us and others in studying transportation planning,
-we have developed \textit{TransportEditor} --- a system for creating and visualizing transportation problems and plans.
-
+To enable effective transportation planning,
+we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
 Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
 written in Java.
 
@@ -82,10 +81,10 @@ using the program and providing an in-depth description.
 
 
 
-\section{Datasets}
+\section{Problem datasets}
 
-We have acquired several datasets from previous runs of the IPC which we will use to test our planners.
-Table~\ref{tab:ipc-datasets} provides an overview of the distinct datasets, their associated IPC competition, track at the competition and the formulation used (descriptions of the tracks in hyperlinks).
+For evaluation and comparison with other planners, we have acquired several problem datasets from previous runs of the IPC.
+Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, their associated IPC competition, the track at the competition and the domain variant the problems are modeled in.
 
 \begin{table}[tb]
 \begin{tabular}{c||ccc}
@@ -102,13 +101,23 @@ seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
 seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
 \end{tabular}
-\caption{Transport datasets from the IPC.}
+\caption{Transport datasets from the 2008 and 2014 IPCs.}
 \label{tab:ipc-datasets}
 \end{table}
 
-Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
-and the rule pages of IPC-8\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}.
-Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
+Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+and the rule pages of IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}.
+Unfortunately, we weren't able to acquire the datasets for IPC-7 (2011), as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
+
+We have decided to split our further research based on the tracks at IPC: we will focus on constructing
+Transport-specific planners for the seq-sat-6, seq-sat-8, and tempo-sat-6 datasets.
+Both the seq-sat-6 and tempo-sat-6 contain 30 problems, while seq-sat-8 only contains 20.
+From the competition results, we have reasonable scores to compare our planners to.
+Figure~\ref{fig:datasets-seq-sat} and Figure~\ref{fig:datasets-tempo-sat}
+
+
+Truck goals: tempo-sat: 21-30
+
 
 
 \TODO{specific problems we will be using, what we have chosen and why and how big they are}
@@ -143,7 +152,7 @@ heuristics and approaches to creating plans for these problems.
 When domain-independent planners solve a sequential Transport problem,
 they face a harder task than our planners that have domain knowledge ahead of time.
 Deciding whether a plan of a given length exists is, in the case of Transport,
-an NEXPTIME-complete task \citep{Ghallab2004}[Section~3.4].
+an NEXPTIME-complete task \citep[Section~3.4]{Ghallab2004}.
 That does not mean domain knowledge makes Transport easy. We will now show
 that even the sequential variant of Transport is NP-hard.
 
@@ -245,7 +254,7 @@ and we will test our approaches on both datasets.
 
 The temporal variant of Transport was only used in IPC 2008.
 Planners that entered that competition did not cope well with the domain
---- only two \TODO{base?} planners were able to produce at least one plan
+--- only two non-baseline planners were able to produce at least one plan
 for any problem. Additionally, only the simple problem (\verb+p01+) was solved
 optimally by any planner. The best total quality was only $7.5/30$, achieved by
 \textit{sgplan6}. No other domain in the temporal track had a lower best total quality
