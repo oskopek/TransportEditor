@@ -899,9 +899,8 @@ by their target locations in Transport.
 
 \subsection{Constraint Satisfaction Problems}\label{csp}
 
-Constraint satistfaction techniques are a popular means of solving problems in combinatorial optimization. \citet[Section~8.1]{Ghallab2004} give an informal definition of a \textit{Constraint Satisfaction
-Problem} (CSP):
-
+Constraint satistfaction techniques are a popular means of solving problems in combinatorial optimization. \citet[Section~8.1]{Ghallab2004} give an informal definition of a
+\textit{Constraint Satisfaction Problem} (CSP):
 \begin{quote}
 Given (1) a set of variables and their respective domains, and (2) a set of constraints on the compatible values that the variables may take, the problem is to find a value for each variable within its domain such that these values meet all the constraints.
 \end{quote}
@@ -915,6 +914,16 @@ we can model the problem as a CSP with $n$-ary variables $C_i \in [n]\; \forall 
 We will attempt to model Transport as a CSP later on in Section~\ref{csp-formulation}.
 Note that the translation of a VRP into a CSP representation is very natural and straightforward \citep[Solution Methods / Constraint Programming]{ResearchGroup2013}, which is usually not the case for planning problems.
 
-\subsection{Past solutions and approaches to Transport}
+\subsection{Past approaches to Transport}
 
-\TODO{\ldots see \citep{Skopek2017}}
+To the best of our knowledge, there has been no attempt at producing domain-dependent planners
+for Transport (IPC 2008, 2011, 2014 and unsolvability IPC 2016) or any other similar IPC domain, like Logistics (IPC 1998\comment{\footnote{\url{https://web.archive.org/web/20151017170331/http://ipc98.icaps-conference.org/}}} and 2000),
+Depots (IPC 2002\comment{\footnote{\url{https://web.archive.org/web/20170408120817/http://ipc02.icaps-conference.org/domains.html}}}),
+DriverLog (IPC 2002 and 2014),
+or Trucks (IPC 2006).
+
+All techniques we know of \TODO{finish domain-indep.}
+
+\TODO{Move this to the datasets part}
+
+
