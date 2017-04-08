@@ -831,25 +831,33 @@ domain-independent planners used in the three before-mentioned competitions.
 Most of the research done on transportation-related problems and their automation
 generally focuses
 on a famous combinatorial optimization problem, the \textit{Travelling Salesman Problem} (TSP), on which an
-exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}.
-Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP
-%(Figure~\ref{fig:tsp})
-is defined by \citet{Applegate2011} as follows:
+exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}. Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
 \begin{quote}
 Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the citites.
 \end{quote}
-However, the problem we aim to study is more similar to a different optimization problem based on the TSP.
+However, the problem we aim to study is more similar to a different optimization problem based on the TSP. See Figure~\ref{fig:tsp} for an illustrative example of a TSP solution.
 
-\TODO{tsp fig}
+\begin{figure}[tbp]
+\begin{center}
+\includegraphics[width=1.0\textwidth]{../img/tsp}
+\end{center}
+\caption[An example TSP solution through cities in Europe.]{An example TSP solution through cities in Europe. Screenshot taken from OptaPlanner \citep{DeSmet2016}.}
+\label{fig:tsp}
+\end{figure}
 
 \subsection{The Vehicle Routing Problem}
 
 The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP
-%(Figure~\ref{fig:vrp})
 as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
-with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today.
+with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
 
-\TODO{vrp fig}
+\begin{figure}[tbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../img/vrp}
+\end{center}
+\caption[An example CVRP solution for 32 customers and one depot.]{An example CVRP solution for 32 customers and one depot. Screenshot taken from OptaPlanner \citep{DeSmet2016}.}
+\label{fig:vrp}
+\end{figure}
 
 Many different VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
 review and classify hundreds of papers related to the VRP, with many more left out.
