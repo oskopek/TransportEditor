@@ -321,6 +321,7 @@ For temporal domains, the format adds a start time and duration for each line, l
 \begin{center}
 \verb+start_time: (action_name action_object_literals*) [duration]+
 \end{center}
+Both \verb+start_time+ and \verb+duration+ are floating point numbers, with a dot as a decimal delimiter.
 
 Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all parsers.
 
@@ -415,14 +416,22 @@ so actions have no duration and are applied one after the other, sequentially.
 This formulation contains three basic planning operators:
 
 \begin{itemize}
-\item \verb+drive+, where a vehicle drives to an adjacent location
+\item \drive{}, where a vehicle drives to an adjacent location
 along a road that is connected to its current location;
-\item \verb+pick-up+, where a vehicle that is stationary at a location picks up a co-located package; and
-\item \verb+drop+, where a stationary vehicle drops a package off at its location.
+\item \pickup{}, where a vehicle that is stationary at a location picks up a co-located package; and
+\item \drop{}, where a stationary vehicle drops a package off at its location.
 \end{itemize}
 
 In all the datasets, this domain variant is denoted as \textit{Transport sequential}
-or \textit{transport-strips} and we will alternate between these terms in this text.
+or \textit{transport-strips} and we will alternate between these terms in this text. See Figure~\ref{fig:ipc08_seq-sat_p13} for a visual example.
+
+\begin{figure}[tbp]
+\begin{center}
+\includegraphics[width=1.0\textwidth]{../img/ipc08_seq-sat_p13_land2}
+\end{center}
+\caption[Visualization of the \texttt{p13} problem of sequential Transport from IPC 2008.]{Road graph visualization of the \texttt{p13} problem of the seq-sat track of IPC 2008. Red dots represent location (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares.}
+\label{fig:ipc08_seq-sat_p13}
+\end{figure}
 
 \subsection{Transport Numeric}\label{transport-numeric}
 
@@ -697,97 +706,100 @@ later on, in Table~\ref{tab:plannner-requirements-comparison}.
 
 \begin{figure}[tbp]
 \begin{code}
-(define (domain transport)
-  (:requirements :typing :action-costs)
-  (:types
-        location target locatable - object
-        vehicle package - locatable
-        capacity-number - object)
-  (:predicates 
-     (road ?l1 ?l2 - location)
-     (at ?x - locatable ?v - location)
-     (in ?x - package ?v - vehicle)
-     (capacity ?v - vehicle ?s1 - capacity-number)
-     (capacity-predecessor ?s1 ?s2 - capacity-number))
-  (:functions
-     (road-length ?l1 ?l2 - location) - number
-     (total-cost) - number)     
-  (:action drive
-    :parameters (?v - vehicle ?l1 ?l2 - location)
-    :precondition (and (at ?v ?l1) (road ?l1 ?l2))
-    :effect (and (not (at ?v ?l1)) (at ?v ?l2)
-        (increase (total-cost) (road-length ?l1 ?l2))))        
- (:action pick-up
-    :parameters (?v - vehicle ?l - location ?p - package
-                 ?s1 ?s2 - capacity-number)
-    :precondition (and (at ?v ?l) (at ?p ?l)
-        (capacity-predecessor ?s1 ?s2) (capacity ?v ?s2))
-    :effect (and (not (at ?p ?l)) (in ?p ?v) (capacity ?v ?s1)
-        (not (capacity ?v ?s2)) (increase (total-cost) 1)))
-  (:action drop
-    :parameters (?v - vehicle ?l - location ?p - package
-                 ?s1 ?s2 - capacity-number)
-    :precondition (and (at ?v ?l) (in ?p ?v)
-        (capacity-predecessor ?s1 ?s2) (capacity ?v ?s1))
-    :effect (and (not (in ?p ?v)) (at ?p ?l) (capacity ?v ?s2)
-        (not (capacity ?v ?s1)) (increase (total-cost) 1))))
+(:action drive
+  :parameters (?v - vehicle ?l1 ?l2 - location)
+  :precondition (and
+      (at ?v ?l1)
+      (road ?l1 ?l2))
+  :effect (and
+      (not (at ?v ?l1))
+      (at ?v ?l2)
+      (increase (total-cost) (road-length ?l1 ?l2))))
+(:action pick-up
+  :parameters (?v - vehicle ?l - location ?p - package
+               ?s1 ?s2 - capacity-number)
+  :precondition (and
+      (at ?v ?l)
+      (at ?p ?l)
+      (capacity-predecessor ?s1 ?s2)
+      (capacity ?v ?s2))
+  :effect (and
+      (not (at ?p ?l))
+      (in ?p ?v)
+      (capacity ?v ?s1)
+      (not (capacity ?v ?s2))
+      (increase (total-cost) 1)))
+(:action drop
+  :parameters (?v - vehicle ?l - location ?p - package
+               ?s1 ?s2 - capacity-number)
+  :precondition (and
+      (at ?v ?l)
+      (in ?p ?v)
+      (capacity-predecessor ?s1 ?s2)
+      (capacity ?v ?s1))
+  :effect (and
+      (not (in ?p ?v))
+      (at ?p ?l)
+      (capacity ?v ?s2)
+      (not (capacity ?v ?s1))
+      (increase (total-cost) 1)))
 \end{code}
-\caption{PDDL formulation of \texttt{transport-strips}.}
+\caption{Formulation of actions in PDDL for \texttt{transport-strips}.}
 \label{code:pddl-strips}
 \end{figure}
 
 \begin{figure}[tbp]
 \begin{code}
-(define (domain transport) 
-  (:requirements :typing :durative-actions :numeric-fluents)
-  (:types
-        location target locatable - object
-        vehicle package - locatable)
-  (:predicates (road ?l1 ?l2 - location)
-     (at ?x - locatable ?y - location) (in ?x - package ?y - vehicle)
-     (has-petrol-station ?l - location) (ready-loading ?v - vehicle))
-  (:functions (capacity ?v - vehicle) (road-length ?l1 ?l2 - location)
-     (fuel-demand ?l1 ?l2 - location) (fuel-left ?v - vehicle)
-     (fuel-max ?v - vehicle) (package-size ?p - package))
-  (:durative-action drive
-    :parameters (?v - vehicle ?l1 ?l2 - location)
-    :duration (= ?duration (road-length ?l1 ?l2))
-    :condition (and (at start (at ?v ?l1))
-        (at start (road ?l1 ?l2))
-        (at start (>= (fuel-left ?v) (fuel-demand ?l1 ?l2))))
-    :effect (and (at start (not (at ?v ?l1)))
-        (at end (at ?v ?l2))
-        (at start (decrease (fuel-left ?v) (fuel-demand ?l1 ?l2)))))
-  (:durative-action pick-up
-    :parameters (?v - vehicle ?l - location ?p - package)
-    :duration (= ?duration 1)
-    :condition (and (at start (at ?v ?l))
-        (over all (at ?v ?l))        (at start (at ?p ?l))
-        (at start (>= (capacity ?v) (package-size ?p)))
-        (at start (ready-loading ?v)))
-    :effect (and (at start (not (at ?p ?l))) (at end (in ?p ?v))
-        (at start (decrease (capacity ?v) (package-size ?p)))
-        (at start (not (ready-loading ?v))) ; lock vehicle
-        (at end (ready-loading ?v))))
-  (:durative-action drop
-    :parameters (?v - vehicle ?l - location ?p - package)
-    :duration (= ?duration 1)
-    :condition (and (at start (at ?v ?l))
-        (over all (at ?v ?l))        (at start (in ?p ?v))
-        (at start (ready-loading ?v)))
-    :effect (and (at start (not (in ?p ?v)))
-        (at end (at ?p ?l))
-        (at end (increase (capacity ?v) (package-size ?p)))
-        (at start (not (ready-loading ?v))) ; lock vehicle
-        (at end (ready-loading ?v))))
-  (:durative-action refuel
-    :parameters (?v - vehicle ?l - location)
-    :duration (= ?duration 10)
-    :condition (and (at start (at ?v ?l))
-        (over all (at ?v ?l)) (at start (has-petrol-station ?l)))
-    :effect (at end (assign (fuel-left ?v) (fuel-max ?v)))))
+(:durative-action drive
+  :parameters (?v - vehicle ?l1 ?l2 - location)
+  :duration (= ?duration (road-length ?l1 ?l2))
+  :condition (and
+      (at start (at ?v ?l1))
+      (at start (road ?l1 ?l2))
+      (at start (>= (fuel-left ?v) (fuel-demand ?l1 ?l2))))
+  :effect (and
+      (at start (not (at ?v ?l1)))
+      (at end (at ?v ?l2))
+      (at start (decrease (fuel-left ?v) (fuel-demand ?l1 ?l2)))))
+(:durative-action pick-up
+  :parameters (?v - vehicle ?l - location ?p - package)
+  :duration (= ?duration 1)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))
+      (at start (at ?p ?l))
+      (at start (>= (capacity ?v) (package-size ?p)))
+      (at start (ready-loading ?v)))
+  :effect (and
+      (at start (not (at ?p ?l)))
+      (at end (in ?p ?v))
+      (at start (decrease (capacity ?v) (package-size ?p)))
+      (at start (not (ready-loading ?v))) ; lock vehicle
+      (at end (ready-loading ?v)))) ; unlock vehicle
+(:durative-action drop
+  :parameters (?v - vehicle ?l - location ?p - package)
+  :duration (= ?duration 1)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))   
+      (at start (in ?p ?v))
+      (at start (ready-loading ?v)))
+  :effect (and (at start (not (in ?p ?v)))
+      (at end (at ?p ?l))
+      (at end (increase (capacity ?v) (package-size ?p)))
+      (at start (not (ready-loading ?v))) ; lock vehicle
+      (at end (ready-loading ?v)))) ; unlock vehicle
+(:durative-action refuel
+  :parameters (?v - vehicle ?l - location)
+  :duration (= ?duration 10)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))
+      (at start (has-petrol-station ?l)))
+  :effect
+      (at end (assign (fuel-left ?v) (fuel-max ?v))))
 \end{code}
-\caption{PDDL formulation of temporal Transport.}
+\caption{Formulation of durative actions in PDDL for temporal Transport.}
 \label{code:pddl-temporal}
 \end{figure}
 
@@ -799,23 +811,45 @@ later on, in Table~\ref{tab:plannner-requirements-comparison}.
 
 
 
+
+
+
+
+
+
+
 \section{Related problems}
 
-Most of the research done on transportation-related problems and their automation focuses
+To the best of our knowledge, there has been no attempt at producing domain-dependent planners
+for Transport (IPC 2008, 2011, 2014 and unsolvability IPC 2016) or any other similar IPC domain, like Logistics (IPC 1998\comment{\footnote{\url{https://web.archive.org/web/20151017170331/http://ipc98.icaps-conference.org/}}} and 2000),
+Depots (IPC 2002\comment{\footnote{\url{https://web.archive.org/web/20170408120817/http://ipc02.icaps-conference.org/domains.html}}}),
+DriverLog (IPC 2002 and 2014),
+or Trucks (IPC 2006).
+All techniques we know of applied to Transport so far are the
+domain-independent planners used in the three before-mentioned competitions.
+
+Most of the research done on transportation-related problems and their automation
+generally focuses
 on a famous combinatorial optimization problem, the \textit{Travelling Salesman Problem} (TSP), on which an
 exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}.
-Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
-
+Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP
+%(Figure~\ref{fig:tsp})
+is defined by \citet{Applegate2011} as follows:
 \begin{quote}
 Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the citites.
 \end{quote}
-
 However, the problem we aim to study is more similar to a different optimization problem based on the TSP.
+
+\TODO{tsp fig}
 
 \subsection{The Vehicle Routing Problem}
 
-The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
+The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP
+%(Figure~\ref{fig:vrp})
+as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
 with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today.
+
+\TODO{vrp fig}
 
 Many different VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
 review and classify hundreds of papers related to the VRP, with many more left out.
@@ -913,17 +947,3 @@ we can model the problem as a CSP with $n$-ary variables $C_i \in [n]\; \forall 
 
 We will attempt to model Transport as a CSP later on in Section~\ref{csp-formulation}.
 Note that the translation of a VRP into a CSP representation is very natural and straightforward \citep[Solution Methods / Constraint Programming]{ResearchGroup2013}, which is usually not the case for planning problems.
-
-\subsection{Past approaches to Transport}
-
-To the best of our knowledge, there has been no attempt at producing domain-dependent planners
-for Transport (IPC 2008, 2011, 2014 and unsolvability IPC 2016) or any other similar IPC domain, like Logistics (IPC 1998\comment{\footnote{\url{https://web.archive.org/web/20151017170331/http://ipc98.icaps-conference.org/}}} and 2000),
-Depots (IPC 2002\comment{\footnote{\url{https://web.archive.org/web/20170408120817/http://ipc02.icaps-conference.org/domains.html}}}),
-DriverLog (IPC 2002 and 2014),
-or Trucks (IPC 2006).
-
-All techniques we know of \TODO{finish domain-indep.}
-
-\TODO{Move this to the datasets part}
-
-
