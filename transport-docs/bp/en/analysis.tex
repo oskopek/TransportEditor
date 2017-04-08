@@ -300,7 +300,7 @@ an analog of the previously defined temporal planning operators.
 Specifically, every durative action has a \texttt{duration}, specified
 either by a constant or a numeric fluent (function with numerical values that
 can change over time). Also, instead of a precondition it introduces a \textit{condition} (it is not necessary that the condition take place before the action).
-Both a condition and an effect represent a temporally qualified expression,
+We will only use so called \textit{discretized} durative actions, meaning that both the condition and the effect represent a temporally qualified expression,
 denoted using three unary PDDL predicates:
 \begin{itemize}
 \item \texttt{at start}, where the parameter predicate must hold or the parameter effect must be applied at the start of the action;
@@ -485,16 +485,17 @@ the classical representation (Figure~\ref{code:classical-strips}).
 Note that this representations does not contain the notion of a \textit{total cost}
 of a plan that we will optimize for later.
 The predicates used are:
-
 \begin{itemize}
 \item \verb+at(o, l)+, the package or vehicle \verb+o+ is at the
 location \verb+l+;
 \item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space -- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
 \item \verb+capacity-predecessor(s1, s2)+, the space literal represented by \verb+s1+
 is directly smaller than the literal represented by \verb+s2+;
-\item \verb+in(p, v)+, the package \verb+p+ is in the vehicle \verb+v+; and
+\item \verb+in(p, v)+, the package \verb+p+ is in the vehicle \verb+v+;
 \item \verb+road(l1, l2)+, the location \verb+l1+ is directly adjacent to the location
-\verb+l2+ by a road.
+\verb+l2+ by a road; and
+\item \verb+road-length(l1, l2)+, the driving distance between location \verb+l1+
+and \verb+l2+. Does not change while planning.
 \end{itemize}
 
 \begin{figure}[tbp]
@@ -625,9 +626,15 @@ compared to \texttt{transport-strips}.}
 \end{figure}
 
 We will represent the temporal variant of Transport using a variant of the state-variable representation using temporal planning operators, further referred to as the \textit{temporal state-variable representation}.
-Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation. \TODO{more commentary, define road-length, package-size, ready-loading}
+On top of the the fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
+\begin{itemize}
+\item \verb+package-size(p)+, a function with positive integer values representing the size of the package \verb+p+ (does not change during planning); and
+\item \verb+ready-loading(v)+, a predicate used for ``locking'' the vehicle \verb+v+ during \pickup{} and \drop{} actions (enforcing the property of these two actions happening sequentially in time for a given vehicle). It is important to note that the \refuel{} action does not
+lock the vehicle, which means the vehicle can be refuelled while dropping off and picking up packages.
+\end{itemize}
+Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation.
 
-\begin{figure}[tbp]
+\begin{figure}[tb]
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
@@ -660,7 +667,7 @@ refuel(v, l)
   cond: (at(v) = l1)@[s, e), (has-petrol-station(l))@s
   effects: (fuel-left(v) <- fuel-max(v))@e
 \end{code}
-\caption[State-variable formulation of temporal Transport.]{Temporal state-variable formulation of the temporal of Transport. The characters \texttt{s} and \texttt{e} represent the start and end temporal variables of the given action, respectively.}
+\caption[State-variable formulation of temporal Transport.]{Temporal state-variable formulation of temporal Transport. The characters \texttt{s} and \texttt{e} represent the start and end temporal variables of the given action, respectively.}
 \label{code:statevar-temporal}
 \end{figure}
 
@@ -681,13 +688,14 @@ requires \verb+numeric-fluents+, which introduces native PDDL support for functi
 The temporal domain is similar in requirements to the numeric one, except for
 substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
 and the duration of actions).
+For reference, we will now show the PDDL representation of the sequential and temporal variant of
+the Transport domain in Figure~\ref{code:pddl-strips} and Figure~\ref{code:pddl-temporal} respectively.
 
 One problem with the diversity of these domain formulations is that rarely does
 a single planner support the union of all these requirements.
 We show the capabilities of individual studied planners
 later on, in Table~\ref{tab:plannner-requirements-comparison}.
-For reference, we show the PDDL representation of the sequential variant of
-the Transport domain in Figure~\ref{code:pddl-strips}.
+
 
 \begin{figure}[tbp]
 \begin{code}
@@ -730,11 +738,7 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 \label{code:pddl-strips}
 \end{figure}
 
-
-Discretised Durative Actions from \citep[Section~5]{Fox2003}.
-\TODO{Temporal formulation.}
-
-\begin{figure}[p]
+\begin{figure}[tbp]
 \begin{code}
 (define (domain transport) 
   (:requirements :typing :durative-actions :numeric-fluents)
@@ -877,24 +881,23 @@ Finally, the cost of the problem solution ${S}$ is: ${F_{VRP} = \sum_{i=1}^{m} F
 \subsection{Comparison of Transport and VRP}
 
 In \citet{ResearchGroup2013}, a website was created, which serves as a comprehensive resource on the history of VRP,
-definitons of its various flavors, an overview of the popular solution methods and state-of-the-art results. According to the taxonomy proposed, we could characterize the Transport domain
-as a Multiple Depot Split Delivery Capacitated VRP with Satellite Facilities. Multiple Depot
+definitons of its various flavors, and an overview of the popular solution methods and state-of-the-art results. According to the taxonomy they propose, we could characterize a Transport domain problem
+as a \textit{Multiple Depot, Split Delivery, Capacitated VRP with Satellite Facilities}. Multiple Depot
 means that vehicles can start driving from multiple locations, split delivery
 means a single customer can be served by multiple vehicles, capacitated VRP adds maximum
-capacities to vehicles, and satellite facilities means that vehicles can pick items up
-while on a route. This does not characterize the Transport domain in every detail,
-but is fairly accurate.
+capacities to vehicles, and satellite facilities mean that vehicles can pick items up
+while on a delivery route. This does not characterize the Transport domain in every detail, but it is a fairly accurate approximation.
 
-According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted similarly in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features in any single study, to the best of our knowledge.
+According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features to those of Transport in any single study, to the best of our knowledge.
 Usually, the studied problems are more constrained than Transport -- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
 makes cooperation of vehicles hard to model, whereas in Transport this is one of the fundamental elements.
 
 \comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
 
-The fundamental difference between Transport and the VRP is that Transport has a notion of single packages, or items, compared to the VRP, the transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
+An important difference between Transport and the VRP is that Transport has a notion of single packages, or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
 interpretation, but also during problem solving -- \textit{customers} in VRP usually request
 a quantity of the delivered item, not specific item instances, like packages being ``requested''
-by their target locations in Transport. \TODO{reread and expand}
+by their target locations in Transport.
 
 \subsection{Constraint Satisfaction Problems}\label{csp}
 
@@ -908,6 +911,8 @@ Given (1) a set of variables and their respective domains, and (2) a set of cons
 \TODO{define state space + size}
 
 \TODO{Expand and quote an authoritative CSP source}
+
+\TODO{Mention that modelling a VRP adn Transport as a CSP, the VRP instance is way smaller with the same amount of nodes and vehicles}
 
 \subsection{Past solutions and approaches to Transport}
 
