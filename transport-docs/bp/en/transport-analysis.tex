@@ -15,7 +15,7 @@ written in Java.
 
 It allows the user to create a planning session, where they
 select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
-The road network of the problem is automatically layed out and visualized for the user as a graph with locations as nodes and roads as edges.
+The road network of the problem is automatically laid out and visualized for the user as a graph with locations as nodes and roads as edges.
 Users can then tweak the layout, make changes to vehicle and package properties
 and export the problem or domain back into PDDL.
 
@@ -26,7 +26,7 @@ Once plans are loaded and verified, it will let the user see a list of actions
 in the plan, or plot a Gantt chart (useful for observing concurrent actions in temporal domain variants).
 
 The best feature of TransportEditor is the option of tracing plans. We can select
-any action, specify an exact timepoint or just step through the actions in order and
+any action, specify an exact time point or just step through the actions in order and
 the road network on the left will display the current state of the problem, as if
 all actions before the current point were applied to the start state.
 It is possible to do all of this, and more, without ever leaving the TransportEditor user interface.
@@ -49,7 +49,7 @@ The basic user workflow of TransportEditor consists of the following steps:
 \item Loading the PDDL or creating their own problem of the given domain. TransportEditor then visualizes the given graph as good as it can;
 \item Iterating among the following options:
 \begin{itemize}
-\item Loading a planner executable and letting TransportEditor run the planner on the loaded problem instance for a given time (the user can cancel any time),
+\item Loading a planner executable and letting TransportEditor run the planner on the loaded problem instance for a given time (the user can cancel anytime),
 then loading the resulting plan;
 \item Possibly loading a pre-generated plan;
 \item Stepping through the individual plan actions and letting TransportEditor visualize them.
@@ -63,7 +63,7 @@ The user can step forward and backward in the plan and inspect each action resul
 \end{itemize}
 
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
-the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offerring guidance when
+the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offering guidance when
 using the program and providing an in-depth description.
 
 
@@ -101,20 +101,20 @@ The problem of finding an optimal plan for an undirected connected graph in the 
 Transport domain is NP-hard. \TODO{Formulate better and revise proof}
 \end{thm}
 \begin{proof}
-It is not evident if the problem is in NP: if we get a plan, there is no straigh-forward
-way of verifying whetherit is optimal.
+It is not evident if the problem is in NP: if we get a plan, there is no straightforward
+way of verifying whether it is optimal.
 
 We will now show that we can reduce an NP-complete problem to our problem in polynomial time,
 hence proving that all NP-complete problems are reducible to our problem,
 and therefore, our problem is NP-hard.
 
-As proven by \citet{Karp1972}, the problem of existance of a Hamilton circuit (HC) in a (directed or undirected) graph is NP-complete. We will show that we are able to transform the HC problem into a sequential Transport problem.
+As proven by \citet{Karp1972}, the problem of existence of a Hamilton circuit (HC) in a (directed or undirected) graph is NP-complete. We will show that we are able to transform the HC problem into a sequential Transport problem.
 
 Given an undirected graph $G$, the solution to HC is a cycle through all the nodes of $G$,
 without visiting any single node twice.
 We can use the same graph to model a Transport problem instance.
 The problem will contain only one vehicle of capacity $n-1$,
-where $n = |G|$, the size of number of nodes in the graph.
+where $n = |G|$, the number of nodes in the graph.
 
 We will co-locate $n-1$ packages with the vehicle at any predetermined graph vertex $l \in G$.
 One package $p'$ will be located elsewhere, at $l' \in G,\, l \neq l'$.
@@ -203,12 +203,12 @@ with a total quality of $28.93/30$, where all other planners had less than $20/3
 Only 5 problem instances were solved suboptimally by \textit{lama}.
 \textit{Quality} is calculated for a given planner and problem $p$
 as $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$ where the results called $BEST$
-are precalculated outside of the competition environment, or the best result of a planner in the competition, depending on which plan has a lower total cost. The quality is therefore a number between $0$ and $1$. The total quality is calculated as the sum of qualities on all problem instances.
+are precalculated outside of the competition environment, or the best result of a planner in the competition, depending on which plan has a lower total cost. The quality is, therefore, a number between $0$ and $1$. The total quality is calculated as the sum of qualities on all problem instances.
 
 As mentioned, we were not able to gather data from the IPC 2011,
 hence the results cannot be meaningfully interpreted.
 The competition featured 20 sequential Transport problems,
-with a 4 planners achieving a total quality of more than $15/20$.
+with 4 planners achieving a total quality of more than $15/20$.
 
 In the seq-sat track of IPC 2014, the winner on the Transport domain
 was without a doubt the \textit{Mercury} planner, achieving
@@ -289,7 +289,7 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 \end{table}
 
 The first section of the table (rows 1--7) contains problem-specific constants.
-The two calcualted values in that section, \textit{Vehicle variables} and \textit{Package variables} are the amount of variables generated for the respective
+The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the amounts of variables generated for the respective
 object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
 multiplied by the set plan length $+ 1$ (each state corresponds to the state before applying an action + the last state).
 

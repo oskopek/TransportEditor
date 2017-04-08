@@ -1,6 +1,6 @@
 \chapter{Analysis of transportation planning problems}
 
-In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also formalize the Transport domain and mention similar studied problems.
+In this chapter, we formalize the concept of planning to help us with formally introducing the studied transportation problems. We will also formalize the Transport domain and mention similar problems that have been studied.
 
 \section{Automated planning}
 
@@ -237,13 +237,13 @@ incorporating domain-specific knowledge.
 
 \subsubsection{Temporal planning}
 
-The addition of time makes modelling planning problems difficult and
+The addition of time makes modeling planning problems difficult and
 solving them even more difficult.
 However, adding time makes most models more realistic and practically usable.
 
-For an exhaustive introduction to temporal planning, see \citet[Chapter~13~and~14]{Ghallab2004}. We will only use the \textit{durative action} modelling approach
+For an exhaustive introduction to temporal planning, see \citet[Chapter~13~and~14]{Ghallab2004}. We will only use the \textit{durative action} modeling approach
 specified by \citet[Section~5]{Fox2003}. We will adapt the following concepts presented
-in \citet[Section~14.2]{Ghallab2004} that are relevant to modelling temporal transportation planning problems:
+in \citet[Section~14.2]{Ghallab2004} that are relevant to modeling temporal transportation planning problems:
 \begin{itemize}
 \item A \textit{temporally qualified expression} (tqe) is any
 expression in the form $$p(x_1, x_2, \ldots, x_k)@[t_s, t_e),$$ where $p$
@@ -258,7 +258,7 @@ The tqe $p(x_1, \ldots, x_k)@[t_s, t_e)$
 asserts that the relation $p(x_1, \ldots, x_k)$ holds for any time $t$, where
 $t_s \leq t < t_e$.
 
-\item A \textit{temporal planning operator} is is a tuple $o$, defined similarly to the planning operator in classical representations, but $\precond(o)$ and $\effects(o)$ are tqes.
+\item A \textit{temporal planning operator} is a tuple $o$, defined similarly to the planning operator in classical representations, but $\precond(o)$ and $\effects(o)$ are tqes.
 \end{itemize}
 
 
@@ -268,7 +268,7 @@ $t_s \leq t < t_e$.
 Originally proposed by \citet{McDermott1998} for the 1$^{\mathrm{st}}$ International Planning
 Competition\footnote{\url{http://ipc98.icaps-conference.org/}},
 the Planning Domain Definition Language (PDDL) has become
-a de facto standard language for modelling planning domains and problems,
+a de facto standard language for modeling planning domains and problems,
 continually evolving to the needs of the  
 research community and the needs of the IPC itself in the future years.
 We will also use it as input for our planners.
@@ -293,9 +293,9 @@ An important version of PDDL, version 2.1, added support for temporal
 planning using \textit{durative actions} \citep[Section~5]{Fox2003},
 an analog of the previously defined temporal planning operators.
 Specifically, every durative action has a \texttt{duration}, specified
-either by a constant or a numeric fluent (function with numerical values that
-can change over time). Also, instead of a precondition it introduces a \textit{condition} (it is not necessary that the condition take place before the action).
-We will only use so called \textit{discretized} durative actions, meaning that both the condition and the effect represent a temporally qualified expression,
+either by a constant or a numeric fluent (a function with numerical values that
+can change over time). Also, instead of a precondition it introduces a \textit{condition} (it is not necessary that the condition takes place before the action).
+We will only use so-called \textit{discretized} durative actions, meaning that both the condition and the effect represent a temporally qualified expression,
 denoted using three unary PDDL predicates:
 \begin{itemize}
 \item \texttt{at start}, where the parameter predicate must hold or the parameter effect must be applied at the start of the action;
@@ -310,8 +310,8 @@ like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}
 Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
 (PPDDL).
 
-PDDL does not handle plan representation. For a specific planning domain and problem in PDDL,
-the we represent the plan in a format that is a field-wide consensus --- we will refer to is
+PDDL does not specify a representation for plans. For a specific planning domain and problem in PDDL,
+we represent the plan in a format that is a field-wide consensus --- we will refer to is
 as the \textit{VAL-like} format. VAL \citep{Howey2003} is a plan validator created for the IPC.
 It takes as input (among several options) three filenames: filename of a planning domain and
 problem in PDDL, and a filename for a plan in the mentioned format.
@@ -325,7 +325,7 @@ For temporal domains, the format adds a start time and duration for each line, l
 \begin{center}
 \verb+start_time: (action_name action_object_literals*) [duration]+
 \end{center}
-Both \verb+start_time+ and \verb+duration+ are floating point numbers, with a dot as a decimal delimiter.
+Both \verb+start_time+ and \verb+duration+ are floating-point numbers, with a dot as a decimal delimiter.
 
 Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all parsers.
 
@@ -334,7 +334,7 @@ Note that all text between a semicolon \verb+;+ and an end-of-line character seq
 In practice, many of the assumptions we made will get violated and many additional requirements will arise,
 due to various business or social requirements.
 These assumptions allow us, however, to work
-on problems that are more general and can therefore be applied to multiple scenarios.
+on problems that are more general and can, therefore, be applied to multiple scenarios.
 Businesses can often add minor tweaks on top of the obtained results so that
 their needs are satisfied. 
 For example, online planning can often be foregone for some form of \textit{windowed} planning,
@@ -403,7 +403,7 @@ after finishing their deliveries.
 \subsection{Transport STRIPS}\label{transport-strips}
 
 STRIPS, the Stanford Research Institute Problem Solver,
-was a planner proposed in the 1970's by \citet{Fikes1971}.
+was a planner proposed in the 1970s by \citet{Fikes1971}.
 The influence of STRIPS was, however, not only due to the planner,
 but the language used to describe its inputs --- the planning operators and goals.
 That is why we sometimes refer to classical planning (Section~\ref{classical-planning})
@@ -412,7 +412,7 @@ as STRIPS planning. For the purposes of this text, we will use these terms inter
 In the STRIPS variant of the Transport domain,
 all packages have a size of 1 and vehicles of a bounded capacity can drive around indefinitely
 (there is no notion of fuel or anything similar). The only reason for them not to, is that
-driving incures a cost of its own, usually much larger than pickin up or dropping off packages.
+driving incurs a cost of its own, usually much larger than picking up or dropping off packages.
 This being a classical STRIPS domain,
 it does not assume time in any sense,
 so actions have no duration and are applied one after the other, sequentially.
@@ -462,7 +462,7 @@ The addition of time poses numerous technical complications when formalizing thi
 One important technicality is that a vehicle cannot pick up or drop packages concurrently --- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
 
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
-defined as the maximum time where an action is still taking place.
+defined as the maximum time when an action is still taking place.
 In practice, this translates to minimizing maximum end time over all actions.
 
 
@@ -493,7 +493,7 @@ they are very much alike and not needed for the comprehension of the following c
 We are now able to show the sequential Transport domain in one of the representations
 previously defined, namely,
 the classical representation (Figure~\ref{code:classical-strips}).
-Note that this representations does not contain the notion of a \textit{total cost}
+Note that this representation does not contain the notion of a \textit{total cost}
 of a plan that we will optimize for later.
 The predicates used are:
 \begin{itemize}
@@ -637,11 +637,11 @@ compared to \texttt{transport-strips}.}
 \end{figure}
 
 We will represent the temporal variant of Transport using a variant of the state-variable representation using temporal planning operators, further referred to as the \textit{temporal state-variable representation}.
-On top of the the fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
+On top of the fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
 \begin{itemize}
 \item \verb+package-size(p)+, a function with positive integer values representing the size of the package \verb+p+ (does not change during planning); and
 \item \verb+ready-loading(v)+, a predicate used for ``locking'' the vehicle \verb+v+ during \pickup{} and \drop{} actions (enforcing the property of these two actions happening sequentially in time for a given vehicle). It is important to note that the \refuel{} action does not
-lock the vehicle, which means the vehicle can be refuelled while dropping off and picking up packages.
+lock the vehicle, which means the vehicle can be refueled while dropping off and picking up packages.
 \end{itemize}
 Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation.
 
@@ -689,12 +689,12 @@ with the requirement \verb+typing+, which adds the notion of types for individua
 literals. We will call these literals \textit{action objects}.
 
 The STRIPS variant additionally needs \verb+action-costs+, a requirement adding
-integer costs to indiviudal planning operators. These costs may be constant
+integer costs to individual planning operators. These costs may be constant
 (like the ones for \verb+pick-up+, \verb+drop+ or \verb+refuel+),
 or they may be dependent on the parameters of the instantiated operator (like
 the cost of \verb+drive+).
 The numeric variant
-requires \verb+numeric-fluents+, which introduces native PDDL support for functions whose values correspond to numbers and can change over time. Also required are
+requires \verb+numeric-fluents+, which introduces native PDDL support for functions whose values correspond to numbers and can change over time. It also requires are
 \verb+goal-utilities+, used for custom optimization functions and optional goal predicates.
 The temporal domain is similar in requirements to the numeric one, except for
 substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
@@ -828,10 +828,10 @@ domain-independent planners used in the three before-mentioned competitions.
 
 Most of the research done on transportation-related problems and their automation
 generally focuses
-on a famous combinatorial optimization problem, the \textit{Travelling Salesman Problem} (TSP), on which an
+on a famous combinatorial optimization problem, the \textit{Traveling Salesman Problem} (TSP), on which an
 exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}. Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
 \begin{quote}
-Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the citites.
+Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the cities.
 \end{quote}
 However, the problem we aim to study is more similar to a different optimization problem based on the TSP. See Figure~\ref{fig:tsp} for an illustrative example of a TSP solution.
 
@@ -847,7 +847,7 @@ However, the problem we aim to study is more similar to a different optimization
 
 The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP
 as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
-with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
+with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from a single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
 
 \begin{figure}[tbp]
 \begin{center}
@@ -857,12 +857,12 @@ with a single vehicle. The precise formulation of the Truck Dispatching Problem 
 \label{fig:vrp}
 \end{figure}
 
-Many different VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
+Many VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
 review and classify hundreds of papers related to the VRP, with many more left out.
 Most of these works tend to study the CVRP problem with minor modifications, hence creating
 a broad landscape of problems and a platform to build on for the future.
 According to the data in \citet[Table~4]{Braekers2016}, there has been a recent uptick
-in popularity for models relatively similar to Transport --- specially, VRPs with
+in popularity for models relatively similar to Transport --- specifically, VRPs with
 backhauls (returning items from customers to depots),
 multiple depots (multiple starting points for vehicles), and with allowed split deliveries (multiple
 vehicles can serve a single customer).
@@ -919,7 +919,7 @@ Finally, the cost of the problem solution ${S}$ is: ${F_{VRP} = \sum_{i=1}^{m} F
 \subsection{Comparison of Transport and VRP}
 
 In \citet{ResearchGroup2013}, a website was created, which serves as a comprehensive resource on the history of VRP,
-definitons of its various flavors, and an overview of the popular solution methods and state-of-the-art results. According to the taxonomy they propose, we could characterize a Transport domain problem
+definitions of its various flavors, and an overview of the popular solution methods and state-of-the-art results. According to the taxonomy they propose, we could characterize a Transport domain problem
 as a \textit{Multiple Depot, Split Delivery, Capacitated VRP with Satellite Facilities}. Multiple Depot
 means that vehicles can start driving from multiple locations, split delivery
 means a single customer can be served by multiple vehicles, capacitated VRP adds maximum
@@ -932,14 +932,14 @@ makes cooperation of vehicles hard to model, whereas in Transport this is one of
 
 \comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
 
-An important difference between Transport and the VRP is that Transport has a notion of single packages, or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
-interpretation, but also during problem solving --- \textit{customers} in VRP usually request
+An important difference between Transport and the VRP is that Transport has a notion of single packages or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
+interpretation, but also during problem-solving --- \textit{customers} in VRP usually request
 a quantity of the delivered item, not specific item instances, like packages being ``requested''
 by their target locations in Transport.
 
 \subsection{Constraint Satisfaction Problems}\label{csp}
 
-Constraint satistfaction techniques are a popular means of solving problems in combinatorial optimization. \citet[Section~8.1]{Ghallab2004} give an informal definition of a
+Constraint satisfaction techniques are a popular means of solving problems in combinatorial optimization. \citet[Section~8.1]{Ghallab2004} give an informal definition of a
 \textit{Constraint Satisfaction Problem} (CSP):
 \begin{quote}
 Given (1) a set of variables and their respective domains, and (2) a set of constraints on the compatible values that the variables may take, the problem is to find a value for each variable within its domain such that these values meet all the constraints.
