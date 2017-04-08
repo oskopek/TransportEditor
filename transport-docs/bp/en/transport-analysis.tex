@@ -8,7 +8,7 @@ that will aid us in developing better quality planners.
 \section{TransportEditor -- A Transportation Planning System}
 
 To aid us and others in studying transportation planning,
-we have developed \textit{TransportEditor} -- a system for creating and visualizing transportation problems and plans.
+we have developed \textit{TransportEditor} --- a system for creating and visualizing transportation problems and plans.
 
 Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
 written in Java.
@@ -222,7 +222,7 @@ Unfortunately, we weren't able to acquire the datasets for IPC-7, as the Subvers
 \subsection{Na{\"{i}}ve formulation}
 
 We will now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the na{\"{i}}ve encoding provided in \citet[Section~8.3]{Ghallab2004}.
-However, using that strategy, our problems ``blow up'' in size -- as is expected due
+However, using that strategy, our problems ``blow up'' in size --- as is expected due
 to the different complexities of planning versus solving CSPs \citep[Section~8.3.2]{Ghallab2004}. To visualize the difference in our case, we have constructed a state space estimation table (Table~\ref{tab:csp-trivial}) for conversions of two sample sequential Transport problems.
 
 \begin{table}[tb]
@@ -271,8 +271,8 @@ $$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations}^2$$
 actions.
 
 As we can see from the third section of the table, the number of variables
-(planning variables and ground actions) is not extremely high --
-the problem is that the variables have very large domains,
+(planning variables and ground actions) is not extremely high
+--- the problem is that the variables have very large domains,
 which makes the CSP problem exponentially larger \citep[Section~8.3.2]{Ghallab2004}.
 We calculated the \textit{Search Space Size Estimate} (SSE) as
 \begin{align*}
@@ -288,6 +288,7 @@ the estimated number of atoms in the universe is generally estimated to be about
 \subsection{Domain-dependent formulation}\label{csp-custom-repr}
 
 \TODO{domain-dep formulation, note the shadow variable overhead}
+\TODO{New cap represents advantages: memory while keeping the same expressive power. Reduction only in state vars}
 
 
 \begin{table}[tb]

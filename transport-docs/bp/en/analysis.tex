@@ -4,14 +4,14 @@ In this chapter, we formalize the concept of planning to help us with formally i
 
 \section{Automated planning}
 
-As previously stated, \textit{planning} is usually defined as the reasoning side of acting -- an abstract deliberation
+As previously stated, \textit{planning} is usually defined as the reasoning side of acting --- an abstract deliberation
 process that chooses and organizes actions by anticipating their outcomes. \citep[Section~1.1]{Ghallab2004}
 It seems only natural that we want to have computers do this strenuous activity for us.
-Automated planning is an attempt at just that -- it is an area of Artificial Intelligence (AI) that
+Automated planning is an attempt at just that --- it is an area of Artificial Intelligence (AI) that
 studies the planning process computationally. \citep[Section~1.1]{Ghallab2004}
 
-Unfortunately, the specific situations in which we want to use automated planning are very diverse --
-from devising a sequence of actions to shut down a nuclear power plant,
+Unfortunately, the specific situations in which we want to use automated planning are very diverse
+--- from devising a sequence of actions to shut down a nuclear power plant,
 planning the movements of a robotic arm
 on an assembly line, or devising the complex pattern of motor activations
 for space aircraft positioning.
@@ -21,7 +21,7 @@ about both the domain and the specific problem at runtime and attempts to devise
 and the planner's previously built-in processes. \citep[Section~1.3]{Ghallab2004}
 
 On the other hand, domain-specific planning, where domain knowledge has been built into the planner,
-has obvious advantages when solving problems in that domain -- all the while being useless on problems of other
+has obvious advantages when solving problems in that domain --- all the while being useless on problems of other
 domains. \citep[Section~1.3]{Ghallab2004}
 
 \subsection{Planning model}
@@ -53,7 +53,7 @@ but they do not state anything about specific states or actions.
 
 Given a state-transition system $\Sigma$, planning aims to find a
 sequence of actions to apply to the beginning state in order to achieve some objective.
-The objective can be defined in various ways -- we might want the planner
+The objective can be defined in various ways --- we might want the planner
 to devise a plan that
 does not enter specific states, or contrary to that, visits each of a set of states,
 or one that just ends at a chosen state.
@@ -69,7 +69,7 @@ A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
 \end{defn}
 
 Now that we have defined a \textit{planning problem} we can specify what we mean
-by the planner generating a \textit{sequence of actions} to achieve a goal -- we will
+by the planner generating a \textit{sequence of actions} to achieve a goal --- we will
 call this sequence a \textit{plan}.
 For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$.
 
@@ -86,9 +86,9 @@ we want to plan for, consists of three components (Figure~\ref{fig:planning-mode
 \begin{itemize}
 \item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
 it receives;
-\item A \textit{controller} -- given an input state $s \in S$ provides an action $a \in A$ as output according
+\item A \textit{controller} --- given an input state $s \in S$ provides an action $a \in A$ as output according
 to a plan; and
-\item A \textit{planner} -- uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
+\item A \textit{planner} --- uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
 to execute in order to reach a goal state from the initial state.
 \end{itemize}
 
@@ -96,7 +96,7 @@ to execute in order to reach a goal state from the initial state.
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../imga/planning_model}
 \end{center}
-\caption[A typical planning model for offline planning.]{A typical planning model for offline planning -- a state-transition system $\Sigma$, a controller executing a plan, and a planner devising the plan based on an initial state and goals. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
+\caption[A typical planning model for offline planning.]{A typical planning model for offline planning --- a state-transition system $\Sigma$, a controller executing a plan, and a planner devising the plan based on an initial state and goals. Adapted from \citep[Figure~1.3]{Ghallab2004}.}
 \label{fig:planning-model}
 \end{figure}
 
@@ -109,15 +109,15 @@ This simplification has historically been studied as classical planning.
 A different branch of automated planning, \textit{neoclassical planning},
 uses largely the same theoretical foundations as classical 
 planning. What is different is the approach to planning using those foundations
--- instead of search space nodes being a sequence of actions or a partially ordered
+--- instead of search space nodes being a sequence of actions or a partially ordered
 set of actions, we view them as a set of several partial plans
 \citep[Part~II]{Ghallab2004}.
 One of the most famous results in neoclassical planning is the GraphPlan algorithm
 published by \citet{Blum1997}. It is out of the scope of this text to describe it in detail
--- see \citet[Section~6.3]{Ghallab2004}.
+--- see \citet[Section~6.3]{Ghallab2004}.
 GraphPlan makes heavy use of a data structure called a \textit{planning graph},
 which caused a breakthrough in the field of (domain-independent) planning
--- bigger problems could now be practically solved.
+--- bigger problems could now be practically solved.
 
 We will now describe several theoretical domain-independent representations
 of planning problems used in classical planning \citep[Chapter~2]{Ghallab2004},
@@ -128,7 +128,7 @@ so that we can formulate our domain using them.
 Leveraging propositional logic, both the planning domain and problem
 are represented with the notion
 of proposition symbols $L = \{p_1, p_2, \ldots\}$.
-Each state is defined as a subset of propositions of $L$ -- those propositions
+Each state is defined as a subset of propositions of $L$ --- those propositions
 which hold in the given state. $S$ is closed under the application of each
 action $a \in A$.
 
@@ -171,14 +171,14 @@ The definition of the state-transition function also stays the same.
 Goal states are defined as the set of states that satisfy $g$,
 the \textit{goal}, where $g$ is any set of ground literals.
 
-Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} -- that any atom/predicate not present in the state does not hold in that state.
+Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} --- that any atom/predicate not present in the state does not hold in that state.
 
 \subsubsection{State-variable representation}
 
 The state-variable representation substitutes the use of relations of the previous
 representation for functions,
 using the concept of state variables. State variables are functions
-that take the state as an input and serve as characteristic attributes, defining the state. We usually use a more practical way of defining these functions -- we assume
+that take the state as an input and serve as characteristic attributes, defining the state. We usually use a more practical way of defining these functions --- we assume
 the current state as an input without denoting it, and instead add different inputs.
 
 For example, a useful set of state-variable functions for a domain that contains a road
@@ -285,7 +285,7 @@ a \textit{precondition} and an \textit{effect}. To denote multiple
 preconditions and effects, we use the n-ary predicate \texttt{and}.
 A full format specification applicable to our use case is available in \citet[Appendix A]{Fox2003}.
 
-Not many planners support PDDL in its entirety -- they usually support 
+Not many planners support PDDL in its entirety --- they usually support 
 several ``feature subsets'', called \textit{requirements}.
 Over time, PDDL has evolved from the originally proposed version 1.2
 to the now standard version 3.1. Several extensions and successors were proposed,
@@ -309,7 +309,7 @@ denoted using three unary PDDL predicates:
 \end{itemize}
 
 PDDL does not handle plan representation. For a specific planning domain and problem in PDDL,
-the we represent the plan in a format that is a field-wide consensus -- we will refer to is
+the we represent the plan in a format that is a field-wide consensus --- we will refer to is
 as the \textit{VAL-like} format. VAL \citep{Howey2003} is a plan validator created for the IPC.
 It takes as input (among several options) three filenames: filename of a planning domain and
 problem in PDDL, and a filename for a plan in the mentioned format.
@@ -339,7 +339,7 @@ where we plan a certain time window offline and move on to the next window,
 repeating the process regularly.
 
 Planners, in practice, are computer programs that are fed two files as input
--- the domain file and the problem file. After that, they proceed with their internal calculations
+--- the domain file and the problem file. After that, they proceed with their internal calculations
 and upon finishing return a plan (or not). 
 We can then evaluate the plan, see if it meets our criteria and, potentially,
 execute it in the real world.
@@ -350,7 +350,7 @@ using a limited number of resources in a limited amount of time, and
 that is crucial to practical usage of any plan \citep[Chapter~15]{Ghallab2004}.
 
 In this text, we will only study the abstracted and simplified first part of this whole process
--- finding the ``best'' actions that lead to a specified goal.
+--- finding the ``best'' actions that lead to a specified goal.
 
 
 
@@ -384,7 +384,7 @@ There are a few basic formulations of the Transport domain family (i.e.~``simila
 
 \subsection{Common traits of Transport domains}
 
-Transport is a logistics domain -- vehicles drive around on a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way.
+Transport is a logistics domain --- vehicles drive around on a (generally asymmetric) positively-weighted oriented graph, picking up and dropping packages along the way.
 All vehicles have limited capacities (the sum of package sizes they can carry).
 Picking up or dropping a package costs 1 unit. The cost of driving along a road is equal to the edge weight
 (in other words, the road length).
@@ -402,7 +402,7 @@ after finishing their deliveries.
 STRIPS, the Stanford Research Institute Problem Solver,
 was a planner proposed in the 1970's by \citet{Fikes1971}.
 The influence of STRIPS was, however, not only due to the planner,
-but the language used to describe its inputs -- the planning operators and goals.
+but the language used to describe its inputs --- the planning operators and goals.
 That is why we sometimes refer to classical planning (Section~\ref{classical-planning})
 as STRIPS planning. For the purposes of this text, we will use these terms interchangeably.
 
@@ -447,8 +447,8 @@ duration of 1, \verb+refuel+ has a duration of 10, and the duration of \verb+dri
 equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
 
 The addition of time poses numerous technical complications when formalizing this variant
--- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
-One important technicality is that a vehicle cannot pick up or drop packages concurrently -- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
+--- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
+One important technicality is that a vehicle cannot pick up or drop packages concurrently --- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
 
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
 defined as the maximum time where an action is still taking place.
@@ -488,7 +488,7 @@ The predicates used are:
 \begin{itemize}
 \item \verb+at(o, l)+, the package or vehicle \verb+o+ is at the
 location \verb+l+;
-\item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space -- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
+\item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space --- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
 \item \verb+capacity-predecessor(s1, s2)+, the space literal represented by \verb+s1+
 is directly smaller than the literal represented by \verb+s2+;
 \item \verb+in(p, v)+, the package \verb+p+ is in the vehicle \verb+v+;
@@ -824,7 +824,7 @@ review and classify hundreds of papers related to the VRP, with many more left o
 Most of these works tend to study the CVRP problem with minor modifications, hence creating
 a broad landscape of problems and a platform to build on for the future.
 According to the data in \citet[Table~4]{Braekers2016}, there has been a recent uptick
-in popularity for models relatively similar to Transport -- specially, VRPs with
+in popularity for models relatively similar to Transport --- specially, VRPs with
 backhauls (returning items from customers to depots),
 multiple depots (multiple starting points for vehicles), and with allowed split deliveries (multiple
 vehicles can serve a single customer).
@@ -889,13 +889,13 @@ capacities to vehicles, and satellite facilities mean that vehicles can pick ite
 while on a delivery route. This does not characterize the Transport domain in every detail, but it is a fairly accurate approximation.
 
 According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features to those of Transport in any single study, to the best of our knowledge.
-Usually, the studied problems are more constrained than Transport -- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
+Usually, the studied problems are more constrained than Transport --- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
 makes cooperation of vehicles hard to model, whereas in Transport this is one of the fundamental elements.
 
 \comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
 
 An important difference between Transport and the VRP is that Transport has a notion of single packages, or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
-interpretation, but also during problem solving -- \textit{customers} in VRP usually request
+interpretation, but also during problem solving --- \textit{customers} in VRP usually request
 a quantity of the delivered item, not specific item instances, like packages being ``requested''
 by their target locations in Transport.
 
