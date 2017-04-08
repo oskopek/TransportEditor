@@ -82,13 +82,11 @@ $\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i \in S$, while $s_k \in g$.
 
 A basic \textit{planning model}, i.e. the abstraction of a whole real-life scenario
 we want to plan for, consists of three components (Figure~\ref{fig:planning-model}):
-
 \begin{itemize}
-\item A \textit{state-transition system} $\Sigma$ that evolves by its state-transition function using the actions
+\item A \textit{state-transition system} $\Sigma$, that evolves by using its state-transition function on the actions
 it receives;
-\item A \textit{controller} --- given an input state $s \in S$ provides an action $a \in A$ as output according
-to a plan; and
-\item A \textit{planner} --- uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
+\item A \textit{controller}, that given an input state $s \in S$ and a generated plan, provides an action $a \in A$ as output; and
+\item A \textit{planner}, that uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
 to execute in order to reach a goal state from the initial state.
 \end{itemize}
 
