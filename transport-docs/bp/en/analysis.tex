@@ -906,11 +906,14 @@ Problem} (CSP):
 Given (1) a set of variables and their respective domains, and (2) a set of constraints on the compatible values that the variables may take, the problem is to find a value for each variable within its domain such that these values meet all the constraints.
 \end{quote}
 
-\TODO{define state space + size}
+We define the \textit{state space} of a CSP as all the possible combinations of assignments of values to the variables, respecting the domains of variables.
+The size of the state space is simply the number of those combinations.
 
-\TODO{Expand and quote an authoritative CSP source}
+For example, the famous $n$-queens problem, where the goal is to position $n$ chess-style queen pieces on an $n \times n$ sized chessboard so that they do not attack each other (according to the rules of chess). Using a simple invariant deduced from the constraints (each queen has to occupy a different column),
+we can model the problem as a CSP with $n$-ary variables $C_i \in [n]\; \forall i \in [n]$, one variable for each of the $n$ columns. The value of $C_i$ then represents the row the queen in column $i$ occupies. This problem has a search space size of $\prod_{i=1}^n n = n^n$, because any of the $n$ queens can be placed on any of the $n$ squares in its column \citep{Russell1995}.
 
-\TODO{Mention that modelling a VRP adn Transport as a CSP, the VRP instance is way smaller with the same amount of nodes and vehicles}
+We will attempt to model Transport as a CSP later on in Section~\ref{csp-formulation}.
+Note that the translation of a VRP into a CSP representation is very natural and straightforward \citep[Solution Methods / Constraint Programming]{ResearchGroup2013}, which is usually not the case for planning problems.
 
 \subsection{Past solutions and approaches to Transport}
 
