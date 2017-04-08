@@ -567,7 +567,7 @@ refuel(v, l)
   precond: at(v, l), has-petrol-station(l)
   effects: assign(fuel-left(v), fuel-max(v))
 \end{code}
-\caption{Classical formulation of \texttt{transport-numeric}'s differences compared to \texttt{transport-strips}.}
+\caption[Partial classical formulation of \texttt{transport-numeric}.]{Classical formulation of \texttt{transport-numeric}'s differences compared to \texttt{transport-strips}.}
 \label{code:classical-numeric}
 \end{figure}
 
@@ -619,7 +619,7 @@ refuel(v, l)
   precond: at(v) = l, has-petrol-station(l)
   effects: fuel-left(v) <- fuel-max(v)
 \end{code}
-\caption{State-variable formulation of \texttt{transport-numeric}'s differences
+\caption[Partial state-variable formulation of \texttt{transport-numeric}.]{State-variable formulation of \texttt{transport-numeric}'s differences
 compared to \texttt{transport-strips}.}
 \label{code:statevar-numeric}
 \end{figure}
@@ -660,7 +660,7 @@ refuel(v, l)
   cond: (at(v) = l1)@[s, e), (has-petrol-station(l))@s
   effects: (fuel-left(v) <- fuel-max(v))@e
 \end{code}
-\caption{Temporal state-variable formulation of the temporal of Transport. The characters \texttt{s} and \texttt{e} represent the start and end temporal variables of the given action, respectively.}
+\caption[State-variable formulation of temporal Transport.]{Temporal state-variable formulation of the temporal of Transport. The characters \texttt{s} and \texttt{e} represent the start and end temporal variables of the given action, respectively.}
 \label{code:statevar-temporal}
 \end{figure}
 
@@ -728,7 +728,7 @@ the Transport domain in Figure~\ref{code:pddl-strips}.
 \end{code}
 \caption{PDDL formulation of \texttt{transport-strips}.}
 \label{code:pddl-strips}
-\end{figure} % TODO Move to attachments and dedicate page?
+\end{figure}
 
 
 Discretised Durative Actions from \citep[Section~5]{Fox2003}.
@@ -787,7 +787,7 @@ Discretised Durative Actions from \citep[Section~5]{Fox2003}.
 \end{code}
 \caption{PDDL formulation of temporal Transport.}
 \label{code:pddl-temporal}
-\end{figure} % TODO Move to attachments and dedicate page?
+\end{figure}
 
 
 
