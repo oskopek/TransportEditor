@@ -1,14 +1,12 @@
 \chapter{Sequential transportation planning}
 
-\section{Definition}
-
 \section{Specifics of sequential planning}
 
-\section{Adding fuel}
+\TODO{mention that there are no vehicle goals.. verify!}
 
-\section{Domain-independent approach}
+\section{Shortcommings of domain-independent approaches}
 
-\TODO{Vygenerovat si plany z LAMA na seqsat ipc08 and ipc14 + analysis of specific errors and shortcommings}
+\TODO{Vytiahnut si plany z vysledkov seq-sat08 z LAMA na seqsat ipc08 an z mercury a lama na ipc14 + analysis of specific errors and shortcommings}
 
 \section{Forward planning}
 
@@ -18,31 +16,39 @@
 
 \TODO{describe a generic search alg}
 
-\subsection{Simple Greedy BFS}
+\section{Simple Greedy BFS}
 
-\TODO{describe BFS and DFS} \citep[Section~3.5]{Russell1995}
+\TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
 
 \TODO{mention Zhou with our Prolog \& Java impl} \citep{Zhou2015}
 
-\subsection{SFA*}
+\section{SFA*}
 
-\subsection{SFA* with a different heuristic}
+\TODO{Describe A* in forward planning}
 
-\subsection{SF with a different search (BFS/DFS, A*, Beam, \ldots)}
+\TODO{Advantages and shortcommings of SFA*}
+
+\subsection{SFA* with a package distance heuristic}
+
+\subsection{SFA* with a different heuristic?}
+
+\subsection{SFA* with a different search (BFS/DFS, Beam, \ldots)?}
 
 \section{Backward planning?}
 
-\subsection{ApproachC?}
+\subsection{Backward planning approach?}
 
 \section{Some sort of a hierarchical planner?}
 
 \section{CSP-based planner}\label{csp-approach}
 
-\TODO{try to run a CSP to solve this and compare results, using Section~\ref{csp-custom-repr}}
+\TODO{try to run a CSP in OptaPlanner to solve this and compare results, using Section~\ref{csp-custom-repr}}
+
+\TODO{Advantages and shortcommings of a CSP-based planner}
 
 \section{Summary and possible future approaches}
 
 \TODO{Mention which planners we choose to compare in the experimental part}
 
-\TODO{Future possible work}
+\TODO{more possible approaches}
 

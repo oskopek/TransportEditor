@@ -285,12 +285,9 @@ A full format specification applicable to our use case is available in \citet[Ap
 
 Not many planners support PDDL in its entirety --- they usually support 
 several ``feature subsets'', called \textit{requirements}.
-Over time, PDDL has evolved from the originally proposed version 1.2
-to the now standard version 3.1. Several extensions and successors were proposed,
-like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}}
-(MA-PDDL) and
-Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
-(PPDDL).
+One problem with the diversity of these requirements is that rarely does
+a single planner support more than a few, which makes comparing them on a diverse
+set of problems difficult.
 
 An important version of PDDL, version 2.1, added support for temporal
 planning using \textit{durative actions} \citep[Section~5]{Fox2003},
@@ -305,6 +302,13 @@ denoted using three unary PDDL predicates:
 \item \texttt{at end}, where it must hold or be applied at the end of the action; and
 \item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is not applicable to effects, as it is unclear what it would mean.
 \end{itemize}
+
+Over time, PDDL has evolved from the originally proposed version 1.2
+to the now standard version 3.1. Several extensions and successors were proposed,
+like Multi-Agent PDDL\comment{\footnote{\url{http://agents.fel.cvut.cz/codmap/}}}
+(MA-PDDL) and
+Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS-04-167.pdf}}}
+(PPDDL).
 
 PDDL does not handle plan representation. For a specific planning domain and problem in PDDL,
 the we represent the plan in a format that is a field-wide consensus --- we will refer to is
@@ -697,12 +701,6 @@ substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
 and the duration of actions).
 For reference, we will now show the PDDL representation of the sequential and temporal variant of
 the Transport domain in Figure~\ref{code:pddl-strips} and Figure~\ref{code:pddl-temporal} respectively.
-
-One problem with the diversity of these domain formulations is that rarely does
-a single planner support the union of all these requirements.
-We show the capabilities of individual studied planners
-later on, in Table~\ref{tab:plannner-requirements-comparison}.
-
 
 \begin{figure}[tbp]
 \begin{code}
