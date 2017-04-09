@@ -508,9 +508,13 @@ that this grammar is only valid if concatenated with the grammar in Figure~\ref{
 
 \section{Formulating Transport as a CSP}\label{csp-formulation}
 
-\TODO{intro}
+When discussing related works, we mentioned the Vehicle Routing Problem (Section~\ref{vrp}) and its straightforward
+formulation as a Constraint Satisfaction Problem. Utilizing CSPs has been useful
+for planning in the past \TODO{ref}
+and we will attempt to use domain-specific knowledge to improve upon the standard, domain-independent
+formulation.
 
-\subsection{Na{\"{i}}ve formulation}
+\subsection{Na{\"{i}}ve CSP formulation}
 
 We will now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the na{\"{i}}ve encoding provided in \citet[Section~8.3]{Ghallab2004}.
 However, using that strategy, our problems ``blow up'' in size --- as is expected due
@@ -576,11 +580,15 @@ where we set $l := \mt{length(plan) + 1}$.
 For comparison to the SSEs in the last table row, 
 the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
 
-\subsection{Domain-dependent formulation}\label{csp-custom-repr}
+\subsection{Domain-dependent CSP formulation}\label{csp-custom-repr}
 
-\TODO{domain-dep formulation, note the shadow variable overhead}
+We will now attempt a different CSP formulation for sequential Transport.
+\TODO{explain how, play down the advantages}
+To be able to compare our results to the previously mentioned encoding, we have constructed another state space estimation table (Table~\ref{tab:csp-custom}) for conversions of the same problem instances.
 
-\TODO{New cap represents advantages: memory while keeping the same expressive power. Reduction only in state vars}
+\TODO{domain-dep formulation using \citet{DeSmet2016}, emphasize the shadow variable overhead}
+
+\TODO{New csp representation advantages: memory is lower, while keeping the same expressive power. Reduction only in state var count.}
 
 
 \begin{table}[tb]
