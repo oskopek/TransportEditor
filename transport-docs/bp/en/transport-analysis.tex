@@ -240,7 +240,7 @@ are rare and usually significantly longer.
 \caption{Problem dimensions of the seq-sat-8 dataset.}
 \label{tab:seq-sat-8-dims}
 \end{subtable}
-\caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets. Bolded problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30} respectively.}
+\caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets. Bold problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30} respectively.}
 \label{tab:dataset-dimensions}
 \end{table}
 
@@ -351,7 +351,7 @@ In a temporal domain without fuel, assuming that vehicles only drive along the s
 the plan does not necessarily have to be suboptimal, but it
 is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify}
 
-In a temporal domain with fuel, it is not safe to say whether or not
+In a temporal domain with fuel, it is not safe to say whether
 such a scenario hurts the plan duration. If there is a petrol station at $B$
 and $v$ wants to refuel there, the other vehicle could have enabled the parallelization 
 of the \refuel{} and \pickup{} actions, therefore shaving off 1 time unit in total.
@@ -374,7 +374,7 @@ occurs right after a different action of the same vehicle and the plan is of the
 Finally, these are the useful properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
 \item \textbf{Refuelling and dropping/picking up can occur at the same time}: 
-A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the refuel action
+A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
 
@@ -423,7 +423,7 @@ along with our other textual works relating to researching the Transport domain.
 
 Information about the model in \texttt{transport-core} and the \texttt{transport-editor} is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
 
-All of the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
+All the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
 data conversion. The only important scripts reside in the \texttt{tools} folder;
 the \texttt{benchmark.sh} script, used for running experimental benchmarks,
 and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX tables of the scores and runtimes from benchmark results.
@@ -432,9 +432,9 @@ The benchmarker takes as input a JSON \citep{Bray2014} configuration file (Figur
 runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format (Figure~\ref{code:benchmark-results-bnf}).
 In both of the figures are BNF grammars. We write zero-or-more repeated statements using ( and )*. Also, [ and ] are used for JSON lists, they do not mean an optional statement --- we use ( and ) (without the star) for that.
 Under \texttt{<character>}, we assume any valid UTF-8 character,
-\texttt{<double>} means any non-negative IEEE compatible double precision floating point number,
+\texttt{<double>} means any non-negative IEEE compatible double precision floating-point number,
 and \texttt{<long>} is any non-negative whole number smaller than or equal to $2^{63}-1$.
-Additionally, all filepaths may use the \verb+${transport.root}+ variable, designating the
+Additionally, all file paths may use the \verb+${transport.root}+ variable, designating the
 root directory of the project.
 
 Apart from the results file, a plain text log containing information about the planner
@@ -470,7 +470,7 @@ containing all the generated report files.
 \caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
 is expected to be a valid Java class name (including the package) and present on the classpath.
 The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
-and \{0\} used to represent the domain filepath, \{1\} the problem filepath, and \{2\} the output plan filepath.}
+and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.}
 \label{code:benchmark-config-bnf}
 \end{figure}
 
