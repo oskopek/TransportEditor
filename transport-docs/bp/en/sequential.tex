@@ -30,6 +30,8 @@ where we will need actions summing up to a higher cost.
 However, it is important to note, that the previously mentioned state space heuristic 
 is not even admissible.
 
+\TODO{Improve this heuristic by applying the shortest vehicle path too + extend it for vehicle goals}
+
 An \textit{admissible} heuristic does not overestimate
 the true value it is approximating. During planning in state space,
 when examining a state $s$, we want to estimate the total costs of the best
@@ -47,6 +49,8 @@ transported to $B$. The road between $A$ and $B$ is symmetric and has length
 of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
 followed by a \drive{} and two \drop{}s. This plan has a total cost of $2+100+2=104$,
 but the heuristic would estimate that we need 
+
+\TODO{substitute drive actions for higher level drives to any node on graph, but forbid two sequential high level drives.. adv: always uses shortest paths, never cycles, minimal overhead.. disadv: might throw off cooperation w.r.t the heuristic?}
 
 \section{Simple Greedy BFS}
 

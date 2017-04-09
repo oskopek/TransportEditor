@@ -297,14 +297,93 @@ A summary of the acquired insights is available in Table~\ref{tab:problem-proper
 
 \subsection{Domain insights}
 
-There are several interesting properties and invariants that hold in Transport and might prove useful for designing planners. We will briefly take a look at 
-that hold.
+There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
+\begin{enumerate}
+\item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations --- there is nothing
+we can do using those packages that would result in a plan with a lower total cost.
+
+\item \textbf{Drop when at the destination}: Likewise, it is
+always correct for a vehicle containing a package with a destination equal
+to the vehicle's location to do a \drop{} action immediately.
+
+\item \textbf{Do not drop and pick up}: It never makes sense to drop and pick up
+the same package by the same vehicle in succession. We will only get to the same state
+by using a longer plan. This rule also applies if an action of a different vehicle
+gets between the two successive actions --- even if it does an action with the
+dropped package.
+It is important to note that this is a symmetric property: picking up and dropping
+equally results in a worse plan.
+\begin{enumerate}
+\item \textbf{Do not drop package where we picked it up}: A generalization
+of the previous rule is that vehicles should never drop a package
+at the location they last picked it up, independent on the actions they took
+between the relevant \pickup{} and \drop{}. This rule is also symmetric.
+
+\item \textbf{Never drop after picking up at a vertex}:
+While the order of successive \pickup{} and \drop{} actions does not
+influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
+without sacrificing admissibility \TODO{def}.
+\end{enumerate}
+
+\item \textbf{Do not drive suboptimally}: If a vehicle does a series of
+\drive{} actions from location $A$ to $B$ without ``touching'' packages at any of the locations it visits,
+it has to follow the shortest possible path from $A$ to $B$. If it does not,
+the induced plan can be made less costly or shorter by swapping the actual \drive{} actions
+for precalculated optimal \drive{} actions along the shortest path.
+Do note, that it is not important for the application of this rule whether actions are in direct succession (in a sequential plan) or not.
+\begin{enumerate}
+\item \textbf{Do not drive in cycles}: A special but important case of the previous rule is that vehicles should not drive in cycles
+\end{enumerate}
+
+\item \textbf{Do not forward packages using other vehicles}:
+Let $p$ be a package of size $|p|$ located at $A$.
+Let $v$ be a vehicle which drove through location $A$ to location $B \neq A$
+and picked up $p$ at $B$,
+without ever having less than $|p|$ free space between leaving $A$ and picking up $p$.
+If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
+$v$ could have picked up $p$ when driving through $A$, and the total plan cost
+would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
+While we cannot say if the drive itself
+was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
+2 on the total cost. 
+
+In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
+the plan does not necessarily have to be suboptimal, but it
+is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify}
+
+In a temporal domain with fuel, it is not safe to say whether or not
+such a scenario hurts the plan duration. If there is a petrol station at $B$
+and $v$ wants to refuel there, the other vehicle could have enabled the parallelization 
+of the \refuel{} and \pickup{} actions, therefore shaving off 1 time unit in total.
+However, if there is no petrol
+station at $B$, this situation reduces to the no-fuel variant. Given the relative rarity of petrol stations, this will reduce the search space somewhat.
+\end{enumerate}
+Several other insights can only be applied in the sequential variant of Transport:
+\begin{enumerate}
+\item \textbf{Drop from an active vehicle only}: Without loss of generality,
+we can prune all plans where a \drop{} action of a vehicle happens
+right after an action of a different vehicle. It is trivial to see that if we had a plan where a drop
+occurs after an action of a different vehicle, we can swap that action with the drop
+action without (a) changing the total plan cost (b) changing the validity of the plan.
+
+Doing this repeatedly will yield an equivalent plan, in which the drop action
+occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
+
+\item \textbf{\TODO{Another one}}
+\end{enumerate}
+Finally, these are the useful properties that only meaningfully apply to the temporal variant:
+\begin{enumerate}
+\item \textbf{Refuelling and dropping/picking up can occur at the same time}: 
+A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the refuel action
+when the vehicle was not dropping or picking up packages and the package was already
+co-located with the vehicle at that time.
+
+\item \textbf{\TODO{Another one}}
+\end{enumerate}
 
 
 
 
-
-\TODO{Mention heuristics, invariants that hold, try to prove them?}
 
 
 
@@ -315,12 +394,40 @@ that hold.
 
 \section{Accompanying software toolkit architecture}
 
-\TODO{Modules, classes, what belongs where, etc}
+To run our experiments efficiently, we have implemented a software project,
+confusingly called TransportEditor, of which the editor described in
+Section~\ref{transport-editor} is only a part.
+The ``scaffolding'' for running experiments, generating reports, and the planner implementations that we will describe in the next two chapters are all part
+of the project as well.
 
+The project is split into several modules, listed in approximate dependency order:
+\begin{itemize}
+\item \texttt{transport-thirdparty}, a set of 3$^\textrm{rd}$ party libraries
+that have not been published in a dependency management repository like {Maven~Central}\footnote{\url{http://central.sonatype.org/}},
+making their compile-time download and linking impossible;
+\item \texttt{transport-core}, a module that contains code modeling the Transport
+domain and persisting it to disk;
+\item \texttt{transport-planners}, containing sequential and temporal planners, both \textit{internal} (implemented as a part of this project) and \textit{external}
+(only calling an executable of a different project);
+\item \texttt{transport-benchmark}, a set of tools for running repeatable
+experiments on Transport datasets, possibly in parallel;
+\item \texttt{transport-report}, a collection of table generators and graph plotters,
+operating on the results of benchmarks; and
+\item \texttt{transport-editor}, the module containing the graphical user interface
+of the planning system TransportEditor. This module is only dependent
+on \texttt{transport-planners} and all its dependencies.
+\end{itemize}
+Independent on the other modules is \texttt{transport-docs},
+the module containing this thesis,
+along with our other textual works relating to researching the Transport domain.
 
+\TODO{high level desc. of model}
 
+\TODO{benchmark input output format -- planovace} 
 
+\TODO{how to run the benchmark}
 
+\TODO{how do reports work and where they are generated}
 
 
 
