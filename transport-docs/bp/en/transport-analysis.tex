@@ -126,7 +126,55 @@ Truck goals: tempo-sat: 21-30
 \TODO{features and peculiarities of the problem instances}
 
 
-
+\begin{table}[p]
+\footnotesize
+\centering
+\begin{subtable}[t]{0.42\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\caption{Problem dimensions of the seq-sat-6 dataset.}
+\label{tab:seq-sat-6-dims}
+\end{subtable}
+\quad
+\begin{subtable}[t]{0.54\textwidth}
+\csvreader[tabular=r||rrrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{Petrol}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/tempo-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads,PetrolStations=\petrol}%
+{\problem & \vehicles & \packages & \locations & \roads & \petrol}%
+\caption{Problem dimensions of the tempo-sat-6 dataset.}
+\label{tab:tempo-sat-6-dims}
+\end{subtable}
+\quad
+\begin{subtable}[t]{1\textwidth}
+\begin{subtable}[t]{0.42\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-8.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\end{subtable}
+\quad
+\begin{subtable}[t]{0.54\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-8_2.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\end{subtable}
+\caption{Problem dimensions of the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-dims}
+\end{subtable}
+\caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets. Bolded problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_seq-sat_p20} respectively.}
+\label{tab:seq-sat-datasets}
+\end{table}
 
 
 

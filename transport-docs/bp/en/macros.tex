@@ -87,6 +87,20 @@
 \newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
 
 %% Personal:
+\usepackage{csvsimple} % CSV tables
+%%% Sub-figures
+\usepackage{subcaption}
+%%% Slanted column headers
+\usepackage{adjustbox}
+\usepackage{array}
+\newcolumntype{R}[2]{%
+    >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
+    l%
+    <{\egroup}%
+}
+\newcommand*\rot{\multicolumn{1}{R{40}{2em}}}% no optional argument here, please!
+%%%
+
 \hyphenation{Transport-Editor}
 
 \newcommand{\TODO}[1]{\textbf{TODO} [{\color{red}#1}]}
