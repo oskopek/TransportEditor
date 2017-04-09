@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function convertToPdf {
-if `which rsvg-convert >/dev/null`; then # TODO: PDF/1-A compliance!!!
+if `which rsvg-convert >/dev/null`; then
     for svg in `ls $reportdir/*.svg`; do
         filename="$reportdir"/"`basename $svg | sed 's/\.svg//g'`"
         rsvg-convert -f pdf -o "$filename".pdf "$filename".svg
