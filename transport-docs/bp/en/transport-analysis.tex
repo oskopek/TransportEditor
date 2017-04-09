@@ -5,7 +5,7 @@ and development of planners for Transport, describe and analyze the datasets
 used for devising experiments, and discuss the properties of Transport
 that will help us in developing better quality planners.
 
-\section{TransportEditor -- A Transportation Planning System}
+\section{TransportEditor -- A Transportation Planning System}\label{transport-editor}
 
 To enable effective transportation planning,
 we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
@@ -322,7 +322,7 @@ between the relevant \pickup{} and \drop{}. This rule is also symmetric.
 \item \textbf{Never drop after picking up at a vertex}:
 While the order of successive \pickup{} and \drop{} actions does not
 influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
-without sacrificing admissibility \TODO{def}.
+without sacrificing admissibility \TODO{define admissibility before}.
 \end{enumerate}
 
 \item \textbf{Do not drive suboptimally}: If a vehicle does a series of
@@ -421,27 +421,86 @@ Independent on the other modules is \texttt{transport-docs},
 the module containing this thesis,
 along with our other textual works relating to researching the Transport domain.
 
+Information about the model in \texttt{transport-core} and the \texttt{transport-editor} is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
+
 All of the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
 data conversion. The only important scripts reside in the \texttt{tools} folder;
-the \texttt{benchmark.sh} script, used for running experimental benchmarks
+the \texttt{benchmark.sh} script, used for running experimental benchmarks,
+and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX tables of the scores and runtimes from benchmark results.
 
-Information about the model in \texttt{transport-core} and a guide to \texttt{transport-editor} is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
+The benchmarker takes as input a JSON \citep{Bray2014} configuration file (Figure~\ref{code:benchmark-config-bnf}),
+runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format (Figure~\ref{code:benchmark-results-bnf}).
+In both of the figures are BNF grammars. We write zero-or-more repeated statements using ( and )*. Also, [ and ] are used for JSON lists, they do not mean an optional statement --- we use ( and ) (without the star) for that.
+Under \texttt{<character>}, we assume any valid UTF-8 character,
+\texttt{<double>} means any non-negative IEEE compatible double precision floating point number,
+and \texttt{<long>} is any non-negative whole number smaller than or equal to $2^{63}-1$.
+Additionally, all filepaths may use the \verb+${transport.root}+ variable, designating the
+root directory of the project.
 
-The \texttt{transport-benchmark} module
+Apart from the results file, a plain text log containing information about the planner
+runs is also produced. Both of these files are placed in the directory \texttt{results/config\_file\_name/YYYYmmdd-HHMMSS/}, under the directory where \texttt{benchmark.sh} is placed.
+We can then use the \texttt{generate-reports.sh} script on the results file,
+which will create a \texttt{reports} directory next to the results file,
+containing all the generated report files.
 
-\TODO{benchmark input output format -- planovace} 
+\begin{figure}[tbp]
+\centering
+\begin{code}
+<config> ::= { "domain" : "<filepath>",
+               "problems" : { "<problem_name>" : <problem_config>
+                          ( , "<problem_name>" : <problem_config> )* },
+               "scoreFunctionType"  : "<score_function>",
+               "planners": { "<planner_name>" : "<planner_config>"
+                        ( , "<planner_name>" : "<planner_config>" )* },
+               "threadCount": <integer>,
+               "timeout": <integer> }
+<filepath> ::= <string>
+<problem_name> ::= <string>
+<problem_config> ::= { "filePath" : "<filepath>",
+                       "bestScore" : <score> }
+<score> ::= null | <float>
+<score_function> ::= TOTAL_TIME | ACTION_COUNT
+<planner_name> ::= <string>
+<planner_config> ::= { "className" : "<class>",
+                       "params" : "<executable_templ>" }
+<class> ::= <string>
+<executable_templ> ::= <string>
+<string> ::= ( <character> )*
+\end{code}
+\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
+is expected to be a valid Java class name (including the package) and present on the classpath.
+The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
+and \{0\} used to represent the domain filepath, \{1\} the problem filepath, and \{2\} the output plan filepath.}
+\label{code:benchmark-config-bnf}
+\end{figure}
 
-\TODO{how to run the benchmark}
-
-\TODO{how do reports work and where they are generated}
-
-
-
-
-
-
-
-
+\begin{figure}[tbp]
+\centering
+\begin{code}
+<results> ::= { "runs" : [ ( <run> ) ( , <run> )* ] }
+<run> ::= { "actions" : [ ( <action> ) ( , <action> )* ],
+            "temporalPlanActions" : [ ( <tpa> ) ( , <tpa> )* ],
+            "domain" : "<string>",
+            "planner" : "<string>",
+            "problem" : "<string>",
+            "results" : <run_results> }
+<action> ::= "<string>"
+<tpa> ::= "<string>"
+<run_results> ::= { "score" : <score>,
+                    "bestScore" : <score>,
+                    "exitStatus" : "<exit_status>",
+                    "startTimeMs" : <timestamp>,
+                    "endTimeMs" : <timestamp>,
+                    "durationMs" : <timestamp>,
+                    "quality" : <double> }
+<exit_status> ::= UNSOVLED | INVALID | VALID | NOTVALIDATED | SUBOPT
+<timestamp> ::= <long>
+\end{code}
+\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF.
+The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
+that this grammar is only valid if concatenated with the grammar in Figure~\ref{code:benchmark-config-bnf}.}
+\label{code:benchmark-results-bnf}
+\end{figure}
 
 
 
