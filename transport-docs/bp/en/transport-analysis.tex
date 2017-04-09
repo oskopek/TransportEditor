@@ -81,134 +81,10 @@ using the program and providing an in-depth description.
 
 
 
-
-\section{Problem datasets}
-
-For evaluation and comparison with other planners, we have acquired several problem datasets from previous runs of the IPC.
-Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, their associated IPC competition, the track at the competition and the domain variant the problems are modeled in.
-
-\begin{table}[tb]
-\begin{tabular}{c||ccc}
-\textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
-\hline
-\hline
-netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
-seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
-seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
-tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
-\hline
-seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
-seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
-seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
-seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
-\end{tabular}
-\caption{Transport datasets from the 2008 and 2014 IPCs.}
-\label{tab:ipc-datasets}
-\end{table}
-
-Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
-and the rule pages of IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}.
-Unfortunately, we weren't able to acquire the datasets for IPC-7 (2011), as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
-
-We have decided to split our further research based on the tracks at IPC: we will focus on constructing
-Transport-specific planners for the seq-sat-6, seq-sat-8, and tempo-sat-6 datasets.
-Both the seq-sat-6 and tempo-sat-6 contain 30 problems, while seq-sat-8 only contains 20. Table~\ref{tab:dataset-dimensions} shows the
-dimensions of each problem instance for each mentioned dataset.
-
-While the planners (including our domain-specific ones) do not know this,
-the datasets are constructed with a scenario in mind. Locations are not just
-placed randomly, but usually belong to cities, inside which the road network
-tends to be dense and road lengths small, while roads connecting cities
-are rare and usually longer.
-
-A special subset of problems, namely the problems 21--30 of tempo-sat-6, contain
-vehicle target locations, which means that not only packages, but also
-vehicles will need to be positioned at specific locations
-after package delivery finishes. We can interpret this goal
-in a similar way as in a VRP, where a vehicle target location is thought to be
-a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
-
-\begin{figure}[tb]
-\begin{center}
-\includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
-\end{center}
-\caption[Visualization of the \texttt{p30} problem of temporal Transport from IPC 2008.]{Road graph visualization of the \texttt{p30} problem of the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problems, the circle of nodes in the center represents a series of truck hubs and each of the attached subgraphs are individual cities.}
-\label{fig:ipc08_tempo-sat_p30}
-\end{figure}
-
-
-\begin{table}[p]
-\footnotesize
-\centering
-\begin{subtable}[t]{0.42\textwidth}
-\csvreader[tabular=r||rrrr,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
-{../data/seq-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
-{\problem & \vehicles & \packages & \locations & \roads}%
-\caption{Problem dimensions of the seq-sat-6 dataset.}
-\label{tab:seq-sat-6-dims}
-\end{subtable}
-\quad
-\begin{subtable}[t]{0.54\textwidth}
-\csvreader[tabular=r||rrrrr,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{Petrol}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
-{../data/tempo-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads,PetrolStations=\petrol}%
-{\problem & \vehicles & \packages & \locations & \roads & \petrol}%
-\caption{Problem dimensions of the tempo-sat-6 dataset.}
-\label{tab:tempo-sat-6-dims}
-\end{subtable}
-
-\begin{subtable}[t]{1\textwidth}
-\vspace{0.5cm}
-\begin{subtable}[t]{0.42\textwidth}
-\csvreader[tabular=r||rrrr,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
-{../data/seq-sat-8.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
-{\problem & \vehicles & \packages & \locations & \roads}%
-\end{subtable}
-\quad
-\begin{subtable}[t]{0.54\textwidth}
-\csvreader[tabular=r||rrrr,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
-{../data/seq-sat-8_2.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
-{\problem & \vehicles & \packages & \locations & \roads}%
-\end{subtable}
-\caption{Problem dimensions of the seq-sat-8 dataset.}
-\label{tab:seq-sat-8-dims}
-\end{subtable}
-\caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets. Bolded problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30} respectively.}
-\label{tab:dataset-dimensions}
-\end{table}
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Properties of Transport domains}
 
-\TODO{refactor}
-
 In this section, we will delve more deeply into the Transport domain and try to analyze its properties.
-We will describe the problem instances that have been used in the IPC and discuss potential
-heuristics and approaches to creating plans for these problems.
-
-
+We will describe the problem instances that have been used in the IPC and discuss insights useful for devising heuristics or for other approaches to creating plans for these problems.
 
 \subsection{Does domain knowledge make Transport easy to solve?}
 
@@ -265,18 +141,164 @@ location of the last \verb+drive+ action. They constitute a path through the gra
 Hence, we have constructed a HC.
 \end{proof}
 
-\subsection{Problem properties}
 
-\TODO{intro}
+\subsection{Datasets \& problem instances}
+
+For evaluation and comparison with other planners, we have acquired several problem datasets from previous runs of the IPC.
+Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, their associated IPC competition, the track at the competition and the domain variant the problems are modeled in.
+
+\begin{table}[tb]
+\begin{tabular}{c||ccc}
+\textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
+\midrule
+\midrule
+netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimal} & Numeric \\ 
+seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimal} & STRIPS \\ 
+seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
+tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
+\midrule
+seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & STRIPS \\ 
+seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} & STRIPS \\ 
+seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
+seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
+\end{tabular}
+\caption{Transport datasets from the 2008 and 2014 IPCs.}
+\label{tab:ipc-datasets}
+\end{table}
+
+Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+and the rule pages of IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}.
+Unfortunately, we weren't able to acquire the datasets for IPC-7 (2011), as the Subversion repository\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/Domains.html}} that promises to contain them is unavailable.
+
+We have decided to split our further research based on the tracks at IPC: we will focus on constructing
+Transport-specific planners for the seq-sat-6, seq-sat-8, and tempo-sat-6 datasets,
+corresponding to the sequential and temporal variants of Transport.
+
+In addition to the domain definition, we need to take a look at the individual problems to fully utilize our knowledge advantage.
+Both the seq-sat-6 and tempo-sat-6 contain 30 problems, while seq-sat-8 only contains 20. Table~\ref{tab:dataset-dimensions} shows the
+dimensions of each problem instance for each mentioned dataset.
+
+While the planners (including our domain-specific ones) do not know this,
+each of the datasets was constructed with a scenario in mind. Locations in problems are not just
+placed randomly, but usually belong to cities. Inside a city, the road network
+tends to be dense and road lengths small, while roads connecting cities
+are rare and usually significantly longer.
+
+
+\begin{figure}[tb]
+\begin{center}
+\includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
+\end{center}
+\caption[Visualization of the \texttt{p30} problem of temporal Transport from IPC 2008.]{Road graph visualization of the \texttt{p30} problem of the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problems, the circle of nodes in the center represents a series of truck hubs and each of the attached subgraphs are individual cities.}
+\label{fig:ipc08_tempo-sat_p30}
+\end{figure}
+
+\begin{table}[p]
+\footnotesize
+\centering
+\begin{subtable}[t]{0.42\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\caption{Problem dimensions of the seq-sat-6 dataset.}
+\label{tab:seq-sat-6-dims}
+\end{subtable}
+\quad
+\begin{subtable}[t]{0.54\textwidth}
+\csvreader[tabular=r||rrrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{Petrol}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/tempo-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads,PetrolStations=\petrol}%
+{\problem & \vehicles & \packages & \locations & \roads & \petrol}%
+\caption{Problem dimensions of the tempo-sat-6 dataset.}
+\label{tab:tempo-sat-6-dims}
+\end{subtable}
+
+\begin{subtable}[t]{1\textwidth}
+\vspace{0.5cm}
+\begin{subtable}[t]{0.42\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-8.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\end{subtable}
+\quad
+\begin{subtable}[t]{0.54\textwidth}
+\csvreader[tabular=r||rrrr,
+    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}}\\\midrule\midrule,
+    late after line=\mbox{}]
+%    table foot=\\\bottomrule]%
+{../data/seq-sat-8_2.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Locations=\locations,Roads=\roads}%
+{\problem & \vehicles & \packages & \locations & \roads}%
+\end{subtable}
+\caption{Problem dimensions of the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-dims}
+\end{subtable}
+\caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets. Bolded problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30} respectively.}
+\label{tab:dataset-dimensions}
+\end{table}
+
 
 All sequential problem instances in seq-sat-6 and seq-sat-8 have symmetric roads and road lengths and can, therefore,
-be simplified to use an undirected graph.
+be simplified by assuming the use of an undirected graph.
+In no sequential problem do vehicles need to finish at a specific target location.
+
 The temporal problems in tempo-sat-6 do not have the same property;
 the problems 1--20 have symmetric roads and lengths, but
 the 21--30 problems only have symmetric roads, not lengths in general.
-The same applies to fuel demands of roads for temporal problems.
+The same applies to fuel demands of roads and as a bonus,
+these problems have vehicle target locations, which means that not only packages,
+but also
+vehicles will need to be positioned at specific locations
+after package delivery finishes. We can interpret this goal
+in a similar way as in a VRP, where a vehicle target location is thought to be
+a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
 
-\TODO{insights, degenerate cases, etc.: sum up with a table of features}
+We can see that problems vary not only in size but also in what features they include
+and what assumptions they make.
+A summary of the acquired insights is available in Table~\ref{tab:problem-properties}.
+
+\begin{table}
+\centering
+\begin{tabular}{cc||ccccc}
+\textbf{Dataset} & \textbf{Problems} & \rot{\textbf{\# of cities}} & \rot{\textbf{Symmetric road lengths}} & \rot{\textbf{Symmetric fuel demands}} & \rot{\textbf{Vehicle target locations}} & \rot{\textbf{State space size}}\\
+\midrule
+\midrule
+\multirow{3}{*}{seq-sat-6} & 01--10 & 1 & \multirow{3}{*}{Yes} & \multirow{3}{*}{N/A} & \multirow{3}{*}{No} & • \\ 
+& 11--20 & 2 &  &  &  & • \\ 
+& 21--30 & 3 &  &  &  & • \\\midrule%
+%
+\multirow{6}{*}{seq-sat-8} & 01--03 & 1 & \multirow{6}{*}{Yes} & \multirow{6}{*}{N/A} & \multirow{6}{*}{No} & • \\ 
+& 04--06 & 2 &  &  &  & • \\ 
+& 07--10 & 3 &  &  &  & • \\ 
+& 11--13 & 1 &  &  &  & • \\ 
+& 14--16 & 2 &  &  &  & • \\ 
+& 17--20 & 3 &  &  &  & • \\\midrule%
+%
+\multirow{7}{*}{tempo-sat-6} & 01--10 & 1 & Yes & Yes & No & • \\ 
+& 11--20 & 2 & Yes & Yes & No & • \\\cmidrule{2-7}
+& 21--22 & 3 & \multirow{5}{*}{No} & \multirow{5}{*}{No} & \multirow{5}{*}{Yes} & • \\ 
+& 23--24 & 4 &  &  &  & • \\ 
+& 25--26 & 5 &  &  &  & • \\ 
+& 27--28 & 6 &  &  &  & • \\ 
+& 29--30 & 7 &  &  &  & •
+\end{tabular} 
+\caption{Summary of problem instance properties in IPC Transport datasets.}
+\label{tab:problem-properties}
+\end{table}
+
+\subsection{Domain insights}
+
+\TODO{Mention heuristics, invariants that hold, try to prove them?}
+
+
+
 
 
 
@@ -317,8 +339,8 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 \begin{center}
 \begin{tabular}{l||rr}
 \textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
-\hline 
-\hline 
+\midrule
+\midrule
 \textbf{Best known plan length} & 6 & 351 \\ 
 \textbf{Vehicles} & 2 & 4 \\ 
 \textbf{Vehicle variables} & 14 & 1 408 \\ 
@@ -327,11 +349,11 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 \textbf{Locations} & 5 & 60 \\ 
 \textbf{Roads} & 12 & 256 \\
 \textbf{Max capacity} & 4 & 4 \\ 
-\hline
+\midrule
 \textbf{Ground Drive actions} & 168 & 360 448 \\ 
 \textbf{Ground PickUp actions} & 140 & 1 689 600 \\ 
 \textbf{Ground Drop actions} & 140 & 1 689 600 \\ 
-\hline 
+\midrule
 \textbf{Planning variables total} & 48 & 10 207 \\ 
 \textbf{Grounded actions total} & 448 & 1 189 838 848 \\ 
 \textbf{Search Space Estimate} & $\approx 1.1 \cdot 10^{52}$ & $\approx 1.4 \cdot 10^{27 952}$ \\ % https://www.wolframalpha.com/input/?i=(245120%5E351)+*+4%5E1408+*+60%5E1408+*+1468%5E7040
@@ -383,8 +405,8 @@ the estimated number of atoms in the universe is generally estimated to be about
 \begin{center}
 \begin{tabular}{l||rr}
 \textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
-\hline 
-\hline 
+\midrule
+\midrule
 \textbf{Best known plan length} & 6 & 351 \\ 
 \textbf{Vehicles} & 2 & 4 \\ 
 \textbf{Vehicle shadow vars} & 14 & 1 408 \\
@@ -393,11 +415,11 @@ the estimated number of atoms in the universe is generally estimated to be about
 \textbf{Locations} & 5 & 60 \\ 
 \textbf{Roads} & 12 & 256 \\
 \textbf{Max capacity} & 4 & 4 \\ 
-\hline
+\midrule
 \textbf{Ground Drive actions} & 24 & 1024 \\ 
 \textbf{Ground PickUp actions} & 20 & 4800 \\ 
 \textbf{Ground Drop actions} & 20 & 4800 \\ 
-\hline 
+\midrule
 \textbf{Planning variables total} & 48 & 10 207 \\ 
 \textbf{Grounded actions in step} & 64 & 10 624 \\ 
 \textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\ 
