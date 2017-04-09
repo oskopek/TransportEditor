@@ -260,6 +260,8 @@ after package delivery finishes. We can interpret this goal
 in a similar way as in a VRP, where a vehicle target location is thought to be
 a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
 
+\TODO{describe state space size + add to table}
+
 We can see that problems vary not only in size but also in what features they include
 and what assumptions they make.
 A summary of the acquired insights is available in Table~\ref{tab:problem-properties}.
@@ -294,6 +296,13 @@ A summary of the acquired insights is available in Table~\ref{tab:problem-proper
 \end{table}
 
 \subsection{Domain insights}
+
+There are several interesting properties and invariants that hold in Transport and might prove useful for designing planners. We will briefly take a look at 
+that hold.
+
+
+
+
 
 \TODO{Mention heuristics, invariants that hold, try to prove them?}
 
@@ -398,6 +407,7 @@ the estimated number of atoms in the universe is generally estimated to be about
 \subsection{Domain-dependent formulation}\label{csp-custom-repr}
 
 \TODO{domain-dep formulation, note the shadow variable overhead}
+
 \TODO{New cap represents advantages: memory while keeping the same expressive power. Reduction only in state vars}
 
 

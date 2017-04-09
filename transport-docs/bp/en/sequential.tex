@@ -16,6 +16,38 @@
 
 \TODO{describe a generic search alg}
 
+\subsection{Simple distance-based heuristics}
+
+\TODO{revise}
+When designing a heuristic, we want to provide an as precise as possible estimate
+of the total plan cost or duration.
+In \texttt{transport-strips}, the only thing we want is to deliver packages to their destinations. Therefore, a straightforward heuristic is to calculate the lengths of a shortest
+path of each package to its destination using the road network and sum them.
+To make it more precise, we will add 1 if the package is currently loaded
+in a vehicle or 2 if it is not loaded and not yet at its destination.
+This heuristic is definitely not optimal, meaning that there are situations,
+where we will need actions summing up to a higher cost.
+However, it is important to note, that the previously mentioned state space heuristic 
+is not even admissible.
+
+An \textit{admissible} heuristic does not overestimate
+the true value it is approximating. During planning in state space,
+when examining a state $s$, we want to estimate the total costs of the best
+plan getting us to a goal state from state $s$. In other words, because we are
+trying to minimize the total cost,
+a planning heuristic $h: S -> \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
+where $h^*$ is the true total cost. A similar definition is applicable for minimizing duration in the temporal variant.
+
+Nonadmissible heuristics do not have nice properties when used with search algorithms
+--- for example, they do not guarantee that the first path to a goal state we find
+will be the optimal plan. To see how our previously constructed heuristic fails to do
+this, imagine the situation of having a network with just two locations $A$ and $B$.
+Two packages and one vehicle are located at $A$ and both packages want to be
+transported to $B$. The road between $A$ and $B$ is symmetric and has length
+of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
+followed by a \drive{} and two \drop{}s. This plan has a total cost of $2+100+2=104$,
+but the heuristic would estimate that we need 
+
 \section{Simple Greedy BFS}
 
 \TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
