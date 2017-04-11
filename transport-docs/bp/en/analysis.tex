@@ -71,13 +71,12 @@ A planning problem is a 5-tuple $\mathcal{P} = (S, A, \gamma, s_0, g)$, where:
 Now that we have defined a \textit{planning problem} we can specify what we mean
 by the planner generating a \textit{sequence of actions} to achieve a goal --- we will
 call this sequence a \textit{plan}.
-For notation purposes, we define $[k] := \{1, 2, \ldots, k\}$ for all $k \in \N$.
 
 \begin{defn}[Plan]\label{defn:plan}\citep[Section~1.5]{Ghallab2004}
 For a planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$,
 a plan is a finite sequence of actions $(a_1, a_2, \ldots, a_k),\, k \in \N$ where
-$\forall i \in [k] : a_i \in A$ and
-$\forall i \in [k] : \gamma(s_{i-1}, a_i) = s_i \in S$, while $s_k \in g$.
+$\forall i \in \kset : a_i \in A$ and
+$\forall i \in \kset : \gamma(s_{i-1}, a_i) = s_i \in S$, while $s_k \in g$.
 \end{defn}
 
 A basic \textit{planning model}, i.e. the abstraction of a whole real-life scenario
