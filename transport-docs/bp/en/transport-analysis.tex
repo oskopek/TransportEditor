@@ -94,70 +94,31 @@ For domain-independent planners, deciding whether a plan of a given length exist
 (the \textsc{Plan-Length} decision problem) is
 an NEXPTIME-complete task
 and deciding if a plan exists at all (the \textsc{Plan-Existence} decision problem)
-an EXPSPACE-complete task  \citep[Table~3.2]{Ghallab2004}.
+an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 
-That does not mean domain knowledge makes Transport easy.
+That does not mean domain knowledge makes Transport easy, as is evident from
+the very thorough analysis by \citet{Helmert2001} and \citet{Helmert2001a}.
+Using the provided notation,
+we can characterize
+the sequential Transport domain as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
+(equivalent to $\textsc{Transport}_{1,\infty,+}$).
+Similarly, the temporal variant can represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
+(equivalent to $\textsc{Transport}_{1,1,+}$) \TODO{Verify}. Note that
+\textsc{Transport} refers to the notation of \citet{Helmert2001a} of a general transportation
+task, while Transport refers to our studied domain.
+
 For sequential and temporal Transport without fuel, the \textsc{Plan-Existence} problem
 reduces to verifying reachability of each package by at least one vehicle
 and the reachability of target locations from the starting locations of all packages,
-which we can do in polynomial time.
-With fuel, there is no straightforward way \TODO{Later: Verify} of determining
-if a plan exists --- however, we can verify that such a plan is valid in polynomial time, hence \textsc{Plan-Existence} is at least in NP after adding fuel.
+which we can do in polynomial time, as noted by \citet[Theorem 8]{Helmert2001}.
+With fuel, there is no straightforward way of determining
+if a plan exists and this problem is NP-complete, which is proven in \citet[Theorem 9 and 10]{Helmert2001}.
 
-We will now show that \textsc{Plan-Length} is NP-complete for Transport even with domain knowledge.
-\begin{thm}
-For all $L \in \N$, the problem of deciding whether a plan of length $L$
-for sequential Transport without fuel exists (\textsc{Plan-Length}) with the usage of prior domain knowledge is NP-complete.
-\end{thm}
-\begin{proof}
-It trivial to see that the problem is in NP: if we get a plan of length $\leq L$,
-we can simulate the state changes done by the effects of individual actions and verify that the preconditions
-of every action holds in the respective intermediate state. At the end, 
-we verify that the goal condition holds in the final state.
-All of this can be done in polynomial time. \TODO{Later: Probably $O(L)$?}
-
-We will now show that we can reduce an NP-complete decision problem to our problem in polynomial time,
-hence proving that all NP-complete problems are reducible to our problem,
-and therefore, our problem is NP-hard.
-
-According to the Cook-Levin theorem \citep{Cook1971}, the problem of determining whether a Boolean formula in Conjunctive Normal Form (CNF) is NP-complete.
-
-We will now show that we can transform a Transport problem instance
-to a CNF Boolean formula in polynomial time.
-Using Figure~\ref{fig:classical-strips},
-we generate $L$
-
-
-We can use the same graph to model a Transport problem instance.
-The problem will contain only one vehicle of capacity $n-1$,
-where $n = |G|$, the number of nodes in the graph.
-
-We will co-locate $n-1$ packages with the vehicle at any predetermined graph vertex $l \in G$.
-One package $p'$ will be located elsewhere, at $l' \in G,\, l \neq l'$.
-Each package positioned at $l$ will have a different target than the other packages at $l$
-and none of the targets will be $l$. The package at $l'$ will have the original node $l$
-as its target. We will set all road lengths to $1$. 
-
-An optimal plan for the designed translation has a total cost of at least $3n$.
-Any plan for this problem has to have at least $n$ \verb+drive+ actions, because
-there is a package to be delivered to every node, and the graph has $n$ nodes.
-Because it has to move $n$ packages, at least $n$ \verb+pick-up+ and $n$ \verb+drop+
-actions are needed. The costs of all actions are 1.
-We conjecture that an HC exists if and only if an optimal and valid plan visits each vertex only once.
-
-First, we prove the forward implication. Assume an HC exists and the optimal plan visits at least one node twice. We can now construct a plan with a lower total cost than the optimal plan: first, pick up all the $n-1$ co-located packages, then drive along the HC. At each
-visited node, drop the package that has this node as its destination. If we are at $l'$,
-pick up the package $p'$. The plan is trivially valid, as it delivers all packages
-and the vehicle never over-reaches its capacity. Also, its total cost is $3n$
-(the length of the HC is $n$, which implies $n$ drive actions) and for every of the $n$ packages, we do exactly one \verb+pick-up+ and exactly one \verb+drop+. Hence, the plan
-is optimal and visits each vertex only once.
-
-Now, assume an HC does not exist. If the found optimal plan only visits each node once,
-we can look at the source locations of all \verb+drive+ actions and the target
-location of the last \verb+drive+ action. They constitute a path through the graph on which a node never repeats and the path starts and finishes at the same node.
-Hence, we have constructed a HC.
-\end{proof}
-
+Similarly, the \textsc{Plan-Length} problem is NP-complete for all mentioned variants of Transport
+\citep[Section~3.6]{Helmert2001a}.
+The fact that all the mentioned proofs work for temporal variants is explained in \citet[Section~3.5]{Helmert2001a}.
+All of these results make clear that looking for an explicit planning algorithm is infeasible,
+despite the knowledge we acquire by only focusing on one planning domain.
 
 \subsection{Datasets \& problem instances}
 
@@ -277,7 +238,26 @@ after package delivery finishes. We can interpret this goal
 in a similar way as in a VRP, where a vehicle target location is thought to be
 a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
 
-\TODO{describe state space size + add to table}
+Given a specific Transport problem, we can calculate the size of the set of states $|S|$.
+For sequential Transport, the state space size can be estimated as: $$l^v \cdot (l+v)^p,$$ where $l$ is the number of locations,
+$v$ the number of vehicles, and $p$ the number of packages. The formula represents
+the number of choices for the location of vehicles, combined with the number of choices
+for the location of packages (these include being loaded onto a vehicle). We have eliminated
+invalid states arising from inconsistent $in(p)$ and $at(p)$ state variable values,
+but some invalid states are still left in the state size estimate (for example states,
+where vehicles are loaded beyond maximum capacity). We did not include a notion of
+capacity in this estimate, because it can be computed from the locations of packages.
+
+For temporal Transport, the problem state space size estimate is more complicated,
+due to actions being parallel. A reasonable estimate could be:
+$$(l+r)^v \cdot (f_{max})^v \cdot (l+v)^p,$$ where $r$ represents the number of roads
+and $f_{max}$ the maximum fuel capacity for vehicles (this is a simplification where all vehicles
+have an equal maximum fuel capacity).
+The formula expresses the choice of positions of vehicles (vehicles can now be in the middle
+of a drive action), the choice of the current fuel capacity of vehicles (cannot be simply
+calculated from the other state variables, only from all previous actions),
+and the choice of location for packages.
+\TODO{not actually $f_{max}$, but the number of fuel vlaues it can take.. but it may be a good approximation... describe}
 
 We can see that problems vary not only in size but also in what features they include
 and what assumptions they make.
@@ -286,31 +266,34 @@ A summary of the acquired insights is available in Table~\ref{tab:problem-proper
 \begin{table}
 \centering
 \begin{tabular}{cc||ccccc}
-\textbf{Dataset} & \textbf{Problems} & \rot{\textbf{\# of cities}} & \rot{\textbf{Symmetric road lengths}} & \rot{\textbf{Symmetric fuel demands}} & \rot{\textbf{Vehicle target locations}} & \rot{\textbf{State space size}}\\
+\textbf{Dataset} & \textbf{Problems} & \rot{\textbf{\# of cities}} & \rot{\textbf{Symmetric road lengths}} & \rot{\textbf{Symmetric fuel demands}} & \rot{\textbf{Vehicle target locations}} & \rot{\textbf{$\approx$ \# states}}\\
 \midrule
 \midrule
-\multirow{3}{*}{seq-sat-6} & 01--10 & 1 & \multirow{3}{*}{Yes} & \multirow{3}{*}{N/A} & \multirow{3}{*}{No} & • \\ 
-& 11--20 & 2 &  &  &  & • \\ 
-& 21--30 & 3 &  &  &  & • \\\midrule%
+\multirow{3}{*}{seq-sat-6} & 01--10 & 1 & \multirow{3}{*}{Yes} & \multirow{3}{*}{N/A} & \multirow{3}{*}{No} & $10^{3} \to 10^{41}$ \\ 
+& 11--20 & 2 &  &  &  & $10^{3} \to 10^{43}$ \\ 
+& 21--30 & 3 &  &  &  & $10^{3} \to 10^{43}$ \\\midrule%
 %
-\multirow{6}{*}{seq-sat-8} & 01--03 & 1 & \multirow{6}{*}{Yes} & \multirow{6}{*}{N/A} & \multirow{6}{*}{No} & • \\ 
-& 04--06 & 2 &  &  &  & • \\ 
-& 07--10 & 3 &  &  &  & • \\ 
-& 11--13 & 1 &  &  &  & • \\ 
-& 14--16 & 2 &  &  &  & • \\ 
-& 17--20 & 3 &  &  &  & • \\\midrule%
+\multirow{6}{*}{seq-sat-8} & 01--03 & 1 & \multirow{6}{*}{Yes} & \multirow{6}{*}{N/A} & \multirow{6}{*}{No} & $10^{50} \to 10^{59}$ \\ 
+& 04--06 & 2 &  &  &  & $10^{62} \to 10^{72}$ \\ 
+& 07--10 & 3 &  &  &  & $10^{67} \to 10^{78}$ \\ 
+& 11--13 & 1 &  &  &  & $10^{50} \to 10^{61}$ \\ 
+& 14--16 & 2 &  &  &  & $10^{58} \to 10^{71}$ \\ 
+& 17--20 & 3 &  &  &  & $10^{63} \to 10^{77}$ \\\midrule%
 %
-\multirow{7}{*}{tempo-sat-6} & 01--10 & 1 & Yes & Yes & No & • \\ 
-& 11--20 & 2 & Yes & Yes & No & • \\\cmidrule{2-7}
+\multirow{7}{*}{tempo-sat-6} & 01--10 & 1 & Yes & Yes & No & $10^{8} \to 10^{52}$ \\ 
+& 11--20 & 2 & Yes & Yes & No &  \\\cmidrule{2-7}
 & 21--22 & 3 & \multirow{5}{*}{No} & \multirow{5}{*}{No} & \multirow{5}{*}{Yes} & • \\ 
-& 23--24 & 4 &  &  &  & • \\ 
+& 23--24 & 4 &  &  &  &  \\ 
 & 25--26 & 5 &  &  &  & • \\ 
 & 27--28 & 6 &  &  &  & • \\ 
 & 29--30 & 7 &  &  &  & •
 \end{tabular} 
 \caption{Summary of problem instance properties in IPC Transport datasets.}
 \label{tab:problem-properties}
+% https://www.wolframalpha.com/input/?i=l%5Ev+*+(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D+5
+% https://www.wolframalpha.com/input/?i=(l%2Br)%5Ev+*+c%5Ev+*(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D5,+r%3D12,+c%3D100
 \end{table}
+
 
 \subsection{Domain insights}
 
@@ -366,7 +349,7 @@ was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
 
 In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
 the plan does not necessarily have to be suboptimal, but it
-is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Later: Verify that this actually holds.}
+is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify that this actually holds.}
 
 In a temporal domain with fuel, it is not safe to say whether
 such a scenario hurts the plan duration. If there is a petrol station at $B$
@@ -386,7 +369,7 @@ action without (a) changing the total plan cost (b) changing the validity of the
 Doing this repeatedly will yield an equivalent plan, in which the drop action
 occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
 
-\item \textbf{\TODO{Later: Add another one}}
+\item \textbf{\TODO{Add another one}}
 \end{enumerate}
 Finally, these are the useful properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
@@ -395,7 +378,7 @@ A plan in which a vehicle starts to pick up a package at the same location it re
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
 
-\item \textbf{\TODO{Later: Add another one}}
+\item \textbf{\TODO{Add another one}}
 \end{enumerate}
 
 
