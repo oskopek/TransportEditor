@@ -89,28 +89,45 @@ We will describe the problem instances that have been used in the IPC and discus
 \subsection{Does domain knowledge make Transport easy to solve?}
 
 When domain-independent planners solve a sequential Transport problem,
-they face a harder task than our planners that have domain knowledge ahead of time.
-Deciding whether a plan of a given length exists is, in the case of Transport,
-an NEXPTIME-complete task \citep[Section~3.4]{Ghallab2004}.
-That does not mean domain knowledge makes Transport easy. We will now show
-that even the sequential variant of Transport is NP-hard.
+they face a harder task than planners that have access to domain knowledge ahead of time.
+For domain-independent planners, deciding whether a plan of a given length exists
+(the \textsc{Plan-Length} decision problem) is
+an NEXPTIME-complete task
+and deciding if a plan exists at all (the \textsc{Plan-Existence} decision problem)
+an EXPSPACE-complete task  \citep[Table~3.2]{Ghallab2004}.
 
+That does not mean domain knowledge makes Transport easy.
+For sequential and temporal Transport without fuel, the \textsc{Plan-Existence} problem
+reduces to verifying reachability of each package by at least one vehicle
+and the reachability of target locations from the starting locations of all packages,
+which we can do in polynomial time.
+With fuel, there is no straightforward way \TODO{Later: Verify} of determining
+if a plan exists --- however, we can verify that such a plan is valid in polynomial time, hence \textsc{Plan-Existence} is at least in NP after adding fuel.
+
+We will now show that \textsc{Plan-Length} is NP-complete for Transport even with domain knowledge.
 \begin{thm}
-The problem of finding an optimal plan for an undirected connected graph in the sequential
-Transport domain is NP-hard. \TODO{Formulate better and revise proof}
+For all $L \in \N$, the problem of deciding whether a plan of length $L$
+for sequential Transport without fuel exists (\textsc{Plan-Length}) with the usage of prior domain knowledge is NP-complete.
 \end{thm}
 \begin{proof}
-It is not evident if the problem is in NP: if we get a plan, there is no straightforward
-way of verifying whether it is optimal.
+It trivial to see that the problem is in NP: if we get a plan of length $\leq L$,
+we can simulate the state changes done by the effects of individual actions and verify that the preconditions
+of every action holds in the respective intermediate state. At the end, 
+we verify that the goal condition holds in the final state.
+All of this can be done in polynomial time. \TODO{Later: Probably $O(L)$?}
 
-We will now show that we can reduce an NP-complete problem to our problem in polynomial time,
+We will now show that we can reduce an NP-complete decision problem to our problem in polynomial time,
 hence proving that all NP-complete problems are reducible to our problem,
 and therefore, our problem is NP-hard.
 
-As proven by \citet{Karp1972}, the problem of existence of a Hamilton circuit (HC) in a (directed or undirected) graph is NP-complete. We will show that we are able to transform the HC problem into a sequential Transport problem.
+According to the Cook-Levin theorem \citep{Cook1971}, the problem of determining whether a Boolean formula in Conjunctive Normal Form (CNF) is NP-complete.
 
-Given an undirected graph $G$, the solution to HC is a cycle through all the nodes of $G$,
-without visiting any single node twice.
+We will now show that we can transform a Transport problem instance
+to a CNF Boolean formula in polynomial time.
+Using Figure~\ref{fig:classical-strips},
+we generate $L$
+
+
 We can use the same graph to model a Transport problem instance.
 The problem will contain only one vehicle of capacity $n-1$,
 where $n = |G|$, the number of nodes in the graph.
@@ -349,7 +366,7 @@ was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
 
 In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
 the plan does not necessarily have to be suboptimal, but it
-is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify}
+is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Later: Verify that this actually holds.}
 
 In a temporal domain with fuel, it is not safe to say whether
 such a scenario hurts the plan duration. If there is a petrol station at $B$
@@ -369,7 +386,7 @@ action without (a) changing the total plan cost (b) changing the validity of the
 Doing this repeatedly will yield an equivalent plan, in which the drop action
 occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
 
-\item \textbf{\TODO{Another one}}
+\item \textbf{\TODO{Later: Add another one}}
 \end{enumerate}
 Finally, these are the useful properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
@@ -378,7 +395,7 @@ A plan in which a vehicle starts to pick up a package at the same location it re
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
 
-\item \textbf{\TODO{Another one}}
+\item \textbf{\TODO{Later: Add another one}}
 \end{enumerate}
 
 
