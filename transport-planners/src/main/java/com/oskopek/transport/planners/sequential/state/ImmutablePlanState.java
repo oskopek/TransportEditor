@@ -175,9 +175,6 @@ public class ImmutablePlanState {
      * @return true iff they are equal, assuming all assumptions hold
      */
     private boolean equalsDuringPlanning(ImmutablePlanState other) {
-        if (hashCode() != other.hashCode()) {
-            return false;
-        }
         return problem.getAllPackages().equals(other.problem.getAllPackages())
                 && problem.getAllVehicles().equals(other.problem.getAllVehicles());
     }
