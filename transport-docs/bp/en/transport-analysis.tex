@@ -51,7 +51,7 @@ The basic user workflow of TransportEditor consists of the following steps:
 \begin{itemize}
 \item Loading a planner executable and letting TransportEditor run the planner on the loaded problem instance for a given time (the user can cancel anytime),
 then loading the resulting plan;
-\item Possibly loading a pre-generated plan;
+\item Possibly loading a pregenerated plan;
 \item Stepping through the individual plan actions and letting TransportEditor visualize them.
 The user can step forward and backward in the plan and inspect each action result in great detail;
 \item Editing the graph: adding/removing/editing the location or properties of vehicles, packages, roads, locations and possibly petrol stations;
@@ -246,7 +246,7 @@ for the location of packages (these include being loaded onto a vehicle). We hav
 invalid states arising from inconsistent $\mt{in}(p)$ and $\mt{at}(p)$ state variable values,
 but some invalid states are still left in the state size estimate (for example states,
 where vehicles are loaded beyond maximum capacity). We did not include a notion of
-capacity in this estimate, because it can be computed from the locations of packages.
+capacity in this estimate because it can be computed from the locations of packages.
 
 For temporal Transport, the problem state space size estimate is more complicated,
 due to actions being parallel. A reasonable estimate could be:
@@ -318,7 +318,7 @@ equally results in a worse plan.
 \begin{enumerate}
 \item \textbf{Do not drop package where we picked it up}: A generalization
 of the previous rule is that vehicles should never drop a package
-at the location they last picked it up, independent on the actions they took
+at the location they last picked it up, independent of the actions they took
 between the relevant \pickup{} and \drop{}. This rule is also symmetric.
 
 \item \textbf{Never drop after picking up at a vertex}:
@@ -378,12 +378,12 @@ occurs right after a different action of the same vehicle and the plan is of the
 \end{enumerate}
 Finally, these are the useful properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
-\item \textbf{Refuelling and dropping/picking up can occur at the same time}: 
+\item \textbf{Refueling and dropping/picking up can occur at the same time}: 
 A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
 
-\item \textbf{No fuel left means refuelling or ignoring the vehicle}:
+\item \textbf{No fuel left means refueling or ignoring the vehicle}:
 If a vehicle is stuck with no fuel left, or with less fuel than is required for
 any valid \drive{} action, the correct thing to do is to either refuel or drop
 all packages and ignore the vehicle in further planning. Unfortunately,
@@ -562,7 +562,7 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 The first section of the table (rows 1--7) contains problem-specific constants.
 The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the amounts of variables generated for the respective
 object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
-multiplied by the set plan length $+ 1$ (each state corresponds to the state before applying an action + the last state).
+multiplied by the set plan length + 1 (each state corresponds to the state before applying an action + the last state).
 
 In the second section (rows 8--10), we estimate the number of ground actions
 Step 1 from \citet[Section~8.3.1]{Ghallab2004} will generate.
@@ -593,18 +593,18 @@ the estimated number of atoms in the universe is generally estimated to be about
 
 \subsection{Domain-dependent CSP representation}\label{csp-custom-repr}
 
-We will now attempt a different CSP formulation for sequential Transport.
+We will now devise a different CSP representation for sequential Transport.
 While not improving upon the search space estimates of the na{\"{i}}ve formulation
 in a theoretical sense, we will describe a slightly more complex
-CSP model that enables us to explore less states.
-Using OptaPlanner and its shadow variable concept \citep[Section~4.3.6]{DeSmet2017}, we will model our Transport problem without caring about capacities,
-vehicle locations, and package locations, all of which will be implicitly managed by OptaPlanner or inferred in the case of capacity.
-\TODO{New csp representation advantages: memory is lower, while keeping the same expressive power. Reduction only in state var count.}
+and less general
+CSP model that enables us to explore fewer states.
 
-\TODO{domain-dep formulation using \citet{DeSmet2016}, emphasize the shadow variable overhead}
+Using OptaPlanner and its shadow variable concept \citep[Section~4.3.6]{DeSmet2017}, we will model our Transport problem without keeping explicit track of capacities,
+vehicle and package locations, and ground actions, all of which will be implicitly managed by OptaPlanner, or inferred in the case of capacity and actions.
+This means we will reduce the memory overhead, maintaining the same expressive power
+and hopefully not enlarge the processing time too much.
 
-To be able to compare our results to the previously mentioned encoding, we have constructed another state space estimation table (Table~\ref{tab:csp-custom}) for conversions of the same problem instances. Do note, that this table cannot be compared directly to the previous one,
-because it hides the shadow variable management overhead.
+\TODO{Describe the specific representation after it is polished in the code.}
 
 \begin{table}[tb]
 \begin{center}
@@ -617,7 +617,7 @@ because it hides the shadow variable management overhead.
 \textbf{Vehicle shadow vars} & 14 & 1 408 \\
 \textbf{Packages} & 2 & 20 \\ 
 \textbf{Package shadow vars} & 14 & 7 040 \\
-\textbf{Locations} & 5 & 60 \\ 
+\textbf{Locations} & 5 & 60 \\
 \textbf{Roads} & 12 & 256 \\
 \textbf{Max capacity} & 4 & 4 \\ 
 \midrule
@@ -631,12 +631,15 @@ because it hides the shadow variable management overhead.
 \textbf{Search Space Estimate} & $\approx 1.5 \cdot 10^{14}$ & $\approx 2.0 \cdot 10^{637}$ \\
 \end{tabular}
 \end{center}
-\caption[Search space approximations for a domain-dependent CSP encoding.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using a custom domain-dependent CSP encoding for Transport sequential.}
+\caption[Search space approximations for a domain-dependent CSP representation.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using a custom domain-dependent CSP representation for Transport sequential.}
 \label{tab:csp-custom}
 \end{table}
 
-Using the domain-dependent encoding specified previously, we are now able to construct
-a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). While the table rows look similar, sections 2 and 3 are calculated
+Using the domain-dependent representation specified, we are now able to construct
+a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). 
+Do note, that this table cannot be compared directly to the previous one,
+because it hides the shadow variable management overhead.
+Also, while the table rows look similar, sections 2 and 3 are calculated
 differently. The ground action counts in section 2 are not multiplied by $\mt{length(plan)} + 1$
 as done previously, because we only represent them once, not at every plan state.
 The total number of grounded actions is the same, but they are not explicitly represented as variables. The Search Space size Estimate is therefore calculated differently:
@@ -644,7 +647,7 @@ The total number of grounded actions is the same, but they are not explicitly re
 \mt{SSE} =\; &3^{\mt{length(plan)} + 1} & \textit{\footnotesize select the action type of each action}\\
 &\cdot \mt{\#ground\_actions}^{l-1}. & \textit{\footnotesize select the specific ground action}
 \end{align*}
-For comparison to the na{\"{i}}ve encoding SSEs which going from the p01 problem to the p20 grow by a logarithmic factor of approximately $538$,
+For comparison to the na{\"{i}}ve encoding SSEs which going from the p01 problem to p20 grow by a logarithmic factor of approximately $538$,
 whereas the domain-dependent ones only grow by approximately $46$,
 which is a huge improvement.
 
