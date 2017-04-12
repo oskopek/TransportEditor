@@ -238,26 +238,26 @@ after package delivery finishes. We can interpret this goal
 in a similar way as in a VRP, where a vehicle target location is thought to be
 a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
 
-Given a specific Transport problem, we can calculate the size of the set of states $|S|$.
+Given a specific Transport problem, we can calculate the size of the set of states $S$.
 For sequential Transport, the state space size can be estimated as: $$l^v \cdot (l+v)^p,$$ where $l$ is the number of locations,
 $v$ the number of vehicles, and $p$ the number of packages. The formula represents
 the number of choices for the location of vehicles, combined with the number of choices
 for the location of packages (these include being loaded onto a vehicle). We have eliminated
-invalid states arising from inconsistent $in(p)$ and $at(p)$ state variable values,
+invalid states arising from inconsistent $\mt{in}(p)$ and $\mt{at}(p)$ state variable values,
 but some invalid states are still left in the state size estimate (for example states,
 where vehicles are loaded beyond maximum capacity). We did not include a notion of
 capacity in this estimate, because it can be computed from the locations of packages.
 
 For temporal Transport, the problem state space size estimate is more complicated,
 due to actions being parallel. A reasonable estimate could be:
-$$(l+r)^v \cdot (f_{max})^v \cdot (l+v)^p,$$ where $r$ represents the number of roads
-and $f_{max}$ the maximum fuel capacity for vehicles (this is a simplification where all vehicles
+$$(l+r)^v \cdot \left(\frac{f_{max}}{\mt{GCD} \{\mt{fuel-demand}(l_1, l_2) | (l_1, l_2) \in R\}}\right)^v \cdot (l+v)^p,$$ where $R$ represents the set of roads, $r = |R|$,
+$\mt{GCD}$ is the greatest common divisor function
+and $f_{max}$ is the maximum fuel capacity for vehicles (this is a simplification where all vehicles
 have an equal maximum fuel capacity).
 The formula expresses the choice of positions of vehicles (vehicles can now be in the middle
 of a drive action), the choice of the current fuel capacity of vehicles (cannot be simply
 calculated from the other state variables, only from all previous actions),
 and the choice of location for packages.
-\TODO{not actually $f_{max}$, but the number of fuel vlaues it can take.. but it may be a good approximation... describe}
 
 We can see that problems vary not only in size but also in what features they include
 and what assumptions they make.
@@ -281,14 +281,16 @@ A summary of the acquired insights is available in Table~\ref{tab:problem-proper
 & 17--20 & 3 &  &  &  & $10^{63} \to 10^{77}$ \\\midrule%
 %
 \multirow{7}{*}{tempo-sat-6} & 01--10 & 1 & Yes & Yes & No & $10^{8} \to 10^{52}$ \\ 
-& 11--20 & 2 & Yes & Yes & No &  \\\cmidrule{2-7}
-& 21--22 & 3 & \multirow{5}{*}{No} & \multirow{5}{*}{No} & \multirow{5}{*}{Yes} & • \\ 
-& 23--24 & 4 &  &  &  &  \\ 
-& 25--26 & 5 &  &  &  & • \\ 
-& 27--28 & 6 &  &  &  & • \\ 
-& 29--30 & 7 &  &  &  & •
+& 11--20 & 2 & Yes & Yes & No & $10^{8} \to 10^{52}$ \\\cmidrule{2-7}
+& 21--22 & 3 & \multirow{5}{*}{No} & \multirow{5}{*}{No} & \multirow{5}{*}{Yes} & $10^{18} \to 10^{21}$ \\ 
+& 23--24 & 4 &  &  &  & $10^{28} \to 10^{36}$ \\ 
+& 25--26 & 5 &  &  &  & $10^{44} \to 10^{49}$ \\ 
+& 27--28 & 6 &  &  &  & $10^{62} \to 10^{67}$ \\ 
+& 29--30 & 7 &  &  &  & $10^{76} \to 10^{81}$
 \end{tabular} 
-\caption{Summary of problem instance properties in IPC Transport datasets.}
+\caption[Summary of problem instance properties in IPC Transport datasets.]{Summary of problem instance properties in IPC Transport datasets.
+State space size estimates in temporal domains
+are calculated using $f_max = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s equal to 1.}
 \label{tab:problem-properties}
 % https://www.wolframalpha.com/input/?i=l%5Ev+*+(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D+5
 % https://www.wolframalpha.com/input/?i=(l%2Br)%5Ev+*+c%5Ev+*(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D5,+r%3D12,+c%3D100
@@ -322,7 +324,10 @@ between the relevant \pickup{} and \drop{}. This rule is also symmetric.
 \item \textbf{Never drop after picking up at a vertex}:
 While the order of successive \pickup{} and \drop{} actions does not
 influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
-without sacrificing admissibility \TODO{define admissibility before}.
+without sacrificing admissibility. \textit{Admissibility} is
+a property of search strategies in general and can be defined as finding
+(one of) the optimal solutions (first), when there are generally several solutions
+of possibly different qualities \citep[Section~3.5]{Russell1995}.
 \end{enumerate}
 
 \item \textbf{Do not drive suboptimally}: If a vehicle does a series of
@@ -377,6 +382,12 @@ Finally, these are the useful properties that only meaningfully apply to the tem
 A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
+
+\item \textbf{No fuel left means refuelling or ignoring the vehicle}:
+If a vehicle is stuck with no fuel left, or with less fuel than is required for
+any valid \drive{} action, the correct thing to do is to either refuel or drop
+all packages and ignore the vehicle in further planning. Unfortunately,
+we cannot say anything about the (non-)optimality of a plan where this occurs.
 
 \item \textbf{\TODO{Add another one}}
 \end{enumerate}
