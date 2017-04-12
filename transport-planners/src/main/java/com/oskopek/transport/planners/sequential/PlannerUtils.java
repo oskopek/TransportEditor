@@ -374,6 +374,41 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
+    public static int calculateSumOfDistancesToVehiclesPackageTargets(Collection<Package> packageList,
+            Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
+        int sumDistances = 0;
+        for (Vehicle vehicle : vehicleList) { // vehicles are never in the middle of a drive
+            int maxPkgDistance = 0;
+            for (Package pkg : vehicle.getPackageList()) {
+                int dist = distanceMatrix.get(vehicle.getLocation().getName(), pkg.getTarget().getName());
+                if (dist > maxPkgDistance) {
+                    maxPkgDistance = dist;
+                }
+            } // TODO: not true, calculate the max distance for a package in the vehicle, or the spanning tree distances
+            sumDistances += maxPkgDistance + vehicle.getPackageList().size(); // + drop actions
+        }
+        for (Package pkg : packageList) {
+            Location pkgLocation = pkg.getLocation();
+            if (pkgLocation != null) {
+                String pkgLocName = pkgLocation.getName();
+                // calculate the distance to the target + pickup and drop
+                sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName())
+                        + 2; // + pickup and drop
+
+                // Calculate the distance to the nearest vehicle
+                int minVehicleDistance = Integer.MAX_VALUE;
+                for (Vehicle vehicle : vehicleList) {
+                    int dist = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName());
+                    if (dist < minVehicleDistance) {
+                        minVehicleDistance = dist;
+                    }
+                }
+                sumDistances += minVehicleDistance;
+            }
+        }
+        return sumDistances;
+    }
+
     public static boolean hasCycle(Iterator<Action> reversedActions) {
         Set<String> drives = new HashSet<>();
         if (!reversedActions.hasNext()) {

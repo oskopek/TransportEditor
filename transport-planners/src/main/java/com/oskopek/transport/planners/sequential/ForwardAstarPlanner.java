@@ -73,7 +73,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     bestPlanScore = current.getTotalTime();
                     bestPlan = new SequentialPlan(current.getAllActionsInList());
                 }
-                return Optional.of(new SequentialPlan(current.getAllActionsInList())); // TODO: remove me?
+//                return Optional.of(new SequentialPlan(current.getAllActionsInList())); // TODO: remove me?
             }
 
             if (shouldCancel()) {
@@ -102,7 +102,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                         entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
 //                        if (tentativeGScore > neighborGScore) {
-//                             TODO: P22 nonopt, p04 ?
+//                             TODO: p03+, p12+, p22+,
 //                            logger.debug("Try not to generate these plans");
 //                        }
                         return;
@@ -123,7 +123,9 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private static Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages,
+//        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages,
+//                state.getProblem().getAllVehicles(), distanceMatrix);
+        return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargets(unfinishedPackages,
                 state.getProblem().getAllVehicles(), distanceMatrix);
     }
 
