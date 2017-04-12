@@ -13,7 +13,7 @@
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
     "SFA*": {
-      "className": "com.oskopek.transport.planners.sequential.ForwardAstarPlanner"
+      "className": "com.oskopek.transport.planners.sequential.SFA2Planner"
     }
   },
   "threadCount": 1,

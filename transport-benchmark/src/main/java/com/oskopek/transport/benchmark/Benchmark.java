@@ -50,12 +50,13 @@ public class Benchmark {
      * @param futures the futures to wait for
      * @return a stream of benchmark runs as results from the futures
      */
-    private static Stream<BenchmarkRun> waitFor(List<CompletableFuture<BenchmarkRun>> futures) {
+    private static Stream<BenchmarkResults.JsonRun> waitFor(List<CompletableFuture<BenchmarkRun>> futures) {
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
         Try.run(allOf::get).onFailure(e -> new IllegalStateException("Waiting for all futures failed.", e));
         logger.info("All benchmarks finished, writing results...");
         return Stream.ofAll(futures).map(
-                f -> Try.of(f::get).getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
+                f -> Try.of(f::get).map(BenchmarkResults::serializeRun)
+                        .getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
     }
 
     /**
@@ -89,17 +90,16 @@ public class Benchmark {
         logger.info("Starting all benchmarks...");
         ScheduledExecutorService schedule = Executors.newScheduledThreadPool(threadCount);
         ExecutorService service = Executors.newFixedThreadPool(threadCount);
-        BenchmarkResults results;
+        List<BenchmarkResults.JsonRun> results;
         try {
             results = Try.of(() -> schedule(matrix, service, schedule))
                     .flatMap(futures -> Try.of(() -> waitFor(futures)))
-                    .map(intermediates -> Benchmark.populateRunTable(matrix, intermediates)).map(BenchmarkResults::from)
-                    .getOrElseThrow(t -> new IllegalStateException("Benchmark failed.", t));
+                    .getOrElseThrow(t -> new IllegalStateException("Benchmark failed.", t)).toJavaList();
         } finally {
             service.shutdown();
             schedule.shutdown();
         }
-        return results;
+        return BenchmarkResults.from(results);
     }
 
     /**

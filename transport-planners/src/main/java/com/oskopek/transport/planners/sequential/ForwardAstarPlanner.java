@@ -59,6 +59,15 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
+        Optional<Plan> maybePlan = planInternal(domain, problem);
+        closedSet = null;
+        openSet = null;
+        entryMap = null;
+        distanceMatrix = null;
+        return maybePlan;
+    }
+
+    public Optional<Plan> planInternal(Domain domain, Problem problem) {
         logger.debug("Initializing planning...");
         resetState();
         initialize(problem);

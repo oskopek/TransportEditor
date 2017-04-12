@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ArrayTable;
+import com.oskopek.transport.benchmark.config.BenchmarkConfig;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
@@ -50,6 +51,19 @@ public final class BenchmarkResults {
      */
     public static BenchmarkResults from(ArrayTable<Problem, Planner, BenchmarkRun> runTable) {
         return new BenchmarkResults(runTable, runTable.values().stream().map(JsonRun::of).collect(Collectors.toList()));
+    }
+
+    /**
+     * Create a results instance from the run table.
+     *
+     * @return the initialized results
+     */
+    public static BenchmarkResults from(List<JsonRun> runs) {
+        return new BenchmarkResults(null, runs);
+    }
+
+    public static JsonRun serializeRun(BenchmarkRun run) {
+        return JsonRun.of(run);
     }
 
     /**
