@@ -521,7 +521,7 @@ that this grammar is only valid if concatenated with the grammar in Figure~\ref{
 
 When discussing related works, we mentioned the Vehicle Routing Problem (Section~\ref{vrp}) and its straightforward
 formulation as a Constraint Satisfaction Problem. Utilizing CSPs has been useful
-for planning in the past \TODO{ref}
+for planning in the past \citep[Section~8.7]{Ghallab2004}
 and we will attempt to use domain-specific knowledge to improve upon the standard, domain-independent
 formulation.
 
@@ -591,16 +591,20 @@ where we set $l := \mt{length(plan) + 1}$.
 For comparison to the SSEs in the last table row, 
 the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
 
-\subsection{Domain-dependent CSP formulation}\label{csp-custom-repr}
+\subsection{Domain-dependent CSP representation}\label{csp-custom-repr}
 
 We will now attempt a different CSP formulation for sequential Transport.
-\TODO{explain how, play down the advantages}
-To be able to compare our results to the previously mentioned encoding, we have constructed another state space estimation table (Table~\ref{tab:csp-custom}) for conversions of the same problem instances.
+While not improving upon the search space estimates of the na{\"{i}}ve formulation
+in a theoretical sense, we will describe a slightly more complex
+CSP model that enables us to explore less states.
+Using OptaPlanner and its shadow variable concept \citep[Section~4.3.6]{DeSmet2017}, we will model our Transport problem without caring about capacities,
+vehicle locations, and package locations, all of which will be implicitly managed by OptaPlanner or inferred in the case of capacity.
+\TODO{New csp representation advantages: memory is lower, while keeping the same expressive power. Reduction only in state var count.}
 
 \TODO{domain-dep formulation using \citet{DeSmet2016}, emphasize the shadow variable overhead}
 
-\TODO{New csp representation advantages: memory is lower, while keeping the same expressive power. Reduction only in state var count.}
-
+To be able to compare our results to the previously mentioned encoding, we have constructed another state space estimation table (Table~\ref{tab:csp-custom}) for conversions of the same problem instances. Do note, that this table cannot be compared directly to the previous one,
+because it hides the shadow variable management overhead.
 
 \begin{table}[tb]
 \begin{center}
