@@ -123,9 +123,7 @@ public class ForwardAstarPlanner extends AbstractPlanner {
 
     private static Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-//        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages,
-//                state.getProblem().getAllVehicles(), distanceMatrix);
-        return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargets(unfinishedPackages,
+        return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                 state.getProblem().getAllVehicles(), distanceMatrix);
     }
 
