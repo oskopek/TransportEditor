@@ -18,7 +18,7 @@ import org.teneighty.heap.Heap;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ForwardAstarPlanner extends AbstractPlanner {
+public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -101,10 +101,6 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                         neighborEntry = openSet.insert(neighborFScore, neighbor);
                         entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
-//                        if (tentativeGScore > neighborGScore) {
-//                             TODO: p03+, p12+, p22+,
-//                            logger.debug("Try not to generate these plans");
-//                        }
                         return;
                     }
 
@@ -121,16 +117,11 @@ public class ForwardAstarPlanner extends AbstractPlanner {
         return Optional.ofNullable(bestPlan);
     }
 
-    private static Integer calculateHeuristic(ImmutablePlanState state,
-            ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
-                state.getProblem().getAllVehicles(), distanceMatrix);
-    }
+    protected abstract Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages);
 
     @Override
-    public ForwardAstarPlanner copy() {
-        return new ForwardAstarPlanner();
-    }
+    public abstract ForwardAstarPlanner copy();
 
     @Override
     public int hashCode() {

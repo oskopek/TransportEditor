@@ -49,7 +49,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
 
     @Before
     public void setUp() throws Exception {
-        planner = new ForwardAstarPlanner();
+        planner = new SFA1Planner();
     }
 
     @Test
