@@ -1,84 +1,143 @@
 \chapter{Experimental evaluation}
 
-\TODO{Intro: goals + what will we examine and why}
+In this chapter, we will describe and run experiments
+that compare our planners from the last two chapters
+with state-of-the-art domain-independent planners from the IPC.
+We will briefly discuss the acquired results and interpret them.
 
 \section{Methodology}
 
-\TODO{Compare with IPC competition results -- mention the rules}
+Using the benchmarker software module described in Section~\ref{transport-project}, we will run experiments in an
+environment as similar to the original
+IPC as possible, and following almost all of their rules.\footnote{\url{https://web.archive.org/web/20160925081907/http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+We will run all tests according to principles mimicking the rules;
+All planners have to be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
+get canceled and prompted for a plan at that time point).
+Our planners explicitly and intentionally break the ``domain-independence'' rule of the IPC.
 
-\TODO{compare runtimes, scores, define the quality}
-\TODO{deduplicate with chapter transport-analysis}
+The evaluation criteria remain the same:
+we focus on plan \textit{quality} in favor of planner run time,
+although we will mention the times.
+The quality of a plan for a specific planner and sequential problem $p$ is defined as
+$$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$
+where the results called $BEST$
+are either precalculated outside of the competition environment or they are the best result of one of the planners in the competition, depending on which plan has a lower total cost.
+Quality is, therefore, a number between $0$ and $1$.
+Note that we will use the original competition's best scores,
+which means that the quality of our plans
+might sometimes exceed the value of 1
+(when our planners find a plan better than all the others found during the competition).
+The overall goal for planners is to maximize the sum of qualities over the problem instances in a given dataset, called the \textit{total quality}.
+For temporal domains, quality is calculated in the same way, just by substituting total cost
+for total time. We sometimes refer to total cost and total time as the \textit{score} of the planner, a term that is not dependent on the domain variant.
 
-\subsection{Datasets}
+We will use three datasets for our experiments --- the seq-sat-6
+and seq-sat-8 datasets for sequential
+and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
+All the datasets used (and more) are available in the
+software project sources, see the \nameref{cd-contents}.
+Descriptions of planners referenced from now on by their names in the respective competitions can be found for both IPC~2008\footnote{\url{https://web.archive.org/web/20170414183131/http://icaps-conference.org/ipc2008/deterministic/Planners.html}} and IPC~2014 \citep{Vallati2015}.
 
-\TODO{Where did we get data (reference to transport-analysis datasets section),
-where are they attached}
+In all planners where nondeterminism occurs,
+we set the initial random seed to 2017
+on all individual runs.
+All the following experiments
+were run on a computer
+containing an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
+with 16 GB of memory, running Gentoo Linux.
+A big thank you goes out to the faculty for providing us with unfettered access to these machines.
+We run all Java programs on Oracle's OpenJDK 
+version \texttt{1.8.0\_121}, build \texttt{b13}.
+The results presented here were obtained with the \TEver{} version of the TransportEditor project.\footnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
+in the project module directories specify
+the exact versions of libraries used.
 
-\TODO{define the planners we are comparing with (cite competition proceedings)}
 
-\subsection{Running the experiments}
 
-\TODO{How do we run it: benchmarker}
 
-\TODO{Deterministic \& reliable: What computer hardware, OS, Java version, TransportEditor version \TEver{} (along with git tag \TEtag{}), library versions (Maven), max memory, cputime}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Sequential Transport}
 
+\TODO{intro}
+
 \subsection{Results}
 
-\section{Original competition results}
+\TODO{intro}
 
-\TODO{re-read and refactor after moving here}
+\TODO{IPC score tables + run time charts + attach plans generated}
 
-In the updated results of the seq-sat track of IPC 2008\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Results.html}} published after the competition,
-the overall winner \textit{lama} (a Fast-Downward \TODO{ref} planner configuration)
+\subsection{Discussion}
+
+In the updated results of the sequential satisficing track of IPC 2008\footnote{\url{https://web.archive.org/web/20170414182036/http://icaps-conference.org/ipc2008/deterministic/Results.html}} published after the competition,
+the overall winner \textit{LAMA} (a Fast Downward based planner)
 was hands-down the best planner on the sequential Transport domain, winning
 with a total quality of $28.93/30$, where all other planners had less than $20/30$.
-Only 5 problem instances were solved suboptimally by \textit{lama}.
-\textit{Quality} is calculated for a given planner and problem $p$
-as $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$ where the results called $BEST$
-are precalculated outside of the competition environment, or the best result of a planner in the competition, depending on which plan has a lower total cost. The quality is, therefore, a number between $0$ and $1$. The total quality is calculated as the sum of qualities on all problem instances.
+Only 5 problem instances were solved suboptimally by \textit{LAMA}.
 
 As mentioned, we were not able to gather data from the IPC 2011,
 hence the results cannot be meaningfully interpreted.
 The competition featured 20 sequential Transport problems,
 with 4 planners achieving a total quality of more than $15/20$.
 
-In the seq-sat track of IPC 2014, the winner on the Transport domain
+In the satisficing track of IPC 2014, the winner on the Transport domain
 was without a doubt the \textit{Mercury} planner, achieving
 a stunning $20/20$ total quality. Even more interesting is the fact that
 the runner-up \textit{yahsp3-mt} achieved a score of $10.74/20$
 and all other planners achieved sub $10/20$ total quality.
 The IPC 2014 used different problem instances than the IPC 2008
-and we will test our approaches on both datasets.
+and we have tested our approaches on both datasets.
 
 \TODO{try to analyze why}
 
+\TODO{our results show that...}
 
 
-\TODO{IPC score tables + runtime charts + attach plans generated}
 
-\subsection{Discussion}
+
+
+
+
+
+
+
+
+
 
 \section{Temporal Transport}
 
+\TODO{intro}
+
 \subsection{Results}
 
-\TODO{intro + re-factor the original compo results}
+\TODO{intro}
 
-The temporal variant of Transport was only used in IPC 2008.
-Planners that entered that competition did not cope well with the domain
---- only two non-baseline planners were able to produce at least one plan
-for any problem. Additionally, only the simple problem (\verb+p01+) was solved
-optimally by any planner. The best total quality was only $7.5/30$, achieved by
-\textit{sgplan6}. No other domain in the temporal track had a lower best total quality
-than Transport, which, assuming reasonably generated problem instances, hints
-at Transport being one of the harder domains for domain-independent temporal planners.
-
-\TODO{Gantt charts + IPC score tables + runtime charts + attach plans generated}
+\TODO{Gantt charts + IPC score tables + run time charts + attach plans generated}
 
 \subsection{Discussion}
 
+Planners that entered the 2008 temporal track at the IPC did not cope well with the Transport domain
+--- only two non-baseline planners were able to produce at least one plan
+for any problem. Additionally, only the simple problem (\verb+p01+) was solved
+optimally by any planner. The best total quality was only $7.5/30$, achieved by
+\textit{SGPlan$_6$}. No other domain in the temporal track had a lower best total quality
+than Transport, which, assuming reasonably generated problem instances, hints
+at Transport being one of the harder domains for domain-independent temporal planners.
+
+
 \section{Overall result conclusion}
 
-
+\TODO{intro + recap}
