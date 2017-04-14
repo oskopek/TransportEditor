@@ -1,14 +1,12 @@
-\chapter{Sequential transportation planning}
+\chapter{Sequential Transport planners}
 
-\section{Specifics of sequential planning}
+\TODO{Specifics of sequential planning}
 
 \TODO{mention that there are no vehicle goals.. verify!}
 
-\section{Shortcommings of domain-independent approaches}
+\section{State-space forward planning}
 
-\TODO{Vytiahnut si plany z vysledkov seq-sat08 z LAMA na seqsat ipc08 an z mercury a lama na ipc14 + analysis of specific errors and shortcommings}
-
-\section{Forward planning}
+\TODO{Forward planning}
 
 \TODO{in state-space, Making it deterministic -> Search}
 
@@ -52,34 +50,23 @@ but the heuristic would estimate that we need
 
 \TODO{substitute drive actions for higher level drives to any node on graph, but forbid two sequential high level drives.. adv: always uses shortest paths, never cycles, minimal overhead.. disadv: might throw off cooperation w.r.t the heuristic?}
 
-\section{Simple Greedy BFS}
+\subsection{SFA*}
 
 \TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
 
 \TODO{mention Zhou with our Prolog \& Java impl} \citep{Zhou2015}
 
-\section{SFA*}
-
 \TODO{Describe A* in forward planning}
 
 \TODO{Advantages and shortcommings of SFA*}
 
+\TODO{SFA* with a package distance heuristic}
 
-
-\subsection{SFA* with a package distance heuristic}
-
-\subsection{SFA* with a different heuristic?}
+\TODO{SFA* with a different heuristic?}
 
 \TODO{WA*, W=5 napr}
 
-\subsection{SFA* with a different search (BFS/DFS, Beam)?}
-
-
-\section{Backward planning?}
-
-\subsection{Backward planning approach?}
-
-\section{Some sort of a hierarchical planner?}
+\section{An ad-hoc planner based on something precalculated}
 
 \section{CSP-based planner}\label{csp-approach}
 
@@ -87,7 +74,7 @@ but the heuristic would estimate that we need
 
 \TODO{Advantages and shortcommings of a CSP-based planner}
 
-\section{Summary and possible future approaches}
+\section{Summary}
 
 \TODO{Mention which planners we choose to compare in the experimental part}
 
