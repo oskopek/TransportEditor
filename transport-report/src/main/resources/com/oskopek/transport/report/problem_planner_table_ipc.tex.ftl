@@ -1,4 +1,3 @@
-\begin{table}[htb]
 \begin{tabular}{|l|<#list planners as planner>r</#list>|r|}
 \hline
 \textbf{Problem}<#list planners as planner> & \textbf{${planner?replace("_", "\\_")}}</#list> & \textbf{BEST}\\
@@ -10,6 +9,3 @@ ${problem}<#list planners as planner> & <#if (((status[planner][problem])!"") ==
 \textbf{total}<#list planners as planner> & \textbf{${total[planner]}}</#list> & \\
 \hline
 \end{tabular}
-\caption{Problem/planner table\TODO{Fix the caption, fix the label}}
-\label{tab:results-TODO}
-\end{table}
