@@ -72,13 +72,73 @@ the exact versions of libraries used.
 
 \section{Sequential Transport}
 
-\TODO{intro}
+In this section, we present the results of our sequential planners on the seq-sat-6 and seq-sat-8 datasets. Specifically, these planners are included in the experiment:
+\begin{description}
+\item[SFA*A] The SFA* algorithm with heuristic A. \TODO{ref}
+\item[SFA*B] The SFA* algorithm with heuristic B. \TODO{ref}
+\item[SFAA*] The adjusting A* algorithm with heuristic X. \TODO{ref}
+\item[OPS] The OptaPlanner sequential algorithm. \TODO{ref}
+\end{description}
 
-\subsection{Results}
+\subsection{Results}\label{sequential-results}
 
-\TODO{intro}
+We show the IPC quality table
+for the experimental run on the seq-sat-6 dataset (Table~\ref{tab:seq-sat-6-ipc-scores})
+and the seq-sat-8 dataset (Table~\ref{tab:seq-sat-8-ipc-scores}).
+Additionally, a plot of the scores and run times is presented in Figures~\ref{fig:seq-sat-6-plots} and~\ref{fig:seq-sat-8-plots}. Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
 
-\TODO{IPC score tables + run time charts + attach plans generated}
+\begin{table}
+\centering
+\input{../data/seq-sat-6-ipc-scores}
+\caption{Quality and score of sequential planners on the seq-sat-6 dataset.}
+\label{tab:seq-sat-6-ipc-scores}
+\end{table}
+
+\begin{table}
+\centering
+\input{../data/seq-sat-8-ipc-scores}
+\caption{Quality and score of sequential planners on the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-ipc-scores}
+\end{table}
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-score}
+\caption{Score plot of sequential planners on the seq-sat-6 dataset.}
+\label{fig:seq-sat-6-score}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
+\caption{Run time plot of sequential planners on the seq-sat-6 dataset.}
+\label{fig:seq-sat-6-runtime}
+\end{subfigure}
+\caption{Score and run time plots of sequential planners on the seq-sat-6 dataset.}
+\label{fig:seq-sat-6-plots}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-score}
+\caption{Score plot of sequential planners on the seq-sat-8 dataset.}
+\label{fig:seq-sat-8-score}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
+\caption{Run time plot of sequential planners on the seq-sat-8 dataset.}
+\label{fig:seq-sat-8-runtime}
+\end{subfigure}
+\caption{Score and run time plots of sequential planners on the seq-sat-8 dataset.}
+\label{fig:seq-sat-8-plots}
+\end{figure}
+
 
 \subsection{Discussion}
 
@@ -119,13 +179,62 @@ and we have tested our approaches on both datasets.
 
 \section{Temporal Transport}
 
-\TODO{intro}
+In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
+\begin{description}
+\item[SFA*T] The SFA* algorithm with heuristic A, temporal version. \TODO{ref}
+\item[OPT] The OptaPlanner temporal algorithm. \TODO{ref}
+\end{description}
 
-\subsection{Results}
+\subsection{Results}\label{temporal-results}
 
-\TODO{intro}
+We show the IPC quality table
+for an experimental run of these planners on the tempo-sat-6 dataset (Table~\ref{tab:tempo-sat-6-ipc-scores}).
+Additionally, a plot of the scores and run times is presented in Figure~\ref{fig:tempo-sat-6-plots} and sample plan Gantt charts are shown in Figure~\ref{fig:tempo-sat-6-gantt}. The generated plans and benchmark results can be found in the \nameref{cd-contents}.
 
-\TODO{Gantt charts + IPC score tables + run time charts + attach plans generated}
+\begin{table}
+\centering
+\input{../data/tempo-sat-6-ipc-scores}
+\caption{Quality and score of temporal planners on the tempo-sat-6 dataset.}
+\label{tab:tempo-sat-6-ipc-scores}
+\end{table}
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-score}
+\caption{Score plot of temporal planners on the tempo-sat-6 dataset.}
+\label{fig:tempo-sat-6-score}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-runtime}
+\caption{Run time plot of temporal planners on the tempo-sat-6 dataset.}
+\label{fig:tempo-sat-6-runtime}
+\end{subfigure}
+\caption{Score and run time plots of temporal planners on the tempo-sat-6 dataset.}
+\label{fig:tempo-sat-6-plots}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-A}
+\caption{Gantt chart of the temporal planner \TODO{A} on the tempo-sat-6 \texttt{p15} problem.}
+\label{fig:tempo-sat-6-gantt-15-a}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-B}
+\caption{Gantt chart of the temporal planner \TODO{B} on the tempo-sat-6 \texttt{p15} problem.}
+\label{fig:tempo-sat-6-gantt-15-b}
+\end{subfigure}
+\caption{Gantt charts of the temporal planner \TODO{A and B} on the tempo-sat-6 \texttt{p15} problem.}
+\label{fig:tempo-sat-6-gantt}
+\end{figure}
 
 \subsection{Discussion}
 
@@ -137,7 +246,9 @@ optimally by any planner. The best total quality was only $7.5/30$, achieved by
 than Transport, which, assuming reasonably generated problem instances, hints
 at Transport being one of the harder domains for domain-independent temporal planners.
 
+\TODO{discuss results}
 
-\section{Overall result conclusion}
+
+\section{Overall results}
 
 \TODO{intro + recap}
