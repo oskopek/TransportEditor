@@ -1,6 +1,6 @@
 \chapter{Transport domain analysis}
 
-In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe a system we developed for the analysis
+In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will introduce a system we developed for the analysis
 and development of planners for Transport, describe and analyze the datasets
 used for devising experiments, and discuss the properties of Transport
 that will help us in developing better quality planners.
@@ -22,7 +22,7 @@ They can also select an external planner
 referencing its executable file, or select one of the built-in planners and try to solve
 the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify plans are correct.
 Once plans are loaded and verified, it will let the user see a list of actions
-in the plan, or plot a Gantt chart (useful for observing concurrent actions in temporal domain variants).
+in the plan, or plot a Gantt chart, which is useful for observing concurrent actions in temporal domain variants (Figure~\ref{fig:tempo-sat-6-gantt}).
 
 The best feature of TransportEditor is the option of tracing plans. We can select
 any action, specify an exact time point or just step through the actions in order and
@@ -56,10 +56,9 @@ then loading the resulting plan;
 The user can step forward and backward in the plan and inspect each action result in great detail;
 \item Editing the graph: adding/removing/editing the location or properties of vehicles, packages, roads, locations and possibly petrol stations;
 \item Saving the currently generated plan;
-\item Saving the problem;
-\item Saving the domain (exporting to a PDDL file).
+\item Saving the problem or domain (exporting to a PDDL file).
 \end{itemize}
-\item Saving and closing the currently loaded problem. Exit the application or go back to the first step.
+\item Exit the application or go back to the first step.
 \end{itemize}
 
 TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
@@ -98,11 +97,11 @@ an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 
 That does not mean domain knowledge makes Transport easy, as is evident from
 the very thorough analysis by \citet{Helmert2001} and \citet{Helmert2001a}.
-Using the provided notation,
-we can characterize
-the sequential Transport domain as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
+We will categorize our problems using Helmert's notation to
+be able to interpret their results to our domain:
+the sequential Transport domain could be thought of as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
 (equivalent to $\textsc{Transport}_{1,\infty,+}$).
-Similarly, the temporal variant can represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
+Similarly, the temporal variant represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
 (equivalent to $\textsc{Transport}_{1,1,+}$) \TODO{Verify}. Note that
 \textsc{Transport} refers to the notation of \citet{Helmert2001a} of a general transportation
 task, while Transport refers to our studied domain.
@@ -290,7 +289,7 @@ A summary of the acquired insights is available in Table~\ref{tab:problem-proper
 \end{tabular} 
 \caption[Summary of problem instance properties in IPC Transport datasets.]{Summary of problem instance properties in IPC Transport datasets.
 State space size estimates in temporal domains
-are calculated using $f_max = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s equal to 1.}
+are calculated using $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s equal to 1.}
 \label{tab:problem-properties}
 % https://www.wolframalpha.com/input/?i=l%5Ev+*+(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D+5
 % https://www.wolframalpha.com/input/?i=(l%2Br)%5Ev+*+c%5Ev+*(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D5,+r%3D12,+c%3D100
