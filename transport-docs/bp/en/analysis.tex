@@ -35,8 +35,7 @@ A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma)$, w
 \item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states;
 \item $A = \{\noop, a_1, a_2, \ldots\}$ is a finite set of actions;
 \item $\gamma: S \times A \to S \cup \{\emptyset\}$ is a state-transition function,
-where $\forall s \in S : \gamma(s, \noop) = s$,
-and $\forall s \in S\,\exists a \in A : \gamma(s, a) \neq \emptyset$; and
+where $\forall s \in S : \gamma(s, \noop) = s$; and
 \item $\Sigma$ is static and offline,
 it only changes when an action is applied to it and does not change while planning.
 \end{itemize}
@@ -52,7 +51,7 @@ and how they are related,
 but they do not state anything about specific states or actions.
 
 Given a state-transition system $\Sigma$, planning aims to find a
-sequence of actions to apply to the beginning state in order to achieve some objective.
+sequence of actions to apply to the initial state in order to achieve some objective.
 The objective can be defined in various ways --- we might want the planner
 to devise a plan that
 does not enter specific states, or contrary to that, visits each of a set of states,
@@ -141,7 +140,7 @@ that will no longer hold in the state once the action is applied; and
 \item similarly, $\effects^+(a)$ are the \textit{positive effects} of an action:
 the set of propositions that will be true in the state once the action is applied.
 \end{itemize}
-
+Note that an action cannot have the same proposition as a negative and positive effect at the same time --- the sets $\effects^+(a)$ and $\effects^-(a)$ are disjunct for all actions $a$.
 The state-transition function is $\gamma(s, a) = (s - \effects^-(a)) \,\cup\,
 \effects^+(a)$ if $a$ is applicable to $s$,
 otherwise $\gamma(s, a)$ is undefined. Goal states $S_g$ are defined as
@@ -163,10 +162,19 @@ triples $o = (\name(o), \precond(o), \effects(o))$:
 (atoms and their negations), similar in use to their equivalents
 in the set-theoretic case.
 \end{itemize}
-
 The definition of the state-transition function also stays the same.
 Goal states are defined as the set of states that satisfy $g$,
 the \textit{goal}, where $g$ is any set of ground literals.
+
+The following is an example of a planning operator for driving a vehicle between two connected locations:
+$$o_d = (\mt{drive}(v, f, t), \{\mt{at}(v, f), \mt{road}(f, t)\}, \{\mt{at}(v, t), \neg \mt{at}(v, f)\}).$$
+The variable $v$ denotes a vehicle, $f$ and $t$ are the source and destination locations, respectively. The at predicate is true if and only if the vehicle is located at that position in the given state and the road predicate
+is true if and only if a road exists between the two locations.
+An example of an action instantiated from the operator (sometimes referred to as \textit{operator instance})
+for a vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$ would be:
+$$a_{\mt{drive}, \mt{v}_1, \mt{l}_1, \mt{l}_2} = (\mt{drive}(\mt{v}_1, \mt{l}_1, \mt{l}_2), \{\mt{at}(\mt{v}_1, \mt{l}_1),
+\mt{road}(\mt{l}_1, \mt{l}_2)\}, \{\mt{at}(\mt{v}_1, \mt{l}_2), \neg \mt{at}(\mt{v}_1, \mt{l}_1)\}).$$
+
 
 Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} --- that any atom/predicate not present in the state does not hold in that state.
 
@@ -190,15 +198,21 @@ using $\mathrm{location''}(v) = \mathrm{location'}(v, state_{cur})$, where $stat
 Planning operators are defined similarly to the classical representation, but
 $\precond(o)$ is now a set of expressions on state variables and relations.
 Also, $\effects(o)$ is defined as a set of assignments of values to state variables.
-The state-transition function is defined analogously: an action $a$ (ground instance
-of operator $o$)
-is applicable to a state $s$ if the $\precond(o)$ condition is true given the values
-of state variables in state $s$. The resulting state is created by changing the state variables
+For comparison, we show the same planning operator as in the classical representation:
+$$o_d = \left(\mt{drive}(v, f, t), \{\mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right),$$
+and an example of an action instantiated from this operator
+for vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$:
+$$a_{\mt{drive}, \mt{v}_1, \mt{l}_1, \mt{l}_2} = \left(\mt{drive}(\mt{v}_1, \mt{l}_1, \mt{l}_2), \{\mt{at}(\mt{v}_1) = \mt{l}_1,
+\mt{road}(\mt{l}_1, \mt{l}_2)\}, \{\mt{at}(\mt{v}_1) \leftarrow \mt{l}_2\}\right).$$
+
+The state-transition function is defined analogously to the classical representation: an action~$a$ (ground instance
+of operator~$o$)
+is applicable to a state~$s$ if the $\precond(o)$ condition is true given the values
+of state variables in state~$s$. The resulting state is created by changing the state variables
 according to the assignments in $\effects(o)$ and the corresponding values of state
-variables in state $s$.
+variables in state~$s$.
 The goal is defined as a set of ground state variables and their corresponding values
 \citep[Section~2.5.2]{Ghallab2004}.
-
 
 \subsubsection{Extensions of representations}
 
@@ -209,7 +223,8 @@ if and only if the predicate's argument is of the given type.
 We can then add these predicates as preconditions of actions.
 Adding types will make the domain and problem formulations
 easier to read and gives additional information
-to planners, making them more efficient \citep[Section 2.4.1]{Ghallab2004}.
+to planners, making them more efficient \citep[Section 2.4.1]{Ghallab2004}. As an example of adding types, we show the previous planning operator for driving with the added vehicle type $veh$ and location type $loc$:
+$$o_d = \left(\mt{drive}(v, f, t), \{\mt{veh}(v), \mt{loc}(f), \mt{loc}(t), \mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right).$$
 
 \subsubsection{State-space planning and Plan-space planning}
 
@@ -299,7 +314,8 @@ denoted using three unary PDDL predicates:
 \begin{itemize}
 \item \texttt{at start}, where the parameter predicate must hold or the parameter effect must be applied at the start of the action;
 \item \texttt{at end}, where it must hold or be applied at the end of the action; and
-\item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is not applicable to effects, as it is unclear what it would mean.
+\item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is only applicable to preconditions of an action. When using \textit{continuous} durative actions which have continuous effects (for example, generating heat and boiling water), we model these
+effects using different syntactical constructs \citep[Section~5.3]{Fox2003}.
 \end{itemize}
 
 Over time, PDDL has evolved from the originally proposed version 1.2
@@ -382,6 +398,8 @@ Since then, it has been used in two IPCs,
 specifically IPC-7\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/}} in 2011
 and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/}} in 2014.
 
+\TODO{mention NoMystery and its lack of difficulty here}
+
 There are a few basic formulations of the Transport domain family (i.e.~``similar'' Transport domain variants) which we will describe now.
 
 \subsection{Common traits of Transport domains}
@@ -462,7 +480,7 @@ One important technicality is that a vehicle cannot pick up or drop packages con
 
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
 defined as the maximum time when an action is still taking place.
-In practice, this translates to minimizing maximum end time over all actions.
+In practice, this translates to minimizing maximum end time over all actions, which is often referred to as minimizing the \textit{makespan}.
 
 
 
@@ -492,20 +510,32 @@ they are very much alike and not needed for the comprehension of the following c
 We are now able to show the sequential Transport domain in one of the representations
 previously defined, namely,
 the classical representation (Figure~\ref{code:classical-strips}).
+For practical reasons, we will use a slight modification, obtained by adding a limited concept of functions
+with finite integer values.
+It is obvious that we could substitute these functions for the appropriate relations
+and a finite amount of literals for the numbers for any given problem instance of
+the domain in this representation,
+so that it adheres to the definition of a classical formulation.
+For example, we could add literals representing a finite set of
+natural numbers and a predicate that represents
+a successor relation, defined as $\texttt{successor}(a, b) \equiv a + 1 = b$.
+
 Note that this representation does not contain the notion of a \textit{total cost}
 of a plan that we will optimize for later.
 The predicates used are:
 \begin{itemize}
 \item \verb+at(o, l)+, the package or vehicle \verb+o+ is at the
 location \verb+l+;
-\item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space --- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially interpretable as a finite set of integers);
-\item \verb+capacity-predecessor(s1, s2)+, the space literal represented by \verb+s1+
-is directly smaller than the literal represented by \verb+s2+;
+\item \verb+capacity(v, s)+, the vehicle \verb+v+ currently has \verb+s+ free space --- \verb+s+ is a variable for space literals, a set of literals denoting the amount of space (essentially,
+these literals are a unary representation of a finite set of integers);
+\item \verb+capacity-predecessor(s1, s2)+, the space literals represented by \verb+s1+ and \verb+s2+
+satisfy the relation $\texttt{s1} + 1 = \texttt{s2}$
+in the unary representation;
 \item \verb+in(p, v)+, the package \verb+p+ is in the vehicle \verb+v+;
 \item \verb+road(l1, l2)+, the location \verb+l1+ is directly adjacent to the location
 \verb+l2+ by a road; and
 \item \verb+road-length(l1, l2)+, the driving distance between location \verb+l1+
-and \verb+l2+. Does not change while planning.
+and \verb+l2+, modeled as a numerical function. Does not change while planning.
 \end{itemize}
 
 \begin{figure}[tbp]
@@ -549,13 +579,7 @@ the vehicle \verb+v+; and
 the vehicle \verb+v+ can contain, i.e. its fuel tank capacity.
 \end{itemize}
 
-It is obvious that we could substitute the functions for relations
-and a finite amount of literals for any given problem instance of
-the domain in this representation,
-so that it adheres to the definition of a classical formulation.
-For example, we could add literals representing a finite set of
-natural numbers and predicate that represents
-\verb+successor+ defined as $\texttt{successor}(a, b) \equiv a + 1 = b$.
+
 
 We also abuse the notation with \verb+decrease+ and \verb+assign+;
 the left parameter's value is to be decreased by the right
@@ -622,8 +646,10 @@ the \verb+drive+ operator (Figure~\ref{code:statevar-numeric}).
 \begin{code}
 drive(v, l1, l2)
   ;; vehicle v moves from location l1 to an adjacent location l2
-  precond: at(v) = l1, road(l1, l2), fuel-left(v) >= fuel-demand(l1,l2)
-  effects: at(v) <- l2, fuel-left(v) <- fuel-left(v)-fuel-demand(l1,l2)
+  precond: at(v) = l1, road(l1, l2),
+           fuel-left(v) >= fuel-demand(l1, l2)
+  effects: at(v) <- l2, 
+           fuel-left(v) <- fuel-left(v) - fuel-demand(l1, l2)
   
 refuel(v, l)
   ;; vehicle v is refueled to the maximum at location l
@@ -651,7 +677,7 @@ drive(v, l1, l2)
   duration: road-length(l1, l2)
   cond: (at(v) = l1)@s, (road(l1, l2))@s,
         (fuel-left(v) >= fuel-demand(l1, l2))@s
-  effects: (at(v) != l1)@s, (at(v) = l2)@e,
+  effects: (at(v) <- nil)@s, (at(v) <- l2)@e,
            (fuel-left(v) <- fuel-left(v) - fuel-demand(l1, l2))@s
 
 pick-up(v, l, p)
@@ -659,7 +685,7 @@ pick-up(v, l, p)
   duration: 1
   cond: (at(v) = l1)@[s, e), (at(p) = l1)@s, (ready-loading(v))@s,
         (capacity(v) >= package-size(p))@s
-  effects: (at(p) = nil)@s, (in(p) = v)@e, (not ready-loading(v))@s,
+  effects: (at(p) <- nil)@s, (in(p) <- v)@e, (not ready-loading(v))@s,
            (capacity(v) <- capacity(v) - package-size(p))@s,
            (ready-loading(v))@e
   
@@ -667,7 +693,7 @@ drop(v, l, p)
   ;; vehicle v drops package p at location l
   duration: 1
   cond: (at(v) = l1)@[s, e), (in(p) = v)@s, (ready-loading(v))@s
-  effects: (in(p) = nil)@s, (at(p) = l)@e, (not ready-loading(v))@s,
+  effects: (in(p) <- nil)@s, (at(p) <- l)@e, (not ready-loading(v))@s,
            (capacity(v) <- capacity(v) + package-size(p))@e,
            (ready-loading(v))@e
   
@@ -838,7 +864,7 @@ However, the problem we aim to study is more similar to a different optimization
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/tsp}
 \end{center}
-\caption[An example TSP solution through cities in Europe.]{An example TSP solution through cities in Europe. Screenshot taken from OptaPlanner \citep{DeSmet2017}.}
+\caption[An example TSP solution through the capitals of Europe.]{An example TSP solution through the capitals of Europe. Screenshot taken from OptaPlanner \citep{DeSmet2017}.}
 \label{fig:tsp}
 \end{figure}
 
@@ -870,9 +896,10 @@ suggests a big rise in popularity for MDVRP in the recent past,
 which provides further proof of relevance for studying the Transport domain.
 
 Traditional solutions for the VRP include exact approaches like branch and bound
-exploring the whole feasible search space,
-classical heuristics which limit the search space, and also metaheuristics (general heuristics for devising specific heuristics), like genetic algorithms, constraint satisfaction
-programming, local search, tabu search, and many more.
+or constraint satisfaction
+programming
+that explore the large parts of the feasible search space,
+classical heuristics which limit the search space, and also metaheuristics (general heuristics for devising specific heuristics), like genetic algorithms, local search, tabu search, and many more.
 
 \comment{
 \subsection{VRP Formulation}\citep{ResearchGroup2013}
@@ -947,8 +974,15 @@ Given (1) a set of variables and their respective domains, and (2) a set of cons
 We define the \textit{state space} of a CSP as all the possible combinations of assignments of values to the variables, respecting the domains of variables.
 The size of the state space is simply the number of those combinations.
 
-For example, the famous $n$-queens problem, where the goal is to position $n$ chess-style queen pieces on an $n \times n$ sized chessboard so that they do not attack each other (according to the rules of chess). Using a simple invariant deduced from the constraints (each queen has to occupy a different column),
-we can model the problem as a CSP with $n$-ary variables $C_i \in [n]\; \forall i \in [n]$, one variable for each of the $n$ columns. The value of $C_i$ then represents the row the queen in column $i$ occupies. This problem has a search space size of $\prod_{i=1}^n n = n^n$, because any of the $n$ queens can be placed on any of the $n$ squares in its column \citep{Russell1995}.
+For example, the famous $n$-queens problem, where the goal is to position $n$ chess-style queen pieces on an $n \times n$ sized chessboard so that they do not attack each other (according to the rules of chess), can be formulated as a CSP. Using a simple invariant deduced from the rule constraints (each queen has to occupy a different column),
+we can model the problem as a CSP with $n$-ary variables $C_i \in \kset[n]{}\; \forall i \in \kset[n]{}$, one variable for each of the $n$ columns. The value of $C_i$ then represents the row the queen in column $i$ occupies.
+
+The corresponding set of constraints can be formulated as:
+\begin{align*}
+\{C_i \neq C_j \;|\; &\forall (i, j) \in \kset[n]{}^2 : i < j\}\\
+\cup \{|C_i-C_j| \neq |i-j| \;|\; &\forall (i, j) \in \kset[n]{}^2 : i < j\}.
+\end{align*}
+This problem has a search space size of $\prod_{i=1}^n n = n^n$, because any of the $n$ queens can be placed on any of the $n$ squares in its column \citep{Russell1995}.
 
 We will attempt to model Transport as a CSP later on in Section~\ref{csp-formulation}.
 Note that the translation of a VRP into a CSP representation is very natural and straightforward \citep[Solution Methods / Constraint Programming]{ResearchGroup2013}, which is usually not the case for planning problems.

@@ -12,16 +12,16 @@ we have developed \textit{TransportEditor}, a system for creating and visualizin
 Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
 written in Java.
 
-It allows the user to create a planning session, where they
+It allows the users to create a planning session, where they
 select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
-The road network of the problem is automatically laid out and visualized for the user as a graph with locations as nodes and roads as edges.
+The road network of the problem is automatically laid out and visualized for the users as a graph with locations as nodes and roads as edges.
 Users can then tweak the layout, make changes to vehicle and package properties
 and export the problem or domain back into PDDL.
 
 They can also select an external planner
 referencing its executable file, or select one of the built-in planners and try to solve
-the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify plans are correct.
-Once plans are loaded and verified, it will let the user see a list of actions
+the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify that the plans are correct.
+Once plans are loaded and verified, it will let the users see a list of actions
 in the plan, or plot a Gantt chart, which is useful for observing concurrent actions in temporal domain variants (Figure~\ref{fig:tempo-sat-6-gantt}).
 
 The best feature of TransportEditor is the option of tracing plans. We can select
@@ -61,7 +61,7 @@ The user can step forward and backward in the plan and inspect each action resul
 \item Exit the application or go back to the first step.
 \end{itemize}
 
-TransportEditor is a part of this thesis and you can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
+TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
 the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offering guidance when
 using the program and providing an in-depth description.
 
@@ -85,7 +85,7 @@ using the program and providing an in-depth description.
 In this section, we will delve more deeply into the Transport domain and try to analyze its properties.
 We will describe the problem instances that have been used in the IPC and discuss insights useful for devising heuristics or for other approaches to creating plans for these problems.
 
-\subsection{Does domain knowledge make Transport easy to solve?}
+\subsection{Problem complexity}
 
 When domain-independent planners solve a sequential Transport problem,
 they face a harder task than planners that have access to domain knowledge ahead of time.
@@ -98,13 +98,16 @@ an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 That does not mean domain knowledge makes Transport easy, as is evident from
 the very thorough analysis by \citet{Helmert2001} and \citet{Helmert2001a}.
 We will categorize our problems using Helmert's notation to
-be able to interpret their results to our domain:
-the sequential Transport domain could be thought of as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
-(equivalent to $\textsc{Transport}_{1,\infty,+}$).
-Similarly, the temporal variant represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
-(equivalent to $\textsc{Transport}_{1,1,+}$) \TODO{Verify}. Note that
+be able to interpret their results to our domain.
+\TODO{Explain notation.}
+Note that
 \textsc{Transport} refers to the notation of \citet{Helmert2001a} of a general transportation
 task, while Transport refers to our studied domain.
+
+Using this notation, the sequential Transport domain could be thought of as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
+(equivalent to $\textsc{Transport}_{1,\infty,+}$).
+Similarly, the temporal variant represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
+(equivalent to $\textsc{Transport}_{1,1,+}$) \TODO{Verify}.
 
 For sequential and temporal Transport without fuel, the \textsc{Plan-Existence} problem
 reduces to verifying reachability of each package by at least one vehicle
@@ -139,7 +142,8 @@ seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
 seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
 \end{tabular}
-\caption{Transport datasets from the 2008 and 2014 IPCs.}
+\caption{Transport datasets from the 2008 and 2014 IPCs.
+\TODO{Add capacity, fuel and other features.}}
 \label{tab:ipc-datasets}
 \end{table}
 
@@ -224,7 +228,7 @@ are rare and usually significantly longer.
 
 All sequential problem instances in seq-sat-6 and seq-sat-8 have symmetric roads and road lengths and can, therefore,
 be simplified by assuming the use of an undirected graph.
-In no sequential problem do vehicles need to finish at a specific target location.
+Also, in sequential problems, vehicles do not need to finish at a specific target location.
 
 The temporal problems in tempo-sat-6 do not have the same property;
 the problems 1--20 have symmetric roads and lengths, but
@@ -296,7 +300,7 @@ are calculated using $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s
 \end{table}
 
 
-\subsection{Domain insights}
+\subsection{Domain information}
 
 There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
 \begin{enumerate}
@@ -343,7 +347,7 @@ Do note, that it is not important for the application of this rule whether actio
 Let $p$ be a package of size $|p|$ located at $A$.
 Let $v$ be a vehicle which drove through location $A$ to location $B \neq A$
 and picked up $p$ at $B$,
-without ever having less than $|p|$ free space between leaving $A$ and picking up $p$.
+without having less than $|p|$ free space in any intermediate state between leaving $A$ and picking up $p$.
 If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
 $v$ could have picked up $p$ when driving through $A$, and the total plan cost
 would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
@@ -559,7 +563,7 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 \end{table}
 
 The first section of the table (rows 1--7) contains problem-specific constants.
-The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the amounts of variables generated for the respective
+The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the numbers of variables generated for the respective
 object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
 multiplied by the set plan length + 1 (each state corresponds to the state before applying an action + the last state).
 
