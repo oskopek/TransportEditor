@@ -43,7 +43,7 @@
 \usepackage{graphicx}       % embedding of pictures
 \usepackage{fancyvrb}       % improved verbatim environment
 \usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
-\setcitestyle{round} % TODO: round brackets for citep and citet
+\setcitestyle{round} % round brackets for citep and citet
 \usepackage[nottoc]{tocbibind} % makes sure that bibliography and the lists
 			    % of figures/tables are included in the table
 			    % of contents
@@ -89,22 +89,16 @@
 % An optional dedication: you can thank whomever you wish (your supervisor,
 % consultant, a person who lent the software, etc.)
 \def\Dedication{%
-\TODO{Dedication}% TODO: Remove me
-\comment{% TODO: Uncomment me
-This work is dedicated to my parents --- thanks for supporting me on every step along the way.
+This work is dedicated to my parents: thanks for supporting me on every step.\\
 
-A big thank you goes to my advisor, \Supervisor{}, for~all the advice along the way.
-}
+\noindent A big thank you also goes to my advisor, \Supervisor{}, for~all the extensive advice and guidance.
 }
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
-\TODO{Abstract}
-\comment{
 Today, a vast amount of resources is spent globally on ineffective transportation planning.
-Using techniques of automated planning, we study simplified variants of logistic problems, where items are delivered to their destinations using a fleet of vehicles moving on an oriented, non-negatively weighted graph that represents a road network.
-We propose several planning systems for the effective solution of such problems. Experiments conducted on the original competition data show that our approach significantly improves the solution quality when compared to domain-independent planners from the competition. Last but not least, we developed TransportEditor, a visualizer and editor of these problems, for efficient problem analysis, planner construction, and evaluation.
-}
+Using techniques of automated planning, we study simplified variants of logistic problems, where items are delivered to their destinations \mbox{using} a fleet of vehicles moving on an oriented, non-negatively weighted graph that represents a road network.
+We propose several planning systems for the effective solution of such problems. Experiments conducted on the original competition data show that our approaches are able to improve the solution quality when compared to domain-independent planners from the competition. Last but not least, we developed TransportEditor, a visualizer and editor of these problems, for efficient problem analysis, planner construction, and plan introspection.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
@@ -132,6 +126,7 @@ We propose several planning systems for the effective solution of such problems.
 %%% Each chapter is kept in a separate file
 \include{introduction}
 \include{analysis}
+\include{formulation}
 \include{transport-analysis}
 \include{sequential}
 \include{temporal}

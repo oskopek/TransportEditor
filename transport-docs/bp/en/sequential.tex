@@ -68,7 +68,149 @@ but the heuristic would estimate that we need
 
 \section{An ad-hoc planner based on something precalculated}
 
-\section{CSP-based planner}\label{csp-approach}
+\section{Formulating Transport as a CSP}\label{csp-approach}
+
+When discussing related works, we mentioned the Vehicle Routing Problem (Section~\ref{vrp}) and its straightforward
+formulation as a Constraint Satisfaction Problem. Utilizing CSPs has been useful
+for planning in the past \citep[Section~8.7]{Ghallab2004}
+and we will attempt to use domain-specific knowledge to improve upon the standard, domain-independent
+formulation.
+
+\subsection{Na{\"{i}}ve CSP formulation}
+
+We will now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the na{\"{i}}ve encoding provided in \citet[Section~8.3]{Ghallab2004}.
+
+
+\TODO{explain the model + constraints}
+
+
+However, using that strategy, our problems ``blow up'' in size --- as is expected due
+to the different complexities of planning versus solving CSPs \citep[Section~8.3.2]{Ghallab2004}. To visualize the difference in our case, we have constructed a state space estimation table (Table~\ref{tab:csp-trivial}) for conversions of two sample sequential Transport problems.
+
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{l||rr}
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
+\midrule
+\midrule
+\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Vehicles} & 2 & 4 \\ 
+\textbf{Vehicle variables} & 14 & 1 408 \\ 
+\textbf{Packages} & 2 & 20 \\ 
+\textbf{Package variables} & 14 & 7 040 \\ 
+\textbf{Locations} & 5 & 60 \\ 
+\textbf{Roads} & 12 & 256 \\
+\textbf{Max capacity} & 4 & 4 \\ 
+\midrule
+\textbf{Ground Drive actions} & 168 & 360 448 \\ 
+\textbf{Ground PickUp actions} & 140 & 1 689 600 \\ 
+\textbf{Ground Drop actions} & 140 & 1 689 600 \\ 
+\midrule
+\textbf{Planning variables total} & 48 & 10 207 \\ 
+\textbf{Grounded actions total} & 448 & 1 189 838 848 \\ 
+\textbf{Search Space Estimate} & $\approx 1.1 \cdot 10^{52}$ & $\approx 1.4 \cdot 10^{27 952}$ \\ % https://www.wolframalpha.com/input/?i=(245120%5E351)+*+4%5E1408+*+60%5E1408+*+1468%5E7040
+\end{tabular}
+\end{center}
+\caption[Search space approximations for a na{\"{i}}ve CSP encoding.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using the general and domain-independent encoding from \citet[Section~8.3]{Ghallab2004}.}
+\label{tab:csp-trivial}
+\end{table}
+
+The first section of the table (rows 1--7) contains problem-specific constants.
+The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the numbers of variables generated for the respective
+object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
+multiplied by the set plan length + 1 (each state corresponds to the state before applying an action + the last state).
+
+In the second section (rows 8--10), we estimate the number of ground actions
+Step 1 from \citet[Section~8.3.1]{Ghallab2004} will generate.
+We calculate the number of \pickup{} and \drop{} actions the CSP encoding will generate
+as $$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations} \cdot \mt{\#packages},$$
+effectively counting all ground planning operators of the problem. Similarly,
+the number of \drive{} actions is calculated as
+$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#roads},$$
+which is more efficient than the na{\"{i}}ve way of
+counting all
+$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations}^2$$
+actions.
+
+As we can see from the third section of the table, the number of variables
+(planning variables and ground actions) is not extremely high
+--- the problem is that the variables have very large domains,
+which makes the CSP problem exponentially larger \citep[Section~8.3.2]{Ghallab2004}.
+We calculated the \textit{Search Space Size Estimate} (SSE) as
+\begin{align*}
+\mt{SSE} =\; &\mt{\#ground\_actions}^{l-1} & \textit{\footnotesize select ground actions for the plan}\\
+&\cdot \mt{\#capacities}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select capacities for vehicle variables}\\
+&\cdot \mt{\#locations}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select locations for vehicle variables}\\
+&\cdot (\mt{\#locations} + \mt{\#vehicles})^{l \cdot \mt{\#pkg}}, & \textit{\footnotesize select locations/vehicles for package variables}
+\end{align*}
+where we set $l := \mt{length(plan) + 1}$.
+For comparison to the SSEs in the last table row, 
+the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
+
+\subsection{Domain-dependent CSP representation}\label{csp-custom-repr}
+
+We will now devise a different CSP representation for sequential Transport.
+While not improving upon the search space estimates of the na{\"{i}}ve formulation
+in a theoretical sense, we will describe a slightly more complex
+and less general
+CSP model that enables us to explore fewer states.
+
+Using OptaPlanner and its shadow variable concept \citep[Section~4.3.6]{DeSmet2017}, we will model our Transport problem without keeping explicit track of capacities,
+vehicle and package locations, and ground actions, all of which will be implicitly managed by OptaPlanner, or inferred in the case of capacity and actions.
+This means we will reduce the memory overhead, maintaining the same expressive power
+and hopefully not enlarge the processing time too much.
+
+\TODO{Describe the specific representation after it is polished in the code + verify numbers}
+
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{l||rr}
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
+\midrule
+\midrule
+\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Vehicles} & 2 & 4 \\ 
+\textbf{Vehicle shadow vars} & 14 & 1 408 \\
+\textbf{Packages} & 2 & 20 \\ 
+\textbf{Package shadow vars} & 14 & 7 040 \\
+\textbf{Locations} & 5 & 60 \\
+\textbf{Roads} & 12 & 256 \\
+\textbf{Max capacity} & 4 & 4 \\ 
+\midrule
+\textbf{Ground Drive actions} & 24 & 1024 \\ 
+\textbf{Ground PickUp actions} & 20 & 4800 \\ 
+\textbf{Ground Drop actions} & 20 & 4800 \\ 
+\midrule
+\textbf{Planning variables total} & 48 & 10 207 \\ 
+\textbf{Grounded actions in step} & 64 & 10 624 \\ 
+\textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\ 
+\textbf{Search Space Estimate} & $\approx 1.5 \cdot 10^{14}$ & $\approx 2.0 \cdot 10^{637}$ \\
+\end{tabular}
+\end{center}
+\caption[Search space approximations for a domain-dependent CSP representation.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using a custom domain-dependent CSP representation for Transport sequential.}
+\label{tab:csp-custom}
+\end{table}
+
+Using the domain-dependent representation specified, we are now able to construct
+a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). 
+Do note, that this table cannot be compared directly to the previous one,
+because it hides the shadow variable management overhead.
+Also, while the table rows look similar, sections 2 and 3 are calculated
+differently. The ground action counts in section 2 are not multiplied by $\mt{length(plan)} + 1$
+as done previously, because we only represent them once, not at every plan state.
+The total number of grounded actions is the same, but they are not explicitly represented as variables. The Search Space size Estimate is therefore calculated differently:
+\begin{align*}
+\mt{SSE} =\; &3^{\mt{length(plan)} + 1} & \textit{\footnotesize select the action type of each action}\\
+&\cdot \mt{\#ground\_actions}^{l-1}. & \textit{\footnotesize select the specific ground action}
+\end{align*}
+For comparison to the na{\"{i}}ve encoding SSEs which going from the p01 problem to p20 grow by a logarithmic factor of approximately $538$,
+whereas the domain-dependent ones only grow by approximately $46$,
+which is a huge improvement.
+
+Given the search space reduction, we will now attempt to use this representation
+for constructing a CSP-based planner.
+
+\subsection{CSP-based planner}
 
 \TODO{try to run a CSP in OptaPlanner to solve this and compare results, using Section~\ref{csp-custom-repr}}
 

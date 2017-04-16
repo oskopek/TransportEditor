@@ -1,91 +1,10 @@
 \chapter{Transport domain analysis}
 
-In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will introduce a system we developed for the analysis
-and development of planners for Transport, describe and analyze the datasets
+In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe and analyze the datasets
 used for devising experiments, and discuss the properties of Transport
 that will help us in developing better quality planners.
 
-\section{TransportEditor -- A Transportation Planning System}\label{transport-editor}
-
-To enable effective transportation planning,
-we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
-Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
-written in Java.
-
-It allows the users to create a planning session, where they
-select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
-The road network of the problem is automatically laid out and visualized for the users as a graph with locations as nodes and roads as edges.
-Users can then tweak the layout, make changes to vehicle and package properties
-and export the problem or domain back into PDDL.
-
-They can also select an external planner
-referencing its executable file, or select one of the built-in planners and try to solve
-the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify that the plans are correct.
-Once plans are loaded and verified, it will let the users see a list of actions
-in the plan, or plot a Gantt chart, which is useful for observing concurrent actions in temporal domain variants (Figure~\ref{fig:tempo-sat-6-gantt}).
-
-The best feature of TransportEditor is the option of tracing plans. We can select
-any action, specify an exact time point or just step through the actions in order and
-the road network on the left will display the current state of the problem, as if
-all actions before the current point were applied to the start state.
-It is possible to do all of this, and more, without ever leaving the TransportEditor user interface.
-
-TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
-A secondary motivation is to be able to test approaches for creating plans for the domain.
-For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=0.9\textwidth]{../img/transporteditor_temporal}
-\end{center}
-\caption[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]{Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
-of a truck currently driving along a road between \texttt{city-2-loc-6} and \texttt{city-2-loc-3}. The \texttt{city-1-loc-1} location is plotted in a darker shade of red, which signifies that a petrol station is present at the location.}
-\label{fig:transporteditor-screenshot}
-\end{figure}
-
-The basic user workflow of TransportEditor consists of the following steps:
-\begin{itemize}
-\item Selecting which formulation of the Transport domain they want to work with or create their own variant;
-\item Loading the PDDL or creating their own problem of the given domain. TransportEditor then visualizes the given graph as good as it can;
-\item Iterating among the following options:
-\begin{itemize}
-\item Loading a planner executable and letting TransportEditor run the planner on the loaded problem instance for a given time (the user can cancel anytime),
-then loading the resulting plan;
-\item Possibly loading a pregenerated plan;
-\item Stepping through the individual plan actions and letting TransportEditor visualize them.
-The user can step forward and backward in the plan and inspect each action result in great detail;
-\item Editing the graph: adding/removing/editing the location or properties of vehicles, packages, roads, locations and possibly petrol stations;
-\item Saving the currently generated plan;
-\item Saving the problem or domain (exporting to a PDDL file).
-\end{itemize}
-\item Exit the application or go back to the first step.
-\end{itemize}
-
-TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
-the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offering guidance when
-using the program and providing an in-depth description.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Properties of Transport domains}
-
-In this section, we will delve more deeply into the Transport domain and try to analyze its properties.
-We will describe the problem instances that have been used in the IPC and discuss insights useful for devising heuristics or for other approaches to creating plans for these problems.
-
-\subsection{Problem complexity}
+\section{Problem complexity}
 
 When domain-independent planners solve a sequential Transport problem,
 they face a harder task than planners that have access to domain knowledge ahead of time.
@@ -122,7 +41,130 @@ The fact that all the mentioned proofs work for temporal variants is explained i
 All of these results make clear that looking for an explicit planning algorithm is infeasible,
 despite the knowledge we acquire by only focusing on one planning domain.
 
-\subsection{Datasets \& problem instances}\label{datasets}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Domain information}
+
+There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
+\begin{enumerate}
+\item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations --- there is nothing
+we can do using those packages that would result in a plan with a lower total cost.
+
+\item \textbf{Drop when at the destination}: Likewise, it is
+always correct for a vehicle containing a package with a destination equal
+to the vehicle's location to do a \drop{} action immediately.
+
+\item \textbf{Do not drop and pick up}: It never makes sense to drop and pick up
+the same package by the same vehicle in succession. We will only get to the same state
+by using a longer plan. This rule also applies if an action of a different vehicle
+gets between the two successive actions --- even if it does an action with the
+dropped package.
+It is important to note that this is a symmetric property: picking up and dropping
+equally results in a worse plan.
+\begin{enumerate}
+\item \textbf{Do not drop package where we picked it up}: A generalization
+of the previous rule is that vehicles should never drop a package
+at the location they last picked it up, independent of the actions they took
+between the relevant \pickup{} and \drop{}. This rule is also symmetric.
+
+\item \textbf{Never drop after picking up at a vertex}:
+While the order of successive \pickup{} and \drop{} actions does not
+influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
+without sacrificing admissibility. \textit{Admissibility} is
+a property of search strategies in general and can be defined as finding
+(one of) the optimal solutions (first), when there are generally several solutions
+of possibly different qualities \citep[Section~3.5]{Russell1995}.
+\end{enumerate}
+
+\item \textbf{Do not drive suboptimally}: If a vehicle does a series of
+\drive{} actions from location $A$ to $B$ without ``touching'' packages at any of the locations it visits,
+it has to follow the shortest possible path from $A$ to $B$. If it does not,
+the induced plan can be made less costly or shorter by swapping the actual \drive{} actions
+for precalculated optimal \drive{} actions along the shortest path.
+Do note, that it is not important for the application of this rule whether actions are in direct succession (in a sequential plan) or not.
+\begin{enumerate}
+\item \textbf{Do not drive in cycles}: A special but important case of the previous rule is that vehicles should not drive in cycles
+\end{enumerate}
+
+\item \textbf{Do not forward packages using other vehicles}:
+Let $p$ be a package of size $|p|$ located at $A$.
+Let $v$ be a vehicle which drove through location $A$ to location $B \neq A$
+and picked up $p$ at $B$,
+without having less than $|p|$ free space in any intermediate state between leaving $A$ and picking up $p$.
+If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
+$v$ could have picked up $p$ when driving through $A$, and the total plan cost
+would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
+While we cannot say if the drive itself
+was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
+2 on the total cost. 
+
+In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
+the plan does not necessarily have to be suboptimal, but it
+is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify that this actually holds.}
+
+In a temporal domain with fuel, it is not safe to say whether
+such a scenario hurts the plan duration. If there is a petrol station at $B$
+and $v$ wants to refuel there, the other vehicle could have enabled the parallelization 
+of the \refuel{} and \pickup{} actions, therefore shaving off 1 time unit in total.
+However, if there is no petrol
+station at $B$, this situation reduces to the no-fuel variant. Given the relative rarity of petrol stations, this will reduce the search space somewhat.
+\end{enumerate}
+Several other insights can only be applied in the sequential variant of Transport:
+\begin{enumerate}
+\item \textbf{Drop from an active vehicle only}: Without loss of generality,
+we can prune all plans where a \drop{} action of a vehicle happens
+right after an action of a different vehicle. It is trivial to see that if we had a plan where a drop
+occurs after an action of a different vehicle, we can swap that action with the drop
+action without (a) changing the total plan cost (b) changing the validity of the plan.
+
+Doing this repeatedly will yield an equivalent plan, in which the drop action
+occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
+
+\item \textbf{\TODO{Add another one}}
+\end{enumerate}
+Finally, these are the useful properties that only meaningfully apply to the temporal variant:
+\begin{enumerate}
+\item \textbf{Refueling and dropping/picking up can occur at the same time}: 
+A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
+when the vehicle was not dropping or picking up packages and the package was already
+co-located with the vehicle at that time.
+
+\item \textbf{No fuel left means refueling or ignoring the vehicle}:
+If a vehicle is stuck with no fuel left, or with less fuel than is required for
+any valid \drive{} action, the correct thing to do is to either refuel or drop
+all packages and ignore the vehicle in further planning. Unfortunately,
+we cannot say anything about the (non-)optimality of a plan where this occurs.
+
+\item \textbf{\TODO{Add another one}}
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Datasets \& problem instances}\label{datasets}
 
 For evaluation and comparison with other planners, we have acquired several problem datasets from previous runs of the IPC.
 Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, their associated IPC competition, the track at the competition and the domain variant the problems are modeled in.
@@ -300,100 +342,6 @@ are calculated using $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s
 \end{table}
 
 
-\subsection{Domain information}
-
-There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
-\begin{enumerate}
-\item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations --- there is nothing
-we can do using those packages that would result in a plan with a lower total cost.
-
-\item \textbf{Drop when at the destination}: Likewise, it is
-always correct for a vehicle containing a package with a destination equal
-to the vehicle's location to do a \drop{} action immediately.
-
-\item \textbf{Do not drop and pick up}: It never makes sense to drop and pick up
-the same package by the same vehicle in succession. We will only get to the same state
-by using a longer plan. This rule also applies if an action of a different vehicle
-gets between the two successive actions --- even if it does an action with the
-dropped package.
-It is important to note that this is a symmetric property: picking up and dropping
-equally results in a worse plan.
-\begin{enumerate}
-\item \textbf{Do not drop package where we picked it up}: A generalization
-of the previous rule is that vehicles should never drop a package
-at the location they last picked it up, independent of the actions they took
-between the relevant \pickup{} and \drop{}. This rule is also symmetric.
-
-\item \textbf{Never drop after picking up at a vertex}:
-While the order of successive \pickup{} and \drop{} actions does not
-influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
-without sacrificing admissibility. \textit{Admissibility} is
-a property of search strategies in general and can be defined as finding
-(one of) the optimal solutions (first), when there are generally several solutions
-of possibly different qualities \citep[Section~3.5]{Russell1995}.
-\end{enumerate}
-
-\item \textbf{Do not drive suboptimally}: If a vehicle does a series of
-\drive{} actions from location $A$ to $B$ without ``touching'' packages at any of the locations it visits,
-it has to follow the shortest possible path from $A$ to $B$. If it does not,
-the induced plan can be made less costly or shorter by swapping the actual \drive{} actions
-for precalculated optimal \drive{} actions along the shortest path.
-Do note, that it is not important for the application of this rule whether actions are in direct succession (in a sequential plan) or not.
-\begin{enumerate}
-\item \textbf{Do not drive in cycles}: A special but important case of the previous rule is that vehicles should not drive in cycles
-\end{enumerate}
-
-\item \textbf{Do not forward packages using other vehicles}:
-Let $p$ be a package of size $|p|$ located at $A$.
-Let $v$ be a vehicle which drove through location $A$ to location $B \neq A$
-and picked up $p$ at $B$,
-without having less than $|p|$ free space in any intermediate state between leaving $A$ and picking up $p$.
-If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
-$v$ could have picked up $p$ when driving through $A$, and the total plan cost
-would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
-While we cannot say if the drive itself
-was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
-2 on the total cost. 
-
-In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
-the plan does not necessarily have to be suboptimal, but it
-is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify that this actually holds.}
-
-In a temporal domain with fuel, it is not safe to say whether
-such a scenario hurts the plan duration. If there is a petrol station at $B$
-and $v$ wants to refuel there, the other vehicle could have enabled the parallelization 
-of the \refuel{} and \pickup{} actions, therefore shaving off 1 time unit in total.
-However, if there is no petrol
-station at $B$, this situation reduces to the no-fuel variant. Given the relative rarity of petrol stations, this will reduce the search space somewhat.
-\end{enumerate}
-Several other insights can only be applied in the sequential variant of Transport:
-\begin{enumerate}
-\item \textbf{Drop from an active vehicle only}: Without loss of generality,
-we can prune all plans where a \drop{} action of a vehicle happens
-right after an action of a different vehicle. It is trivial to see that if we had a plan where a drop
-occurs after an action of a different vehicle, we can swap that action with the drop
-action without (a) changing the total plan cost (b) changing the validity of the plan.
-
-Doing this repeatedly will yield an equivalent plan, in which the drop action
-occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
-
-\item \textbf{\TODO{Add another one}}
-\end{enumerate}
-Finally, these are the useful properties that only meaningfully apply to the temporal variant:
-\begin{enumerate}
-\item \textbf{Refueling and dropping/picking up can occur at the same time}: 
-A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
-when the vehicle was not dropping or picking up packages and the package was already
-co-located with the vehicle at that time.
-
-\item \textbf{No fuel left means refueling or ignoring the vehicle}:
-If a vehicle is stuck with no fuel left, or with less fuel than is required for
-any valid \drive{} action, the correct thing to do is to either refuel or drop
-all packages and ignore the vehicle in further planning. Unfortunately,
-we cannot say anything about the (non-)optimality of a plan where this occurs.
-
-\item \textbf{\TODO{Add another one}}
-\end{enumerate}
 
 
 
@@ -406,253 +354,6 @@ we cannot say anything about the (non-)optimality of a plan where this occurs.
 
 
 
-\section{Accompanying software toolkit architecture}\label{transport-project}
-
-To run our experiments efficiently, we have implemented a software project,
-confusingly called TransportEditor, of which the editor described in
-Section~\ref{transport-editor} is only a part.
-The ``scaffolding'' for running experiments, generating reports, and the planner implementations that we will describe in the next two chapters are all part
-of the project as well.
-
-The project is split into several modules, listed in approximate dependency order:
-\begin{itemize}
-\item \texttt{transport-thirdparty}, a set of 3$^\textrm{rd}$ party libraries
-that have not been published in a dependency management repository like Maven~Central,\footnote{\url{http://central.sonatype.org/}}
-making their compile-time download and linking impossible;
-\item \texttt{transport-core}, a module that contains code modeling the Transport
-domain and persisting it to disk;
-\item \texttt{transport-planners}, containing sequential and temporal planners, both \textit{internal} (implemented as a part of this project) and \textit{external}
-(only calling an executable of a different project);
-\item \texttt{transport-benchmark}, a set of tools for running repeatable
-experiments on Transport datasets, possibly in parallel;
-\item \texttt{transport-report}, a collection of table generators and graph plotters,
-operating on the results of benchmarks; and
-\item \texttt{transport-editor}, the module containing the graphical user interface
-of the planning system TransportEditor. This module is only dependent
-on \texttt{transport-planners} and all its dependencies.
-\end{itemize}
-Independent on the other modules is \texttt{transport-docs},
-the module containing this thesis,
-along with our other textual works relating to researching the Transport domain.
-
-Information about the model in \texttt{transport-core} and the \texttt{transport-editor} is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
-
-All the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
-data conversion. The only important scripts reside in the \texttt{tools} folder;
-the \texttt{benchmark.sh} script, used for running experimental benchmarks,
-and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX tables of the scores and runtimes from benchmark results.
-
-The benchmarker takes as input a JSON \citep{Bray2014} configuration file (Figure~\ref{code:benchmark-config-bnf}),
-runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format (Figure~\ref{code:benchmark-results-bnf}).
-In both of the figures are BNF grammars. We write zero-or-more repeated statements using ( and )*. Also, [ and ] are used for JSON lists, they do not mean an optional statement --- we use ( and ) (without the star) for that.
-Under \texttt{<character>}, we assume any valid UTF-8 character,
-\texttt{<double>} means any non-negative IEEE compatible double precision floating-point number,
-and \texttt{<long>} is any non-negative whole number smaller than or equal to $2^{63}-1$.
-Additionally, all file paths may use the \verb+${transport.root}+ variable, designating the
-root directory of the project.
-
-Apart from the results file, a plain text log containing information about the planner
-runs is also produced. Both of these files are placed in the directory \texttt{results/config\_file\_name/YYYYmmdd-HHMMSS/}, under the directory where \texttt{benchmark.sh} is placed.
-We can then use the \texttt{generate-reports.sh} script on the results file,
-which will create a \texttt{reports} directory next to the results file,
-containing all the generated report files.
-
-\begin{figure}[tbp]
-\centering
-\begin{code}
-<config> ::= { "domain" : "<filepath>",
-               "problems" : { "<problem_name>" : <problem_config>
-                          ( , "<problem_name>" : <problem_config> )* },
-               "scoreFunctionType"  : "<score_function>",
-               "planners": { "<planner_name>" : "<planner_config>"
-                        ( , "<planner_name>" : "<planner_config>" )* },
-               "threadCount": <integer>,
-               "timeout": <integer> }
-<filepath> ::= <string>
-<problem_name> ::= <string>
-<problem_config> ::= { "filePath" : "<filepath>",
-                       "bestScore" : <score> }
-<score> ::= null | <float>
-<score_function> ::= TOTAL_TIME | ACTION_COUNT
-<planner_name> ::= <string>
-<planner_config> ::= { "className" : "<class>",
-                       "params" : "<executable_templ>" }
-<class> ::= <string>
-<executable_templ> ::= <string>
-<string> ::= ( <character> )*
-\end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
-is expected to be a valid Java class name (including the package) and present on the classpath.
-The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
-and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.}
-\label{code:benchmark-config-bnf}
-\end{figure}
-
-\begin{figure}[tbp]
-\centering
-\begin{code}
-<results> ::= { "runs" : [ ( <run> ) ( , <run> )* ] }
-<run> ::= { "actions" : [ ( <action> ) ( , <action> )* ],
-            "temporalPlanActions" : [ ( <tpa> ) ( , <tpa> )* ],
-            "domain" : "<string>",
-            "planner" : "<string>",
-            "problem" : "<string>",
-            "results" : <run_results> }
-<action> ::= "<string>"
-<tpa> ::= "<string>"
-<run_results> ::= { "score" : <score>,
-                    "bestScore" : <score>,
-                    "exitStatus" : "<exit_status>",
-                    "startTimeMs" : <timestamp>,
-                    "endTimeMs" : <timestamp>,
-                    "durationMs" : <timestamp>,
-                    "quality" : <double> }
-<exit_status> ::= UNSOVLED | INVALID | VALID | NOTVALIDATED | SUBOPT
-<timestamp> ::= <long>
-\end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF.
-The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
-that this grammar is only valid if concatenated with the grammar in Figure~\ref{code:benchmark-config-bnf}.}
-\label{code:benchmark-results-bnf}
-\end{figure}
 
 
 
-
-
-\section{Formulating Transport as a CSP}\label{csp-formulation}
-
-When discussing related works, we mentioned the Vehicle Routing Problem (Section~\ref{vrp}) and its straightforward
-formulation as a Constraint Satisfaction Problem. Utilizing CSPs has been useful
-for planning in the past \citep[Section~8.7]{Ghallab2004}
-and we will attempt to use domain-specific knowledge to improve upon the standard, domain-independent
-formulation.
-
-\subsection{Na{\"{i}}ve CSP formulation}
-
-We will now formulate a sequential Transport (Section~\ref{transport-strips}) problem as a CSP (Section~\ref{csp}) using the na{\"{i}}ve encoding provided in \citet[Section~8.3]{Ghallab2004}.
-However, using that strategy, our problems ``blow up'' in size --- as is expected due
-to the different complexities of planning versus solving CSPs \citep[Section~8.3.2]{Ghallab2004}. To visualize the difference in our case, we have constructed a state space estimation table (Table~\ref{tab:csp-trivial}) for conversions of two sample sequential Transport problems.
-
-\begin{table}[tb]
-\begin{center}
-\begin{tabular}{l||rr}
-\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
-\midrule
-\midrule
-\textbf{Best known plan length} & 6 & 351 \\ 
-\textbf{Vehicles} & 2 & 4 \\ 
-\textbf{Vehicle variables} & 14 & 1 408 \\ 
-\textbf{Packages} & 2 & 20 \\ 
-\textbf{Package variables} & 14 & 7 040 \\ 
-\textbf{Locations} & 5 & 60 \\ 
-\textbf{Roads} & 12 & 256 \\
-\textbf{Max capacity} & 4 & 4 \\ 
-\midrule
-\textbf{Ground Drive actions} & 168 & 360 448 \\ 
-\textbf{Ground PickUp actions} & 140 & 1 689 600 \\ 
-\textbf{Ground Drop actions} & 140 & 1 689 600 \\ 
-\midrule
-\textbf{Planning variables total} & 48 & 10 207 \\ 
-\textbf{Grounded actions total} & 448 & 1 189 838 848 \\ 
-\textbf{Search Space Estimate} & $\approx 1.1 \cdot 10^{52}$ & $\approx 1.4 \cdot 10^{27 952}$ \\ % https://www.wolframalpha.com/input/?i=(245120%5E351)+*+4%5E1408+*+60%5E1408+*+1468%5E7040
-\end{tabular}
-\end{center}
-\caption[Search space approximations for a na{\"{i}}ve CSP encoding.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using the general and domain-independent encoding from \citet[Section~8.3]{Ghallab2004}.}
-\label{tab:csp-trivial}
-\end{table}
-
-The first section of the table (rows 1--7) contains problem-specific constants.
-The two calculated values in that section, \textit{Vehicle variables} and \textit{Package variables} are the numbers of variables generated for the respective
-object by grounding it for every intermediate plan state (before and after applying an action). Therefore, the value is equal to the number of vehicles/packages of the problem
-multiplied by the set plan length + 1 (each state corresponds to the state before applying an action + the last state).
-
-In the second section (rows 8--10), we estimate the number of ground actions
-Step 1 from \citet[Section~8.3.1]{Ghallab2004} will generate.
-We calculate the number of \pickup{} and \drop{} actions the CSP encoding will generate
-as $$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations} \cdot \mt{\#packages},$$
-effectively counting all ground planning operators of the problem. Similarly,
-the number of \drive{} actions is calculated as
-$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#roads},$$
-which is more efficient than the na{\"{i}}ve way of
-counting all
-$$(\mt{length(plan)} + 1) \cdot \mt{\#vehicles} \cdot \mt{\#locations}^2$$
-actions.
-
-As we can see from the third section of the table, the number of variables
-(planning variables and ground actions) is not extremely high
---- the problem is that the variables have very large domains,
-which makes the CSP problem exponentially larger \citep[Section~8.3.2]{Ghallab2004}.
-We calculated the \textit{Search Space Size Estimate} (SSE) as
-\begin{align*}
-\mt{SSE} =\; &\mt{\#ground\_actions}^{l-1} & \textit{\footnotesize select ground actions for the plan}\\
-&\cdot \mt{\#capacities}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select capacities for vehicle variables}\\
-&\cdot \mt{\#locations}^{l \cdot \mt{\#vehicles}} & \textit{\footnotesize select locations for vehicle variables}\\
-&\cdot (\mt{\#locations} + \mt{\#vehicles})^{l \cdot \mt{\#pkg}}, & \textit{\footnotesize select locations/vehicles for package variables}
-\end{align*}
-where we set $l := \mt{length(plan) + 1}$.
-For comparison to the SSEs in the last table row, 
-the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
-
-\subsection{Domain-dependent CSP representation}\label{csp-custom-repr}
-
-We will now devise a different CSP representation for sequential Transport.
-While not improving upon the search space estimates of the na{\"{i}}ve formulation
-in a theoretical sense, we will describe a slightly more complex
-and less general
-CSP model that enables us to explore fewer states.
-
-Using OptaPlanner and its shadow variable concept \citep[Section~4.3.6]{DeSmet2017}, we will model our Transport problem without keeping explicit track of capacities,
-vehicle and package locations, and ground actions, all of which will be implicitly managed by OptaPlanner, or inferred in the case of capacity and actions.
-This means we will reduce the memory overhead, maintaining the same expressive power
-and hopefully not enlarge the processing time too much.
-
-\TODO{Describe the specific representation after it is polished in the code + verify numbers}
-
-\begin{table}[tb]
-\begin{center}
-\begin{tabular}{l||rr}
-\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
-\midrule
-\midrule
-\textbf{Best known plan length} & 6 & 351 \\ 
-\textbf{Vehicles} & 2 & 4 \\ 
-\textbf{Vehicle shadow vars} & 14 & 1 408 \\
-\textbf{Packages} & 2 & 20 \\ 
-\textbf{Package shadow vars} & 14 & 7 040 \\
-\textbf{Locations} & 5 & 60 \\
-\textbf{Roads} & 12 & 256 \\
-\textbf{Max capacity} & 4 & 4 \\ 
-\midrule
-\textbf{Ground Drive actions} & 24 & 1024 \\ 
-\textbf{Ground PickUp actions} & 20 & 4800 \\ 
-\textbf{Ground Drop actions} & 20 & 4800 \\ 
-\midrule
-\textbf{Planning variables total} & 48 & 10 207 \\ 
-\textbf{Grounded actions in step} & 64 & 10 624 \\ 
-\textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\ 
-\textbf{Search Space Estimate} & $\approx 1.5 \cdot 10^{14}$ & $\approx 2.0 \cdot 10^{637}$ \\
-\end{tabular}
-\end{center}
-\caption[Search space approximations for a domain-dependent CSP representation.]{CSP Search space approximations for the \textit{p01} and \textit{p20} problems from the \textit{seq-sat} track of IPC 2008, using a custom domain-dependent CSP representation for Transport sequential.}
-\label{tab:csp-custom}
-\end{table}
-
-Using the domain-dependent representation specified, we are now able to construct
-a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). 
-Do note, that this table cannot be compared directly to the previous one,
-because it hides the shadow variable management overhead.
-Also, while the table rows look similar, sections 2 and 3 are calculated
-differently. The ground action counts in section 2 are not multiplied by $\mt{length(plan)} + 1$
-as done previously, because we only represent them once, not at every plan state.
-The total number of grounded actions is the same, but they are not explicitly represented as variables. The Search Space size Estimate is therefore calculated differently:
-\begin{align*}
-\mt{SSE} =\; &3^{\mt{length(plan)} + 1} & \textit{\footnotesize select the action type of each action}\\
-&\cdot \mt{\#ground\_actions}^{l-1}. & \textit{\footnotesize select the specific ground action}
-\end{align*}
-For comparison to the na{\"{i}}ve encoding SSEs which going from the p01 problem to p20 grow by a logarithmic factor of approximately $538$,
-whereas the domain-dependent ones only grow by approximately $46$,
-which is a huge improvement.
-
-Given the search space reduction, we will attempt to use this representation
-for constructing a CSP-based planner in Section~\ref{csp-approach}.
