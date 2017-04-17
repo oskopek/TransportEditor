@@ -2,7 +2,7 @@
 
 In this chapter, we will formalize variants of the Transport domain and mention a few related transportation problems that have been studied in the past.
 
-\section{Description of Transport domain variants}
+\section{Description of Transport domain variants}\label{domain-desc}
 
 Transport is a planning domain designed for
 the International Planning
@@ -15,21 +15,7 @@ Since then, it has been used in two IPCs,
 specifically IPC-7\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/}} in 2011
 and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/}} in 2014.
 
-There are a few basic formulations of the Transport domain family (i.e.~``similar'' Transport domain variants) which we will describe in the following sections. One variant which we will not study
-in this work is the NoMystery domain from IPC 2011,
-devised as a simplification of Transport (using only a single
-vehicle with no capacity constraints).
-The domain assumes
-fuel costs for driving on roads, with the vehicle
-having an initial fuel capacity (there is no refueling).
-All actions have a cost of 1.
-It is reasonably straightforward to solve problems of this variant using domain-specific knowledge as shown in \citet{Bartak2016}: the vehicle is always greedily loaded
-with all the packages present at a location when arriving at it and
-greedily unloaded when it contains a package which has the given location as a destination. Choosing which roads the vehicle drives
-along and thus determining
-the order of package loading and unloading 
-while taking into account the fuel constraints is
-the task that is left for the planner to solve.
+There are a few basic formulations of the Transport domain family (i.e.~``similar'' Transport domain variants) which we will describe in the following sections.
 
 \subsection{Common traits of Transport domains}
 
@@ -45,6 +31,22 @@ the plan.
 A few Transport problems also request that the vehicles be positioned at certain
 locations in the graph
 after finishing their deliveries.
+
+One variant which we will not study
+in this work is the NoMystery domain from IPC 2011,
+devised as a simplification of Transport (using only a single
+vehicle with no capacity constraints).
+The domain assumes
+fuel costs for driving on roads, with the vehicle
+having an initial fuel capacity (there is no refueling).
+All actions have a cost of 1.
+It is reasonably straightforward to solve problems of this variant using domain-specific knowledge as shown in \citet{Bartak2016}: the vehicle is always greedily loaded
+with all the packages present at a location when arriving at it and
+greedily unloaded when it contains a package which has the given location as a destination. Choosing which roads the vehicle drives
+along and thus determining
+the order of package loading and unloading 
+while taking into account the fuel constraints is
+the task that is left for the planner to solve.
 
 \subsection{Transport STRIPS}\label{transport-strips}
 

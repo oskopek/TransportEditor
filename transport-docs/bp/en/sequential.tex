@@ -2,8 +2,6 @@
 
 \TODO{Specifics of sequential planning}
 
-\TODO{mention that there are no vehicle goals.. verify!}
-
 \section{State-space forward planning}
 
 \TODO{Forward planning}
@@ -54,7 +52,7 @@ but the heuristic would estimate that we need
 
 \TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
 
-\TODO{mention Zhou with our Prolog \& Java impl} \citep{Zhou2015}
+\TODO{mention Zhou with Java impl} \citep{Zhou2015}
 
 \TODO{Describe A* in forward planning}
 
@@ -86,6 +84,8 @@ We will now formulate a sequential Transport (Section~\ref{transport-strips}) pr
 
 However, using that strategy, our problems ``blow up'' in size --- as is expected due
 to the different complexities of planning versus solving CSPs \citep[Section~8.3.2]{Ghallab2004}. To visualize the difference in our case, we have constructed a state space estimation table (Table~\ref{tab:csp-trivial}) for conversions of two sample sequential Transport problems.
+
+\TODO{recalculate + verify numbers}
 
 \begin{table}[tb]
 \begin{center}
@@ -160,7 +160,9 @@ vehicle and package locations, and ground actions, all of which will be implicit
 This means we will reduce the memory overhead, maintaining the same expressive power
 and hopefully not enlarge the processing time too much.
 
-\TODO{Describe the specific representation after it is polished in the code + verify numbers}
+\TODO{Describe the specific representation after it is polished in the code}
+
+\TODO{recalculate + verify numbers}
 
 \begin{table}[tb]
 \begin{center}

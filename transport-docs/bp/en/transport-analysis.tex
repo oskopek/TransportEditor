@@ -1,12 +1,8 @@
 \chapter{Transport domain analysis}
 
-In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe and analyze the datasets
+In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe the datasets
 used for devising experiments, and discuss the properties of Transport
 that will help us in developing better quality planners.
-
-\TODO{make sense of information in chapter 2 and 3, organize}
-
-\TODO{mention netbenefit and metrics}
 
 \section{Problem complexity}
 
@@ -19,10 +15,38 @@ and deciding if a plan exists at all (the \textsc{Plan-Existence} decision probl
 an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 
 That does not mean domain knowledge makes Transport easy, as is evident from
-the very thorough analysis by \citet{Helmert2001} and \citet{Helmert2001a}.
+the very thorough analysis by \citet{Helmert2001, Helmert2001a}.
 We will categorize our problems using Helmert's notation to
 be able to interpret their results to our domain.
-\TODO{Explain notation.}
+Helmert's \textsc{Transport} task is a 9-tuple $(V, E, M, P, fuel_0, l_0, l_G, cap, road),$
+where:
+\begin{itemize}
+\item $(V, E)$ is the road graph;
+\item $M$ is a finite set of vehicles (mobiles);
+\item $P$ is a finite set of packages (portables);
+\item $fuel_0 : V \to \N$ is the fuel function;
+\item $l_0: (M \cup P) \to V$ is the initial location function;
+\item $l_G: P \to V$ is the goal location function;
+\item $cap: M \to \N$ is the capacity function; and
+\item $road: M \to 2^E$ is the movement constraints function.
+\end{itemize}
+$V$, $M$, and $P$ are pairwise disjoint.
+No Transport domain variants assume movement constraints, therefore, $road$ is a constant
+function $road(m) = E$.
+Fuel constraints are modeled differently than in Transport (constraints per location versus per vehicle). \TODO{explain why it doesn't matter complexity-wise}
+
+A simplified notation is also introduced by \citet{Helmert2001a} for special cases of \textsc{Transport} tasks.
+For $i,j \in \{1, \infty, *\}, k \in \{1, +, *\}$ a $\textsc{Transport}_{i,j,k}$ task is defined as a
+general \textsc{Transport} task (defined above) that satisfies:
+\begin{itemize}
+\item if $i=1$, then $\forall m \in M : cap(m) = 1$ (vehicles can only carry one package);
+\item if $i=\infty$, then $\forall m \in M : cap(m) = |P|$ (vehicles have unlimited capacity);
+\item if $j=1$, then $\forall v \in V : fuel_0(v) = 1$ (one fuel unit per location);
+\item if $j=\infty$, then $\forall v \in V : fuel_0(v) = \infty$ (unlimited fuel per location);
+\item if $k=+$, then $\forall m \in M : road(m) = E$ (no movement restrictions); and
+\item if $k=1$, then $M = \{m\} \And road(m) = E$ (single vehicle, no restrictions).
+\end{itemize}
+The $*$ value for $i$, $j$ or $k$ signifies no restriction on that property.
 Note that
 \textsc{Transport} refers to the notation of \citet{Helmert2001a} of a general transportation
 task, while Transport refers to our studied domain.
@@ -30,7 +54,7 @@ task, while Transport refers to our studied domain.
 Using this notation, the sequential Transport domain could be thought of as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
 (equivalent to $\textsc{Transport}_{1,\infty,+}$).
 Similarly, the temporal variant represents a $\textsc{Transport}_{c,f,+}$ task, for $c, f \in \N$
-(equivalent to $\textsc{Transport}_{1,1,+}$) \TODO{Verify}.
+(equivalent to $\textsc{Transport}_{1,1,+}$).
 
 For sequential and temporal Transport without fuel, the \textsc{Plan-Existence} problem
 reduces to verifying reachability of each package by at least one vehicle
@@ -115,7 +139,10 @@ was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
 
 In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
 the plan does not necessarily have to be suboptimal, but it
-is of equal length or longer: $p$ could have arrived at $B$ at the same time as $v$ but no sooner, and therefore the \pickup{} action could have taken place at either location and the plan would remain of the same length. \TODO{Verify that this actually holds.}
+is of equal length or longer: due to concurrent actions, the vehicles could have driven simultaneously.
+In a few cases, the other vehicle could have dropped $p$ at $B$ before $v$ wants to pick it up,
+which means that the total makespan of the partial plan did not become longer, but stayed the same.
+The plan could not have become shorter, because $v$ does not have any time in this scenario when it is available to do another action.
 
 In a temporal domain with fuel, it is not safe to say whether
 such a scenario hurts the plan duration. If there is a petrol station at $B$
@@ -174,6 +201,7 @@ For evaluation and comparison with other planners, we have acquired several prob
 Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, their associated IPC competition, the track at the competition and the domain variant the problems are modeled in.
 
 \begin{table}[tb]
+\centering
 \begin{tabular}{c||ccc}
 \textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
 \midrule
@@ -188,8 +216,7 @@ seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{
 seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimal} & STRIPS \\ 
 seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} & STRIPS \\ 
 \end{tabular}
-\caption{Transport datasets from the 2008 and 2014 IPCs.
-\TODO{Add capacity, fuel and other features.}}
+\caption[Transport datasets from the 2008 and 2014 IPCs.]{Transport datasets from the 2008 and 2014 IPCs. All formulations assume capacitated vehicles, numeric and temporal formulations also contain fuel demands and capacities. The temporal formulation additionally adds concurrent actions and a notion of time. More information can be found in Section~\ref{domain-desc}.}
 \label{tab:ipc-datasets}
 \end{table}
 
@@ -275,6 +302,16 @@ are rare and usually significantly longer.
 All sequential problem instances in seq-sat-6 and seq-sat-8 have symmetric roads and road lengths and can, therefore,
 be simplified by assuming the use of an undirected graph.
 Also, in sequential problems, vehicles do not need to finish at a specific target location.
+Although possible only assuming the domain model, all packages are always positioned at locations
+in the initial state, not in vehicles (in all domain variants).
+
+The netben-opt-6 dataset contains Net Benefit problems --- problems where the aim
+is to compensate between achieving \textit{soft goals} and minimizing the total cost.
+Soft goals are goals that do not necessarily have to be satisfied in a goal state,
+but it is usually better for the total score if they are.
+Each problem usually specifies a metric used for calculation of the score.
+We will not focus on 
+these problems in this work.
 
 The temporal problems in tempo-sat-6 do not have the same property;
 the problems 1--20 have symmetric roads and lengths, but
