@@ -8,7 +8,7 @@ import com.oskopek.transport.persistence.DefaultProblemIO;
 import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.VariableDomainIO;
-import com.oskopek.transport.planners.sequential.SFA2Planner;
+import com.oskopek.transport.planners.sequential.RandomizedRestartPlanner;
 import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,8 @@ public final class SequentialPlannerMain {
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}"
 // + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
-    private static final Planner planner = new SFA2Planner();
+//    private static final Planner planner = new ForwardAstarPlanner();
+    private static final Planner planner = new RandomizedRestartPlanner();
 
     private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
 
