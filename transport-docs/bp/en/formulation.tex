@@ -300,6 +300,7 @@ On top of the fuel-related predicates and functions from \verb+transport-numeric
 lock the vehicle, which means the vehicle can be refueled while dropping off and picking up packages.
 \end{itemize}
 Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation.
+Note that both \pickup{} and \drop{} cancel the \verb+at+ predicate at the start of the action, which forbids parallel pickup and drop.
 
 \begin{figure}[tb]
 \begin{code}
