@@ -81,7 +81,18 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
         List<Location> locations = problem.getRoadGraph().getAllLocations().collect(Collectors.toList());
+        int i = 1;
+        float exploration = 0.8f;
+        float multiplier = 0.05f; // best so far: 0
+        int everySteps = 50_000;
         while (true) {
+            if (i % everySteps == 0) {
+                float delta = exploration;
+                exploration -= delta * multiplier;
+                logger.debug("Exploration increased to: {}", exploration);
+            }
+            i++;
+
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < bestPlanScore) {
                 Problem curProblem = current.getProblem();
@@ -93,7 +104,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
                 Package chosenPackage = unfinished.get(random.nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
                 while (true) {
-                    if (random.nextFloat() < 0.1) {
+                    if (random.nextFloat() < exploration) {
                         chosenVehicle = vehicles.get(random.nextInt(vehicles.size()));
                     } else {
                         Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
