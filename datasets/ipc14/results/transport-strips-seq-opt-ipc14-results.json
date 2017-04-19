@@ -51,22 +51,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p01",
-            "results": {
-                "bestScore": 148,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 148,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p01",
             "results": {
@@ -148,38 +132,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p01",
-            "results": {
-                "bestScore": 148,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 148,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p01",
-            "results": {
-                "bestScore": 148,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p01",
             "results": {
                 "bestScore": 148,
@@ -323,22 +275,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p02",
-            "results": {
-                "bestScore": 191,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 191,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p02",
             "results": {
@@ -420,38 +356,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p02",
-            "results": {
-                "bestScore": 191,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 191,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p02",
-            "results": {
-                "bestScore": 191,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p02",
             "results": {
                 "bestScore": 191,
@@ -595,22 +499,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p03",
-            "results": {
-                "bestScore": 300,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 300,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p03",
             "results": {
@@ -692,38 +580,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p03",
-            "results": {
-                "bestScore": 300,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 300,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p03",
-            "results": {
-                "bestScore": 300,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p03",
             "results": {
                 "bestScore": 300,
@@ -867,22 +723,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p04",
-            "results": {
-                "bestScore": 250,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p04",
             "results": {
@@ -964,38 +804,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p04",
-            "results": {
-                "bestScore": 250,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p04",
-            "results": {
-                "bestScore": 250,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p04",
             "results": {
                 "bestScore": 250,
@@ -1139,22 +947,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p05",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p05",
             "results": {
@@ -1236,38 +1028,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p05",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p05",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p05",
             "results": {
                 "bestScore": -1,
@@ -1411,22 +1171,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p06",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p06",
             "results": {
@@ -1508,38 +1252,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p06",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p06",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p06",
             "results": {
                 "bestScore": -1,
@@ -1683,22 +1395,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p07",
-            "results": {
-                "bestScore": 967,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 967,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p07",
             "results": {
@@ -1780,38 +1476,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p07",
-            "results": {
-                "bestScore": 967,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 967,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p07",
-            "results": {
-                "bestScore": 967,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p07",
             "results": {
                 "bestScore": 967,
@@ -1955,22 +1619,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p08",
-            "results": {
-                "bestScore": 1173,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p08",
             "results": {
@@ -2060,38 +1708,6 @@
                 "exitStatus": "UNSOLVED",
                 "quality": 0,
                 "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p08",
-            "results": {
-                "bestScore": 1173,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p08",
-            "results": {
-                "bestScore": 1173,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 1173,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2227,22 +1843,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p09",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p09",
             "results": {
@@ -2324,38 +1924,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p09",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p09",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p09",
             "results": {
                 "bestScore": -1,
@@ -2499,22 +2067,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p10",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p10",
             "results": {
@@ -2596,38 +2148,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p10",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p10",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p10",
             "results": {
                 "bestScore": -1,
@@ -2771,22 +2291,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p11",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p11",
             "results": {
@@ -2868,38 +2372,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p11",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p11",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p11",
             "results": {
                 "bestScore": -1,
@@ -3043,22 +2515,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p12",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p12",
             "results": {
@@ -3140,38 +2596,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p12",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p12",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p12",
             "results": {
                 "bestScore": -1,
@@ -3315,22 +2739,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p13",
-            "results": {
-                "bestScore": 594,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 594,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p13",
             "results": {
@@ -3412,38 +2820,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p13",
-            "results": {
-                "bestScore": 594,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 594,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p13",
-            "results": {
-                "bestScore": 594,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p13",
             "results": {
                 "bestScore": 594,
@@ -3587,22 +2963,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p14",
-            "results": {
-                "bestScore": 526,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 526,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p14",
             "results": {
@@ -3684,38 +3044,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p14",
-            "results": {
-                "bestScore": 526,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 526,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p14",
-            "results": {
-                "bestScore": 526,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p14",
             "results": {
                 "bestScore": 526,
@@ -3859,22 +3187,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p15",
-            "results": {
-                "bestScore": 753,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p15",
             "results": {
@@ -3956,38 +3268,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p15",
-            "results": {
-                "bestScore": 753,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p15",
-            "results": {
-                "bestScore": 753,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p15",
             "results": {
                 "bestScore": 753,
@@ -4131,22 +3411,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p16",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p16",
             "results": {
@@ -4228,38 +3492,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p16",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p16",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p16",
             "results": {
                 "bestScore": -1,
@@ -4403,22 +3635,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p17",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p17",
             "results": {
@@ -4500,38 +3716,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p17",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p17",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p17",
             "results": {
                 "bestScore": -1,
@@ -4675,22 +3859,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p18",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p18",
             "results": {
@@ -4772,38 +3940,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p18",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p18",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p18",
             "results": {
                 "bestScore": -1,
@@ -4947,22 +4083,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p19",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p19",
             "results": {
@@ -5044,38 +4164,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p19",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p19",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p19",
             "results": {
                 "bestScore": -1,
@@ -5219,22 +4307,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p20",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dynamic-gamer",
             "problem": "p20",
             "results": {
@@ -5316,38 +4388,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "metis",
-            "problem": "p20",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p20",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
             "problem": "p20",
             "results": {
                 "bestScore": -1,
