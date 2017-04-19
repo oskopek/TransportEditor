@@ -41,8 +41,6 @@ import java.util.stream.Collectors;
 // choose a random vehicle and package,
 // find the path, find all packages on it
 // choose the ones whose target is on the path
-// if still not fully capacitated, choose the others in the
-// order of distance from the shortest path
 public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

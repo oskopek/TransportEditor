@@ -15,9 +15,10 @@ import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import javaslang.Tuple;
+import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.Value;
-import javaslang.collection.Stream;
+import javaslang.collection.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,6 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 // choose a random vehicle and package,
@@ -82,7 +89,6 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
                 if (unfinished.isEmpty()) {
                     throw new IllegalStateException("Zero packages left but not in goal state.");
                 }
-
 
                 Package chosenPackage = unfinished.get(random.nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
@@ -164,24 +170,77 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
                 .filter(t -> t._1 >= 0 && t._2 >= 0 && t._1 <= t._2).toList();
         // only packages with pick up and drop on path and with pick up before drop
         // list should have at least one entry now
-        int curCapacity = chosenVehicle.getCurCapacity().getCost();
+        final int curCapacity = chosenVehicle.getCurCapacity().getCost();
         List<Package> chosenPackages;
+        int capacityLeft;
         if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
-            chosenPackages = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
+            Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
                     .map(sTuple -> Tuple.of(curCapacity - calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
                     .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
-                    .minBy(t -> Tuple.of(t._1, t._2)) // TODO: T2 not last index, but length of indexes + maximize?
-                    .map(t -> t._3.toJavaList()).getOrElse((List<Package>) null);
+                    .minBy(t -> Tuple.of(t._1, t._2)).get(); // TODO: T2 not last index, but length of indexes + maximize?
+            capacityLeft = pkgTuples._1;
+            chosenPackages = pkgTuples._3.toJavaList();
         } else {
-            chosenPackages = completelyOnPath.map(t -> t._3).toJavaList();
+            Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples
+                    = Tuple.of(curCapacity - calculateMaxCapacity(completelyOnPath),
+            completelyOnPath.toStream().map(t -> locationsOnPath.lastIndexOf(t._3.getTarget())).max().getOrElse(Integer.MAX_VALUE),
+            completelyOnPath.map(t -> t._3).toList());
+            capacityLeft = pkgTuples._1;
+            chosenPackages = pkgTuples._3.toJavaList();
         }
 
         if (chosenPackages == null) {
             throw new IllegalStateException("Should not occur.");
         }
 
+        Map<Package, Location> targetMap = new HashMap<>(chosenPackages.size() + capacityLeft);
+        for (Package pkg : chosenPackages) {
+            targetMap.put(pkg, pkg.getTarget());
+        }
+
+        if (capacityLeft > 0) { // fill in with packages that get closer to goal
+            List<Tuple3<Integer, Location, Package>> distancesFromPath = new ArrayList<>(capacityLeft * 1);
+            for (Package pkg : packagesOnPath) {
+                if (chosenPackages.contains(pkg)) {
+                    continue;
+                }
+                List<Tuple2<Integer, Location>> distancesFromPathLocation = new ArrayList<>();
+                boolean pickedUp = false;
+                boolean first = true;
+                for (RoadEdge edge : basicPath) {
+                    if (first) {
+                        first = false;
+                        continue;
+                    }
+                    if (edge.getFrom().equals(pkg.getLocation())) {
+                        pickedUp = true;
+                        continue;
+                    }
+                    if (pickedUp) {
+                        ShortestPath pkgToTarget = shortestPathMatrix.get(edge.getFrom().getName(), pkg.getTarget().getName());
+                        distancesFromPathLocation.add(Tuple.of(pkgToTarget.getDistance(), edge.getFrom()));
+                    }
+                }
+                if (!distancesFromPathLocation.isEmpty()) {
+                    Tuple2<Integer, Location> minLoc = Collections.min(distancesFromPathLocation, Comparator.comparing(t -> t._1));
+                    distancesFromPath.add(Tuple.of(minLoc._1, minLoc._2, pkg));
+                }
+            }
+            distancesFromPath.sort(Comparator.comparing(t -> t._1));
+            for (Tuple3<Integer, Location, Package> tuple : distancesFromPath) {
+                int pkgSize = tuple._3.getSize().getCost();
+                if (capacityLeft - pkgSize < 0) {
+                    continue;
+                }
+                capacityLeft -= pkgSize;
+
+                chosenPackages.add(tuple._3);
+                targetMap.put(tuple._3, tuple._2);
+            }
+        }
+
         List<RoadEdge> path = basicPath;
-        return buildPlan(domain, path, chosenVehicle, chosenPackages);
+        return buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
     }
 
     private static Integer calculateMaxCapacity(javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
@@ -202,7 +261,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
     }
 
     private List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
-            List<Package> chosenPackages) {
+            List<Package> chosenPackages, Map<Package, Location> targetMap) {
         if (path.isEmpty()) {
             return Collections.emptyList();
         }
@@ -212,14 +271,14 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
         for (int i = path.size() - 1; i >= 0; i--) {
             RoadEdge edge = path.get(i);
             Location to = edge.getTo();
-            buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle);
+            buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
 
             // drive
             actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
         }
         // last loc
         Location firstLocation = path.get(0).getFrom();
-        buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle);
+        buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
 
         for (int i = 0; i < actions.size(); i++) { // remove redundant drives
             Action action = actions.get(i);
@@ -233,7 +292,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
         return Stream.ofAll(actions).reverse().toJavaList();
     }
 
-    private void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop, Set<Package> inVehicle, Location at, Vehicle vehicle) {
+    private void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop, Set<Package> inVehicle, Location at, Vehicle vehicle,
+            Map<Package, Location> targetMap) {
         for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
             Package pkg = iter.next();
             if (pkg.getLocation().equals(at)) {
@@ -243,7 +303,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
         }
         for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext(); ) {
             Package pkg = iter.next();
-            if (pkg.getTarget().equals(at)) {
+            if (targetMap.get(pkg).equals(at)) {
                 actions.add(domain.buildDrop(vehicle, at, pkg));
                 inVehicle.add(pkg);
                 iter.remove();
