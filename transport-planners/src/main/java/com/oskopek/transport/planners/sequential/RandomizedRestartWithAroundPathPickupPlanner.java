@@ -17,7 +17,7 @@ import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import javaslang.Tuple;
 import javaslang.Tuple3;
 import javaslang.Value;
-import javaslang.collection.*;
+import javaslang.collection.Stream;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,20 +30,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-// choose a random package and a nearby or random vehicle,
-// find the path, find all packages on it
+// choose a random vehicle and package,
+// find the path, find all packages on it and around it
 // choose the ones whose target is on the path
 // if still not fully capacitated, choose the others in the
 // order of distance from the shortest path
-public class RandomizedRestartWithOnPathPickup2Planner extends AbstractPlanner {
+public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -52,8 +46,8 @@ public class RandomizedRestartWithOnPathPickup2Planner extends AbstractPlanner {
     private Plan bestPlan;
     private int bestPlanScore;
 
-    public RandomizedRestartWithOnPathPickup2Planner() {
-        setName(RandomizedRestartWithOnPathPickup2Planner.class.getSimpleName());
+    public RandomizedRestartWithAroundPathPickupPlanner() {
+        setName(RandomizedRestartWithAroundPathPickupPlanner.class.getSimpleName());
     }
 
     public ArrayTable<String, String, ShortestPath> getShortestPathMatrix() {
@@ -67,7 +61,7 @@ public class RandomizedRestartWithOnPathPickup2Planner extends AbstractPlanner {
     }
 
     void initialize(Problem problem) {
-        shortestPathMatrix = RandomizedRestartWithOnPathPickup2Planner.computeAPSP(problem.getRoadGraph());
+        shortestPathMatrix = RandomizedRestartWithAroundPathPickupPlanner.computeAPSP(problem.getRoadGraph());
         random = new Random(2017L);
     }
 
@@ -259,8 +253,8 @@ public class RandomizedRestartWithOnPathPickup2Planner extends AbstractPlanner {
 
 
     @Override
-    public RandomizedRestartWithOnPathPickup2Planner copy() {
-        return new RandomizedRestartWithOnPathPickup2Planner();
+    public RandomizedRestartWithAroundPathPickupPlanner copy() {
+        return new RandomizedRestartWithAroundPathPickupPlanner();
     }
 
     @Override
@@ -270,7 +264,7 @@ public class RandomizedRestartWithOnPathPickup2Planner extends AbstractPlanner {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof RandomizedRestartWithOnPathPickup2Planner;
+        return obj instanceof RandomizedRestartWithAroundPathPickupPlanner;
     }
 
     private static ArrayTable<String, String, ShortestPath> computeAPSP(final RoadGraph graph) {

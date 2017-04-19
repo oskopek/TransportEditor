@@ -9,6 +9,7 @@ import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.VariableDomainIO;
 import com.oskopek.transport.planners.sequential.RandomizedRestartPlanner;
+import com.oskopek.transport.planners.sequential.RandomizedRestartWithOnPathPickup2Planner;
 import com.oskopek.transport.planners.sequential.RandomizedRestartWithOnPathPickupPlanner;
 import javaslang.control.Try;
 import org.slf4j.Logger;
@@ -31,7 +32,8 @@ public final class SequentialPlannerMain {
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
 //    private static final Planner planner = new ForwardAstarPlanner();
 //    private static final Planner planner = new RandomizedRestartPlanner();
-    private static final Planner planner = new RandomizedRestartWithOnPathPickupPlanner();
+//    private static final Planner planner = new RandomizedRestartWithOnPathPickupPlanner();
+    private static final Planner planner = new RandomizedRestartWithOnPathPickup2Planner();
 
     private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
 
