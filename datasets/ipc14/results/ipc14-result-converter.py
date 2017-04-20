@@ -84,7 +84,7 @@ def to_json(domain, finished, score):
     rows = []
     for problem in problems:
         for planner in planners:
-            if planner in ["miplan", "nucelar", "planets", "dpmplan", "freelunch", "arvandherd", "bfs-f"]:
+            if planner in ["miplan", "nucelar", "planets", "dpmplan", "freelunch", "arvandherd", "bfs-f", "bifd", "fdss-2014", "cedalion", "rpt", "use", "yahsp3", "ibacop2"]: # skip low performing planners
                 continue
             best = best_score[problem]
             status = statusTable[finished_dict[problem][planner]]

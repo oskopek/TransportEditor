@@ -24,6 +24,8 @@ def filter_rows(rows, domain, track):
         planner = row[1]
         if "ref" == planner:
             continue
+        if planner in ["upwards", "dae1", "dae2", "c3"]: # filter out not well performing planners
+            continue
         problem = "p" + str(row[3])
         status = statusTable[str(row[4])]
 
