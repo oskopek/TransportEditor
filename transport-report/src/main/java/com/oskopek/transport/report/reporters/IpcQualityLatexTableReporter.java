@@ -52,13 +52,9 @@ public class IpcQualityLatexTableReporter implements Reporter {
         Map<String, Map<String, String>> quality = grouped
                 .mapValues(v -> v.mapValues(jsonRun -> jsonRun.getResults().getQuality())
                         .mapValues(qualityFormat::format).toJavaMap()).toJavaMap();
-        DecimalFormat scoreFormat = new DecimalFormat();
-        scoreFormat.setMinimumFractionDigits(0);
-        scoreFormat.setMaximumFractionDigits(2);
-        scoreFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         Map<String, Map<String, String>> score = grouped
                 .mapValues(v -> v.mapValues(jsonRun -> jsonRun.getResults().getScore())
-                        .mapValues(score2 -> score2 == null ? null : scoreFormat.format(score2)).toJavaMap()).toJavaMap();
+                        .mapValues(score2 -> score2 == null ? null : LatexProblemPlannerReporter.scoreFormat.format(score2)).toJavaMap()).toJavaMap();
         Map<String, String> total = javaslang.collection.Stream.ofAll(runs)
                 .groupBy(BenchmarkResults.JsonRun::getPlanner).mapValues(groupedRuns -> groupedRuns.toJavaStream()
                         .mapToDouble(r -> r.getResults().getQuality()).sum())
@@ -78,7 +74,7 @@ public class IpcQualityLatexTableReporter implements Reporter {
                 throw new IllegalStateException("Problem does not have equal best scores: " + bestScores);
             }
         });
-        Map<String, String> best = bestList.mapValues(l -> l.get(0)).mapValues(l -> l == null ? null : scoreFormat.format(l))
+        Map<String, String> best = bestList.mapValues(l -> l.get(0)).mapValues(l -> l == null ? null : LatexProblemPlannerReporter.scoreFormat.format(l))
                 .toJavaMap();
 
         Map<String, Map<String, String>> status = grouped.mapValues(v ->

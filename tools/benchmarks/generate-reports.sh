@@ -41,6 +41,9 @@ echo "`date -u '+[%H:%M:%S]'` Adding IPC results..."
 if `echo $configName | grep 'ipc08' > /dev/null`; then
 ipc="08"
 fi
+if `echo $configName | grep 'ipc11' > /dev/null`; then
+ipc="11"
+fi
 if `echo $configName | grep 'ipc14' > /dev/null`; then
 ipc="14"
 fi
