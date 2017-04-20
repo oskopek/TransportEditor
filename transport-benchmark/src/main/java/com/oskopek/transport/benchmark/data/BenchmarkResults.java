@@ -1,26 +1,20 @@
 package com.oskopek.transport.benchmark.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.plan.Plan;
-import com.oskopek.transport.model.planner.Planner;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.TemporalPlanIO;
 import javaslang.control.Try;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents the aggregated results of a {@link com.oskopek.transport.benchmark.Benchmark}.
  */
 public final class BenchmarkResults {
 
-    private final transient ArrayTable<Problem, Planner, BenchmarkRun> runTable;
     private final List<JsonRun> runs;
 
     /**
@@ -28,28 +22,16 @@ public final class BenchmarkResults {
      */
     @JsonCreator
     private BenchmarkResults() {
-        this(null, null);
+        this(null);
     }
 
     /**
      * Default constructor.
      *
-     * @param runTable the run table
      * @param runs the JSON run representation
      */
-    private BenchmarkResults(ArrayTable<Problem, Planner, BenchmarkRun> runTable, List<JsonRun> runs) {
-        this.runTable = runTable;
+    private BenchmarkResults(List<JsonRun> runs) {
         this.runs = runs;
-    }
-
-    /**
-     * Create a results instance from the run table.
-     *
-     * @param runTable the run table
-     * @return the initialized results
-     */
-    public static BenchmarkResults from(ArrayTable<Problem, Planner, BenchmarkRun> runTable) {
-        return new BenchmarkResults(runTable, runTable.values().stream().map(JsonRun::of).collect(Collectors.toList()));
     }
 
     /**
@@ -59,7 +41,7 @@ public final class BenchmarkResults {
      * @return the initialized results
      */
     public static BenchmarkResults from(List<JsonRun> runs) {
-        return new BenchmarkResults(null, runs);
+        return new BenchmarkResults(runs);
     }
 
     /**
@@ -78,16 +60,6 @@ public final class BenchmarkResults {
      */
     public String toJson() {
         return new BenchmarkResultsIO().serialize(this);
-    }
-
-    /**
-     * Get the run table.
-     *
-     * @return the run table
-     */
-    @JsonIgnore
-    public ArrayTable<Problem, Planner, BenchmarkRun> getRunTable() {
-        return runTable;
     }
 
     /**
