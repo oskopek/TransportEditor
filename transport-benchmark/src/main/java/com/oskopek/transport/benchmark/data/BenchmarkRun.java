@@ -331,6 +331,10 @@ public class BenchmarkRun {
         public double getQuality() {
             return quality;
         }
+
+        public Results updateBestScore(Double newBestScore) {
+            return new Results(plan, score, newBestScore, exitStatus, startTimeMs, endTimeMs);
+        }
     }
 
 }

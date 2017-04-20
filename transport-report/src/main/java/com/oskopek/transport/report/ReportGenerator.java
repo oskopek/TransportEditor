@@ -4,6 +4,7 @@ import com.oskopek.transport.benchmark.data.BenchmarkResults;
 import com.oskopek.transport.benchmark.data.BenchmarkResultsIO;
 import com.oskopek.transport.persistence.IOUtils;
 import javaslang.Tuple;
+import javaslang.Value;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
 import org.reflections.Reflections;
@@ -19,9 +20,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The logic behind report generation. Uses the added reporters to generate a folder full of reports.
@@ -89,12 +89,20 @@ public class ReportGenerator {
     public void generate(Path resultFile) throws IOException {
         String resultFileContents = IOUtils.concatReadAllLines(Files.newInputStream(resultFile));
         BenchmarkResults results = new BenchmarkResultsIO().parse(resultFileContents);
-        recalculateQuality(results);
+        results = recalculateQuality(results);
         generate(results, resultFile.getParent());
     }
 
-    private void recalculateQuality(BenchmarkResults results) {
-//        results.getRuns().
+    private BenchmarkResults recalculateQuality(BenchmarkResults results) {
+        Map<String, List<BenchmarkResults.JsonRun>> runs = Stream.ofAll(results.getRuns()).groupBy(r -> r.getProblem())
+                .mapValues(Value::toJavaList).toJavaMap();
+        Map<String, Double> bestScore = Stream.ofAll(runs.entrySet()).map(e -> Tuple.of(e.getKey(), e.getValue().stream()
+                .flatMap(r -> java.util.stream.Stream.of(r.getResults().getScore(), r.getResults().getBestScore()))
+                .filter(Objects::nonNull).min(Double::compare)))
+                .toJavaMap(t -> Tuple.of(t._1, t._2.orElse(null)));
+        return BenchmarkResults.from(results.getRuns().stream()
+                .map(r -> BenchmarkResults.JsonRun.of(r, r.getResults().updateBestScore(bestScore.get(r.getProblem()))))
+                .collect(Collectors.toList()));
     }
 
     /**

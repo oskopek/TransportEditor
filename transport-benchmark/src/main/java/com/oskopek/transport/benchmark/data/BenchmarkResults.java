@@ -129,6 +129,18 @@ public final class BenchmarkResults {
         }
 
         /**
+         * Construct a JSON run instance from the json run instance with new results.
+         *
+         * @param run the serialized run
+         * @param runResults new results for the run
+         * @return the initialized JSON run
+         */
+        public static JsonRun of(JsonRun run, BenchmarkRun.Results runResults) {
+            return new JsonRun(run.getDomain(), run.getProblem(), run.getPlanner(),
+                    run.getTemporalPlanActions(), run.getActions(), runResults);
+        }
+
+        /**
          * Get the domainName.
          *
          * @return the domainName
