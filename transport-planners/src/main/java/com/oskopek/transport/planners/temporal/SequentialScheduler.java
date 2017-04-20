@@ -64,7 +64,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             Action from = seqActionList.get(i);
             for (int j = i + 1; j < seqActionList.size(); j++) {
                 Action to = seqActionList.get(j);
-                if (from.getWho().getName().equals(from.getWho().getName())) { // vehicle mutex
+                if (from.getWho().getName().equals(to.getWho().getName())) { // vehicle mutex
                     mutexDag.addEdge(i + "->" + j + "_" + id++, i, j, true); // for sequential drive actions, only add the needed transitive ones
                     continue;
                 }
@@ -80,13 +80,14 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         sort.init(mutexDag);
         sort.compute();
         List<Integer> topoSorted = sort.getSortedNodes().stream().map(n -> Integer.parseInt(n.getId())).collect(Collectors.toList());
+        final double delta = 0.001;
         for (int actionIndex : topoSorted) {
             double maxEndTimeOfPrevious = 0d;
             for (Iterator<Edge> it = mutexDag.getNode(actionIndex).getEnteringEdgeIterator(); it.hasNext(); ) {
                 Edge enteringEdge = it.next();
                 int sourceActionIndex = Integer.parseInt(enteringEdge.getSourceNode().getId());
                 TemporalPlanAction plannedAction = plannedActions.get(sourceActionIndex);
-                maxEndTimeOfPrevious = Math.max(plannedAction.getEndTimestamp(), maxEndTimeOfPrevious);
+                maxEndTimeOfPrevious = Math.max(plannedAction.getEndTimestamp(), maxEndTimeOfPrevious) + delta;
             }
             Action action = seqActionList.get(actionIndex);
             plannedActions.put(actionIndex, new TemporalPlanAction(action, maxEndTimeOfPrevious, maxEndTimeOfPrevious + action.getDuration().getCost()));
