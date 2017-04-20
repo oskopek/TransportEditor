@@ -7,7 +7,7 @@
     },
     "p02": {
       "filePath": "${transport.root}/transport-core/src/test/resources/com/oskopek/transport/persistence/p02SeqProblem.pddl",
-      "bestScore": 54
+      "bestScore": 270
     }
   },
   "scoreFunctionType": "TOTAL_TIME",
