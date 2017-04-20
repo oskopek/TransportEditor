@@ -6,10 +6,8 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
-import com.oskopek.transport.model.problem.Location;
+import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.problem.graph.RoadEdge;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.planners.AbstractPlanner;
@@ -18,7 +16,7 @@ import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.Value;
-import javaslang.collection.*;
+import javaslang.collection.Stream;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -31,12 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 // choose a random vehicle and package,
@@ -44,7 +36,7 @@ import java.util.stream.Collectors;
 // choose the ones whose target is on the path
 // if still not fully capacitated, choose the others in the
 // order of distance from the shortest path
-public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanner {
+public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -53,8 +45,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
     private Plan bestPlan;
     private int bestPlanScore;
 
-    public RandomizedRestartWithAroundPathPickupPlanner() {
-        setName(RandomizedRestartWithAroundPathPickupPlanner.class.getSimpleName());
+    public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner() {
+        setName(RandomizedRestartWithAroundPathPickupNoCoinTossPlanner.class.getSimpleName());
     }
 
     public ArrayTable<String, String, ShortestPath> getShortestPathMatrix() {
@@ -68,7 +60,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
     }
 
     void initialize(Problem problem) {
-        shortestPathMatrix = RandomizedRestartWithAroundPathPickupPlanner.computeAPSP(problem.getRoadGraph());
+        shortestPathMatrix = RandomizedRestartWithAroundPathPickupNoCoinTossPlanner.computeAPSP(problem.getRoadGraph());
         random = new Random(2017L);
     }
 
@@ -78,21 +70,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
         resetState();
         initialize(problem);
         logger.debug("Starting planning...");
-
-        List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
-        List<Location> locations = problem.getRoadGraph().getAllLocations().collect(Collectors.toList());
-        int i = 1;
-        float exploration = 0.2f; // best so far: 0.2 or 0.1
-        float multiplier = 0.00f; // best so far: 0
-        int everySteps = 50_000;
+        double temperature = 1d; // TODO test this out
         while (true) {
-            if (i % everySteps == 0) {
-                float delta = exploration;
-                exploration -= delta * multiplier;
-                logger.debug("Exploration increased to: {}", exploration);
-            }
-            i++;
-
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < bestPlanScore) {
                 Problem curProblem = current.getProblem();
@@ -104,17 +83,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
                 Package chosenPackage = unfinished.get(random.nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
                 while (true) {
-                    if (random.nextFloat() < exploration) {
-                        chosenVehicle = vehicles.get(random.nextInt(vehicles.size()));
-                    } else {
-                        Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
-                                chosenPackage.getLocation(), chosenPackage.getSize().getCost());
-                        if (maybeVehicle.isPresent()) {
-                            chosenVehicle = maybeVehicle.get();
-                        } else {
-                            continue;
-                        }
-                    }
+                    chosenVehicle = chooseFromDistanceDistribution(curProblem.getAllVehicles(), chosenPackage.getLocation(), chosenPackage.getSize().getCost(), temperature);
                     if (chosenVehicle.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()) {
                         break;
                     }
@@ -142,6 +111,32 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
                 bestPlan = new SequentialPlan(current.getAllActionsInList());
             }
         }
+    }
+
+    private Vehicle chooseFromDistanceDistribution(Collection<Vehicle> vehicles, Location to, int minFreeCapacity, double temperature) {
+        List<Tuple2<Double, Vehicle>> vehDistances = vehicles.stream()
+                .filter(v -> v.getCurCapacity().getCost() >= minFreeCapacity)
+                .sorted(Comparator.comparing(Vehicle::getName))
+                .map(v -> Tuple.of((double) shortestPathMatrix.get(v.getLocation().getName(), to.getName()).getDistance(), v))
+                .collect(Collectors.toList());
+        vehDistances = vehDistances.stream().map(t -> Tuple.of((1/(t._1 + 1)) * temperature, t._2))
+                .collect(Collectors.toList());
+        double sumOfDistances = vehDistances.stream().mapToDouble(t -> t._1).sum();
+        List<Double> vehProbs = vehDistances.stream()
+                .map(t -> t._1 / sumOfDistances).collect(Collectors.toList());
+        double intermediateSum = 0d;
+        for (int i = 0; i < vehProbs.size(); i++) {
+            Double elem = vehProbs.get(i);
+            intermediateSum += elem;
+            vehProbs.set(i, intermediateSum);
+        }
+
+        double rand = random.nextDouble();
+        int chosenIndex = 0;
+        while (chosenIndex < vehProbs.size() && rand > vehProbs.get(chosenIndex)) {
+            chosenIndex++;
+        }
+        return vehDistances.get(chosenIndex)._2;
     }
 
     private Optional<Vehicle> nearestVehicle(Collection<Vehicle> vehicles, Location curLocation, int minFreeCapacity) {
@@ -324,8 +319,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
 
 
     @Override
-    public RandomizedRestartWithAroundPathPickupPlanner copy() {
-        return new RandomizedRestartWithAroundPathPickupPlanner();
+    public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner copy() {
+        return new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
     }
 
     @Override
@@ -335,7 +330,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends AbstractPlanne
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof RandomizedRestartWithAroundPathPickupPlanner;
+        return obj instanceof RandomizedRestartWithAroundPathPickupNoCoinTossPlanner;
     }
 
     private static ArrayTable<String, String, ShortestPath> computeAPSP(final RoadGraph graph) {
