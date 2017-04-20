@@ -63,7 +63,7 @@ public class TemporalPlanIO implements DataIO<Plan> {
         }
         StringBuilder str = new StringBuilder();
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
-        actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
+        actionSet.stream().sorted().map(TemporalPlanIO::serializeTemporalPlanAction).forEach(str::append);
 
         Double totalTime = 0d;
         Optional<Double> last = actionSet.stream().map(TemporalPlanAction::getEndTimestamp).max(Double::compare);

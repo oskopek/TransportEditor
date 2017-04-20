@@ -62,7 +62,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             i++;
 
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
+            double makeSpan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList())).calculateMakespan();
+            while (!current.isGoalState() && makeSpan < getBestPlanScore()) { // TODO: too slow for seq
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(
                         PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
@@ -104,10 +105,10 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            // TODO: collapse plan?
-            if (current.getTotalTime() < getBestPlanScore()) {
-                savePlanIfBetter(current.getTotalTime(),
-                        planTransformation.apply(new SequentialPlan(current.getAllActionsInList())));
+            Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));  // TODO: too slow for seq?
+            double curScore = curPlan.calculateMakespan();
+            if (curScore < getBestPlanScore()) {
+                savePlanIfBetter(curScore, curPlan);
             }
         }
     }

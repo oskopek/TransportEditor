@@ -53,4 +53,8 @@ public interface Plan extends Iterable<TemporalPlanAction> {
     default Spliterator<TemporalPlanAction> spliterator() {
         return getTemporalPlanActions().spliterator();
     }
+
+    default Double calculateMakespan() {
+        return getTemporalPlanActions().stream().mapToDouble(TemporalPlanAction::getEndTimestamp).max().orElse(0);
+    }
 }
