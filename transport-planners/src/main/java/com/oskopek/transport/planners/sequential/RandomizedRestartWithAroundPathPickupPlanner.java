@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Chooses a package randomly and choose a nearby vehicle or a random one,
@@ -37,6 +38,11 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
+        return plan(domain, problem, Function.identity());
+    }
+
+    @Override
+    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
         logger.debug("Initializing planning...");
         resetState();
         initialize(problem);
@@ -99,10 +105,9 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             }
 
             // TODO: collapse plan?
-            if (getBestPlanScore() > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
-                setBestPlanScore(current.getTotalTime());
-                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
+            if (current.getTotalTime() < getBestPlanScore()) {
+                savePlanIfBetter(current.getTotalTime(),
+                        planTransformation.apply(new SequentialPlan(current.getAllActionsInList())));
             }
         }
     }

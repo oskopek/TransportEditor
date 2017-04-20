@@ -73,10 +73,10 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
     private ImmutablePlanState newStateRecursively(Domain domain, final ImmutablePlanState current,
             final float exploration) {
         if (current.isGoalState()) {
-            if (getBestPlanScore() > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
-                setBestPlanScore(current.getTotalTime());
-                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
+            double totalTime = current.getTotalTime();
+            if (getBestPlanScore() > totalTime) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
+                savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
             return current;
         }

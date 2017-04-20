@@ -10,8 +10,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * A planner implementation for simple Java-based planners. Handles listeners
@@ -23,6 +26,8 @@ import java.util.Optional;
  */
 public abstract class AbstractPlanner extends CancellableLogStreamable implements Planner {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private String name = "AbstractPlanner";
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
     private final BooleanProperty isPlanningProperty = new SimpleBooleanProperty(false);
@@ -32,7 +37,6 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
      */
     public AbstractPlanner() {
         // intentionally empty
-
     }
 
     /**
@@ -44,6 +48,10 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
      * @return the plan, or nothing
      */
     public abstract Optional<Plan> plan(Domain domain, Problem problem);
+
+    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
+        return plan(domain, problem).map(planTransformation);
+    }
 
     @Override
     public final Plan startAndWait(Domain domain, Problem problem) {

@@ -4,11 +4,7 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.persistence.DefaultProblemIO;
-import com.oskopek.transport.persistence.IOUtils;
-import com.oskopek.transport.persistence.SequentialPlanIO;
-import com.oskopek.transport.persistence.VariableDomainIO;
-import com.oskopek.transport.planners.sequential.*;
+import com.oskopek.transport.persistence.*;
 import com.oskopek.transport.planners.temporal.RRWASequentialScheduler;
 import javaslang.control.Try;
 import org.slf4j.Logger;
@@ -21,34 +17,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Main class for running sequential planners.
+ * Main class for running temporal planners.
  */
-public final class SequentialPlannerMain {
+public final class TemporalPlannerMain {
 
-//    private static final Planner planner = new FastDownwardExternalPlanner("--alias seq-sat-lama-2011 {0} {1}");
-//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1}"
-// + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
-//    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
-//    private static final Planner planner = new ForwardAstarPlanner();
-//    private static final Planner planner = new RandomizedRestartPlanner();
-//    private static final Planner planner = new RandomizedRestartWithOnPathPickupPlanner();
-//    private static final Planner planner = new RandomizedRestartWithOnPathPickup2Planner();
-    private static final Planner planner = new RandomizedRestartWithAroundPathPickupPlanner();
-//    private static final Planner planner = new BacktrackRestartWithAroundPathPickupPlanner();
-//    private static final Planner planner = new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
+    private static final Planner planner = new RRWASequentialScheduler();
 
-    private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
+    private static final Logger logger = LoggerFactory.getLogger(TemporalPlannerMain.class);
 
     /**
      * Private empty constructor.
      */
-    private SequentialPlannerMain() {
+    private TemporalPlannerMain() {
         // intentionally empty
     }
 
     /**
      * The main method. Takes two args, the domain and the problem file in PDDL. The domain
-     * has to be a sequential transport domain.
+     * has to be a temporal transport domain.
      *
      * @param args the command-line arguments
      * @throws IOException if an error during loading the problem or saving the plan occurs
@@ -77,7 +63,7 @@ public final class SequentialPlannerMain {
         Plan plan = planner.startAndWait(domain, problem);
         if (plan != null) {
             try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("out.val"))) {
-                writer.write(new SequentialPlanIO(domain, problem).serialize(plan));
+                writer.write(new TemporalPlanIO(domain, problem).serialize(plan));
             }
         } else {
             logger.debug("Planner returned null plan.");
