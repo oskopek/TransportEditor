@@ -76,7 +76,8 @@ public class BenchmarkRun {
             ScoreFunction scoreFunction, Results runResults) {
         this.domain = domain;
         this.problem = problem;
-        this.planner = planner;
+        this.planner = planner.copy();
+        this.planner.setName(planner.getName());
         this.bestScore = bestScore;
         this.timeout = timeout;
         this.scoreFunction = scoreFunction;
