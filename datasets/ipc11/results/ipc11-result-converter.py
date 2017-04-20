@@ -4,7 +4,8 @@ import csv
 import json
 
 statusTable = {
-        1: 'VALID',
+        2: 'VALID',
+        1: 'INVALID',
         0: 'UNSOLVED',
     }
 
@@ -45,55 +46,62 @@ def read_csv(inpfile):
                 continue
             row = [element for element in row if element]
             rows.append(row)
-    return rows[:-1]
+    return rows
 
 def to_json(domain, finished, score):
-    planners = finished[0]
-    if not score:
-        planners = finished[0][:-1]
-    problems = [row[0] for row in finished[1:]]
+    problems = set()
+    planners = set()
 
     finished_dict = {}
     best_score = {}
     score_dict = {}
+    time_dict = {}
     for row in finished[1:]:
-        problem = row[0]
-        best_score[problem] = None
-        finished_dict[problem] = {}
-        score_dict[problem] = {}
-        row_end = len(row)
-        if not score:
-            row_end -= 1
-            best_score[problem] = int(row[-1])
-        for i in range(1, row_end):
-            planner = planners[i-1]
-            val = int(str(row[i])) # 0 or 1
-            finished_dict[problem][planner] = val
-            score_dict[problem][planner] = None
-            if not score:
-                score_dict[problem][planner] = val
+        planner = row[0]
+        planners.add(planner)
+        problem = int(row[2])
+        problems.add(problem)
+        finished_status = int(row[3]) + int(row[4])
 
+        best_score[problem] = None
+        if not problem in finished_dict:
+            finished_dict[problem] = {}
+        finished_dict[problem][planner] = finished_status
+        score_dict[problem] = {}
+        time_dict[problem] = {}
     if score:
         for row in score[1:]:
-            problem = row[0]
-            best_score[problem] = int(row[-1])
-            for i in range(1, len(row)-1):
-                planner = planners[i-1]
-                score_dict[problem][planner] = float(row[i])
+            planner = row[0]
+            problem = int(row[2])
+            if len(row) == 5:
+                timesols = [int(s)*1000 for s in row[3].split(",")]
+                values = [float(v) for v in row[4].split(",")]
+                max_val = min(list(enumerate(values)), key=lambda elem: elem[1])
+                max_time = timesols[max_val[0]]
+                score_dict[problem][planner] = max_val[1]
+                time_dict[problem][planner] = max_time
+
+    for problem in problems:
+        best_score[problem] = min([score_dict[problem][planner] for planner in score_dict[problem]])
 
     rows = []
     for problem in problems:
         for planner in planners:
+            if planner in ["acoplan", "acoplan2", "cpt4", "lprpgp", "madagascar", "madagascar-p", "popf2", "satplanlm-c", "sharaabi"]: # skip irrelevant planners
+                continue
             best = best_score[problem]
             status = statusTable[finished_dict[problem][planner]]
-            quality = score_dict[problem][planner]
-            if quality >= 0.01:
-                cur_score = int(best/(quality)) # quality = best/score => score = best/quality
-            else:
+            if planner not in score_dict[problem]:
                 cur_score = None
+                quality = 0.0
+                time = 0
+            else:
+                cur_score = score_dict[problem][planner]
+                quality = best/cur_score
+                time = time_dict[problem][planner]
             jsonrow = {
                 "domain": domain,
-                "problem": problem,
+                "problem": 'p{:02d}'.format(problem + 1),
                 "planner": planner,
                 "temporalPlanActions": [],
                 "actions": [],
@@ -102,8 +110,8 @@ def to_json(domain, finished, score):
                     "bestScore": best,
                     "exitStatus": status,
                     "startTimeMs": 0,
-                    "endTimeMs": 0,
-                    "durationMs": -1,
+                    "endTimeMs": time,
+                    "durationMs": -1 if time == 0 else time,
                     "quality": quality
                     }
                 }
@@ -112,7 +120,7 @@ def to_json(domain, finished, score):
 
 if __name__ == '__main__':
 
-    to_filter = {'transport': {'seq-sat': True, 'seq-opt': False, 'seq-mco': False}}
+    to_filter = {'transport': {'seq-sat': True}} #, 'seq-opt': True, 'seq-mco': True}}
 
     inpfolder = 'csv'
     jsonfile_prefix = 'transport-strips-'
