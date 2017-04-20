@@ -35,4 +35,26 @@ Fran Lattanzio
 
 License: MIT
 
-Files in: `transport-thirdparty/src/main/java/org/teneighty/org.teneighty.heap/`
+Files in: `transport-thirdparty/src/main/java/org/teneighty/heap/`
+
+== GraphStream Algorithm TopologicalSort
+
+The implementations is a forked and updated version of the GraphStream GitHub repository release at: https://github.com/graphstream/gs-algo
+
+Original authors:
+The GraphStream team:
+
+- Julien Baudry <julien.baudry@graphstream-project.org>
+- Antoine Dutot <antoine.dutot@graphstream-project.org>
+- Yoann Pigné <yoann.pigne@graphstream-project.org>
+- Guilhelm Savin <guilhelm.savin@graphstream-project.org>
+
+
+Contributors:
+
+- Frédéric Guinand <frederic.guinand@univ-lehavre.fr>
+- Guillaume-Jean Herbiet <guillaume-jean@herbiet.net>
+
+License: LGPL
+
+Files in: `transport-thirdparty/src/main/java/org/graphstream/algorithm/`
