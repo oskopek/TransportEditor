@@ -84,10 +84,10 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRP": {
-      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPathPickupNoCoinTossPlanner"
+    "RRWA": {
+      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPathPickupPlanner"
     }
   },
   "threadCount": 8,
-  "timeout": 1800
+  "timeout": 600
 }
