@@ -32,9 +32,9 @@ public final class SequentialPlannerMain {
 //    private static final Planner planner = new RandomizedRestartPlanner();
 //    private static final Planner planner = new RandomizedRestartWithOnPathPickupPlanner();
 //    private static final Planner planner = new RandomizedRestartWithOnPathPickup2Planner();
-//    private static final Planner planner = new RandomizedRestartWithAroundPathPickupPlanner();
+    private static final Planner planner = new RandomizedRestartWithAroundPathPickupPlanner();
 //    private static final Planner planner = new BacktrackRestartWithAroundPathPickupPlanner();
-    private static final Planner planner = new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
+//    private static final Planner planner = new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
 
     private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
 

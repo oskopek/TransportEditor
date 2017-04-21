@@ -388,7 +388,7 @@ public final class PlannerUtils {
      * @param targetName the target location name
      * @return the shortest path length
      */
-    private static double getLengthToCorrect(APSP.APSPInfo current, String targetName) {
+    public static double getLengthToCorrect(APSP.APSPInfo current, String targetName) {
         if (targetName.equals(current.getNodeId())) { // fix weird behavior of APSP
             return 0d;
         } else {
