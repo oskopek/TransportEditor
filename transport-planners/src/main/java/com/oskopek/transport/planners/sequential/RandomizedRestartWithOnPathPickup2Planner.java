@@ -63,7 +63,7 @@ public class RandomizedRestartWithOnPathPickup2Planner extends RandomizedRestart
                 }
 
                 List<Action> newActions = findPartialPlan(domain, current, chosenVehicle.getName(), chosenPackage,
-                        unfinished);
+                        unfinished, false);
                 current = Stream.ofAll(newActions).foldLeft(Optional.of(current),
                         (state, action) -> state.flatMap(state2 -> state2.apply(action)))
                         .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to current state."));

@@ -70,7 +70,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
     }
 
     protected List<Action> findPartialPlan(Domain domain, ImmutablePlanState current, String chosenVehicleName,
-            final Package chosenPackage, List<Package> unfinished) {
+            final Package chosenPackage, List<Package> unfinished, boolean weighPackagesByDistance) {
         Map<Location, Set<Package>> packageLocMap = new HashMap<>();
         for (Package pkg : unfinished) {
             packageLocMap.computeIfAbsent(pkg.getLocation(), l -> new HashSet<>()).add(pkg);
@@ -102,14 +102,36 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
         // list should have at least one entry now
         final int curCapacity = chosenVehicle.getCurCapacity().getCost();
         List<Package> chosenPackages;
-        if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
-            chosenPackages = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
-                    .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
-                    .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
-                    .minBy(t -> Tuple.of(t._1, t._2)) // TODO: T2 not last index, but length of indexes + maximize?
-                    .map(t -> t._3.toJavaList()).getOrElse((List<Package>) null);
+        Map<Package, Location> targetMap;
+        if (weighPackagesByDistance) {
+            int capacityLeft;
+            if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
+                Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
+                        .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
+                        .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
+                        .minBy(t -> Tuple.of(t._1, t._2)).get(); // TODO: T2 not last index, but length of indexes + maximize?
+                capacityLeft = pkgTuples._1;
+                chosenPackages = pkgTuples._3.toJavaList();
+            } else {
+                Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples
+                        = Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(completelyOnPath),
+                        completelyOnPath.toStream().map(t -> locationsOnPath.lastIndexOf(t._3.getTarget())).max().getOrElse(Integer.MAX_VALUE),
+                        completelyOnPath.map(t -> t._3).toList());
+                capacityLeft = pkgTuples._1;
+                chosenPackages = pkgTuples._3.toJavaList();
+            }
+            targetMap = calculateTargetMap(capacityLeft, chosenPackages, packagesOnPath, basicPath);
         } else {
-            chosenPackages = completelyOnPath.map(t -> t._3).toJavaList();
+            if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
+                chosenPackages = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
+                        .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
+                        .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
+                        .minBy(t -> Tuple.of(t._1, t._2)) // TODO: T2 not last index, but length of indexes + maximize?
+                        .map(t -> t._3.toJavaList()).getOrElse((List<Package>) null);
+            } else {
+                chosenPackages = completelyOnPath.map(t -> t._3).toJavaList();
+            }
+            targetMap = Collections.emptyMap();
         }
 
         if (chosenPackages == null) {
@@ -117,63 +139,11 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
         }
 
         List<RoadEdge> path = basicPath;
-        return PlannerUtils.buildPlan(domain, path, chosenVehicle, chosenPackages, Collections.emptyMap());
+        return PlannerUtils.buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
     }
 
-    protected List<Action> findPartialPlan2(Domain domain, ImmutablePlanState current, String chosenVehicleName,
-            final Package chosenPackage, List<Package> unfinished) {
-        Map<Location, Set<Package>> packageLocMap = new HashMap<>();
-        for (Package pkg : unfinished) {
-            packageLocMap.computeIfAbsent(pkg.getLocation(), l -> new HashSet<>()).add(pkg);
-        }
-
-        final Vehicle chosenVehicle = current.getProblem().getVehicle(chosenVehicleName);
-        Location packageLoc = chosenPackage.getLocation();
-        List<RoadEdge> basicPath = new ArrayList<>();
-        basicPath.addAll(getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
-        basicPath.addAll(getShortestPathMatrix().get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
-        if (basicPath.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<Location> locationsOnPath = basicPath.stream().map(RoadEdge::getFrom).collect(Collectors.toList());
-        locationsOnPath.add(basicPath.get(basicPath.size() - 1).getTo());
-
-        Set<Package> packagesOnPath = new HashSet<>();
-        for (RoadEdge edge : basicPath) {
-            Set<Package> atFrom = packageLocMap.get(edge.getFrom());
-            if (atFrom != null) {
-                packagesOnPath.addAll(atFrom);
-            }
-        }
-
-        javaslang.collection.List<Tuple3<Integer, Integer, Package>> completelyOnPath = Stream.ofAll(packagesOnPath)
-                .map(p -> Tuple.of(locationsOnPath.indexOf(p.getLocation()), locationsOnPath.lastIndexOf(p.getTarget()), p))
-                .filter(t -> t._1 >= 0 && t._2 >= 0 && t._1 <= t._2).toList();
-        // only packages with pick up and drop on path and with pick up before drop
-        // list should have at least one entry now
-        final int curCapacity = chosenVehicle.getCurCapacity().getCost();
-        List<Package> chosenPackages;
-        int capacityLeft;
-        if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
-            Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
-                    .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
-                    .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
-                    .minBy(t -> Tuple.of(t._1, t._2)).get(); // TODO: T2 not last index, but length of indexes + maximize?
-            capacityLeft = pkgTuples._1;
-            chosenPackages = pkgTuples._3.toJavaList();
-        } else {
-            Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples
-                    = Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(completelyOnPath),
-                    completelyOnPath.toStream().map(t -> locationsOnPath.lastIndexOf(t._3.getTarget())).max().getOrElse(Integer.MAX_VALUE),
-                    completelyOnPath.map(t -> t._3).toList());
-            capacityLeft = pkgTuples._1;
-            chosenPackages = pkgTuples._3.toJavaList();
-        }
-
-        if (chosenPackages == null) {
-            throw new IllegalStateException("Should not occur.");
-        }
-
+    private Map<Package, Location> calculateTargetMap(int capacityLeft, List<Package> chosenPackages,
+            Set<Package> packagesOnPath, List<RoadEdge> basicPath) {
         Map<Package, Location> targetMap = new HashMap<>(chosenPackages.size() + capacityLeft);
         for (Package pkg : chosenPackages) {
             targetMap.put(pkg, pkg.getTarget());
@@ -219,9 +189,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
                 targetMap.put(tuple._3, tuple._2);
             }
         }
-
-        List<RoadEdge> path = basicPath;
-        return PlannerUtils.buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
+        return targetMap;
     }
 
     @Override
