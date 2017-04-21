@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class DefaultPredicate implements Predicate {
 
-    private static final Logger logger = LoggerFactory.getLogger(Predicate.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultPredicate.class);
 
     @Override
     public boolean isValid(Problem state, Action action) {

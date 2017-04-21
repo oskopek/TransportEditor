@@ -108,7 +108,7 @@ import java.util.NoSuchElementException;
  * @author Fran Lattanzio
  * @version $Revision: 14 $ $Date: 2009-11-21 13:24:37 -0500 (Sat, 21 Nov 2009) $
  */
-public class BinaryHeap<TKey, TValue>
+public final class BinaryHeap<TKey, TValue>
         extends AbstractHeap<TKey, TValue>
         implements Heap<TKey, TValue>, Iterable<Heap.Entry<TKey, TValue>>,
         Serializable, Cloneable {
@@ -575,7 +575,7 @@ public class BinaryHeap<TKey, TValue>
     private void ensureCapacityUp() {
         int new_capacity = this.getCapacity();
 
-        if (this.getSize() >= (this.getCapacity() - 1)) {
+        if (this.size >= (this.getCapacity() - 1)) {
             // Double the space.
             new_capacity = this.getCapacity() * 2;
         }
@@ -590,10 +590,10 @@ public class BinaryHeap<TKey, TValue>
     private void ensureCapacityDown() {
         int new_capacity = this.getCapacity();
 
-        if (this.getSize() == 0) {
+        if (this.size == 0) {
             // Special case.
             new_capacity = this.rec_capacity;
-        } else if (this.getSize() < (this.getCapacity() / 2)) {
+        } else if (this.size < (this.getCapacity() / 2)) {
             // Half the current capacity.
             new_capacity = this.getCapacity() / 2;
 
@@ -711,7 +711,7 @@ public class BinaryHeap<TKey, TValue>
 
             // Clone the stupid nodes.
             BinaryHeapEntry<TKey, TValue> tmp = null;
-            for (int index = 1; index <= this.getSize(); index++) {
+            for (int index = 1; index <= this.size; index++) {
                 tmp = this.heap.get(index);
                 clone.heap.set(index, (BinaryHeapEntry<TKey, TValue>) tmp
                         .clone());
@@ -749,7 +749,7 @@ public class BinaryHeap<TKey, TValue>
 
         // Write key/value pairs.
         BinaryHeapEntry<TKey, TValue> tmp = null;
-        for (int index = 1; index <= this.getSize(); index++) {
+        for (int index = 1; index <= this.size; index++) {
             tmp = this.heap.get(index);
             out.writeObject(tmp.getKey());
             out.writeObject(tmp.getValue());

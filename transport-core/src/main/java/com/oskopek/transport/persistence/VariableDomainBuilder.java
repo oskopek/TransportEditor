@@ -56,18 +56,10 @@ public final class VariableDomainBuilder {
      */
     private String calculateDomainFilename() {
         char separator = '/';
-        StringBuilder builder = new StringBuilder("domain-variants").append(separator);
-        builder.append(domainType.get().toString().toLowerCase());
-        builder.append(separator).append("domain").append(separator).append("domain-");
 
-        builder.append(isCapacity() ? "" : "No").append("Cap");
-        builder.append("-");
-        builder.append(isFuel() ? "" : "No").append("Fuel");
-        builder.append("-");
-        builder.append(isNumeric() ? "" : "No").append("Num");
-
-        builder.append(".pddl");
-        return builder.toString();
+        return "domain-variants" + separator + domainType.get().toString().toLowerCase() + separator
+                + "domain" + separator + "domain-" + (isCapacity() ? "" : "No") + "Cap" + '-' + (isFuel() ? "" : "No")
+                + "Fuel" + '-' + (isNumeric() ? "" : "No") + "Num" + ".pddl";
     }
 
     /**

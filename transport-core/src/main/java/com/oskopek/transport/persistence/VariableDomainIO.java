@@ -150,7 +150,7 @@ public class VariableDomainIO implements DataIO<Domain> {
      * @return set of PDDL labels for the domain
      */
     private static Set<PddlLabel> parsePddlLabels(String contents) {
-        Set<PddlLabel> pddlLabels = new HashSet<>();
+        Set<PddlLabel> pddlLabels = EnumSet.noneOf(PddlLabel.class);
         if (contents.contains(":action-costs")) {
             pddlLabels.add(PddlLabel.ActionCost);
         }
@@ -622,8 +622,8 @@ public class VariableDomainIO implements DataIO<Domain> {
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getPreconditions()).append(getEffects()).append(getCost()).append(
-                    getDuration()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(preconditions).append(effects).append(cost).append(
+                    duration).toHashCode();
         }
 
         @Override
@@ -635,8 +635,8 @@ public class VariableDomainIO implements DataIO<Domain> {
                 return false;
             }
             PartialBuilder that = (PartialBuilder) o;
-            return new EqualsBuilder().append(getPreconditions(), that.getPreconditions()).append(getEffects(),
-                    that.getEffects()).append(getCost(), that.getCost()).append(getDuration(), that.getDuration())
+            return new EqualsBuilder().append(preconditions, that.preconditions).append(effects,
+                    that.effects).append(cost, that.cost).append(duration, that.duration)
                     .isEquals();
         }
 

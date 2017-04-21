@@ -76,14 +76,14 @@ public final class RoadEdge {
             return false;
         }
         RoadEdge roadEdge = (RoadEdge) o;
-        return new EqualsBuilder().append(getRoad(), roadEdge.getRoad()).append(getFrom(), roadEdge.getFrom())
-                .append(getTo(), roadEdge.getTo()).isEquals();
+        return new EqualsBuilder().append(road, roadEdge.road).append(from, roadEdge.from)
+                .append(to, roadEdge.to).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getRoad()).append(getFrom())
-                .append(getTo()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(road).append(from)
+                .append(to).toHashCode();
     }
 
     @Override

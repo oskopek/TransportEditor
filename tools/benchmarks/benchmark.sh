@@ -22,7 +22,7 @@ resultdir="$origdir/results/$configName/$starttime"
 mkdir -p "$resultdir"
 logdir="$resultdir"
 
-eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
+eval "$JAVA_HOME/bin/java -Xmx10g -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $benchmarker $config $resultdir"
 endtime="`date -u '+%Y%m%d-%H%M%S'`"
 
 echo "End time UTC: $endtime"

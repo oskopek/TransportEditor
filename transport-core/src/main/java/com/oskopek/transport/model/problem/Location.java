@@ -57,7 +57,7 @@ public class Location extends DefaultActionObject implements Locatable {
 
     @Override
     public Location updateName(String newName) {
-        return new Location(newName, getxCoordinate(), getyCoordinate(), getPetrolStation());
+        return new Location(newName, getxCoordinate(), getyCoordinate(), petrolStation);
     }
 
     /**
@@ -115,7 +115,7 @@ public class Location extends DefaultActionObject implements Locatable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getName())
-                .append(getPetrolStation()).toHashCode();
+                .append(petrolStation).toHashCode();
     }
 
     @Override
@@ -128,11 +128,11 @@ public class Location extends DefaultActionObject implements Locatable {
         }
         Location location = (Location) o;
         return new EqualsBuilder().appendSuper(super.equals(o))
-                .append(getPetrolStation(), location.getPetrolStation()).isEquals();
+                .append(petrolStation, location.petrolStation).isEquals();
     }
 
     @Override
     public String toString() {
-        return "Loc[" + getName() + "]";
+        return "Loc[" + getName() + ']';
     }
 }

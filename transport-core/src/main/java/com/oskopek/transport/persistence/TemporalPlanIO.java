@@ -44,14 +44,14 @@ public class TemporalPlanIO implements DataIO<Plan> {
      * @return the serialized action in a single line
      */
     private static String serializeTemporalPlanAction(TemporalPlanAction temporalPlanAction) {
-        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(")").toString();
+        String action = SequentialPlanIO.serializeActionSimple(temporalPlanAction.getAction()).append(')').toString();
         StringBuilder str = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00000");
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(symbols);
         Double duration = temporalPlanAction.getEndTimestamp() - temporalPlanAction.getStartTimestamp();
-        str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(" ").append(action).append(
+        str.append(df.format(temporalPlanAction.getStartTimestamp())).append(':').append(' ').append(action).append(
                 " [").append(df.format(duration)).append("]\n");
         return str.toString();
     }
@@ -92,10 +92,6 @@ public class TemporalPlanIO implements DataIO<Plan> {
         }
         for (PlanParser.TemporalActionContext action : tempContext.temporalAction()) {
             double duration = Double.parseDouble(action.duration().NUMBER().getText());
-            if ((duration != Math.floor(duration)) || Double.isInfinite(duration)) {
-                throw new IllegalArgumentException("We do not support non-integer durations."
-                        + " There's no need for them in most Transport domains.");
-            }
             double time = Double.parseDouble(action.time().NUMBER().getText());
             String actionString = String.format("(%s)",
                     String.join(" ", action.sequentialAction().action().NAME().getText(),

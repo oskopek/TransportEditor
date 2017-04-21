@@ -84,7 +84,7 @@ public class VisualProblem implements Problem {
         if (aPackage != null) {
             return aPackage;
         }
-        Location location = getRoadGraph().getLocation(name);
+        Location location = roadGraph.getLocation(name);
         if (location != null) {
             return location;
         }
@@ -97,7 +97,7 @@ public class VisualProblem implements Problem {
         if (locatable != null) {
             return locatable;
         }
-        Road aRoad = getRoadGraph().getRoad(name);
+        Road aRoad = roadGraph.getRoad(name);
         if (aRoad != null) {
             return aRoad;
         }
@@ -126,9 +126,9 @@ public class VisualProblem implements Problem {
 
     @Override
     public VisualProblem putVehicle(String name, Vehicle vehicle) {
-        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(vehicleMap);
         newVehicleMap.put(name, vehicle);
-        return new VisualProblem(getName(), getVisualRoadGraph(), newVehicleMap, getPackageMap());
+        return new VisualProblem(this.name, roadGraph, newVehicleMap, packageMap);
     }
 
     /**
@@ -139,16 +139,16 @@ public class VisualProblem implements Problem {
      * @see #putVehicle(String, Vehicle)
      */
     public VisualProblem putAllVehicles(Stream<Vehicle> vehicles) {
-        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(vehicleMap);
         vehicles.forEach(v -> newVehicleMap.put(v.getName(), v));
-        return new VisualProblem(getName(), getVisualRoadGraph(), newVehicleMap, getPackageMap());
+        return new VisualProblem(name, roadGraph, newVehicleMap, packageMap);
     }
 
     @Override
     public VisualProblem putPackage(String name, Package pkg) {
-        Map<String, Package> newPackageMap = new HashMap<>(getPackageMap());
+        Map<String, Package> newPackageMap = new HashMap<>(packageMap);
         newPackageMap.put(name, pkg);
-        return new VisualProblem(getName(), getVisualRoadGraph(), getVehicleMap(), newPackageMap);
+        return new VisualProblem(this.name, roadGraph, vehicleMap, newPackageMap);
     }
 
     @Override
@@ -162,39 +162,39 @@ public class VisualProblem implements Problem {
 
     @Override
     public VisualProblem removeVehicle(String name) {
-        Map<String, Vehicle> newVehicleMap = new HashMap<>(getVehicleMap());
+        Map<String, Vehicle> newVehicleMap = new HashMap<>(vehicleMap);
         newVehicleMap.remove(name);
-        return new VisualProblem(getName(), getVisualRoadGraph(), newVehicleMap, getPackageMap());
+        return new VisualProblem(this.name, roadGraph, newVehicleMap, packageMap);
     }
 
     @Override
     public VisualProblem removePackage(String name) {
-        Map<String, Package> newPackageMap = new HashMap<>(getPackageMap());
+        Map<String, Package> newPackageMap = new HashMap<>(packageMap);
         newPackageMap.remove(name);
-        return new VisualProblem(getName(), getVisualRoadGraph(), getVehicleMap(), newPackageMap);
+        return new VisualProblem(this.name, roadGraph, vehicleMap, newPackageMap);
     }
 
     @Override
     public VisualProblem removeLocation(String name) { // TODO: Should this be immutable too? Yes!
-        getRoadGraph().removeLocation(getRoadGraph().getLocation(name));
+        roadGraph.removeLocation(roadGraph.getLocation(name));
         return this;
     }
 
     @Override
     public VisualProblem putLocation(String name, Location location) { // TODO: Should this be immutable too? Yes!
-        getRoadGraph().moveLocation(name, location.getxCoordinate(), location.getyCoordinate());
-        getRoadGraph().setPetrolStation(name, location.getPetrolStation());
+        roadGraph.moveLocation(name, location.getxCoordinate(), location.getyCoordinate());
+        roadGraph.setPetrolStation(name, location.getPetrolStation());
         return this;
     }
 
     @Override
     public VisualProblem putName(String newName) {
-        return new VisualProblem(newName, getVisualRoadGraph(), getVehicleMap(), getPackageMap());
+        return new VisualProblem(newName, roadGraph, vehicleMap, packageMap);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getRoadGraph()).append(vehicleMap).append(
+        return new HashCodeBuilder(17, 37).append(name).append(roadGraph).append(vehicleMap).append(
                 packageMap).toHashCode();
     }
 
@@ -207,7 +207,7 @@ public class VisualProblem implements Problem {
             return false;
         }
         VisualProblem that = (VisualProblem) o;
-        return new EqualsBuilder().append(getName(), that.getName()).append(getRoadGraph(), that.getRoadGraph()).append(
-                getVehicleMap(), that.getVehicleMap()).append(getPackageMap(), that.getPackageMap()).isEquals();
+        return new EqualsBuilder().append(name, that.name).append(roadGraph, that.roadGraph).append(
+                vehicleMap, that.vehicleMap).append(packageMap, that.packageMap).isEquals();
     }
 }

@@ -54,7 +54,7 @@ public class DefaultRoad extends DefaultActionObject implements Road {
 
     @Override
     public DefaultRoad updateName(String newName) {
-        return new DefaultRoad(newName, getLength());
+        return new DefaultRoad(newName, length);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class DefaultRoad extends DefaultActionObject implements Road {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
-                .append(getLength())
+                .append(length)
                 .toHashCode();
     }
 
@@ -89,12 +89,12 @@ public class DefaultRoad extends DefaultActionObject implements Road {
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(getLength(), that.getLength())
+                .append(length, that.length)
                 .isEquals();
     }
 
     @Override
     public String toString() {
-        return "Road[" + getName() + ": " + getLength() + ']';
+        return "Road[" + getName() + ": " + length + ']';
     }
 }

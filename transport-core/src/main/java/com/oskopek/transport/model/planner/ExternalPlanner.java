@@ -6,7 +6,6 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.TemporalPlanIO;
-import com.oskopek.transport.tools.executables.CancellableLogStreamable;
 import com.oskopek.transport.tools.executables.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -69,7 +68,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      */
     public ExternalPlanner(String executableWithParametersString) {
         this(executableWithParametersString.split(" ")[0],
-                executableWithParametersString.substring(executableWithParametersString.indexOf(" ") + 1));
+                executableWithParametersString.substring(executableWithParametersString.indexOf(' ') + 1));
     }
 
     /**
@@ -81,8 +80,8 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @param executable an executable with correct parameter templates
      */
     public ExternalPlanner(ExecutableWithParameters executable) {
-        this(executable, "");
-        setName(getClass().getSimpleName() + '[' + executable.getExecutable() + ' ' + executable.getParameters() + ']');
+        this(executable, ExternalPlanner.class.getSimpleName() + '[' + executable.getExecutable() + ' '
+                + executable.getParameters() + ']');
     }
 
     /**
@@ -109,7 +108,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
      * @return a new immutable external planner with correctly initialized transient fields
      */
     protected Object readResolve() {
-        return new ExternalPlanner(getExecutableWithParameters());
+        return new ExternalPlanner(executable);
     }
 
     /**
@@ -170,7 +169,7 @@ public class ExternalPlanner extends CancellableLogStreamable implements Planner
             int retVal = Try.of(retValFuture::get)
                     .getOrElseThrow(e -> new IllegalStateException("Failed waiting for planner process.", e));
             if (retVal != 0) {
-                logger.warn("Planning failed: return value " + retVal + ".");
+                logger.warn("Planning failed: return value {}.", retVal);
                 bestPlan.setValue(null);
             }
 

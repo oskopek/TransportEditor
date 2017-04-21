@@ -1,6 +1,5 @@
 package com.oskopek.transport.model.domain.action;
 
-import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.predicates.Predicate;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.PlaceholderActionObject;
@@ -30,12 +29,12 @@ public class Refuel extends DefaultAction<Vehicle, PlaceholderActionObject> {
     }
 
     @Override
-    public Problem applyPreconditions(Domain domain, Problem problemState) {
+    public Problem applyPreconditions(Problem problemState) {
         return problemState;
     }
 
     @Override
-    public Problem applyEffects(Domain domain, Problem problemState) {
+    public Problem applyEffects(Problem problemState) {
         String name = this.getWho().getName();
         Vehicle vehicle = problemState.getVehicle(name);
         return problemState.putVehicle(name, vehicle.updateCurFuelCapacity(vehicle.getMaxFuelCapacity()));

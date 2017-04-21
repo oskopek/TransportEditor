@@ -56,7 +56,7 @@ public abstract class AbstractLogStreamable implements LogStreamable {
      * @param message the message to delegate
      */
     protected void log(String message) {
-        forEach(l -> l.accept(message + "\n"));
+        forEach(l -> l.accept(message + '\n'));
     }
 
     @Override

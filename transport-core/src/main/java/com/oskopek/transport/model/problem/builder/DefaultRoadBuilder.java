@@ -40,12 +40,12 @@ public class DefaultRoadBuilder<Road_ extends DefaultRoad> extends DefaultAction
 
     @Override
     public Road_ build() {
-        return (Road_) new DefaultRoad(getName(), getLength());
+        return (Road_) new DefaultRoad(getName(), length);
     }
 
     @Override
     public void from(Road_ instance) {
         super.from(instance);
-        setLength(instance.getLength());
+        this.length = instance.getLength();
     }
 }

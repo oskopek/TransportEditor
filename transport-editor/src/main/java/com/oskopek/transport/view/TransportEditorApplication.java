@@ -47,8 +47,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class TransportEditorApplication extends Application {
 
     private static AtomicReference<TransportEditorApplication> atomicThis = new AtomicReference<>(null);
-    private final String logoResource = "logo_64x64.png";
-    private final String logoResourceLarge = "logo_640x640.png";
+    private static final String logoResource = "logo_64x64.png";
+    private static final String logoResourceLarge = "logo_640x640.png";
     private final transient Logger logger = LoggerFactory.getLogger(getClass());
     private final ObjectProperty<PlanningSession> planningSession = new SimpleObjectProperty<>();
     private transient Stage primaryStage;
@@ -178,7 +178,7 @@ public final class TransportEditorApplication extends Application {
      * @return the top left corner point
      */
     private Point2D getTopLeft() {
-        return new Point2D(getPrimaryStage().getX(), getPrimaryStage().getY());
+        return new Point2D(primaryStage.getX(), primaryStage.getY());
     }
 
     /**
@@ -187,7 +187,7 @@ public final class TransportEditorApplication extends Application {
      * @return the bottom right corner point
      */
     private Point2D getBottomRight() {
-        return new Point2D(getPrimaryStage().getWidth(), getPrimaryStage().getHeight());
+        return new Point2D(primaryStage.getWidth(), primaryStage.getHeight());
     }
 
     /**

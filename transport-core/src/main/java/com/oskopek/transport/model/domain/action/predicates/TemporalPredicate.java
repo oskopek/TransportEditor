@@ -43,6 +43,6 @@ public class TemporalPredicate extends PredicateWrapper {
 
     @Override
     public String getPredicateName() {
-        return getInternal().getClass().getSimpleName() + "[" + quantifier.name() + "]";
+        return getInternal().getClass().getSimpleName() + '[' + quantifier.name() + ']';
     }
 }

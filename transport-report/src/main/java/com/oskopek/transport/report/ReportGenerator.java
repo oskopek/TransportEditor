@@ -119,7 +119,7 @@ public class ReportGenerator {
         reporters.stream().map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results.getRuns())))
                 .forEach(tuple -> {
                     String reportName = tuple._1;
-                    logger.info("Generating report: " + reportName);
+                    logger.info("Generating report: {}", reportName);
                     Path reportFile = reportDir.resolve(reportName);
                     Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2))
                             .onFailure(e -> new IllegalStateException("Failed to persist report: " + reportFile, e));
@@ -130,7 +130,7 @@ public class ReportGenerator {
                     .map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results.getRunTable())))
                     .forEach(tuple -> {
                         String reportName = tuple._1;
-                        logger.info("Generating run table report: " + reportName);
+                        logger.info("Generating run table report: {}", reportName);
                         Path reportFile = reportDir.resolve(reportName);
                         Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2)).onFailure(e ->
                                 new IllegalStateException("Failed to persist report: " + reportFile, e));

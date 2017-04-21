@@ -93,8 +93,8 @@ public abstract class DefaultAction<Who extends Locatable, What extends ActionOb
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getName()).append(getWho()).append(getWhere()).append(getWhat())
-                .append(getPreconditions()).append(getEffects()).append(getCost()).append(getDuration()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(name).append(who).append(where).append(what)
+                .append(preconditions).append(effects).append(cost).append(duration).toHashCode();
     }
 
     @Override
@@ -106,16 +106,16 @@ public abstract class DefaultAction<Who extends Locatable, What extends ActionOb
             return false;
         }
         DefaultAction<?, ?> that = (DefaultAction<?, ?>) o;
-        return new EqualsBuilder().append(getName(), that.getName()).append(getWho(), that.getWho()).append(getWhere(),
-                that.getWhere()).append(getWhat(), that.getWhat()).append(getPreconditions(), that.getPreconditions())
-                .append(getEffects(), that.getEffects()).append(getCost(), that.getCost()).append(getDuration(),
-                        that.getDuration()).isEquals();
+        return new EqualsBuilder().append(name, that.name).append(who, that.who).append(where,
+                that.where).append(what, that.what).append(preconditions, that.preconditions)
+                .append(effects, that.effects).append(cost, that.cost).append(duration,
+                        that.duration).isEquals();
     }
 
     @Override
     public String toString() {
-        return name + "[" + Optional.ofNullable(who).map(ActionObject::getName).orElse("null") + " @ "
+        return name + '[' + Optional.ofNullable(who).map(ActionObject::getName).orElse("null") + " @ "
                 + Optional.ofNullable(where).map(ActionObject::getName).orElse("null")
-                + " -> " + Optional.ofNullable(what).map(ActionObject::getName).orElse("null") + "]";
+                + " -> " + Optional.ofNullable(what).map(ActionObject::getName).orElse("null") + ']';
     }
 }

@@ -35,12 +35,12 @@ public class FuelRoad extends DefaultRoad {
 
     @Override
     public FuelRoad updateName(String newName) {
-        return new FuelRoad(newName, getLength(), getFuelCost());
+        return new FuelRoad(newName, getLength(), fuelCost);
     }
 
     @Override
     public FuelRoad updateLength(ActionCost length) {
-        return new FuelRoad(getName(), length, getFuelCost());
+        return new FuelRoad(getName(), length, fuelCost);
     }
 
     /**
@@ -110,7 +110,7 @@ public class FuelRoad extends DefaultRoad {
         FuelRoad fuelRoad = (FuelRoad) o;
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(getFuelCost(), fuelRoad.getFuelCost())
+                .append(fuelCost, fuelRoad.fuelCost)
                 .isEquals();
     }
 
@@ -118,7 +118,7 @@ public class FuelRoad extends DefaultRoad {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
-                .append(getFuelCost())
+                .append(fuelCost)
                 .toHashCode();
     }
 }

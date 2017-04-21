@@ -197,6 +197,6 @@ public class IntervalTree<Type> {
 
     @Override
     public String toString() {
-        return "IntervalTree[" + (head == null ? "" : head.toText(0)) + "]";
+        return "IntervalTree[" + (head == null ? "" : head.toText(0)) + ']';
     }
 }

@@ -34,7 +34,7 @@ public interface Predicate {
      * @return the predicate name.
      */
     default String getPredicateName() {
-        return getClass().getSimpleName() + "[" + getTemporalQuantifier().name() + "]";
+        return getClass().getSimpleName() + '[' + getTemporalQuantifier().name() + ']';
     }
 
 }

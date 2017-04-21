@@ -8,10 +8,7 @@ import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
-import com.oskopek.transport.planners.sequential.state.ProblemPlanningWrapper;
 import com.oskopek.transport.planners.AbstractPlanner;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teneighty.heap.AbstractHeap;
@@ -21,94 +18,116 @@ import org.teneighty.heap.Heap;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ForwardAstarPlanner extends AbstractPlanner {
+/**
+ * A forward planner using A* as search. Utilized {@link PlannerUtils}
+ * for generating actions. Uses a binary heap ({@link org.teneighty.heap.BinaryHeap}) internally to keep track
+ * of open states.
+ */
+public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Map<ProblemPlanningWrapper, Integer> fScore;
-    private Map<ProblemPlanningWrapper, Integer> gScore;
-    private Map<ProblemPlanningWrapper, Integer> hScore;
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
-    private Set<ProblemPlanningWrapper> closedSet;
+    private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
-    private ObjectProperty<ArrayTable<String, String, Integer>> distanceMatrix = new SimpleObjectProperty<>();
+    private ArrayTable<String, String, Integer> distanceMatrix;
     private Plan bestPlan;
     private int bestPlanScore;
 
+    /**
+     * Default constructor.
+     */
     public ForwardAstarPlanner() {
         setName(ForwardAstarPlanner.class.getSimpleName());
     }
 
-    private Integer getHScore(ImmutablePlanState state) {
-        return hScore.computeIfAbsent(state, s -> calculateHeuristic(s, getDistanceMatrix(),
-                PlannerUtils.getUnfinishedPackages(s.getAllPackages())));
+    /**
+     * Get the heuristic score, used in A*.
+     *
+     * @param s the state whose score to get
+     * @return the estimated distance to a goal state
+     */
+    private Integer getHScore(ImmutablePlanState s) {
+        return calculateHeuristic(s, distanceMatrix,
+                PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
     }
 
-    private Integer getFScore(ImmutablePlanState state) {
-        return fScore.getOrDefault(state, Integer.MAX_VALUE);
-    }
-
-    private Integer getGScore(ImmutablePlanState state) {
-        return gScore.getOrDefault(state, Integer.MAX_VALUE);
-    }
-
+    /**
+     * The distance matrix, used for checking if a path is the shortest possible.
+     *
+     * @return the shortest path length (sum of lengths of roads on the shortest paths)
+     */
     public ArrayTable<String, String, Integer> getDistanceMatrix() {
-        return distanceMatrix.get();
+        return distanceMatrix;
     }
 
+    /**
+     * Resets to planner to an original state.
+     */
     void resetState() {
-        hScore = new HashMap<>();
-        fScore = new HashMap<>();
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
-        gScore = new HashMap<>();
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
     }
 
-    void initialize(Domain domain, Problem problem) {
-        this.distanceMatrix.setValue(PlannerUtils.computeAPSP(problem.getRoadGraph()));
-        ImmutablePlanState start = new ImmutablePlanState(domain, problem, Collections.emptyList());
+    /**
+     * Initializes the planner, precomputing the shortest paths and initial scores.
+     *
+     * @param problem the problem to initialize the planner from
+     */
+    void initialize(Problem problem) {
+        distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
+        ImmutablePlanState start = new ImmutablePlanState(problem);
         int startHScore = getHScore(start);
-        fScore.put(start, startHScore);
         entryMap.put(start, openSet.insert(startHScore, start));
-        gScore.put(start, 0);
     }
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
+        Optional<Plan> maybePlan = planInternal(domain, problem);
+        closedSet = null;
+        openSet = null;
+        entryMap = null;
+        distanceMatrix = null;
+        return maybePlan;
+    }
+
+    /**
+     * Internal method for planning. Runs the A* algorithm.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @return the plan, or an empty optional if no plan was found
+     */
+    public Optional<Plan> planInternal(Domain domain, Problem problem) {
         logger.debug("Initializing planning...");
         resetState();
-        initialize(domain, problem);
+        initialize(problem);
         logger.debug("Starting planning...");
 
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
-//            System.out.println("\n\n" + new SequentialPlanIO(domain, problem).serialize(new SequentialPlan(current
-// .getActions().toJavaList())));
-//            logger.debug("F: {}, G: {}, H: {}", getFScore(current), getGScore(current), getHScore(current));
             if (current.isGoalState()) {
-//                logger.debug("Found goal state! Explored {} states. Left out {} states.", closedSet.size(),
-//                        openSet.getKeys().size());
                 if (bestPlanScore > current.getTotalTime()) {
                     logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
                     bestPlanScore = current.getTotalTime();
-                    bestPlan = new SequentialPlan(current.getActions());
+                    bestPlan = new SequentialPlan(current.getAllActionsInList());
                 }
-                return Optional.of(new SequentialPlan(current.getActions())); // TODO: remove me?
+//                return Optional.of(new SequentialPlan(current.getAllActionsInList())); // TODO: remove me?
             }
 
             if (shouldCancel()) {
-                logger.debug("Cancelling, returning best found plan so with score: {}.", bestPlanScore);
+                logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
 
-            closedSet.add(new ProblemPlanningWrapper(current));
+            closedSet.add(current);
 
-            Stream<Action> generatedActions = PlannerUtils.generateActions(current, current.getActions(),
-                    distanceMatrix.get(), PlannerUtils.getUnfinishedPackages(current.getAllPackages()));
+            Stream<Action> generatedActions = PlannerUtils.generateActions(domain, current, distanceMatrix,
+                    PlannerUtils.getUnfinishedPackages(current.getProblem().getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 // Ignore the neighbor state which is already evaluated or invalid
                 Optional<ImmutablePlanState> maybeNeighbor = current.apply(generatedAction)
@@ -117,49 +136,45 @@ public class ForwardAstarPlanner extends AbstractPlanner {
                     ImmutablePlanState neighbor = maybeNeighbor.get();
 
                     // The distance from start to a neighbor
-                    int tentativeGScore = getGScore(current) + generatedAction.getDuration().getCost();
+                    int tentativeGScore = neighbor.getTotalTime(); // G score
                     int neighborFScore = tentativeGScore + getHScore(neighbor);
-                    int neighborGScore = getGScore(neighbor);
 
                     Heap.Entry<Integer, ImmutablePlanState> neighborEntry = entryMap.get(neighbor);
                     if (neighborEntry == null) {
                         neighborEntry = openSet.insert(neighborFScore, neighbor);
                         entryMap.put(neighbor, neighborEntry);
-                    } else if (tentativeGScore >= neighborGScore) {
-//                        if (tentativeGScore > neighborGScore) {
-//                             TODO: P22 nonopt, p03 nonopt, p04
-//                            logger.debug("Try not to generate these plans");
-//                        }
+                    } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
                         return;
                     }
 
                     // this path is the best until now
-                    openSet.decreaseKey(neighborEntry,
-                            neighborFScore); // TODO check if overwrites the correct state with shorter actions
-                    gScore.put(neighbor, tentativeGScore);
-                    fScore.put(neighbor, neighborFScore);
+                    openSet.decreaseKey(neighborEntry, neighborFScore);
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
                 logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
                         entryMap.size());
-                logger.debug("Current plan depth: {}", current.getActions().size());
             }
         }
 
         return Optional.ofNullable(bestPlan);
     }
 
-    private static Integer calculateHeuristic(ProblemPlanningWrapper state,
-            ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return PlannerUtils.calculateSumOfDistancesToPackageTargets(unfinishedPackages, state.getAllVehicles(),
-                distanceMatrix);
-    }
+    /**
+     * Calculate the heuristic value for a given state (estimated distance to goal state).
+     * Ideally, heuristics should be admissible (i.e. they should never overestimate the distance).
+     * Then, A* returns the optimal solution first.
+     *
+     * @param state the state
+     * @param distanceMatrix the shortest path length matrix
+     * @param unfinishedPackages the packages that have not yet been delivered
+     * @return the heuristic value (score)
+     */
+    protected abstract Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages);
 
     @Override
-    public ForwardAstarPlanner copy() {
-        return new ForwardAstarPlanner();
-    }
+    public abstract ForwardAstarPlanner copy();
 
     @Override
     public int hashCode() {

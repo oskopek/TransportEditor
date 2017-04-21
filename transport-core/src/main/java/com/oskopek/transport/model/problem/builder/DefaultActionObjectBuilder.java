@@ -42,7 +42,7 @@ public abstract class DefaultActionObjectBuilder<T extends DefaultActionObject> 
 
     @Override
     public void from(T instance) {
-        setName(instance.getName());
+        this.name = instance.getName();
     }
 
     @Override

@@ -59,13 +59,13 @@ public class PackageBuilder extends LocatableBuilder<Package> {
 
     @Override
     public Package build() {
-        return new Package(getName(), getLocation(), getTarget(), getSize());
+        return new Package(getName(), getLocation(), target, size);
     }
 
     @Override
     public void from(Package instance) {
         super.from(instance);
-        setTarget(instance.getTarget());
-        setSize(instance.getSize());
+        this.target = instance.getTarget();
+        this.size = instance.getSize();
     }
 }

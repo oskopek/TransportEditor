@@ -44,10 +44,12 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
      * @param road the road that was used
      * @param <Who_> the vehicle type
      * @param <What_> the location type
+     * @param isFuel is the domain a fuel-enabled one
      * @return the built action
      */
-    public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what, Road road) {
-        return new Drive(who, where, what, getPreconditions(), getEffects(), road);
+    public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what, Road road,
+            boolean isFuel) {
+        return new Drive(who, where, what, getPreconditions(), getEffects(), road, isFuel);
     }
 
     /**
@@ -61,10 +63,11 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
      * @param graph the graph to search for the shortest path between the two locations
      * @param <Who_> the vehicle type
      * @param <What_> the location type
+     * @param isFuel is the domain a fuel-enabled one
      * @return the built action
      */
     public <Who_ extends Vehicle, What_ extends Location> Drive build(Who_ who, Location where, What_ what,
-            RoadGraph graph) {
+            RoadGraph graph, boolean isFuel) {
         if (where == null) {
             throw new IllegalArgumentException("Where cannot be null.");
         }
@@ -77,6 +80,6 @@ public class DriveBuilder extends DefaultActionBuilder<Drive, Vehicle, Location>
             throw new IllegalArgumentException(
                     "Could not find road \"" + where.getName() + "\" -> \"" + what.getName() + "\".");
         }
-        return build(who, where, what, road);
+        return build(who, where, what, road, isFuel);
     }
 }

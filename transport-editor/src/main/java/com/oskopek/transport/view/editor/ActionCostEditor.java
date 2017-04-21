@@ -12,7 +12,7 @@ import org.controlsfx.property.editor.AbstractPropertyEditor;
 /**
  * Simple property editor using an integer spinner for {@link ActionCost}.
  */
-public class ActionCostEditor extends AbstractPropertyEditor<ActionCost, Spinner<Integer>> {
+public final class ActionCostEditor extends AbstractPropertyEditor<ActionCost, Spinner<Integer>> {
 
     private ObjectProperty<ActionCost> actionCostObservableValue;
 

@@ -35,33 +35,28 @@ public class ForwardBFSPlanner extends AbstractPlanner {
         ArrayTable<String, String, Integer> distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
 
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
-        states.add(new ImmutablePlanState(domain, problem, Collections.emptyList()));
+        states.add(new ImmutablePlanState(problem));
 
         logger.debug("Starting planning...");
 
         long counter = 0;
-        List<Action> actions = Collections.emptyList();
         while (!states.isEmpty()) {
+            ImmutablePlanState state = states.removeFirst();
             if (shouldCancel()) {
                 logger.debug("Returning current hypothesis plan after cancellation.");
-                return Optional.of(new SequentialPlan(actions));
+                return Optional.of(new SequentialPlan(state.getAllActionsInList()));
             }
-            ImmutablePlanState state = states.removeFirst();
-            if (state.getActions().size() > actions.size()) {
-                logger.debug("Enlarged plan: {} actions", state.getActions().size());
-                logger.debug("Explored {} states, left: {}", counter, states.size());
-            }
-            actions = state.getActions();
+
 
             if (state.isGoalState()) {
                 logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter,
                         states.size());
-                return Optional.of(new SequentialPlan(actions));
+                return Optional.of(new SequentialPlan(state.getAllActionsInList()));
             }
 
             Stream.Builder<ImmutablePlanState> generatedStates = Stream.builder();
-            Stream<Action> generatedActions = PlannerUtils.generateActions(state, state.getActions(),
-                    distanceMatrix, PlannerUtils.getUnfinishedPackages(state.getAllPackages()));
+            Stream<Action> generatedActions = PlannerUtils.generateActions(domain, state, distanceMatrix,
+                    PlannerUtils.getUnfinishedPackages(state.getProblem().getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 Optional<ImmutablePlanState> maybeNewState = state.apply(generatedAction);
                 if (maybeNewState.isPresent()) {

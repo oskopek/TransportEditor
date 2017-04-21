@@ -22,7 +22,6 @@ import java.util.stream.Stream;
  */
 public class TemporalPlanStateManager implements PlanStateManager {
 
-    private final Domain domain;
     private final Problem problem;
     private final List<TemporalPlanAction> temporalPlanActions;
     private PlanActionPointer pointer;
@@ -36,20 +35,10 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @param plan the plan to simulate
      */
     public TemporalPlanStateManager(Domain domain, Problem problem, Plan plan) {
-        this.domain = domain;
         this.problem = problem;
         this.temporalPlanActions = plan.getTemporalPlanActions().stream().sorted().collect(Collectors.toList());
         this.state = getBeginningState();
         this.pointer = new PlanActionPointer(0, false);
-    }
-
-    /**
-     * Get the domain.
-     *
-     * @return the domain
-     */
-    protected Domain getDomain() {
-        return domain;
     }
 
     @Override
@@ -68,7 +57,7 @@ public class TemporalPlanStateManager implements PlanStateManager {
      * @return the beginning state
      */
     private PlanState getBeginningState() {
-        return new DefaultPlanState(domain, problem);
+        return new DefaultPlanState(problem);
     }
 
     @Override
@@ -201,15 +190,15 @@ public class TemporalPlanStateManager implements PlanStateManager {
             }
             TimeElement<?> that = (TimeElement<?>) o;
 
-            return new EqualsBuilder().append(getTime(), that.getTime())
-                    .append(isEnd(), that.isEnd())
-                    .append(getPayload(), that.getPayload()).isEquals();
+            return new EqualsBuilder().append(time, that.time)
+                    .append(isEnd, that.isEnd)
+                    .append(payload, that.payload).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getTime()).append(isEnd())
-                    .append(getPayload()).toHashCode();
+            return new HashCodeBuilder(17, 37).append(time).append(isEnd)
+                    .append(payload).toHashCode();
         }
 
         /**
@@ -220,8 +209,8 @@ public class TemporalPlanStateManager implements PlanStateManager {
          */
         @Override
         public int compareTo(TimeElement<Payload> o) {
-            return new CompareToBuilder().append(getTime(), o.getTime())
-                    .append(o.isEnd(), isEnd()) // reversed on purpose
+            return new CompareToBuilder().append(time, o.time)
+                    .append(o.isEnd, isEnd) // reversed on purpose
                     .toComparison();
         }
     }

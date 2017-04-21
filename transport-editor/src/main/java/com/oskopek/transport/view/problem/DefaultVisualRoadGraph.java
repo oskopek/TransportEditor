@@ -130,7 +130,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
     /**
      * Set the default CSS stylesheet and various rendering properties.
      */
-    public void setDefaultStyling() {
+    public synchronized void setDefaultStyling() {
         String style;
         try {
             style = String.join("\n", IOUtils.concatReadAllLines(getClass().getResourceAsStream("stylesheet.css")));
@@ -141,6 +141,13 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
         getAllLocations().forEach(this::setPetrolStationStyle);
+        createNewSpriteManager();
+    }
+
+    /**
+     * Create a new sprite manager for the current graph (reset).
+     */
+    private synchronized void createNewSpriteManager() {
         spriteManager = new SpriteManager(this);
     }
 
@@ -156,7 +163,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         spriteManager.sprites().forEach(s -> spriteNames.add(s.getId()));
         spriteNames.forEach(s -> spriteManager.removeSprite(s));
         spriteManager.detach();
-        setDefaultStyling(); // TODO: Hack
+        createNewSpriteManager();
     }
 
     /**
@@ -188,8 +195,9 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         removeAllActionObjectSprites();
         getEdgeSet().stream().filter(e -> !spriteManager.hasSprite("sprite-" + e.getId())).forEach(this::addEdgeSprite);
 
-        Map<Package, Location> packagesAtNodes = new HashMap<>();
-        Map<Package, Road> packagesAtEdges = new HashMap<>();
+        Collection<Package> allPackages = state.getAllPackages();
+        Map<Package, Location> packagesAtNodes = new HashMap<>(allPackages.size());
+        Map<Package, Road> packagesAtEdges = new HashMap<>(allPackages.size());
 
         // draw vehicles
         state.getAllVehicles().stream().sorted(Comparator.comparing(DefaultActionObject::getName)).forEach(v -> {
@@ -220,7 +228,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         });
 
         // draw packages
-        state.getAllPackages().stream().sorted(Comparator.comparing(DefaultActionObject::getName))
+        allPackages.stream().sorted(Comparator.comparing(DefaultActionObject::getName))
                 .forEach(p -> {
                     if (p.getLocation() != null) {
                         addPackageSprite(p, p.getLocation());

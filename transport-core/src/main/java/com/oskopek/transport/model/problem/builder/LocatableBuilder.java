@@ -43,6 +43,6 @@ public abstract class LocatableBuilder<T extends DefaultActionObject & Locatable
     @Override
     public void from(T instance) {
         super.from(instance);
-        setLocation(instance.getLocation());
+        this.location = instance.getLocation();
     }
 }

@@ -7,7 +7,6 @@ import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.DefaultRoadGraph;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.antlr4.PddlLexer;
 import com.oskopek.transport.persistence.antlr4.PddlParser;
 import freemarker.template.Configuration;
@@ -57,7 +56,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
 
     @Override
     public String serialize(Problem object) {
-        Map<String, Object> input = new HashMap<>();
+        Map<String, Object> input = new HashMap<>(30);
         input.put("date", new Date());
         input.put("title", object.getName().replaceFirst("transport-", ""));
         input.put("domain", domain);
@@ -337,7 +336,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
             switch (typeName) {
                 case "vehicle":
                     parsed.vehicleMap().put(objectName, new Vehicle(objectName, null, null, null, null, true,
-                            new ArrayList<>()));
+                            Collections.emptyList()));
                     break;
                 case "package":
                     parsed.packageMap().put(objectName, new Package(objectName, null, null, ActionCost.ONE));
@@ -368,7 +367,7 @@ public class DefaultProblemIO implements DataIO<Problem> {
      * @param goalContext the context to parse
      * @param parsed intermediate problem properties aggregator
      */
-    private void parseGoalDescContext(PddlParser.GoalContext goalContext, ParsedProblemContainer parsed) {
+    private static void parseGoalDescContext(PddlParser.GoalContext goalContext, ParsedProblemContainer parsed) {
         for (PddlParser.GoalDescContext goalDescContext : goalContext.goalDesc().goalDesc()) { // we add 'and' implictly
             String predicate = goalDescContext.atomicTermFormula().predicate().getText();
             String arg1 = goalDescContext.atomicTermFormula().term(0).getText();

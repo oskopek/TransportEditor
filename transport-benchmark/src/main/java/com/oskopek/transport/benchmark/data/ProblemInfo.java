@@ -70,7 +70,7 @@ public class ProblemInfo {
      * @return a new info instance
      */
     public ProblemInfo updateFileContents(String fileContents) {
-        return new ProblemInfo(getFilePath(), getBestScore(), fileContents);
+        return new ProblemInfo(filePath, bestScore, fileContents);
     }
 
     @Override
@@ -82,19 +82,19 @@ public class ProblemInfo {
             return false;
         }
         ProblemInfo that = (ProblemInfo) o;
-        return new EqualsBuilder().append(getFilePath(), that.getFilePath())
-                .append(getBestScore(), that.getBestScore()).append(getFileContents(), that.getFileContents())
+        return new EqualsBuilder().append(filePath, that.filePath)
+                .append(bestScore, that.bestScore).append(fileContents, that.fileContents)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getFilePath())
-                .append(getBestScore()).append(getFileContents()).toHashCode();
+        return new HashCodeBuilder(17, 37).append(filePath)
+                .append(bestScore).append(fileContents).toHashCode();
     }
 
     @Override
     public String toString() {
-        return "ProblemInfo{" + getFilePath() + '}';
+        return "ProblemInfo{" + filePath + '}';
     }
 }

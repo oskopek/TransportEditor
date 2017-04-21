@@ -24,6 +24,6 @@ public class Not extends PredicateWrapper {
 
     @Override
     public String getPredicateName() {
-        return "!(" + getInternal().getPredicateName() + ")";
+        return "!(" + getInternal().getPredicateName() + ')';
     }
 }

@@ -99,7 +99,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getExecutable())
+        return new HashCodeBuilder(17, 37).append(executable)
                 .append(parameters)
                 .toHashCode();
     }
@@ -113,7 +113,7 @@ public final class DefaultExecutableWithParameters implements ExecutableWithPara
             return false;
         }
         DefaultExecutableWithParameters that = (DefaultExecutableWithParameters) o;
-        return new EqualsBuilder().append(getExecutable(), that.getExecutable())
+        return new EqualsBuilder().append(executable, that.executable)
                 .append(parameters, that.parameters)
                 .isEquals();
     }
