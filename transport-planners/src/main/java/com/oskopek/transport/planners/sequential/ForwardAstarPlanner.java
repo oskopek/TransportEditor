@@ -18,6 +18,11 @@ import org.teneighty.heap.Heap;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * A forward planner using A* as search. Utilized {@link PlannerUtils}
+ * for generating actions. Uses a binary heap ({@link org.teneighty.heap.BinaryHeap}) internally to keep track
+ * of open states.
+ */
 public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -29,19 +34,36 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     private Plan bestPlan;
     private int bestPlanScore;
 
+    /**
+     * Default constructor.
+     */
     public ForwardAstarPlanner() {
         setName(ForwardAstarPlanner.class.getSimpleName());
     }
 
+    /**
+     * Get the heuristic score, used in A*.
+     *
+     * @param s the state whose score to get
+     * @return the estimated distance to a goal state
+     */
     private Integer getHScore(ImmutablePlanState s) {
         return calculateHeuristic(s, distanceMatrix,
                 PlannerUtils.getUnfinishedPackages(s.getProblem().getAllPackages()));
     }
 
+    /**
+     * The distance matrix, used for checking if a path is the shortest possible.
+     *
+     * @return the shortest path length (sum of lengths of roads on the shortest paths)
+     */
     public ArrayTable<String, String, Integer> getDistanceMatrix() {
         return distanceMatrix;
     }
 
+    /**
+     * Resets to planner to an original state.
+     */
     void resetState() {
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
@@ -50,6 +72,11 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         bestPlanScore = Integer.MAX_VALUE;
     }
 
+    /**
+     * Initializes the planner, precomputing the shortest paths and initial scores.
+     *
+     * @param problem the problem to initialize the planner from
+     */
     void initialize(Problem problem) {
         distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
         ImmutablePlanState start = new ImmutablePlanState(problem);
@@ -67,6 +94,13 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         return maybePlan;
     }
 
+    /**
+     * Internal method for planning. Runs the A* algorithm.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @return the plan, or an empty optional if no plan was found
+     */
     public Optional<Plan> planInternal(Domain domain, Problem problem) {
         logger.debug("Initializing planning...");
         resetState();
@@ -126,6 +160,16 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         return Optional.ofNullable(bestPlan);
     }
 
+    /**
+     * Calculate the heuristic value for a given state (estimated distance to goal state).
+     * Ideally, heuristics should be admissible (i.e. they should never overestimate the distance).
+     * Then, A* returns the optimal solution first.
+     *
+     * @param state the state
+     * @param distanceMatrix the shortest path length matrix
+     * @param unfinishedPackages the packages that have not yet been delivered
+     * @return the heuristic value (score)
+     */
     protected abstract Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages);
 

@@ -7,10 +7,15 @@ import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import java.util.Collection;
 
 /**
- * Created by skopeko on 12.4.17.
+ * SFA* with
+ * {@link PlannerUtils#calculateSumOfDistancesToPackageTargets(Collection, Collection, ArrayTable)}
+ * as a heuristic.
  */
 public class SFA1Planner extends ForwardAstarPlanner {
 
+    /**
+     * Default constructor.
+     */
     public SFA1Planner() {
         setName(SFA1Planner.class.getSimpleName());
     }

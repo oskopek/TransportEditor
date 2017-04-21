@@ -33,6 +33,16 @@ public final class PlannerUtils {
         // intentionally empty
     }
 
+    /**
+     * Generate reasonable actions that are applicable to the the current state. Does not generate all of them,
+     * it prunes away all that are unnecessary (driving in circles, etc).
+     *
+     * @param domain the domain
+     * @param state the state
+     * @param distanceMatrix the distance matrix
+     * @param packagesUnfinished the undelivered packages
+     * @return a stream of applicable actions
+     */
     public static Stream<Action> generateActions(Domain domain, ImmutablePlanState state,
             ArrayTable<String, String, Integer> distanceMatrix, Set<Package> packagesUnfinished) {
         if (PlannerUtils.hasCycle(state.getAllActionsReversed())) { // TODO: Convert to non-generation
@@ -158,7 +168,16 @@ public final class PlannerUtils {
         return generated.build();
     }
 
-    @Deprecated // TODO: doesn't work, use ...Occurred
+
+    /**
+     * Test if a drop and pickup have been generated that didn't need to be generated.
+     *
+     * @param reverseActions actions that were generated, in reverse order
+     * @param vehicle the vehicle to check for
+     * @param pkg the package to check for
+     * @return true iff an unneeded drop and pickup action were generated
+     * @deprecated TODO: doesn't work, use {@link #needlessDropAndPickupOccurred(Collection, Iterable)}
+     */
     public static boolean needlessDropAndPickup(Iterator<Action> reverseActions, Vehicle vehicle, Package pkg) {
         Map<String, String> pickedUpBy = new HashMap<>(); // Package -> Vehicle
         pickedUpBy.put(pkg.getName(), vehicle.getName());
@@ -179,7 +198,15 @@ public final class PlannerUtils {
         return false;
     }
 
-    @Deprecated // TODO: Slow, replace
+    /**
+     * Test if a drop and pickup have been generated that didn't need to be generated.
+     *
+     * @param vehicles the vehicles to check for
+     * @param actions the actions that were generated
+     * @param lastAction the last action that was generated (not part of actions)
+     * @return true iff an unneeded drop and pickup action were generated
+     * @deprecated TODO: Slow, replace with a faster version
+     */
     public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions,
             PickUp lastAction) {
         List<Action> actionsNew = Lists.newArrayList(actions);
@@ -187,7 +214,14 @@ public final class PlannerUtils {
         return needlessDropAndPickupOccurred(vehicles, actionsNew);
     }
 
-    @Deprecated // TODO: Slow, replace
+    /**
+     * Test if a drop and pickup have been generated that didn't need to be generated.
+     *
+     * @param vehicles the vehicles to check for
+     * @param actions the actions that were generated
+     * @return true iff an unneeded drop and pickup action were generated
+     * @deprecated TODO: Slow, replace with a faster version
+     */
     public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions) {
         for (Vehicle v : vehicles) {
             Map<String, Integer> packagesUntouchedSince = new HashMap<>();
@@ -221,7 +255,17 @@ public final class PlannerUtils {
         return false;
     }
 
-    public static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
+    /**
+     * Generate drive actions for the vehicle (only if they are on the shortest paths).
+     *
+     * @param vehicle the vehicle
+     * @param graph the road graph
+     * @param domain the domain
+     * @param distanceMatrix the distance matrix
+     * @param reversedActions reversed actions generated up to now
+     * @return a stream of generated drive actions
+     */
+    private static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
             ArrayTable<String, String, Integer> distanceMatrix, Iterable<Action> reversedActions) {
         Stream.Builder<Drive> vehicleActions = Stream.builder();
         Location current = vehicle.getLocation();
@@ -235,8 +279,14 @@ public final class PlannerUtils {
         return vehicleActions.build();
     }
 
-    // Vehicle -> [Package]
-    public static Map<String, Set<String>> getPackagesDroppedAfterLastMoveMap(int vehicleCount,
+    /**
+     * Calculates a map of packages that were dropped by a vehicle after its last move so far.
+     *
+     * @param vehicleCount the number of vehicles (used for allocation)
+     * @param plannedActions the actions generated up to now
+     * @return a map of vehicle names to sets of packages (Vehicle -> [Package])
+     */
+    private static Map<String, Set<String>> getPackagesDroppedAfterLastMoveMap(int vehicleCount,
             List<Action> plannedActions) {
         // Vehicle -> int (index into plannedActions)
         Map<String, Integer> lastDriveIndexMap = new HashMap<>(vehicleCount);
@@ -266,7 +316,13 @@ public final class PlannerUtils {
         return packagesDroppedAfterLastMoveMap;
     }
 
-    public static Map<Location, Set<Vehicle>> computeVehicleMap(Collection<Vehicle> vehicles) {
+    /**
+     * Computes a map of locations to sets of vehicles present at that location.
+     *
+     * @param vehicles the vehicles
+     * @return the map
+     */
+    private static Map<Location, Set<Vehicle>> computeVehicleMap(Collection<Vehicle> vehicles) {
         Map<Location, Set<Vehicle>> vehicleMap = new HashMap<>();
         for (Vehicle vehicle : vehicles) {
             Location current = vehicle.getLocation();
@@ -279,7 +335,13 @@ public final class PlannerUtils {
         return vehicleMap;
     }
 
-    public static Map<Location, Set<Package>> computePackageMap(Collection<Package> pkgs) {
+    /**
+     * Computes a map of locations to sets of packages present at that location.
+     *
+     * @param pkgs the packages
+     * @return the map
+     */
+    private static Map<Location, Set<Package>> computePackageMap(Collection<Package> pkgs) {
         Map<Location, Set<Package>> pkgMap = new HashMap<>();
         for (Package pkg : pkgs) {
             Location current = pkg.getLocation();
@@ -292,6 +354,12 @@ public final class PlannerUtils {
         return pkgMap;
     }
 
+    /**
+     * Computes the All-pairs shortest path algorithm (Floyd-Warshall) on the road graph.
+     *
+     * @param graph the graph
+     * @return a lookup matrix of shortest path distances
+     */
     public static ArrayTable<String, String, Integer> computeAPSP(final RoadGraph graph) {
         final String ATTRIBUTE_NAME = "weight";
         RoadGraph originalAPSPGraph = (RoadGraph) Graphs.clone(graph);
@@ -312,7 +380,15 @@ public final class PlannerUtils {
         return distanceMatrix;
     }
 
-    public static double getLengthToCorrect(APSP.APSPInfo current, String targetName) {
+    /**
+     * Corrects the distance returned by Floyd-Warshall's implementation in {@link APSP} to correctly return 0
+     * for the shortest path from a point A to A.
+     *
+     * @param current the current node APSP info
+     * @param targetName the target location name
+     * @return the shortest path length
+     */
+    private static double getLengthToCorrect(APSP.APSPInfo current, String targetName) {
         if (targetName.equals(current.getNodeId())) { // fix weird behavior of APSP
             return 0d;
         } else {
@@ -320,7 +396,15 @@ public final class PlannerUtils {
         }
     }
 
-
+    /**
+     * Determines if a shorter path leads to the target than the one at the tail of the generated actions.
+     *
+     * @param vehicle the vehicle for which to check
+     * @param target the target location
+     * @param reversedActionsIterator an iterator over the generated actions, in reverse order
+     * @param distanceMatrix the distance matrix
+     * @return true iff a shorter path than the current one exists (making the sequential plan suboptimal)
+     */
     public static boolean doesShorterPathExist(Vehicle vehicle, Location target,
             Iterator<Action> reversedActionsIterator, ArrayTable<String, String, Integer> distanceMatrix) {
 
@@ -355,6 +439,15 @@ public final class PlannerUtils {
         return distanceMatrix.get(sourceOfPreviousDrives.getName(), target.getName()) < lengthOfPath;
     }
 
+    /**
+     * Heuristic: sum distances of package locations to their targets, using the shortest available paths.
+     * Also adds costs for drop and pickup actions. Is <strong>not admissible</strong>.
+     *
+     * @param packageList the package list
+     * @param vehicleList the vehicle list
+     * @param distanceMatrix the distance matrix
+     * @return the heuristic value.
+     */
     public static int calculateSumOfDistancesToPackageTargets(Collection<Package> packageList,
             Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
         int sumDistances = 0;
@@ -374,8 +467,14 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
-    public static int admissibleHeuristic(Collection<Package> packageList,
-            Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
+    /**
+     * Heuristic: sum the minimum of needed costs of drop and pickup actions to deliver all packages.
+     * Is <strong>admissible</strong>.
+     *
+     * @param packageList the package list
+     * @return the heuristic value.
+     */
+    public static int admissibleHeuristic(Collection<Package> packageList) {
         int sumDistances = 0;
         for (Package pkg : packageList) {
             Location pkgLocation = pkg.getLocation();
@@ -388,6 +487,19 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
+    /**
+     * Heuristic: sum distances of package locations to their targets and of the closes vehicle to the package location
+     * or the closes package location,
+     * using the shortest available paths.
+     * Also adds costs for drop and pickup actions. Is <strong>not admissible</strong>.
+     * As a rule, this heuristic returns larger values than
+     * {@link #calculateSumOfDistancesToPackageTargets(Collection, Collection, ArrayTable)}.
+     *
+     * @param packageList the package list
+     * @param vehicleList the vehicle list
+     * @param distanceMatrix the distance matrix
+     * @return the heuristic value.
+     */
     public static int calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(Collection<Package> packageList,
             Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
         int sumDistances = 0;
@@ -434,42 +546,13 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
-    public static int calculateSumOfDistancesToVehiclesPackageTargets(Collection<Package> packageList,
-            Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
-        int sumDistances = 0;
-        for (Vehicle vehicle : vehicleList) { // vehicles are never in the middle of a drive
-            int maxPkgDistance = 0;
-            for (Package pkg : vehicle.getPackageList()) {
-                int dist = distanceMatrix.get(vehicle.getLocation().getName(), pkg.getTarget().getName());
-                if (dist > maxPkgDistance) {
-                    maxPkgDistance = dist;
-                }
-            } // TODO: not true, calculate the max distance for a package in the vehicle, or the spanning tree distances
-            sumDistances += maxPkgDistance + vehicle.getPackageList().size(); // + drop actions
-        }
-        for (Package pkg : packageList) {
-            Location pkgLocation = pkg.getLocation();
-            if (pkgLocation != null) {
-                String pkgLocName = pkgLocation.getName();
-                // calculate the distance to the target + pickup and drop
-                sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName())
-                        + 2; // + pickup and drop
-
-                // Calculate the distance to the nearest vehicle
-                int minVehicleDistance = Integer.MAX_VALUE;
-                for (Vehicle vehicle : vehicleList) {
-                    int dist = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName());
-                    if (dist < minVehicleDistance) {
-                        minVehicleDistance = dist;
-                    }
-                }
-                sumDistances += minVehicleDistance;
-            }
-        }
-        return sumDistances;
-    }
-
-    public static boolean hasCycle(Iterator<Action> reversedActions) {
+    /**
+     * Detects cycles in generated drive actions.
+     *
+     * @param reversedActions an iterator over generated actions, in reverse order
+     * @return true iff a cycle was detected (without pickup or drop between 2 visits of one location)
+     */
+    private static boolean hasCycle(Iterator<Action> reversedActions) {
         Set<String> drives = new HashSet<>();
         if (!reversedActions.hasNext()) {
             return false;
@@ -494,6 +577,12 @@ public final class PlannerUtils {
         return false;
     }
 
+    /**
+     * Calculate a set of packages not yet at their target locations.
+     *
+     * @param packages all packages in the problem
+     * @return a set of undelivered packages, possibly empty
+     */
     public static Set<Package> getUnfinishedPackages(Collection<Package> packages) {
         Set<Package> unfinishedPackages = new HashSet<>(packages.size());
         for (Package pkg : packages) {
@@ -506,7 +595,16 @@ public final class PlannerUtils {
         return unfinishedPackages;
     }
 
-    public static boolean droppedPackageWhereWePickedItUp(ImmutablePlanState state, Drop newAction) {
+    /**
+     * Detects drop actions that occurred at the same location as a pickup action of the same package and vehicle,
+     * which is suboptimal (due to the costs of pickup and drop).
+     * Similar to {@link #needlessDropAndPickup(Iterator, Vehicle, Package)}.
+     *
+     * @param state the state
+     * @param newAction the newly generated drop action
+     * @return true iff an unnecessary drop and pickup occurred
+     */
+    private static boolean droppedPackageWhereWePickedItUp(ImmutablePlanState state, Drop newAction) {
         Map<String, Set<String>> pickedUpAt = new HashMap<>();
         for (Iterator<Action> it = state.getAllActionsReversed(); it.hasNext();) {
             Action a = it.next();
@@ -515,7 +613,6 @@ public final class PlannerUtils {
                         .add(a.getWhere().getName());
             }
         }
-
 
         Set<String> pickedBySameCar = pickedUpAt.get(newAction.getWhat().getName());
         if (pickedBySameCar != null && pickedBySameCar.contains(newAction.getWhere().getName())) {

@@ -16,8 +16,14 @@ import org.graphstream.graph.implementations.SingleGraph;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SFA2Planner extends ForwardAstarPlanner {
+/**
+ * SFA* with a Minimum Spanning Tree based heuristic.
+ */
+public final class SFA2Planner extends ForwardAstarPlanner {
 
+    /**
+     * Default constructor.
+     */
     public SFA2Planner() {
         setName(SFA2Planner.class.getSimpleName());
     }
@@ -68,6 +74,12 @@ public class SFA2Planner extends ForwardAstarPlanner {
         return heuristic;
     }
 
+    /**
+     * Calculate the minimum spanning tree, using {@link Kruskal}'s algorithm.
+     *
+     * @param graph the graph to calculate the MST of
+     * @return the MST, as a graph
+     */
     private Graph mst(RoadGraph graph) {
         graph.getAllRoads().forEach(re -> graph.getEdge(re.getRoad().getName())
                 .setAttribute("weight", re.getRoad().getLength().getCost()));
