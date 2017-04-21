@@ -69,7 +69,8 @@ public class SFA2Planner extends ForwardAstarPlanner {
     }
 
     private Graph mst(RoadGraph graph) {
-        graph.getAllRoads().forEach(re -> graph.getEdge(re.getRoad().getName()).setAttribute("weight", re.getRoad().getLength().getCost()));
+        graph.getAllRoads().forEach(re -> graph.getEdge(re.getRoad().getName())
+                .setAttribute("weight", re.getRoad().getLength().getCost()));
         Kruskal kruskal = new Kruskal("weight", "mst", "on", "off");
         kruskal.init(graph);
         kruskal.compute();

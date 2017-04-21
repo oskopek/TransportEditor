@@ -15,6 +15,7 @@ import com.oskopek.transport.tools.test.TestUtils;
 import javaslang.collection.Stream;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -58,6 +59,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
     }
 
     @Test
+    @Ignore("Takes too long.")
     public void plansP01Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, problem);
         ForwardBFSPlannerIT
@@ -66,6 +68,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
     }
 
     @Test
+    @Ignore("Takes too long.")
     public void plansP02Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p02Problem);
         System.out.println(new SequentialPlanIO(domain, p02Problem).serialize(plan));
@@ -78,6 +81,7 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
     }
 
     @Test
+    @Ignore("Takes too long.")
     public void plansP03Sequential() throws Exception {
         Plan plan = planner.startAndWait(domain, p03Problem);
         System.out.println(new SequentialPlanIO(domain, p03Problem).serialize(plan));

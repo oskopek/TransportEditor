@@ -1,6 +1,5 @@
 package com.oskopek.transport.benchmark;
 
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.SequentialDomain;
 import com.oskopek.transport.model.domain.action.TemporalPlanAction;
@@ -44,7 +43,7 @@ public class BenchmarkIT {
         problemInfo.put(problems.get(0), new ProblemInfo("", 54d, ""));
         problemInfo.put(problems.get(1), new ProblemInfo("", 54d, ""));
         planners = Arrays.asList(new SFA1Planner(), new ForwardBFSPlanner());
-        matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, 100);
+        matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, 15);
     }
 
     @Test
@@ -53,15 +52,13 @@ public class BenchmarkIT {
                 (problem, planner) -> !planner.isAvailable(), new SequentialPlanValidator());
 
         BenchmarkResults results = benchmark.benchmark(4);
-        ArrayTable<Problem, Planner, BenchmarkRun> runTable = results.getRunTable();
-        assertThat(runTable).isNotNull();
-        assertThat(runTable.size()).isEqualTo(4);
-        Plan plan = runTable.at(0, 0).getRunResults().getPlan();
+        assertThat(results.getRuns().size()).isEqualTo(4);
+        Plan plan = results.getRuns().get(0).getResults().getPlan();
         IterableAssert<TemporalPlanAction> planAssert = assertThat(plan);
-        for (BenchmarkRun run : runTable.values()) {
-            assertThat(run.getRunResults().getDurationMs()).isGreaterThan(0);
-            assertThat(run.getRunResults().getScore()).isEqualTo(6);
-            assertThat(run.getRunResults().getExitStatus()).isEqualTo(BenchmarkRun.RunExitStatus.VALID);
+        for (BenchmarkResults.JsonRun run : results.getRuns()) {
+            assertThat(run.getResults().getDurationMs()).isGreaterThan(0);
+            assertThat(run.getResults().getScore()).isEqualTo(6);
+            assertThat(run.getResults().getExitStatus()).isEqualTo(BenchmarkRun.RunExitStatus.VALID);
         }
     }
 

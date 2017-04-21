@@ -55,12 +55,18 @@ public final class BenchmarkResults {
     /**
      * Create a results instance from the run table.
      *
+     * @param runs the JSON run representation
      * @return the initialized results
      */
     public static BenchmarkResults from(List<JsonRun> runs) {
         return new BenchmarkResults(null, runs);
     }
 
+    /**
+     * Serializes a single {@link BenchmarkRun} into a {@link JsonRun}.
+     * @param run the run to serialize
+     * @return the serialized run
+     */
     public static JsonRun serializeRun(BenchmarkRun run) {
         return JsonRun.of(run);
     }

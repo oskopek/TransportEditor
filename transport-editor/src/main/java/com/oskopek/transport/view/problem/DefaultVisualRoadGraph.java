@@ -144,6 +144,9 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         createNewSpriteManager();
     }
 
+    /**
+     * Create a new sprite manager for the current graph (reset).
+     */
     private synchronized void createNewSpriteManager() {
         spriteManager = new SpriteManager(this);
     }

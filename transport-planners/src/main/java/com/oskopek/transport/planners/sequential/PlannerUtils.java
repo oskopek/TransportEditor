@@ -398,7 +398,8 @@ public final class PlannerUtils {
 //                if (dist > maxPkgDistance) {
 //                    maxPkgDistance = dist;
 //                }
-//            } // TODO: not true, calculate the max distance for a package in the vehicle, or the spanning tree distances
+//            } // TODO: not true, calculate the max distance for a package in the vehicle,
+//              // or the spanning tree distances
 //            sumDistances += maxPkgDistance + vehicle.getPackageList().size(); // + drop actions
 //        }
         for (Package pkg : packageList) {

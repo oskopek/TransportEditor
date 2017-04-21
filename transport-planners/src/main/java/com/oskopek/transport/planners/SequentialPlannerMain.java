@@ -8,8 +8,6 @@ import com.oskopek.transport.persistence.DefaultProblemIO;
 import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.VariableDomainIO;
-import com.oskopek.transport.planners.sequential.ForwardAstarPlanner;
-import com.oskopek.transport.planners.sequential.SFA1Planner;
 import com.oskopek.transport.planners.sequential.SFA2Planner;
 import javaslang.control.Try;
 import org.slf4j.Logger;
