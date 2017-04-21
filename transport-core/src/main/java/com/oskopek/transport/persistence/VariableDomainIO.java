@@ -431,6 +431,7 @@ public class VariableDomainIO implements DataIO<Domain> {
      */
     private static DriveBuilder parseDriveBuilder(PddlParser.StructureDefContext context) {
         PartialBuilder builder = parseGenericBuilder(context);
+        builder.getPreconditions().add(new HasFuelCapacityForDrive()); // Add fuel precondition TODO: what about seq?
         return new DriveBuilder(builder.getPreconditions(), builder.getEffects());
     }
 

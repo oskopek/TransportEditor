@@ -54,4 +54,12 @@ public class Drive extends DefaultAction<Vehicle, Location> {
         return problemState
                 .putVehicle(vehicleName, vehicle.updateLocation(dest));
     }
+
+    public boolean isFuelDomain() {
+        return isFuelDomain;
+    }
+
+    public Road getRoad() {
+        return road;
+    }
 }

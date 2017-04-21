@@ -2,11 +2,13 @@ package com.oskopek.transport.planners.sequential;
 
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
+import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import javaslang.collection.*;
 import org.slf4j.Logger;
@@ -50,9 +52,12 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
         int i = 1;
-        float exploration = 0.2f; // best so far: 0.2 or 0.1
-        float multiplier = 0.00f; // best so far: 0
-        int everySteps = 50_000;
+//        float exploration = 0.2f; // best so far: 0.2 or 0.1
+//        float multiplier = 0.00f; // best so far: 0
+//        int everySteps = 50_000;
+        float exploration = 0.8f; // best so far: 0.2 or 0.1
+        float multiplier = 0.05f; // best so far: 0
+        int everySteps = 10_000;
         while (true) {
             if (i % everySteps == 0) {
                 float delta = exploration;
@@ -68,7 +73,24 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
                 List<Package> unfinished = new ArrayList<>(
                         PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
                 if (unfinished.isEmpty()) {
-                    throw new IllegalStateException("Zero packages left but not in goal state.");
+                    List<Drive> driveToTarget = new ArrayList<>(); // TODO: irrelevant for seq
+                    for (Vehicle vehicle : curProblem.getAllVehicles()) {
+                        if (vehicle.getTarget() != null && !vehicle.getTarget().equals(vehicle.getLocation())) {
+                            List<RoadEdge> edges = getShortestPathMatrix().get(vehicle.getLocation().getName(), vehicle.getTarget().getName()).getRoads();
+                            for (RoadEdge edge : edges) {
+                                driveToTarget.add(domain.buildDrive(vehicle, edge.getFrom(), edge.getTo(), edge.getRoad()));
+                            }
+                        }
+                    }
+
+                    if (driveToTarget.isEmpty()) {
+                        throw new IllegalStateException("Zero packages left and no vehicles not at targets but not in goal state.");
+                    } else {
+                        current = Stream.ofAll(driveToTarget).foldLeft(Optional.of(current),
+                                (state, action) -> state.flatMap(state2 -> state2.apply(action)))
+                                .orElseThrow(() -> new IllegalStateException("Could not apply all new drive actions to current state."));
+                        break;
+                    }
                 }
 
                 Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
@@ -105,7 +127,13 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
+            if (current == null) { // invalid state, break
+                continue;
+            }
             Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));  // TODO: too slow for seq?
+            if (curPlan == null) {
+                continue;
+            }
             double curScore = curPlan.calculateMakespan();
             if (curScore < getBestPlanScore()) {
                 savePlanIfBetter(curScore, curPlan);

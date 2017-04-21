@@ -2,10 +2,7 @@ package com.oskopek.transport.planners.temporal;
 
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.SequentialDomain;
-import com.oskopek.transport.model.domain.action.Action;
-import com.oskopek.transport.model.domain.action.Drop;
-import com.oskopek.transport.model.domain.action.PickUp;
-import com.oskopek.transport.model.domain.action.TemporalPlanAction;
+import com.oskopek.transport.model.domain.action.*;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.TemporalPlan;
 import com.oskopek.transport.model.planner.Planner;
@@ -13,6 +10,7 @@ import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.DefaultRoadGraph;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
+import com.oskopek.transport.model.state.TemporalPlanStateManager;
 import com.oskopek.transport.planners.AbstractPlanner;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
@@ -31,12 +29,12 @@ public abstract class SequentialScheduler extends AbstractPlanner {
     public Optional<Plan> plan(Domain domain, Problem problem) {
         SequentialDomain seqDomain = new SequentialDomain(domain.getName() + "-seq");
         Problem seqProblem = translateToSequential(problem);
-        Optional<Plan> sequentialPlan = planInternal(seqDomain, seqProblem, plan -> schedule(problem, plan.getActions()));
+        Optional<Plan> sequentialPlan = planInternal(seqDomain, seqProblem, plan -> schedule(domain, problem, plan.getActions()));
         return sequentialPlan.map(plan -> {
             if (plan instanceof TemporalPlan) {
                 return plan;
             }
-            return schedule(seqProblem, plan.getActions());
+            return schedule(domain, seqProblem, plan.getActions());
         });
     }
 
@@ -49,12 +47,27 @@ public abstract class SequentialScheduler extends AbstractPlanner {
     // Mutexes:
     // * Actions of the same vehicle
     // * drop/pick-up of the same package
-    // TODO: handle fuel and refueling
-    protected static TemporalPlan schedule(Problem temporalProblem, Collection<Action> seqActions) {
+    protected static TemporalPlan schedule(Domain domain, Problem temporalProblem, Collection<Action> seqActions) {
         if (seqActions.isEmpty()) {
             return new TemporalPlan(Collections.emptyList());
         }
         List<Action> seqActionList = new ArrayList<>(seqActions);
+        // TODO: only greedy fuel currently
+        for (int i = 0; i < seqActionList.size(); i++) {
+            Action action = seqActionList.get(i);
+            if (action instanceof Drive) {
+                Location temporalFrom = temporalProblem.getRoadGraph().getLocation(action.getWhere().getName());
+                if (temporalFrom.hasPetrolStation()) {
+                    seqActionList.add(i, domain.buildRefuel(temporalProblem.getVehicle(action.getWho().getName()), temporalFrom));
+                    i++;
+                }
+                Location temporalTo = temporalProblem.getRoadGraph().getLocation(action.getWhat().getName());
+                Vehicle temporalVehicle = temporalProblem.getVehicle(action.getWho().getName());
+                FuelRoad road = (FuelRoad) temporalProblem.getRoadGraph().getRoad(((Drive) action).getRoad().getName());
+                seqActionList.set(i, domain.buildDrive(temporalVehicle, temporalFrom, temporalTo, road));
+            }
+        }
+
         Graph mutexDag = new MultiGraph("mutexDag", true, false, seqActionList.size(), seqActionList.size());
         for (int i = 0; i < seqActionList.size(); i++) {
             mutexDag.addNode(i + "");
@@ -64,7 +77,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             Action from = seqActionList.get(i);
             for (int j = i + 1; j < seqActionList.size(); j++) {
                 Action to = seqActionList.get(j);
-                if (from.getWho().getName().equals(to.getWho().getName())) { // vehicle mutex
+                if (from.getWho().getName().equals(to.getWho().getName())) { // vehicle mutex.. TODO: refuel and pickup/drop can be concurrent
                     mutexDag.addEdge(i + "->" + j + "_" + id++, i, j, true); // for sequential drive actions, only add the needed transitive ones
                     continue;
                 }
@@ -92,12 +105,24 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             Action action = seqActionList.get(actionIndex);
             plannedActions.put(actionIndex, new TemporalPlanAction(action, maxEndTimeOfPrevious, maxEndTimeOfPrevious + action.getDuration().getCost()));
         }
-        return new TemporalPlan(plannedActions.values());
+
+        TemporalPlan proposedPlan = new TemporalPlan(plannedActions.values());
+        TemporalPlanStateManager manager = new TemporalPlanStateManager(domain, temporalProblem, proposedPlan);
+        double endTime = proposedPlan.calculateMakespan();
+        try {
+            manager.goToTime(endTime + 1d, true);
+        } catch (IllegalStateException e) { // invalid plan // TODO: do not throw
+            return null;
+        }
+        if (manager.getCurrentPlanState().getAllVehicles().stream().anyMatch(v -> v.getCurFuelCapacity() != null
+                && v.getCurFuelCapacity().getCost() < 0)) { // TODO: too slow for seq
+            // invalid plan, break
+            return null;
+        }
+        return proposedPlan;
     }
 
     // remove all fuel-related stuff from vehicles and graph roads
-    // TODO: verify that all seq. planners use package size correctly
-    // TODO: vehicle goals
     protected static Problem translateToSequential(final Problem problem) {
         RoadGraph graph = problem.getRoadGraph();
         RoadGraph newGraph = new DefaultRoadGraph(graph.getId());
@@ -109,6 +134,9 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         Iterator<Vehicle> newVehicles = seqProblem.getAllVehicles().stream().map(v -> v.updateCurFuelCapacity(null).updateMaxFuelCapacity(null).updateLocation(newLocMap.get(v.getLocation().getName()))).iterator();
         while (newVehicles.hasNext()) {
             Vehicle vehicle = newVehicles.next();
+            if (vehicle.getTarget() != null) {
+                vehicle = vehicle.updateTarget(newLocMap.get(vehicle.getTarget().getName()));
+            }
             seqProblem = seqProblem.putVehicle(vehicle.getName(), vehicle);
         }
 
@@ -134,44 +162,4 @@ public abstract class SequentialScheduler extends AbstractPlanner {
 
     @Override
     public abstract SequentialScheduler copy();
-
-    private static final class Mutex {
-        private final Action left;
-        private final Action right;
-
-        public Mutex(Action left, Action right) {
-            this.left = left;
-            this.right = right;
-        }
-
-        public Action getLeft() {
-            return left;
-        }
-
-        public Action getRight() {
-            return right;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof Mutex)) {
-                return false;
-            }
-            Mutex mutex = (Mutex) o;
-            if (getLeft() != null ? !getLeft().equals(mutex.getLeft()) : mutex.getLeft() != null) {
-                return false;
-            }
-            return getRight() != null ? getRight().equals(mutex.getRight()) : mutex.getRight() == null;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = getLeft() != null ? getLeft().hashCode() : 0;
-            result = 31 * result + (getRight() != null ? getRight().hashCode() : 0);
-            return result;
-        }
-    }
 }
