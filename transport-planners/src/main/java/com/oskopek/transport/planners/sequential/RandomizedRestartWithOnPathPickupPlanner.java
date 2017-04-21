@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,6 +60,26 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         random = new Random(2017L);
     }
 
+    protected Random getRandom() {
+        return random;
+    }
+
+    protected Plan getBestPlan() {
+        return bestPlan;
+    }
+
+    protected int getBestPlanScore() {
+        return bestPlanScore;
+    }
+
+    public void setBestPlan(Plan bestPlan) {
+        this.bestPlan = bestPlan;
+    }
+
+    public void setBestPlanScore(int bestPlanScore) {
+        this.bestPlanScore = bestPlanScore;
+    }
+
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
         logger.debug("Initializing planning...");
@@ -69,20 +88,19 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         logger.debug("Starting planning...");
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
-        List<Location> locations = problem.getRoadGraph().getAllLocations().collect(Collectors.toList());
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            while (!current.isGoalState() && current.getTotalTime() < bestPlanScore) {
+            while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
                 if (unfinished.isEmpty()) {
                     throw new IllegalStateException("Zero packages left but not in goal state.");
                 }
 
-                Vehicle chosenVehicle = vehicles.get(random.nextInt(vehicles.size()));
+                Vehicle chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
                 Package chosenPackage;
                 while (true) {
-                    chosenPackage = unfinished.get(random.nextInt(unfinished.size()));
+                    chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
                     int curCapacity = chosenVehicle.getCurCapacity().getCost();
                     curCapacity -= chosenPackage.getSize().getCost();
                     if (curCapacity >= 0) {
@@ -96,8 +114,8 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
                         .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to current state."));
 
                 if (shouldCancel()) {
-                    logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
-                    return Optional.ofNullable(bestPlan);
+                    logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
+                    return Optional.ofNullable(getBestPlan());
                 }
             }
             if (logger.isTraceEnabled()) {
@@ -105,15 +123,15 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
             }
 
             // TODO: collapse plan?
-            if (bestPlanScore > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
-                bestPlanScore = current.getTotalTime();
-                bestPlan = new SequentialPlan(current.getAllActionsInList());
+            if (getBestPlanScore() > current.getTotalTime()) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
+                setBestPlanScore(current.getTotalTime());
+                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
             }
         }
     }
 
-    private List<Action> findPartialPlan(Domain domain, ImmutablePlanState current, String chosenVehicleName,
+    protected List<Action> findPartialPlan(Domain domain, ImmutablePlanState current, String chosenVehicleName,
             final Package chosenPackage, List<Package> unfinished) {
         Map<Location, Set<Package>> packageLocMap = new HashMap<>();
         for (Package pkg : unfinished) {
@@ -123,8 +141,8 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         final Vehicle chosenVehicle = current.getProblem().getVehicle(chosenVehicleName);
         Location packageLoc = chosenPackage.getLocation();
         List<RoadEdge> basicPath = new ArrayList<>();
-        basicPath.addAll(shortestPathMatrix.get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
-        basicPath.addAll(shortestPathMatrix.get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
         if (basicPath.isEmpty()) {
             return Collections.emptyList();
         }
@@ -144,11 +162,11 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
                 .filter(t -> t._1 >= 0 && t._2 >= 0 && t._1 <= t._2).toList();
         // only packages with pick up and drop on path and with pick up before drop
         // list should have at least one entry now
-        int curCapacity = chosenVehicle.getCurCapacity().getCost();
+        final int curCapacity = chosenVehicle.getCurCapacity().getCost();
         List<Package> chosenPackages;
         if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
             chosenPackages = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
-                    .map(sTuple -> Tuple.of(curCapacity - calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
+                    .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
                     .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
                     .minBy(t -> Tuple.of(t._1, t._2)) // TODO: T2 not last index, but length of indexes + maximize?
                     .map(t -> t._3.toJavaList()).getOrElse((List<Package>) null);
@@ -164,24 +182,7 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         return buildPlan(domain, path, chosenVehicle, chosenPackages);
     }
 
-    private static Integer calculateMaxCapacity(javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
-        return combination.flatMap(t -> Stream.of(Tuple.of(t._1, false), Tuple.of(t._2, true)))
-                .sortBy(t -> t._1).foldLeft(Tuple.of(0, Integer.MIN_VALUE), (capTuple, elem) -> {
-                    int curCapacity = capTuple._1;
-                    if (elem._2) { // drop
-                        curCapacity -= 1; // TODO assumes 1 sizes of packages
-                    } else { // pickup
-                        curCapacity += 1; // TODO assumes 1 sizes of packages
-                    }
-                    if (curCapacity > capTuple._2) {
-                        return Tuple.of(curCapacity, curCapacity);
-                    } else {
-                        return Tuple.of(curCapacity, capTuple._2);
-                    }
-                })._2;
-    }
-
-    private List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
+    protected List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
             List<Package> chosenPackages) {
         if (path.isEmpty()) {
             return Collections.emptyList();
@@ -192,14 +193,14 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         for (int i = path.size() - 1; i >= 0; i--) {
             RoadEdge edge = path.get(i);
             Location to = edge.getTo();
-            buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle);
+            PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, Collections.emptyMap());
 
             // drive
             actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
         }
         // last loc
         Location firstLocation = path.get(0).getFrom();
-        buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle);
+        PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, Collections.emptyMap());
 
         for (int i = 0; i < actions.size(); i++) { // remove redundant drives
             Action action = actions.get(i);
@@ -212,25 +213,6 @@ public class RandomizedRestartWithOnPathPickupPlanner extends AbstractPlanner {
         }
         return Stream.ofAll(actions).reverse().toJavaList();
     }
-
-    private void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop, Set<Package> inVehicle, Location at, Vehicle vehicle) {
-        for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
-            Package pkg = iter.next();
-            if (pkg.getLocation().equals(at)) {
-                actions.add(domain.buildPickUp(vehicle, at, pkg));
-                iter.remove();
-            }
-        }
-        for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext(); ) {
-            Package pkg = iter.next();
-            if (pkg.getTarget().equals(at)) {
-                actions.add(domain.buildDrop(vehicle, at, pkg));
-                inVehicle.add(pkg);
-                iter.remove();
-            }
-        }
-    }
-
 
     @Override
     public RandomizedRestartWithOnPathPickupPlanner copy() {

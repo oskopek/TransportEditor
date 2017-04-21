@@ -185,14 +185,14 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         int capacityLeft;
         if ((long) completelyOnPath.map(t -> t._3.getSize().getCost()).sum() > curCapacity) { // if not take everything
             Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples = Stream.ofAll(completelyOnPath).combinations().map(Value::toList)
-                    .map(sTuple -> Tuple.of(curCapacity - calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
+                    .map(sTuple -> Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(sTuple), sTuple.map(t -> t._3)))
                     .filter(t -> t._1 >= 0).map(t -> Tuple.of(t._1, t._2.toStream().map(p -> locationsOnPath.lastIndexOf(p.getTarget())).max().getOrElse(Integer.MAX_VALUE), t._2))
                     .minBy(t -> Tuple.of(t._1, t._2)).get(); // TODO: T2 not last index, but length of indexes + maximize?
             capacityLeft = pkgTuples._1;
             chosenPackages = pkgTuples._3.toJavaList();
         } else {
             Tuple3<Integer, Integer, javaslang.collection.List<Package>> pkgTuples
-                    = Tuple.of(curCapacity - calculateMaxCapacity(completelyOnPath),
+                    = Tuple.of(curCapacity - PlannerUtils.calculateMaxCapacity(completelyOnPath),
             completelyOnPath.toStream().map(t -> locationsOnPath.lastIndexOf(t._3.getTarget())).max().getOrElse(Integer.MAX_VALUE),
             completelyOnPath.map(t -> t._3).toList());
             capacityLeft = pkgTuples._1;
@@ -253,23 +253,6 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         return buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
     }
 
-    private static Integer calculateMaxCapacity(javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
-        return combination.flatMap(t -> Stream.of(Tuple.of(t._1, false), Tuple.of(t._2, true)))
-                .sortBy(t -> t._1).foldLeft(Tuple.of(0, Integer.MIN_VALUE), (capTuple, elem) -> {
-                    int curCapacity = capTuple._1;
-                    if (elem._2) { // drop
-                        curCapacity -= 1; // TODO assumes 1 sizes of packages
-                    } else { // pickup
-                        curCapacity += 1; // TODO assumes 1 sizes of packages
-                    }
-                    if (curCapacity > capTuple._2) {
-                        return Tuple.of(curCapacity, curCapacity);
-                    } else {
-                        return Tuple.of(curCapacity, capTuple._2);
-                    }
-                })._2;
-    }
-
     private List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
             List<Package> chosenPackages, Map<Package, Location> targetMap) {
         if (path.isEmpty()) {
@@ -281,14 +264,14 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         for (int i = path.size() - 1; i >= 0; i--) {
             RoadEdge edge = path.get(i);
             Location to = edge.getTo();
-            buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
+            PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
 
             // drive
             actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
         }
         // last loc
         Location firstLocation = path.get(0).getFrom();
-        buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
+        PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
 
         for (int i = 0; i < actions.size(); i++) { // remove redundant drives
             Action action = actions.get(i);
@@ -300,25 +283,6 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
             }
         }
         return Stream.ofAll(actions).reverse().toJavaList();
-    }
-
-    private void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop, Set<Package> inVehicle, Location at, Vehicle vehicle,
-            Map<Package, Location> targetMap) {
-        for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
-            Package pkg = iter.next();
-            if (pkg.getLocation().equals(at)) {
-                actions.add(domain.buildPickUp(vehicle, at, pkg));
-                iter.remove();
-            }
-        }
-        for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext(); ) {
-            Package pkg = iter.next();
-            if (targetMap.get(pkg).equals(at)) {
-                actions.add(domain.buildDrop(vehicle, at, pkg));
-                inVehicle.add(pkg);
-                iter.remove();
-            }
-        }
     }
 
 

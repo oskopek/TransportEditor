@@ -14,6 +14,8 @@ import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
+import javaslang.Tuple;
+import javaslang.Tuple3;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
@@ -639,6 +641,42 @@ public final class PlannerUtils {
             }
         }
         return false;
+    }
+
+    public static Integer calculateMaxCapacity(javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
+        return combination.flatMap(t -> javaslang.collection.Stream.of(Tuple.of(t._1, false, t._3), Tuple.of(t._2, true, t._3)))
+                .sortBy(t -> t._1).foldLeft(Tuple.of(0, Integer.MIN_VALUE), (capTuple, elem) -> {
+                    int curCapacity = capTuple._1;
+                    if (elem._2) { // drop
+                        curCapacity -= elem._3.getSize().getCost();
+                    } else { // pickup
+                        curCapacity += elem._3.getSize().getCost();
+                    }
+                    if (curCapacity > capTuple._2) {
+                        return Tuple.of(curCapacity, curCapacity);
+                    } else {
+                        return Tuple.of(curCapacity, capTuple._2);
+                    }
+                })._2;
+    }
+
+    public static void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop,
+            Set<Package> inVehicle, Location at, Vehicle vehicle, Map<Package, Location> targetMap) {
+        for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
+            Package pkg = iter.next();
+            if (pkg.getLocation().equals(at)) {
+                actions.add(domain.buildPickUp(vehicle, at, pkg));
+                iter.remove();
+            }
+        }
+        for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext(); ) {
+            Package pkg = iter.next();
+            if (targetMap.getOrDefault(pkg, pkg.getTarget()).equals(at)) {
+                actions.add(domain.buildDrop(vehicle, at, pkg));
+                inVehicle.add(pkg);
+                iter.remove();
+            }
+        }
     }
 
 }
