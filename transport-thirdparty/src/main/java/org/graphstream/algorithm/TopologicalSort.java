@@ -11,14 +11,14 @@ import java.util.*;
  * Implementation of DFS and Kahn's algorithms for topological sorting of a directed acyclic graph (DAG).
  * Every DAG has at least one topological ordering and these are algorithms known for constructing a
  * topological ordering in linear time.
- *
+ * <p>
  * DFS sorting is the default, as Kahn's algorithm requires the graph to be copied or for the original to
  * be modified, which can be expensive. DFS works in place and with constant memory.
- *
- * @reference Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11): 558–562
- *
- * @complexity O(V+E) time, where V and E are the number of vertices and edges
+ * <p>
+ * Complexity: O(V+E) time, where V and E are the number of vertices and edges
  * respectively.
+ * <p>
+ * Reference: Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11): 558–562
  */
 public class TopologicalSort implements Algorithm {
     public class GraphHasCycleException extends IllegalStateException {}

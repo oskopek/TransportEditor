@@ -11,7 +11,7 @@ import com.oskopek.transport.tools.executables.DefaultExecutableWithParameters;
 public class ValValidator extends ExternalValidator {
 
     private static final String executable = "validate";
-    private static final String parameters = "{0} {1} {2}";
+    private static final String parameters = "-t 0.001 {0} {1} {2}";
 
     /**
      * Default constructor.
