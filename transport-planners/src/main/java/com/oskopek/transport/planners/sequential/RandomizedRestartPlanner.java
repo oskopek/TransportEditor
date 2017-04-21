@@ -1,6 +1,5 @@
 package com.oskopek.transport.planners.sequential;
 
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
@@ -9,7 +8,6 @@ import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
-import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import javaslang.collection.Stream;
@@ -19,32 +17,12 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RandomizedRestartPlanner extends AbstractPlanner {
+public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
-    private Random random;
-    private Plan bestPlan;
-    private int bestPlanScore;
-
     public RandomizedRestartPlanner() {
         setName(RandomizedRestartPlanner.class.getSimpleName());
-    }
-
-    public ArrayTable<String, String, ShortestPath> getShortestPathMatrix() {
-        return shortestPathMatrix;
-    }
-
-    void resetState() {
-        random = null;
-        bestPlan = null;
-        bestPlanScore = Integer.MAX_VALUE;
-    }
-
-    void initialize(Problem problem) {
-        shortestPathMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
-        random = new Random(2017L);
     }
 
     @Override
@@ -58,18 +36,18 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
         List<Location> locations = problem.getRoadGraph().getAllLocations().collect(Collectors.toList());
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            while (!current.isGoalState() && current.getTotalTime() < bestPlanScore) {
+            while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 Set<Package> unfinished = PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages());
                 if (unfinished.isEmpty()) {
                     throw new IllegalStateException("Zero packages left but not in goal state.");
                 }
 
-                Vehicle chosenVehicle = vehicles.get(random.nextInt(vehicles.size()));
+                Vehicle chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
                 List<Package> chosenPackages = new ArrayList<>();
                 Location chosenLocation;
                 while (true) {
-                    chosenLocation = locations.get(random.nextInt(locations.size()));
+                    chosenLocation = locations.get(getRandom().nextInt(locations.size()));
                     final Location iterLocation = chosenLocation;
                     Iterator<Package> pkgIter = unfinished.stream().filter(p -> p.getLocation() != null
                             && p.getLocation().getName().equals(iterLocation.getName())).iterator();
@@ -97,18 +75,19 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
 
                 // TODO: assert that packages were delivered
                 if (shouldCancel()) {
-                    logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
-                    return Optional.ofNullable(bestPlan);
+                    logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
+                    return Optional.ofNullable(getBestPlan());
                 }
             }
             if (logger.isTraceEnabled()) {
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            if (bestPlanScore > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
-                bestPlanScore = current.getTotalTime();
-                bestPlan = new SequentialPlan(current.getAllActionsInList()); // TODO: collapse?
+            // TODO: collapse plan?
+            if (getBestPlanScore() > current.getTotalTime()) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
+                setBestPlanScore(current.getTotalTime());
+                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
             }
         }
     }
@@ -124,7 +103,7 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
         Location packageLoc = chosenPackages.get(0).getLocation();
 
         // drive to packages
-        ShortestPath toPackages = shortestPathMatrix.get(chosenVehicle.getLocation().getName(), chosenPackages.get(0).getLocation().getName());
+        ShortestPath toPackages = getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), chosenPackages.get(0).getLocation().getName());
         toPackages.getRoads().forEach(re -> actions.add(domain.buildDrive(chosenVehicle, re.getFrom(), re.getTo(), re.getRoad())));
 
         // pick packages up
@@ -133,7 +112,7 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
         // drive to each target
         Stream.ofAll(chosenPackages).map(pkg -> pkg.getTarget().getName()).distinct().permutations()
                 .map(Stream::toList).map(lList -> lList.prepend(packageLoc.getName())).map(lList -> lList.zip(lList.toStream().drop(1)))
-                .map(lTuples -> lTuples.map(lTuple -> shortestPathMatrix.get(lTuple._1, lTuple._2)))
+                .map(lTuples -> lTuples.map(lTuple -> getShortestPathMatrix().get(lTuple._1, lTuple._2)))
                 .minBy(lPaths -> (long) lPaths.toStream().map(ShortestPath::getDistance).sum())
                 .getOrElseThrow(() -> new IllegalStateException("Could not find the list of shortest paths."))
                 .forEach(path -> {

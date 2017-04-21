@@ -1,9 +1,7 @@
 package com.oskopek.transport.planners.sequential;
 
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
-import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Location;
@@ -11,7 +9,6 @@ import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.problem.graph.RoadEdge;
-import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import javaslang.Tuple;
@@ -30,32 +27,12 @@ import java.util.stream.Collectors;
 // choose the ones whose target is on the path
 // if still not fully capacitated, choose the others in the
 // order of distance from the shortest path
-public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner {
+public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
-    private Plan bestPlan;
-    private int bestPlanScore;
-    private Random random;
-
     public BacktrackRestartWithAroundPathPickupPlanner() {
         setName(BacktrackRestartWithAroundPathPickupPlanner.class.getSimpleName());
-    }
-
-    public ArrayTable<String, String, ShortestPath> getShortestPathMatrix() {
-        return shortestPathMatrix;
-    }
-
-    void resetState() {
-        random = null;
-        bestPlan = null;
-        bestPlanScore = Integer.MAX_VALUE;
-    }
-
-    void initialize(Problem problem) {
-        shortestPathMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
-        random = new Random(2017L);
     }
 
     @Override
@@ -76,23 +53,23 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
             }
             break;
         }
-        return Optional.ofNullable(bestPlan);
+        return Optional.ofNullable(getBestPlan());
     }
 
     private ImmutablePlanState newStateRecursively(Domain domain, final ImmutablePlanState current, final float exploration) {
         if (current.isGoalState()) {
-            if (bestPlanScore > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
-                bestPlanScore = current.getTotalTime();
-                bestPlan = new SequentialPlan(current.getAllActionsInList());
+            if (getBestPlanScore() > current.getTotalTime()) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
+                setBestPlanScore(current.getTotalTime());
+                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
             }
             return current;
         }
         if (shouldCancel()) {
-            logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
+            logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
             return null;
         }
-        if (current.getTotalTime() >= bestPlanScore) {
+        if (current.getTotalTime() >= getBestPlanScore()) {
             return current;
         }
 
@@ -105,14 +82,14 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         }
 
         while (!toTry.isEmpty()) {
-            Package chosenPackage = toTry.remove(random.nextInt(toTry.size()));
+            Package chosenPackage = toTry.remove(getRandom().nextInt(toTry.size()));
 
             List<Vehicle> vehicles = new ArrayList<>(curProblem.getAllVehicles());
             Vehicle chosenVehicle;
             while (!vehicles.isEmpty()) {
                 while (true) {
-                    if (random.nextFloat() < exploration) {
-                        chosenVehicle = vehicles.remove(random.nextInt(vehicles.size()));
+                    if (getRandom().nextFloat() < exploration) {
+                        chosenVehicle = vehicles.remove(getRandom().nextInt(vehicles.size()));
                     } else {
                         Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
                                 chosenPackage.getLocation(), chosenPackage.getSize().getCost());
@@ -142,13 +119,6 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         return current;
     }
 
-
-    private Optional<Vehicle> nearestVehicle(Collection<Vehicle> vehicles, Location curLocation, int minFreeCapacity) {
-        return Stream.ofAll(vehicles).filter(v -> v.getCurCapacity().getCost() >= minFreeCapacity)
-                .minBy(v -> shortestPathMatrix.get(v.getLocation().getName(), curLocation.getName()).getDistance())
-                .toJavaOptional();
-    }
-
     private List<Action> findPartialPlan(Domain domain, ImmutablePlanState current, String chosenVehicleName,
             final Package chosenPackage, List<Package> unfinished) {
         Map<Location, Set<Package>> packageLocMap = new HashMap<>();
@@ -159,8 +129,8 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         final Vehicle chosenVehicle = current.getProblem().getVehicle(chosenVehicleName);
         Location packageLoc = chosenPackage.getLocation();
         List<RoadEdge> basicPath = new ArrayList<>();
-        basicPath.addAll(shortestPathMatrix.get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
-        basicPath.addAll(shortestPathMatrix.get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
         if (basicPath.isEmpty()) {
             return Collections.emptyList();
         }
@@ -227,7 +197,7 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
                         continue;
                     }
                     if (pickedUp) {
-                        ShortestPath pkgToTarget = shortestPathMatrix.get(edge.getFrom().getName(), pkg.getTarget().getName());
+                        ShortestPath pkgToTarget = getShortestPathMatrix().get(edge.getFrom().getName(), pkg.getTarget().getName());
                         distancesFromPathLocation.add(Tuple.of(pkgToTarget.getDistance(), edge.getFrom()));
                     }
                 }
@@ -250,58 +220,12 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends AbstractPlanner
         }
 
         List<RoadEdge> path = basicPath;
-        return buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
+        return PlannerUtils.buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
     }
-
-    private List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
-            List<Package> chosenPackages, Map<Package, Location> targetMap) {
-        if (path.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<Action> actions = new ArrayList<>();
-        Set<Package> afterDrop = new HashSet<>(chosenPackages);
-        Set<Package> inVehicle = new HashSet<>(vehicle.getPackageList());
-        for (int i = path.size() - 1; i >= 0; i--) {
-            RoadEdge edge = path.get(i);
-            Location to = edge.getTo();
-            PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
-
-            // drive
-            actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
-        }
-        // last loc
-        Location firstLocation = path.get(0).getFrom();
-        PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
-
-        for (int i = 0; i < actions.size(); i++) { // remove redundant drives
-            Action action = actions.get(i);
-            if (action instanceof Drive) {
-                actions.remove(i);
-                i--;
-            } else {
-                break;
-            }
-        }
-        return Stream.ofAll(actions).reverse().toJavaList();
-    }
-
 
     @Override
     public BacktrackRestartWithAroundPathPickupPlanner copy() {
         return new BacktrackRestartWithAroundPathPickupPlanner();
     }
-
-    @Override
-    public int hashCode() {
-        return getClass().getSimpleName().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof BacktrackRestartWithAroundPathPickupPlanner;
-    }
-
-
-
 
 }

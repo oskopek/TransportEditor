@@ -1,15 +1,12 @@
 package com.oskopek.transport.planners.sequential;
 
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
-import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.RoadEdge;
-import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import javaslang.Tuple;
@@ -28,32 +25,12 @@ import java.util.stream.Collectors;
 // choose the ones whose target is on the path
 // if still not fully capacitated, choose the others in the
 // order of distance from the shortest path
-public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends AbstractPlanner {
+public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
-    private Random random;
-    private Plan bestPlan;
-    private int bestPlanScore;
-
     public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner() {
         setName(RandomizedRestartWithAroundPathPickupNoCoinTossPlanner.class.getSimpleName());
-    }
-
-    public ArrayTable<String, String, ShortestPath> getShortestPathMatrix() {
-        return shortestPathMatrix;
-    }
-
-    void resetState() {
-        random = null;
-        bestPlan = null;
-        bestPlanScore = Integer.MAX_VALUE;
-    }
-
-    void initialize(Problem problem) {
-        shortestPathMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
-        random = new Random(2017L);
     }
 
     @Override
@@ -65,14 +42,14 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
         double temperature = 1d; // TODO test this out
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            while (!current.isGoalState() && current.getTotalTime() < bestPlanScore) {
+            while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
                 if (unfinished.isEmpty()) {
                     throw new IllegalStateException("Zero packages left but not in goal state.");
                 }
 
-                Package chosenPackage = unfinished.get(random.nextInt(unfinished.size()));
+                Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
                 while (true) {
                     chosenVehicle = chooseFromDistanceDistribution(curProblem.getAllVehicles(), chosenPackage.getLocation(), chosenPackage.getSize().getCost(), temperature);
@@ -88,8 +65,8 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
                         .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to current state."));
 
                 if (shouldCancel()) {
-                    logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
-                    return Optional.ofNullable(bestPlan);
+                    logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
+                    return Optional.ofNullable(getBestPlan());
                 }
             }
             if (logger.isTraceEnabled()) {
@@ -97,10 +74,10 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
             }
 
             // TODO: collapse plan?
-            if (bestPlanScore > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
-                bestPlanScore = current.getTotalTime();
-                bestPlan = new SequentialPlan(current.getAllActionsInList());
+            if (getBestPlanScore() > current.getTotalTime()) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
+                setBestPlanScore(current.getTotalTime());
+                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
             }
         }
     }
@@ -109,7 +86,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
         List<Tuple2<Double, Vehicle>> vehDistances = vehicles.stream()
                 .filter(v -> v.getCurCapacity().getCost() >= minFreeCapacity)
                 .sorted(Comparator.comparing(Vehicle::getName))
-                .map(v -> Tuple.of((double) shortestPathMatrix.get(v.getLocation().getName(), to.getName()).getDistance(), v))
+                .map(v -> Tuple.of((double) getShortestPathMatrix().get(v.getLocation().getName(), to.getName()).getDistance(), v))
                 .collect(Collectors.toList());
         vehDistances = vehDistances.stream().map(t -> Tuple.of((1/(t._1 + 1)) * temperature, t._2))
                 .collect(Collectors.toList());
@@ -123,7 +100,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
             vehProbs.set(i, intermediateSum);
         }
 
-        double rand = random.nextDouble();
+        double rand = getRandom().nextDouble();
         int chosenIndex = 0;
         while (chosenIndex < vehProbs.size() && rand > vehProbs.get(chosenIndex)) {
             chosenIndex++;
@@ -141,8 +118,8 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
         final Vehicle chosenVehicle = current.getProblem().getVehicle(chosenVehicleName);
         Location packageLoc = chosenPackage.getLocation();
         List<RoadEdge> basicPath = new ArrayList<>();
-        basicPath.addAll(shortestPathMatrix.get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
-        basicPath.addAll(shortestPathMatrix.get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), packageLoc.getName()).getRoads());
+        basicPath.addAll(getShortestPathMatrix().get(packageLoc.getName(), chosenPackage.getTarget().getName()).getRoads());
         if (basicPath.isEmpty()) {
             return Collections.emptyList();
         }
@@ -209,7 +186,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
                         continue;
                     }
                     if (pickedUp) {
-                        ShortestPath pkgToTarget = shortestPathMatrix.get(edge.getFrom().getName(), pkg.getTarget().getName());
+                        ShortestPath pkgToTarget = getShortestPathMatrix().get(edge.getFrom().getName(), pkg.getTarget().getName());
                         distancesFromPathLocation.add(Tuple.of(pkgToTarget.getDistance(), edge.getFrom()));
                     }
                 }
@@ -232,54 +209,11 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Abst
         }
 
         List<RoadEdge> path = basicPath;
-        return buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
+        return PlannerUtils.buildPlan(domain, path, chosenVehicle, chosenPackages, targetMap);
     }
-
-    private List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
-            List<Package> chosenPackages, Map<Package, Location> targetMap) {
-        if (path.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<Action> actions = new ArrayList<>();
-        Set<Package> afterDrop = new HashSet<>(chosenPackages);
-        Set<Package> inVehicle = new HashSet<>(vehicle.getPackageList());
-        for (int i = path.size() - 1; i >= 0; i--) {
-            RoadEdge edge = path.get(i);
-            Location to = edge.getTo();
-            PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
-
-            // drive
-            actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
-        }
-        // last loc
-        Location firstLocation = path.get(0).getFrom();
-        PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
-
-        for (int i = 0; i < actions.size(); i++) { // remove redundant drives
-            Action action = actions.get(i);
-            if (action instanceof Drive) {
-                actions.remove(i);
-                i--;
-            } else {
-                break;
-            }
-        }
-        return Stream.ofAll(actions).reverse().toJavaList();
-    }
-
 
     @Override
     public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner copy() {
         return new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().getSimpleName().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof RandomizedRestartWithAroundPathPickupNoCoinTossPlanner;
     }
 }

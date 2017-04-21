@@ -4,7 +4,6 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
-import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
@@ -87,25 +86,8 @@ public class RandomizedRestartWithOnPathPickup2Planner extends RandomizedRestart
         }
     }
 
-    private Optional<Vehicle> nearestVehicle(Collection<Vehicle> vehicles, Location curLocation, int minFreeCapacity) {
-        return Stream.ofAll(vehicles).filter(v -> v.getCurCapacity().getCost() >= minFreeCapacity)
-                .minBy(v -> getShortestPathMatrix().get(v.getLocation().getName(), curLocation.getName()).getDistance())
-                .toJavaOptional();
-    }
-
-
     @Override
     public RandomizedRestartWithOnPathPickup2Planner copy() {
         return new RandomizedRestartWithOnPathPickup2Planner();
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().getSimpleName().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof RandomizedRestartWithOnPathPickup2Planner;
     }
 }

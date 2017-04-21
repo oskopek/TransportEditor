@@ -660,7 +660,7 @@ public final class PlannerUtils {
                 })._2;
     }
 
-    public static void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop,
+    private static void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop,
             Set<Package> inVehicle, Location at, Vehicle vehicle, Map<Package, Location> targetMap) {
         for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
             Package pkg = iter.next();
@@ -677,6 +677,38 @@ public final class PlannerUtils {
                 iter.remove();
             }
         }
+    }
+
+    public static List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
+            List<Package> chosenPackages, Map<Package, Location> targetMap) {
+        if (path.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Action> actions = new ArrayList<>();
+        Set<Package> afterDrop = new HashSet<>(chosenPackages);
+        Set<Package> inVehicle = new HashSet<>(vehicle.getPackageList());
+        for (int i = path.size() - 1; i >= 0; i--) {
+            RoadEdge edge = path.get(i);
+            Location to = edge.getTo();
+            PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, to, vehicle, targetMap);
+
+            // drive
+            actions.add(domain.buildDrive(vehicle, edge.getFrom(), to, edge.getRoad()));
+        }
+        // last loc
+        Location firstLocation = path.get(0).getFrom();
+        PlannerUtils.buildPackageActions(domain, actions, afterDrop, inVehicle, firstLocation, vehicle, targetMap);
+
+        for (int i = 0; i < actions.size(); i++) { // remove redundant drives
+            Action action = actions.get(i);
+            if (action instanceof Drive) {
+                actions.remove(i);
+                i--;
+            } else {
+                break;
+            }
+        }
+        return javaslang.collection.Stream.ofAll(actions).reverse().toJavaList();
     }
 
 }
