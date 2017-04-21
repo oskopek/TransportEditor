@@ -92,10 +92,6 @@ public class TemporalPlanIO implements DataIO<Plan> {
         }
         for (PlanParser.TemporalActionContext action : tempContext.temporalAction()) {
             double duration = Double.parseDouble(action.duration().NUMBER().getText());
-//            if ((duration != Math.floor(duration)) || Double.isInfinite(duration)) {
-//                throw new IllegalArgumentException("We do not support non-integer durations."
-//                        + " There's no need for them in most Transport domains.");
-//            }
             double time = Double.parseDouble(action.time().NUMBER().getText());
             String actionString = String.format("(%s)",
                     String.join(" ", action.sequentialAction().action().NAME().getText(),

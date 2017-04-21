@@ -158,7 +158,7 @@ public final class PlannerUtils {
         return generated.build();
     }
 
-    @Deprecated // doesn't work, use ...Occurred
+    @Deprecated // TODO: doesn't work, use ...Occurred
     public static boolean needlessDropAndPickup(Iterator<Action> reverseActions, Vehicle vehicle, Package pkg) {
         Map<String, String> pickedUpBy = new HashMap<>(); // Package -> Vehicle
         pickedUpBy.put(pkg.getName(), vehicle.getName());
@@ -179,7 +179,7 @@ public final class PlannerUtils {
         return false;
     }
 
-    @Deprecated // Slow, replace
+    @Deprecated // TODO: Slow, replace
     public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions,
             PickUp lastAction) {
         List<Action> actionsNew = Lists.newArrayList(actions);
@@ -187,7 +187,7 @@ public final class PlannerUtils {
         return needlessDropAndPickupOccurred(vehicles, actionsNew);
     }
 
-    @Deprecated // Slow, replace
+    @Deprecated // TODO: Slow, replace
     public static boolean needlessDropAndPickupOccurred(Collection<Vehicle> vehicles, Iterable<Action> actions) {
         for (Vehicle v : vehicles) {
             Map<String, Integer> packagesUntouchedSince = new HashMap<>();
