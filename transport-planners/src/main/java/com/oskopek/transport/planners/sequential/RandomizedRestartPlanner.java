@@ -9,19 +9,10 @@ import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
-import com.oskopek.transport.model.problem.graph.RoadEdge;
-import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import javaslang.collection.Stream;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.graphstream.algorithm.APSP;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Element;
-import org.graphstream.graph.Path;
-import org.graphstream.graph.implementations.Graphs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +43,7 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
     }
 
     void initialize(Problem problem) {
-        shortestPathMatrix = RandomizedRestartPlanner.computeAPSP(problem.getRoadGraph());
+        shortestPathMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
         random = new Random(2017L);
     }
 
@@ -174,95 +165,5 @@ public class RandomizedRestartPlanner extends AbstractPlanner {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof RandomizedRestartPlanner;
-    }
-
-    private static ArrayTable<String, String, ShortestPath> computeAPSP(final RoadGraph graph) {
-        final String ATTRIBUTE_NAME = "weight";
-        RoadGraph originalAPSPGraph = (RoadGraph) Graphs.clone(graph);
-        originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName())
-                .addAttribute(ATTRIBUTE_NAME, roadEdge.getRoad().getLength().getCost()));
-        new APSP(originalAPSPGraph, ATTRIBUTE_NAME, true).compute();
-        List<String> locationNames = originalAPSPGraph.getNodeSet().stream().map(Element::getId).collect(
-                Collectors.toList());
-        ArrayTable<String, String, ShortestPath> distanceMatrix = ArrayTable.create(locationNames, locationNames);
-        for (String from : locationNames) {
-            APSP.APSPInfo current = originalAPSPGraph.getNode(from).getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
-            for (String to : locationNames) {
-                Path shortestPath = current.getShortestPathTo(to);
-                List<RoadEdge> roads = new ArrayList<>(shortestPath.getEdgeCount());
-                int distance = (int) PlannerUtils.getLengthToCorrect(current, to);
-                if (distance > 0) {
-                    for (Edge edge : shortestPath.getEachEdge()) {
-                        roads.add(graph.getRoadEdge(edge.getId()));
-                    }
-                }
-                if (null != distanceMatrix.put(from, to, new ShortestPath(roads, distance))) {
-                    throw new IllegalStateException("Overwritten a value.");
-                }
-            }
-        }
-        return distanceMatrix;
-    }
-
-    private static final class ShortestPath {
-
-        private final List<RoadEdge> roads;
-        private final Integer distance;
-
-        public ShortestPath(List<RoadEdge> roads, Integer distance) {
-            this.roads = roads;
-            this.distance = distance;
-        }
-
-        public Location lastLocation() {
-            if (roads.isEmpty()) {
-                return null;
-            }
-            return roads.get(roads.size() - 1).getTo();
-        }
-
-        /**
-         * Get the roads.
-         *
-         * @return the roads
-         */
-        public List<RoadEdge> getRoads() {
-            return roads;
-        }
-
-        /**
-         * Get the distance.
-         *
-         * @return the distance
-         */
-        public Integer getDistance() {
-            return distance;
-        }
-
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this).append("distance", distance).append("roads", roads).toString();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-
-            if (!(o instanceof ShortestPath)) {
-                return false;
-            }
-
-            ShortestPath that = (ShortestPath) o;
-
-            return new EqualsBuilder().append(getRoads(), that.getRoads()).append(getDistance(), that.getDistance())
-                    .isEquals();
-        }
-
-        @Override
-        public int hashCode() {
-            return new HashCodeBuilder(17, 37).append(getRoads()).append(getDistance()).toHashCode();
-        }
     }
 }

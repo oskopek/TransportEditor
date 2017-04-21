@@ -9,12 +9,15 @@ import com.oskopek.transport.model.domain.action.Drop;
 import com.oskopek.transport.model.domain.action.PickUp;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
+import org.graphstream.graph.Path;
 import org.graphstream.graph.implementations.Graphs;
 
 import java.util.*;
@@ -44,7 +47,7 @@ public final class PlannerUtils {
      * @return a stream of applicable actions
      */
     public static Stream<Action> generateActions(Domain domain, ImmutablePlanState state,
-            ArrayTable<String, String, Integer> distanceMatrix, Set<Package> packagesUnfinished) {
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Set<Package> packagesUnfinished) {
         if (PlannerUtils.hasCycle(state.getAllActionsReversed())) { // TODO: Convert to non-generation
             return Stream.empty();
         }
@@ -157,11 +160,11 @@ public final class PlannerUtils {
         List<Action> reversedActions = Lists.newArrayList(state.getAllActionsReversed());
         if (lastVehicleAndNotDrop.isPresent()) { // continue driving if driving
             Vehicle vehicle = lastVehicleAndNotDrop.get();
-            PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
+            generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
                     .forEach(generated::add);
         } else {
             for (Vehicle vehicle : vehicles) {
-                PlannerUtils.generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
+                generateDrivesForVehicle(vehicle, graph, domain, distanceMatrix, reversedActions)
                         .forEach(generated::add);
             }
         }
@@ -266,12 +269,12 @@ public final class PlannerUtils {
      * @return a stream of generated drive actions
      */
     private static Stream<Drive> generateDrivesForVehicle(Vehicle vehicle, RoadGraph graph, Domain domain,
-            ArrayTable<String, String, Integer> distanceMatrix, Iterable<Action> reversedActions) {
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Iterable<Action> reversedActions) {
         Stream.Builder<Drive> vehicleActions = Stream.builder();
         Location current = vehicle.getLocation();
         for (Edge edge : graph.getNode(current.getName()).getEachLeavingEdge()) {
             Location target = graph.getLocation(edge.getTargetNode().getId());
-            if (PlannerUtils.doesShorterPathExist(vehicle, target, reversedActions.iterator(), distanceMatrix)) {
+            if (doesShorterPathExist(vehicle, target, reversedActions.iterator(), distanceMatrix)) {
                 continue;
             }
             vehicleActions.accept(domain.buildDrive(vehicle, current, target, graph.getRoad(edge.getId())));
@@ -358,9 +361,9 @@ public final class PlannerUtils {
      * Computes the All-pairs shortest path algorithm (Floyd-Warshall) on the road graph.
      *
      * @param graph the graph
-     * @return a lookup matrix of shortest path distances
+     * @return a lookup matrix of shortest paths
      */
-    public static ArrayTable<String, String, Integer> computeAPSP(final RoadGraph graph) {
+    public static ArrayTable<String, String, ShortestPath> computeAPSP(final RoadGraph graph) {
         final String ATTRIBUTE_NAME = "weight";
         RoadGraph originalAPSPGraph = (RoadGraph) Graphs.clone(graph);
         originalAPSPGraph.getAllRoads().forEach(roadEdge -> originalAPSPGraph.getEdge(roadEdge.getRoad().getName())
@@ -368,11 +371,19 @@ public final class PlannerUtils {
         new APSP(originalAPSPGraph, ATTRIBUTE_NAME, true).compute();
         List<String> locationNames = originalAPSPGraph.getNodeSet().stream().map(Element::getId).collect(
                 Collectors.toList());
-        ArrayTable<String, String, Integer> distanceMatrix = ArrayTable.create(locationNames, locationNames);
+        ArrayTable<String, String, ShortestPath> distanceMatrix = ArrayTable.create(locationNames, locationNames);
         for (String from : locationNames) {
             APSP.APSPInfo current = originalAPSPGraph.getNode(from).getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
             for (String to : locationNames) {
-                if (null != distanceMatrix.put(from, to, (int) getLengthToCorrect(current, to))) {
+                Path shortestPath = current.getShortestPathTo(to);
+                List<RoadEdge> roads = new ArrayList<>(shortestPath.getEdgeCount());
+                int distance = (int) getLengthToCorrect(current, to);
+                if (distance > 0) {
+                    for (Edge edge : shortestPath.getEachEdge()) {
+                        roads.add(graph.getRoadEdge(edge.getId()));
+                    }
+                }
+                if (null != distanceMatrix.put(from, to, new ShortestPath(roads, distance))) {
                     throw new IllegalStateException("Overwritten a value.");
                 }
             }
@@ -406,7 +417,7 @@ public final class PlannerUtils {
      * @return true iff a shorter path than the current one exists (making the sequential plan suboptimal)
      */
     public static boolean doesShorterPathExist(Vehicle vehicle, Location target,
-            Iterator<Action> reversedActionsIterator, ArrayTable<String, String, Integer> distanceMatrix) {
+            Iterator<Action> reversedActionsIterator, ArrayTable<String, String, ShortestPath> distanceMatrix) {
 
         if (!reversedActionsIterator.hasNext()) {
             return false;
@@ -436,7 +447,7 @@ public final class PlannerUtils {
             sourceOfPreviousDrives = lastDrive.getWhere();
         }
 
-        return distanceMatrix.get(sourceOfPreviousDrives.getName(), target.getName()) < lengthOfPath;
+        return distanceMatrix.get(sourceOfPreviousDrives.getName(), target.getName()).getDistance() < lengthOfPath;
     }
 
     /**
@@ -449,19 +460,19 @@ public final class PlannerUtils {
      * @return the heuristic value.
      */
     public static int calculateSumOfDistancesToPackageTargets(Collection<Package> packageList,
-            Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
+            Collection<Vehicle> vehicleList, ArrayTable<String, String, ShortestPath> distanceMatrix) {
         int sumDistances = 0;
         for (Vehicle vehicle : vehicleList) { // vehicles are never in the middle of a drive
             for (Package pkg : vehicle.getPackageList()) {
                 sumDistances += distanceMatrix.get(vehicle.getLocation().getName(), pkg.getTarget().getName())
-                        + 1; // + drop action
+                        .getDistance() + 1; // + drop action
             }
         }
         for (Package pkg : packageList) {
             Location pkgLocation = pkg.getLocation();
             if (pkgLocation != null) {
                 sumDistances += distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName())
-                        + 2; // + pickup and drop
+                        .getDistance() + 2; // + pickup and drop
             }
         }
         return sumDistances;
@@ -501,7 +512,7 @@ public final class PlannerUtils {
      * @return the heuristic value.
      */
     public static int calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(Collection<Package> packageList,
-            Collection<Vehicle> vehicleList, ArrayTable<String, String, Integer> distanceMatrix) {
+            Collection<Vehicle> vehicleList, ArrayTable<String, String, ShortestPath> distanceMatrix) {
         int sumDistances = 0;
 //        for (Vehicle vehicle : vehicleList) { // vehicles are never in the middle of a drive
 //            int maxPkgDistance = 0;
@@ -520,19 +531,19 @@ public final class PlannerUtils {
                 String pkgLocName = pkgLocation.getName();
                 // calculate the distance to the target + pickup and drop
                 sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName()) // TODO: not admissible
-                        + 2; // + pickup and drop
+                        .getDistance() + 2; // + pickup and drop
 
                 // Calculate the distance to the nearest vehicle or package
                 int minVehicleDistance = Integer.MAX_VALUE;
                 for (Vehicle vehicle : vehicleList) {
-                    int dist = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName());
+                    int dist = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName()).getDistance();
                     if (dist < minVehicleDistance) {
                         minVehicleDistance = dist;
                     }
                 }
                 for (Package pkg2 : packageList) {
                     if (pkg2.getLocation() != null) {
-                        int dist = distanceMatrix.get(pkgLocName, pkg2.getLocation().getName());
+                        int dist = distanceMatrix.get(pkgLocName, pkg2.getLocation().getName()).getDistance();
                         if (dist < minVehicleDistance) {
                             minVehicleDistance = dist;
                         }

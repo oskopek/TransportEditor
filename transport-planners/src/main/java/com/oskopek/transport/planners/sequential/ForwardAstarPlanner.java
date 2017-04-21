@@ -9,6 +9,7 @@ import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.AbstractPlanner;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teneighty.heap.AbstractHeap;
@@ -30,7 +31,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
     private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
-    private ArrayTable<String, String, Integer> distanceMatrix;
+    private ArrayTable<String, String, ShortestPath> distanceMatrix;
     private Plan bestPlan;
     private int bestPlanScore;
 
@@ -57,7 +58,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      *
      * @return the shortest path length (sum of lengths of roads on the shortest paths)
      */
-    public ArrayTable<String, String, Integer> getDistanceMatrix() {
+    public ArrayTable<String, String, ShortestPath> getDistanceMatrix() {
         return distanceMatrix;
     }
 
@@ -171,7 +172,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      * @return the heuristic value (score)
      */
     protected abstract Integer calculateHeuristic(ImmutablePlanState state,
-            ArrayTable<String, String, Integer> distanceMatrix, Collection<Package> unfinishedPackages);
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages);
 
     @Override
     public abstract ForwardAstarPlanner copy();
