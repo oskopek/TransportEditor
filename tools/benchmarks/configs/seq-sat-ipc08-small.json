@@ -24,6 +24,10 @@
     "p22": {
       "filePath": "${transport.root}/datasets/ipc08/seq-sat/transport-strips/p22.pddl",
       "bestScore": 675
+    },
+    "p30": {
+      "filePath": "${transport.root}/datasets/ipc08/seq-sat/transport-strips/p22.pddl",
+      "bestScore": 5513
     }
   },
   "scoreFunctionType": "TOTAL_TIME",
@@ -38,6 +42,6 @@
       "className": "com.oskopek.transport.planners.sequential.SFA3Planner"
     }
   },
-  "threadCount": 6,
-  "timeout": 10
+  "threadCount": 3,
+  "timeout": 600
 }

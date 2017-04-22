@@ -124,14 +124,11 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRWAScheduler": {
-      "className": "com.oskopek.transport.planners.temporal.RRWASequentialScheduler"
-    },
     "TFD2014": {
       "className": "com.oskopek.transport.model.planner.ExternalPlanner",
       "params": "tfd-plan.sh {0} {1} {2}"
     }
   },
-  "threadCount": 8,
-  "timeout": 600
+  "threadCount": 4,
+  "timeout": 1800
 }
