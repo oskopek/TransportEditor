@@ -12,7 +12,7 @@ import java.util.Collection;
  * {@link PlannerUtils#calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(Collection, Collection, ArrayTable)}
  * as a heuristic.
  */
-public final class SFA3Planner extends ForwardAstarPlanner {
+public class SFA3Planner extends ForwardAstarPlanner {
 
     /**
      * Default constructor.
@@ -20,6 +20,15 @@ public final class SFA3Planner extends ForwardAstarPlanner {
     public SFA3Planner() {
         super(false);
         setName(SFA3Planner.class.getSimpleName());
+    }
+
+    /**
+     * Default constructor.
+     *
+     * @param stopAtFirstSolution true iff the algorithm should stop after the first found solution
+     */
+    public SFA3Planner(boolean stopAtFirstSolution) {
+        super(stopAtFirstSolution);
     }
 
     @Override
