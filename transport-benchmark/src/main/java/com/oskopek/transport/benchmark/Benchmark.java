@@ -1,6 +1,5 @@
 package com.oskopek.transport.benchmark;
 
-import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.validation.Validator;
@@ -57,22 +56,6 @@ public class Benchmark {
         return Stream.ofAll(futures).map(
                 f -> Try.of(f::get).map(BenchmarkResults::serializeRun)
                         .getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
-    }
-
-    /**
-     * Populates the run table from the stream of benchmark run results.
-     *
-     * @param matrix the benchmark matrix
-     * @param intermediates the intermediate results
-     * @return the run table
-     */
-    private static ArrayTable<Problem, Planner, BenchmarkRun> populateRunTable(BenchmarkMatrix matrix,
-            Stream<BenchmarkRun> intermediates) {
-        ArrayTable<Problem, Planner, BenchmarkRun> table = ArrayTable.create(matrix.getProblems(),
-                matrix.getPlanners());
-        intermediates.forEach(intermediate -> table.put(intermediate.getProblem(), intermediate.getPlanner(),
-                intermediate));
-        return table;
     }
 
     /**

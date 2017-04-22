@@ -19,22 +19,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p01",
-            "results": {
-                "bestScore": 148,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 148,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p01",
             "results": {
@@ -228,22 +212,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p02",
-            "results": {
-                "bestScore": 191,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 191,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p02",
             "results": {
                 "bestScore": 191,
@@ -467,22 +435,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p03",
-            "results": {
-                "bestScore": 300,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 300,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p03",
             "results": {
@@ -676,22 +628,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p04",
-            "results": {
-                "bestScore": 250,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p04",
             "results": {
                 "bestScore": 250,
@@ -915,22 +851,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p05",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p05",
             "results": {
@@ -1124,22 +1044,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p06",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p06",
             "results": {
                 "bestScore": -1,
@@ -1363,22 +1267,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p07",
-            "results": {
-                "bestScore": 967,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 967,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p07",
             "results": {
@@ -1572,22 +1460,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p08",
-            "results": {
-                "bestScore": 1173,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p08",
             "results": {
                 "bestScore": 1173,
@@ -1811,22 +1683,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p09",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p09",
             "results": {
@@ -2020,22 +1876,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p10",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p10",
             "results": {
                 "bestScore": -1,
@@ -2259,22 +2099,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p11",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p11",
             "results": {
@@ -2468,22 +2292,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p12",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p12",
             "results": {
                 "bestScore": -1,
@@ -2707,22 +2515,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p13",
-            "results": {
-                "bestScore": 594,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 594,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p13",
             "results": {
@@ -2931,22 +2723,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p14",
-            "results": {
-                "bestScore": 526,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 1,
-                "score": 526,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p14",
             "results": {
@@ -3140,22 +2916,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p15",
-            "results": {
-                "bestScore": 753,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p15",
             "results": {
                 "bestScore": 753,
@@ -3379,22 +3139,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p16",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p16",
             "results": {
@@ -3588,22 +3332,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p17",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p17",
             "results": {
                 "bestScore": -1,
@@ -3827,22 +3555,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p18",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p18",
             "results": {
@@ -4051,22 +3763,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "cedalion",
-            "problem": "p19",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "cgamer-bd",
             "problem": "p19",
             "results": {
@@ -4260,22 +3956,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "all-paca",
-            "problem": "p20",
-            "results": {
-                "bestScore": -1,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "cedalion",
             "problem": "p20",
             "results": {
                 "bestScore": -1,

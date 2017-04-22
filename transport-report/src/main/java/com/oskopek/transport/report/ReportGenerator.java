@@ -4,6 +4,7 @@ import com.oskopek.transport.benchmark.data.BenchmarkResults;
 import com.oskopek.transport.benchmark.data.BenchmarkResultsIO;
 import com.oskopek.transport.persistence.IOUtils;
 import javaslang.Tuple;
+import javaslang.Value;
 import javaslang.collection.Stream;
 import javaslang.control.Try;
 import org.reflections.Reflections;
@@ -19,9 +20,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The logic behind report generation. Uses the added reporters to generate a folder full of reports.
@@ -29,7 +29,6 @@ import java.util.Optional;
 public class ReportGenerator {
 
     private final List<Reporter> reporters = new ArrayList<>();
-    private final List<RunTableReporter> runTableReporters = new ArrayList<>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final String reportsFolderName;
 
@@ -78,13 +77,6 @@ public class ReportGenerator {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(this::addReporter);
-
-        Stream.ofAll(reflections.getSubTypesOf(RunTableReporter.class))
-                .filter(type -> !Modifier.isAbstract(type.getModifiers()))
-                .map(type -> Try.of(type::newInstance).toJavaOptional())
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(this::addRunTableReporter);
     }
 
     /**
@@ -97,7 +89,28 @@ public class ReportGenerator {
     public void generate(Path resultFile) throws IOException {
         String resultFileContents = IOUtils.concatReadAllLines(Files.newInputStream(resultFile));
         BenchmarkResults results = new BenchmarkResultsIO().parse(resultFileContents);
+        results = recalculateQuality(results);
         generate(results, resultFile.getParent());
+    }
+
+    /**
+     * Recalculates the best scores for a problem and the corresponding quality values of solutions.
+     *
+     * @param results the original results
+     * @return the updated results
+     */
+    private static BenchmarkResults recalculateQuality(BenchmarkResults results) {
+        Map<String, List<BenchmarkResults.JsonRun>> runs = Stream.ofAll(results.getRuns())
+                .groupBy(BenchmarkResults.JsonRun::getProblem)
+                .mapValues(Value::toJavaList).toJavaMap();
+        Map<String, Double> bestScore = Stream.ofAll(runs.entrySet())
+                .map(e -> Tuple.of(e.getKey(), e.getValue().stream()
+                .flatMap(r -> java.util.stream.Stream.of(r.getResults().getScore(), r.getResults().getBestScore()))
+                .filter(Objects::nonNull).min(Double::compare)))
+                .toJavaMap(t -> Tuple.of(t._1, t._2.orElse(null)));
+        return BenchmarkResults.from(results.getRuns().stream()
+                .map(r -> BenchmarkResults.JsonRun.of(r, r.getResults().updateBestScore(bestScore.get(r.getProblem()))))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -124,18 +137,6 @@ public class ReportGenerator {
                     Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2))
                             .onFailure(e -> new IllegalStateException("Failed to persist report: " + reportFile, e));
                 });
-
-        if (results.getRunTable() != null) {
-            runTableReporters.stream()
-                    .map(reporter -> Tuple.of(reporter.getFileName(), reporter.generateReport(results.getRunTable())))
-                    .forEach(tuple -> {
-                        String reportName = tuple._1;
-                        logger.info("Generating run table report: {}", reportName);
-                        Path reportFile = reportDir.resolve(reportName);
-                        Try.run(() -> IOUtils.writeToFile(reportFile, tuple._2)).onFailure(e ->
-                                new IllegalStateException("Failed to persist report: " + reportFile, e));
-                    });
-        }
     }
 
     /**
@@ -146,15 +147,5 @@ public class ReportGenerator {
     public void addReporter(Reporter reporter) {
         reporters.add(reporter);
     }
-
-    /**
-     * Add a run table reporter to use when generating.
-     *
-     * @param runTableReporter the run table reporter to add
-     */
-    public void addRunTableReporter(RunTableReporter runTableReporter) {
-        runTableReporters.add(runTableReporter);
-    }
-
 
 }

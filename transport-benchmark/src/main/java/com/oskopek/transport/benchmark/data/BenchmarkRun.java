@@ -36,7 +36,7 @@ public class BenchmarkRun {
 
 
     /**
-     * Ammend the run results to a benchmark run.
+     * Amend the run results to a benchmark run.
      *
      * @param run the benchmark run
      * @param runResults the run results
@@ -76,7 +76,8 @@ public class BenchmarkRun {
             ScoreFunction scoreFunction, Results runResults) {
         this.domain = domain;
         this.problem = problem;
-        this.planner = planner;
+        this.planner = planner.copy();
+        this.planner.setName(planner.getName());
         this.bestScore = bestScore;
         this.timeout = timeout;
         this.scoreFunction = scoreFunction;
@@ -329,6 +330,16 @@ public class BenchmarkRun {
          */
         public double getQuality() {
             return quality;
+        }
+
+        /**
+         * Update the best score, creating a new run instance.
+         *
+         * @param newBestScore the new best score
+         * @return a new results instance
+         */
+        public Results updateBestScore(Double newBestScore) {
+            return new Results(plan, score, newBestScore, exitStatus, startTimeMs, endTimeMs);
         }
     }
 

@@ -53,7 +53,7 @@ public class BenchmarkMatrix {
     public Iterator<BenchmarkRun> toBenchmarkRuns(Function2<Problem, Planner, Boolean> skipFunction,
             ScoreFunction scoreFunction) {
         return Stream.ofAll(problems).crossProduct(planners).filter(t -> !skipFunction.apply(t._1, t._2)).map(
-                t -> new BenchmarkRun(domain, t._1, t._2.copy(), problemInfo.get(t._1).getBestScore(), timeout,
+                t -> new BenchmarkRun(domain, t._1, t._2, problemInfo.get(t._1).getBestScore(), timeout,
                         scoreFunction));
     }
 

@@ -21,11 +21,29 @@ import java.util.stream.Stream;
 public abstract class LatexProblemPlannerReporter implements Reporter {
 
     private final Function<BenchmarkResults.JsonRun, Object> dataGetter;
+
+    /**
+     * Used for formatting quality and any other decimal numbers (fixed 2 decimal places).
+     */
     protected static final DecimalFormat decimalFormat;
 
+    /**
+     * Used for formatting score (optional two decimal places, if possible no decimal places).
+     */
+    protected static final DecimalFormat scoreFormat;
+
     static {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(Locale.US);
+        symbols.setDecimalSeparator('.');
         decimalFormat = new DecimalFormat("0.00");
-        decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
+        decimalFormat.setGroupingUsed(false);
+        decimalFormat.setDecimalFormatSymbols(symbols);
+
+        scoreFormat = new DecimalFormat();
+        scoreFormat.setGroupingUsed(false);
+        scoreFormat.setDecimalFormatSymbols(symbols);
+        scoreFormat.setMinimumFractionDigits(0);
+        scoreFormat.setMaximumFractionDigits(2);
     }
 
     /**
