@@ -17,10 +17,19 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Chooses a vehicle and location randomly,
+ * pick up as many packages as possible at that location,
+ * and deliver them along the shortest path possible (calculated as brute force permutations and evaluated
+ * using the shortest path matrix).
+ */
 public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Default constructor.
+     */
     public RandomizedRestartPlanner() {
         setName(RandomizedRestartPlanner.class.getSimpleName());
     }
@@ -68,10 +77,11 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
                     }
                 }
 
-                List<Action> newActions = findPlan(domain, current, chosenVehicle.getName(), chosenPackages);
+                List<Action> newActions = findPlan(domain, curProblem.getVehicle(chosenVehicle.getName()),
+                        chosenPackages);
                 current = javaslang.collection.Stream.ofAll(newActions).foldLeft(Optional.of(current),
                         (state, action) -> state.flatMap(state2 -> state2.apply(action)))
-                        .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to current state."));
+                        .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to state."));
 
                 // TODO: assert that packages were delivered
                 if (shouldCancel()) {
@@ -92,26 +102,34 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
         }
     }
 
-    private List<Action> findPlan(Domain domain, ImmutablePlanState current, String chosenVehicleName,
-            List<Package> chosenPackages) {
+    /**
+     * Build the path for the chosen packages.
+     *
+     * @param domain the domain
+     * @param chosenVehicle the chosen vehicle
+     * @param chosenPackages the chosen packages
+     * @return the plan
+     */
+    private List<Action> findPlan(Domain domain, Vehicle chosenVehicle, List<Package> chosenPackages) {
         List<Action> actions = new ArrayList<>();
         if (chosenPackages.isEmpty()) {
             return actions;
         }
-
-        final Vehicle chosenVehicle = current.getProblem().getVehicle(chosenVehicleName);
         Location packageLoc = chosenPackages.get(0).getLocation();
 
         // drive to packages
-        ShortestPath toPackages = getShortestPathMatrix().get(chosenVehicle.getLocation().getName(), chosenPackages.get(0).getLocation().getName());
-        toPackages.getRoads().forEach(re -> actions.add(domain.buildDrive(chosenVehicle, re.getFrom(), re.getTo(), re.getRoad())));
+        ShortestPath toPackages = getShortestPathMatrix().get(chosenVehicle.getLocation().getName(),
+                chosenPackages.get(0).getLocation().getName());
+        toPackages.getRoads().forEach(re -> actions.add(domain.buildDrive(chosenVehicle, re.getFrom(), re.getTo(),
+                re.getRoad())));
 
         // pick packages up
         chosenPackages.forEach(p -> actions.add(domain.buildPickUp(chosenVehicle, p.getLocation(), p)));
 
         // drive to each target
         Stream.ofAll(chosenPackages).map(pkg -> pkg.getTarget().getName()).distinct().permutations()
-                .map(Stream::toList).map(lList -> lList.prepend(packageLoc.getName())).map(lList -> lList.zip(lList.toStream().drop(1)))
+                .map(Stream::toList)
+                .map(lList -> lList.prepend(packageLoc.getName())).map(lList -> lList.zip(lList.toStream().drop(1)))
                 .map(lTuples -> lTuples.map(lTuple -> getShortestPathMatrix().get(lTuple._1, lTuple._2)))
                 .minBy(lPaths -> (long) lPaths.toStream().map(ShortestPath::getDistance).sum())
                 .getOrElseThrow(() -> new IllegalStateException("Could not find the list of shortest paths."))

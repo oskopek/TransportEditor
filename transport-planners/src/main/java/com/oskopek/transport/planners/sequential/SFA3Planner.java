@@ -22,8 +22,8 @@ public final class SFA3Planner extends ForwardAstarPlanner {
     }
 
     @Override
-    protected Integer calculateHeuristic(ImmutablePlanState state, ArrayTable<String, String, ShortestPath> distanceMatrix,
-            Collection<Package> unfinishedPackages) {
+    protected Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
         return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                 state.getProblem().getAllVehicles(), distanceMatrix);
     }

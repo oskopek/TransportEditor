@@ -15,13 +15,19 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.List;
 
-// choose a random vehicle and package,
-// find the path, find all packages on it
-// choose the ones whose target is on the path
+/**
+ * Chooses a vehicle and package randomly,
+ * find the path to deliver the package by the vehicle,
+ * find all packages on it and around it
+ * choose the ones whose target is on the path and deliver them.
+ */
 public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Default constructor.
+     */
     public RandomizedRestartWithOnPathPickupPlanner() {
         setName(RandomizedRestartWithOnPathPickupPlanner.class.getSimpleName());
     }
@@ -38,7 +44,8 @@ public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomiz
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
-                List<Package> unfinished = new ArrayList<>(PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
+                List<Package> unfinished = new ArrayList<>(
+                        PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
                 if (unfinished.isEmpty()) {
                     throw new IllegalStateException("Zero packages left but not in goal state.");
                 }
@@ -54,10 +61,11 @@ public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomiz
                     }
                 }
 
-                List<Action> newActions = findPartialPlan(domain, current, chosenVehicle.getName(), chosenPackage, unfinished, false);
+                List<Action> newActions = findPartialPlan(domain, current, chosenVehicle.getName(), chosenPackage,
+                        unfinished, false);
                 current = Stream.ofAll(newActions).foldLeft(Optional.of(current),
                         (state, action) -> state.flatMap(state2 -> state2.apply(action)))
-                        .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to current state."));
+                        .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to state."));
 
                 if (shouldCancel()) {
                     logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());

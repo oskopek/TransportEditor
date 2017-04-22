@@ -30,8 +30,8 @@ public final class SFA2Planner extends ForwardAstarPlanner {
     }
 
     @Override
-    protected Integer calculateHeuristic(ImmutablePlanState state, ArrayTable<String, String, ShortestPath> distanceMatrix,
-            Collection<Package> unfinishedPackages) {
+    protected Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
         int heuristic = 0;
 
         Graph T = mst(state.getProblem().getRoadGraph());

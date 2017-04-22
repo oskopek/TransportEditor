@@ -643,8 +643,17 @@ public final class PlannerUtils {
         return false;
     }
 
-    public static Integer calculateMaxCapacity(javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
-        return combination.flatMap(t -> javaslang.collection.Stream.of(Tuple.of(t._1, false, t._3), Tuple.of(t._2, true, t._3)))
+    /**
+     * Calculate the maximum capacity needed at any point in time for a vehicle to contain the packages,
+     * assuming the integers are "start" and "stop" times (i.e. loading and unloading times).
+     *
+     * @param combination the combination of packages and their times
+     * @return the maximum number of packages present in the vehicle at the same time
+     */
+    public static Integer calculateMaxCapacity(
+            javaslang.collection.List<Tuple3<Integer, Integer, Package>> combination) {
+        return combination.flatMap(t -> javaslang.collection.Stream.of(Tuple.of(t._1, false, t._3),
+                Tuple.of(t._2, true, t._3)))
                 .sortBy(t -> t._1).foldLeft(Tuple.of(0, Integer.MIN_VALUE), (capTuple, elem) -> {
                     int curCapacity = capTuple._1;
                     if (elem._2) { // drop
@@ -660,16 +669,28 @@ public final class PlannerUtils {
                 })._2;
     }
 
+    /**
+     * Build pickup and drop actions for the given location.
+     * Do note that the plan is being built in reverse order.
+     *
+     * @param domain the domain
+     * @param actions the actions
+     * @param afterDrop the packages that have already been dropped (i.e. not yet present in the reverse plan)
+     * @param inVehicle the packages that are in the vehicle (i.e. only dropped in the reverse plan)
+     * @param at the current location
+     * @param vehicle the current vehicle
+     * @param targetMap the map of package target locations
+     */
     private static void buildPackageActions(Domain domain, List<Action> actions, Set<Package> afterDrop,
             Set<Package> inVehicle, Location at, Vehicle vehicle, Map<Package, Location> targetMap) {
-        for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext(); ) {
+        for (Iterator<Package> iter = inVehicle.iterator(); iter.hasNext();) {
             Package pkg = iter.next();
             if (pkg.getLocation().equals(at)) {
                 actions.add(domain.buildPickUp(vehicle, at, pkg));
                 iter.remove();
             }
         }
-        for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext(); ) {
+        for (Iterator<Package> iter = afterDrop.iterator(); iter.hasNext();) {
             Package pkg = iter.next();
             if (targetMap.getOrDefault(pkg, pkg.getTarget()).equals(at)) {
                 actions.add(domain.buildDrop(vehicle, at, pkg));
@@ -679,6 +700,16 @@ public final class PlannerUtils {
         }
     }
 
+    /**
+     * Build a plan for the vehicle, packages and their targets.
+     *
+     * @param domain the domain
+     * @param path the vehicle's path
+     * @param vehicle the vehicle
+     * @param chosenPackages the chosen packages
+     * @param targetMap the package target locations
+     * @return the plan, in correct order
+     */
     public static List<Action> buildPlan(Domain domain, List<RoadEdge> path, Vehicle vehicle,
             List<Package> chosenPackages, Map<Package, Location> targetMap) {
         if (path.isEmpty()) {

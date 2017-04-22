@@ -8,16 +8,30 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;
 
+/**
+ * Represents a (shortest) path between two graph locations.
+ */
 public final class ShortestPath {
 
     private final List<RoadEdge> roads;
     private final Integer distance;
 
+    /**
+     * Default constructor.
+     *
+     * @param roads the roads
+     * @param distance the distance
+     */
     public ShortestPath(List<RoadEdge> roads, Integer distance) {
         this.roads = roads;
         this.distance = distance;
     }
 
+    /**
+     * Get the last location on the path.
+     *
+     * @return the last location, or null if the path is empty
+     */
     public Location lastLocation() {
         if (roads.isEmpty()) {
             return null;

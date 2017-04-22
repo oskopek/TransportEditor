@@ -14,15 +14,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-// choose a vehicle and package,
-// find the path, find all packages on it and around it
-// choose the ones whose target is on the path
-// if still not fully capacitated, choose the others in the
-// order of distance from the shortest path
+/**
+ * Chooses a vehicle and package,
+ * find the path to deliver the package by the vehicle,
+ * find all packages on it and around it
+ * choose the ones whose target is on the path
+ * if still not fully capacitated, choose the others in the
+ * order of distance from their destinations at any possible drop of point on the path.
+ */
 public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Default constructor.
+     */
     public BacktrackRestartWithAroundPathPickupPlanner() {
         setName(BacktrackRestartWithAroundPathPickupPlanner.class.getSimpleName());
     }
@@ -36,9 +42,17 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
         return planRecursively(domain, problem);
     }
 
+    /**
+     * Wrapper around {@link #newStateRecursively(Domain, ImmutablePlanState, float)}.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @return the plan, or an empty optional
+     */
     private Optional<Plan> planRecursively(Domain domain, Problem problem) {
         float exploration = 0.8f;
         while (true) {
+            // TODO: change exploration
             ImmutablePlanState result = newStateRecursively(domain, new ImmutablePlanState(problem), exploration);
             if (result == null) {
                 break;
@@ -48,7 +62,16 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
         return Optional.ofNullable(getBestPlan());
     }
 
-    private ImmutablePlanState newStateRecursively(Domain domain, final ImmutablePlanState current, final float exploration) {
+    /**
+     * Backtrack through generated actions to find a new state.
+     *
+     * @param domain the domain
+     * @param current the current state
+     * @param exploration the exploration factor
+     * @return a new state, or null if we want to break the backtracking
+     */
+    private ImmutablePlanState newStateRecursively(Domain domain, final ImmutablePlanState current,
+            final float exploration) {
         if (current.isGoalState()) {
             if (getBestPlanScore() > current.getTotalTime()) {
                 logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
@@ -67,7 +90,8 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
 
 
         Problem curProblem = current.getProblem();
-        final List<Package> unfinished = new ArrayList<>(PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
+        final List<Package> unfinished = new ArrayList<>(
+                PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
         List<Package> toTry = new ArrayList<>(unfinished);
         if (unfinished.isEmpty()) {
             throw new IllegalStateException("Zero packages left but not in goal state.");
@@ -100,8 +124,7 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
                         unfinished, true);
                 ImmutablePlanState newState = Stream.ofAll(newActions).foldLeft(Optional.of(current),
                         (state, action) -> state.flatMap(state2 -> state2.apply(action)))
-                        .orElseThrow(
-                                () -> new IllegalStateException("Could not apply all new actions to current state."));
+                        .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to state."));
                 ImmutablePlanState returned = newStateRecursively(domain, newState, exploration);
                 if (returned == null) { // cancelling
                     return null;
