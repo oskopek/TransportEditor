@@ -4,17 +4,17 @@ import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.AbstractPlanner;
-import com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPathPickupPlanner;
+import com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Scheduler wrapper around {@link RandomizedRestartWithAroundPathPickupPlanner}.
+ * Scheduler wrapper around {@link RandomizedRestartAroundPathNearbyPlanner}.
  */
-public class RRWASequentialScheduler extends SequentialScheduler {
+public class RRAPNSequentialScheduler extends SequentialScheduler {
 
-    private final AbstractPlanner planner = new RandomizedRestartWithAroundPathPickupPlanner();
+    private final AbstractPlanner planner = new RandomizedRestartAroundPathNearbyPlanner();
 
     @Override
     public Optional<Plan> plan(Domain seqDomain, Problem seqProblem,
@@ -28,7 +28,7 @@ public class RRWASequentialScheduler extends SequentialScheduler {
     }
 
     @Override
-    public RRWASequentialScheduler copy() {
-        return new RRWASequentialScheduler();
+    public RRAPNSequentialScheduler copy() {
+        return new RRAPNSequentialScheduler();
     }
 }

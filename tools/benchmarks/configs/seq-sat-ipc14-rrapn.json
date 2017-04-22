@@ -1,0 +1,93 @@
+{
+  "domain": "${transport.root}/datasets/ipc14/seq-sat/Transport/domain.pddl",
+  "problems": {
+    "p01": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p01.pddl",
+      "bestScore": 1309
+    },
+    "p02": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p02.pddl",
+      "bestScore": 2125
+    },
+    "p03": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p03.pddl",
+      "bestScore": 1539
+    },
+    "p04": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p04.pddl",
+      "bestScore": 5678
+    },
+    "p05": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p05.pddl",
+      "bestScore": 6235
+    },
+    "p06": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p06.pddl",
+      "bestScore": 5678
+    },
+    "p07": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p07.pddl",
+      "bestScore": 4839
+    },
+    "p08": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p08.pddl",
+      "bestScore": 4467
+    },
+    "p09": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p09.pddl",
+      "bestScore": 4839
+    },
+    "p10": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p10.pddl",
+      "bestScore": 4626
+    },
+    "p11": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p11.pddl",
+      "bestScore": 1336
+    },
+    "p12": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p12.pddl",
+      "bestScore": 1641
+    },
+    "p13": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p13.pddl",
+      "bestScore": 1147
+    },
+    "p14": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p14.pddl",
+      "bestScore": 5974
+    },
+    "p15": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p15.pddl",
+      "bestScore": 5320
+    },
+    "p16": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p16.pddl",
+      "bestScore": 4695
+    },
+    "p17": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p17.pddl",
+      "bestScore": 4540
+    },
+    "p18": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p18.pddl",
+      "bestScore": 4840
+    },
+    "p19": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p19.pddl",
+      "bestScore": 3881
+    },
+    "p20": {
+      "filePath": "${transport.root}/datasets/ipc14/seq-sat/Transport/p20.pddl",
+      "bestScore": 3853
+    }
+  },
+  "scoreFunctionType": "TOTAL_TIME",
+  "planners": {
+    "RRAPN": {
+      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner"
+    }
+  },
+  "threadCount": 8,
+  "timeout": 1800
+}

@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
  * if still not fully capacitated, choose the others in the
  * order of distance from their destinations at any possible drop of point on the path.
  */
-public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends SequentialRandomizedPlanner {
+public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Default constructor.
      */
-    public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner() {
-        setName(RandomizedRestartWithAroundPathPickupNoCoinTossPlanner.class.getSimpleName());
+    public RandomizedRestartAroundPathDistributionPlanner() {
+        setName(RandomizedRestartAroundPathDistributionPlanner.class.getSimpleName());
     }
 
     @Override
@@ -126,7 +126,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Sequ
     }
 
     @Override
-    public RandomizedRestartWithAroundPathPickupNoCoinTossPlanner copy() {
-        return new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
+    public RandomizedRestartAroundPathDistributionPlanner copy() {
+        return new RandomizedRestartAroundPathDistributionPlanner();
     }
 }

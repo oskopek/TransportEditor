@@ -21,15 +21,15 @@ import java.util.List;
  * find all packages on it and around it
  * choose the ones whose target is on the path and deliver them.
  */
-public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomizedPlanner {
+public class RandomizedRestartOnPathPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Default constructor.
      */
-    public RandomizedRestartWithOnPathPickupPlanner() {
-        setName(RandomizedRestartWithOnPathPickupPlanner.class.getSimpleName());
+    public RandomizedRestartOnPathPlanner() {
+        setName(RandomizedRestartOnPathPlanner.class.getSimpleName());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomiz
     }
 
     @Override
-    public RandomizedRestartWithOnPathPickupPlanner copy() {
-        return new RandomizedRestartWithOnPathPickupPlanner();
+    public RandomizedRestartOnPathPlanner copy() {
+        return new RandomizedRestartOnPathPlanner();
     }
 }

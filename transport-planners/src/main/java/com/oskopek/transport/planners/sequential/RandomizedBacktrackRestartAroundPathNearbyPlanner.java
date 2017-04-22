@@ -22,15 +22,15 @@ import java.util.*;
  * if still not fully capacitated, choose the others in the
  * order of distance from their destinations at any possible drop of point on the path.
  */
-public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRandomizedPlanner {
+public class RandomizedBacktrackRestartAroundPathNearbyPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Default constructor.
      */
-    public BacktrackRestartWithAroundPathPickupPlanner() {
-        setName(BacktrackRestartWithAroundPathPickupPlanner.class.getSimpleName());
+    public RandomizedBacktrackRestartAroundPathNearbyPlanner() {
+        setName(RandomizedBacktrackRestartAroundPathNearbyPlanner.class.getSimpleName());
     }
 
     @Override
@@ -128,8 +128,8 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
     }
 
     @Override
-    public BacktrackRestartWithAroundPathPickupPlanner copy() {
-        return new BacktrackRestartWithAroundPathPickupPlanner();
+    public RandomizedBacktrackRestartAroundPathNearbyPlanner copy() {
+        return new RandomizedBacktrackRestartAroundPathNearbyPlanner();
     }
 
 }
