@@ -36,7 +36,7 @@ public class BenchmarkRun {
 
 
     /**
-     * Ammend the run results to a benchmark run.
+     * Amend the run results to a benchmark run.
      *
      * @param run the benchmark run
      * @param runResults the run results
@@ -332,6 +332,12 @@ public class BenchmarkRun {
             return quality;
         }
 
+        /**
+         * Update the best score, creating a new run instance.
+         *
+         * @param newBestScore the new best score
+         * @return a new results instance
+         */
         public Results updateBestScore(Double newBestScore) {
             return new Results(plan, score, newBestScore, exitStatus, startTimeMs, endTimeMs);
         }

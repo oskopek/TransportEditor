@@ -93,10 +93,18 @@ public class ReportGenerator {
         generate(results, resultFile.getParent());
     }
 
-    private BenchmarkResults recalculateQuality(BenchmarkResults results) {
-        Map<String, List<BenchmarkResults.JsonRun>> runs = Stream.ofAll(results.getRuns()).groupBy(r -> r.getProblem())
+    /**
+     * Recalculates the best scores for a problem and the corresponding quality values of solutions.
+     *
+     * @param results the original results
+     * @return the updated results
+     */
+    private static BenchmarkResults recalculateQuality(BenchmarkResults results) {
+        Map<String, List<BenchmarkResults.JsonRun>> runs = Stream.ofAll(results.getRuns())
+                .groupBy(BenchmarkResults.JsonRun::getProblem)
                 .mapValues(Value::toJavaList).toJavaMap();
-        Map<String, Double> bestScore = Stream.ofAll(runs.entrySet()).map(e -> Tuple.of(e.getKey(), e.getValue().stream()
+        Map<String, Double> bestScore = Stream.ofAll(runs.entrySet())
+                .map(e -> Tuple.of(e.getKey(), e.getValue().stream()
                 .flatMap(r -> java.util.stream.Stream.of(r.getResults().getScore(), r.getResults().getBestScore()))
                 .filter(Objects::nonNull).min(Double::compare)))
                 .toJavaMap(t -> Tuple.of(t._1, t._2.orElse(null)));

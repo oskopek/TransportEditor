@@ -21,8 +21,16 @@ import java.util.stream.Stream;
 public abstract class LatexProblemPlannerReporter implements Reporter {
 
     private final Function<BenchmarkResults.JsonRun, Object> dataGetter;
-    public static final DecimalFormat decimalFormat;
-    public static final DecimalFormat scoreFormat;
+
+    /**
+     * Used for formatting quality and any other decimal numbers (fixed 2 decimal places).
+     */
+    protected static final DecimalFormat decimalFormat;
+
+    /**
+     * Used for formatting score (optional two decimal places, if possible no decimal places).
+     */
+    protected static final DecimalFormat scoreFormat;
 
     static {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(Locale.US);
