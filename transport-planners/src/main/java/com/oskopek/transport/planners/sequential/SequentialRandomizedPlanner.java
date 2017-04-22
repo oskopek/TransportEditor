@@ -35,7 +35,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
     private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
     private Random random;
     private Plan bestPlan;
-    private double bestPlanScore;
+    private int bestPlanScore;
 
     /**
      * Get the precalculated shortest path lookup matrix.
@@ -69,7 +69,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
      *
      * @return the best plan score
      */
-    protected double getBestPlanScore() {
+    protected int getBestPlanScore() {
         return bestPlanScore;
     }
 
@@ -79,7 +79,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
      * @param score the score of the plan
      * @param plan the plan
      */
-    protected void savePlanIfBetter(double score, Plan plan) {
+    protected void savePlanIfBetter(int score, Plan plan) {
         if (bestPlanScore > score) {
             logger.debug("Found new best plan {} -> {}", bestPlanScore, score);
             bestPlanScore = score;
@@ -99,7 +99,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
     protected void resetState() {
         random = null;
         bestPlan = null;
-        bestPlanScore = Double.MAX_VALUE;
+        bestPlanScore = Integer.MAX_VALUE;
     }
 
     /**

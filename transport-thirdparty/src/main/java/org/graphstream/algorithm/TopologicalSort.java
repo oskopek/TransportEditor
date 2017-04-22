@@ -21,7 +21,7 @@ import java.util.*;
  * Reference: Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11):
  * 558–562
  */
-public class TopologicalSort implements Algorithm {
+public class TopologicalSort implements Algorithm { // TODO: Remove me with the update to GraphStream Algorithm 1.4
 
     /**
      * Thrown if the graph is not a DAG.

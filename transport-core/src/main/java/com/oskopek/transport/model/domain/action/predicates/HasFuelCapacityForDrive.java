@@ -15,11 +15,10 @@ public class HasFuelCapacityForDrive extends DefaultPredicate {
     public boolean isValidInternal(Problem state, Action action) {
         if (action instanceof Drive) {
             Drive drive = (Drive) action;
-            Road road = drive.getRoad();
             if (drive.isFuelDomain()) {
                 Vehicle vehicle = state.getVehicle(action.getWho().getName());
-                FuelRoad fuelRoad = (FuelRoad) road;
-                return vehicle.getCurFuelCapacity().subtract(fuelRoad.getFuelCost()).getCost() >= 0;
+                FuelRoad road = (FuelRoad) drive.getRoad();
+                return vehicle.getCurFuelCapacity().subtract(road.getFuelCost()).getCost() >= 0;
             }
         }
         return true;

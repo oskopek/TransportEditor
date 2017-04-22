@@ -10,8 +10,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -25,8 +23,6 @@ import java.util.function.Function;
  * </ul>
  */
 public abstract class AbstractPlanner extends CancellableLogStreamable implements Planner {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String name = "AbstractPlanner";
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();

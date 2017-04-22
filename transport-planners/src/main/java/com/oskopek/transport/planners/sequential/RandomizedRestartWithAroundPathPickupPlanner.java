@@ -143,7 +143,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             }
             double curScore = curPlan.calculateMakespan();
             if (curScore < getBestPlanScore()) {
-                savePlanIfBetter(curScore, curPlan);
+                savePlanIfBetter(Math.round((float) curScore), curPlan);
             }
         }
     }

@@ -144,7 +144,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             return null;
         }
         if (manager.getCurrentPlanState().getAllVehicles().stream().anyMatch(v -> v.getCurFuelCapacity() != null
-                && v.getCurFuelCapacity().getCost() < 0)) { // TODO: too slow for seq
+                && v.getCurFuelCapacity().getCost() < 0)) {
             // invalid plan, break
             return null;
         }

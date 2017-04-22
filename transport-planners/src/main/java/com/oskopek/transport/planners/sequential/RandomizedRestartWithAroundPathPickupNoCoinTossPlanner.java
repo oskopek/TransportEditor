@@ -78,7 +78,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Sequ
             }
 
             // TODO: collapse plan?
-            double totalTime = current.getTotalTime();
+            int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
