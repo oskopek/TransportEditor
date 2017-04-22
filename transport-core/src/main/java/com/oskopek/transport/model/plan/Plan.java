@@ -54,6 +54,11 @@ public interface Plan extends Iterable<TemporalPlanAction> {
         return getTemporalPlanActions().spliterator();
     }
 
+    /**
+     * Calculate the makespan of the given plan (maximum end time of actions).
+     *
+     * @return the makespan
+     */
     default Double calculateMakespan() {
         return getTemporalPlanActions().stream().mapToDouble(TemporalPlanAction::getEndTimestamp).max().orElse(0);
     }

@@ -9,7 +9,6 @@ import com.oskopek.transport.persistence.IOUtils;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import com.oskopek.transport.persistence.VariableDomainIO;
 import com.oskopek.transport.planners.sequential.*;
-import com.oskopek.transport.planners.temporal.RRWASequentialScheduler;
 import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

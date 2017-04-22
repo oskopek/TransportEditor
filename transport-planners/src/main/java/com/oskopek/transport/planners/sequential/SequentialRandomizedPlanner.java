@@ -73,7 +73,12 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
         return bestPlanScore;
     }
 
-
+    /**
+     * Save the plan if it has a lower score than the currently best found plan.
+     *
+     * @param score the score of the plan
+     * @param plan the plan
+     */
     protected void savePlanIfBetter(double score, Plan plan) {
         if (bestPlanScore > score) {
             logger.debug("Found new best plan {} -> {}", bestPlanScore, score);

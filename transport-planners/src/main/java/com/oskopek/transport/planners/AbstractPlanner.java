@@ -49,6 +49,15 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
      */
     public abstract Optional<Plan> plan(Domain domain, Problem problem);
 
+    /**
+     * Create a plan for the given problem and domain. Will return empty {@link Optional} if no plan could be found,
+     * for any reason. Supports intermediate plan transformation (used for wrapping planners in temporal schedulers).
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @param planTransformation the transformation function (usually the scheduler)
+     * @return the transformed plan, or nothing
+     */
     public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
         return plan(domain, problem).map(planTransformation);
     }

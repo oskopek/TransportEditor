@@ -3,8 +3,12 @@ package com.oskopek.transport.model.domain.action.predicates;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.problem.*;
-import com.oskopek.transport.model.problem.Package;
 
+/**
+ * Assert that a vehicle (who) has a current fuel capacity (current fuel level) to drive to the given location (what).
+ * Only validated in a fuel domain.
+ * @see Drive#isFuelDomain()
+ */
 public class HasFuelCapacityForDrive extends DefaultPredicate {
 
     @Override

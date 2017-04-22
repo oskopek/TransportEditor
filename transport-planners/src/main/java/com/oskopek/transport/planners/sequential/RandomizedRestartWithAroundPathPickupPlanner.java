@@ -67,7 +67,8 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             i++;
 
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            double makeSpan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList())).calculateMakespan();
+            double makeSpan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()))
+                    .calculateMakespan();
             while (!current.isGoalState() && makeSpan < getBestPlanScore()) { // TODO: too slow for seq
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(
@@ -76,19 +77,23 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
                     List<Drive> driveToTarget = new ArrayList<>(); // TODO: irrelevant for seq
                     for (Vehicle vehicle : curProblem.getAllVehicles()) {
                         if (vehicle.getTarget() != null && !vehicle.getTarget().equals(vehicle.getLocation())) {
-                            List<RoadEdge> edges = getShortestPathMatrix().get(vehicle.getLocation().getName(), vehicle.getTarget().getName()).getRoads();
+                            List<RoadEdge> edges = getShortestPathMatrix().get(vehicle.getLocation().getName(),
+                                    vehicle.getTarget().getName()).getRoads();
                             for (RoadEdge edge : edges) {
-                                driveToTarget.add(domain.buildDrive(vehicle, edge.getFrom(), edge.getTo(), edge.getRoad()));
+                                driveToTarget.add(domain.buildDrive(vehicle, edge.getFrom(), edge.getTo(),
+                                        edge.getRoad()));
                             }
                         }
                     }
 
                     if (driveToTarget.isEmpty()) {
-                        throw new IllegalStateException("Zero packages left and no vehicles not at targets but not in goal state.");
+                        throw new IllegalStateException("Zero packages left and no vehicles not at targets but"
+                                + " not in goal state.");
                     } else {
                         current = Stream.ofAll(driveToTarget).foldLeft(Optional.of(current),
                                 (state, action) -> state.flatMap(state2 -> state2.apply(action)))
-                                .orElseThrow(() -> new IllegalStateException("Could not apply all new drive actions to current state."));
+                                .orElseThrow(() -> new IllegalStateException("Could not apply all new drive actions"
+                                        + " to current state."));
                         break;
                     }
                 }
@@ -130,7 +135,9 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             if (current == null) { // invalid state, break
                 continue;
             }
-            Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));  // TODO: too slow for seq?
+
+            // TODO: too slow for seq?
+            Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));
             if (curPlan == null) {
                 continue;
             }

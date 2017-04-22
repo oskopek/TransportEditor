@@ -18,49 +18,74 @@ import java.util.*;
  * Complexity: O(V+E) time, where V and E are the number of vertices and edges
  * respectively.
  * <p>
- * Reference: Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11): 558–562
+ * Reference: Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11):
+ * 558–562
  */
 public class TopologicalSort implements Algorithm {
-    public class GraphHasCycleException extends IllegalStateException {}
 
+    /**
+     * Thrown if the graph is not a DAG.
+     */
+    public class GraphHasCycleException extends IllegalStateException {
+        // intentionally empty
+    }
+
+    /**
+     * The selected sort algorithm.
+     */
     public enum SortAlgorithm {
+        /**
+         * Kahn's algorithm.
+         */
         KAHN,
+
+        /**
+         * DFS.
+         */
         DEPTH_FIRST
     }
 
-    private final static int MARK_UNMARKED = 0;
-    private final static int MARK_TEMP = 1;
-    private final static int MARK_PERM = 2;
+    private static final int MARK_UNMARKED = 0;
+    private static final int MARK_TEMP = 1;
+    private static final int MARK_PERM = 2;
 
     /**
-     * The algorithm that will be used for topological sorting
+     * The algorithm that will be used for topological sorting.
      */
     private final SortAlgorithm algorithm;
 
     /**
-     * graph to calculate a topological ordering
+     * Graph to calculate a topological ordering.
      */
     private Graph graph;
 
     /**
-     * collection containing sorted nodes after calculation
+     * Collection containing sorted nodes after calculation.
      */
     private Node[] sortedNodes;
 
     /**
-     * Next index to populated in sortedNodes
+     * Next index to populated in sortedNodes.
      */
     private int index;
 
     /**
-     * collection containing all source nodes (inDegree=00)
+     * Collection containing all source nodes (inDegree=00).
      */
     private Set<Node> sourceNodes;
 
+    /**
+     * Default DFS constructor.
+     */
     public TopologicalSort() {
         this(SortAlgorithm.DEPTH_FIRST);
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param algorithm the chosen sort algorithm
+     */
     public TopologicalSort(SortAlgorithm algorithm) {
         this.algorithm = algorithm;
     }
@@ -90,6 +115,9 @@ public class TopologicalSort implements Algorithm {
         }
     }
 
+    /**
+     * Compute Kahn's algorithm.
+     */
     private void computeKahns() {
         while (!sourceNodes.isEmpty()) {
             Node aSourceNode = sourceNodes.iterator().next();
@@ -98,7 +126,7 @@ public class TopologicalSort implements Algorithm {
             sortedNodes[index] = aSourceNode;
             index++;
 
-            for (Iterator<Edge> it = aSourceNode.getLeavingEdgeIterator(); it.hasNext(); ) {
+            for (Iterator<Edge> it = aSourceNode.getLeavingEdgeIterator(); it.hasNext();) {
                 Edge aLeavingEdge = it.next();
                 Node aTargetNode = aLeavingEdge.getTargetNode();
                 it.remove();
@@ -121,7 +149,7 @@ public class TopologicalSort implements Algorithm {
     }
 
     /**
-     * calculates the source nodes
+     * Calculates the source nodes.
      * @return set of source nodes
      */
     private Set<Node> calculateSourceNodes() {
@@ -137,6 +165,9 @@ public class TopologicalSort implements Algorithm {
         return aSourceNodeSet;
     }
 
+    /**
+     * Compute DFS.
+     */
     private void computeDFS() {
         if (graph == null) {
             throw new NotInitializedException(this);
@@ -150,6 +181,11 @@ public class TopologicalSort implements Algorithm {
         }
     }
 
+    /**
+     * Get the first unmarked node.
+     * @param marks the marks
+     * @return the unmarked node, or null
+     */
     private Node getUnmarkedNode(int[] marks) {
         for (int i = 0; i < marks.length; i++) {
             if (marks[i] == MARK_UNMARKED) {
@@ -160,6 +196,12 @@ public class TopologicalSort implements Algorithm {
         return null;
     }
 
+    /**
+     * Visit the given node.
+     *
+     * @param node the node
+     * @param marks the marks
+     */
     private void visitNode(Node node, int[] marks) {
         int mark = marks[node.getIndex()];
 
@@ -180,7 +222,7 @@ public class TopologicalSort implements Algorithm {
     }
 
     /**
-     * gets sorted list of the given graph
+     * Gets sorted list of the given graph.
      * @return topological sorted list of nodes
      */
     public List<Node> getSortedNodes() {
@@ -188,6 +230,7 @@ public class TopologicalSort implements Algorithm {
     }
 
     /**
+     * Topologically sorted nodes in array form.
      * @return Topologically sorted nodes in array form
      */
     public Node[] getSortedArray() {

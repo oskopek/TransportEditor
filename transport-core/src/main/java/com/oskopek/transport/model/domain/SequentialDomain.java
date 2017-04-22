@@ -29,7 +29,7 @@ public class SequentialDomain extends DefaultDomain {
      * @param name the name of the domain
      */
     public SequentialDomain(String name) {
-        super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad()),
+        super(name, new DriveBuilder(Arrays.asList(new WhoAtWhere(), new IsRoad(), new HasFuelCapacityForDrive()),
                         Arrays.asList(new Not(new WhoAtWhere()), new WhoAtWhat())),
                 new DropBuilder(Arrays.asList(new WhoAtWhere(), new In()),
                         Arrays.asList(new Not(new In()), new WhatAtWhere()),

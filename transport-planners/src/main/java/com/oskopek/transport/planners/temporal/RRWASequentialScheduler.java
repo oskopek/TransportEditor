@@ -9,12 +9,16 @@ import com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPath
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * Scheduler wrapper around {@link RandomizedRestartWithAroundPathPickupPlanner}.
+ */
 public class RRWASequentialScheduler extends SequentialScheduler {
 
     private final AbstractPlanner planner = new RandomizedRestartWithAroundPathPickupPlanner();
 
     @Override
-    protected Optional<Plan> planInternal(Domain seqDomain, Problem seqProblem, Function<Plan, Plan> planTransformation) {
+    public Optional<Plan> plan(Domain seqDomain, Problem seqProblem,
+            Function<Plan, Plan> planTransformation) {
         return planner.plan(seqDomain, seqProblem, planTransformation);
     }
 
