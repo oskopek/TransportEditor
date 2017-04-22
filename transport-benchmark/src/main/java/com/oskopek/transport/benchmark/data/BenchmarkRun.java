@@ -104,7 +104,7 @@ public class BenchmarkRun {
         if (plan == null) {
             exitStatus = RunExitStatus.UNSOLVED;
         } else {
-            if (validator == null) {
+            if (validator == null || !validator.isAvailable()) {
                 exitStatus = RunExitStatus.NOTVALIDATED;
             } else {
                 exitStatus = validator.isValid(domain, problem, plan) ? RunExitStatus.VALID : RunExitStatus.INVALID;
