@@ -17,11 +17,11 @@ import java.util.*;
  */
 public class ImmutablePlanState {
 
-    private final Action action; // TODO: non sequential domains?
+    private final Action action;
     private final ImmutablePlanState lastState;
     private final int totalTime;
 
-    private final Problem problem; // TODO: do not store the entire problem?
+    private final Problem problem;
     private int planningHashCode;
 
     /**

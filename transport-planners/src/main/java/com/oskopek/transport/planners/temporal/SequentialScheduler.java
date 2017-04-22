@@ -140,7 +140,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         double endTime = proposedPlan.calculateMakespan();
         try {
             manager.goToTime(endTime + 1d, true);
-        } catch (IllegalStateException e) { // invalid plan // TODO: do not throw
+        } catch (IllegalStateException e) { // invalid plan
             return null;
         }
         if (manager.getCurrentPlanState().getAllVehicles().stream().anyMatch(v -> v.getCurFuelCapacity() != null

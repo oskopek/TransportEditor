@@ -41,7 +41,7 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Sequ
         resetState();
         initialize(problem);
         logger.debug("Starting planning...");
-        double temperature = 1d; // TODO test this out
+        double temperature = 1d; // seems to not have much effect
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
@@ -77,7 +77,6 @@ public class RandomizedRestartWithAroundPathPickupNoCoinTossPlanner extends Sequ
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            // TODO: collapse plan?
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);

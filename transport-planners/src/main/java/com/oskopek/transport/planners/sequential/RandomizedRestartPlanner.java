@@ -83,7 +83,6 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
                         (state, action) -> state.flatMap(state2 -> state2.apply(action)))
                         .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to state."));
 
-                // TODO: assert that packages were delivered
                 if (shouldCancel()) {
                     logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
                     return Optional.ofNullable(getBestPlan());
@@ -93,7 +92,6 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            // TODO: collapse plan?
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);

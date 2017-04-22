@@ -18,6 +18,7 @@ public final class SFA3Planner extends ForwardAstarPlanner {
      * Default constructor.
      */
     public SFA3Planner() {
+        super(false);
         setName(SFA3Planner.class.getSimpleName());
     }
 

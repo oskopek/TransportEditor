@@ -76,7 +76,6 @@ public class RandomizedRestartWithOnPathPickupPlanner extends SequentialRandomiz
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            // TODO: collapse plan?
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);

@@ -40,11 +40,24 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
-        return plan(domain, problem, Function.identity());
+        return planWithOptionalTransformations(domain, problem, null);
     }
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
+        return planWithOptionalTransformations(domain, problem, planTransformation);
+    }
+
+    /**
+     * Plan, optionally with intermediate plan transformations.
+     *
+     * @param domain the domain
+     * @param problem the problem
+     * @param planTransformation the plan transformation, optionally null
+     * @return the plan, or an empty optional
+     */
+    private Optional<Plan> planWithOptionalTransformations(Domain domain, Problem problem,
+            Function<Plan, Plan> planTransformation) {
         logger.debug("Initializing planning...");
         resetState();
         initialize(problem);
@@ -67,14 +80,17 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
             i++;
 
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            double makeSpan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()))
-                    .calculateMakespan();
-            while (!current.isGoalState() && makeSpan < getBestPlanScore()) { // TODO: too slow for seq
+            int curScore = current.getTotalTime();
+            if (planTransformation != null) {
+                curScore = Math.round(planTransformation.apply(new SequentialPlan(current.getAllActionsInList()))
+                        .calculateMakespan().floatValue());
+            }
+            while (!current.isGoalState() && curScore < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(
                         PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
                 if (unfinished.isEmpty()) {
-                    List<Drive> driveToTarget = new ArrayList<>(); // TODO: irrelevant for seq
+                    List<Drive> driveToTarget = new ArrayList<>(); // will not get called for seq, used in vehicle goals
                     for (Vehicle vehicle : curProblem.getAllVehicles()) {
                         if (vehicle.getTarget() != null && !vehicle.getTarget().equals(vehicle.getLocation())) {
                             List<RoadEdge> edges = getShortestPathMatrix().get(vehicle.getLocation().getName(),
@@ -132,18 +148,20 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
-            if (current == null) { // invalid state, break
-                continue;
-            }
-
-            // TODO: too slow for seq?
-            Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));
-            if (curPlan == null) {
-                continue;
-            }
-            double curScore = curPlan.calculateMakespan();
-            if (curScore < getBestPlanScore()) {
-                savePlanIfBetter(Math.round((float) curScore), curPlan);
+            if (planTransformation == null) {
+                curScore = current.getTotalTime();
+                if (curScore < getBestPlanScore()) {
+                    savePlanIfBetter(curScore, new SequentialPlan(current.getAllActionsInList()));
+                }
+            } else {
+                Plan curPlan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));
+                if (curPlan == null) {
+                    continue;
+                }
+                curScore = Math.round(curPlan.calculateMakespan().floatValue());
+                if (curScore < getBestPlanScore()) {
+                    savePlanIfBetter(Math.round((float) curScore), curPlan);
+                }
             }
         }
     }
