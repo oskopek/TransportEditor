@@ -24,7 +24,8 @@ public final class MetaSFA3Planner extends SFA3Planner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>, Integer> weightedHeuristic;
+    private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>,
+            Integer> weightedHeuristic;
 
     private Plan bestPlan;
     private int bestPlanScore;
@@ -51,8 +52,8 @@ public final class MetaSFA3Planner extends SFA3Planner {
 
         while (true) {
             final int newWeight = weight;
-            weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils.
-                    calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
+            weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils
+                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
             logger.debug("Setting weight to {}.", weight);
             Optional<Plan> plan = super.plan(domain, problem);

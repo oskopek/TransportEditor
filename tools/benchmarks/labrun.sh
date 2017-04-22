@@ -1,5 +1,5 @@
 #!/bin/bash
-configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-sfa3 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched'
+configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched'
 TEvariant="TransportEditor-final"
 exp_configs=""
 
@@ -15,7 +15,7 @@ done
 
 i=0
 for config in $exp_configs; do
-    echo "cd git/$TEvariant/tools/benchmarks && ./benchmark.sh configs/$config.json; exit" | ssh -tt "u-pl1$i" &
+    echo "source .shrc && cd git/$TEvariant/tools/benchmarks && ./benchmark.sh configs/$config.json; exit" | ssh -tt "u-pl1$i" &
     i=$((i+1))
 done
 
