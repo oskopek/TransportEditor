@@ -25,6 +25,13 @@ public interface Validator extends LogStreamable, Cancellable {
      */
     boolean isValid(Domain domain, Problem problem, Plan plan);
 
+    /**
+     * Signalizes if this planner is available on this system at this time (useful for external validators).
+     *
+     * @return true iff the planner is ready to be used
+     */
+    boolean isAvailable();
+
     @Override
     default boolean cancel() {
         // intentionally empty

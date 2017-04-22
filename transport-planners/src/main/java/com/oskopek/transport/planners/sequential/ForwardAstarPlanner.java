@@ -73,6 +73,13 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
+        resetBestPlan();
+    }
+
+    /**
+     * Reset the best found plan to the original state.
+     */
+    void resetBestPlan() {
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
     }

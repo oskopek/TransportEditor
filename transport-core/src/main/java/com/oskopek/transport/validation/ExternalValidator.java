@@ -3,10 +3,7 @@ package com.oskopek.transport.validation;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.tools.executables.Cancellable;
-import com.oskopek.transport.tools.executables.CancellableLogStreamable;
-import com.oskopek.transport.tools.executables.ExecutableTemporarySerializer;
-import com.oskopek.transport.tools.executables.ExecutableWithParameters;
+import com.oskopek.transport.tools.executables.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javaslang.control.Try;
@@ -53,6 +50,11 @@ public class ExternalValidator extends CancellableLogStreamable implements Valid
     @Override
     public boolean isValid(Domain domain, Problem problem, Plan plan) {
         return isValidInternal(domain, problem, plan);
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return executable != null && executable.isExecutableValid();
     }
 
     @Override

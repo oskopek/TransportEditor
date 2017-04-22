@@ -26,6 +26,11 @@ public final class EmptyValidator extends AbstractLogStreamable implements Valid
     }
 
     @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object o) {
         return this == o || o instanceof EmptyValidator;
     }

@@ -26,6 +26,11 @@ public class SequentialPlanValidator extends AbstractLogStreamable implements Va
         return isValid(domain, problem, (SequentialPlan) plan);
     }
 
+    @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
     /**
      * Runs the validation and reports the results.
      *

@@ -124,10 +124,10 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "SFA3": {
-      "className": "com.oskopek.transport.planners.sequential.SFA3Planner"
+    "MSFA3": {
+      "className": "com.oskopek.transport.planners.sequential.MetaSFA3Planner"
     }
   },
-  "threadCount": 2,
+  "threadCount": 4,
   "timeout": 1800
 }
