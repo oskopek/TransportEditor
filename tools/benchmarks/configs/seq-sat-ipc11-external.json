@@ -84,8 +84,8 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "SFA*": {
-      "className": "com.oskopek.transport.planners.sequential.ForwardAstarPlanner"
+    "RRWA": {
+      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPathPickupPlanner"
     }
   },
   "threadCount": 8,

@@ -3,22 +3,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.67,
-                "score": 1953,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p01",
             "results": {
@@ -35,22 +19,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p01",
             "results": {
@@ -60,38 +28,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.48,
                 "score": 2727,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.58,
-                "score": 2256,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -147,22 +83,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p01",
             "results": {
@@ -204,22 +124,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.64,
                 "score": 2045,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -275,22 +179,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p01",
             "results": {
@@ -323,22 +211,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.79,
-                "score": 2689,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p02",
             "results": {
@@ -355,22 +227,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p02",
             "results": {
@@ -380,38 +236,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.35,
                 "score": 6071,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.67,
-                "score": 3171,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -467,22 +291,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p02",
             "results": {
@@ -524,22 +332,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.52,
                 "score": 4086,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -595,22 +387,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p02",
             "results": {
@@ -643,22 +419,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.82,
-                "score": 1876,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p03",
             "results": {
@@ -675,22 +435,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p03",
             "results": {
@@ -700,38 +444,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.39,
                 "score": 3946,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.56,
-                "score": 2748,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -787,22 +499,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p03",
             "results": {
@@ -844,22 +540,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.58,
                 "score": 2653,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -915,22 +595,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p03",
             "results": {
@@ -963,39 +627,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p04",
             "results": {
                 "bestScore": 5678,
@@ -1020,38 +652,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.48,
                 "score": 11829,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1107,22 +707,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p04",
             "results": {
@@ -1164,22 +748,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.64,
                 "score": 8871,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1235,22 +803,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p04",
             "results": {
@@ -1283,22 +835,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p05",
             "results": {
@@ -1315,55 +851,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p05",
             "results": {
                 "bestScore": 6235,
@@ -1420,22 +908,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.44,
                 "score": 14170,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1491,22 +963,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dae_yahsp",
             "problem": "p05",
             "results": {
@@ -1555,22 +1011,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p05",
             "results": {
@@ -1603,39 +1043,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p06",
             "results": {
                 "bestScore": 5678,
@@ -1660,38 +1068,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.48,
                 "score": 11829,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1747,22 +1123,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p06",
             "results": {
@@ -1804,22 +1164,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.64,
                 "score": 8871,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1875,22 +1219,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p06",
             "results": {
@@ -1923,39 +1251,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p07",
             "results": {
                 "bestScore": 4839,
@@ -1980,38 +1276,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.59,
                 "score": 8201,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2067,22 +1331,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p07",
             "results": {
@@ -2116,22 +1364,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p07",
             "results": {
                 "bestScore": 4839,
@@ -2195,22 +1427,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p07",
             "results": {
@@ -2243,22 +1459,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p08",
             "results": {
@@ -2275,55 +1475,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p08",
             "results": {
                 "bestScore": 4467,
@@ -2387,22 +1539,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p08",
             "results": {
@@ -2436,22 +1572,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p08",
             "results": {
                 "bestScore": 4467,
@@ -2515,22 +1635,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p08",
             "results": {
@@ -2563,39 +1667,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p09",
             "results": {
                 "bestScore": 4839,
@@ -2620,38 +1692,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.59,
                 "score": 8201,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -2707,22 +1747,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p09",
             "results": {
@@ -2756,22 +1780,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p09",
             "results": {
                 "bestScore": 4839,
@@ -2835,22 +1843,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p09",
             "results": {
@@ -2883,39 +1875,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p10",
             "results": {
                 "bestScore": 4626,
@@ -2940,38 +1900,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.43,
                 "score": 10758,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3027,22 +1955,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p10",
             "results": {
@@ -3076,22 +1988,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p10",
             "results": {
                 "bestScore": 4626,
@@ -3155,22 +2051,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p10",
             "results": {
@@ -3203,22 +2083,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.75,
-                "score": 1781,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p11",
             "results": {
@@ -3235,22 +2099,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p11",
             "results": {
@@ -3260,38 +2108,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.4,
                 "score": 3340,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.66,
-                "score": 2024,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3347,22 +2163,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p11",
             "results": {
@@ -3404,22 +2204,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.61,
                 "score": 2190,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3475,22 +2259,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p11",
             "results": {
@@ -3523,22 +2291,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.85,
-                "score": 1930,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p12",
             "results": {
@@ -3555,22 +2307,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p12",
             "results": {
@@ -3580,38 +2316,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.42,
                 "score": 3907,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.58,
-                "score": 2829,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3667,22 +2371,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p12",
             "results": {
@@ -3724,22 +2412,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.65,
                 "score": 2524,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3795,22 +2467,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p12",
             "results": {
@@ -3843,22 +2499,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.65,
-                "score": 1764,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p13",
             "results": {
@@ -3875,22 +2515,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
             "problem": "p13",
             "results": {
@@ -3900,38 +2524,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.35,
                 "score": 3277,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.53,
-                "score": 2164,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -3987,22 +2579,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p13",
             "results": {
@@ -4044,22 +2620,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.52,
                 "score": 2205,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4115,22 +2675,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p13",
             "results": {
@@ -4163,22 +2707,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p14",
             "results": {
@@ -4195,55 +2723,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p14",
             "results": {
                 "bestScore": 5974,
@@ -4307,22 +2787,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p14",
             "results": {
@@ -4364,22 +2828,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.56,
                 "score": 10667,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4435,22 +2883,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p14",
             "results": {
@@ -4483,39 +2915,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p15",
             "results": {
                 "bestScore": 5320,
@@ -4540,38 +2940,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.4,
                 "score": 13300,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4627,22 +2995,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p15",
             "results": {
@@ -4684,22 +3036,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.41,
                 "score": 12975,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4755,22 +3091,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p15",
             "results": {
@@ -4803,39 +3123,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p16",
             "results": {
                 "bestScore": 4695,
@@ -4860,38 +3148,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.48,
                 "score": 9781,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -4947,22 +3203,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p16",
             "results": {
@@ -5004,22 +3244,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.43,
                 "score": 10918,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5075,22 +3299,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p16",
             "results": {
@@ -5123,22 +3331,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p17",
             "results": {
@@ -5155,55 +3347,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p17",
             "results": {
                 "bestScore": 4540,
@@ -5267,22 +3411,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p17",
             "results": {
@@ -5316,22 +3444,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p17",
             "results": {
                 "bestScore": 4540,
@@ -5395,22 +3507,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p17",
             "results": {
@@ -5443,22 +3539,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p18",
             "results": {
@@ -5475,55 +3555,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p18",
             "results": {
                 "bestScore": 4840,
@@ -5587,22 +3619,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p18",
             "results": {
@@ -5636,22 +3652,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "ibacop2",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
             "problem": "p18",
             "results": {
                 "bestScore": 4840,
@@ -5715,22 +3715,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p18",
             "results": {
@@ -5763,39 +3747,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "miplan",
             "problem": "p19",
             "results": {
                 "bestScore": 3881,
@@ -5820,38 +3772,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.43,
                 "score": 9025,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -5907,22 +3827,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p19",
             "results": {
@@ -5964,22 +3868,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.36,
                 "score": 10780,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -6035,22 +3923,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dpmplan",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "mercury",
             "problem": "p19",
             "results": {
@@ -6083,22 +3955,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "arvandherd",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "fdss-2014",
             "problem": "p20",
             "results": {
@@ -6115,55 +3971,7 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "miplan",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "use",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "bfs-f",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "freelunch",
             "problem": "p20",
             "results": {
                 "bestScore": 3853,
@@ -6227,22 +4035,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "nucelar",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "yahsp3-mt",
             "problem": "p20",
             "results": {
@@ -6291,22 +4083,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "planets",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "dae_yahsp",
             "problem": "p20",
             "results": {
@@ -6340,22 +4116,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "rpt",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dpmplan",
             "problem": "p20",
             "results": {
                 "bestScore": 3853,

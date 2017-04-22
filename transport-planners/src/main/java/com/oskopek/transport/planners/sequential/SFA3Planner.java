@@ -3,6 +3,7 @@ package com.oskopek.transport.planners.sequential;
 import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 
 import java.util.Collection;
 
@@ -21,8 +22,8 @@ public final class SFA3Planner extends ForwardAstarPlanner {
     }
 
     @Override
-    protected Integer calculateHeuristic(ImmutablePlanState state, ArrayTable<String, String, Integer> distanceMatrix,
-            Collection<Package> unfinishedPackages) {
+    protected Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
         return PlannerUtils.calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                 state.getProblem().getAllVehicles(), distanceMatrix);
     }

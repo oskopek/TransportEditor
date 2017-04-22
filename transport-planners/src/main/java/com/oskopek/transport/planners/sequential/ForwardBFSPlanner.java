@@ -8,6 +8,7 @@ import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.AbstractPlanner;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class ForwardBFSPlanner extends AbstractPlanner {
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
-        ArrayTable<String, String, Integer> distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
+        ArrayTable<String, String, ShortestPath> distanceMatrix = PlannerUtils.computeAPSP(problem.getRoadGraph());
 
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
         states.add(new ImmutablePlanState(problem));

@@ -6,6 +6,7 @@ import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
+import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.algorithm.Kruskal;
 import org.graphstream.graph.Edge;
@@ -29,8 +30,8 @@ public final class SFA2Planner extends ForwardAstarPlanner {
     }
 
     @Override
-    protected Integer calculateHeuristic(ImmutablePlanState state, ArrayTable<String, String, Integer> distanceMatrix,
-            Collection<Package> unfinishedPackages) {
+    protected Integer calculateHeuristic(ImmutablePlanState state,
+            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
         int heuristic = 0;
 
         Graph T = mst(state.getProblem().getRoadGraph());
