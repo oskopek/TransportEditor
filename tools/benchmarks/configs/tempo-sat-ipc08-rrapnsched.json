@@ -124,8 +124,8 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRWASched": {
-      "className": "com.oskopek.transport.planners.temporal.RRWASequentialScheduler"
+    "RRAPNSched": {
+      "className": "com.oskopek.transport.planners.temporal.RRAPNSequentialScheduler"
     }
   },
   "threadCount": 8,

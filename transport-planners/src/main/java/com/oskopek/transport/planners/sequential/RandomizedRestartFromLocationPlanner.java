@@ -23,15 +23,15 @@ import java.util.stream.Collectors;
  * and deliver them along the shortest path possible (calculated as brute force permutations and evaluated
  * using the shortest path matrix).
  */
-public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
+public class RandomizedRestartFromLocationPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Default constructor.
      */
-    public RandomizedRestartPlanner() {
-        setName(RandomizedRestartPlanner.class.getSimpleName());
+    public RandomizedRestartFromLocationPlanner() {
+        setName(RandomizedRestartFromLocationPlanner.class.getSimpleName());
     }
 
     @Override
@@ -148,8 +148,8 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
     }
 
     @Override
-    public RandomizedRestartPlanner copy() {
-        return new RandomizedRestartPlanner();
+    public RandomizedRestartFromLocationPlanner copy() {
+        return new RandomizedRestartFromLocationPlanner();
     }
 
     @Override
@@ -159,6 +159,6 @@ public class RandomizedRestartPlanner extends SequentialRandomizedPlanner {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof RandomizedRestartPlanner;
+        return obj instanceof RandomizedRestartFromLocationPlanner;
     }
 }

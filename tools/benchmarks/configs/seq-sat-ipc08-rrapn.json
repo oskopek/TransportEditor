@@ -124,8 +124,8 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRWA": {
-      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartWithAroundPathPickupPlanner"
+    "RRAPN": {
+      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner"
     }
   },
   "threadCount": 8,

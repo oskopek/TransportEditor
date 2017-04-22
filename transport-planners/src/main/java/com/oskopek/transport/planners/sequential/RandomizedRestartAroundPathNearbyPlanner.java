@@ -27,15 +27,15 @@ import java.util.function.Function;
  * if still not fully capacitated, choose the others in the
  * order of distance from their destinations at any possible drop of point on the path.
  */
-public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRandomizedPlanner {
+public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomizedPlanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Default constructor.
      */
-    public RandomizedRestartWithAroundPathPickupPlanner() {
-        setName(RandomizedRestartWithAroundPathPickupPlanner.class.getSimpleName());
+    public RandomizedRestartAroundPathNearbyPlanner() {
+        setName(RandomizedRestartAroundPathNearbyPlanner.class.getSimpleName());
     }
 
     @Override
@@ -167,7 +167,7 @@ public class RandomizedRestartWithAroundPathPickupPlanner extends SequentialRand
     }
 
     @Override
-    public RandomizedRestartWithAroundPathPickupPlanner copy() {
-        return new RandomizedRestartWithAroundPathPickupPlanner();
+    public RandomizedRestartAroundPathNearbyPlanner copy() {
+        return new RandomizedRestartAroundPathNearbyPlanner();
     }
 }

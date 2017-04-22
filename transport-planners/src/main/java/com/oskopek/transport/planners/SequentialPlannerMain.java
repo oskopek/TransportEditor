@@ -29,12 +29,12 @@ public final class SequentialPlannerMain {
 // + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
 //    private static final Planner planner = new ForwardAstarPlanner();
-//    private static final Planner planner = new RandomizedRestartPlanner();
-//    private static final Planner planner = new RandomizedRestartWithOnPathPickupPlanner();
-//    private static final Planner planner = new RandomizedRestartWithOnPathPickup2Planner();
-    private static final Planner planner = new RandomizedRestartWithAroundPathPickupPlanner();
-//    private static final Planner planner = new BacktrackRestartWithAroundPathPickupPlanner();
-//    private static final Planner planner = new RandomizedRestartWithAroundPathPickupNoCoinTossPlanner();
+//    private static final Planner planner = new RandomizedRestartFromLocationPlanner();
+//    private static final Planner planner = new RandomizedRestartOnPathPlanner();
+//    private static final Planner planner = new RandomizedRestartOnPathNearbyPlanner();
+    private static final Planner planner = new RandomizedRestartAroundPathNearbyPlanner();
+//    private static final Planner planner = new RandomizedBacktrackRestartAroundPathNearbyPlanner();
+//    private static final Planner planner = new RandomizedRestartAroundPathDistributionPlanner();
 
     private static final Logger logger = LoggerFactory.getLogger(SequentialPlannerMain.class);
 
