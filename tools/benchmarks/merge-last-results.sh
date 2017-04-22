@@ -14,13 +14,13 @@ for config in $configs; do
         continue
     fi
     lastres="`ls $confdir | tail -n 1`"
-    if ! [ -d "$lastres" ]; then
+    if [ -z "$lastres" ]; then
         echo "Last Conf dir not found, skipping: $lastres"
         continue
     fi
-    file="`realpath $lastres/results.json`"
+    file="`realpath $confdir/$lastres/results.json`"
     if [ -f "$file" ]; then
-        results="$results results/$config/results.json"
+        results="$results $file"
     else
         echo "Skipping $config, not results file found: $file"
         continue
@@ -32,12 +32,13 @@ if [ -z "$results" ]; then
     return
 fi
 
+rm -rf "$target"
+sleep 1s
 mkdir -p "$target"
 python3 scripts/merge-results.py $results "$target/results.json"
 . generate-reports.sh "$lastconfig" "$target/results.json"
 
 }
-
 
 ipc08seq="seq-sat-ipc08-rrapn seq-sat-ipc08-sfa3"
 ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-sfa3"
@@ -49,5 +50,3 @@ merge-results "$ipc08seq" "$basepath/ipc08seq"
 merge-results "$ipc11seq" "$basepath/ipc11seq"
 merge-results "$ipc14seq" "$basepath/ipc14seq"
 merge-results "$ipc08temp" "$basepath/ipc08temp"
-
-
