@@ -135,7 +135,8 @@ public final class TestUtils {
         // drive
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new WhoAtWhere());
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new IsRoad());
-        assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
+        assertThat(parsed.getDriveBuilder().getPreconditions()).contains(new HasFuelCapacityForDrive());
+        assertEquals(3, parsed.getDriveBuilder().getPreconditions().size());
 
         assertThat(parsed.getDriveBuilder().getEffects()).contains(new Not(new WhoAtWhere()));
         assertThat(parsed.getDriveBuilder().getEffects()).contains(new WhoAtWhat());

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public final class SequentialPlan implements Plan {
      *
      * @param actionList the action list
      */
-    public SequentialPlan(List<Action> actionList) {
+    public SequentialPlan(Collection<Action> actionList) {
         this(new LinkedList<>(actionList));
     }
 

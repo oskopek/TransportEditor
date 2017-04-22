@@ -114,8 +114,7 @@ public class Location extends DefaultActionObject implements Locatable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getName())
-                .append(petrolStation).toHashCode();
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(getName()).toHashCode();
     }
 
     @Override
@@ -126,9 +125,7 @@ public class Location extends DefaultActionObject implements Locatable {
         if (!(o instanceof Location)) {
             return false;
         }
-        Location location = (Location) o;
-        return new EqualsBuilder().appendSuper(super.equals(o))
-                .append(petrolStation, location.petrolStation).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).isEquals();
     }
 
     @Override

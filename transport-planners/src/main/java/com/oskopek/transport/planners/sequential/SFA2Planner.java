@@ -26,6 +26,7 @@ public final class SFA2Planner extends ForwardAstarPlanner {
      * Default constructor.
      */
     public SFA2Planner() {
+        super(false);
         setName(SFA2Planner.class.getSimpleName());
     }
 

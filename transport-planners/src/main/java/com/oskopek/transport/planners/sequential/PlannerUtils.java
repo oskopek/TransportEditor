@@ -523,7 +523,7 @@ public final class PlannerUtils {
 //                if (dist > maxPkgDistance) {
 //                    maxPkgDistance = dist;
 //                }
-//            } // TODO: not true, calculate the max distance for a package in the vehicle,
+//            } // WARNING: not true, calculate the max distance for a package in the vehicle,
 //              // or the spanning tree distances
 //            sumDistances += maxPkgDistance + vehicle.getPackageList().size(); // + drop actions
 //        }
@@ -532,7 +532,7 @@ public final class PlannerUtils {
             if (pkgLocation != null) {
                 String pkgLocName = pkgLocation.getName();
                 // calculate the distance to the target + pickup and drop
-                sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName()) // TODO: not admissible
+                sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName()) // WARNING: not admissible
                         .getDistance() + 2; // + pickup and drop
 
                 // Calculate the distance to the nearest vehicle or package

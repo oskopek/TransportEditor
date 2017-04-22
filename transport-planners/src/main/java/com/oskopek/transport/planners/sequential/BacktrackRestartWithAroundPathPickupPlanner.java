@@ -51,14 +51,7 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
      */
     private Optional<Plan> planRecursively(Domain domain, Problem problem) {
         float exploration = 0.8f;
-        while (true) {
-            // TODO: change exploration
-            ImmutablePlanState result = newStateRecursively(domain, new ImmutablePlanState(problem), exploration);
-            if (result == null) {
-                break;
-            }
-            break;
-        }
+        newStateRecursively(domain, new ImmutablePlanState(problem), exploration);
         return Optional.ofNullable(getBestPlan());
     }
 
@@ -73,10 +66,10 @@ public class BacktrackRestartWithAroundPathPickupPlanner extends SequentialRando
     private ImmutablePlanState newStateRecursively(Domain domain, final ImmutablePlanState current,
             final float exploration) {
         if (current.isGoalState()) {
-            if (getBestPlanScore() > current.getTotalTime()) {
-                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), current.getTotalTime());
-                setBestPlanScore(current.getTotalTime());
-                setBestPlan(new SequentialPlan(current.getAllActionsInList()));
+            int totalTime = current.getTotalTime();
+            if (getBestPlanScore() > totalTime) {
+                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
+                savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
             return current;
         }

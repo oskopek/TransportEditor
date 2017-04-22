@@ -4,6 +4,8 @@ import com.google.common.collect.ArrayTable;
 import com.oskopek.transport.model.domain.Domain;
 import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
+import com.oskopek.transport.model.plan.SequentialPlan;
+import com.oskopek.transport.model.plan.TemporalPlan;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.Problem;
@@ -17,6 +19,8 @@ import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.Value;
 import javaslang.collection.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +29,8 @@ import java.util.stream.Collectors;
  * Abstract superclass of randomized sequential planners.
  */
 public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
     private Random random;
@@ -68,23 +74,23 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
     }
 
     /**
-     * Set the best plan so far.
+     * Save the plan if it has a lower score than the currently best found plan.
      *
-     * @param bestPlan the best plan
-     * @deprecated should be done via an update method?
+     * @param score the score of the plan
+     * @param plan the plan
      */
-    protected void setBestPlan(Plan bestPlan) {
-        this.bestPlan = bestPlan;
-    }
-
-    /**
-     * Set the best plan score.
-     *
-     * @param bestPlanScore the best plan score
-     * @deprecated should be done via an update method?
-     */
-    protected void setBestPlanScore(int bestPlanScore) {
-        this.bestPlanScore = bestPlanScore;
+    protected void savePlanIfBetter(int score, Plan plan) {
+        if (bestPlanScore > score) {
+            logger.debug("Found new best plan {} -> {}", bestPlanScore, score);
+            bestPlanScore = score;
+            if (plan instanceof SequentialPlan) {
+                bestPlan = new SequentialPlan(plan.getActions());
+            } else if (plan instanceof TemporalPlan) {
+                bestPlan = new TemporalPlan(plan.getTemporalPlanActions());
+            } else {
+                throw new IllegalStateException("Cannot save plan of type: " + plan.getClass());
+            }
+        }
     }
 
     /**

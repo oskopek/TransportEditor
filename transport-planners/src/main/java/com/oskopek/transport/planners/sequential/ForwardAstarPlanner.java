@@ -34,12 +34,16 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     private ArrayTable<String, String, ShortestPath> distanceMatrix;
     private Plan bestPlan;
     private int bestPlanScore;
+    private final boolean stopAtFirstSolution;
 
     /**
      * Default constructor.
+     *
+     * @param stopAtFirstSolution if the planner should stop after finding the first valid plan
      */
-    public ForwardAstarPlanner() {
+    public ForwardAstarPlanner(boolean stopAtFirstSolution) {
         setName(ForwardAstarPlanner.class.getSimpleName());
+        this.stopAtFirstSolution = stopAtFirstSolution;
     }
 
     /**
@@ -117,7 +121,9 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                     bestPlanScore = current.getTotalTime();
                     bestPlan = new SequentialPlan(current.getAllActionsInList());
                 }
-//                return Optional.of(new SequentialPlan(current.getAllActionsInList())); // TODO: remove me?
+                if (stopAtFirstSolution) {
+                    return Optional.of(new SequentialPlan(current.getAllActionsInList()));
+                }
             }
 
             if (shouldCancel()) {

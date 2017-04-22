@@ -8,6 +8,8 @@ import com.oskopek.transport.model.plan.TemporalPlan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.antlr4.PlanLexer;
 import com.oskopek.transport.persistence.antlr4.PlanParser;
+import javaslang.Tuple;
+import javaslang.Tuple2;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -63,7 +65,11 @@ public class TemporalPlanIO implements DataIO<Plan> {
         }
         StringBuilder str = new StringBuilder();
         Collection<TemporalPlanAction> actionSet = plan.getTemporalPlanActions();
-        actionSet.stream().map(TemporalPlanIO::serializeTemporalPlanAction).sorted().forEach(str::append);
+        Comparator<Tuple2<TemporalPlanAction, String>> comparator = Comparator.comparing(a -> a._1);
+        comparator = comparator.thenComparing(a -> a._2);
+
+        actionSet.stream().map(a -> Tuple.of(a, TemporalPlanIO.serializeTemporalPlanAction(a))).sorted(comparator)
+                .forEach(t -> str.append(t._2));
 
         Double totalTime = 0d;
         Optional<Double> last = actionSet.stream().map(TemporalPlanAction::getEndTimestamp).max(Double::compare);

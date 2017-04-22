@@ -107,7 +107,7 @@ public class VariableDomainIOIT {
                 new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
                 new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START));
-        assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
+        assertEquals(3, parsed.getDriveBuilder().getPreconditions().size());
 
         assertThat(parsed.getDriveBuilder().getEffects()).contains(
                 new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START));
@@ -193,7 +193,7 @@ public class VariableDomainIOIT {
                 new TemporalPredicate(new WhoAtWhere(), TemporalQuantifier.AT_START));
         assertThat(parsed.getDriveBuilder().getPreconditions()).contains(
                 new TemporalPredicate(new IsRoad(), TemporalQuantifier.AT_START));
-        assertEquals(2, parsed.getDriveBuilder().getPreconditions().size());
+        assertEquals(3, parsed.getDriveBuilder().getPreconditions().size());
 
         assertThat(parsed.getDriveBuilder().getEffects()).contains(
                 new TemporalPredicate(new Not(new WhoAtWhere()), TemporalQuantifier.AT_START));

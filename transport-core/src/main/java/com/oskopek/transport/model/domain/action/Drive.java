@@ -54,4 +54,22 @@ public class Drive extends DefaultAction<Vehicle, Location> {
         return problemState
                 .putVehicle(vehicleName, vehicle.updateLocation(dest));
     }
+
+    /**
+     * Is this domain fuel-enabled?
+     *
+     * @return true iff this domain has fuel
+     */
+    public boolean isFuelDomain() {
+        return isFuelDomain;
+    }
+
+    /**
+     * Get the road we are driving on.
+     *
+     * @return the road
+     */
+    public Road getRoad() {
+        return road;
+    }
 }
