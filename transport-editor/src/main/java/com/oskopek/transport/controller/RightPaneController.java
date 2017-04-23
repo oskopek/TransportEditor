@@ -6,7 +6,6 @@ import com.oskopek.transport.event.GraphUpdatedEvent;
 import com.oskopek.transport.event.PlanningFinishedEvent;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.state.TemporalPlanStateManager;
 import com.oskopek.transport.session.PlanningSession;
 import com.oskopek.transport.view.*;
@@ -381,8 +380,9 @@ public class RightPaneController extends AbstractController {
     @FXML
     private void handlePlan() {
         logger.debug("Starting planning...");
+        Planner planner = application.getPlanningSession().getPlanner().copy();
+        application.getPlanningSession().setPlanner(planner);
         CompletionStage<Plan> planFuture = application.getPlanningSession().startPlanningAsync();
-        Planner planner = application.getPlanningSession().getPlanner();
         BooleanProperty successful = new SimpleBooleanProperty(false);
         BooleanProperty completed = new SimpleBooleanProperty(false);
         planFuture.thenAcceptAsync(plan -> {
