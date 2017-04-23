@@ -190,6 +190,7 @@ public class RootLayoutController extends AbstractController {
                 .filter(tuple -> tuple._2.isPresent())
                 .map(tuple -> Tuple.of(tuple._1, tuple._2.get()))
                 .filter(tuple -> tuple._2.isAvailable())
+                .sortBy(tuple -> tuple._1)
                 .forEach(tuple -> addPlanner(tuple._1, tuple._2));
     }
 
