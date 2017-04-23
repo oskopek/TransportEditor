@@ -65,17 +65,14 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
         int i = 1;
-//        float exploration = 0.2f; // best so far: 0.2 or 0.1
-//        float multiplier = 0.00f; // best so far: 0
-//        int everySteps = 50_000;
-        float exploration = 0.8f; // best so far: 0.2 or 0.1
-        float multiplier = 0.05f; // best so far: 0
-        int everySteps = 10_000;
+        float exploration = 0.2f; // best so far: 0.2 or 0.1
+        float multiplier = 0.00f; // best so far: 0
+        int everySteps = 50_000;
         while (true) {
             if (i % everySteps == 0) {
                 float delta = exploration;
                 exploration -= delta * multiplier;
-                logger.debug("Exploration increased to: {}", exploration);
+                logger.debug("Exploration set to: {}", exploration);
             }
             i++;
 
