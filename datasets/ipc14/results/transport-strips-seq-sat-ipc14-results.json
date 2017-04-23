@@ -35,22 +35,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.44,
-                "score": 2975,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p01",
             "results": {
@@ -76,22 +60,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 1309,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p01",
-            "results": {
-                "bestScore": 1309,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.66,
-                "score": 1983,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -131,22 +99,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.32,
-                "score": 6640,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p02",
             "results": {
@@ -172,22 +124,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 2125,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p02",
-            "results": {
-                "bestScore": 2125,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.73,
-                "score": 2910,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -227,22 +163,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.37,
-                "score": 4159,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p03",
             "results": {
@@ -268,22 +188,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 1539,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p03",
-            "results": {
-                "bestScore": 1539,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.82,
-                "score": 1876,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -323,22 +227,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.6,
-                "score": 9463,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p04",
             "results": {
@@ -364,22 +252,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 5678,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p04",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 12343,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -419,22 +291,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.49,
-                "score": 12724,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p05",
             "results": {
@@ -460,22 +316,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 6235,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p05",
-            "results": {
-                "bestScore": 6235,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.39,
-                "score": 15987,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -515,22 +355,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.6,
-                "score": 9463,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p06",
             "results": {
@@ -556,22 +380,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 5678,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p06",
-            "results": {
-                "bestScore": 5678,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 12343,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -611,22 +419,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 10519,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p07",
             "results": {
@@ -652,22 +444,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 4839,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p07",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -707,22 +483,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.49,
-                "score": 9116,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p08",
             "results": {
@@ -748,22 +508,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 4467,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p08",
-            "results": {
-                "bestScore": 4467,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -803,22 +547,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 10519,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p09",
             "results": {
@@ -844,22 +572,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 4839,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p09",
-            "results": {
-                "bestScore": 4839,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "UNSOLVED",
-                "quality": 0.0,
-                "score": null,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -899,22 +611,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.37,
-                "score": 12502,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p10",
             "results": {
@@ -947,22 +643,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p10",
-            "results": {
-                "bestScore": 4626,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.53,
-                "score": 8728,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p11",
             "results": {
@@ -980,22 +660,6 @@
             "actions": [],
             "domain": "transport-strips",
             "planner": "yahsp3-mt",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.55,
-                "score": 2429,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
             "problem": "p11",
             "results": {
                 "bestScore": 1336,
@@ -1043,22 +707,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p11",
-            "results": {
-                "bestScore": 1336,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.64,
-                "score": 2087,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p12",
             "results": {
@@ -1084,22 +732,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.45,
                 "score": 3646,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.43,
-                "score": 3816,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1139,22 +771,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p12",
-            "results": {
-                "bestScore": 1641,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.77,
-                "score": 2131,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p13",
             "results": {
@@ -1180,22 +796,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.31,
                 "score": 3700,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.33,
-                "score": 3475,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1235,22 +835,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p13",
-            "results": {
-                "bestScore": 1147,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.58,
-                "score": 1977,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p14",
             "results": {
@@ -1276,22 +860,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.64,
                 "score": 9334,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.48,
-                "score": 12445,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1331,22 +899,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p14",
-            "results": {
-                "bestScore": 5974,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.43,
-                "score": 13893,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p15",
             "results": {
@@ -1372,22 +924,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.45,
                 "score": 11822,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.42,
-                "score": 12666,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1427,22 +963,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p15",
-            "results": {
-                "bestScore": 5320,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.38,
-                "score": 14000,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p16",
             "results": {
@@ -1468,22 +988,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.55,
                 "score": 8536,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.51,
-                "score": 9205,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1523,22 +1027,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p16",
-            "results": {
-                "bestScore": 4695,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.4,
-                "score": 11737,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p17",
             "results": {
@@ -1564,22 +1052,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.56,
                 "score": 8107,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 9869,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1619,22 +1091,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p17",
-            "results": {
-                "bestScore": 4540,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.47,
-                "score": 9659,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p18",
             "results": {
@@ -1660,22 +1116,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.46,
                 "score": 10521,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.48,
-                "score": 10083,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1715,22 +1155,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p18",
-            "results": {
-                "bestScore": 4840,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.55,
-                "score": 8800,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p19",
             "results": {
@@ -1756,22 +1180,6 @@
                 "exitStatus": "VALID",
                 "quality": 0.53,
                 "score": 7322,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.32,
-                "score": 12128,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []
@@ -1811,22 +1219,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p19",
-            "results": {
-                "bestScore": 3881,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.52,
-                "score": 7463,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "ibacop",
             "problem": "p20",
             "results": {
@@ -1859,22 +1251,6 @@
         {
             "actions": [],
             "domain": "transport-strips",
-            "planner": "dae_yahsp",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.44,
-                "score": 8756,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
             "planner": "jasper",
             "problem": "p20",
             "results": {
@@ -1900,22 +1276,6 @@
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 3853,
-                "startTimeMs": 0
-            },
-            "temporalPlanActions": []
-        },
-        {
-            "actions": [],
-            "domain": "transport-strips",
-            "planner": "uniform",
-            "problem": "p20",
-            "results": {
-                "bestScore": 3853,
-                "durationMs": -1,
-                "endTimeMs": 0,
-                "exitStatus": "VALID",
-                "quality": 0.46,
-                "score": 8376,
                 "startTimeMs": 0
             },
             "temporalPlanActions": []

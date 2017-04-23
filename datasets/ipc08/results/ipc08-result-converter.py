@@ -24,8 +24,10 @@ def filter_rows(rows, domain, track):
         planner = row[1]
         if "ref" == planner:
             continue
-        if planner in ["upwards", "dae1", "dae2", "c3"]: # filter out not well performing planners
+        if planner in ["ffha", "ffsa", "upwards", "dae1", "dae2", "c3"]: # filter out not well performing planners
             continue
+        if planner == "temporal-fast-downward":
+            planner = "tfd"
         problem = "p" + str(row[3])
         status = statusTable[str(row[4])]
 

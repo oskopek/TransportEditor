@@ -10,14 +10,13 @@ We will briefly discuss the acquired results and interpret them.
 Using our benchmarking software (described in the attachments), we will now run experiments in an
 environment as similar to the original
 IPC as possible, following almost all of their rules mentioned in.\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
-We will run all tests according to principles mimicking the rules;
-All planners have to be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
+All planners are be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
 get canceled and prompted for a plan at that time point).
 Our planners explicitly and intentionally break the ``domain-independence'' rule of the IPC.
 
 The evaluation criteria remain the same:
 we focus on plan \textit{quality} in favor of planner run time,
-although we will mention the times.
+although we will mention runtimes.
 The quality of a plan for a specific planner and sequential problem $p$ is defined as
 $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$
 where the results called $BEST$
@@ -31,21 +30,21 @@ The overall goal for planners is to maximize the sum of qualities over the probl
 For temporal domains, quality is calculated in the same way, just by substituting total cost
 for total time. We sometimes refer to total cost and total time as the \textit{score} of the planner, a term that is not dependent on the domain variant.
 
-We will use three datasets for our experiments --- the seq-sat-6
+We will use four datasets for our experiments --- the seq-sat-6, seq-sat-7,
 and seq-sat-8 datasets for sequential
 and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
 All the datasets used (and more) are available in the
-software project sources, see the \nameref{cd-contents}.
-Descriptions of planners referenced from now on by their names in the respective competitions can be found for both IPC~2008\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}} and IPC~2014 \citep{Vallati2015}.
+software project sources (see the attached \nameref{cd-contents}).
+Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}}, IPC~2011 \citep{Garcia-Olaya2011} and IPC~2014 \citep{Vallati2015}.
 
 In all planners where nondeterminism occurs,
 we set the initial random seed to 2017
-on all individual runs.
+(on all individual problem runs).
 All the following experiments
 were run on a computer
 containing an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
 with 16 GB of memory, running Gentoo Linux.
-A big thank you goes out to the faculty for providing us with unfettered access to these machines.
+A big thank you goes out to the faculty for providing us with access to these machines.
 We run all Java programs on Oracle's OpenJDK 
 version \texttt{1.8.0\_121}, build \texttt{b13}.
 The results presented here were obtained with the \TEver{} version of the TransportEditor project.\footnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
@@ -74,30 +73,29 @@ the exact versions of libraries used.
 
 In this section, we present the results of our sequential planners on the seq-sat-6 and seq-sat-8 datasets. Specifically, these planners are included in the experiment:
 \begin{description}
-\item[SFA*A] The SFA* algorithm with heuristic A. \TODO{ref}
-\item[SFA*B] The SFA* algorithm with heuristic B. \TODO{ref}
-\item[SFAA*] The adjusting A* algorithm with heuristic X. \TODO{ref}
-\item[OPS] The OptaPlanner sequential algorithm. \TODO{ref}
+\item[SFA3] The SFA* algorithm with heuristic C (Section~\ref{sfa3})
+\item[MSFA3] The metaheuristically weighted SFA3 planner (Section~\ref{msfa})
+\item[RRAPN] The Randomized Restart Around Path Nearby Planner (Section~\ref{rrapn})
+\item[CSP] The \TODO{CSP planner} (Section~\ref{csp-planner})
 \end{description}
 
 \subsection{Results}\label{sequential-results}
 
-We show the IPC quality table
-for the experimental run on the seq-sat-6 dataset (Table~\ref{tab:seq-sat-6-ipc-scores}),
-the seq-sat-7 dataset (Table~\ref{tab:seq-sat-7-ipc-scores}),
-and the seq-sat-8 dataset (Table~\ref{tab:seq-sat-8-ipc-scores}).
-Additionally, a plot of the scores and run times is presented in Figures~\ref{fig:seq-sat-6-plots},
-\ref{fig:seq-sat-7-plots}, and~\ref{fig:seq-sat-8-plots}. Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
+We show an IPC quality table and a quality plot
+for the experimental runs on the seq-sat-6 dataset (Figure~\ref{fig:seq-sat-6-results}), seq-sat-7 dataset (Figure~\ref{fig:seq-sat-7-results}), and the seq-sat-8 dataset (Figure~\ref{fig:seq-sat-8-results}). Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
 
-\begin{figure}
+\begin{figure}[p]
 \centering
 \begin{subtable}{\textwidth}
 \centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/seq-sat-6-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-6 dataset.}
 \label{tab:seq-sat-6-ipc-scores}
 \end{subtable}
-\quad
+
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-quality}
@@ -108,15 +106,18 @@ Additionally, a plot of the scores and run times is presented in Figures~\ref{fi
 \label{fig:seq-sat-6-results}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[p]
 \centering
 \begin{subtable}{\textwidth}
 \centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/seq-sat-7-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-7 dataset.}
 \label{tab:seq-sat-7-ipc-scores}
 \end{subtable}
-\quad
+
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=1.0\textwidth]{../imga/seq-sat-7-quality}
@@ -127,15 +128,18 @@ Additionally, a plot of the scores and run times is presented in Figures~\ref{fi
 \label{fig:seq-sat-7-results}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[p]
 \centering
 \begin{subtable}{\textwidth}
 \centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/seq-sat-8-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-8 dataset.}
 \label{tab:seq-sat-8-ipc-scores}
 \end{subtable}
-\quad
+
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-quality}
@@ -144,25 +148,6 @@ Additionally, a plot of the scores and run times is presented in Figures~\ref{fi
 \end{subfigure}
 \caption{Planner results on seq-sat-8.}
 \label{fig:seq-sat-8-results}
-\end{figure}
-
-\begin{figure}
-\centering
-\begin{subtable}{\textwidth}
-\centering
-\input{../data/tempo-sat-6-ipc-scores}
-\caption{Quality and score of sequential planners on the tempo-sat-6 dataset.}
-\label{tab:tempo-sat-6-ipc-scores}
-\end{subtable}
-\quad
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-quality}
-\caption{Quality plot of sequential planners on the seq-sat-6 dataset.}
-\label{fig:tempo-sat-6-quality}
-\end{subfigure}
-\caption{Planner results on tempo-sat-6.}
-\label{fig:tempo-sat-6-results}
 \end{figure}
 
 
@@ -208,40 +193,37 @@ and we have tested our approaches on both datasets.
 
 In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
 \begin{description}
-\item[SFA*T] The SFA* algorithm with heuristic A, temporal version. \TODO{ref}
-\item[OPT] The OptaPlanner temporal algorithm. \TODO{ref}
+\item[RRAPNSched] The scheduled (Section~\ref{sched}) RRAPN planner (Section~\ref{rrapn})
+\item[CSPT] The \TODO{temporal CSP planner} \TODO{ref}
+\item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
 \end{description}
 
 \subsection{Results}\label{temporal-results}
 
-We show the IPC quality table
-for an experimental run of these planners on the tempo-sat-6 dataset (Table~\ref{tab:tempo-sat-6-ipc-scores}).
-Additionally, a plot of the scores and run times is presented in Figure~\ref{fig:tempo-sat-6-plots} and sample plan Gantt charts are shown in Figure~\ref{fig:tempo-sat-6-gantt}. The generated plans and benchmark results can be found in the \nameref{cd-contents}.
+We show an IPC quality table and a quality plot of an experimental run of these planners on the tempo-sat-6 dataset (Figure~\ref{fig:tempo-sat-6-results}).
+Additionally, sample plan Gantt charts are shown in Figure~\ref{fig:tempo-sat-6-gantt}. The generated plans and benchmark results can be found in the attached \nameref{cd-contents}.
 
-\begin{table}
+
+\begin{figure}[p]
 \centering
+\begin{subtable}{\textwidth}
+\centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/tempo-sat-6-ipc-scores}
-\caption{Quality and score of temporal planners on the tempo-sat-6 dataset.}
+\caption{Quality and score of sequential planners on the tempo-sat-6 dataset.}
 \label{tab:tempo-sat-6-ipc-scores}
-\end{table}
+\end{subtable}
 
-\begin{figure}
-\centering
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-score}
-\caption{Score plot of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-score}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-quality}
+\caption{Quality plot of sequential planners on the tempo-sat-6 dataset.}
+\label{fig:tempo-sat-6-quality}
 \end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-runtime}
-\caption{Run time plot of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-runtime}
-\end{subfigure}
-\caption{Score and run time plots of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-plots}
+\caption{Planner results on tempo-sat-6.}
+\label{fig:tempo-sat-6-results}
 \end{figure}
 
 \begin{figure}

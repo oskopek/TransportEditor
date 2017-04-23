@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 function merge-results {
-configs="$1"
-target="$2"
+prefix="$1"
+configs="$2"
+target="$3"
 
 results=""
 lastconfig=""
 for config in $configs; do
     lastconfig="$config"
-    confdir="results/$config"
+    confdir="$prefix/results/$config"
     if ! [ -d "$confdir" ]; then
         echo "Conf dir not found, skipping: $confdir"
         continue
@@ -45,8 +46,11 @@ ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-msfa3 seq-sat-ipc11-sfa3"
 ipc14seq="seq-sat-ipc14-rrapn seq-sat-ipc14-msfa3 seq-sat-ipc14-sfa3"
 ipc08temp="tempo-sat-ipc08-rrapnsched tempo-sat-ipc08-tfd2014"
 
-basepath="results/merged"
-merge-results "$ipc08seq" "$basepath/ipc08seq"
-merge-results "$ipc11seq" "$basepath/ipc11seq"
-merge-results "$ipc14seq" "$basepath/ipc14seq"
-merge-results "$ipc08temp" "$basepath/ipc08temp"
+#TEvariant="TransportEditor-final"
+#basepath="$HOME/git/$TEvariant/tools/benchmarks"
+basepath="."
+merged="$basepath/results/merged"
+merge-results "$basepath" "$ipc08seq" "$merged/ipc08seq"
+merge-results "$basepath" "$ipc11seq" "$merged/ipc11seq"
+merge-results "$basepath" "$ipc14seq" "$merged/ipc14seq"
+merge-results "$basepath" "$ipc08temp" "$merged/ipc08temp"
