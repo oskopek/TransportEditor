@@ -5,6 +5,9 @@ import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -15,6 +18,20 @@ public class NumberDoubleStringConverter extends DoubleStringConverter {
 
     private static final transient Logger logger = LoggerFactory.getLogger(NumberDoubleStringConverter.class);
     private static final Pattern numberPattern = Pattern.compile("[^0-9.]");
+    private static final DecimalFormat decimalFormat;
+
+    static {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(Locale.US);
+        symbols.setDecimalSeparator('.');
+        decimalFormat = new DecimalFormat("0.000");
+        decimalFormat.setGroupingUsed(false);
+        decimalFormat.setDecimalFormatSymbols(symbols);
+    }
+
+    @Override
+    public String toString(Double value) {
+        return decimalFormat.format(value);
+    }
 
     @Override
     public Double fromString(String string) {

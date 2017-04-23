@@ -10,8 +10,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javaslang.collection.Stream;
 import org.controlsfx.control.table.TableFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +21,6 @@ import java.util.function.Consumer;
  * {@link com.oskopek.transport.model.plan.TemporalPlan}s.
  */
 public final class TemporalPlanTable {
-
-    private static final transient Logger logger = LoggerFactory.getLogger(TemporalPlanTable.class);
 
     /**
      * Empty constructor.
@@ -79,9 +75,10 @@ public final class TemporalPlanTable {
             updatePlan.accept(actionList);
             displayActionList.setValue(sort(actionList));
         });
-        TableColumn<TemporalPlanAction, Number> endColumn = new TableColumn<>("End");
+        TableColumn<TemporalPlanAction, Double> endColumn = new TableColumn<>("End");
         endColumn.cellValueFactoryProperty().setValue(
-                param -> new ReadOnlyDoubleWrapper(param.getValue().getEndTimestamp()));
+                param -> new ReadOnlyDoubleWrapper(param.getValue().getEndTimestamp()).asObject());
+        endColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberDoubleStringConverter()));
         TableColumn<TemporalPlanAction, String> actionColumn = new TableColumn<>("Action");
         actionColumn.cellValueFactoryProperty().setValue(
                 param -> new ReadOnlyStringWrapper(param.getValue().getAction().getName()));
