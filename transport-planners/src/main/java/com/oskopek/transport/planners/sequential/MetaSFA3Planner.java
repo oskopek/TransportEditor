@@ -8,7 +8,6 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
 import javaslang.Function3;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
@@ -22,8 +21,6 @@ import java.util.Optional;
  */
 public final class MetaSFA3Planner extends SFA3Planner {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>,
             Integer> weightedHeuristic;
 
@@ -36,6 +33,7 @@ public final class MetaSFA3Planner extends SFA3Planner {
     public MetaSFA3Planner() {
         super(true);
         setName(MetaSFA3Planner.class.getSimpleName());
+        logger = LoggerFactory.getLogger(getClass());
     }
 
     @Override
@@ -52,21 +50,25 @@ public final class MetaSFA3Planner extends SFA3Planner {
 
         while (true) {
             final int newWeight = weight;
+            if (weight == 1) {
+                formatLog("Will not stop at first solution anymore, weight is {}.", weight);
+                setStopAtFirstSolution(false);
+            }
             weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils
                     .calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
-            logger.debug("Setting weight to {}.", weight);
+            formatLog("Setting weight to {}.", weight);
             Optional<Plan> plan = super.plan(domain, problem);
             plan.ifPresent(plan2 -> {
                 Double makespan = plan2.calculateMakespan();
                 if (makespan < bestPlanScore) {
-                    logger.debug("Found new best plan (weight: {}, score: {})", newWeight, makespan);
+                    formatLog("Found new best plan (weight: {}, score: {})", newWeight, makespan);
                     bestPlan = plan2;
                     bestPlanScore = Math.round(makespan.floatValue());
                 }
             });
             if (shouldCancel()) {
-                logger.debug("Cancelling, returning WASTAR best plan so far with score: {}.", bestPlanScore);
+                formatLog("Cancelling, returning WASTAR best plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
             weight = Math.round(coef * weight);

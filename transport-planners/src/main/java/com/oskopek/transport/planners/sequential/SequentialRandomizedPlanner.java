@@ -19,8 +19,6 @@ import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.Value;
 import javaslang.collection.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,8 +27,6 @@ import java.util.stream.Collectors;
  * Abstract superclass of randomized sequential planners.
  */
 public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ArrayTable<String, String, ShortestPath> shortestPathMatrix;
     private Random random;
@@ -81,7 +77,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
      */
     protected void savePlanIfBetter(int score, Plan plan) {
         if (bestPlanScore > score) {
-            logger.debug("Found new best plan {} -> {}", bestPlanScore, score);
+            formatLog("Found new best plan {} -> {}", bestPlanScore, score);
             bestPlanScore = score;
             if (plan instanceof SequentialPlan) {
                 bestPlan = new SequentialPlan(plan.getActions());

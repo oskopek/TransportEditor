@@ -9,7 +9,6 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
@@ -22,13 +21,12 @@ import java.util.stream.Stream;
  */
 public class ForwardBFSPlanner extends AbstractPlanner {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     /**
      * Default constructor.
      */
     public ForwardBFSPlanner() {
         setName(ForwardAstarPlanner.class.getSimpleName());
+        logger = LoggerFactory.getLogger(getClass());
     }
 
     @Override
@@ -38,19 +36,19 @@ public class ForwardBFSPlanner extends AbstractPlanner {
         Deque<ImmutablePlanState> states = new ArrayDeque<>();
         states.add(new ImmutablePlanState(problem));
 
-        logger.debug("Starting planning...");
+        formatLog("Starting planning...");
 
         long counter = 0;
         while (!states.isEmpty()) {
             ImmutablePlanState state = states.removeFirst();
             if (shouldCancel()) {
-                logger.debug("Returning current hypothesis plan after cancellation.");
+                formatLog("Returning current hypothesis plan after cancellation.");
                 return Optional.of(new SequentialPlan(state.getAllActionsInList()));
             }
 
 
             if (state.isGoalState()) {
-                logger.debug("Found goal state! Exiting. Explored {} states. Left out {} states.", counter,
+                formatLog("Found goal state! Exiting. Explored {} states. Left out {} states.", counter,
                         states.size());
                 return Optional.of(new SequentialPlan(state.getAllActionsInList()));
             }
@@ -71,7 +69,7 @@ public class ForwardBFSPlanner extends AbstractPlanner {
 
             counter++;
             if (counter % 100_000 == 0) {
-                logger.debug("Explored {} states, left: {}", counter, states.size());
+                formatLog("Explored {} states, left: {}", counter, states.size());
             }
         }
 

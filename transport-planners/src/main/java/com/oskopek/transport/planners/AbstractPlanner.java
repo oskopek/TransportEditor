@@ -10,6 +10,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -24,6 +27,8 @@ import java.util.function.Function;
  */
 public abstract class AbstractPlanner extends CancellableLogStreamable implements Planner {
 
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
     private String name = "AbstractPlanner";
     private final ObjectProperty<Plan> planProperty = new SimpleObjectProperty<>();
     private final BooleanProperty isPlanningProperty = new SimpleBooleanProperty(false);
@@ -33,6 +38,18 @@ public abstract class AbstractPlanner extends CancellableLogStreamable implement
      */
     public AbstractPlanner() {
         // intentionally empty
+    }
+
+    /**
+     * Utility method for simultaneous logging to slf4j and all listeners.
+     *
+     * @param format the message with formatting marks
+     * @param items the objects to fill in
+     */
+    protected void formatLog(String format, Object... items) {
+        String msg = MessageFormatter.arrayFormat(format, items, null).getMessage();
+        log(msg);
+        logger.debug(msg);
     }
 
     /**

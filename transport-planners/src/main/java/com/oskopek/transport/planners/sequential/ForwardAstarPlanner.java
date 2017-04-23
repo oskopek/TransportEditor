@@ -10,7 +10,6 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ShortestPath;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teneighty.heap.AbstractHeap;
 import org.teneighty.heap.BinaryHeap;
@@ -26,15 +25,13 @@ import java.util.stream.Stream;
  */
 public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap;
     private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
     private ArrayTable<String, String, ShortestPath> distanceMatrix;
     private Plan bestPlan;
     private int bestPlanScore;
-    private final boolean stopAtFirstSolution;
+    private boolean stopAtFirstSolution;
 
     /**
      * Default constructor.
@@ -43,6 +40,25 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      */
     public ForwardAstarPlanner(boolean stopAtFirstSolution) {
         setName(ForwardAstarPlanner.class.getSimpleName());
+        this.stopAtFirstSolution = stopAtFirstSolution;
+        logger = LoggerFactory.getLogger(getClass());
+    }
+
+    /**
+     * Will stop at first solution?
+     *
+     * @return true iff will stop at first solution
+     */
+    protected boolean isStopAtFirstSolution() {
+        return stopAtFirstSolution;
+    }
+
+    /**
+     * Should stop at first solution?
+     *
+     * @param stopAtFirstSolution stop at first solution
+     */
+    protected void setStopAtFirstSolution(boolean stopAtFirstSolution) {
         this.stopAtFirstSolution = stopAtFirstSolution;
     }
 
@@ -114,17 +130,18 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      * @return the plan, or an empty optional if no plan was found
      */
     public Optional<Plan> planInternal(Domain domain, Problem problem) {
-        logger.debug("Initializing planning...");
+        formatLog("Initializing planning...");
+
         resetState();
         initialize(problem);
-        logger.debug("Starting planning...");
+        formatLog("Starting planning...");
 
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
             if (current.isGoalState()) {
                 if (bestPlanScore > current.getTotalTime()) {
-                    logger.debug("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
+                    formatLog("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
                     bestPlanScore = current.getTotalTime();
                     bestPlan = new SequentialPlan(current.getAllActionsInList());
                 }
@@ -134,7 +151,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
             }
 
             if (shouldCancel()) {
-                logger.debug("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
+                formatLog("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
 
@@ -166,7 +183,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
-                logger.debug("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
+                formatLog("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
                         entryMap.size());
             }
         }

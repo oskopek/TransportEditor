@@ -9,7 +9,6 @@ import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
 import javaslang.collection.*;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
@@ -23,21 +22,20 @@ import java.util.List;
  */
 public class RandomizedRestartOnPathPlanner extends SequentialRandomizedPlanner {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     /**
      * Default constructor.
      */
     public RandomizedRestartOnPathPlanner() {
         setName(RandomizedRestartOnPathPlanner.class.getSimpleName());
+        logger = LoggerFactory.getLogger(getClass());
     }
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
-        logger.debug("Initializing planning...");
+        formatLog("Initializing planning...");
         resetState();
         initialize(problem);
-        logger.debug("Starting planning...");
+        formatLog("Starting planning...");
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
         while (true) {
@@ -68,7 +66,7 @@ public class RandomizedRestartOnPathPlanner extends SequentialRandomizedPlanner 
                         .orElseThrow(() -> new IllegalStateException("Could not apply all new actions to state."));
 
                 if (shouldCancel()) {
-                    logger.debug("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
+                    formatLog("Cancelling, returning best found plan so far with score: {}.", getBestPlanScore());
                     return Optional.ofNullable(getBestPlan());
                 }
             }
@@ -78,7 +76,7 @@ public class RandomizedRestartOnPathPlanner extends SequentialRandomizedPlanner 
 
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
-                logger.debug("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
+                formatLog("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
         }
