@@ -49,13 +49,12 @@ public class Benchmark {
      * @param futures the futures to wait for
      * @return a stream of benchmark runs as results from the futures
      */
-    private static Stream<BenchmarkResults.JsonRun> waitFor(List<CompletableFuture<BenchmarkRun>> futures) {
+    private static Stream<BenchmarkResults.JsonRun> waitFor(List<CompletableFuture<BenchmarkResults.JsonRun>> futures) {
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
         Try.run(allOf::get).onFailure(e -> new IllegalStateException("Waiting for all futures failed.", e));
         logger.info("All benchmarks finished, writing results...");
-        return Stream.ofAll(futures).map(
-                f -> Try.of(f::get).map(BenchmarkResults::serializeRun)
-                        .getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
+        return Stream.ofAll(futures).map(f -> Try.of(f::get)
+                .getOrElseThrow(e -> new IllegalStateException("Future not completed.", e)));
     }
 
     /**
@@ -93,7 +92,7 @@ public class Benchmark {
      * @param schedule the timeout-keeping executor service
      * @return a list of futures of the scheduled runs
      */
-    private List<CompletableFuture<BenchmarkRun>> schedule(BenchmarkMatrix matrix, ExecutorService service,
+    private List<CompletableFuture<BenchmarkResults.JsonRun>> schedule(BenchmarkMatrix matrix, ExecutorService service,
             ScheduledExecutorService schedule) {
         return matrix.toBenchmarkRuns(skipFunction, scoreFunction)
                 .map(benchmarkRun -> {
@@ -137,7 +136,7 @@ public class Benchmark {
                                     Try.run(timeoutHandler::call);
                                 }
                             }, service);
-                    return runFuture;
+                    return runFuture.thenApply(BenchmarkResults.JsonRun::of);
                 })
                 .toJavaList();
     }
