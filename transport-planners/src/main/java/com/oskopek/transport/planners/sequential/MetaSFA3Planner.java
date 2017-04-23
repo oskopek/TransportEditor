@@ -67,7 +67,7 @@ public final class MetaSFA3Planner extends SFA3Planner {
                     bestPlanScore = Math.round(makespan.floatValue());
                 }
             });
-            if (shouldCancel()) {
+            if (shouldCancel() || weight == 1) { // plan ended with weight == 1
                 formatLog("Cancelling, returning WASTAR best plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
