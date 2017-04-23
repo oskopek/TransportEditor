@@ -86,6 +86,8 @@
 \newcommand{\pulrad}[1]{\raisebox{1.5ex}[0pt]{#1}}
 \newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
 
+%% Algorithms:
+\usepackage{algpseudocode}
 %% Personal:
 \usepackage{csvsimple} % CSV tables
 %%% Merging rows in tables
@@ -122,3 +124,21 @@
 \newcommand{\drop}{\texttt{drop}}
 \newcommand{\drive}{\texttt{drive}}
 \newcommand{\refuel}{\texttt{refuel}}
+
+\newcommand{\myalg}[5]{%
+\begin{figure}[tb]
+\hrule
+\vspace{0.1cm}
+\textbf{Algorithm} #1
+\vspace{0.05cm}
+\hrule
+\begin{algorithmic}
+#2
+\end{algorithmic}
+\vspace{0.05cm}
+\hrule
+\vspace{0.1cm}
+\caption[#3]{#4}
+\label{alg:#5}
+\end{figure}
+}

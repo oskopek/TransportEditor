@@ -12,7 +12,32 @@
 
 \subsection{Deterministic search algorithms}
 
+\myalg{General Search}%
+{%
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+}%
+{A general search algorithm.}{A general search algorithm
+\citep[Section~3.4]{Russell1995}.}{gs}
+
 \subsubsection{BFS}
+
+\myalg{Breadth-First Search}%
+{%
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+}%
+{The Breadth-First Search algorithm.}{The Breadth-First Search algorithm \citep[Section~3.5]{Russell1995}.}{bfs}
 
 \TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
 
@@ -21,6 +46,15 @@
 \TODO{Describe A* in forward planning}
 
 %\TODO{mention Zhou with Java impl} \citep{Zhou2015}
+
+\myalg{A*}%
+{%
+\Require problem, a problem
+\Ensure a solution sequence
+
+\Return \Call{General-Search}{problem, Queue-Fn}
+}%
+{The A* algorithm.}{The A* algorithm \citep[Section~4.1]{Russell1995}.}{astar}
 
 \subsubsection{WA*}
 
