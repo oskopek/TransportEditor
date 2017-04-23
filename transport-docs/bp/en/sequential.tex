@@ -2,7 +2,7 @@
 
 \TODO{Specifics of sequential planning}
 
-\section{State-space forward planning}
+\section{State-space forward planning}\label{forward-planning}
 
 \TODO{Forward planning}
 
@@ -10,10 +10,40 @@
 
 \TODO{describe the alg}
 
-\TODO{describe a generic search alg}
+\subsection{Deterministic search algorithms}
 
-\subsection{Simple distance-based heuristics}
+\subsubsection{BFS}
 
+\TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
+
+\subsubsection{A*}
+
+\TODO{Describe A* in forward planning}
+
+%\TODO{mention Zhou with Java impl} \citep{Zhou2015}
+
+\subsubsection{WA*}
+
+\TODO{WA*}
+
+
+
+
+\subsection{Sequential Forward A*}\label{sfa}
+
+\TODO{Define + Advantages and shortcommings of SFA*}
+
+\subsection{Weighted SFA*}\label{wsfa}
+
+\subsection{Meta-weighted SFA*}\label{msfa}
+
+\TODO{meta WSFA*}
+
+\subsection{Heuristics for forward search}
+
+\TODO{heuristics in general}
+
+\TODO{heuristics in Transport}
 \TODO{revise}
 When designing a heuristic, we want to provide an as precise as possible estimate
 of the total plan cost or duration.
@@ -33,7 +63,7 @@ the true value it is approximating. During planning in state space,
 when examining a state $s$, we want to estimate the total costs of the best
 plan getting us to a goal state from state $s$. In other words, because we are
 trying to minimize the total cost,
-a planning heuristic $h: S -> \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
+a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
 where $h^*$ is the true total cost. A similar definition is applicable for minimizing duration in the temporal variant.
 
 Nonadmissible heuristics do not have nice properties when used with search algorithms
@@ -48,31 +78,86 @@ but the heuristic would estimate that we need
 
 \TODO{substitute drive actions for higher level drives to any node on graph, but forbid two sequential high level drives.. adv: always uses shortest paths, never cycles, minimal overhead.. disadv: might throw off cooperation w.r.t the heuristic?}
 
-\subsection{SFA*}
+\TODO{specific heuristics:}
 
-\TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
+\subsubsection{Trivially admissible Transport heuristic}\label{sfa0}
 
-\TODO{mention Zhou with Java impl} \citep{Zhou2015}
+\subsubsection{Package distance heuristic}\label{sfa1}
 
-\TODO{Describe A* in forward planning}
+\subsubsection{Minimum Spanning Tree heuristic}\label{sfa2}
 
-\TODO{Advantages and shortcommings of SFA*}
+\subsubsection{Package and vehicle distance heuristic}\label{sfa3}
 
-\TODO{SFA* with a package distance heuristic}
+\subsubsection{A practical admissible heuristic for Transport}\label{sfa4}
 
-\subsubsection{SFA* with a package distance based heuristic}\label{sfa3}
-\TODO{SFA* with a different heuristic?}
+\TODO{SFA* with a practical admissible heuristic?}
 
-\subsection{Weighted SFA*}\label{wsfa}
-\TODO{WA*, W=5 napr}
 
-\subsection{Meta-weighted SFA*}\label{msfa}
 
-\section{An ad-hoc planner based on something precalculated}
 
-\section{Randomized Restart Planners}\label{rand-restart}
 
-\subsection{Randomized Restart Around Path Nearby Planner}\label{rrapn}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Ad-hoc planners}\label{ad-hoc}
+
+\subsection{Randomized Restart Planners}\label{rand-restart}
+
+\subsubsection{Randomized Restart From Location Planner}\label{rrfl}
+
+\subsubsection{Randomized Restart On Path Planner}\label{rrop}
+
+\subsubsection{Randomized Restart On Path Nearby Planner}\label{rropn}
+
+\subsubsection{Randomized Restart Around Path Nearby Planner}\label{rrapn}
+
+\subsubsection{Randomized Backtrack Restart Around Path Nearby Planner}\label{rbrapn}
+
+\subsubsection{Randomized Restart Around Path Distribution Planner}\label{rrapd}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Formulating Transport as a CSP}\label{csp-approach}
 
