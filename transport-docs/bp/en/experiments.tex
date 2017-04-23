@@ -7,9 +7,9 @@ We will briefly discuss the acquired results and interpret them.
 
 \section{Methodology}
 
-Using the benchmarker software module described in Section~\ref{transport-project}, we will run experiments in an
+Using our benchmarking software (described in the attachments), we will now run experiments in an
 environment as similar to the original
-IPC as possible, and following almost all of their rules.\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+IPC as possible, following almost all of their rules mentioned in.\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
 We will run all tests according to principles mimicking the rules;
 All planners have to be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
 get canceled and prompted for a plan at that time point).
@@ -83,60 +83,86 @@ In this section, we present the results of our sequential planners on the seq-sa
 \subsection{Results}\label{sequential-results}
 
 We show the IPC quality table
-for the experimental run on the seq-sat-6 dataset (Table~\ref{tab:seq-sat-6-ipc-scores})
+for the experimental run on the seq-sat-6 dataset (Table~\ref{tab:seq-sat-6-ipc-scores}),
+the seq-sat-7 dataset (Table~\ref{tab:seq-sat-7-ipc-scores}),
 and the seq-sat-8 dataset (Table~\ref{tab:seq-sat-8-ipc-scores}).
-Additionally, a plot of the scores and run times is presented in Figures~\ref{fig:seq-sat-6-plots} and~\ref{fig:seq-sat-8-plots}. Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
+Additionally, a plot of the scores and run times is presented in Figures~\ref{fig:seq-sat-6-plots},
+\ref{fig:seq-sat-7-plots}, and~\ref{fig:seq-sat-8-plots}. Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
 
-\begin{table}
+\begin{figure}
+\centering
+\begin{subtable}{\textwidth}
 \centering
 \input{../data/seq-sat-6-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-6 dataset.}
 \label{tab:seq-sat-6-ipc-scores}
-\end{table}
-
-\begin{table}
-\centering
-\input{../data/seq-sat-8-ipc-scores}
-\caption{Quality and score of sequential planners on the seq-sat-8 dataset.}
-\label{tab:seq-sat-8-ipc-scores}
-\end{table}
-
-\begin{figure}
-\centering
+\end{subtable}
+\quad
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-score}
-\caption{Score plot of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-score}
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-quality}
+\caption{Quality plot of sequential planners on the seq-sat-6 dataset.}
+\label{fig:seq-sat-6-quality}
 \end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
-\caption{Run time plot of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-runtime}
-\end{subfigure}
-\caption{Score and run time plots of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-plots}
+\caption{Planner results on seq-sat-6.}
+\label{fig:seq-sat-6-results}
 \end{figure}
 
 \begin{figure}
 \centering
+\begin{subtable}{\textwidth}
+\centering
+\input{../data/seq-sat-7-ipc-scores}
+\caption{Quality and score of sequential planners on the seq-sat-7 dataset.}
+\label{tab:seq-sat-7-ipc-scores}
+\end{subtable}
+\quad
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-score}
-\caption{Score plot of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-score}
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-7-quality}
+\caption{Quality plot of sequential planners on the seq-sat-7 dataset.}
+\label{fig:seq-sat-7-quality}
 \end{subfigure}
+\caption{Planner results on seq-sat-7.}
+\label{fig:seq-sat-7-results}
+\end{figure}
 
+\begin{figure}
+\centering
+\begin{subtable}{\textwidth}
+\centering
+\input{../data/seq-sat-8-ipc-scores}
+\caption{Quality and score of sequential planners on the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-ipc-scores}
+\end{subtable}
+\quad
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
-\caption{Run time plot of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-runtime}
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-quality}
+\caption{Quality plot of sequential planners on the seq-sat-8 dataset.}
+\label{fig:seq-sat-8-quality}
 \end{subfigure}
-\caption{Score and run time plots of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-plots}
+\caption{Planner results on seq-sat-8.}
+\label{fig:seq-sat-8-results}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subtable}{\textwidth}
+\centering
+\input{../data/tempo-sat-6-ipc-scores}
+\caption{Quality and score of sequential planners on the tempo-sat-6 dataset.}
+\label{tab:tempo-sat-6-ipc-scores}
+\end{subtable}
+\quad
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-quality}
+\caption{Quality plot of sequential planners on the seq-sat-6 dataset.}
+\label{fig:tempo-sat-6-quality}
+\end{subfigure}
+\caption{Planner results on tempo-sat-6.}
+\label{fig:tempo-sat-6-results}
 \end{figure}
 
 
