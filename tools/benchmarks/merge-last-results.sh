@@ -40,9 +40,9 @@ python3 scripts/merge-results.py $results "$target/results.json"
 
 }
 
-ipc08seq="seq-sat-ipc08-rrapn seq-sat-ipc08-msfa3"
-ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-msfa3"
-ipc14seq="seq-sat-ipc14-rrapn seq-sat-ipc14-msfa3"
+ipc08seq="seq-sat-ipc08-rrapn seq-sat-ipc08-msfa3 seq-sat-ipc08-sfa3"
+ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-msfa3 seq-sat-ipc11-sfa3"
+ipc14seq="seq-sat-ipc14-rrapn seq-sat-ipc14-msfa3 seq-sat-ipc14-sfa3"
 ipc08temp="tempo-sat-ipc08-rrapnsched tempo-sat-ipc08-tfd2014"
 
 basepath="results/merged"

@@ -1,5 +1,15 @@
 #!/bin/bash
-configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched'
+
+function run-remotely {
+TEvaraint="$1"
+config="$2"
+serv="$3"
+
+echo "source .shrc && cd git/$TEvariant/tools/benchmarks && ./benchmark.sh configs/$config.json 2>&1; exit" | ssh -tt "u-pl$serv"
+echo "`date -u '+[%H:%M:%S]'` Finished: $config"
+}
+
+configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-sfa3 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched'
 TEvariant="TransportEditor-final"
 exp_configs=""
 
@@ -12,10 +22,9 @@ for ipc in ipc08 ipc11 ipc14; do
     done
 done
 
-
-i=0
+i=9
 for config in $exp_configs; do
-    echo "source .shrc && cd git/$TEvariant/tools/benchmarks && ./benchmark.sh configs/$config.json; exit" | ssh -tt "u-pl1$i" &
+    run-remotely "$TEvariant" "$config" "$i" &
     i=$((i+1))
 done
 
@@ -26,4 +35,3 @@ sleep 30s
 cd "$HOME/git/$TEvariant/tools/benchmarks"
 . merge-last-results.sh
 echo "Merge dir: `pwd`/results/merged"
-
