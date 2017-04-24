@@ -52,6 +52,14 @@ public abstract class SequentialScheduler extends AbstractPlanner {
      */
     protected abstract Planner getInternalPlanner();
 
+    /**
+     * Calculate a list of indices to potentially add refuel actions to.
+     *
+     * @param vehicle the vehicle
+     * @param actions the actions
+     * @param problem the problem
+     * @return a list of indices into actions
+     */
     private static List<Integer> calculateRefuelPositions(Vehicle vehicle, List<Action> actions,
             Problem problem) {
         List<Integer> positions = new ArrayList<>();
@@ -67,6 +75,18 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         return positions;
     }
 
+    /**
+     * Add refuel actions at the specified indices.
+     *
+     * @param vehicleName the name of the vehicle
+     * @param domain the domain
+     * @param temporalProblem the problem
+     * @param actions the actions
+     * @param refuels a list of potential refuel indices into actions
+     * @param refuelPointers pointers into refuels
+     * @param refSize length of refuel pointers
+     * @return actions with the added refuels
+     */
     private static List<Action> addRefuels(String vehicleName, Domain domain, Problem temporalProblem,
             List<Action> actions, List<Integer> refuels, Iterator<Integer> refuelPointers, int refSize) {
         List<Action> newActions = new ArrayList<>(actions.size() + refSize);
@@ -102,6 +122,14 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         return newActions;
     }
 
+    /**
+     * Produce an set of random integers between zero and to (excluding) of length count.
+     *
+     * @param count the length
+     * @param to the upper bound (exclusive)
+     * @param random the random instance
+     * @return a set of random integers
+     */
     private static Set<Integer> randomDistinctInternal(int count, int to, Random random) {
         Set<Integer> set = new HashSet<>(count);
         while (set.size() < count) {
@@ -110,6 +138,14 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         return set;
     }
 
+    /**
+     * Produce an iterator over random sorted integers between zero and to (excluding) of length count.
+     *
+     * @param count the length
+     * @param to the upper bound (exclusive)
+     * @param random the random instance
+     * @return the iterator
+     */
     private static Iterator<Integer> randomDistinct(int count, int to, Random random) {
         if (to < 0) {
             throw new IllegalArgumentException("To < From.");
@@ -235,7 +271,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         final double delta = 0.001;
         for (int actionIndex : topoSorted) {
             double maxEndTimeOfPrevious = 0d;
-            for (Iterator<Edge> it = mutexDag.getNode(actionIndex).getEnteringEdgeIterator(); it.hasNext(); ) {
+            for (Iterator<Edge> it = mutexDag.getNode(actionIndex).getEnteringEdgeIterator(); it.hasNext();) {
                 Edge enteringEdge = it.next();
                 int sourceActionIndex = Integer.parseInt(enteringEdge.getSourceNode().getId());
                 TemporalPlanAction plannedAction = plannedActions.get(sourceActionIndex);
