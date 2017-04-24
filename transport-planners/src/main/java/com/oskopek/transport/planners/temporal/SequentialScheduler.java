@@ -20,7 +20,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * Wraps a sequential planner and schedules its outputs using a mutex directed acyclic graph (DAG).
@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  * in a specific order (for example, pick up and drop of a specific package have to occur in this order).
  */
 public abstract class SequentialScheduler extends AbstractPlanner {
+
+    private static final boolean fuelAll = false;
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem) {
@@ -50,18 +52,90 @@ public abstract class SequentialScheduler extends AbstractPlanner {
      */
     protected abstract Planner getInternalPlanner();
 
+    private static List<Integer> calculateRefuelPositions(Vehicle vehicle, List<Action> actions,
+            Problem problem) {
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < actions.size(); i++) {
+            Action action = actions.get(i);
+            if (action instanceof Drive && action.getWho().getName().equals(vehicle.getName())) {
+                Location temporalFrom = problem.getRoadGraph().getLocation(action.getWhere().getName());
+                if (temporalFrom.hasPetrolStation()) {
+                    positions.add(i);
+                }
+            }
+        }
+        return positions;
+    }
+
+    private static List<Action> addRefuels(String vehicleName, Domain domain, Problem temporalProblem,
+            List<Action> actions, List<Integer> refuels, Iterator<Integer> refuelPointers, int refSize) {
+        List<Action> newActions = new ArrayList<>(actions.size() + refSize);
+        Vehicle temporalVehicle = temporalProblem.getVehicle(vehicleName);
+        final int maxFuelCapacity = temporalVehicle.getMaxFuelCapacity().getCost();
+        int curFuelCapacity = temporalVehicle.getCurFuelCapacity().getCost();
+        int refuelVal = -1;
+        if (refuelPointers.hasNext()) {
+            refuelVal = refuels.get(refuelPointers.next());
+        }
+        for (int i = 0, refuelI = 0; i < actions.size(); i++) {
+            Action action = actions.get(i);
+            if (refuelI < refSize) {
+                if (refuelVal == i) {
+                    newActions.add(domain.buildRefuel(temporalProblem.getVehicle(action.getWho().getName()),
+                            temporalProblem.getRoadGraph().getLocation(action.getWhere().getName())));
+                    curFuelCapacity = maxFuelCapacity;
+                    refuelI++;
+                    if (refuelPointers.hasNext()) {
+                        refuelVal = refuels.get(refuelPointers.next());
+                    }
+                }
+            }
+            if (action instanceof Drive && action.getWho().getName().equals(vehicleName)) {
+                FuelRoad road = (FuelRoad) temporalProblem.getRoadGraph().getRoad(((Drive) action).getRoad().getName());
+                curFuelCapacity -= road.getFuelCost().getCost();
+            }
+            newActions.add(action);
+            if (curFuelCapacity < 0) {
+                return null;
+            }
+        }
+        return newActions;
+    }
+
+    private static Set<Integer> randomDistinctInternal(int count, int to, Random random) {
+        Set<Integer> set = new HashSet<>(count);
+        while (set.size() < count) {
+            set.add(random.nextInt(to));
+        }
+        return set;
+    }
+
+    private static Iterator<Integer> randomDistinct(int count, int to, Random random) {
+        if (to < 0) {
+            throw new IllegalArgumentException("To < From.");
+        } else if (to < count) {
+            throw new IllegalArgumentException("To - From < Count.");
+        }
+        if (count * 2 > to) {
+            Set<Integer> inverse = randomDistinctInternal(to - count, to, random);
+            return IntStream.range(0, to).filter(n -> !inverse.contains(n)).iterator();
+        } else {
+            return randomDistinctInternal(count, to, random).stream().sorted().iterator();
+        }
+    }
+
     /**
      * Schedules a sequential plan using mutexes.
      * Computes the following:
      * <ol>
-     *     <li>Find mutexes in the plan (ordered pairs of actions)</li>
-     *     <li>Plan actions with no mutexes at 0 and incrementally plan others after the max mutex of previous ones,
-     *     following a DAG</li>
+     * <li>Find mutexes in the plan (ordered pairs of actions)</li>
+     * <li>Plan actions with no mutexes at 0 and incrementally plan others after the max mutex of previous ones,
+     * following a DAG</li>
      * </ol>
      * Mutexes are:
      * <ul>
-     *     <li>Drive, pickup, drop actions of the same vehicle</li>
-     *     <li>Drop+pick-up actions of the same package</li>
+     * <li>Drive, pickup, drop actions of the same vehicle</li>
+     * <li>Drop+pick-up actions of the same package</li>
      * </ul>
      *
      * @param domain the temporal domain
@@ -73,12 +147,13 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         if (seqActions.isEmpty()) {
             return new TemporalPlan(Collections.emptyList());
         }
+        Random random = new Random(2017L);
         List<Action> seqActionList = new ArrayList<>(seqActions);
         for (int i = 0; i < seqActionList.size(); i++) {
             Action action = seqActionList.get(i);
             if (action instanceof Drive) {
                 Location temporalFrom = temporalProblem.getRoadGraph().getLocation(action.getWhere().getName());
-                if (temporalFrom.hasPetrolStation()) {
+                if (fuelAll && temporalFrom.hasPetrolStation()) {
                     seqActionList.add(i, domain.buildRefuel(temporalProblem.getVehicle(action.getWho().getName()),
                             temporalFrom));
                     i++;
@@ -87,6 +162,41 @@ public abstract class SequentialScheduler extends AbstractPlanner {
                 Vehicle temporalVehicle = temporalProblem.getVehicle(action.getWho().getName());
                 FuelRoad road = (FuelRoad) temporalProblem.getRoadGraph().getRoad(((Drive) action).getRoad().getName());
                 seqActionList.set(i, domain.buildDrive(temporalVehicle, temporalFrom, temporalTo, road));
+            }
+        }
+
+        if (!fuelAll) {
+            // fuel // TODO: try to calculate this for all vehicles simultaneously
+            for (Vehicle vehicle : temporalProblem.getAllVehicles()) {
+                final List<Action> vehicleActions = seqActionList;
+                List<Integer> refuelPositions
+                        = calculateRefuelPositions(vehicle, vehicleActions, temporalProblem);
+                final int maxk = refuelPositions.size();
+                if (maxk == 0) {
+                    List<Action> fueled = addRefuels(vehicle.getName(), domain, temporalProblem, vehicleActions,
+                            Collections.emptyList(), Collections.emptyIterator(), 0);
+                    if (fueled == null) {
+                        return null;
+                    } else {
+                        break;
+                    }
+                }
+                boolean foundEnoughFuel = false;
+                for (int k = 0; k < maxk; k++) {
+                    List<Action> fueled = null;
+                    for (int i = 0; fueled == null && i < 1_000; i++) {
+                        fueled = addRefuels(vehicle.getName(), domain, temporalProblem, vehicleActions,
+                                refuelPositions, randomDistinct(k, maxk, random), k);
+                    }
+                    if (fueled != null) {
+                        seqActionList = fueled;
+                        foundEnoughFuel = true;
+                        break;
+                    }
+                }
+                if (!foundEnoughFuel) {
+                    return null;
+                }
             }
         }
 
@@ -125,7 +235,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         final double delta = 0.001;
         for (int actionIndex : topoSorted) {
             double maxEndTimeOfPrevious = 0d;
-            for (Iterator<Edge> it = mutexDag.getNode(actionIndex).getEnteringEdgeIterator(); it.hasNext();) {
+            for (Iterator<Edge> it = mutexDag.getNode(actionIndex).getEnteringEdgeIterator(); it.hasNext(); ) {
                 Edge enteringEdge = it.next();
                 int sourceActionIndex = Integer.parseInt(enteringEdge.getSourceNode().getId());
                 TemporalPlanAction plannedAction = plannedActions.get(sourceActionIndex);
@@ -144,11 +254,6 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         } catch (IllegalStateException e) { // invalid plan
             return null;
         }
-        if (manager.getCurrentPlanState().getAllVehicles().stream().anyMatch(v -> v.getCurFuelCapacity() != null
-                && v.getCurFuelCapacity().getCost() < 0)) {
-            // invalid plan, break
-            return null;
-        }
         return proposedPlan;
     }
 
@@ -156,6 +261,7 @@ public abstract class SequentialScheduler extends AbstractPlanner {
 
     /**
      * Removes all fuel-related stuff from vehicles and graph roads.
+     *
      * @param problem the temporal problem
      * @return a sequential variant of the same problem
      */
