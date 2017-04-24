@@ -74,7 +74,6 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             return new TemporalPlan(Collections.emptyList());
         }
         List<Action> seqActionList = new ArrayList<>(seqActions);
-        // TODO: only greedy fuel currently
         for (int i = 0; i < seqActionList.size(); i++) {
             Action action = seqActionList.get(i);
             if (action instanceof Drive) {
@@ -102,8 +101,10 @@ public abstract class SequentialScheduler extends AbstractPlanner {
             for (int j = i + 1; j < seqActionList.size(); j++) {
                 Action to = seqActionList.get(j);
                 if (from.getWho().getName().equals(to.getWho().getName())) { // vehicle mutex
-                    // TODO: refuel and pickup/drop can be concurrent
-
+                    if ((from instanceof Refuel && (to instanceof Drop || to instanceof PickUp))
+                            || (to instanceof Refuel && (from instanceof Drop || from instanceof PickUp))) {
+                        continue; // pickup/drop and refuel can be concurrent
+                    }
                     // for sequential drive actions, only add the needed transitive ones
                     mutexDag.addEdge(i + "->" + j + "_" + id++, i, j, true);
                     continue;
