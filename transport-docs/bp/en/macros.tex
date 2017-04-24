@@ -125,6 +125,11 @@
 \newcommand{\drive}{\texttt{drive}}
 \newcommand{\refuel}{\texttt{refuel}}
 
+% footnotes https://tex.stackexchange.com/questions/56063/how-to-properly-typeset-footnotes-superscripts-after-punctuation-marks
+\let\origfootnote\footnote
+\renewcommand{\footnote}[1]{\kern.06em\origfootnote{#1}}
+\newcommand{\puncfootnote}[1]{\kern-.20em\origfootnote{#1}}
+
 \newcommand{\myalg}[5]{%
 \begin{figure}[tb]
 \hrule

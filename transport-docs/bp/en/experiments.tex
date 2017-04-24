@@ -9,8 +9,8 @@ We will briefly discuss the acquired results and interpret them.
 
 Using our benchmarking software (described in the attachments), we will now run experiments in an
 environment as similar to the original
-IPC as possible, following almost all of their rules mentioned in.\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
-All planners are be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
+IPC as possible, following almost all of the official rules.\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+All planners will be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
 get canceled and prompted for a plan at that time point).
 Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
 
@@ -35,7 +35,7 @@ and seq-sat-8 datasets for sequential
 and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
 All the datasets used (and more) are available in the
 software project sources (see the attached \nameref{cd-contents}).
-Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}}, IPC~2011 \citep{Garcia-Olaya2011} and IPC~2014 \citep{Vallati2015}.
+Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}} IPC~2011 \citep{Garcia-Olaya2011}, and IPC~2014 \citep{Vallati2015}.
 
 In all planners where nondeterminism occurs,
 we set the initial random seed to 2017
@@ -47,7 +47,7 @@ with 16 GB of memory, running Gentoo Linux.
 A big thank you goes out to the faculty for providing us with access to these machines.
 We run all Java programs on Oracle's OpenJDK 
 version \texttt{1.8.0\_121}, build \texttt{b13}.
-The results presented here were obtained with the \TEver{} version of the TransportEditor project.\footnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
+The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
 in the project module directories specify
 the exact versions of libraries used.
 
