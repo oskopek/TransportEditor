@@ -110,6 +110,8 @@ public class BenchmarkRun {
                 exitStatus = validator.isValid(domain, problem, plan) ? RunExitStatus.VALID : RunExitStatus.INVALID;
             }
         }
+        logger.info("Returning benchmark results for domain {}, problem {}, planner {}", domain.getName(),
+                problem.getName(), planner.getName());
         return new BenchmarkRun(this, new Results(plan, score, bestScore, exitStatus, startTime, endTime));
     }
 

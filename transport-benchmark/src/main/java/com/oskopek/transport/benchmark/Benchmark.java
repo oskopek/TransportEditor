@@ -99,27 +99,29 @@ public class Benchmark {
                     CompletableFuture<BenchmarkRun> runFuture = new CompletableFuture<>();
                     CompletableFuture<BenchmarkRun> planningFuture = new CompletableFuture<>();
                     Callable<CompletableFuture<BenchmarkRun>> timeoutHandler = () -> {
-                        logger.debug("Schedule timeout for {}, {}", benchmarkRun.getPlanner(),
-                                benchmarkRun.getProblem());
+                        logger.debug("Schedule timeout for {}, {}", benchmarkRun.getPlanner().getName(),
+                                benchmarkRun.getProblem().getName());
                         if (!planningFuture.isDone()) {
                             BenchmarkRun defaultRun = new BenchmarkRun(benchmarkRun, new BenchmarkRun.Results(null,
                                     null, benchmarkRun.getBestScore(), BenchmarkRun.RunExitStatus.FAILED_TO_OBTAIN_PLAN,
                                     0, 0));
-                            logger.trace("Not done {}, {}", benchmarkRun.getPlanner(), benchmarkRun.getProblem());
+                            logger.debug("Not done {}, {}", benchmarkRun.getPlanner().getName(),
+                                    benchmarkRun.getProblem().getName());
                             boolean result = benchmarkRun.getPlanner().cancel();
-                            logger.trace("Cancel result {} for {}, {}", result, benchmarkRun.getPlanner(),
+                            logger.debug("Cancel result {} for {}, {}", result, benchmarkRun.getPlanner(),
                                     benchmarkRun.getProblem());
                             if (!result) {
                                 runFuture.complete(defaultRun);
                             } else {
-                                logger.trace("Getting cancelled planner result {}, {}", benchmarkRun.getPlanner(),
-                                        benchmarkRun.getProblem());
+                                logger.debug("Getting cancelled planner result {}, {}",
+                                        benchmarkRun.getPlanner().getName(), benchmarkRun.getProblem().getName());
                                 BenchmarkRun planned = Try.of(() -> planningFuture.get(30, TimeUnit.SECONDS))
                                         .getOrElse(defaultRun);
                                 runFuture.complete(planned);
                             }
                         } else {
-                            logger.trace("Done {}, {}", benchmarkRun.getPlanner(), benchmarkRun.getProblem());
+                            logger.debug("Done {}, {}", benchmarkRun.getPlanner().getName(),
+                                    benchmarkRun.getProblem().getName());
                             runFuture.complete(Try.of(planningFuture::get).getOrElseThrow(e ->
                                     new IllegalStateException("Getting finished future failed.", e)));
                         }
@@ -129,12 +131,26 @@ public class Benchmark {
                     CompletableFuture.runAsync(() -> {
                                 ScheduledFuture<CompletableFuture<BenchmarkRun>> future = schedule.schedule(
                                         timeoutHandler, benchmarkRun.getTimeout(), TimeUnit.SECONDS);
+                                logger.debug("Executing {} @ {}.", benchmarkRun.getProblem().getName(),
+                                        benchmarkRun.getPlanner().getName());
                                 BenchmarkRun results = benchmarkRun.execute(validator);
+                                logger.debug("Returned results from execute for {} @ {}.",
+                                        benchmarkRun.getProblem().getName(), benchmarkRun.getPlanner().getName());
                                 future.cancel(false);
+                                logger.debug("Cancelled future {} @ {}.", benchmarkRun.getProblem().getName(),
+                                        benchmarkRun.getPlanner().getName());
                                 planningFuture.complete(results);
+                                logger.debug("Completed planning future {} @ {}.",
+                                benchmarkRun.getProblem().getName(), benchmarkRun.getPlanner().getName());
                                 if (future.isCancelled()) {
+                                    logger.debug("Running timeout handler {} @ {}.",
+                                            benchmarkRun.getProblem().getName(), benchmarkRun.getPlanner().getName());
                                     Try.run(timeoutHandler::call);
+                                    logger.debug("Timeout handler finished {} @ {}.",
+                                            benchmarkRun.getProblem().getName(), benchmarkRun.getPlanner().getName());
                                 }
+                                logger.debug("Completed run future {} @ {}.",
+                                    benchmarkRun.getProblem().getName(), benchmarkRun.getPlanner().getName());
                             }, service);
                     return runFuture.thenApply(BenchmarkResults.JsonRun::of);
                 })
