@@ -103,7 +103,7 @@ public class Benchmark {
                                 benchmarkRun.getProblem());
                         if (!planningFuture.isDone()) {
                             BenchmarkRun defaultRun = new BenchmarkRun(benchmarkRun, new BenchmarkRun.Results(null,
-                                    null, benchmarkRun.getBestScore(), BenchmarkRun.RunExitStatus.UNSOLVED,
+                                    null, benchmarkRun.getBestScore(), BenchmarkRun.RunExitStatus.FAILED_TO_OBTAIN_PLAN,
                                     0, 0));
                             logger.trace("Not done {}, {}", benchmarkRun.getPlanner(), benchmarkRun.getProblem());
                             boolean result = benchmarkRun.getPlanner().cancel();

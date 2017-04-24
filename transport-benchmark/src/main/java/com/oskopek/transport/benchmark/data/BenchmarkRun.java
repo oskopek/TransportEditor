@@ -213,7 +213,12 @@ public class BenchmarkRun {
         /**
          * A plan was generated and is valid, but not optimal. Not used at the moment.
          */
-        SUBOPT
+        SUBOPT,
+
+        /**
+         * A plan was probably generated, but the planner did not provide it in time.
+         */
+        FAILED_TO_OBTAIN_PLAN
     }
 
     /**
