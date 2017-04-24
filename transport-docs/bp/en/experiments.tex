@@ -12,7 +12,7 @@ environment as similar to the original
 IPC as possible, following almost all of their rules mentioned in.\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
 All planners are be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
 get canceled and prompted for a plan at that time point).
-Our planners explicitly and intentionally break the ``domain-independence'' rule of the IPC.
+Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
 
 The evaluation criteria remain the same:
 we focus on plan \textit{quality} in favor of planner run time,
@@ -76,7 +76,7 @@ In this section, we present the results of our sequential planners on the seq-sa
 \item[SFA3] SFA* planner with a package and vehicle distance heuristic (Section~\ref{sfa3})
 \item[MSFA3] Metaheuristically weighted SFA3 planner (Section~\ref{msfa})
 \item[RRAPN] Randomized Restart Around Path Nearby planner (Section~\ref{rrapn})
-\item[CSP] \TODO{CSP planner} (Section~\ref{csp-planner})
+\item[CSP] CSP-based planner (Section~\ref{csp-planner})
 \end{description}
 
 \subsection{Results}\label{sequential-results}
@@ -161,7 +161,7 @@ best known solution from IPC 2008.
 Our best planner, RRAPN, achieves a total quality of $28.94/30$,
 which is a slight improvement over LAMA and other planners. The biggest gain of our planner is in being able to approximate
 solutions of larger problems fast, which can be observed on
-the results on problems $7--10$, $18--20$, and $27--30$,
+the results on problems 7--10, 18--20, and 27--30,
 which are the largest problems.
 On the other hand, RRAPN fails to achieve optimal scores
 on smaller problems like \verb+p02+, \verb+p12+, or \verb+p22+,
@@ -286,4 +286,16 @@ to the optimum than the best score estimates for larger problems.
 
 \section{Overall results}
 
-\TODO{intro + recap}
+The attained results show that domain-dependent information can be leveraged
+to generate plans of better quality.
+We have designed and implemented Transport planners that are able to beat
+results from the original competitions in the sequential
+and temporal satisficing tracks of the 2008 and 2011 IPCs.
+In the 2014 IPC, we would attain second place on overall quality in the Transport domain, behind the $20/20$ result of Mercury.
+
+Another major advantage previously unmentioned is that
+our ad-hoc planners generate good solutions quite fast.
+Below, we show results from a 1 minute run of RRAPN and RRAPNSched.
+
+\TODO{show results of a 1 minute run}
+

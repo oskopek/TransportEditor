@@ -69,7 +69,8 @@ For screenshots of typical TransportEditor usage, see the attached \nameref{tran
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../img/transporteditor_temporal}
 \end{center}
-\caption[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]{Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
+\caption*%[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]
+{Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
 of a truck currently driving along a road between \texttt{city-2-loc-6} and \texttt{city-2-loc-3}. The \texttt{city-1-loc-1} location is plotted in a darker shade of red, which signifies that a petrol station is present at the location.}
 \label{fig:transporteditor-screenshot}
 \end{figure}
@@ -203,7 +204,8 @@ containing all the generated report files.
 <executable_templ> ::= <string>
 <string> ::= ( <character> )*
 \end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
+\caption*%[Grammar of the input configuration JSON file in BNF.]
+{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
 is expected to be a valid Java class name (including the package) and present on the classpath.
 The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
 and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.}
@@ -232,7 +234,8 @@ and \{0\} used to represent the domain file path, \{1\} the problem file path, a
 <exit_status> ::= UNSOVLED | INVALID | VALID | NOTVALIDATED | SUBOPT
 <timestamp> ::= <long>
 \end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF.
+\caption*%[Grammar of the input configuration JSON file in BNF.]
+{Grammar of the input configuration JSON file in BNF.
 The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
 that this grammar is only valid if concatenated with the grammar in Figure~\ref{code:benchmark-config-bnf}.}
 \label{code:benchmark-results-bnf}
