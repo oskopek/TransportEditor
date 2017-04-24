@@ -191,8 +191,14 @@ public final class BenchmarkConfig {
                 .toJavaMap(problem -> Tuple.of(problem.getName(), problem));
         Map<Problem, ProblemInfo> problemInfo = Stream.ofAll(this.problems.entrySet())
                 .toJavaMap(t -> Tuple.of(problemNames.get(t.getKey()), t.getValue()));
+
+        ValValidator valValidator = new ValValidator();
+        if (!valValidator.isAvailable()) {
+            throw new IllegalStateException("VAL is not available, exiting.");
+        }
+
         return new Benchmark(new BenchmarkMatrix(domain, problems, planners, problemInfo, timeout), scoreFunction,
-                skipFunction, new ValValidator());
+                skipFunction, valValidator);
     }
 
     /**

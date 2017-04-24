@@ -96,22 +96,28 @@ public class BenchmarkRun {
         long startTime = System.currentTimeMillis();
         Plan plan = planner.startAndWait(domain, problem);
         long endTime = System.currentTimeMillis();
-        logger.info("Ending benchmark run for domain {}, problem {}, planner {}", domain.getName(), problem.getName(),
-                planner.getName());
+        logger.info("Ending benchmark run for domain {}, problem {}, planner {}, plan {}", domain.getName(),
+                problem.getName(), planner.getName(), plan);
 
         Double score = plan == null ? null : scoreFunction.apply(domain, problem, plan);
+        logger.debug("Got score {} for domain {}, problem {}, planner {}", score, domain.getName(), problem.getName(),
+                planner.getName());
         RunExitStatus exitStatus;
         if (plan == null) {
             exitStatus = RunExitStatus.UNSOLVED;
         } else {
-            if (validator == null || !validator.isAvailable()) {
+            if (validator == null) { // should not occur
                 exitStatus = RunExitStatus.NOTVALIDATED;
             } else {
+                logger.debug("Starting validation domain {}, problem {}, planner {}", domain.getName(),
+                        problem.getName(), planner.getName());
                 exitStatus = validator.isValid(domain, problem, plan) ? RunExitStatus.VALID : RunExitStatus.INVALID;
+                logger.debug("Validation ended ({}) domain {}, problem {}, planner {}", exitStatus,
+                        domain.getName(), problem.getName(), planner.getName());
             }
         }
-        logger.info("Returning benchmark results for domain {}, problem {}, planner {}", domain.getName(),
-                problem.getName(), planner.getName());
+        logger.info("Returning benchmark results for domain {}, problem {}, planner {}, exit status {}",
+                domain.getName(), problem.getName(), planner.getName(), exitStatus);
         return new BenchmarkRun(this, new Results(plan, score, bestScore, exitStatus, startTime, endTime));
     }
 

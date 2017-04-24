@@ -108,14 +108,15 @@ public class Benchmark {
                             logger.debug("Not done {}, {}", benchmarkRun.getPlanner().getName(),
                                     benchmarkRun.getProblem().getName());
                             boolean result = benchmarkRun.getPlanner().cancel();
-                            logger.debug("Cancel result {} for {}, {}", result, benchmarkRun.getPlanner(),
-                                    benchmarkRun.getProblem());
+                            logger.debug("Cancel result {} for {}, {}", result, benchmarkRun.getPlanner().getName(),
+                                    benchmarkRun.getProblem().getName());
                             if (!result) {
                                 runFuture.complete(defaultRun);
                             } else {
                                 logger.debug("Getting cancelled planner result {}, {}",
                                         benchmarkRun.getPlanner().getName(), benchmarkRun.getProblem().getName());
                                 BenchmarkRun planned = Try.of(() -> planningFuture.get(30, TimeUnit.SECONDS))
+                                        .onFailure(e -> logger.warn("Waiting for planning future failed.", e))
                                         .getOrElse(defaultRun);
                                 runFuture.complete(planned);
                             }
@@ -125,6 +126,8 @@ public class Benchmark {
                             runFuture.complete(Try.of(planningFuture::get).getOrElseThrow(e ->
                                     new IllegalStateException("Getting finished future failed.", e)));
                         }
+                        logger.debug("Completing timeout handler {}, {}.", benchmarkRun.getPlanner().getName(),
+                                benchmarkRun.getProblem().getName());
                         return runFuture;
                     };
 
