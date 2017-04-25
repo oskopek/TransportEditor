@@ -1,94 +1,148 @@
 \chapter{Sequential Transport planning}
 
-\TODO{Specifics of sequential planning}
+In this chapter, we describe the approaches we
+selected or designed, implemented, and tested.
+We will attempt to leverage the acquired
+Transport domain knowledge
+in these approaches as much as possible.
 
 \section{State-space forward planning}\label{forward-planning}
 
-\TODO{Forward planning}
+One of the most straightforward approaches to planning
+is forward search \citep[Section~4.2]{Ghallab2004}
+in state space (Figure~\ref{alg:forward-search}).
+Although it is defined on a classical representation,
+it can be used on any planning problem, where we can
+\begin{itemize}
+\item determine if a state is a goal state or not;
+\item iterate over all actions applicable to a state; and
+\item compute a successor state by applying an action to the current state.
+\end{itemize}
+The algorithm, despite its simplicity, is one of the most frequently
+used in domain-independent planners.
+There are two key steps of the algorithm, which
+cause the most problems in practice: representing
+the applicable actions (step 6) and choosing the
+next action to apply (step 8).
 
-\TODO{in state-space, Making it deterministic -> Search}
+\myalg{Forward Search}%
+{%
+\Input a planning problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$
+\Output a plan $\pi$
+\Function{Forward-Search}{$\mathcal{P}$}
+\State $s \gets s_0$ 
+\State $\pi \gets $ empty plan
+\Loop
+\If {$s$ satisfies $g$} \Return $\pi$ \EndIf
+\State $A_s \gets \{a \,|\, o \in O$, $a$ is a ground instance of $o \;\&\; \mt{precond}(a) \mt{ is true in } s\}$
+\If {$A_s = \emptyset$} \Return failure \EndIf
+\State (nondeterministical) choose an action $a \in A_s$
+\State $s \gets \gamma(s, a)$
+\State $\pi \gets$ append $a$ to $\pi$
+\EndLoop
+\EndFunction
+}%
+{A forward search planning algorithm.}{A forward search planning algorithm for Transport. Adapted from \citet[Figure~4.1]{Ghallab2004}.}{forward-search}{bt}
 
-\TODO{describe the alg}
+Representing state transitions in step 6
+is a technical problem of representing successor states
+in state space search \citep[Section~3.2]{Russell1995}.
+Due to limited memory,
+applicable actions are grounded from operators
+on demand, as are the corresponding successor states
+\citep[Section~3.4]{Russell1995}.
+
+The forward search algorithm in its specified form is nondeterministic.
+If we knew which action to choose in step 8,
+we would know how to solve the planning problem.
+Since we generally do not know which action (state transition) to chose in a given state, the choice is usually delegated to a suitable
+search algorithm, which makes the algorithm deterministic.
+
 
 \subsection{Deterministic search algorithms}
 
-\myalg{General Search}%
+State space search algorithms are a heavily studied area
+of computer science, and any reasonable search algorithm applied
+to forward search will yield correct results.
+Example of such a algorithms are Breadth-First Search (BFS), 
+Depth-First Search, and many more \citep[Section~3.5]{Russell1995}.
+The choice of a search algorithm greatly influence
+the quality of resulting plans when applied to forward search.
+
+As the sizes of planning problems grow,
+choosing a search algorithm is even more crucial ---
+several well performing algorithms on small problems (like BFS)
+exceed reasonable run times and become unusable for practical applications.
+An important and practically useful search algorithm
+withstanding larger problem sizes is the \textit{A* algorithm} (Figure~\ref{alg:astar})
+introduced in \citet{Hart1968}.
+
+\myalg{Forward Search with A*}%
 {%
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
+\Input a planning problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$,
+an (admissible and monotone) heuristic function $h$
+\Output a plan $\pi$
+\Function{Collect-Plan}{$s, \pi$}
+\State $\pi_s \gets $ empty list
+\While{$s \neq \emptyset$}
+	\State $(s', a) \gets \pi[s]$
+	\State $\pi_s \gets$ prepend $a$ to $\pi_s$
+	\State $s \gets s'$
+\EndWhile
+\State \Return $\pi_s$
+\EndFunction
+
+\Function{Forward-Search-Astar}{$\mathcal{P}$}
+\State $\pi \gets $ empty map, $f[*] \gets \infty$, $g[*] \gets \infty$, $o \gets \{s_0\}$, $c \gets \emptyset$
+\State $\pi[s_0] \gets \emptyset$, 
+$g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
+\While{$o \neq \emptyset$}
+\State $s \gets \min_{s \in o} f[s]$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
+\If {$s$ satisfies $g$} \Return \Call{Collect-Plan}{$s$, $\pi$} \EndIf
+\ForAll{actions $a \in$ \Call{Generate-Actions}{$s, \pi$}}
+	\State $s' \gets \gamma(s, a)$
+	\If{$s' \notin c$} \Comment{Not visited yet}
+		\If{$s' \notin o$} $o \gets o \cup \{s'\}$ \Comment{Discovered a new state} \EndIf 
+		\If{$g[s] + \mt{cost}(a) < g[s']$} \Comment{Found a better path}
+			\State $\pi[s'] \gets (s, a)$
+			\State $g[s'] \gets g[s] + \mt{cost}(a)$
+			\State $f[s'] \gets g[s'] + h(s')$
+		\EndIf
+	\EndIf
+\EndFor
+\EndWhile
+\Return failure
+\EndFunction
 }%
-{A general search algorithm.}{A general search algorithm
-\citep[Section~3.4]{Russell1995}.}{gs}
+{Forward search planning using A*.}{Forward search planning using A*.
+\textsc{Generate-Actions} is a function that produces actions applicable to the state $s$.}{astar}{tb}
 
-\subsubsection{BFS}
+A* has many important properties. We pinpoint one important to us, namely its admissibility.
+A search algorithm is \textit{admissible}
+if it is guaranteed to find an optimal path from a state $s$
+to a goal state $s_g$ for any state space \citep{Hart1968}.
+A* is admissible and optimal, given an admissible heuristic, which is a heuristic that never
+overestimates the distance to a goal state \citep{Hart1968}.
 
-\myalg{Breadth-First Search}%
-{%
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
-}%
-{The Breadth-First Search algorithm.}{The Breadth-First Search algorithm \citep[Section~3.5]{Russell1995}.}{bfs}
+A slight modification of A*, called \textit{Weighted A*} \citep{Pohl1970},
+tends to yield good quality plans in a shorter amount of time,
+at the expense of
+sacrificing admissibility. The only difference
+when compared to A* is that the heuristic $h(x)$
+is substituted for $h_w(x) = w \cdot h(x),$
+where $w$ is a weight constant. Choosing a weight greater
+than 1 makes the heuristic inadmissible,
+but guides the search towards a goal state faster.
 
-\TODO{describe BFS, describe how it is complete but too slow, etc} \citep[Section~3.5]{Russell1995}
 
-\subsubsection{A*}
+\subsection{Heuristics for forward search in Transport}\label{seq-heuristics}
 
-\TODO{Describe A* in forward planning}
-
-%\TODO{mention Zhou with Java impl} \citep{Zhou2015}
-
-\myalg{A*}%
-{%
-\Require problem, a problem
-\Ensure a solution sequence
-
-\Return \Call{General-Search}{problem, Queue-Fn}
-}%
-{The A* algorithm.}{The A* algorithm \citep[Section~4.1]{Russell1995}.}{astar}
-
-\subsubsection{WA*}
-
-\TODO{WA*}
+When designing a heuristic, we want to provide an estimate
+of the total plan cost or duration
+that is as precise as possible.
 
 
 
-
-\subsection{Sequential Forward A*}\label{sfa}
-
-\TODO{Define + Advantages and shortcommings of SFA*}
-
-\subsection{Weighted SFA*}\label{wsfa}
-
-\subsection{Meta-weighted SFA*}\label{msfa}
-
-\TODO{meta WSFA*}
-
-\subsection{Heuristics for forward search}
-
-\TODO{heuristics in general}
-
-\TODO{heuristics in Transport}
-\TODO{revise}
-When designing a heuristic, we want to provide an as precise as possible estimate
-of the total plan cost or duration.
-In \texttt{transport-strips}, the only thing we want is to deliver packages to their destinations. Therefore, a straightforward heuristic is to calculate the lengths of a shortest
-path of each package to its destination using the road network and sum them.
-To make it more precise, we will add 1 if the package is currently loaded
-in a vehicle or 2 if it is not loaded and not yet at its destination.
-This heuristic is definitely not optimal, meaning that there are situations,
-where we will need actions summing up to a higher cost.
-However, it is important to note, that the previously mentioned state space heuristic 
-is not even admissible.
 
 \TODO{Improve this heuristic by applying the shortest vehicle path too + extend it for vehicle goals}
 
@@ -110,17 +164,71 @@ of a 100. It is trivial to see that the optimal plan consists of two \pickup{} a
 followed by a \drive{} and two \drop{}s. This plan has a total cost of $2+100+2=104$,
 but the heuristic would estimate that we need 
 
-\TODO{substitute drive actions for higher level drives to any node on graph, but forbid two sequential high level drives.. adv: always uses shortest paths, never cycles, minimal overhead.. disadv: might throw off cooperation w.r.t the heuristic?}
-
-\TODO{specific heuristics:}
+We will now describe several heuristics for sequential
+Transport using the state-variable representation.
+The value of the $\mt{target(p)}$ function represents
+the target location of a package $p$ in the set of packages $P$.
 
 \subsubsection{Trivially admissible Transport heuristic}\label{sfa0}
 
+The simplest heuristic (apart from the zero heuristic $h_0 \equiv 0$) that is applicable to all variants of Transport
+is one that counts the minimum number of pickup and drop
+actions necessary to reach a goal state.
+To obtain the correct count, we add 1 for each
+package that is not yet at its destination (it will need to be dropped there) and another 1 for each package
+that is additionally not in a vehicle (it will need to be picked up):
+
+$$h'_{0}(s) = \sum_{\substack{
+p \in P\\ \mt{at}(p) \neq \mt{target}(p)}} 1
++ \sum_{\substack{
+p \in P\\ \mt{at}(p) \neq \mt{target}(p)\\
+\mt{at}(p) \neq \mt{nil}}} 1.$$
+
+This $h'_0$ is admissible, but it is practically unusable, as it
+very poorly approximates 
+the cost of the optimal remaining actions to a goal state
+--- recall that costs of \drive{} actions are generally much higher than the costs of \pickup{} and \drop{} actions.
+
 \subsubsection{Package distance heuristic}\label{sfa1}
+
+In \texttt{transport-strips}, the only thing we want is to deliver packages to their destinations. Therefore, a straightforward heuristic is one that calculates the length of a shortest
+path of each package to its destination and sums the lengths for all packages.
+To make the heuristic more precise, we can add the
+value of $h'_0$ to it:
+$$h_1 = h'_0 + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
+where the $location: P \to L$ function,
+with values in the set of all locations $L$, is defined as
+$$location(p) = \begin{cases} 
+   \mt{at}(p) & \text{if } \mt{at}(p) \neq \mt{nil}\\
+   \mt{at}(\mt{in}(p)) & \text{else}.
+  \end{cases}$$
+The location of a package will is, therefore, defined
+as the location it is at, or, if it is in a vehicle,
+the location of the vehicle.
+The function $\mt{spd}: L \times L \to \N_0$ represents
+the shortest path distance between the two locations.
+
+This heuristic is definitely not optimal, meaning that there are states,
+where we will need to add actions to reach a goal state with a higher total cost than the value of the heuristic in that state.
+However, it is important to note, the heuristic
+is not even admissible, so its value might sometimes overestimate the total cost needed. For example,
+when two packages are need to get to the same location $B$
+from the same location $A, A \neq B$, we would count
+the length of the shortest path between $A$ and $B$ twice,
+even if one vehicle can deliver both packages with a single sequence of \drive{} actions.
+
+\subsubsection{Package and vehicle distance heuristic}\label{sfa3}
+
+An extension of the package heuristic 
+\TODO{finished here}
+
+\subsubsection{Package or vehicle admissible distance heuristic}\label{sfa3}
+
+An extension of the package heuristic 
 
 \subsubsection{Minimum Spanning Tree heuristic}\label{sfa2}
 
-\subsubsection{Package and vehicle distance heuristic}\label{sfa3}
+
 
 \subsubsection{A practical admissible heuristic for Transport}\label{sfa4}
 
@@ -128,6 +236,45 @@ but the heuristic would estimate that we need
 
 
 
+
+
+
+
+\subsection{Sequential Forward A*}\label{sfa}
+
+\textit{Sequential Forward A*} (SFA) is a planner for sequential Transport based on forward search using A* (Figure~\ref{alg:astar}).
+It utilizes most of the domain knowledge described
+in Section~\ref{domain-info} and~\ref{datasets}
+to prune the search space as much as possible
+without sacrificing admissibility.
+
+However, the domain knowledge alone does not
+prune away enough search space to
+generate plans in an efficient way.
+With the addition of (admissible and nonadmissible)
+heuristics
+from Section~\ref{seq-heuristics}
+implementations of the planner become reasonably useful
+on practical problems, as will be demonstrated
+later during experimental evaluation.
+
+A variant of SFA, 
+\textit{Weighted Sequential Forward A*} (WSFA)
+swaps A* search for Weighted A* in the SFA planner.
+
+\subsection{Meta-heuristically weighted SFA*}\label{msfa}
+
+\textit{Meta-heuristically weighted SFA*} (MSFA) is
+a meta-planner built on top of a WSFA planner with
+a given heuristic.
+
+Given two hyperparameters $\alpha \in [0, 1]$ and $w_0 \in [1, \infty)$,
+it runs the WSFA planner with the weight $w \gets w_0$,
+waits for the planner to find a plan,
+and then (exponentially) decays the 
+weight of the heuristic function: $w \gets \max(1, \floor*{\alpha \cdot w}).$
+Do note that this entails a change of values in the $f$ map
+of forward search with A*.
 
 
 

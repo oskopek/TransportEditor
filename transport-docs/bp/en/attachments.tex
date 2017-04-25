@@ -40,8 +40,8 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 To enable effective transportation planning,
 we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
-Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
-written in Java.
+Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application 
+written in Java (see attached screenshot).
 
 It allows the users to create a planning session, where they
 select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
@@ -72,7 +72,6 @@ For screenshots of typical TransportEditor usage, see the attached \nameref{tran
 \caption*%[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]
 {Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
 of a truck currently driving along a road between \texttt{city-2-loc-6} and \texttt{city-2-loc-3}. The \texttt{city-1-loc-1} location is plotted in a darker shade of red, which signifies that a petrol station is present at the location.}
-\label{fig:transporteditor-screenshot}
 \end{figure}
 
 The basic user workflow of TransportEditor consists of the following steps:
@@ -165,8 +164,8 @@ data conversion. The only important scripts reside in the \texttt{tools} folder;
 the \texttt{benchmark.sh} script, used for running experimental benchmarks,
 and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX tables of the scores and runtimes from benchmark results.
 
-The benchmarker takes as input a JSON \citep{Bray2014} configuration file (Figure~\ref{code:benchmark-config-bnf}),
-runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format (Figure~\ref{code:benchmark-results-bnf}).
+The benchmarker takes as input a JSON \citep{Bray2014} configuration file,
+runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format  (see attached grammars).
 In both of the figures are BNF grammars. We write zero-or-more repeated statements using ( and )*. Also, [ and ] are used for JSON lists, they do not mean an optional statement --- we use ( and ) (without the star) for that.
 Under \texttt{<character>}, we assume any valid UTF-8 character,
 \texttt{<double>} means any non-negative IEEE compatible double precision floating-point number,
@@ -209,7 +208,6 @@ containing all the generated report files.
 is expected to be a valid Java class name (including the package) and present on the classpath.
 The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
 and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.}
-\label{code:benchmark-config-bnf}
 \end{figure}
 
 \begin{figure}[tbp]
@@ -237,8 +235,7 @@ and \{0\} used to represent the domain file path, \{1\} the problem file path, a
 \caption*%[Grammar of the input configuration JSON file in BNF.]
 {Grammar of the input configuration JSON file in BNF.
 The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
-that this grammar is only valid if concatenated with the grammar in Figure~\ref{code:benchmark-config-bnf}.}
-\label{code:benchmark-results-bnf}
+that this grammar is only valid if concatenated with the previously mentioned problem configuration grammar.}
 \end{figure}
 
 

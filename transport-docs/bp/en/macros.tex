@@ -87,7 +87,12 @@
 \newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
 
 %% Algorithms:
-\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
 %% Personal:
 \usepackage{csvsimple} % CSV tables
 %%% Merging rows in tables
@@ -120,6 +125,10 @@
 \DeclareMathOperator{\precond}{\textrm{precond}}
 \DeclareMathOperator{\name}{\textrm{name}}
 
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 \newcommand{\pickup}{\texttt{pick-up}}
 \newcommand{\drop}{\texttt{drop}}
 \newcommand{\drive}{\texttt{drive}}
@@ -130,14 +139,14 @@
 \renewcommand{\footnote}[1]{\kern.06em\origfootnote{#1}}
 \newcommand{\puncfootnote}[1]{\kern-.20em\origfootnote{#1}}
 
-\newcommand{\myalg}[5]{%
-\begin{figure}[tb]
+\newcommand{\myalg}[6]{%
+\begin{figure}[#6]
 \hrule
 \vspace{0.1cm}
 \textbf{Algorithm} #1
 \vspace{0.05cm}
 \hrule
-\begin{algorithmic}
+\begin{algorithmic}[1]
 #2
 \end{algorithmic}
 \vspace{0.05cm}
