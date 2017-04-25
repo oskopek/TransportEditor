@@ -19,7 +19,7 @@ import java.util.Optional;
  * as a heuristic.
  * Acts as a Weighted A* with a metaheuristically decreasing weight.
  */
-public final class MetaSFA3Planner extends SFA3Planner {
+public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
 
     private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>,
             Integer> weightedHeuristic;
@@ -30,9 +30,9 @@ public final class MetaSFA3Planner extends SFA3Planner {
     /**
      * Default constructor.
      */
-    public MetaSFA3Planner() {
+    public MetaSFA4Planner() {
         super(true);
-        setName(MetaSFA3Planner.class.getSimpleName());
+        setName(MetaSFA4Planner.class.getSimpleName());
         logger = LoggerFactory.getLogger(getClass());
     }
 
@@ -83,8 +83,8 @@ public final class MetaSFA3Planner extends SFA3Planner {
     }
 
     @Override
-    public MetaSFA3Planner copy() {
-        return new MetaSFA3Planner();
+    public MetaSFA4Planner copy() {
+        return new MetaSFA4Planner();
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class MetaSFA3Planner extends SFA3Planner {
     }
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MetaSFA3Planner;
+        return obj instanceof MetaSFA4Planner;
     }
 
 }

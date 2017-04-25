@@ -293,8 +293,6 @@ public abstract class SequentialScheduler extends AbstractPlanner {
         return proposedPlan;
     }
 
-    //
-
     /**
      * Removes all fuel-related stuff from vehicles and graph roads.
      *

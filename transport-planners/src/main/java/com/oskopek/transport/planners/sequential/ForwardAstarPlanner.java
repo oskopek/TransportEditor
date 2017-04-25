@@ -183,7 +183,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
-                formatLog("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
+                formatLog("Closed {} states, open: {} ({})", closedSet.size(), openSet.getEntries().size(),
                         entryMap.size());
             }
         }
