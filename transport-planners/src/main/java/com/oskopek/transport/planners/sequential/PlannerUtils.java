@@ -7,7 +7,6 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.domain.action.Drive;
 import com.oskopek.transport.model.domain.action.Drop;
 import com.oskopek.transport.model.domain.action.PickUp;
-import com.oskopek.transport.model.problem.DefaultLocatable;
 import com.oskopek.transport.model.problem.Location;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.RoadEdge;
@@ -561,8 +560,8 @@ public final class PlannerUtils {
     }
 
     /**
-     * Heuristic: sum distances of package locations to their targets or the closest vehicle to the package location
-     * or the closest package location,
+     * Heuristic: sum distances of package locations to their targets or the closest vehicle or to the package location
+     * of the closest package,
      * using the shortest available paths.
      * Also adds costs for drop and pickup actions. Is <strong>not admissible</strong>.
      * As a rule, this heuristic returns larger values than
@@ -578,41 +577,48 @@ public final class PlannerUtils {
         int sumDistances = 0;
         for (Package pkg : packageList) {
             Location pkgLocation = pkg.getLocation();
+            Location target = pkg.getTarget();
+            if (pkgLocation != null && pkgLocation.getName().equals(target.getName())) {
+                continue; // skip packages at dest
+            }
+            Vehicle inVehicle = null;
             if (pkgLocation == null) {
-                pkgLocation = vehicleList.stream().filter(v -> v.getPackageList().contains(pkg))
-                        .map(DefaultLocatable::getLocation).findAny()
+                sumDistances += 1; // a drop is needed
+                inVehicle = vehicleList.stream().filter(v -> v.getPackageList().contains(pkg))
+                        .findAny()
                         .orElseThrow(() -> new IllegalStateException("Package disappeared: " + pkg.getName()));
-            }
-
-            // TODO: finish with a minimum distance to another package at a diff. location, or target, or other vehicle
-            // TODO: + h'_0
-
-            if (pkgLocation != null) {
-                String pkgLocName = pkgLocation.getName();
-                // calculate the distance to the target + pickup and drop
-                sumDistances += distanceMatrix.get(pkgLocName, pkg.getTarget().getName()) // WARNING: not admissible
-                        .getDistance() + 2; // + pickup and drop
-
-                // Calculate the distance to the nearest vehicle or package
-                int minVehicleDistance = Integer.MAX_VALUE;
-                for (Vehicle vehicle : vehicleList) {
-                    int dist = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName()).getDistance();
-                    if (dist < minVehicleDistance) {
-                        minVehicleDistance = dist;
-                    }
-                }
-                for (Package pkg2 : packageList) {
-                    if (pkg2.getLocation() != null) {
-                        int dist = distanceMatrix.get(pkgLocName, pkg2.getLocation().getName()).getDistance();
-                        if (dist < minVehicleDistance) {
-                            minVehicleDistance = dist;
-                        }
-                    }
-                }
-                sumDistances += minVehicleDistance;
+                pkgLocation = inVehicle.getLocation();
             } else {
-                sumDistances += 1; // drop, at least
+                sumDistances += 2; // a drop and pickup is needed
             }
+
+            int pkgMinDist = Integer.MAX_VALUE;
+            pkgMinDist = Math.min(pkgMinDist, distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName()).getDistance());
+            if (inVehicle != null) { // pkg in vehicle
+                int vehDist = Integer.MAX_VALUE;
+                for (Vehicle vehicle : vehicleList) {
+                    if (vehicle.getName().equals(inVehicle.getName())) {
+                        continue;
+                    }
+                    int dist = distanceMatrix.get(pkgLocation.getName(), vehicle.getLocation().getName()).getDistance();
+                    vehDist = Math.min(vehDist, dist);
+                }
+                pkgMinDist = Math.min(pkgMinDist, vehDist);
+            }
+
+            int pkgDist = Integer.MAX_VALUE;
+            for (Package pkg2 : packageList) {
+                if (pkg.getName().equals(pkg2.getName())) {
+                    continue;
+                }
+                if (pkg2.getLocation() == null) {
+                    continue; // already counted in vehicles in that case
+                }
+                int dist = distanceMatrix.get(pkgLocation.getName(), pkg2.getLocation().getName()).getDistance();
+                pkgDist = Math.min(pkgDist, dist);
+            }
+            pkgMinDist = Math.min(pkgMinDist, pkgDist);
+            sumDistances += pkgMinDist;
         }
         return sumDistances;
     }

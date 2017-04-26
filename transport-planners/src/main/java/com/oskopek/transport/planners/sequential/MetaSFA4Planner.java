@@ -55,7 +55,7 @@ public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
                 setStopAtFirstSolution(false);
             }
             weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils
-                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
+                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleReally(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
             formatLog("Setting weight to {}.", weight);
             Optional<Plan> plan = super.plan(domain, problem);

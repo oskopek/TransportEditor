@@ -18,7 +18,7 @@ public class SFA4Planner extends ForwardAstarPlanner {
      * Default constructor.
      */
     public SFA4Planner() {
-        super(false);
+        super(true);
         setName(SFA4Planner.class.getSimpleName());
     }
 
