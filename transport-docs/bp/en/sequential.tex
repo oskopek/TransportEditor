@@ -121,8 +121,18 @@ A* has many important properties. We pinpoint one important to us, namely its ad
 A search algorithm is \textit{admissible}
 if it is guaranteed to find an optimal path from a state $s$
 to a goal state $s_g$ for any state space \citep{Hart1968}.
-A* is admissible and optimal, given an admissible heuristic, which is a heuristic that never
-overestimates the distance to a goal state \citep{Hart1968}.
+A* is admissible and optimal given an admissible heuristic.
+
+An \textit{admissible} heuristic does not overestimate
+the true value it is approximating. During planning in state space,
+when examining a state $s$, we want to estimate the total costs of the best
+plan getting us to a goal state from state $s$. In other words, because we are
+trying to minimize the total cost,
+a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
+where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing duration in the temporal variant.
+As mentioned previously, admissible heuristics have more desirable properties when used with search algorithms
+--- for example, they guarantee that the first path to a goal state we find
+will be the optimal \TODO{admissible + monotone?}.
 
 A slight modification of A*, called \textit{Weighted A*} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
@@ -139,34 +149,13 @@ but guides the search towards a goal state faster.
 
 When designing a heuristic, we want to provide an estimate
 of the total plan cost or duration
-that is as precise as possible.
-
-
-
-
-\TODO{Improve this heuristic by applying the shortest vehicle path too + extend it for vehicle goals}
-
-An \textit{admissible} heuristic does not overestimate
-the true value it is approximating. During planning in state space,
-when examining a state $s$, we want to estimate the total costs of the best
-plan getting us to a goal state from state $s$. In other words, because we are
-trying to minimize the total cost,
-a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
-where $h^*$ is the true total cost. A similar definition is applicable for minimizing duration in the temporal variant.
-
-Nonadmissible heuristics do not have nice properties when used with search algorithms
---- for example, they do not guarantee that the first path to a goal state we find
-will be the optimal plan. To see how our previously constructed heuristic fails to do
-this, imagine the situation of having a network with just two locations $A$ and $B$.
-Two packages and one vehicle are located at $A$ and both packages want to be
-transported to $B$. The road between $A$ and $B$ is symmetric and has length
-of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
-followed by a \drive{} and two \drop{}s. This plan has a total cost of $2+100+2=104$,
-but the heuristic would estimate that we need 
+that is as precise as possible. This
+will help guide the search to a goal state as quickly as
+possible.
 
 We will now describe several heuristics for sequential
 Transport using the state-variable representation.
-The value of the $\mt{target(p)}$ function represents
+In the following, the value of the $\mt{target(p)}$ function represents
 the target location of a package $p$ in the set of packages $P$.
 
 \subsubsection{Trivially admissible Transport heuristic}\label{sfa0}
@@ -194,7 +183,8 @@ the cost of the optimal remaining actions to a goal state
 In \texttt{transport-strips}, the only thing we want is to deliver packages to their destinations. Therefore, a straightforward heuristic is one that calculates the length of a shortest
 path of each package to its destination and sums the lengths for all packages.
 To make the heuristic more precise, we can add the
-value of $h'_0$ to it:
+value of $h'_0$ to it, as the \pickup{} and \drop{}
+actions also have to occur in the optimal plan:
 $$h_1 = h'_0 + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
 where the $location: P \to L$ function,
 with values in the set of all locations $L$, is defined as
@@ -210,29 +200,54 @@ the shortest path distance between the two locations.
 
 This heuristic is definitely not optimal, meaning that there are states,
 where we will need to add actions to reach a goal state with a higher total cost than the value of the heuristic in that state.
+
 However, it is important to note, the heuristic
-is not even admissible, so its value might sometimes overestimate the total cost needed. For example,
-when two packages are need to get to the same location $B$
-from the same location $A, A \neq B$, we would count
-the length of the shortest path between $A$ and $B$ twice,
-even if one vehicle can deliver both packages with a single sequence of \drive{} actions.
-
-\subsubsection{Package and vehicle distance heuristic}\label{sfa3}
-
-An extension of the package heuristic 
-\TODO{finished here}
-
-\subsubsection{Package or vehicle admissible distance heuristic}\label{sfa3}
-
-An extension of the package heuristic 
+is not even admissible, so its value might sometimes overestimate the total cost needed.
+To see why, let us have a network with just two locations $A$ and $B$.
+A vehicle of capacity 2 and two packages are located at $A$ and both packages want to be
+transported to $B$. The road between $A$ and $B$ is symmetric and has length
+of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
+followed by a \drive{} and two \drop{} actions. This plan has a total cost of $2+100+2=104$,
+but the heuristic would estimate that we need actions
+that cost $204$.
 
 \subsubsection{Minimum Spanning Tree heuristic}\label{sfa2}
 
+\TODO{mst approach}
+\citet{Kruskal1956}
+
+\subsubsection{Package and vehicle distance heuristic}\label{sfa3}
+
+As an extension of the package distance heuristic,
+we will also add the distance of the nearest vehicle for
+each package:
+$$h_3 = h_1 + \sum_{p \in P} \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),$$
+where $V$ is the set of all vehicles.
+As follows from the inadmissibility of $h_1$, $h_3$
+is also inadmissible and nonoptimal.
+
+\subsubsection{Package or vehicle distance heuristic}\label{sfa4}
+
+A variation on the package and distance heuristic
+is one that does not sum, but instead takes
+the minimum distances.
+Specifically, for each package, the minimum
+is taken from the distance to its target location,
+distance to the nearest vehicle,
+and the distance to the nearest package:
+\begin{align*}
+h_4 = \sum_{p \in P} \min\lbrace
+&\mt{spd}(location(p), target(p)),
+\min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
+&\min_{p' \in P} \mt{spd}(location(p), location(p'))\rbrace.
+\end{align*}
+\TODO{Admissibility}
 
 
-\subsubsection{A practical admissible heuristic for Transport}\label{sfa4}
+\subsubsection{Discussion}
 
-\TODO{SFA* with a practical admissible heuristic?}
+\TODO{discuss the advantages/usability}
+
 
 
 
