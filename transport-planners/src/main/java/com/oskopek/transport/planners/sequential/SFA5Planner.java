@@ -29,6 +29,7 @@ public class SFA5Planner extends ForwardAstarPlanner {
      */
     public SFA5Planner(boolean stopAtFirstSolution) {
         super(stopAtFirstSolution);
+        setName(SFA5Planner.class.getSimpleName());
     }
 
     @Override

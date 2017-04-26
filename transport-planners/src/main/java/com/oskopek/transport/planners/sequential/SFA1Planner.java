@@ -22,6 +22,16 @@ public class SFA1Planner extends ForwardAstarPlanner {
         setName(SFA1Planner.class.getSimpleName());
     }
 
+    /**
+     * Default constructor.
+     *
+     * @param stopAtFirstSolution true iff the algorithm should stop after the first found solution
+     */
+    public SFA1Planner(boolean stopAtFirstSolution) {
+        super(stopAtFirstSolution);
+        setName(SFA1Planner.class.getSimpleName());
+    }
+
     @Override
     protected Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
