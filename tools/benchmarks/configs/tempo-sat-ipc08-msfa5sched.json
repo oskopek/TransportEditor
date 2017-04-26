@@ -124,9 +124,8 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "TFD2014": {
-      "className": "com.oskopek.transport.model.planner.ExternalPlanner",
-      "params": "tfd-plan.sh {0} {1} {2}"
+    "RRAPNSched": {
+      "className": "com.oskopek.transport.planners.temporal.MSFA5SequentialScheduler"
     }
   },
   "threadCount": 8,

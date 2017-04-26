@@ -124,10 +124,10 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "MSFA3": {
-      "className": "com.oskopek.transport.planners.sequential.MetaSFA3Planner"
+    "RRAPD": {
+      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathDistributionPlanner"
     }
   },
-  "threadCount": 4,
+  "threadCount": 8,
   "timeout": 600
 }

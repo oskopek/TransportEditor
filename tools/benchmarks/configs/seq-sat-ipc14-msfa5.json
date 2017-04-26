@@ -84,10 +84,10 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRAPN": {
-      "className": "com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner"
+    "MSFA5": {
+      "className": "com.oskopek.transport.planners.sequential.MetaSFA5Planner"
     }
   },
-  "threadCount": 8,
+  "threadCount": 4,
   "timeout": 600
 }
