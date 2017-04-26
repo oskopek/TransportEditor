@@ -29,6 +29,7 @@ public final class SequentialPlannerMain {
 // + " --heuristic hff=ff() --heuristic hcea=cea() --search lazy_greedy([hff,hcea],preferred=[hff,hcea])");
 //    private static final Planner planner = new FastDownwardExternalPlanner("{0} {1} --search astar(ff())");
     private static final Planner planner = new RandomizedRestartAroundPathNearbyPlanner();
+//    private static final Planner planner = new RandomizedRestartAroundPathDistributionPlanner();
 //    private static final Planner planner = new RandomizedRestartOnPathNearbyPlanner();
 //    private static final Planner planner = new MetaSFA1Planner();
 //    private static final Planner planner = new MetaSFA3Planner();

@@ -21,13 +21,13 @@ import java.util.*;
  * if still not fully capacitated, choose the others in the
  * order of distance from their destinations at any possible drop of point on the path.
  */
-public class RandomizedBacktrackRestartAroundPathNearbyPlanner extends SequentialRandomizedPlanner {
+public class RandomizedBacktrackAroundPathNearbyPlanner extends SequentialRandomizedPlanner {
 
     /**
      * Default constructor.
      */
-    public RandomizedBacktrackRestartAroundPathNearbyPlanner() {
-        setName(RandomizedBacktrackRestartAroundPathNearbyPlanner.class.getSimpleName());
+    public RandomizedBacktrackAroundPathNearbyPlanner() {
+        setName(RandomizedBacktrackAroundPathNearbyPlanner.class.getSimpleName());
         logger = LoggerFactory.getLogger(getClass());
     }
 
@@ -126,8 +126,8 @@ public class RandomizedBacktrackRestartAroundPathNearbyPlanner extends Sequentia
     }
 
     @Override
-    public RandomizedBacktrackRestartAroundPathNearbyPlanner copy() {
-        return new RandomizedBacktrackRestartAroundPathNearbyPlanner();
+    public RandomizedBacktrackAroundPathNearbyPlanner copy() {
+        return new RandomizedBacktrackAroundPathNearbyPlanner();
     }
 
 }
