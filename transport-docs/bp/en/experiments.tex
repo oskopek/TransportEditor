@@ -1,4 +1,4 @@
-\chapter{Experimental evaluation}
+\chapter{Experimental evaluation}\label{experiments}
 
 In this chapter, we will describe and run experiments
 that compare our planners from the last two chapters
@@ -73,10 +73,9 @@ the exact versions of libraries used.
 
 In this section, we present the results of our sequential planners on the seq-sat-6, seq-sat-7, and seq-sat-8 datasets. Specifically, these planners are included in the experiment:
 \begin{description}
-\item[SFA3] The SFA planner (Section~\ref{sfa}) with a package and vehicle distance heuristic (Section~\ref{sfa3})
-\item[MSFA3] The meta-heuristically weighted SFA3 planner (Section~\ref{msfa})
+\item[MSFA3] The meta-heuristically weighted SFA planner (Section~\ref{msfa}) with the package and vehicle distance heuristic (Section~\ref{sfa3})
+\item[MSFA5] The meta-heuristically weighted SFA planner with the general marking heuristic (Section~\ref{sfa5})
 \item[RRAPN] The Randomized Restart Around Path Nearby planner (Section~\ref{rrapn})
-\item[CSP] The CSP-based planner (Section~\ref{csp-planner})
 \end{description}
 
 \subsection{Results}\label{sequential-results}
@@ -166,14 +165,14 @@ which are the largest problems.
 On the other hand, RRAPN fails to achieve optimal scores
 on smaller problems like \verb+p02+, \verb+p12+, or \verb+p22+,
 due to its explicit nature.
-\TODO{comment on MSFA3 and SFA3 once we have the results}
+\TODO{comment on MSFA3 and MSFA5 once we have the results}
 
 The IPC 2011 featured 20 sequential Transport problems,
 with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
 Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA. The fourth best planner, dae\_yahsp, performed consistenly worse by a small margin, except for two problems, \verb+p04+ and \verb+p05+, where it beat even our planners.
 RRAPN consistenly achieves better scores than all the planners in most problems ($17/20$). This can be attributed to the size
 of the problems (see Table~\ref{tab:dataset-dimensions}).
-\TODO{comment on MSFA3 and SFA3 once we have the results}
+\TODO{comment on MSFA3 and MSFA5 once we have the results}
 
 In the satisficing track of IPC 2014, the winner on the Transport domain
 was without a doubt the Mercury planner, achieving
@@ -185,7 +184,7 @@ Our planner RRAPN manages to outperform yahsp3-mt with $16.43/20$, yet it fails
 to match the results
 of Mercury and by a large margin at that.
 \TODO{why?}
-\TODO{comment on MSFA3 and SFA3 once we have the results}
+\TODO{comment on MSFA3 and MSFA5 once we have the results}
 
 
 
@@ -208,6 +207,7 @@ of Mercury and by a large margin at that.
 In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
 \begin{description}
 \item[RRAPNSched] The scheduled (Section~\ref{sched}) RRAPN planner (Section~\ref{rrapn})
+\item[MSFA5Sched] The scheduled MSFA5 planner (Sections~\ref{msfa} and~\ref{sfa5})
 \item[RRAPNTemp] The RRAPN Temporal planner (Section~\ref{temporal-approach})
 \item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
 \end{description}

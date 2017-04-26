@@ -211,10 +211,35 @@ followed by a \drive{} and two \drop{} actions. This plan has a total cost of $2
 but the heuristic would estimate that we need actions
 that cost $204$.
 
-\subsubsection{Minimum Spanning Tree heuristic}\label{sfa2}
+\subsubsection{Minimum spanning tree marking heuristic}\label{sfa2}
 
-\TODO{mst approach}
-\citet{Kruskal1956}
+A different extension of the $h'_0$ heuristic
+is the heuristic $h_2$ defined below, based
+on finding shortest paths on a \textit{minimum spanning tree} (MST).
+Using an MST calculated using the algorithm presented in \citet{Kruskal1956}, we can solve one of the largest problems with $h_1$,
+namely that we count an excessive amount of drive actions
+for packages to their targets.
+For each package, we will calculate
+shortest path distances only on the MST.
+Also, we will not calculate any edge twice --- we will mark
+the edge when it happens to be part of a shortest path and
+after marking edges of all shortest paths,
+we sum the lengths of the marked edges.
+In the same way as with $h_1$, we add the value of $h'_0$ to
+the sum.
+
+Do note that this heuristic is yet again inadmissible:
+let the road network be a circle of $n$ locations with
+roads of lengths $1, 2, \ldots, n$ assigned clockwise.
+An MST on this network consists of all roads except the road
+with length $n$, lets denote the road $r = (A, B) \in L^2$.
+Now, assume there is a package located at $A$ with a target
+location of $B$ and a vehicle also located at $A$.
+The optimal plan is obviously to pick up the package at $A$,
+drive along road $r$ to $B$, and drop the package there.
+The plan has a cost of $n+2$. The $h_2$ heuristic's estimate
+in the initial state is $$h_2(s_0) = 2 + \sum_{i=1}^{n-1} i = \frac{n^2}{2} - \frac{n}{2} + 2,$$
+which is evidently greater than $n+2$ for $n > 3$.
 
 \subsubsection{Package and vehicle distance heuristic}\label{sfa3}
 
@@ -241,12 +266,95 @@ h_4 = \sum_{p \in P} \min\lbrace
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
 &\min_{p' \in P} \mt{spd}(location(p), location(p'))\rbrace.
 \end{align*}
-\TODO{Admissibility}
+We will now show a few properties of this heuristic.
+\begin{thm}
+The heuristic $h_4$ is admissible for sequential Transport problems.
+\end{thm}
+\begin{proof}
+\TODO{prove}
+\end{proof}
+
+However, the $h_4$ heuristic is not monotonic. Assume the following road network (Figure~\ref{fig:heursit}):
+$$\{\{A, B, 1\}, \{B, C, 2\}, \{B, D, 2\}\},$$
+where $\mt{at}(v) = A$, $\mt{at}(p_1) = C,$ and $\mt{at}(p_2) = D$
+hold in the initial state $s_0$.
+The target of $p_1$ is $D$ and the target of $p_2$ is $C$.
+The value
+$$h_4(s_0) = 3+3+4 = 10$$ is greater than the cost
+of the applicable \drive{} action for vehicle $v$ from $A$ to $B$
+added to the heuristic value in the updated state:
+$$cost(a) + h_4(s') = 1 + (2+2+4) = 9.$$
+The heuristic is also not optimal, as is evident from the same
+example situation (for $s_0$, the optimal plan is of length $13$).
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.3\textwidth]{../imga/heursit}
+\caption{Visualization of the counterexample road network
+for monotonicity of $h_4$.}
+\label{fig:heursit}
+\end{figure}
+
+\subsubsection{General marking heuristic}\label{sfa5}
+
+The heuristic $h_5$ is a generalization of the MST marking heuristic $h_2$. We calculate $h_5$ in the exact same way by marking roads,
+except for
+using an MST --- instead, the whole graph is used.
+We also mark roads on the shortest path from each package to the nearest
+vehicle or package or target location, depending on which is nearer (similar
+to the package or vehicle distance heuristic).
+Shortest path ties are broken arbitrarily.
+Do note that if a package is loaded in a vehicle, no roads are marked for it.
+
+The described heuristic is not optimal, but it is admissible.
+Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds.
+
+\begin{thm}
+The heuristic $h_5$ is monotonic for sequential Transport problems.
+\end{thm}
+\begin{proof}
+Let $s$ be a state and $s*$ the nearest goal state.
+We will (equivalently) show that $h_5(s) \leq h_5(s') + cost(a),$ where
+$s' = \gamma(s, a)$ for all applicable $a \in A$.
+
+If $a$ is a \pickup{} or \drop{} action,
+no road will be marked because of the package that was picked up/dropped,
+due to the nearest vehicle being present at the same location.
+The markings of other packages do not change, because
+the vehicle picking up or dropping the package does not move
+and shortest distances are calculated to packages and vehicles.
+Therefore, even if the minimum was previously hit at the package that was
+picked up, it would be hit at the vehicle that was picking up
+the package anyway (analogously for the \drop{} action).
+Therefore, the inequality holds trivially, because $h_5(s') = h_5(s) - 1$ and the cost of $a$ is 1.
+
+Assume $a$ is a \drive{} action of the vehicle $v$.
+We can ignore all packages that are loaded onto the vehicle,
+as they only contribute to the value with 1 for the drop
+that has to happen. That does not change by appending a \drive{} action.
+We consider the following cases:
+\begin{itemize}
+\item no package calculated its minimum distance using the vehicle $v$: if no package calculates its minimum distance using the vehicle
+in $s'$, the drive action did not have an influence
+on the final value and the inequality holds.
+\TODO{finish proof}
+\end{itemize}
+\end{proof}
 
 
 \subsubsection{Discussion}
 
-\TODO{discuss the advantages/usability}
+In our tests, we found that
+the heuristics $h_0$, $h'_0$, $h_1$, and $h_2$
+were too simple for practical usage.
+The $h_3$ heuristic, while having no significant
+theoretical properties performs surprisingly well in practice.
+The $h_4$ heuristic on the other hand, while being admissible, does not
+perform well empirically.
+Due to its monotonicity, the $h_5$ heuristic has the best theoretical properties out of all the discussed heuristics and also
+performs well in practice.
+We will include planners utilizing the $h_3$ and $h_5$ heuristics
+in our final evaluation (Chapter~\ref{experiments}).
 
 
 
@@ -266,7 +374,7 @@ without sacrificing admissibility.
 However, the domain knowledge alone does not
 prune away enough search space to
 generate plans in an efficient way.
-With the addition of (admissible and nonadmissible)
+With the addition of 
 heuristics
 from Section~\ref{seq-heuristics}
 implementations of the planner become reasonably useful
@@ -291,10 +399,9 @@ weight of the heuristic function: $w \gets \max(1, \floor*{\alpha \cdot w}).$
 Do note that this entails a change of values in the $f$ map
 of forward search with A*.
 
-
-
-
-
+Even though this meta-planning approach breaks
+admissibility guarantees, it works very well on
+practical problems, even the larger ones.
 
 
 
@@ -353,7 +460,12 @@ of forward search with A*.
 
 
 
-\section{TODO: Formulating Transport as a CSP}
+
+
+
+
+
+
 \comment{
 \section{Formulating Transport as a CSP}\label{csp-approach}
 
@@ -508,28 +620,3 @@ for constructing a CSP-based planner.
 \TODO{Advantages and shortcommings of a CSP-based planner}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Further approaches}
-
-\TODO{more possible approaches}
-
