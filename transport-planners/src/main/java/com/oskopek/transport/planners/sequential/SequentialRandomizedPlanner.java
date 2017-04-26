@@ -125,7 +125,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
 
     /**
      * Constructs a partial plan that delivers the chosen package using the chosen vehicle,
-     * optionally picking up and dropping other vehicles along the way.
+     * optionally picking up and dropping other vehicles on the way.
      *
      * @param domain the domain
      * @param current the current state

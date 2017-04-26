@@ -46,6 +46,14 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
         return planWithOptionalTransformations(domain, problem, planTransformation);
     }
 
+    private static int calculateCurrentScore(ImmutablePlanState current, Plan transformed) {
+        int curScore = current.getTotalTime();
+        if (transformed != null) {
+            curScore = Math.round(transformed.calculateMakespan().floatValue());
+        }
+        return curScore;
+    }
+
     /**
      * Plan, optionally with intermediate plan transformations.
      *
@@ -62,25 +70,10 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
         formatLog("Starting planning...");
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
-        int i = 1;
         float exploration = 0.2f; // best so far: 0.2 or 0.1
-        float multiplier = 0.00f; // best so far: 0
-        int everySteps = 50_000;
         while (true) {
-            if (i % everySteps == 0) {
-                float delta = exploration;
-                exploration -= delta * multiplier;
-                formatLog("Exploration set to: {}", exploration);
-            }
-            i++;
-
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            int curScore = current.getTotalTime();
-            if (planTransformation != null) {
-                curScore = Math.round(planTransformation.apply(new SequentialPlan(current.getAllActionsInList()))
-                        .calculateMakespan().floatValue());
-            }
-            while (!current.isGoalState() && curScore < getBestPlanScore()) {
+            while (!current.isGoalState() && calculateCurrentScore(current, null) < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(
                         PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
@@ -144,7 +137,7 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
             }
 
             if (planTransformation == null) {
-                curScore = current.getTotalTime();
+                int curScore = calculateCurrentScore(current, null);
                 if (curScore < getBestPlanScore()) {
                     savePlanIfBetter(curScore, new SequentialPlan(current.getAllActionsInList()));
                 }
@@ -153,7 +146,7 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
                 if (curPlan == null) {
                     continue;
                 }
-                curScore = Math.round(curPlan.calculateMakespan().floatValue());
+                int curScore = calculateCurrentScore(current, curPlan);
                 if (curScore < getBestPlanScore()) {
                     savePlanIfBetter(Math.round((float) curScore), curPlan);
                 }

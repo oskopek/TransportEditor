@@ -21,7 +21,7 @@ import java.util.List;
  * find all packages on it and around it
  * choose the ones whose target is on the path and deliver them.
  */
-public class RandomizedRestartOnPathNearbyPlanner extends RandomizedRestartOnPathPlanner {
+public class RandomizedRestartOnPathNearbyPlanner extends SequentialRandomizedPlanner {
 
     /**
      * Default constructor.
@@ -39,6 +39,7 @@ public class RandomizedRestartOnPathNearbyPlanner extends RandomizedRestartOnPat
         formatLog("Starting planning...");
 
         List<Vehicle> vehicles = new ArrayList<>(problem.getAllVehicles());
+        float exploration = 0.2f; // best so far: 0.2 or 0.1
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
@@ -52,7 +53,7 @@ public class RandomizedRestartOnPathNearbyPlanner extends RandomizedRestartOnPat
                 Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
                 while (true) {
-                    if (getRandom().nextFloat() < 0.1) {
+                    if (getRandom().nextFloat() < exploration) {
                         chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
                     } else {
                         Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
@@ -85,7 +86,6 @@ public class RandomizedRestartOnPathNearbyPlanner extends RandomizedRestartOnPat
 
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
-                formatLog("Found new best plan {} -> {}", getBestPlanScore(), totalTime);
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
         }
