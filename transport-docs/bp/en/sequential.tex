@@ -64,14 +64,14 @@ search algorithm, which makes the algorithm deterministic.
 State space search algorithms are a heavily studied area
 of computer science, and any reasonable search algorithm applied
 to forward search will yield correct results.
-Example of such a algorithms are Breadth-First Search (BFS), 
+Examples of such algorithms are Breadth-First Search (BFS), 
 Depth-First Search, and many more \citep[Section~3.5]{Russell1995}.
 The choice of a search algorithm greatly influence
 the quality of resulting plans when applied to forward search.
 
 As the sizes of planning problems grow,
 choosing a search algorithm is even more crucial ---
-several well performing algorithms on small problems (like BFS)
+several well-performing algorithms on small problems (like BFS)
 exceed reasonable run times and become unusable for practical applications.
 An important and practically useful search algorithm
 withstanding larger problem sizes is the \textit{A* algorithm} (Figure~\ref{alg:astar})
@@ -114,7 +114,7 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \Return failure
 \EndFunction
 }%
-{Forward search planning using A*.}{Forward search planning using A*.
+{A forward search planning algorithm using A*.}{A forward search planning algorithm using A*.
 \textsc{Generate-Actions} is a function that produces actions applicable to the state $s$.}{astar}{tb}
 
 A* has many important properties. We pinpoint one important to us, namely its admissibility.
@@ -215,7 +215,7 @@ that cost $204$.
 
 A different extension of the $h'_0$ heuristic
 is the heuristic $h_2$ defined below, based
-on finding shortest paths on a \textit{minimum spanning tree} (MST).
+on finding the shortest paths on a \textit{minimum spanning tree} (MST).
 Using an MST calculated using the algorithm presented in \citet{Kruskal1956}, we can solve one of the largest problems with $h_1$,
 namely that we count an excessive amount of drive actions
 for packages to their targets.
@@ -371,9 +371,9 @@ in Section~\ref{domain-info} and~\ref{datasets}
 to prune the search space as much as possible
 without sacrificing admissibility.
 
-However, the domain knowledge alone does not
+However, domain knowledge alone does not
 prune away enough search space to
-generate plans in an efficient way.
+generate plans efficiently.
 With the addition of 
 heuristics
 from Section~\ref{seq-heuristics}
@@ -423,22 +423,191 @@ practical problems, even the larger ones.
 
 \section{Ad-hoc planning}\label{ad-hoc}
 
+An approach that domain-independent planners by definition cannot utilize
+is ad-hoc planning. We propose several
+ad-hoc planners that generate decent quality plans very fast,
+although they are usually suboptimal.
+This becomes an advantage mainly when dealing with very large
+problems or time-constrained planning,
+like in the agile track of IPC.
+
 \subsection{Randomized Restart Planning}\label{rand-restart}
+
+We will now describe a family of planners which we will refer to as \textit{Randomized Restart} planners.
+Each of these planners essentially performs the same algorithm (Figure~\ref{alg:rand-restart}),
+with minor tweaks. The motivation
+behind the algorithm is that the ``hardest'' part of Transport planning
+is choosing where to drive with what vehicle.
+
+\myalg{Randomized Restart planning}%
+{%
+\Input a Transport problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$
+\Output a plan $\pi$
+\Function{Randomized-Restart}{$\mathcal{P}$}
+\State $\pi \gets $ empty plan, $\Pi \gets \infty$
+\While{cancel not requested} \Comment{Cancelled by an external request}
+\State $s \gets s_0$, $\pi' \gets $ empty plan
+\While{$s$ doesn't satisfy $g \And score(\pi') < \Pi$}
+\State $A \gets $ \Call{Generate-Drive-Sequence}{$s$}
+\ForAll{action $a \in A$} \Comment{Apply all actions to the state}
+\State $s \gets \gamma(s, a)$
+\EndFor
+\If{$s = \emptyset$} \textbf{break} \Comment{At least one $a \in A$ was not applicable}
+\EndIf
+\State $\pi' \gets $ append all $a \in A$ to $\pi'$
+\EndWhile
+\If{$s$ satisfies $g \And score(\pi') < \Pi$}
+\State $\pi \gets \pi'$, $\Pi \gets score(\pi')$ \Comment{Update the best plan}
+\EndIf
+\EndWhile
+\State \Return $\pi$
+\EndFunction
+}%
+{A Randomized Restart planning algorithm.}{A Randomized Restart planning algorithm. The \textsc{Generate-Drive-Sequence} function
+generates a partial plan beginning in state $s$.
+The exact definition of the function
+depends on the specific algorithm variant as described in Section~\ref{rand-restart}.}{rand-restart}{tb}
+
+The algorithm essentially does domain-dependent plan space planning
+by iteratively adding sequences of \drive{} actions
+intertwined with pickups and drops
+until all packages are delivered.
+To do all of this at speed, the vehicle used for the given sequence
+is usually chosen randomly, as are the packages that are picked up and dropped along the driving path.
+The biggest advantage, however, is gained by precomputing
+a matrix of shortest paths and always using those to drive to the
+selected locations.
+
+Our randomized restart planners will generate many suboptimal plans,
+but by always keeping a copy of the so far best found plan,
+we can prune away the current partial plan if it becomes
+worse than the best plan after adding a sequence.
+Afterwards, we simply restart
+from the initial state and iteratively generate a new candidate plan.
+We utilize domain knowledge in all the planners,
+for example by not picking up packages that are at their destination,
+and most of the other insights discussed in Section~\ref{domain-info}.
 
 \subsubsection{Randomized Restart From Location Planner}\label{rrfl}
 
+In each iteration of the before mentioned algorithm,
+the Randomized Restart From Location planner (RRFL)
+randomly chooses a vehicle and a location.
+
+It adds \drive{} actions along the shortest path
+to that location and greedily picks up as many packages as
+its capacity allows.
+It then calculates the optimal
+path through all the picked up package target locations,
+by trying the shortest paths through all possible permutations
+of the locations.
+Finally, it adds the appropriate \drive{} and \drop{} actions.
+
 \subsubsection{Randomized Restart On Path Planner}\label{rrop}
+
+The Randomized Restart On Path planner (RROP),
+randomly chooses a vehicle
+and a package that fits into the vehicle.
+It then calculates the shortest path from the vehicle
+to the package
+and the shortest path from the package to its target location.
+Afterwards, it finds all packages on that have current and target locations on the path, taking into account the direction of driving.
+It then tries all combinations of
+those packages that do not make the vehicle become
+overcapacitated over the whole course
+of the path,
+to find the combination that minimizes the minimum
+free capacity over the course of the path.
+If there are several such combinations, it minimizes the
+maximum package drop location index in the path.
+If there are still several combinations, it chooses one arbitrarily.
+Finally, it adds the appropriate \drive{} and \drop{} actions.
 
 \subsubsection{Randomized Restart On Path Nearby Planner}\label{rropn}
 
+The Randomized Restart On Path Nearby planner (RROPN)
+is a slight modification of RROP.
+It first chooses a package randomly and then,
+based on a probability $\varepsilon \in [0, 1]$,
+either chooses a random vehicle that the package fits into,
+or the nearest such vehicle.
+The rest of the algorithm is identical to RROP.
+The probability $\varepsilon$ is a hyperparameter,
+which in our experiments is fixed to $0.2$,
+which means that the probability of selecting the nearest vehicle is 80\%.
+
 \subsubsection{Randomized Restart Around Path Nearby Planner}\label{rrapn}
 
-\subsubsection{Randomized Backtrack Restart Around Path Nearby Planner}\label{rbrapn}
+Another randomized restart planner that is built on top of RROPN,
+is the Randomized Restart Around Path Nearby planner (RRAPN).
+It uses the same vehicle and package selection,
+but it changes the way packages on the path are chosen to be loaded
+onto the vehicle.
+
+We still load as many packages that are completely on the path
+as possible, using the same selection mechanism as in RROPN.
+Additionally, for each package we precalculate
+the location on the path that is closest to its target,
+limited to locations after the package was picked up
+in the correct driving direction.
+Finally, we plan the pick up and drop of the
+packages that greedily fit into the vehicle and
+have the smallest precalculated distance to their target.
+
+\subsubsection{Randomized Backtrack Around Path Nearby Planner}\label{rbapn}
+
+We also developed a backtracking variant of RRAPN
+called Randomized Backtrack Around Path Nearby (RBAPN).
+Instead of choosing random vehicles and packages
+it backtracks over the choices it makes,
+guaranteeing to find an optimal
+plan in the subspace of plans
+generated by adding such drive sequences as described in
+the section about RRAPN. This approach is very
+time-consuming and not practically usable.
 
 \subsubsection{Randomized Restart Around Path Distribution Planner}\label{rrapd}
 
+Another variant of RRAPN, the
+Randomized Restart Around Path Distribution planner (RRAPD),
+changes the vehicle choice of inherited from RROPN.
+Instead of using a biased coin flip based on the $\varepsilon$
+hyperparameter, RRAPN samples the vehicle
+from a discrete probability distribution
+obtained by applying the \textit{softmax} function on the distances of vehicles to the selected package:
+$$\varphi_i = \frac{\exp((\mt{spd}(location(p), \mt{at}(v_i)) + 1)/T)}{\sum_{j = 1}^{|V|} \exp((\mt{spd}(location(p), \mt{at}(v_j)) + 1)/T)}.$$
+The value $\varphi_i$ is the resulting probability of each vehicle $v_i \in V = \{v_1, v_2, \ldots, v_n\}$.
+The hyperparameter $T \in (0, \infty)$ is the \textit{temperature}
+of the softmax. If set to higher values than 1, it
+evens out the distribution --- higher probabilities shrink
+and smaller probabilities become larger.
+As $T$ grows large, the distribution will resemble a uniform distribution.
+If $T$ is set to lower values, the distribution will prefer larger values.
+In our experiments, we use a fixed $T = 0.05$, to prefer the nearest vehicles.
 
+\subsubsection{Discussion}
 
+In our tests, the implementations
+of RRFL, RROP, and RROPN have empirically shown
+lesser performance than RRAPN and RRAPD.
+As mentioned previously, RBAPN is unusable on larger
+problems due to catastrophic run time in practice.
+We will evaluate both the Nearby and Distribution
+planners of the Randomized Restart Around Path
+kind in our experiments in Chapter~\ref{experiments},
+as they produce good quality plans in a very short time
+even for larger problem instances.
+
+All planners of the Randomized Restart family
+are suboptimal, not only meaning that they sometimes produce
+suboptimal plans, but also that for some problems,
+even the best plan they can produce will be suboptimal.
+This is easiest to prove for each planner individually,
+by constructing a counterexample for a corner
+case of the 
+greedy
+choices
+the planners make.
 
 
 
