@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * SFA* with
@@ -42,7 +43,7 @@ public final class MetaSFA5Planner extends SFA5Planner { // TODO: deduplicate
     }
 
     @Override
-    public Optional<Plan> plan(Domain domain, Problem problem) {
+    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
         int weight = 400;
         final float coef = 0.5f;
         bestPlan = null;
@@ -58,7 +59,7 @@ public final class MetaSFA5Planner extends SFA5Planner { // TODO: deduplicate
                     .calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleMark(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
             formatLog("Setting weight to {}.", weight);
-            Optional<Plan> plan = super.plan(domain, problem);
+            Optional<Plan> plan = super.plan(domain, problem, planTransformation);
             plan.ifPresent(plan2 -> {
                 Double makespan = plan2.calculateMakespan();
                 if (makespan < bestPlanScore) {
