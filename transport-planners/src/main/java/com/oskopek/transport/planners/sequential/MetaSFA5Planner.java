@@ -19,7 +19,7 @@ import java.util.Optional;
  * as a heuristic.
  * Acts as a Weighted A* with a metaheuristically decreasing weight.
  */
-public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
+public final class MetaSFA5Planner extends SFA5Planner { // TODO: deduplicate
 
     private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>,
             Integer> weightedHeuristic;
@@ -30,9 +30,9 @@ public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
     /**
      * Default constructor.
      */
-    public MetaSFA4Planner() {
+    public MetaSFA5Planner() {
         super(true);
-        setName(MetaSFA4Planner.class.getSimpleName());
+        setName(MetaSFA5Planner.class.getSimpleName());
         logger = LoggerFactory.getLogger(getClass());
     }
 
@@ -55,7 +55,7 @@ public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
                 setStopAtFirstSolution(false);
             }
             weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils
-                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleReally(unfinishedPackages,
+                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleMark(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
             formatLog("Setting weight to {}.", weight);
             Optional<Plan> plan = super.plan(domain, problem);
@@ -83,8 +83,8 @@ public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
     }
 
     @Override
-    public MetaSFA4Planner copy() {
-        return new MetaSFA4Planner();
+    public MetaSFA5Planner copy() {
+        return new MetaSFA5Planner();
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class MetaSFA4Planner extends SFA4Planner { // TODO: deduplicate
     }
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MetaSFA4Planner;
+        return obj instanceof MetaSFA5Planner;
     }
 
 }

@@ -559,6 +559,47 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
+    public static int calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleMark(Collection<Package> packageList,
+            Collection<Vehicle> vehicleList, ArrayTable<String, String, ShortestPath> distanceMatrix) {
+        int sumDistances = 0;
+        Set<RoadEdge> edgesDriven = new HashSet<>();
+        for (Package pkg : packageList) {
+            Location pkgLocation = pkg.getLocation();
+            if (pkgLocation != null) {
+                String pkgLocName = pkgLocation.getName();
+                // calculate the distance to the target + pickup and drop
+                sumDistances += 2; // pickup and drop
+                edgesDriven.addAll(distanceMatrix.get(pkgLocName, pkg.getTarget().getName()).getRoads());
+
+                // Calculate the distance to the nearest vehicle or package
+                int minVehicleDistance = Integer.MAX_VALUE;
+                List<RoadEdge> minVehPath = Collections.emptyList();
+                for (Vehicle vehicle : vehicleList) {
+                    ShortestPath path = distanceMatrix.get(pkgLocName, vehicle.getLocation().getName());
+                    if (path.getDistance() < minVehicleDistance) {
+                        minVehicleDistance = path.getDistance();
+                        minVehPath = path.getRoads();
+                    }
+                }
+                for (Package pkg2 : packageList) {
+                    if (pkg2.getLocation() != null) {
+                        ShortestPath path = distanceMatrix.get(pkgLocName, pkg2.getLocation().getName());
+                        if (path.getDistance() < minVehicleDistance) {
+                            minVehicleDistance = path.getDistance();
+                            minVehPath = path.getRoads();
+                        }
+                    }
+                }
+                edgesDriven.addAll(minVehPath);
+            } else {
+                sumDistances += 1; // drop, at least
+            }
+        }
+
+        sumDistances += edgesDriven.stream().mapToInt(e -> e.getRoad().getLength().getCost()).sum();
+        return sumDistances;
+    }
+
     /**
      * Heuristic: sum distances of package locations to their targets or the closest vehicle or to the package location
      * of the closest package,
