@@ -342,7 +342,7 @@ on the final value and the inequality holds.
 \end{proof}
 
 
-\subsubsection{Discussion}
+\subsubsection{Summary}
 
 In our tests, we found that
 the heuristics $h_0$, $h'_0$, $h_1$, and $h_2$
@@ -445,7 +445,7 @@ is choosing where to drive with what vehicle.
 \Output a plan $\pi$
 \Function{Randomized-Restart}{$\mathcal{P}$}
 \State $\pi \gets $ empty plan, $\Pi \gets \infty$
-\While{cancel not requested} \Comment{Cancelled by an external request}
+\While{cancel not requested} \Comment{Canceled by an external request}
 \State $s \gets s_0$, $\pi' \gets $ empty plan
 \While{$s$ doesn't satisfy $g \And score(\pi') < \Pi$}
 \State $A \gets $ \Call{Generate-Drive-Sequence}{$s$}
@@ -588,7 +588,7 @@ As $T$ grows large, the distribution will resemble a uniform distribution.
 If $T$ is set to lower values, the distribution will prefer larger values.
 In our experiments, we used a fixed $T = 0.1$, to prefer the nearest vehicles.
 
-\subsubsection{Discussion}
+\subsubsection{Sumamry}
 
 In our tests, the implementations
 of RRFL, RROP, and RROPN have empirically shown
@@ -668,7 +668,7 @@ to the different complexities of planning versus solving CSPs \citep[Section~8.3
 \textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
 \midrule
 \midrule
-\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Best-known plan length} & 6 & 351 \\ 
 \textbf{Vehicles} & 2 & 4 \\ 
 \textbf{Vehicle variables} & 14 & 1 408 \\ 
 \textbf{Packages} & 2 & 20 \\ 
@@ -745,7 +745,7 @@ and hopefully not enlarge the processing time too much.
 \textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
 \midrule
 \midrule
-\textbf{Best known plan length} & 6 & 351 \\ 
+\textbf{Best-known plan length} & 6 & 351 \\ 
 \textbf{Vehicles} & 2 & 4 \\ 
 \textbf{Vehicle shadow vars} & 14 & 1 408 \\
 \textbf{Packages} & 2 & 20 \\ 

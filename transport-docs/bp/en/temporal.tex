@@ -22,28 +22,20 @@ for tackling these challenges.
 \section{Scheduling actions of sequential plans}\label{sched}
 
 A simple temporal planning
-technique that is suprisingly effective in practice
+technique that is surprisingly effective in practice
 is one that simply forgets about time,
 finds a plan, and reintroduces time and concurrency as an afterthought
 into the generated plan.
 
-In the case of Transport, we simply relax the temporal
-problem to a sequential one by removing fuel demands
-and any notion of time.
-After running a sequential planner on the relaxed problem,
-we schedule the plan by finding a
-topological ordering of the directed acyclic graph (DAG)
-of mutexes. Using the graph, we add actions to the temporal plan
-at the earliest available time, based on the topological
-order and mutex relations.
-
+To be able to precisely formulate our algorithm, we
+have to define the concept of a mutex first.
 We say that a pair of instantiated temporal operators $a$, $b$
 is in a mutual exclusion relation (mutex)
 if and only if $a$ and $b$
 cannot overlap in a valid plan.
 For example, a pair of \pickup{} actions 
 of the same vehicle is mutex, because the
-at start effect of each actions is to 
+at start effect of each action is to 
 set the \verb+ready-loading+
 predicate to false and the action has an at start
 condition that requires \verb+ready-loading+
@@ -57,32 +49,112 @@ of the same vehicle, except a \refuel{} and \pickup{}/\drop{} pair (in any order
 of the same package.
 \end{itemize}
 
+Our algorithm starts with relaxing the temporal
+problem to a sequential one by removing fuel demands
+and any notion of time.
+After running a sequential planner on the relaxed problem,
+we schedule the plan by finding a
+topological ordering of a directed acyclic graph (DAG)
+of actions, where edges are specified by mutex relations.
+Using the graph, we add actions to the temporal plan
+at the earliest available time, based on the topological
+order.
+
 The DAG described above is constructed
 from a sequential plan $\pi$ by adding
 all actions of the plan as nodes of the graph
 and all mutex relations as edges.
-The edges are directed based on the order the actions appear in the original plan $\pi$.
+The direction of added edges is based on the order
+the actions of a mutex appear in the original plan $\pi$.
 
-We find a topological ordering in the mutex DAG
-using the algorithm described in \citet{Kahn1962}.
+To find a topological ordering in the mutex DAG,
+we use the algorithm described in \citet{Kahn1962}.
+We traverse actions of the sequential plan $\pi$
+(nodes of the DAG)
+in topological order, and add each action $a$
+to the temporal plan $\pi^T$
+at the maximum end time in $\pi^T$ of all actions
+who are mutex with $a$, where $a$ is second in the pair.
+Thanks to topological ordering, all of these actions
+are already planned in $\pi^T$ and hence we know their end times.
+The described algorithm is summarized in Figure~\ref{alg:sched}.
 
+\myalg{Sequential plan scheduling}%
+{%
+\Input a temporal Transport problem $\mathcal{P} = (S, O, \gamma, s_0, g)$
+\Output a temporal plan $\pi^T$
+\Function{Randomized-Restart}{$\mathcal{P}$}
+\State $\pi \gets $ empty plan, $\Pi \gets \infty$
+\While{cancel not requested} \Comment{Canceled by an external request}
+\State $s \gets s_0$, $\pi' \gets $ empty plan
+\While{$s$ doesn't satisfy $g \And score(\pi') < \Pi$}
+\State $A \gets $ \Call{Generate-Drive-Sequence}{$s$}
+\ForAll{action $a \in A$} \Comment{Apply all actions to the state}
+\State $s \gets \gamma(s, a)$
+\EndFor
+\If{$s = \emptyset$} \textbf{break} \Comment{At least one $a \in A$ was not applicable}
+\EndIf
+\State $\pi' \gets $ append all $a \in A$ to $\pi'$
+\EndWhile
+\If{$s$ satisfies $g \And score(\pi') < \Pi$}
+\State $\pi \gets \pi'$, $\Pi \gets score(\pi')$ \Comment{Update the best plan}
+\EndIf
+\EndWhile
+\State \Return $\pi$
+\EndFunction
+}%
+{A scheduling algorithm
+for temporal planning using sequential planners.}{A scheduling algorithm
+for temporal planning using sequential planners.}{sched}{tb}
 
+Previously, we left out an important step of the algorithm,
+which consists of adding fuel constraints back into the plan.
+Just before constructing the mutex DAG,
+we attempt to add the least amount of refuel actions
+into the plan, so that no fuel capacity constraints are broken.
+This is done iteratively for each vehicle,
+by looking at combinations of possible places to refuel for that vehicle in a plan.
+This approach, however, does not always lead to a valid plan,
+because not all
+sequential plans go through enough locations that have a petrol station
+to allow all vehicles to be sufficiently fueled.
+The problem is solved by simply giving up on the current plan
+and attempting to generate another sequential plan.
+We keep track of the best-known plan and always update it
+if we find a better scheduled and valid plan.
+Despite this, some combinations of sequential planners
+and specific problem instances might never generate a sequential plan
+that when scheduled produces a valid temporal plan (due to fuel capacities of vehicles).
 
+A big advantage of using a scheduling approach to temporal planning
+is that it is possible to
+reuse sequential planners which have already been created
+and optimized.
+The choice of an underlying planner makes a big difference
+in the quality of scheduled plans. Planners
+that generate various different plans generally perform better
+in such a scenario, because the scheduler has more
+opportunities to find an extension of the plan with respect to fuel demands.
 
+Also, suboptimal plans in the sequential domain
+sometimes yield better scheduled plans than optimal ones.
+For example, consider a triangular road network with three locations $A$, $B$, and $C$, connected by roads of length 1.
+There is are two packages $p_A$, $p_B$ and two vehicle $v_A$, $v_B$,
+positioned at $A$ and $B$ respectively. The target location of both
+packages is $C$. The capacities and fuel capacities of all vehicles
+are 2 and both packages have a size of 1.
+In the sequential variant, the optimal plan consists of either
+vehicle picking up the package at their location, driving
+over to the location with the other package, and delivering both packages
+to $C$. The cost of such a plan is $6$.
+However, in the temporal variant, both of the vehicles can drive at the same time, meaning that the optimal plan makespan is only $3$.
+If the sequential planner never generates a plan
+using both vehicles, the temporal scheduler has no way of
+parallelizing the generated actions, hence it will never
+schedule a plan with a lower makespan than $6$.
 
- and starting at time 0,
-iterate through the actions
-.
-
-
-
-\TODO{choice of seq planner}
-
-\TODO{describe the idea of parallelizing sequential plans using ``mutexes''}
-
-\TODO{easy to implement, leveraging existing work + describe shortcommings}
-
-
+We will test the scheduling algorithm with a Randomized Restart planner (Section~\ref{rand-restart})
+and a meta-heuristically weighted forward planner (Section~\ref{msfa}) in Chapter~\ref{experiments}.
 
 
 
