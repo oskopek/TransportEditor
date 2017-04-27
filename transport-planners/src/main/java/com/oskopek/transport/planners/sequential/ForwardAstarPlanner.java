@@ -159,6 +159,9 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                 } else if (myBestPlanScore > score) {
                     formatLog("Found new best plan {} -> {}", myBestPlanScore, score);
                     myBestPlanScore = score;
+                    if (plan == null) {
+                        plan = new SequentialPlan(current.getAllActionsInList());
+                    }
                     myBestPlan = plan;
                 }
                 if (stopAtFirstSolution) {

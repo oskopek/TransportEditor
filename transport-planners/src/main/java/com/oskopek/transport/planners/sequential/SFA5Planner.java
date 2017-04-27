@@ -41,7 +41,7 @@ public class SFA5Planner extends ForwardAstarPlanner {
 
     @Override
     public SFA5Planner copy() {
-        return new SFA5Planner();
+        return new SFA5Planner(isStopAtFirstSolution());
     }
 
     @Override

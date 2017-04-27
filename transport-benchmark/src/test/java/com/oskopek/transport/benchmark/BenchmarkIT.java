@@ -42,7 +42,7 @@ public class BenchmarkIT {
         problemInfo = new HashMap<>();
         problemInfo.put(problems.get(0), new ProblemInfo("", 54d, ""));
         problemInfo.put(problems.get(1), new ProblemInfo("", 54d, ""));
-        planners = Arrays.asList(new SFA1Planner(), new ForwardBFSPlanner());
+        planners = Arrays.asList(new SFA1Planner(true), new ForwardBFSPlanner());
 
         int cores = Runtime.getRuntime().availableProcessors();
         matrix = new BenchmarkMatrix(domain, problems, planners, problemInfo, Math.round((float) 100 / (float) cores));

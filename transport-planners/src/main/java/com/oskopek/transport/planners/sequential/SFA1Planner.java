@@ -18,8 +18,7 @@ public class SFA1Planner extends ForwardAstarPlanner {
      * Default constructor.
      */
     public SFA1Planner() {
-        super(false);
-        setName(SFA1Planner.class.getSimpleName());
+        this(false);
     }
 
     /**
@@ -41,7 +40,7 @@ public class SFA1Planner extends ForwardAstarPlanner {
 
     @Override
     public SFA1Planner copy() {
-        return new SFA1Planner();
+        return new SFA1Planner(isStopAtFirstSolution());
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ForwardBFSPlanner extends AbstractPlanner {
      * Default constructor.
      */
     public ForwardBFSPlanner() {
-        setName(ForwardAstarPlanner.class.getSimpleName());
+        setName(ForwardBFSPlanner.class.getSimpleName());
         logger = LoggerFactory.getLogger(getClass());
     }
 
