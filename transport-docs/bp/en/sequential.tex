@@ -586,17 +586,19 @@ evens out the distribution --- higher probabilities shrink
 and smaller probabilities become larger.
 As $T$ grows large, the distribution will resemble a uniform distribution.
 If $T$ is set to lower values, the distribution will prefer larger values.
-In our experiments, we use a fixed $T = 0.1$, to prefer the nearest vehicles.
+In our experiments, we used a fixed $T = 0.1$, to prefer the nearest vehicles.
 
 \subsubsection{Discussion}
 
 In our tests, the implementations
 of RRFL, RROP, and RROPN have empirically shown
 lesser performance than RRAPN and RRAPD.
+RRAPD, however, performs worse than RRAPN on
+average.
 As mentioned previously, RBAPN is unusable on larger
 problems due to catastrophic run time in practice.
-We will evaluate both the Nearby and Distribution
-planners of the Randomized Restart Around Path
+We will evaluate the Nearby planner
+of the Randomized Restart Around Path
 kind in our experiments in Chapter~\ref{experiments},
 as they produce good quality plans in a very short time
 even for larger problem instances.

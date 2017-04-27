@@ -124,7 +124,7 @@
   },
   "scoreFunctionType": "TOTAL_TIME",
   "planners": {
-    "RRAPNSched": {
+    "MSFA5Sched": {
       "className": "com.oskopek.transport.planners.temporal.MSFA5SequentialScheduler"
     }
   },
