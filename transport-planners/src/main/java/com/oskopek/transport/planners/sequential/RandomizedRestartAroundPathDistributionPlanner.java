@@ -103,7 +103,7 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
                         .getDistance(), v))
                 .collect(Collectors.toList());
         vehDistances = vehDistances.stream() // inverse + softmax
-                .map(t -> Tuple.of(Math.exp((1d/(t._1 + 1d)) / temperature), t._2)).collect(Collectors.toList());
+                .map(t -> Tuple.of(Math.exp((1d / (t._1 + 1d)) / temperature), t._2)).collect(Collectors.toList());
         double sumOfDistances = vehDistances.stream().mapToDouble(t -> t._1).sum();
         List<Double> vehProbs = vehDistances.stream()
                 .map(t -> t._1 / sumOfDistances).collect(Collectors.toList());
