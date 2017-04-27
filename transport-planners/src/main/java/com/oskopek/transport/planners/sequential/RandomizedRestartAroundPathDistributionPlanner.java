@@ -39,7 +39,7 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
         resetState();
         initialize(problem);
         formatLog("Starting planning...");
-        double temperature = 0.05d; // hyperparameter
+        double temperature = 0.1d; // hyperparameter
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
             while (!current.isGoalState() && current.getTotalTime() < getBestPlanScore()) {
@@ -102,8 +102,8 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
                 .map(v -> Tuple.of((double) getShortestPathMatrix().get(v.getLocation().getName(), to.getName())
                         .getDistance(), v))
                 .collect(Collectors.toList());
-        vehDistances = vehDistances.stream() // softmax
-                .map(t -> Tuple.of(Math.exp((t._1 + 1) / temperature), t._2)).collect(Collectors.toList());
+        vehDistances = vehDistances.stream() // inverse + softmax
+                .map(t -> Tuple.of(Math.exp((1d/(t._1 + 1d)) / temperature), t._2)).collect(Collectors.toList());
         double sumOfDistances = vehDistances.stream().mapToDouble(t -> t._1).sum();
         List<Double> vehProbs = vehDistances.stream()
                 .map(t -> t._1 / sumOfDistances).collect(Collectors.toList());
