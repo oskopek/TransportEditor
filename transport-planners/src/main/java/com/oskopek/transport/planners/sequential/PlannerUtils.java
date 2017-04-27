@@ -559,6 +559,17 @@ public final class PlannerUtils {
         return sumDistances;
     }
 
+    /**
+     * Heuristic: mark edges on shortest paths of package locations to their targets or to
+     * the closest vehicle or the closes package,
+     * then sum up the marked edges.
+     * Also adds costs for drop and pickup actions. Is <strong>admissible?</strong>.
+     *
+     * @param packageList the package list
+     * @param vehicleList the vehicle list
+     * @param distanceMatrix the distance matrix
+     * @return the heuristic value.
+     */
     public static int calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleMark(Collection<Package> packageList,
             Collection<Vehicle> vehicleList, ArrayTable<String, String, ShortestPath> distanceMatrix) {
         int sumDistances = 0;
@@ -634,7 +645,8 @@ public final class PlannerUtils {
             }
 
             int pkgMinDist = Integer.MAX_VALUE;
-            pkgMinDist = Math.min(pkgMinDist, distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName()).getDistance());
+            pkgMinDist = Math.min(pkgMinDist, distanceMatrix.get(pkgLocation.getName(), pkg.getTarget().getName())
+                    .getDistance());
             if (inVehicle != null) { // pkg in vehicle
                 int vehDist = Integer.MAX_VALUE;
                 for (Vehicle vehicle : vehicleList) {

@@ -46,6 +46,13 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
         return planWithOptionalTransformations(domain, problem, planTransformation);
     }
 
+    /**
+     * Calculates the current score depending if we are doing temporal scheduling or sequential planning.
+     *
+     * @param current the current state
+     * @param transformed the transformed plan, or null
+     * @return the score
+     */
     private static int calculateCurrentScore(ImmutablePlanState current, Plan transformed) {
         int curScore = current.getTotalTime();
         if (transformed != null) {

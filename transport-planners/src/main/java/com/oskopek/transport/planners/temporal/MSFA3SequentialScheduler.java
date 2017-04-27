@@ -5,7 +5,6 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.MetaSFA3Planner;
-import com.oskopek.transport.planners.sequential.MetaSFA5Planner;
 import com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner;
 
 import java.util.Optional;

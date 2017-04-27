@@ -133,6 +133,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      *
      * @param domain the domain
      * @param problem the problem
+     * @param planTransformation the intermediate transformation function (used for temporal scheduling)
      * @return the plan, or an empty optional if no plan was found
      */
     public Optional<Plan> planInternal(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
@@ -154,9 +155,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                         score = Math.round(plan.calculateMakespan().floatValue());
                     }
                 }
-                if (planTransformation != null && plan == null) {
-                    // do not save as best plan
-                } else if (myBestPlanScore > score) {
+                if ((planTransformation == null || plan != null) && myBestPlanScore > score) {
                     formatLog("Found new best plan {} -> {}", myBestPlanScore, score);
                     myBestPlanScore = score;
                     if (plan == null) {
