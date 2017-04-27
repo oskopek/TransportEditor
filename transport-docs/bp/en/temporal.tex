@@ -81,31 +81,91 @@ The described algorithm is summarized in Figure~\ref{alg:sched}.
 
 \myalg{Sequential plan scheduling}%
 {%
-\Input a temporal Transport problem $\mathcal{P} = (S, O, \gamma, s_0, g)$
+\Input a temporal Transport problem $\mathcal{P} = (S, O, \gamma, s_0, g),$
+a sequential plan $\pi$
 \Output a temporal plan $\pi^T$
-\Function{Randomized-Restart}{$\mathcal{P}$}
-\State $\pi \gets $ empty plan, $\Pi \gets \infty$
-\While{cancel not requested} \Comment{Canceled by an external request}
-\State $s \gets s_0$, $\pi' \gets $ empty plan
-\While{$s$ doesn't satisfy $g \And score(\pi') < \Pi$}
-\State $A \gets $ \Call{Generate-Drive-Sequence}{$s$}
-\ForAll{action $a \in A$} \Comment{Apply all actions to the state}
-\State $s \gets \gamma(s, a)$
+\comment{
+\Function{Refuel-Positions}{$v$, $\pi$}
+\State $P_v \gets $ empty list
+\For{$i \gets 1 \textbf{ to } |\pi|$}
+\State $a \gets \pi[i]$
+\If{$a$ is a \drive{} action of vehicle $v$}
+\If{$\mt{has-petrol-station}(from(a))$} \Comment{The drive's source location}
+\State $P_v \gets$ append $i$ to $P_v$
+\EndIf
+\EndIf
 \EndFor
-\If{$s = \emptyset$} \textbf{break} \Comment{At least one $a \in A$ was not applicable}
-\EndIf
-\State $\pi' \gets $ append all $a \in A$ to $\pi'$
-\EndWhile
-\If{$s$ satisfies $g \And score(\pi') < \Pi$}
-\State $\pi \gets \pi'$, $\Pi \gets score(\pi')$ \Comment{Update the best plan}
-\EndIf
-\EndWhile
+\State \Return $P_v$
+\EndFunction
+
+\Function{Add-Refuels}{$k$, $P_v$, $\pi$}
+\TODO{Add-Refuels}
 \State \Return $\pi$
+\EndFunction
+
+\Function{Add-Refuel-Actions}{$\mathcal{P}$, $\pi$}
+\ForAll{vehicle $v$}
+\State $P_v \gets $ \Call{Refuel-Positions}{$v$, $\pi$}
+\State $F \gets $ failure
+\For{$k \gets 0 \textbf{ to } |\pi|$}
+\State $F \gets $ \Call{Add-Refuels}{$k$, $P_v$, $\pi$}
+\If{$F$ \textbf{is not} failure}
+\State $\pi \gets F$
+\State \textbf{break}
+\EndIf
+\EndFor
+\If{$F$ \textbf{is} failure}
+\Return failure
+\EndIf
+\EndFor
+\State \Return $\pi$
+\EndFunction
+}
+\Function{Build-Mutex-Graph}{$\pi$}
+\State $G \gets $ empty directed graph
+\ForAll {action $a \in \pi$} 
+\State $G \gets $ add node $a$ to $G$
+\EndFor
+\For{$i \gets 1 \textbf{ to } |\pi|$}
+\State $a \gets \pi[i]$
+\For{$j \gets i \textbf{ to } |\pi|$}
+\State $b \gets \pi[j]$
+\If{$veh(a) = veh(b)$ and not \pickup{}/\drop{} and \refuel{}}
+\State $G \gets $ add edge $(a, b)$ to $G$
+\ElsIf{$a$ and $b$ are \pickup{} and \drop{} actions}
+\State $G \gets $ add edge $(a, b)$ to $G$
+\EndIf
+\EndFor
+\EndFor
+\State \Return $G$
+\EndFunction
+
+\Function{Schedule}{$\mathcal{P}$, $\pi$, $\delta$ ($= 0.001$)}
+\State $\pi^T \gets $ empty temporal plan, $t_s, t_e \gets $ empty maps
+\State $\pi \gets $ \Call{Add-Refuel-Actions}{$\mathcal{P}$, $\pi$}
+\If{$\pi$ \textbf{is} failure} \Return failure \EndIf
+\State $G \gets $ \Call{Build-Mutex-Graph}{$\pi$}
+\State $G' \gets $ \Call{Topological-Sort}{$G$}
+
+\ForAll{action $b \in G'$}
+\State $t_s[b] \gets \delta + \max_{(a, b) \in G'} t_e[a]$
+\Comment{If no such edge exists, defaults to 0}
+\State $t_e[b] \gets t_s[b] + duration(b)$
+\State $\pi^T \gets $ append $(t_s[b], t_e[b], b)$ to $\pi^T$
+\EndFor
+\If{$\exists$ vehicle $v : \mt{fuel-left}(v) < 0$ at any point during $\pi^T$}
+\Return failure
+\EndIf
+\State \Return $\pi^T$
 \EndFunction
 }%
 {A scheduling algorithm
 for temporal planning using sequential planners.}{A scheduling algorithm
-for temporal planning using sequential planners.}{sched}{tb}
+for temporal planning using sequential planners.
+The maps $t_s$ and $t_e$ represent the assigned start and end times (respectively) of planned actions. The parameter $\delta > 0$ is a constant used for separating different actions.
+\textsc{Topological-Sort} returns the same graph, but with nodes sorted
+using Kahn's algorithm.
+\textsc{Add-Refuel-Actions} is briefly described in Section~\ref{sched}.}{sched}{tb}
 
 Previously, we left out an important step of the algorithm,
 which consists of adding fuel constraints back into the plan.
@@ -182,5 +242,4 @@ and a meta-heuristically weighted forward planner (Section~\ref{msfa}) in Chapte
 
 
 
-%\section{Ad-hoc temporal planning}\label{temporal-approach}
-%\TODO{temporal RRAPN}
+\section{TODO: Ad-hoc temporal planning?}\label{temporal-approach}
