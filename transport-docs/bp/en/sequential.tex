@@ -1,6 +1,6 @@
 \chapter{Sequential Transport planning}
 
-In this chapter, we describe the approaches we
+In this chapter, we describe the planning approaches we
 selected or designed, implemented, and tested.
 We will attempt to leverage the acquired
 Transport domain knowledge
@@ -8,7 +8,7 @@ in these approaches as much as possible.
 
 \section{State-space forward planning}\label{forward-planning}
 
-One of the most straightforward approaches to planning
+One of the most straightforward approaches to automated planning
 is forward search \citep[Section~4.2]{Ghallab2004}
 in state space (Figure~\ref{alg:forward-search}).
 Although it is defined on a classical representation,
@@ -65,7 +65,7 @@ State space search algorithms are a heavily studied area
 of computer science, and any reasonable search algorithm applied
 to forward search will yield correct results.
 Examples of such algorithms are Breadth-First Search (BFS), 
-Depth-First Search, and many more \citep[Section~3.5]{Russell1995}.
+Depth-First Search (DFS), and many more \citep[Section~3.5]{Russell1995}.
 The choice of a search algorithm greatly influence
 the quality of resulting plans when applied to forward search.
 
@@ -575,7 +575,10 @@ Instead of using a biased coin flip based on the $\varepsilon$
 hyperparameter, RRAPN samples the vehicle
 from a discrete probability distribution
 obtained by applying the \textit{softmax} function on the distances of vehicles to the selected package:
-$$\varphi_i = \frac{\exp((\mt{spd}(location(p), \mt{at}(v_i)) + 1)/T)}{\sum_{j = 1}^{|V|} \exp((\mt{spd}(location(p), \mt{at}(v_j)) + 1)/T)}.$$
+\begin{align*}
+\varphi'_i &= \frac{1}{\mt{spd}(location(p), \mt{at}(v_i)) + 1}\\
+\varphi_i &= \frac{\exp(\varphi'_i/T)}{\sum_{j = 1}^{|V|} \exp(\varphi'_j/T)}
+\end{align*}
 The value $\varphi_i$ is the resulting probability of each vehicle $v_i \in V = \{v_1, v_2, \ldots, v_n\}$.
 The hyperparameter $T \in (0, \infty)$ is the \textit{temperature}
 of the softmax. If set to higher values than 1, it
@@ -583,7 +586,7 @@ evens out the distribution --- higher probabilities shrink
 and smaller probabilities become larger.
 As $T$ grows large, the distribution will resemble a uniform distribution.
 If $T$ is set to lower values, the distribution will prefer larger values.
-In our experiments, we use a fixed $T = 0.05$, to prefer the nearest vehicles.
+In our experiments, we use a fixed $T = 0.1$, to prefer the nearest vehicles.
 
 \subsubsection{Discussion}
 

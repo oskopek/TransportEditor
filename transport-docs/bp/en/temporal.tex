@@ -1,15 +1,114 @@
 \chapter{Temporal Transport planning}
 
-\TODO{Specifics of temporal planning}
+The temporal domain not only has the added challenge of time,
+but fuel demands and vehicle target locations are also present.
+In this chapter, we describe approaches used
+for tackling these challenges.
 
-\TODO{mention that there are vehicle goals..}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Scheduling actions of sequential plans}\label{sched}
+
+A simple temporal planning
+technique that is suprisingly effective in practice
+is one that simply forgets about time,
+finds a plan, and reintroduces time and concurrency as an afterthought
+into the generated plan.
+
+In the case of Transport, we simply relax the temporal
+problem to a sequential one by removing fuel demands
+and any notion of time.
+After running a sequential planner on the relaxed problem,
+we schedule the plan by finding a
+topological ordering of the directed acyclic graph (DAG)
+of mutexes. Using the graph, we add actions to the temporal plan
+at the earliest available time, based on the topological
+order and mutex relations.
+
+We say that a pair of instantiated temporal operators $a$, $b$
+is in a mutual exclusion relation (mutex)
+if and only if $a$ and $b$
+cannot overlap in a valid plan.
+For example, a pair of \pickup{} actions 
+of the same vehicle is mutex, because the
+at start effect of each actions is to 
+set the \verb+ready-loading+
+predicate to false and the action has an at start
+condition that requires \verb+ready-loading+
+to be true.
+
+Leveraging our domain knowledge, we pre-construct mutex relations for Transport. The following actions are mutex:
+\begin{itemize}
+\item any pair of actions
+of the same vehicle, except a \refuel{} and \pickup{}/\drop{} pair (in any order); and
+\item a \drop{} and \pickup{} pair (in any order)
+of the same package.
+\end{itemize}
+
+The DAG described above is constructed
+from a sequential plan $\pi$ by adding
+all actions of the plan as nodes of the graph
+and all mutex relations as edges.
+The edges are directed based on the order the actions appear in the original plan $\pi$.
+
+We find a topological ordering in the mutex DAG
+using the algorithm described in \citet{Kahn1962}.
+
+
+
+
+
+ and starting at time 0,
+iterate through the actions
+.
+
+
+
+\TODO{choice of seq planner}
 
 \TODO{describe the idea of parallelizing sequential plans using ``mutexes''}
 
 \TODO{easy to implement, leveraging existing work + describe shortcommings}
 
-%TODO: \section{Ad-hoc temporal planning}\label{temporal-approach}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\section{Ad-hoc temporal planning}\label{temporal-approach}
 %\TODO{temporal RRAPN}
