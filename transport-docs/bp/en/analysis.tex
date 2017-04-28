@@ -245,7 +245,7 @@ An alternative for using the state space is offered by \textit{plan-space planni
 The state space is substituted for the \textit{plan space}.
 Nodes in this space represent \textit{partially specified plans},
 edges are \textit{plan refinement operations} \citep[Section~5.1]{Ghallab2004}.
-We will not use plan-space planning in this work, as according to
+We will not explicitly use plan-space planning in this work, as according to
 \citet[Section~5.6]{Ghallab2004} it is unfit for
 incorporating domain-specific knowledge.
 
@@ -265,8 +265,9 @@ is a relation of the planning domain and $x_1, \ldots, x_k$ are constants or \te
 variables}. These are similar to state variables in the state-variable representation,
 but the values change in time, not between states).
 
-The temporal variables $t_s$ and $t_e$ do not specifically represent a numerical time value, but together with other variables and constraints form a consistent set (for a more precise definition, see \citet[Section~14.2.1]{Ghallab2004}).
-It holds that $t_s < t_e$.
+The temporal variables $t_s$ and $t_e$ do not specifically represent a numerical time value, but together with other variables and constraints form a consistent set.
+It holds that $t_s < t_e$. For a more precise definition, see \citet[Section~14.2.1]{Ghallab2004}.
+
 
 The tqe $p(x_1, \ldots, x_k)@[t_s, t_e)$
 asserts that the relation $p(x_1, \ldots, x_k)$ holds for any time $t$, where
