@@ -234,8 +234,7 @@ The results of MSFA3 and MSFA5 on this dataset are almost identical.
 In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
 \begin{description}
 \item[RRAPNSched] The scheduled (Section~\ref{sched}) RRAPN planner (Section~\ref{rrapn})
-\item[MSFA3Sched] The scheduled MSFA3 planner (Sections~\ref{msfa} and~\ref{sfa3})
-\item[MSFA5Sched] The scheduled MSFA5 planner (Section~\ref{sfa5})
+\item[MSFA5Sched] The scheduled MSFA5 planner (Sections~\ref{msfa} and~\ref{sfa5})
 \item[AdHocTemp] The ? Temporal planner (Section~\ref{temporal-approach})
 \item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
 \end{description}
@@ -253,7 +252,7 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \scriptsize
 \renewcommand{\footnotesize}{\scriptsize}
 \input{../data/tempo-sat-6-ipc-scores}
-\caption{Quality and score of sequential planners on the tempo-sat-6 dataset.}
+\caption{Quality and score of temporal planners on the tempo-sat-6 dataset.}
 \label{tab:tempo-sat-6-ipc-scores}
 \end{subtable}
 
@@ -261,7 +260,7 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-quality}
-\caption{Quality plot of sequential planners on the tempo-sat-6 dataset.}
+\caption{Quality plot of temporal planners on the tempo-sat-6 dataset.}
 \label{fig:tempo-sat-6-quality}
 \end{subfigure}
 \caption{Planner results on tempo-sat-6.}
@@ -272,18 +271,27 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \centering
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-A}
-\caption{Gantt chart of the temporal planner RRAPNSched on the tempo-sat-6 \texttt{p15} problem.}
-\label{fig:tempo-sat-6-gantt-15-a}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
+\caption{Gantt chart of the temporal planner RRAPNSched on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-rrapn}
 \end{subfigure}
+
+\comment{
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-MSFA5}
+\caption{Gantt chart of the temporal planner MSFA5Sched on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-msfa5}
+\end{subfigure}
+}
 
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-B}
-\caption{Gantt chart of the temporal planner TFD2014 on the tempo-sat-6 \texttt{p15} problem.}
-\label{fig:tempo-sat-6-gantt-15-b}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
+\caption{Gantt chart of the temporal planner TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-tfd}
 \end{subfigure}
-\caption{Gantt charts of the temporal planner RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p15} problem.}
+\caption{Gantt charts of the temporal planner RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
 \label{fig:tempo-sat-6-gantt}
 \end{figure}
 
@@ -314,7 +322,6 @@ to the optimum than the best score estimates for larger problems.
 An interesting case is the problem number 10\TODO{why?}
 
 \TODO{RRAPNSched a TFD2014, porovnat chyby v Gantt charts}
-\TODO{automatize gantt charts}
 
 
 \section{Overall results}
@@ -327,8 +334,50 @@ and temporal satisficing tracks of the 2008 and 2011 IPCs.
 In the 2014 IPC, we would attain second place on overall quality in the Transport domain, behind the impressive result of Mercury.
 
 Another major advantage previously unmentioned is that
-our ad-hoc planners generate good solutions quite fast.
-Below, we show results from a 1 minute run of RRAPN and RRAPNSched.
+our planners generate good solutions quite fast.
+In Table~\ref{tab:planner-results-short},
+we show results from a \TODO{?} second run of our planners on all datasets.
 
-\TODO{show results of a 1 minute run}
+
+\begin{table}[tbp]
+\centering
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-6-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-6 dataset.}
+\label{tab:seq-sat-6-ipc-scores-short}
+\end{subtable}
+\quad
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/tempo-sat-6-ipc-scores-short}
+\caption{Quality and score of our planners on the tempo-sat-6 dataset. \TODO{remove TFD2014}}
+\label{tab:tempo-sat-6-ipc-scores-short}
+\end{subtable}
+
+\vspace{0.5cm}
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-7-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-7 dataset.}
+\label{tab:seq-sat-7-ipc-scores-short}
+\end{subtable}
+\quad
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-8-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-ipc-scores-short}
+\end{subtable}
+\caption{Results of our planners when run for \TODO{?} seconds on all datasets.}
+\label{tab:planner-results-short}
+\end{table}
 
