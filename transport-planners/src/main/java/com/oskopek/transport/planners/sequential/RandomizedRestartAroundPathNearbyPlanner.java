@@ -80,7 +80,9 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
         float exploration = 0.2f; // best so far: 0.2 or 0.1
         while (true) {
             ImmutablePlanState current = new ImmutablePlanState(problem);
-            while (!current.isGoalState() && calculateCurrentScore(current, null) < getBestPlanScore()) {
+            while (!current.isGoalState() && calculateCurrentScore(current, planTransformation == null ? null
+                    : planTransformation.apply(new SequentialPlan(current.getAllActionsInList())))
+                    < getBestPlanScore()) {
                 Problem curProblem = current.getProblem();
                 List<Package> unfinished = new ArrayList<>(
                         PlannerUtils.getUnfinishedPackages(curProblem.getAllPackages()));
@@ -143,6 +145,9 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
+            if (!current.isGoalState()) {
+                continue;
+            }
             if (planTransformation == null) {
                 int curScore = calculateCurrentScore(current, null);
                 if (curScore < getBestPlanScore()) {

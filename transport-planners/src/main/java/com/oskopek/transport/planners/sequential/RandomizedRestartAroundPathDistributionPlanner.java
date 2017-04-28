@@ -75,6 +75,9 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
+            if (!current.isGoalState()) {
+                continue;
+            }
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
