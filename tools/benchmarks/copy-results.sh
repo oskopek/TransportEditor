@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 function copy-figures {
 dataset="$1"
 from="$2"
@@ -10,10 +8,11 @@ target="$3"
 cp -v "$from/ipc-reports/ipc_score_table.tex" "$target/data/$dataset-ipc-scores.tex"
 cp -v "$from/reports/ipc_score_table.tex" "$target/data/$dataset-ipc-scores-short.tex"
 cp -v "$from/ipc-reports/quality_line_chart.pdf" "$target/img/$dataset-quality.pdf"
-cp -v "$from/ipc-reports/score_line_chart.pdf" "$target/img/$dataset-score.pdf"
+cp -v "$from/plots/gantt_RRAPNSched_p12.pdf" "$target/img/$dataset-quality.pdf"
+cp -v "$from/plots/gantt_TFD2014_p12.pdf" "$target/img/$dataset-gantt-p15-A.pdf"
+cp -v "$from/ipc-reports/score_line_chart.pdf" "$target/img/$dataset-gantt-p15-A.pdf"
 cp -v "$from/ipc-reports/runtime_line_chart.pdf" "$target/img/$dataset-runtime.pdf"
 }
-
 
 prefix="$HOME/git"
 TEvariant="TransportEditor-final"

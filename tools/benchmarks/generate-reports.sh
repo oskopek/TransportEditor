@@ -69,6 +69,15 @@ else
     python3 scripts/merge-results.py "$resultdir/results.json" "$ref_results" "$ipc_results"
     ipc_reportdir_name="ipc-reports"
     reportdir="$resultdir/$ipc_reportdir_name"
+    if `echo $configName | grep '^tempo-sat' > /dev/null`; then # generate gantt charts
+        plot_dir="`realpath "$resultdir/plots"`"
+        mkdir -p "$plot_dir"
+        cp "$ipc_results" "$transportroot/tools/plots/plans/generate-gantt-charts.py" "$plot_dir"
+        cur_dir="`pwd`"
+        cd "$plot_dir"
+        python3 "generate-gantt-charts.py"
+        cd "$cur_dir"
+    fi
     eval "$JAVA_HOME/bin/java -Dlogging.path=\"$logdir\" -Dtransport.root=\"$transportroot\" -jar $reportGenerator $resultdir/results-ipc.json $ipc_reportdir_name"
     convertToPdf
 fi
