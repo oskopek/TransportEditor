@@ -127,4 +127,7 @@ if __name__ == "__main__":
     with open(filename, 'r') as f:
         js = json.loads("".join(f.readlines()))
     for run in js["runs"]:
+        if run["problem"] not in ["p12"]:
+            print("Skipping: gantt_" + run["planner"] + "_" + run["problem"])
+            continue
         convert_to_gantt(run)

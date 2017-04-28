@@ -8,9 +8,10 @@ target="$3"
 cp -v "$from/ipc-reports/ipc_score_table.tex" "$target/data/$dataset-ipc-scores.tex"
 cp -v "$from/reports/ipc_score_table.tex" "$target/data/$dataset-ipc-scores-short.tex"
 cp -v "$from/ipc-reports/quality_line_chart.pdf" "$target/img/$dataset-quality.pdf"
-cp -v "$from/plots/gantt_RRAPNSched_p12.pdf" "$target/img/$dataset-quality.pdf"
-cp -v "$from/plots/gantt_TFD2014_p12.pdf" "$target/img/$dataset-gantt-p15-A.pdf"
-cp -v "$from/ipc-reports/score_line_chart.pdf" "$target/img/$dataset-gantt-p15-A.pdf"
+cp -v "$from/plots/gantt_RRAPNSched_p12.pdf" "$target/img/$dataset-gantt-p12-RRAPN.pdf"
+cp -v "$from/plots/gantt_TFD2014_p12.pdf" "$target/img/$dataset-gantt-p12-TFD.pdf"
+cp -v "$from/plots/gantt_MSFA5Sched_p12.pdf" "$target/img/$dataset-gantt-p12-MSFA5.pdf"
+cp -v "$from/ipc-reports/score_line_chart.pdf" "$target/img/$dataset-score.pdf"
 cp -v "$from/ipc-reports/runtime_line_chart.pdf" "$target/img/$dataset-runtime.pdf"
 }
 
