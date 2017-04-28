@@ -93,7 +93,8 @@ we can do using those packages that would result in a plan with a lower total co
 always correct for a vehicle containing a package with a destination equal
 to the vehicle's location to do a \drop{} action immediately.
 
-\item \textbf{Do not drop and pick up}: It never makes sense to drop and pick up
+\item \textbf{Do not drop and pick up}: It never makes sense to plan a \drop{} and \pickup{}
+action of
 the same package by the same vehicle in succession. We will only get to the same state
 by using a longer plan. This rule also applies if an action of a different vehicle
 gets between the two successive actions --- even if it does an action with the
@@ -133,7 +134,7 @@ without having less than $|p|$ free space in any intermediate state between leav
 If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
 $v$ could have picked up $p$ when driving through $A$, and the total plan cost
 would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
-While we cannot say if the drive itself
+While we cannot say if the \drive{} action itself
 was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
 2 on the total cost. 
 
@@ -155,12 +156,12 @@ Several other insights can only be applied in the sequential variant of Transpor
 \begin{enumerate}
 \item \textbf{Drop from an active vehicle only}: Without loss of generality,
 we can prune all plans where a \drop{} action of a vehicle happens
-right after an action of a different vehicle. It is trivial to see that if we had a plan where a drop
-occurs after an action of a different vehicle, we can swap that action with the drop
-action without (a) changing the total plan cost (b) changing the validity of the plan.
+right after an action of a different vehicle. It is trivial to see that if we had a plan where
+a \drop{} action
+occurs after an action of a different vehicle, we can swap that action with the \drop{} action without (a) changing the total plan cost (b) changing the validity of the plan.
 
-Doing this repeatedly will yield an equivalent plan, in which the drop action
-occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each drop action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
+Doing this repeatedly will yield an equivalent plan, in which the \drop{} action
+occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each \drop{} action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
 \end{enumerate}
 Finally, these are the useful properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
@@ -171,8 +172,8 @@ co-located with the vehicle at that time.
 
 \item \textbf{No fuel left means refueling or ignoring the vehicle}:
 If a vehicle is stuck with no fuel left, or with less fuel than is required for
-any valid \drive{} action, the correct thing to do is to either refuel or drop
-all packages and ignore the vehicle in further planning. Unfortunately,
+any valid \drive{} action,
+the correct thing to do is to either refuel or drop all packages and ignore the vehicle in further planning. Unfortunately,
 we cannot say anything about the (non-)optimality of a plan where this occurs.
 \end{enumerate}
 
@@ -350,7 +351,7 @@ $\mt{GCD}$ is the greatest common divisor function
 and $f_{max}$ is the maximum fuel capacity for vehicles (this is a simplification where all vehicles
 have an equal maximum fuel capacity).
 The formula expresses the choice of positions of vehicles (vehicles can now be in the middle
-of a drive action), the choice of the current fuel capacity of vehicles (cannot be simply
+of a \drive{} action), the choice of the current fuel capacity of vehicles (cannot be simply
 calculated from the other state variables, only from all previous actions),
 and the choice of location for packages.
 

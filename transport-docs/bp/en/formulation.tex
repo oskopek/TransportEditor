@@ -92,7 +92,7 @@ The numeric variant adds the concept of fuel on top of the STRIPS variant.
 All roads have an additional cost, called \verb+fuel-demand+, which is
 subtracted from a vehicle's \verb+fuel-left+ value if it chooses to drive along that road.
 Additionally, all vehicles have a maximum fuel capacity \verb+fuel-max+,
-which they regain upon being the target of a \verb+refuel+ action. This action can only
+which they regain upon being the target of a \refuel{} action. This action can only
 be executed at a location that is marked as having a petrol station. Petrol stations
 are static with respect to a given planning problem instance.
 
@@ -102,8 +102,8 @@ This variant is usually denoted as \textit{Transport numeric} or \textit{transpo
 
 The temporal Transport domain is usually denoted as \textit{Transport temporal} or, confusingly,
 also \textit{transport-numeric}. A major difference with respect to the numeric variant is
-the addition of time. All actions now have a duration (\verb+pick-up+ and \verb+drop+ both have a
-duration of 1, \verb+refuel+ has a duration of 10, and the duration of \verb+drive+ is
+the addition of time. All actions now have a duration (\pickup{} and \drop{} both have a
+duration of 1, \refuel{} has a duration of 10, and the duration of \drive{} is
 equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
 
 The addition of time poses numerous technical complications when formalizing this variant
@@ -197,7 +197,7 @@ drop(v, l, p, s1, s2)
 \label{code:classical-strips}
 \end{figure}
 
-The numeric variant  adds the \verb+refuel+ operator, changes the \verb+drive+
+The numeric variant  adds the \refuel{} operator, changes the \drive{}
 operator, and adds a new fuel-related predicate \verb+has-petrol-station(l)+, that is true when the given location \verb+l+ has
 a petrol station.
 To model fuel, we need the addition of a few functions, namely:
@@ -270,9 +270,9 @@ drop(v, l, p, s1, s2)
 \label{code:statevar-strips}
 \end{figure}
 
-The numeric variant again adds the \verb+refuel+ operator along with
+The numeric variant again adds the \refuel{} operator along with
 a few fuel-related state-variable functions and predicates, and changes 
-the \verb+drive+ operator (Figure~\ref{code:statevar-numeric}).
+the \drive{} operator (Figure~\ref{code:statevar-numeric}).
 
 \begin{figure}[tb]
 \begin{code}
@@ -301,7 +301,7 @@ On top of the fuel-related predicates and functions from \verb+transport-numeric
 lock the vehicle, which means the vehicle can be refueled while dropping off and picking up packages.
 \end{itemize}
 Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation.
-Note that both \pickup{} and \drop{} cancel the \verb+at+ predicate at the start of the action, which forbids parallel pickup and drop.
+Note that both \pickup{} and \drop{} cancel the \verb+at+ predicate at the start of the action, which forbids parallel picking up and dropping.
 
 \begin{figure}[tb]
 \begin{code}
@@ -348,9 +348,9 @@ literals. We will call these literals \textit{action objects}.
 
 The STRIPS variant additionally needs \verb+action-costs+, a requirement adding
 integer costs to individual planning operators. These costs may be constant
-(like the ones for \verb+pick-up+, \verb+drop+ or \verb+refuel+),
+(like the ones for \pickup{}, \drop{} or \refuel{}),
 or they may be dependent on the parameters of the instantiated operator (like
-the cost of \verb+drive+).
+the cost of \drive{}).
 The numeric variant
 requires \verb+numeric-fluents+, which introduces native PDDL support for functions whose values correspond to numbers and can change over time. It also requires are
 \verb+goal-utilities+, used for custom optimization functions and optional goal predicates.
