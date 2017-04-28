@@ -33,7 +33,6 @@ where:
 $V$, $M$, and $P$ are pairwise disjoint.
 No Transport domain variants assume movement constraints, therefore, $road$ is a constant
 function $road(m) = E$.
-Fuel constraints are modeled differently than in Transport (constraints per location versus per vehicle). \TODO{explain why it doesn't matter complexity-wise}
 
 A simplified notation is also introduced by \citet{Helmert2001a} for special cases of \textsc{Transport} tasks.
 For $i,j \in \{1, \infty, *\}, k \in \{1, +, *\}$ a $\textsc{Transport}_{i,j,k}$ task is defined as a
@@ -63,13 +62,20 @@ which we can do in polynomial time, as noted by \citet[Theorem 8]{Helmert2001}.
 With fuel, there is no straightforward way of determining
 if a plan exists and this problem is NP-complete, which is proven in \citet[Theorem 9 and 10]{Helmert2001}.
 
+Even though fuel constraints are modeled differently than in Transport (constraints per location versus per vehicle), the proof of 
+NP-completeness of \textsc{Plan-Existence} for $\textsc{Transport}_{\infty,1,1}$
+present in \citet[Theorem~3.9]{Helmert2001a}
+can be trivially edited to prove the NP-completeness
+of \textsc{Plan-Existence} for sequential Transport.
+Instead of adding fuel conditions
+to the entrance and exit nodes of a location,
+we simply add it to edge between them. The rest of the proof holds as was presented originally.
+
 Similarly, the \textsc{Plan-Length} problem is NP-complete for all mentioned variants of Transport
 \citep[Section~3.6]{Helmert2001a}.
 The fact that all the mentioned proofs work for temporal variants is explained in \citet[Section~3.5]{Helmert2001a}.
 All of these results make clear that looking for an explicit planning algorithm is infeasible,
 despite the knowledge we acquire by only focusing on one planning domain.
-
-
 
 
 
