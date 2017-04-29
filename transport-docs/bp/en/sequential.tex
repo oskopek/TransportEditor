@@ -61,8 +61,6 @@ search algorithm, which makes the algorithm deterministic.
 
 \subsection{Deterministic search algorithms}
 
-\TODO{proofread this and distinguish optimality vs. tree optimality properly}
-
 State space search algorithms are a heavily studied area
 of computer science, and any reasonable search algorithm applied
 to forward search will yield correct results.
@@ -82,7 +80,7 @@ introduced in \citet{Hart1968}.
 \myalg{Forward Search with A*}%
 {%
 \Input a planning problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$,
-an (admissible and monotone) heuristic function $h$
+a consistent heuristic function $h$
 \Output a plan $\pi$
 \Function{Collect-Plan}{$s, \pi$}
 \State $\pi_s \gets $ empty list
@@ -131,10 +129,7 @@ when examining a state $s$, we want to estimate the total costs of the best
 plan getting us to a goal state from state $s$. In other words, because we are
 trying to minimize the total cost,
 a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
-where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing duration in the temporal variant.
-As mentioned previously, admissible heuristics have more desirable properties when used with search algorithms
---- for example, they guarantee that the first path to a goal state we find
-will be the optimal \TODO{admissible + monotone?}.
+where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
 
 A slight modification of A*, called \textit{Weighted A*} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
@@ -205,7 +200,7 @@ where we will need to add actions to reach a goal state with a higher total cost
 
 However, it is important to note, the heuristic
 is not even admissible, so its value might sometimes overestimate the total cost needed.
-To see why, let us have a network with just two locations $A$ and $B$.
+To see why, let us consider a network with just two locations $A$ and $B$.
 A vehicle of capacity 2 and two packages are located at $A$ and both packages want to be
 transported to $B$. The road between $A$ and $B$ is symmetric and has length
 of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
@@ -263,7 +258,7 @@ is taken from the distance to its target location,
 distance to the nearest vehicle,
 and the distance to the nearest package:
 \begin{align*}
-h_4 = h_0' + \sum_{p \in P} \min\lbrace
+h_4 = h'_0 + \sum_{p \in P} \min\lbrace
 &\mt{spd}(location(p), target(p)),
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
 &\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\rbrace.
@@ -273,32 +268,36 @@ We will now show a few properties of this heuristic.
 The heuristic $h_4$ is admissible for sequential Transport problems.
 \end{thm}
 \begin{proof}
-Let $s_0$ be the initial state and $s_g$ the nearest goal state.
-Let $\pi$ be a plan from $s_0$ to $s_g$.
+Let $s$ be a state such that $h_4(s) > h^*(s)$,
+where $h^*$ is a function of the real distance to the nearest goal state.
+State $s$ is not a goal state, because for all goal states $s'$
+it holds that
+$h_4(s') = 0 = h^*(s'),$ due to all packages being at their target locations.
+Let $s_g$ be the nearest goal state to $s$.
 
-It holds that $h_4(s_g) = 0,$ because the minimum for each package is achieved at 0,
-due to all packages being at their target locations.
-Therefore, there exists a pair of successive states $s_i$ and $s_{i+1}$ in the intermediate states of $\pi$,
-such that: $$h_4(s_i) > h^*(s_i) \And h_4(s_{i+1}) \leq h^*(s_{i+1}),$$
-where $h^*$ is represents the optimum distance to the nearest goal state.
-Let $s_j$ and $s_{j+1}$ be the last such states, with the action $a$
-transitioning between them.
-We will show that the value of $h_4$ 
+Because $h_4(s) > h^*(s)$, there exists a finite plan $\pi$ from $s$ that ends in $s_g$,
+such that the total cost of $\pi$ is less than $h_4(s)$.
+Using induction, we prove that for all intermediate states $s'$ of $\pi$,
+$h_4(s') \leq h^*(s'),$ which is a contradiction with $h_4(s) > h^*(s)$,
+as $s$ is the initial state of $\pi$.
 
-If $a$ was a \pickup{} or \drop{} action,
-only the $h'_0$ part of $h_4$ could have changed,
-and $h'_0$ is trivially admissible.
-Therefore, $a$ was a \drive{} action and the value of $h'_0$ does
-not change on a \drive{} action.
+Let $n$ be the number of actions in $\pi$.
+If $n=0$, $s$ is a goal state and, therefore, $h_4(s) = 0 = h^*(s)$.
 
-The minimum value for a package in the driving vehicle
-could not have changed at all, because it is at 0 and will stay so.
+Let us number all intermediate states of $\pi$ in reverse order: $$\{s = s_k, s_{k-1}, \ldots, s_2, s_1, s_0 = s_g\}.$$
+Now, assume that our conjecture holds for the last $n < k$ states.
+We will prove that it then also holds for the last $n+1$ states.
+Let us denote the transition action between $s_{n+1}$ and $s_{n}$ as $a$.
 
+If $a$ were a \pickup{} or \drop{} action, only the value of $h'_0$
+would have changed, and by at most 1 in the correct direction,
+which means that $h_4(s_{n+1}) \leq h^*(s_{n+1}).$
 
-
+If $a$ were a \drive{} action
+\TODO{finish proof}.
 \end{proof}
 
-However, the $h_4$ heuristic is not monotonic. Assume the following road network (Figure~\ref{fig:heursit}):
+However, the $h_4$ heuristic is not consistent. Assume the following road network (Figure~\ref{fig:heursit}):
 $$\{\{A, B, 1\}, \{B, C, 2\}, \{B, D, 2\}\},$$
 where $\mt{at}(v) = A$, $\mt{at}(p_1) = C,$ and $\mt{at}(p_2) = D$
 hold in the initial state $s_0$.
@@ -315,7 +314,7 @@ example situation (for $s_0$, the optimal plan is of length $13$).
 \centering
 \includegraphics[width=0.3\textwidth]{../imga/heursit}
 \caption{Visualization of the counterexample road network
-for monotonicity of $h_4$.}
+for consistency of $h_4$.}
 \label{fig:heursit}
 \end{figure}
 
@@ -334,10 +333,10 @@ The described heuristic is not optimal, but it is admissible.
 Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds.
 
 \begin{thm}
-The heuristic $h_5$ is monotonic for sequential Transport problems.
+The heuristic $h_5$ is consistent for sequential Transport problems.
 \end{thm}
 \begin{proof}
-Let $s$ be a state and $s*$ the nearest goal state.
+Let $s$ be a state and $s_g$ the nearest goal state.
 We will (equivalently) show that $h_5(s) \leq h_5(s') + cost(a),$ where
 $s' = \gamma(s, a)$ for all applicable $a \in A$.
 
@@ -350,19 +349,14 @@ and shortest distances are calculated to packages and vehicles.
 Therefore, even if the minimum was previously hit at the package that was
 picked up, it would be hit at the vehicle that was picking up
 the package anyway (analogously for the \drop{} action).
-Therefore, the inequality holds trivially, because $h_5(s') = h_5(s) - 1$ and the cost of $a$ is 1.
+Therefore, the inequality holds trivially, because $h_5(s) = h_5(s') - 1$ (for \drop{})
+or $h_5(s) = h_5(s') + 1$ (for \pickup{}), and the cost of $a$ is 1.
 
 Assume $a$ is a \drive{} action of the vehicle $v$.
 We can ignore all packages that are loaded onto the vehicle,
 as they only contribute to the value with 1 for the \drop{} action
 that has to happen. That does not change by appending a \drive{} action.
-We consider the following cases:
-\begin{itemize}
-\item no package calculated its minimum distance using the vehicle $v$: if no package calculates its minimum distance using the vehicle
-in $s'$, the \drive{} action did not have an influence
-on the final value and the inequality holds.
 \TODO{finish proof}
-\end{itemize}
 \end{proof}
 
 
@@ -375,7 +369,7 @@ The $h_3$ heuristic, while having no significant
 theoretical properties performs surprisingly well in practice.
 The $h_4$ heuristic on the other hand, while being admissible, does not
 perform well empirically.
-Due to its monotonicity, the $h_5$ heuristic has the best theoretical properties out of all the discussed heuristics and also
+Due to its consistency, the $h_5$ heuristic has the best theoretical properties out of all the discussed heuristics and also
 performs well in practice.
 We will include planners utilizing the $h_3$ and $h_5$ heuristics
 in our final evaluation (Chapter~\ref{experiments}).
