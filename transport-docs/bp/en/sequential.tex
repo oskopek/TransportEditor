@@ -266,7 +266,7 @@ and the distance to the nearest package:
 h_4 = h_0' + \sum_{p \in P} \min\lbrace
 &\mt{spd}(location(p), target(p)),
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
-&\min_{p' \in P} \mt{spd}(location(p), location(p'))\rbrace.
+&\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\rbrace.
 \end{align*}
 We will now show a few properties of this heuristic.
 \begin{thm}
@@ -283,13 +283,18 @@ such that: $$h_4(s_i) > h^*(s_i) \And h_4(s_{i+1}) \leq h^*(s_{i+1}),$$
 where $h^*$ is represents the optimum distance to the nearest goal state.
 Let $s_j$ and $s_{j+1}$ be the last such states, with the action $a$
 transitioning between them.
+We will show that the value of $h_4$ 
 
 If $a$ was a \pickup{} or \drop{} action,
 only the $h'_0$ part of $h_4$ could have changed,
 and $h'_0$ is trivially admissible.
-
 Therefore, $a$ was a \drive{} action and the value of $h'_0$ does
 not change on a \drive{} action.
+
+The minimum value for a package in the driving vehicle
+could not have changed at all, because it is at 0 and will stay so.
+
+
 
 \end{proof}
 
