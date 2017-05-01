@@ -5,7 +5,7 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.*;
-import com.oskopek.transport.planners.temporal.RRAPNSequentialScheduler;
+import com.oskopek.transport.planners.temporal.*;
 import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 public final class TemporalPlannerMain {
 
     private static final Planner planner = new RRAPNSequentialScheduler();
+//    private static final Planner planner = new MSFA3SequentialScheduler();
+//    private static final Planner planner = new MSFA5SequentialScheduler();
 
     private static final Logger logger = LoggerFactory.getLogger(TemporalPlannerMain.class);
 

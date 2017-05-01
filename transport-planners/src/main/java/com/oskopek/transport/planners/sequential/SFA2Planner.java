@@ -34,9 +34,6 @@ public final class SFA2Planner extends ForwardAstarPlanner {
     protected Integer calculateHeuristic(ImmutablePlanState state,
             ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
         int heuristic = 0;
-
-        Graph T = mst(state.getProblem().getRoadGraph());
-
         Map<Location, Set<Package>> targetMap = new HashMap<>();
         Map<Package, Location> packageMap = new HashMap<>();
         for (Vehicle vehicle : state.getProblem().getAllVehicles()) {
@@ -52,6 +49,8 @@ public final class SFA2Planner extends ForwardAstarPlanner {
                 heuristic += 2; // pickup and drop
             }
         }
+
+        Graph T = mst(state.getProblem().getRoadGraph());
 
         for (Map.Entry<Location, Set<Package>> entry : targetMap.entrySet()) {
             Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "weight");

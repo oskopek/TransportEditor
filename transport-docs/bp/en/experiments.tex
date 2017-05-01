@@ -1,4 +1,4 @@
-\chapter{Experimental evaluation}
+\chapter{Experimental evaluation}\label{experiments}
 
 In this chapter, we will describe and run experiments
 that compare our planners from the last two chapters
@@ -7,48 +7,43 @@ We will briefly discuss the acquired results and interpret them.
 
 \section{Methodology}
 
-Using the benchmarker software module described in Section~\ref{transport-project}, we will run experiments in an
+Using our benchmarking software (described in the attachments), we will now run experiments in an
 environment as similar to the original
-IPC as possible, and following almost all of their rules.\footnote{\url{https://web.archive.org/web/20160925081907/http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
-We will run all tests according to principles mimicking the rules;
-All planners have to be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
+IPC as possible, following almost all of the official rules.\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
+All planners will be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
 get canceled and prompted for a plan at that time point).
-Our planners explicitly and intentionally break the ``domain-independence'' rule of the IPC.
+Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
 
-The evaluation criteria remain the same:
+The evaluation criteria remain the same as in the IPC:
 we focus on plan \textit{quality} in favor of planner run time,
-although we will mention the times.
+although we will mention runtimes.
 The quality of a plan for a specific planner and sequential problem $p$ is defined as
 $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$
 where the results called $BEST$
 are either precalculated outside of the competition environment or they are the best result of one of the planners in the competition, depending on which plan has a lower total cost.
 Quality is, therefore, a number between $0$ and $1$.
-Note that we will use the original competition's best scores,
-which means that the quality of our plans
-might sometimes exceed the value of 1
-(when our planners find a plan better than all the others found during the competition).
 The overall goal for planners is to maximize the sum of qualities over the problem instances in a given dataset, called the \textit{total quality}.
 For temporal domains, quality is calculated in the same way, just by substituting total cost
 for total time. We sometimes refer to total cost and total time as the \textit{score} of the planner, a term that is not dependent on the domain variant.
 
-We will use three datasets for our experiments --- the seq-sat-6
+We will use four datasets for our experiments --- the seq-sat-6, seq-sat-7,
 and seq-sat-8 datasets for sequential
 and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
 All the datasets used (and more) are available in the
-software project sources, see the \nameref{cd-contents}.
-Descriptions of planners referenced from now on by their names in the respective competitions can be found for both IPC~2008\footnote{\url{https://web.archive.org/web/20170414183131/http://icaps-conference.org/ipc2008/deterministic/Planners.html}} and IPC~2014 \citep{Vallati2015}.
+software project sources (see the attached \nameref{cd-contents}).
+Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}} IPC~2011 \citep{Garcia-Olaya2011}, and IPC~2014 \citep{Vallati2015}.
 
 In all planners where nondeterminism occurs,
 we set the initial random seed to 2017
-on all individual runs.
+(on all individual problem runs).
 All the following experiments
 were run on a computer
-containing an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
-with 16 GB of memory, running Gentoo Linux.
-A big thank you goes out to the faculty for providing us with unfettered access to these machines.
+with an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
+and 16 GB of memory, running Gentoo Linux.
+A big thank you goes out to the faculty for providing access to these machines.
 We run all Java programs on Oracle's OpenJDK 
 version \texttt{1.8.0\_121}, build \texttt{b13}.
-The results presented here were obtained with the \TEver{} version of the TransportEditor project.\footnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
+The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
 in the project module directories specify
 the exact versions of libraries used.
 
@@ -72,99 +67,155 @@ the exact versions of libraries used.
 
 \section{Sequential Transport}
 
-In this section, we present the results of our sequential planners on the seq-sat-6 and seq-sat-8 datasets. Specifically, these planners are included in the experiment:
+In this section, we present the results of our sequential planners on the seq-sat-6, seq-sat-7, and seq-sat-8 datasets. Specifically, these planners are included in the experiment:
 \begin{description}
-\item[SFA*A] The SFA* algorithm with heuristic A. \TODO{ref}
-\item[SFA*B] The SFA* algorithm with heuristic B. \TODO{ref}
-\item[SFAA*] The adjusting A* algorithm with heuristic X. \TODO{ref}
-\item[OPS] The OptaPlanner sequential algorithm. \TODO{ref}
+\item[MSFA3] The meta-heuristically weighted SFA planner (Section~\ref{msfa}) with the package and vehicle distance heuristic (Section~\ref{sfa3})
+\item[MSFA5] The meta-heuristically weighted SFA planner with the general marking heuristic (Section~\ref{sfa5})
+\item[RRAPN] The Randomized Restart Around Path Nearby planner (Section~\ref{rrapn})
 \end{description}
 
 \subsection{Results}\label{sequential-results}
 
-We show the IPC quality table
-for the experimental run on the seq-sat-6 dataset (Table~\ref{tab:seq-sat-6-ipc-scores})
-and the seq-sat-8 dataset (Table~\ref{tab:seq-sat-8-ipc-scores}).
-Additionally, a plot of the scores and run times is presented in Figures~\ref{fig:seq-sat-6-plots} and~\ref{fig:seq-sat-8-plots}. Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
+We show an IPC quality table and a quality plot
+for the experimental runs on the seq-sat-6 dataset (Figure~\ref{fig:seq-sat-6-results}), seq-sat-7 dataset (Figure~\ref{fig:seq-sat-7-results}), and the seq-sat-8 dataset (Figure~\ref{fig:seq-sat-8-results}). Details about the specific plans along with the benchmark results can be found in the \nameref{cd-contents}.
 
-\begin{table}
+\begin{figure}[tbp]
 \centering
+\begin{subtable}{\textwidth}
+\centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/seq-sat-6-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-6 dataset.}
 \label{tab:seq-sat-6-ipc-scores}
-\end{table}
+\end{subtable}
 
-\begin{table}
+\vspace{0.5cm}
+\begin{subfigure}{\textwidth}
 \centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-quality}
+\caption{Quality plot of sequential planners on the seq-sat-6 dataset.}
+\label{fig:seq-sat-6-quality}
+\end{subfigure}
+\caption{Planner results on seq-sat-6.}
+\label{fig:seq-sat-6-results}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subtable}{\textwidth}
+\centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
+\input{../data/seq-sat-7-ipc-scores}
+\caption{Quality and score of sequential planners on the seq-sat-7 dataset.}
+\label{tab:seq-sat-7-ipc-scores}
+\end{subtable}
+
+\vspace{0.5cm}
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-7-quality}
+\caption{Quality plot of sequential planners on the seq-sat-7 dataset.}
+\label{fig:seq-sat-7-quality}
+\end{subfigure}
+\caption{Planner results on seq-sat-7.}
+\label{fig:seq-sat-7-results}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subtable}{\textwidth}
+\centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/seq-sat-8-ipc-scores}
 \caption{Quality and score of sequential planners on the seq-sat-8 dataset.}
 \label{tab:seq-sat-8-ipc-scores}
-\end{table}
+\end{subtable}
 
-\begin{figure}
-\centering
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-score}
-\caption{Score plot of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-score}
+\includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-quality}
+\caption{Quality plot of sequential planners on the seq-sat-8 dataset.}
+\label{fig:seq-sat-8-quality}
 \end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
-\caption{Run time plot of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-runtime}
-\end{subfigure}
-\caption{Score and run time plots of sequential planners on the seq-sat-6 dataset.}
-\label{fig:seq-sat-6-plots}
-\end{figure}
-
-\begin{figure}
-\centering
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-8-score}
-\caption{Score plot of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-score}
-\end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/seq-sat-6-runtime}
-\caption{Run time plot of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-runtime}
-\end{subfigure}
-\caption{Score and run time plots of sequential planners on the seq-sat-8 dataset.}
-\label{fig:seq-sat-8-plots}
+\caption{Planner results on seq-sat-8.}
+\label{fig:seq-sat-8-results}
 \end{figure}
 
 
-\subsection{Discussion}
 
-In the updated results of the sequential satisficing track of IPC 2008\footnote{\url{https://web.archive.org/web/20170414182036/http://icaps-conference.org/ipc2008/deterministic/Results.html}} published after the competition,
-the overall winner \textit{LAMA} (a Fast Downward based planner)
+\subsubsection{IPC 2008}
+
+In the updated results of the sequential satisficing track of IPC 2008\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Results.html}} published after the competition,
+the overall winner LAMA (a Fast Downward based planner)
 was hands-down the best planner on the sequential Transport domain, winning
 with a total quality of $28.93/30$, where all other planners had less than $20/30$.
-Only 5 problem instances were solved suboptimally by \textit{LAMA}.
+Only 5 plans generated by LAMA had a worse total cost than the best known plans.
 
-As mentioned, we were not able to gather data from the IPC 2011,
-hence the results cannot be meaningfully interpreted.
-The competition featured 20 sequential Transport problems,
-with 4 planners achieving a total quality of more than $15/20$.
+After adding our planners to the results,
+the total quality of LAMA drops to $24.43/30$,
+because several larger problems were solved better than the
+best known solution from IPC 2008.
+Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.75/30$,
+which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to approximate
+solutions of larger problems fast, which can be observed on
+the results on problems 7--10, 19--20, and 27--30,
+which are the largest problems.
+On the other hand, RRAPN fails to achieve optimal scores
+on some smaller problems like problem number 2 or 12,
+due to its explicit nature.
+
+MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
+In the final summary, MSFA3 comes out on top as the better one of the two planners.
+
+All of our three planners beat all planners from the original competition based on total score,
+which despite the possible minor differences in the computing environment indicates that
+domain knowledge indeed helps us generate better plans.
+
+\subsubsection{IPC 2011}
+
+The 2011 competition featured 20 sequential Transport problems,
+with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
+Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA. The fourth best planner, dae\_yahsp, performed consistenly worse by a small margin, except for problems number 4 and 5, where it beat our planner RRAPN.
+
+RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 18 out of the 20 problems. This can again be attributed to the size
+of the problems (see Table~\ref{tab:dataset-dimensions}).
+
+Even though RRAPN is better than the original planners more often than both MSFA planners,
+they are come out on top based on total cost. Even more interesting, the problems
+where they perform well are complementary to the ones where RRAPN performs well,
+as is visible on the results of problems 10--12 and 13--15.
+
+\subsubsection{IPC 2014}
 
 In the satisficing track of IPC 2014, the winner on the Transport domain
-was without a doubt the \textit{Mercury} planner, achieving
+was without a doubt the Mercury planner, achieving
 a stunning $20/20$ total quality. Even more interesting is the fact that
-the runner-up \textit{yahsp3-mt} achieved a score of $10.74/20$
-and all other planners achieved sub $10/20$ total quality.
-The IPC 2014 used different problem instances than the IPC 2008
-and we have tested our approaches on both datasets.
+the runner-up yahsp3-mt achieved a score of only $10.74/20$
+and all other planners achieved sub $10/20$ total quality,
+accentuating the performance of Mercury even more.
 
-\TODO{try to analyze why} \TODO{Vytiahnut si plany z vysledkov seq-sat08 z LAMA na seqsat ipc08 an z mercury a lama na ipc14 + analysis of specific errors and shortcommings}
+After adding the results of our planners to the quality table,
+the total quality of yahsp3-mt is lowered to $10.3/20$.
+Mercury loses its spotless results, but still significantly dominates all
+other planners, including ours, at $19.25/20$.
+
+RRAPN manages to outperform yahsp3-mt with $15.75/20$, yet it fails
+to match the results of Mercury, not even in one problem.
+Both MSFA planners outperform RRAPN on this dataset,
+but still do not come reasonably close to beating Mercury.
+However, they do (marginally) outperform Mercury on some problems, like
+problems 4--7, 9--10, 12, and 18--19.
+The results of MSFA3 and MSFA5 on this dataset are almost identical.
+
+\TODO{fix errors and invalid results in result tables}
 
 
-\TODO{our results show that...}
+
+
 
 
 
@@ -182,76 +233,165 @@ and we have tested our approaches on both datasets.
 
 In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
 \begin{description}
-\item[SFA*T] The SFA* algorithm with heuristic A, temporal version. \TODO{ref}
-\item[OPT] The OptaPlanner temporal algorithm. \TODO{ref}
+\item[AdHocTemp] The ? Temporal planner (Section~\ref{temporal-approach})
+\item[MSFA5Sched] The scheduled MSFA5 planner (Sections~\ref{msfa} and~\ref{sfa5})
+\item[RRAPNSched] The scheduled (Section~\ref{sched}) RRAPN planner (Section~\ref{rrapn})
+\item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
 \end{description}
 
 \subsection{Results}\label{temporal-results}
 
-We show the IPC quality table
-for an experimental run of these planners on the tempo-sat-6 dataset (Table~\ref{tab:tempo-sat-6-ipc-scores}).
-Additionally, a plot of the scores and run times is presented in Figure~\ref{fig:tempo-sat-6-plots} and sample plan Gantt charts are shown in Figure~\ref{fig:tempo-sat-6-gantt}. The generated plans and benchmark results can be found in the \nameref{cd-contents}.
+We show an IPC quality table and a quality plot of an experimental run of these planners on the tempo-sat-6 dataset (Figure~\ref{fig:tempo-sat-6-results}).
+Additionally, sample Gantt charts \citep{Gantt1910} of two chosen plans are shown in Figure~\ref{fig:tempo-sat-6-gantt}.
+The generated plans and benchmark results can be found in the attached \nameref{cd-contents}.
 
-\begin{table}
+\begin{figure}[tbp]
 \centering
+\begin{subtable}{\textwidth}
+\centering
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
 \input{../data/tempo-sat-6-ipc-scores}
 \caption{Quality and score of temporal planners on the tempo-sat-6 dataset.}
 \label{tab:tempo-sat-6-ipc-scores}
-\end{table}
+\end{subtable}
 
-\begin{figure}
-\centering
+\vspace{0.5cm}
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-score}
-\caption{Score plot of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-score}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-quality}
+\caption{Quality plot of temporal planners on the tempo-sat-6 dataset.}
+\label{fig:tempo-sat-6-quality}
 \end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-runtime}
-\caption{Run time plot of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-runtime}
-\end{subfigure}
-\caption{Score and run time plots of temporal planners on the tempo-sat-6 dataset.}
-\label{fig:tempo-sat-6-plots}
+\caption{Planner results on tempo-sat-6.}
+\label{fig:tempo-sat-6-results}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[tbp]
 \centering
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-A}
-\caption{Gantt chart of the temporal planner \TODO{A} on the tempo-sat-6 \texttt{p15} problem.}
-\label{fig:tempo-sat-6-gantt-15-a}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
+\caption{Gantt chart of the temporal planner RRAPNSched on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-rrapn}
 \end{subfigure}
+
+\comment{
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-MSFA5}
+\caption{Gantt chart of the temporal planner MSFA5Sched on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-msfa5}
+\end{subfigure}
+}
 
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p15-B}
-\caption{Gantt chart of the temporal planner \TODO{B} on the tempo-sat-6 \texttt{p15} problem.}
-\label{fig:tempo-sat-6-gantt-15-b}
+\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
+\caption{Gantt chart of the temporal planner TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt-12-tfd}
 \end{subfigure}
-\caption{Gantt charts of the temporal planner \TODO{A and B} on the tempo-sat-6 \texttt{p15} problem.}
+\caption{Gantt charts of the temporal planner RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
 \label{fig:tempo-sat-6-gantt}
 \end{figure}
 
-\subsection{Discussion}
-
 Planners that entered the 2008 temporal track at the IPC did not cope well with the Transport domain
---- only two non-baseline planners were able to produce at least one plan
-for any problem. Additionally, only the simple problem (\verb+p01+) was solved
-optimally by any planner. The best total quality was only $7.5/30$, achieved by
-\textit{SGPlan$_6$}. No other domain in the temporal track had a lower best total quality
+--- only two non-baseline planners (SGPlan$_6$ and TFD) were able to produce at least one plan
+for any problem. Additionally, only the smallest problem, problem number 1, was solved
+to the best known score by any planner.
+The best total quality was only $7.5/30$, achieved by
+{SGPlan$_6$. No other domain in the temporal track had a lower best total quality
 than Transport, which, assuming reasonably generated problem instances, hints
 at Transport being one of the harder domains for domain-independent temporal planners.
+We observe an evident performance increase of Temporal Fast Downward,
+when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 
-\TODO{Vytiahnut si plany z vysledkov seq-sat08 TFD a sgplan6, najst deficiencies}
+Our results further show that using a simple domain-dependent scheduling approach
+of sequential plans yields an improvement over domain-independent temporal planners. Our planners RRAPNSched
+and MSFA5Sched achieve total qualities of $25.54/30$
+and $10.54/30$, respectively.
+The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
+and therefore produces worse results when scheduled using our algorithm,
+mostly due to the inability of the scheduler to add enough \refuel{}
+actions to the existing plans.
 
-\TODO{discuss results}
+RRAPNSched, on the other hand, is able to beat even newer temporal planners like TFD2014
+by a significant margin.
+We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score estimate is closer
+to the optimum than the estimates for larger problems.
+An interesting case is problem number 10,
+which was not solved by any planner, except TFD2014. We were not able to reasonably explain
+this phenomenon. \TODO{explain}
 
+In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
+of RRAPNSched and TFD2014 for problem number 12.
+Observe that the important difference between the two plans
+is that \texttt{truck-1} chooses to pick up and move \texttt{package-4}
+while it is delivering \texttt{package-2}. It then later picks it up again and delivers
+it while \texttt{truck-2} is delivering \texttt{package-3}.
+In the plan of TFD2014, \texttt{truck-1} did not pick up \texttt{package-4}
+while delivering \texttt{package-2} and then had to travel further to deliver it
+--- this is basically the only difference between the two plans,
+and it makes a difference in makespans of more than 50.
+Finally, observe that due to the nature of RRAPN, \texttt{truck-1}
+dropped \texttt{package-4} and then went back to pick it up, even though it had enough capacity
+to carry it. Another important observation, however, is that this had no effect on the total makespan
+of the plan.
 
 \section{Overall results}
 
-\TODO{intro + recap}
+The attained results show that domain-specific information can be leveraged
+to generate plans of better quality.
+We have designed and implemented Transport planners that are able to beat
+results from the original competitions in the sequential
+and temporal satisficing tracks of the 2008 and 2011 IPCs.
+In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury.
+
+Another major advantage previously unmentioned is that
+our planners generate good solutions quite fast.
+In Table~\ref{tab:planner-results-short},
+we show results from a 10 second run of our planners on all datasets.
+
+
+\begin{table}[tbp]
+\centering
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-6-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-6 dataset.}
+\label{tab:seq-sat-6-ipc-scores-short}
+\end{subtable}
+\quad
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/tempo-sat-6-ipc-scores-short}
+\caption{Quality and score of our planners on the tempo-sat-6 dataset. \TODO{remove TFD2014}}
+\label{tab:tempo-sat-6-ipc-scores-short}
+\end{subtable}
+
+\vspace{0.5cm}
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-7-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-7 dataset.}
+\label{tab:seq-sat-7-ipc-scores-short}
+\end{subtable}
+\quad
+\begin{subtable}{0.48\textwidth}
+\centering
+\tiny
+\renewcommand{\footnotesize}{\tiny}
+\input{../data/seq-sat-8-ipc-scores-short}
+\caption{Quality and score of our planners on the seq-sat-8 dataset.}
+\label{tab:seq-sat-8-ipc-scores-short}
+\end{subtable}
+\caption{Results of our planners when run for 10 seconds on all datasets.}
+\label{tab:planner-results-short}
+\end{table}
+

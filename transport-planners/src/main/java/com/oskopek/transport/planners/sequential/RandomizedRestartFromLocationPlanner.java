@@ -90,6 +90,9 @@ public class RandomizedRestartFromLocationPlanner extends SequentialRandomizedPl
                 logger.trace("Finished one iteration. Length: {}", current.getTotalTime());
             }
 
+            if (!current.isGoalState()) {
+                continue;
+            }
             int totalTime = current.getTotalTime();
             if (getBestPlanScore() > totalTime) {
                 formatLog("Found new best plan {} -> {}", getBestPlanScore(), totalTime);

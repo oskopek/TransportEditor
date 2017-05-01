@@ -16,34 +16,35 @@ we have shown an approach to analyzing,
 planning, and evaluating domain-specific planners.
 To make each step along the way easier, we have developer TransportEditor,
 a transportation planning system, as an intuitive graphical desktop application,
-which was recently submitted \TODO{accepted or not?} to the System Demonstrations and Exhibits
+which was recently accepted to the System Demonstrations and Exhibits
 track at the 27$^\mt{th}$ International Conference on Automated Planning and Scheduling
 in Pittsburgh, USA \citep{Skopek2017}. We have also developed a benchmarker project
 for automatizing experimental evaluation of planners, which could be used for benchmarking planners on
 other planning domains with just minor modifications.
 
-To underline our work, we have experimentally evaluated and discussed several approaches to
+To summarize our work, we have experimentally evaluated and discussed several approaches to
 domain-specific planning on the Transport domain, both on the sequential and temporal
 variants.
-Our results show that the performance of state-of-the-art domain-independent planners is very impressive given the difficulty of the problem they are solving, despite the broad misconception that they are not useful in practice.
-Even by leveraging domain knowledge, our results show that \TODO{describe results}.
+We have achieved comparable results to state-of-the-art domain-independent planners. Their performance is generally very impressive, given the difficulty of the problem they are solving. Despite the broad misconception that they are not useful in practice,
+we have not managed to beat all of them even when leveraging domain-specific knowledge.
 
 There remain more promising approaches to apply to the Transport domain
 and domain-specific planning in general.
 To conclude this thesis, we list a few, in our opinion, perspective methods for domain-specific planning, which were not
 evaluated in this work due to time constraints:
 \begin{itemize}
-\item Hierarchical Task Networks (HTN) --- 
-HTN planning \citet[Chapter~11]{Ghallab2004} uses \textit{tasks},
+\item Hierarchical Task Networks (HTN): 
+HTN planning uses \textit{tasks},
 a higher level and usually domain-specific description of sequences of operators
-to carry out some goal. An HTN planner decomposes these tasks and embeds them in a classical plan. This approach has been thoroughly studied and is arguably one of the most used in practice today.
+to carry out some goal
+ \citep[Chapter~11]{Ghallab2004}. An HTN planner decomposes these tasks and embeds them in a classical plan. This approach has been thoroughly studied and is arguably one of the most used in practice today.
 
-\item Pointer Networks and Reinforcement Learning --- 
+\item Pointer Networks and Reinforcement Learning: 
 A recent attempt at training special architectures of neural networks to solve TSP problem instances using reinforcement learning by \citet{Bello2016} shows
 reasonable promise for the future. While this technique is highly experimental at the moment,
-neural networks have helped push the limits in other fields before.
+neural networks have helped push the limits of other fields before.
 
-\item Learning a domain-specific heuristic function --- Another neural network
+\item Learning a domain-specific heuristic function: Another neural network
 approach aims to help solve a standard problem: coming up with a good heuristic for a domain. \citet{Chen2011}
 train a neural network to use as a heuristic for state space search,
 which may help when creating a heuristic is simply too challenging or time-consuming.

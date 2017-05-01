@@ -1,5 +1,5 @@
 \begin{tabular}{c|<#list planners as planner>|c</#list>}
-\textbf{Problem}<#list planners as planner> & \textbf{${planner?replace("_", "\\_")}}</#list>\\
+\textbf{\#}<#list planners as planner> & \textbf{${planner?replace("_", "\\_")}}</#list>\\
 \hline
 \hline
 <#list problems as problem>

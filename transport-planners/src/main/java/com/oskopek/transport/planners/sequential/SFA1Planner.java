@@ -18,7 +18,16 @@ public class SFA1Planner extends ForwardAstarPlanner {
      * Default constructor.
      */
     public SFA1Planner() {
-        super(false);
+        this(false);
+    }
+
+    /**
+     * Default constructor.
+     *
+     * @param stopAtFirstSolution true iff the algorithm should stop after the first found solution
+     */
+    public SFA1Planner(boolean stopAtFirstSolution) {
+        super(stopAtFirstSolution);
         setName(SFA1Planner.class.getSimpleName());
     }
 
@@ -31,7 +40,7 @@ public class SFA1Planner extends ForwardAstarPlanner {
 
     @Override
     public SFA1Planner copy() {
-        return new SFA1Planner();
+        return new SFA1Planner(isStopAtFirstSolution());
     }
 
     @Override

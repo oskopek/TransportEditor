@@ -16,6 +16,7 @@ import org.teneighty.heap.BinaryHeap;
 import org.teneighty.heap.Heap;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -29,8 +30,8 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     private Set<ImmutablePlanState> closedSet;
     private AbstractHeap<Integer, ImmutablePlanState> openSet;
     private ArrayTable<String, String, ShortestPath> distanceMatrix;
-    private Plan bestPlan;
-    private int bestPlanScore;
+    private Plan myBestPlan;
+    private int myBestPlanScore = Integer.MAX_VALUE;
     private boolean stopAtFirstSolution;
 
     /**
@@ -96,8 +97,8 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      * Reset the best found plan to the original state.
      */
     void resetBestPlan() {
-        bestPlan = null;
-        bestPlanScore = Integer.MAX_VALUE;
+        myBestPlan = null;
+        myBestPlanScore = Integer.MAX_VALUE;
     }
 
     /**
@@ -113,8 +114,8 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     }
 
     @Override
-    public Optional<Plan> plan(Domain domain, Problem problem) {
-        Optional<Plan> maybePlan = planInternal(domain, problem);
+    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
+        Optional<Plan> maybePlan = planInternal(domain, problem, planTransformation);
         closedSet = null;
         openSet = null;
         entryMap = null;
@@ -122,14 +123,20 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         return maybePlan;
     }
 
+    @Override
+    public Optional<Plan> plan(Domain domain, Problem problem) {
+        return plan(domain, problem, null);
+    }
+
     /**
      * Internal method for planning. Runs the A* algorithm.
      *
      * @param domain the domain
      * @param problem the problem
+     * @param planTransformation the intermediate transformation function (used for temporal scheduling)
      * @return the plan, or an empty optional if no plan was found
      */
-    public Optional<Plan> planInternal(Domain domain, Problem problem) {
+    public Optional<Plan> planInternal(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
         formatLog("Initializing planning...");
 
         resetState();
@@ -140,19 +147,30 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
             if (current.isGoalState()) {
-                if (bestPlanScore > current.getTotalTime()) {
-                    formatLog("Found new best plan {} -> {}", bestPlanScore, current.getTotalTime());
-                    bestPlanScore = current.getTotalTime();
-                    bestPlan = new SequentialPlan(current.getAllActionsInList());
+                int score = current.getTotalTime();
+                Plan plan = null;
+                if (planTransformation != null) {
+                    plan = planTransformation.apply(new SequentialPlan(current.getAllActionsInList()));
+                    if (plan != null) {
+                        score = Math.round(plan.calculateMakespan().floatValue());
+                    }
+                }
+                if ((planTransformation == null || plan != null) && myBestPlanScore > score) {
+                    formatLog("Found new best plan {} -> {}", myBestPlanScore, score);
+                    myBestPlanScore = score;
+                    if (plan == null) {
+                        plan = new SequentialPlan(current.getAllActionsInList());
+                    }
+                    myBestPlan = plan;
                 }
                 if (stopAtFirstSolution) {
-                    return Optional.of(new SequentialPlan(current.getAllActionsInList()));
+                    return Optional.ofNullable(myBestPlan);
                 }
             }
 
             if (shouldCancel()) {
-                formatLog("Cancelling, returning best found plan so far with score: {}.", bestPlanScore);
-                return Optional.ofNullable(bestPlan);
+                formatLog("Cancelling, returning best found plan so far with score: {}.", myBestPlanScore);
+                return Optional.ofNullable(myBestPlan);
             }
 
             closedSet.add(current);
@@ -183,12 +201,12 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
                 }
             });
             if (closedSet.size() % 100_000 == 0) {
-                formatLog("Explored {} states, left: {} ({})", closedSet.size(), openSet.getEntries().size(),
+                formatLog("Closed {} states, open: {} ({})", closedSet.size(), openSet.getEntries().size(),
                         entryMap.size());
             }
         }
 
-        return Optional.ofNullable(bestPlan);
+        return Optional.ofNullable(myBestPlan);
     }
 
     /**

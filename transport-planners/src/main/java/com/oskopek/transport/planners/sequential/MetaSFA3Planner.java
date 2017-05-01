@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * SFA* with
@@ -42,8 +43,8 @@ public final class MetaSFA3Planner extends SFA3Planner {
     }
 
     @Override
-    public Optional<Plan> plan(Domain domain, Problem problem) {
-        int weight = 40;
+    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
+        int weight = 400;
         final float coef = 0.5f;
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
@@ -58,7 +59,7 @@ public final class MetaSFA3Planner extends SFA3Planner {
                     .calculateSumOfDistancesToVehiclesPackageTargetsAdmissible(unfinishedPackages,
                             state.getProblem().getAllVehicles(), distanceMatrix);
             formatLog("Setting weight to {}.", weight);
-            Optional<Plan> plan = super.plan(domain, problem);
+            Optional<Plan> plan = super.plan(domain, problem, planTransformation);
             plan.ifPresent(plan2 -> {
                 Double makespan = plan2.calculateMakespan();
                 if (makespan < bestPlanScore) {
@@ -71,7 +72,8 @@ public final class MetaSFA3Planner extends SFA3Planner {
                 formatLog("Cancelling, returning WASTAR best plan so far with score: {}.", bestPlanScore);
                 return Optional.ofNullable(bestPlan);
             }
-            weight = Math.round(coef * weight);
+            float updatedWeight = coef * weight;
+            weight = Math.max(1, Math.round(updatedWeight));
         }
     }
 

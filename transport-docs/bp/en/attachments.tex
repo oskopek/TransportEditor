@@ -40,8 +40,8 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 To enable effective transportation planning,
 we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
-Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application (Figure~\ref{fig:transporteditor-screenshot})
-written in Java.
+Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application 
+written in Java (see attached screenshot).
 
 It allows the users to create a planning session, where they
 select a Transport domain variant, load a problem instance from PDDL (Section~\ref{pddl}) or create a new one from scratch.
@@ -53,7 +53,7 @@ They can also select an external planner
 referencing its executable file, or select one of the built-in planners and try to solve
 the loaded problem using the selected planner. Internal and external plan validators, like VAL \citep{Howey2003}, can also be selected to verify that the plans are correct.
 Once plans are loaded and verified, it will let the users see a list of actions
-in the plan, or plot a Gantt chart, which is useful for observing concurrent actions in temporal domain variants (Figure~\ref{fig:tempo-sat-6-gantt}).
+in the plan, or plot a Gantt chart \citep{Gantt1910}, which is useful for observing concurrent actions in temporal domain variants (Figure~\ref{fig:tempo-sat-6-gantt}).
 
 The best feature of TransportEditor is the option of tracing plans. We can select
 any action, specify an exact time point or just step through the actions in order and
@@ -61,19 +61,18 @@ the road network on the left will display the current state of the problem, as i
 all actions before the current point were applied to the start state.
 It is possible to do all of this, and more, without ever leaving the TransportEditor user interface.
 
-TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
-A secondary motivation is to be able to test approaches for creating plans for the domain.
-For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
-
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../img/transporteditor_temporal}
 \end{center}
-\caption[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]{Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
+\caption*%[Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor.]
+{Screenshot of a user tracing actions of a plan for a small temporal problem in TransportEditor. The bubble in the middle shows details
 of a truck currently driving along a road between \texttt{city-2-loc-6} and \texttt{city-2-loc-3}. The \texttt{city-1-loc-1} location is plotted in a darker shade of red, which signifies that a petrol station is present at the location.}
-\label{fig:transporteditor-screenshot}
 \end{figure}
 
+TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
+A secondary motivation is to be able to test approaches for creating plans for the domain.
+For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
 The basic user workflow of TransportEditor consists of the following steps:
 \begin{itemize}
 \item Selecting which formulation of the Transport domain they want to work with or create their own variant;
@@ -87,7 +86,7 @@ then loading the resulting plan;
 The user can step forward and backward in the plan and inspect each action result in great detail;
 \item Editing the graph: adding/removing/editing the location or properties of vehicles, packages, roads, locations and possibly petrol stations;
 \item Saving the currently generated plan;
-\item Saving the problem or domain (exporting to a PDDL file).
+\item Saving the problem or domain (exporting to a PDDL file);
 \end{itemize}
 \item Exit the application or go back to the first step.
 \end{itemize}
@@ -117,7 +116,7 @@ Running an external planner on a sequential problem.
 
 \begin{center}
 \includegraphics[width=0.94\textwidth]{../img/transporteditor_planstates}
-Tracing a sequential plan. Highlighted is the corresponding \verb+drive+ action and the visualization of the vehicle (blue square) and the package it carries (purple square) on the road graph.
+Tracing a sequential plan. Highlighted is the corresponding \drive{} action and the visualization of the vehicle (blue square) and the package it carries (purple square) on the road graph.
 \end{center}
 \medskip
 
@@ -135,11 +134,10 @@ confusingly called TransportEditor, of which the editor described in
 the previous section is only a part.
 The ``scaffolding'' for running experiments, generating reports, and the planner implementations that we will describe in the next two chapters are all part
 of the project as well.
-
 The project is split into several modules, listed in approximate dependency order:
 \begin{itemize}
 \item \texttt{transport-thirdparty}, a set of 3$^\textrm{rd}$ party libraries
-that have not been published in a dependency management repository like Maven~Central,\footnote{\url{http://central.sonatype.org/}}
+that have not been published in a dependency management repository like Maven~Central,\puncfootnote{\url{http://central.sonatype.org/}}
 making their compile-time download and linking impossible;
 \item \texttt{transport-core}, a module that contains code modeling the Transport
 domain and persisting it to disk;
@@ -156,16 +154,16 @@ on \texttt{transport-planners} and all its dependencies.
 Independent on the other modules is \texttt{transport-docs},
 the module containing this thesis,
 along with our other textual works relating to researching the Transport domain.
-
-Information about the model in \texttt{transport-core} and the \texttt{transport-editor} is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
-
+Information about the model in \texttt{core} and the
+\texttt{editor}  
+is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
 All the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
 data conversion. The only important scripts reside in the \texttt{tools} folder;
 the \texttt{benchmark.sh} script, used for running experimental benchmarks,
-and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX tables of the scores and runtimes from benchmark results.
+and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX{} tables of the scores and runtimes from benchmark results.
 
-The benchmarker takes as input a JSON \citep{Bray2014} configuration file (Figure~\ref{code:benchmark-config-bnf}),
-runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format (Figure~\ref{code:benchmark-results-bnf}).
+The benchmarker takes as input a JSON \citep{Bray2014} configuration file,
+runs the specified benchmarks and returns a \texttt{results.json} output file in a different JSON format  (see attached grammars).
 In both of the figures are BNF grammars. We write zero-or-more repeated statements using ( and )*. Also, [ and ] are used for JSON lists, they do not mean an optional statement --- we use ( and ) (without the star) for that.
 Under \texttt{<character>}, we assume any valid UTF-8 character,
 \texttt{<double>} means any non-negative IEEE compatible double precision floating-point number,
@@ -173,15 +171,12 @@ and \texttt{<long>} is any non-negative whole number smaller than or equal to $2
 Additionally, all file paths may use the \verb+${transport.root}+ variable, designating the
 root directory of the project.
 
-Apart from the results file, a plain text log containing information about the planner
-runs is also produced. Both of these files are placed in the directory \texttt{results/config\_file\_name/YYYYmmdd-HHMMSS/}, under the directory where \texttt{benchmark.sh} is placed.
-We can then use the \texttt{generate-reports.sh} script on the results file,
-which will create a \texttt{reports} directory next to the results file,
-containing all the generated report files.
+Below is the grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
+is expected to be a valid Java class name (including the package) and present on the classpath.
+The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
+and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.
 
-\begin{figure}[tbp]
-\centering
-\begin{code}
+\begin{codesmall}
 <config> ::= { "domain" : "<filepath>",
                "problems" : { "<problem_name>" : <problem_config>
                           ( , "<problem_name>" : <problem_config> )* },
@@ -202,17 +197,13 @@ containing all the generated report files.
 <class> ::= <string>
 <executable_templ> ::= <string>
 <string> ::= ( <character> )*
-\end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF. The token \texttt{<class>}
-is expected to be a valid Java class name (including the package) and present on the classpath.
-The \texttt{<executable\_templ>} token is expected to be a valid executable planner with supplied parameters
-and \{0\} used to represent the domain file path, \{1\} the problem file path, and \{2\} the output plan file path.}
-\label{code:benchmark-config-bnf}
-\end{figure}
+\end{codesmall}
 
-\begin{figure}[tbp]
-\centering
-\begin{code}
+Finally, below is the grammar of the result configuration JSON file in BNF.
+The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
+that this grammar is only valid if concatenated with the previous grammar.
+
+\begin{codesmall}
 <results> ::= { "runs" : [ ( <run> ) ( , <run> )* ] }
 <run> ::= { "actions" : [ ( <action> ) ( , <action> )* ],
             "temporalPlanActions" : [ ( <tpa> ) ( , <tpa> )* ],
@@ -231,9 +222,10 @@ and \{0\} used to represent the domain file path, \{1\} the problem file path, a
                     "quality" : <double> }
 <exit_status> ::= UNSOVLED | INVALID | VALID | NOTVALIDATED | SUBOPT
 <timestamp> ::= <long>
-\end{code}
-\caption[Grammar of the input configuration JSON file in BNF.]{Grammar of the input configuration JSON file in BNF.
-The tokens \texttt{<action>} and \texttt{<tpa>} were defined in Section~\ref{pddl}. Note
-that this grammar is only valid if concatenated with the grammar in Figure~\ref{code:benchmark-config-bnf}.}
-\label{code:benchmark-results-bnf}
-\end{figure}
+\end{codesmall}
+
+Apart from the results file, a plain text log containing information about the planner
+runs is also produced. Both of these files are placed in the directory \texttt{results/config\_file\_name/YYYYmmdd-HHMMSS/}, under the directory where \texttt{benchmark.sh} is placed.
+We can then use the \texttt{generate-reports.sh} script on the results file,
+which will create a \texttt{reports} directory next to the results file,
+containing all the generated report files.
