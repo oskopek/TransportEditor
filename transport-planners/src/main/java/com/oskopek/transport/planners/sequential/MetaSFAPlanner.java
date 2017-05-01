@@ -51,13 +51,15 @@ public abstract class MetaSFAPlanner extends ForwardAstarPlanner {
         bestPlan = null;
         bestPlanScore = Integer.MAX_VALUE;
 
+        resetState();
+        initialize(problem);
         while (true) {
             if (weight == 1) {
                 formatLog("Will not stop at first solution anymore, weight is {}.", weight);
                 setStopAtFirstSolution(false);
             }
             formatLog("Setting weight to {}.", weight);
-            Optional<Plan> plan = super.plan(domain, problem, planTransformation);
+            Optional<Plan> plan = super.planInternal(domain, problem, planTransformation);
             plan.ifPresent(plan2 -> {
                 Double makespan = plan2.calculateMakespan();
                 if (makespan < bestPlanScore) {
@@ -71,7 +73,11 @@ public abstract class MetaSFAPlanner extends ForwardAstarPlanner {
                 return Optional.ofNullable(bestPlan);
             }
             float updatedWeight = coef * weight;
-            weight = Math.max(1, Math.round(updatedWeight));
+            int newWeight = Math.max(1, Math.round(updatedWeight));
+            if (newWeight != weight) {
+                weight = newWeight;
+                recalculateOpenStateValues();
+            }
         }
     }
 
