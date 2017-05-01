@@ -3,7 +3,7 @@
 The temporal domain not only has the added challenge of time,
 but fuel demands and vehicle target locations are also present.
 In this chapter, we describe approaches used
-for tackling these challenges.
+for tackling these additional challenges.
 
 
 
@@ -71,7 +71,7 @@ To find a topological ordering in the mutex DAG,
 we use the algorithm described in \citet{Kahn1962}.
 We traverse actions of the sequential plan $\pi$
 (nodes of the DAG)
-in topological order, and add each action $a$
+in topological order and add each action $a$
 to the temporal plan $\pi^T$
 at the maximum end time in $\pi^T$ of all actions
 who are mutex with $a$, where $a$ is second in the pair.
@@ -167,10 +167,10 @@ The maps $t_s$ and $t_e$ represent the assigned start and end times (respectivel
 using Kahn's algorithm.
 \textsc{Add-Refuel-Actions} is briefly described in Section~\ref{sched}.}{sched}{tb}
 
-Previously, we left out an important step of the algorithm,
+Previously left out was an important step of the algorithm,
 which consists of adding fuel constraints back into the plan.
 Just before constructing the mutex DAG,
-we attempt to add the least amount of refuel actions
+we attempt to add the least amount of \refuel{} actions
 into the plan, so that no fuel capacity constraints are broken.
 This is done iteratively for each vehicle,
 by looking at combinations of possible places to refuel for that vehicle in a plan.
@@ -199,7 +199,7 @@ opportunities to find an extension of the plan with respect to fuel demands.
 Also, suboptimal plans in the sequential domain
 sometimes yield better scheduled plans than optimal ones.
 For example, consider a triangular road network with three locations $A$, $B$, and $C$, connected by roads of length 1.
-There is are two packages $p_A$, $p_B$ and two vehicle $v_A$, $v_B$,
+There are two packages $p_A$, $p_B$ and two vehicles $v_A$, $v_B$,
 positioned at $A$ and $B$ respectively. The target location of both
 packages is $C$. The capacities and fuel capacities of all vehicles
 are 2 and both packages have a size of 1.

@@ -14,7 +14,7 @@ All planners will be single-threaded and use a maximum of 2GB of memory, with a 
 get canceled and prompted for a plan at that time point).
 Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
 
-The evaluation criteria remain the same:
+The evaluation criteria remain the same as in the IPC:
 we focus on plan \textit{quality} in favor of planner run time,
 although we will mention runtimes.
 The quality of a plan for a specific planner and sequential problem $p$ is defined as
@@ -22,10 +22,6 @@ $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$
 where the results called $BEST$
 are either precalculated outside of the competition environment or they are the best result of one of the planners in the competition, depending on which plan has a lower total cost.
 Quality is, therefore, a number between $0$ and $1$.
-Note that we will use the original competition's best scores,
-which means that the quality of our plans
-might sometimes exceed the value of 1
-(when our planners find a plan better than all the others found during the competition).
 The overall goal for planners is to maximize the sum of qualities over the problem instances in a given dataset, called the \textit{total quality}.
 For temporal domains, quality is calculated in the same way, just by substituting total cost
 for total time. We sometimes refer to total cost and total time as the \textit{score} of the planner, a term that is not dependent on the domain variant.
@@ -313,7 +309,7 @@ when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 Our results further show that using a simple domain-dependent scheduling approach
 of sequential plans yields an improvement over domain-independent temporal planners. Our planners RRAPNSched
 and MSFA5Sched achieve total qualities of $25.54/30$
-and $10.54/30$.
+and $10.54/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
 and therefore produces worse results when scheduled using our algorithm,
 mostly due to the inability of the scheduler to add enough \refuel{}
@@ -321,11 +317,11 @@ actions to the existing plans.
 
 RRAPNSched, on the other hand, is able to beat even newer temporal planners like TFD2014
 by a significant margin.
-We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score is closer
-to the optimum than the best score estimates for larger problems.
+We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score estimate is closer
+to the optimum than the estimates for larger problems.
 An interesting case is problem number 10,
 which was not solved by any planner, except TFD2014. We were not able to reasonably explain
-this phenomenon.
+this phenomenon. \TODO{explain}
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
@@ -349,7 +345,7 @@ to generate plans of better quality.
 We have designed and implemented Transport planners that are able to beat
 results from the original competitions in the sequential
 and temporal satisficing tracks of the 2008 and 2011 IPCs.
-In the 2014 IPC, we would attain second place on overall quality in the Transport domain, behind the impressive result of Mercury.
+In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury.
 
 Another major advantage previously unmentioned is that
 our planners generate good solutions quite fast.

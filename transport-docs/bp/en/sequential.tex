@@ -74,13 +74,13 @@ choosing a search algorithm is even more crucial.
 Several well-performing algorithms on small problems (like BFS)
 exceed reasonable run times and become unusable for practical applications.
 An important and practically useful search algorithm
-withstanding larger problem sizes is the \textit{A$^{\kern-.15em*}$ algorithm} (Figure~\ref{alg:astar})
+withstanding larger problem sizes is the \textit{A$^{\kern-.05em*}$ algorithm} (Figure~\ref{alg:astar})
 introduced in \citet{Hart1968}.
 
 \myalg{Forward Search with A$^{\kern-.15em*}$}%
 {%
 \Input a classical planning problem $\mathcal{P} = (S, O, \gamma, s_0, g)$,
-a consistent heuristic function $h$
+a consistent heuristic $h$
 \Output a plan $\pi$
 \Function{Collect-Plan}{$s, \pi$}
 \State $\pi' \gets $ empty list
@@ -114,7 +114,7 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \Return failure
 \EndFunction
 }%
-{A forward search planning algorithm using A$^{\kern-.15em*}$.}{A forward search planning algorithm using A$^{\kern-.15em*}$.
+{A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$}{A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$
 \textsc{Generate-Actions} is a function that produces actions applicable to the state $s$.}{astar}{tb}
 
 A$^{\kern-.15em*}$ has many important properties. We pinpoint one important to us, namely its admissibility.
@@ -131,7 +131,7 @@ trying to minimize the total cost,
 a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
 where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
 
-A slight modification of A$^{\kern-.15em*}{\kern-.30em,}$ called \textit{Weighted A$^{\kern-.15em*}$} \citep{Pohl1970},
+A slight modification of A$^{\kern-.15em*}{\kern-.30em,}$ called \textit{Weighted A$^{\kern-.05em*}$} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
 at the expense of
 sacrificing admissibility. The only difference
@@ -184,13 +184,13 @@ value of $h'_0$ to it, as the \pickup{} and \drop{}
 actions also have to occur in the optimal plan:
 $$h_1 = h'_0 + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
 where the $location: P \to L$ function,
-with values in the set of all locations $L$, is defined as
+with values in the set of all locations $L$, is defined as:
 $$location(p) = \begin{cases} 
-   \mt{at}(p) & \text{if } \mt{at}(p) \neq \mt{nil}\\
+   \mt{at}(p) & \text{if } \mt{at}(p) \neq \mt{nil},\\
    \mt{at}(\mt{in}(p)) & \text{else}.
   \end{cases}$$
-The location of a package will is, therefore, defined
-as the location it is at, or, if it is in a vehicle,
+The location of a package is, therefore, defined
+as the location it is at, or, if it is loaded in a vehicle,
 the location of the vehicle.
 The function $\mt{spd}: L \times L \to \N_0$ represents
 the shortest path distance between the two locations.
@@ -263,7 +263,7 @@ h_4 = h'_0 + \sum_{p \in P} \min\lbrace
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
 &\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\rbrace.
 \end{align*}
-We will now show a few properties of this heuristic.
+We will now show the admissibility of this heuristic.
 \begin{thm}
 The heuristic $h_4$ is admissible for sequential Transport problems.
 \end{thm}
@@ -282,16 +282,19 @@ $h_4(s') \leq h^*(s'),$ which is a contradiction with $h_4(s) > h^*(s)$,
 as $s$ is the initial state of $\pi$.
 
 Let $n$ be the number of actions in $\pi$.
-If $n=0$, $s$ is a goal state and, therefore, $h_4(s) = 0 = h^*(s)$.
-
+If $n=0$, $s$ is a goal state and, therefore, 
+it holds that $h_4(s) = 0 = h^*(s)$.
 Let us number all intermediate states of $\pi$ in reverse order: $$\{s = s_k, s_{k-1}, \ldots, s_2, s_1, s_0 = s_g\}.$$
 Now, assume that our conjecture holds for the last $n < k$ states.
-We will prove that it then also holds for the last $n+1$ states.
+We will prove that it then also holds for the $(n+1)$-th state.
 Let us denote the transition action between $s_{n+1}$ and $s_{n}$ as $a$.
 
 If $a$ were a \pickup{} or \drop{} action, only the value of $h'_0$
 would have changed, and by at most 1 in the correct direction,
+because $h_4(s_{n+1}) = h_4(s_{n}) - 1$ (for \drop{})
+or $h_4(s_{n+1}) = h_4(s_{n}) + 1$ (for \pickup{}), and the cost of $a$ is 1,
 which means that $h_4(s_{n+1}) \leq h^*(s_{n+1}).$
+
 
 If $a$ were a \drive{} action
 \TODO{finish proof}.
@@ -331,6 +334,7 @@ Do note that if a package is loaded in a vehicle, no roads are marked for it.
 
 The described heuristic is not optimal, but it is admissible.
 Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds.
+Additionally, we will prove consistency of $h_5$.
 
 \begin{thm}
 The heuristic $h_5$ is consistent for sequential Transport problems.
@@ -381,9 +385,9 @@ in our final evaluation (Chapter~\ref{experiments}).
 
 
 
-\subsection{Sequential Forward A$^{\kern-.15em*}$}\label{sfa}
+\subsection{Sequential Forward A*}\label{sfa}
 
-\textit{Sequential Forward A$^{\kern-.15em*}$} (SFA) is a planner for sequential Transport based on forward search using A$^{\kern-.15em*}$ (Figure~\ref{alg:astar}).
+\textit{Sequential Forward A$^{\kern-.05em*}$} (SFA) is a planner for sequential Transport based on forward search using A$^{\kern-.15em*}$ (Figure~\ref{alg:astar}).
 It utilizes most of the domain knowledge described
 in Section~\ref{domain-info} and~\ref{datasets}
 to prune the search space as much as possible
@@ -394,18 +398,18 @@ prune away enough search space to
 generate plans efficiently.
 With the addition of 
 heuristics
-from Section~\ref{seq-heuristics}
+from Section~\ref{seq-heuristics},
 implementations of the planner become reasonably useful
 on practical problems, as will be demonstrated
 later during experimental evaluation.
 
 A variant of SFA, 
-\textit{Weighted Sequential Forward A$^{\kern-.15em*}$} (WSFA)
+\textit{Weighted Sequential Forward A$^{\kern-.05em*}$} (WSFA)
 swaps A$^{\kern-.15em*}$ search for Weighted A$^{\kern-.15em*}$ in the SFA planner.
 
-\subsection{Meta-heuristically weighted SFA$^{\kern-.15em*}$}\label{msfa}
+\subsection{Meta-heuristically weighted SFA*}\label{msfa}
 
-\textit{Meta-heuristically weighted SFA$^{\kern-.15em*}$} (MSFA) is
+\textit{Meta-heuristically weighted SFA$^{\kern-.05em*}$} (MSFA) is
 a meta-planner built on top of a WSFA planner with
 a given heuristic.
 
@@ -504,14 +508,13 @@ Afterwards, we simply restart
 from the initial state and iteratively generate a new candidate plan.
 We utilize domain knowledge in all the planners,
 for example by not picking up packages that are at their destination,
-and most of the other insights discussed in Section~\ref{domain-info}.
+and using most of the other insights discussed in Section~\ref{domain-info}.
 
 \subsubsection{Randomized Restart From Location Planner}\label{rrfl}
 
 In each iteration of the before mentioned algorithm,
 the Randomized Restart From Location planner (RRFL)
 randomly chooses a vehicle and a location.
-
 It adds \drive{} actions along the shortest path
 to that location and greedily picks up as many packages as
 its capacity allows.
@@ -529,11 +532,11 @@ and a package that fits into the vehicle.
 It then calculates the shortest path from the vehicle
 to the package
 and the shortest path from the package to its target location.
-Afterwards, it finds all packages on that have current and target locations on the path, taking into account the direction of driving.
+Afterwards, it finds all packages that have current and target locations on the path, taking into account the direction of driving.
 It then tries all combinations of
 those packages that do not make the vehicle become
 overcapacitated over the whole course
-of the path,
+of the path, in order
 to find the combination that minimizes the minimum
 free capacity over the course of the path.
 If there are several such combinations, it minimizes the
@@ -590,12 +593,12 @@ Another variant of RRAPN, the
 Randomized Restart Around Path Distribution planner (RRAPD),
 changes the vehicle choice of inherited from RROPN.
 Instead of using a biased coin flip based on the $\varepsilon$
-hyperparameter, RRAPN samples the vehicle
+hyperparameter, RRAPD samples the vehicle
 from a discrete probability distribution
 obtained by applying the \textit{softmax} function on the distances of vehicles to the selected package:
 \begin{align*}
-\varphi'_i &= \frac{1}{\mt{spd}(location(p), \mt{at}(v_i)) + 1}\\
-\varphi_i &= \frac{\exp(\varphi'_i/T)}{\sum_{j = 1}^{|V|} \exp(\varphi'_j/T)}
+\varphi'_i &= \frac{1}{\mt{spd}(location(p), \mt{at}(v_i)) + 1},\\
+\varphi_i &= \frac{\exp(\varphi'_i/T)}{\sum_{j = 1}^{|V|} \exp(\varphi'_j/T)}.
 \end{align*}
 The value $\varphi_i$ is the resulting probability of each vehicle $v_i \in V = \{v_1, v_2, \ldots, v_n\}$.
 The hyperparameter $T \in (0, \infty)$ is the \textit{temperature}
@@ -608,9 +611,9 @@ In our experiments, we used a fixed $T = 0.1$, to prefer the nearest vehicles.
 
 \subsubsection{Sumamry}
 
-In our tests, the implementations
+The implementations
 of RRFL, RROP, and RROPN have empirically shown
-lesser performance than RRAPN and RRAPD.
+lesser performance in our tests than RRAPN and RRAPD.
 RRAPD, however, performs worse than RRAPN on
 average.
 As mentioned previously, RBAPN is unusable on larger
