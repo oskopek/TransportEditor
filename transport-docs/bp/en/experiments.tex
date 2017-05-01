@@ -162,14 +162,14 @@ best known solution from IPC 2008.
 Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.75/30$,
 which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to approximate
 solutions of larger problems fast, which can be observed on
-the results on problems 7--10, 19--20, and 27--30,
+the results on problems 7--10 or 25--27,
 which are the largest problems.
 On the other hand, RRAPN fails to achieve optimal scores
 on some smaller problems like problem number 2 or 12,
 due to its explicit nature.
 
 MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
-In the final summary, MSFA3 comes out on top as the better one of the two planners.
+In the final summary, MSFA5 comes out on top as the better one of the two planners.
 
 All of our three planners beat all planners from the original competition based on total score,
 which despite the possible minor differences in the computing environment indicates that
@@ -187,7 +187,7 @@ of the problems (see Table~\ref{tab:dataset-dimensions}).
 Even though RRAPN is better than the original planners more often than both MSFA planners,
 they are come out on top based on total cost. Even more interesting, the problems
 where they perform well are complementary to the ones where RRAPN performs well,
-as is visible on the results of problems 10--12 and 13--15.
+as is visible on the results of problems 3--6, 10--12, and 13--15.
 
 \subsubsection{IPC 2014}
 
@@ -199,19 +199,19 @@ and all other planners achieved sub $10/20$ total quality,
 accentuating the performance of Mercury even more.
 
 After adding the results of our planners to the quality table,
-the total quality of yahsp3-mt is lowered to $10.3/20$.
+the total quality of yahsp3-mt is lowered to $10.29/20$.
 Mercury loses its spotless results, but still significantly dominates all
 other planners, including ours, at $19.25/20$.
 
-RRAPN manages to outperform yahsp3-mt with $15.75/20$, yet it fails
+RRAPN manages to outperform yahsp3-mt with $15.88/20$, yet it fails
 to match the results of Mercury, not even in one problem.
-Both MSFA planners outperform RRAPN on this dataset,
+Both MSFA planners outperform RRAPN on this dataset with qualities around $18.50/20$,
 but still do not come reasonably close to beating Mercury.
 However, they do (marginally) outperform Mercury on some problems, like
 problems 4--7, 9--10, 12, and 18--19.
 The results of MSFA3 and MSFA5 on this dataset are almost identical.
 
-\TODO{fix errors and invalid results in result tables}
+\TODO{fix seq-sat-8 quality plot for MSFA5}
 
 
 
@@ -309,7 +309,7 @@ when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 Our results further show that using a simple domain-dependent scheduling approach
 of sequential plans yields an improvement over domain-independent temporal planners. Our planners RRAPNSched
 and MSFA5Sched achieve total qualities of $25.54/30$
-and $10.54/30$, respectively.
+and $10.59/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
 and therefore produces worse results when scheduled using our algorithm,
 mostly due to the inability of the scheduler to add enough \refuel{}
@@ -321,7 +321,7 @@ We see that RRAPNSched produces plans with worse scores than the best known scor
 to the optimum than the estimates for larger problems.
 An interesting case is problem number 10,
 which was not solved by any planner, except TFD2014. We were not able to reasonably explain
-this phenomenon. \TODO{explain}
+this phenomenon. \TODO{explain + p21 explain or fix}
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
