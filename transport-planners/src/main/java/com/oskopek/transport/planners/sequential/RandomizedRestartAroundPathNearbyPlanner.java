@@ -26,7 +26,7 @@ import java.util.function.Function;
  * if still not fully capacitated, choose the others in the
  * order of distance from their destinations at any possible drop of point on the path.
  */
-public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomizedPlanner {
+public class RandomizedRestartAroundPathNearbyPlanner extends RandomizedRestartOnPathNearbyPlanner {
 
     /**
      * Default constructor.
@@ -112,24 +112,7 @@ public class RandomizedRestartAroundPathNearbyPlanner extends SequentialRandomiz
                 }
 
                 Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
-                Vehicle chosenVehicle;
-                while (true) {
-                    if (getRandom().nextFloat() < exploration) {
-                        chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
-                    } else {
-                        Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
-                                chosenPackage.getLocation(), chosenPackage.getSize().getCost());
-                        if (maybeVehicle.isPresent()) {
-                            chosenVehicle = maybeVehicle.get();
-                        } else {
-                            continue;
-                        }
-                    }
-                    if (chosenVehicle.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()) {
-                        break;
-                    }
-                }
-
+                Vehicle chosenVehicle = chooseVehicle(curProblem, vehicles, chosenPackage, exploration);
                 List<Action> newActions = findPartialPlan(domain, current, chosenVehicle.getName(), chosenPackage,
                         unfinished, true);
                 current = Stream.ofAll(newActions).foldLeft(Optional.of(current),

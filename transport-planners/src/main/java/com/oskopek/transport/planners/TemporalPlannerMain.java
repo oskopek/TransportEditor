@@ -6,7 +6,6 @@ import com.oskopek.transport.model.planner.Planner;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.persistence.*;
 import com.oskopek.transport.planners.temporal.*;
-import javaslang.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,17 +41,7 @@ public final class TemporalPlannerMain {
      * @throws IOException if an error during loading the problem or saving the plan occurs
      */
     public static void main(String[] args) throws IOException {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Try.run(() -> Thread.sleep(200));
-            logger.debug("Shutting down ...");
-
-            if (planner.isPlanning().getValue()) {
-                planner.cancel();
-                Try.run(() -> Thread.sleep(5000));
-            }
-            logger.debug("Shut down.");
-        }));
-
+        SequentialPlannerMain.addShutdownHook();
         Domain domain;
         try (InputStream inputStream = Files.newInputStream(Paths.get(args[0]))) {
             domain = new VariableDomainIO().parse(IOUtils.concatReadAllLines(inputStream));

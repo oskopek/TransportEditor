@@ -53,17 +53,7 @@ public final class SequentialPlannerMain {
      * @throws IOException if an error during loading the problem or saving the plan occurs
      */
     public static void main(String[] args) throws IOException {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Try.run(() -> Thread.sleep(200));
-            logger.debug("Shutting down ...");
-
-            if (planner.isPlanning().getValue()) {
-                planner.cancel();
-                Try.run(() -> Thread.sleep(5000));
-            }
-            logger.debug("Shut down.");
-        }));
-
+        addShutdownHook();
         Domain domain;
         try (InputStream inputStream = Files.newInputStream(Paths.get(args[0]))) {
             domain = new VariableDomainIO().parse(IOUtils.concatReadAllLines(inputStream));
@@ -82,6 +72,22 @@ public final class SequentialPlannerMain {
             logger.debug("Planner returned null plan.");
         }
         logger.debug("Written results, exiting.");
+    }
+
+    /**
+     * Add a shutdown hook for 5 seconds to wait until the planner exits.
+     */
+    static void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Try.run(() -> Thread.sleep(200));
+            logger.debug("Shutting down ...");
+
+            if (planner.isPlanning().getValue()) {
+                planner.cancel();
+                Try.run(() -> Thread.sleep(5000));
+            }
+            logger.debug("Shut down.");
+        }));
     }
 
 }

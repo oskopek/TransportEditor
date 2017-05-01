@@ -237,7 +237,7 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
         }
 
         if (capacityLeft > 0) { // fill in with packages that get closer to goal
-            List<Tuple3<Integer, Location, Package>> distancesFromPath = new ArrayList<>(capacityLeft * 1);
+            List<Tuple3<Integer, Location, Package>> distancesFromPath = new ArrayList<>(capacityLeft);
             for (Package pkg : packagesOnPath) {
                 if (chosenPackages.contains(pkg)) {
                     continue;

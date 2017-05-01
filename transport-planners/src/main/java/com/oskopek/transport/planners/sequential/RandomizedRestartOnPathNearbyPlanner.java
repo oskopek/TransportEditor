@@ -51,24 +51,7 @@ public class RandomizedRestartOnPathNearbyPlanner extends SequentialRandomizedPl
                 }
 
                 Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
-                Vehicle chosenVehicle;
-                while (true) {
-                    if (getRandom().nextFloat() < exploration) {
-                        chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
-                    } else {
-                        Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
-                                chosenPackage.getLocation(), chosenPackage.getSize().getCost());
-                        if (maybeVehicle.isPresent()) {
-                            chosenVehicle = maybeVehicle.get();
-                        } else {
-                            continue;
-                        }
-                    }
-                    if (chosenVehicle.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()) {
-                        break;
-                    }
-                }
-
+                Vehicle chosenVehicle = chooseVehicle(curProblem, vehicles, chosenPackage, exploration);
                 List<Action> newActions = findPartialPlan(domain, current, chosenVehicle.getName(), chosenPackage,
                         unfinished, false);
                 current = Stream.ofAll(newActions).foldLeft(Optional.of(current),
@@ -92,6 +75,37 @@ public class RandomizedRestartOnPathNearbyPlanner extends SequentialRandomizedPl
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
         }
+    }
+
+    /**
+     * Choose a vehicle using a biased coin toss.
+     *
+     * @param curProblem the current problem state
+     * @param vehicles the vehicles (expects stable order between calls)
+     * @param chosenPackage the chosen package
+     * @param exploration the exploration hyperparameter [0,1] for random vehicle choice (lower = less chance)
+     * @return the chosen vehicle with enough capacity, or null
+     */
+    protected Vehicle chooseVehicle(Problem curProblem, List<Vehicle> vehicles, Package chosenPackage,
+            float exploration) {
+        Vehicle chosenVehicle;
+        while (true) {
+            if (getRandom().nextFloat() < exploration) {
+                chosenVehicle = vehicles.get(getRandom().nextInt(vehicles.size()));
+            } else {
+                Optional<Vehicle> maybeVehicle = nearestVehicle(curProblem.getAllVehicles(),
+                        chosenPackage.getLocation(), chosenPackage.getSize().getCost());
+                if (maybeVehicle.isPresent()) {
+                    chosenVehicle = maybeVehicle.get();
+                } else {
+                    continue;
+                }
+            }
+            if (chosenVehicle.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()) {
+                break;
+            }
+        }
+        return chosenVehicle;
     }
 
     @Override

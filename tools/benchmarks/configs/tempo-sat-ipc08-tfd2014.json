@@ -129,6 +129,6 @@
       "params": "tfd-plan.sh {0} {1} {2}"
     }
   },
-  "threadCount": 8,
+  "threadCount": 4,
   "timeout": 600
 }
