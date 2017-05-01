@@ -1,7 +1,7 @@
 \chapter{Transport domain analysis}
 
 In this chapter, we will analyze two variants of the Transport domain: sequential and temporal. To do this, we will describe the datasets
-used for devising experiments, and discuss the properties of Transport
+used for devising experiments and discuss the properties of Transport
 that will help us in developing better quality planners.
 
 \section{Problem complexity}
@@ -10,21 +10,21 @@ When domain-independent planners solve a sequential Transport problem,
 they face a harder task than planners that have access to domain knowledge ahead of time.
 For domain-independent planners, deciding whether a plan of a given length exists
 (the \textsc{Plan-Length} decision problem) is
-an NEXPTIME-complete task
+a NEXPTIME-complete task
 and deciding if a plan exists at all (the \textsc{Plan-Existence} decision problem)
 an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 
 That does not mean domain knowledge makes Transport easy, as is evident from
 the very thorough analysis by \citet{Helmert2001, Helmert2001a}.
 We will categorize our problems using Helmert's notation to
-be able to interpret their results to our domain.
+be able to apply their results to our domain.
 Helmert's \textsc{Transport} task is a 9-tuple $(V, E, M, P, fuel_0, l_0, l_G, cap, road),$
 where:
 \begin{itemize}
 \item $(V, E)$ is the road graph;
 \item $M$ is a finite set of vehicles (mobiles);
 \item $P$ is a finite set of packages (portables);
-\item $fuel_0 : V \to \N$ is the fuel function;
+\item $fuel_0 : V \to \N_0$ is the fuel function;
 \item $l_0: (M \cup P) \to V$ is the initial location function;
 \item $l_G: P \to V$ is the goal location function;
 \item $cap: M \to \N$ is the capacity function; and
@@ -35,7 +35,7 @@ No Transport domain variants assume movement constraints, therefore, $road$ is a
 function $road(m) = E$.
 
 A simplified notation is also introduced by \citet{Helmert2001a} for special cases of \textsc{Transport} tasks.
-For $i,j \in \{1, \infty, *\}, k \in \{1, +, *\}$ a $\textsc{Transport}_{i,j,k}$ task is defined as a
+For $i,j \in \{1, \infty, *\},$ $k \in \{1, +, *\}$ a $\textsc{Transport}_{i,j,k}$ task is defined as a
 general \textsc{Transport} task (defined above) that satisfies:
 \begin{itemize}
 \item if $i=1$, then $\forall m \in M : cap(m) = 1$ (vehicles can only carry one package);
@@ -66,7 +66,7 @@ Even though fuel constraints are modeled differently than in Transport (constrai
 NP-completeness of \textsc{Plan-Existence} for $\textsc{Transport}_{\infty,1,1}$
 present in \citet[Theorem~3.9]{Helmert2001a}
 can be trivially edited to prove the NP-completeness
-of \textsc{Plan-Existence} for sequential Transport.
+of \textsc{Plan-Existence} for temporal Transport.
 Instead of adding fuel conditions
 to the entrance and exit nodes of a location,
 we simply add it to edge between them. The rest of the proof holds as was presented originally.
@@ -92,7 +92,7 @@ despite the knowledge we acquire by only focusing on one planning domain.
 
 There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
 \begin{enumerate}
-\item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations --- there is nothing
+\item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations, since there is nothing
 we can do using those packages that would result in a plan with a lower total cost.
 
 \item \textbf{Drop when at the destination}: Likewise, it is
@@ -103,7 +103,7 @@ to the vehicle's location to do a \drop{} action immediately.
 action of
 the same package by the same vehicle in succession. We will only get to the same state
 by using a longer plan. This rule also applies if an action of a different vehicle
-gets between the two successive actions --- even if it does an action with the
+gets between the two successive actions, even if it does an action with the
 dropped package.
 It is important to note that this is a symmetric property: picking up and dropping
 equally results in a worse plan.
@@ -113,13 +113,10 @@ of the previous rule is that vehicles should never drop a package
 at the location they last picked it up, independent of the actions they took
 between the relevant \pickup{} and \drop{}. This rule is also symmetric.
 
-\item \textbf{Never drop after picking up at a vertex}:
+\item \textbf{Never drop after picking up at a location}:
 While the order of successive \pickup{} and \drop{} actions does not
 influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
-without sacrificing admissibility. \textit{Admissibility} is
-a property of search strategies in general and can be defined as finding
-(one of) the optimal solutions (first), when there are generally several solutions
-of possibly different qualities \citep[Section~3.5]{Russell1995}.
+without making the planner miss the minimum.
 \end{enumerate}
 
 \item \textbf{Do not drive suboptimally}: If a vehicle does a series of
@@ -129,7 +126,7 @@ the induced plan can be made less costly or shorter by swapping the actual \driv
 for precalculated optimal \drive{} actions along the shortest path.
 Do note, that it is not important for the application of this rule whether actions are in direct succession (in a sequential plan) or not.
 \begin{enumerate}
-\item \textbf{Do not drive in cycles}: A special but important case of the previous rule is that vehicles should not drive in cycles
+\item \textbf{Do not drive in cycles}: A special but important case of the previous rule is that vehicles should not drive in cycles.
 \end{enumerate}
 
 \item \textbf{Do not forward packages using other vehicles}:
@@ -158,13 +155,13 @@ of the \refuel{} and \pickup{} actions, therefore shaving off 1 time unit in tot
 However, if there is no petrol
 station at $B$, this situation reduces to the no-fuel variant. Given the relative rarity of petrol stations, this will reduce the search space somewhat.
 \end{enumerate}
-Several other insights can only be applied in the sequential variant of Transport:
+Another insight can only be applied to the sequential variant of Transport:
 \begin{enumerate}
 \item \textbf{Drop from an active vehicle only}: Without loss of generality,
 we can prune all plans where a \drop{} action of a vehicle happens
 right after an action of a different vehicle. It is trivial to see that if we had a plan where
 a \drop{} action
-occurs after an action of a different vehicle, we can swap that action with the \drop{} action without (a) changing the total plan cost (b) changing the validity of the plan.
+occurs after an action of a different vehicle, we can swap that action with the \drop{} action without changing the total plan cost or changing the validity of the plan.
 
 Doing this repeatedly will yield an equivalent plan, in which the \drop{} action
 occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each \drop{} action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
@@ -209,19 +206,19 @@ Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, th
 \textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
 \midrule
 \midrule
-netben-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimization} & Numeric \\ 
-seq-opt-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimization} & STRIPS \\ 
-seq-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
-tempo-sat-6 & IPC-6 & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
+netben-opt-6 & \multirow{4}{*}{IPC-6} & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimization} & Numeric \\ 
+seq-opt-6 & & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimization} & STRIPS \\ 
+seq-sat-6 & & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialSatisficing.html}{Sequential: satisficing} & STRIPS \\ 
+tempo-sat-6 & & \href{http://icaps-conference.org/ipc2008/deterministic/TemporalSatisficing.html}{Temporal: satisficing} & Temporal \\ 
 \midrule
-seq-mco-7 & IPC-7 & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialMulticore.html}{Sequential: multi-core} & \multirow{3}{*}{STRIPS} \\ 
-seq-opt-7 & IPC-7 & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialOptimization.html}{Sequential: optimization} &  \\ 
-seq-sat-7 & IPC-7 & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialSatisficing.html}{Sequential: satisficing} &  \\ 
+seq-mco-7 & \multirow{3}{*}{IPC-7} & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialMulticore.html}{Sequential: multi-core} & \multirow{3}{*}{STRIPS} \\ 
+seq-opt-7 & & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialOptimization.html}{Sequential: optimization} &  \\ 
+seq-sat-7 & & \href{http://www.plg.inf.uc3m.es/ipc2011-deterministic/SequentialSatisficing.html}{Sequential: satisficing} &  \\ 
 \midrule
-seq-agl-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & \multirow{4}{*}{STRIPS} \\ 
-seq-mco-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} &  \\ 
-seq-opt-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimization} &  \\ 
-seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} &  \\ 
+seq-agl-8 & \multirow{4}{*}{IPC-8} & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqagi.html}{Sequential: agile} & \multirow{4}{*}{STRIPS} \\ 
+seq-mco-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} &  \\ 
+seq-opt-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimization} &  \\ 
+seq-sat-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} &  \\ 
 \end{tabular}
 \caption[Transport datasets from the 2008, 2011, and 2014 IPCs.]{Transport datasets from the 2008, 2011, and 2014 IPCs. All formulations assume capacitated vehicles, numeric and temporal formulations also contain fuel demands and capacities. The temporal formulation additionally adds concurrent actions and a notion of time. More information can be found in Section~\ref{domain-desc}.}
 \label{tab:ipc-datasets}
@@ -230,7 +227,7 @@ seq-sat-8 & IPC-8 & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Se
 Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
 IPC-7,\puncfootnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/CompetitionRules.html}}
 and the rule pages of IPC-8.\puncfootnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
-We have decided to split our further research based on the tracks at IPC: we will focus on constructing
+We have decided to split our further research based on the tracks at the IPC: we will focus on constructing
 Transport-specific planners for the seq-sat-6, seq-sat-7, seq-sat-8, and tempo-sat-6 datasets,
 corresponding to the sequential and temporal variants of Transport.
 
@@ -261,7 +258,7 @@ are rare and usually significantly longer.
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
 \end{center}
-\caption[Visualization of the \texttt{p30} problem of temporal Transport from IPC 2008.]{Road graph visualization of the \texttt{p30} problem of the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problems, the circle of nodes in the center represents a series of truck hubs and each of the attached subgraphs are individual cities.}
+\caption[Visualization of the \texttt{p30} problem of temporal Transport from IPC 2008.]{Road graph visualization of the \texttt{p30} problem of the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problem, the circle of nodes in the center represents truck hubs and each of the attached subgraphs are individual cities.}
 \label{fig:ipc08_tempo-sat_p30}
 \end{figure}
 
@@ -318,7 +315,7 @@ Roads=\roads,Stateslat=\stateslat}%
 \end{subtable}
 \caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets.
 The ``states'' value is a state space size estimate as discussed in Section~\ref{datasets} (in temporal domains calculated with $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s equal to 1).
-Bold problem instance numbers correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30}.}
+Bold problem instances correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30}.}
 \label{tab:dataset-dimensions}
 \end{table}
 

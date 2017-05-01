@@ -15,7 +15,7 @@ Since then, it has been used in two IPCs,
 specifically IPC-7\footnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/}} in 2011
 and IPC-8\footnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/}} in 2014.
 
-There are a few basic formulations of the Transport domain family (i.e.~``similar'' Transport domain variants) which we will describe in the following sections.
+There are a few basic formulations of the Transport domain family (i.e.\;similar Transport domain variants) which we will describe in the following sections.
 
 \subsection{Common traits of Transport domains}
 
@@ -26,9 +26,8 @@ Picking up or dropping a package costs 1 unit. The cost of driving along a road 
 Road lengths are always positive integers.
 The general goal is to minimize the \textit{total cost}
 while delivering all packages to their destination, where
-the total cost of a plan is defined as the sum of the costs of all actions in
+the total cost of a plan is defined as the sum of costs of all actions in
 the plan.
-
 A few Transport problems also request that the vehicles be positioned at certain
 locations in the graph
 after finishing their deliveries.
@@ -52,7 +51,7 @@ the task that is left for the planner to solve.
 \subsection{Transport STRIPS}\label{transport-strips}
 
 STRIPS, the Stanford Research Institute Problem Solver,
-was a planner proposed in the 1970s by \citet{Fikes1971}.
+was a planner proposed by \citet{Fikes1971}.
 The influence of STRIPS was, however, not only due to the planner,
 but the language used to describe its inputs --- the planning operators and goals.
 That is why we sometimes refer to classical planning (Section~\ref{classical-planning})
@@ -82,7 +81,8 @@ or \textit{transport-strips} and we will alternate between these terms in this t
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/ipc08_seq-sat_p13_land2}
 \end{center}
-\caption[Visualization of the \texttt{p13} problem of sequential Transport from IPC 2008.]{Road graph visualization of the \texttt{p13} problem of the seq-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares.}
+\caption[Visualization of the \texttt{p13} problem of sequential Transport from IPC 2008.]{Road graph visualization of the \texttt{p13} problem of the seq-sat track of IPC 2008.
+Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares.}
 \label{fig:ipc08_seq-sat_p13}
 \end{figure}
 
@@ -107,8 +107,8 @@ duration of 1, \refuel{} has a duration of 10, and the duration of \drive{} is
 equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
 
 The addition of time poses numerous technical complications when formalizing this variant
---- its PDDL (Section~\ref{pddl}) formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
-One important technicality is that a vehicle cannot pick up or drop packages concurrently --- it always handles packages one at a time. Also, vehicles cannot do other actions during driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
+--- its PDDL formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
+One important technicality is that a vehicle cannot pick up or drop packages concurrently --- it always handles packages one at a time. Also, vehicles cannot do other actions while driving to another location (they are essentially placed ``off the graph'' for the duration of driving).
 
 The overall goal remains largely the same (deliver packages to their destinations), but we no longer optimize the total cost. Instead, we now minimize the total duration of a plan,
 defined as the maximum time when an action is still taking place.
@@ -208,7 +208,7 @@ from location \verb+l1+ to location \verb+l2+;
 \item \verb+fuel-left(v)+, the amount of fuel left in
 the vehicle \verb+v+; and
 \item \verb+fuel-max(v)+, the maximum amount of fuel
-the vehicle \verb+v+ can contain, i.e. its fuel tank capacity.
+the vehicle \verb+v+ can contain, i.e.\;its fuel tank capacity.
 \end{itemize}
 
 
@@ -294,13 +294,13 @@ compared to \texttt{transport-strips}.}
 \end{figure}
 
 We will represent the temporal variant of Transport using a variant of the state-variable representation using temporal planning operators, further referred to as the \textit{temporal state-variable representation}.
-On top of the fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
+On top of fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
 \begin{itemize}
 \item \verb+package-size(p)+, a function with positive integer values representing the size of the package \verb+p+ (does not change during planning); and
 \item \verb+ready-loading(v)+, a predicate used for ``locking'' the vehicle \verb+v+ during \pickup{} and \drop{} actions (enforcing the property of these two actions happening sequentially in time for a given vehicle). It is important to note that the \refuel{} action does not
 lock the vehicle, which means the vehicle can be refueled while dropping off and picking up packages.
 \end{itemize}
-Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clear notation.
+Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clearer notation.
 Note that both \pickup{} and \drop{} cancel the \verb+at+ predicate at the start of the action, which forbids parallel picking up and dropping.
 
 \begin{figure}[tb]
@@ -505,7 +505,7 @@ However, the problem we aim to study is more similar to a different optimization
 
 The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{Truck Dispatching Problem} by \citet{Dantzig1959}, modeling a fleet of vehicles delivering gasoline to service stations. They described VRP
 as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
-with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citep[Section~2]{Dantzig1959} represents a model with a fleet of identical vehicles departing from a single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
+with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citet[Section~2]{Dantzig1959} presents a model with a fleet of identical vehicles departing from a single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
 
 \begin{figure}[tbp]
 \begin{center}
@@ -580,7 +580,7 @@ Finally, the cost of the problem solution ${S}$ is: ${F_{VRP} = \sum_{i=1}^{m} F
 
 \subsection{Comparison of Transport and VRP}
 
-In \citet{ResearchGroup2013}, a website was created, which serves as a comprehensive resource on the history of VRP,
+The work of \citet{ResearchGroup2013} resulted in a website, which serves as a comprehensive resource on the history of VRP,
 definitions of its various flavors, and an overview of the popular solution methods and state-of-the-art results. According to the taxonomy they propose, we could characterize a Transport domain problem
 as a \textit{Multiple Depot, Split Delivery, Capacitated VRP with Satellite Facilities}. Multiple Depot
 means that vehicles can start driving from multiple locations, split delivery
@@ -590,11 +590,11 @@ while on a delivery route. This does not characterize the Transport domain in ev
 
 According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features to those of Transport in any single study, to the best of our knowledge.
 Usually, the studied problems are more constrained than Transport --- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
-makes cooperation of vehicles hard to model, whereas in Transport this is one of the fundamental elements.
+makes cooperation of vehicles practically hard to model, whereas in Transport this is one of the fundamental elements.
 
 \comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
 
-An important difference between Transport and the VRP is that Transport has a notion of single packages or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs. letters or parcels). This makes a difference not only in the
+Another important difference between Transport and the VRP is that Transport has a notion of single packages or items. In the VRP, transported goods are usually regarded as measurable, rather than countable (for example gasoline or milk vs.\;letters or parcels). This makes a difference not only in the
 interpretation, but also during problem-solving --- \textit{customers} in VRP usually request
 a quantity of the delivered item, not specific item instances, like packages being ``requested''
 by their target locations in Transport.

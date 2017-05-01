@@ -1,24 +1,24 @@
 \chapter{Sequential Transport planning}
 
 In this chapter, we describe the planning approaches we
-selected or designed, implemented, and tested.
+selected, implemented, and tested.
 We will attempt to leverage the acquired
 Transport domain knowledge
-in these approaches as much as possible.
+while designing these approaches as much as possible.
 
 \section{State-space forward planning}\label{forward-planning}
 
 One of the most straightforward approaches to automated planning
 is forward search \citep[Section~4.2]{Ghallab2004}
 in state space (Figure~\ref{alg:forward-search}).
-Although it is defined on a classical representation,
-it can be used on any planning problem, where we can
+Although the algorithm is defined on a classical representation,
+it can be used on any planning problem, where we can:
 \begin{itemize}
 \item determine if a state is a goal state or not;
 \item iterate over all actions applicable to a state; and
 \item compute a successor state by applying an action to the current state.
 \end{itemize}
-The algorithm, despite its simplicity, is one of the most frequently
+Forward search, despite its simplicity, is one of the most frequently
 used in domain-independent planners.
 There are two key steps of the algorithm, which
 cause the most problems in practice: representing
@@ -36,7 +36,7 @@ next action to apply (step 8).
 \If {$s$ satisfies $g$} \Return $\pi$ \EndIf
 \State $A_s \gets \{a \,|\, o \in O$, $a$ is a ground instance of $o \;\&\; \mt{precond}(a) \mt{ is true in } s\}$
 \If {$A_s = \emptyset$} \Return failure \EndIf
-\State (nondeterministical) choose an action $a \in A_s$
+\State (nondeterministically) choose an action $a \in A_s$
 \State $s \gets \gamma(s, a)$
 \State $\pi \gets$ append $a$ to $\pi$
 \EndLoop
@@ -52,17 +52,17 @@ applicable actions are grounded from operators
 on demand, as are the corresponding successor states
 \citep[Section~3.4]{Russell1995}.
 
-The forward search algorithm in its specified form is nondeterministic.
+The forward search algorithm, in its specified form, is nondeterministic.
 If we knew which action to choose in step 8,
 we would know how to solve the planning problem.
 Since we generally do not know which action (state transition) to chose in a given state, the choice is usually delegated to a suitable
-search algorithm, which makes the algorithm deterministic.
+search algorithm, which makes the whole algorithm deterministic.
 
 
 \subsection{Deterministic search algorithms}
 
 State space search algorithms are a heavily studied area
-of computer science, and any reasonable search algorithm applied
+of computer science and any reasonable search algorithm applied
 to forward search will yield correct results.
 Examples of such algorithms are Breadth-First Search (BFS), 
 Depth-First Search (DFS), and many more \citep[Section~3.5]{Russell1995}.
@@ -70,26 +70,26 @@ The choice of a search algorithm greatly influence
 the quality of resulting plans when applied to forward search.
 
 As the sizes of planning problems grow,
-choosing a search algorithm is even more crucial ---
-several well-performing algorithms on small problems (like BFS)
+choosing a search algorithm is even more crucial.
+Several well-performing algorithms on small problems (like BFS)
 exceed reasonable run times and become unusable for practical applications.
 An important and practically useful search algorithm
-withstanding larger problem sizes is the \textit{A* algorithm} (Figure~\ref{alg:astar})
+withstanding larger problem sizes is the \textit{A$^{\kern-.15em*}$ algorithm} (Figure~\ref{alg:astar})
 introduced in \citet{Hart1968}.
 
-\myalg{Forward Search with A*}%
+\myalg{Forward Search with A$^{\kern-.15em*}$}%
 {%
-\Input a planning problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$,
+\Input a classical planning problem $\mathcal{P} = (S, O, \gamma, s_0, g)$,
 a consistent heuristic function $h$
 \Output a plan $\pi$
 \Function{Collect-Plan}{$s, \pi$}
-\State $\pi_s \gets $ empty list
+\State $\pi' \gets $ empty list
 \While{$s \neq \emptyset$}
 	\State $(s', a) \gets \pi[s]$
-	\State $\pi_s \gets$ prepend $a$ to $\pi_s$
+	\State $\pi' \gets$ prepend $a$ to $\pi'$
 	\State $s \gets s'$
 \EndWhile
-\State \Return $\pi_s$
+\State \Return $\pi'$
 \EndFunction
 
 \Function{Forward-Search-Astar}{$\mathcal{P}$}
@@ -97,7 +97,7 @@ a consistent heuristic function $h$
 \State $\pi[s_0] \gets \emptyset$, 
 $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \While{$o \neq \emptyset$}
-\State $s \gets \min_{s \in o} f[s]$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
+\State $s \gets \mt{argmin}_{s \in o} f[s]$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
 \If {$s$ satisfies $g$} \Return \Call{Collect-Plan}{$s$, $\pi$} \EndIf
 \ForAll{actions $a \in$ \Call{Generate-Actions}{$s, \pi$}}
 	\State $s' \gets \gamma(s, a)$
@@ -114,16 +114,16 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \Return failure
 \EndFunction
 }%
-{A forward search planning algorithm using A*.}{A forward search planning algorithm using A*.
+{A forward search planning algorithm using A$^{\kern-.15em*}$.}{A forward search planning algorithm using A$^{\kern-.15em*}$.
 \textsc{Generate-Actions} is a function that produces actions applicable to the state $s$.}{astar}{tb}
 
-A* has many important properties. We pinpoint one important to us, namely its admissibility.
+A$^{\kern-.15em*}$ has many important properties. We pinpoint one important to us, namely its admissibility.
 A search algorithm is \textit{admissible}
 if it is guaranteed to find an optimal path from a state $s$
 to a goal state $s_g$ for any state space \citep{Hart1968}.
-A* is admissible and optimal given an admissible heuristic.
+A$^{\kern-.15em*}$ is admissible and optimal given an admissible heuristic.
 
-An \textit{admissible} heuristic does not overestimate
+An \textit{admissible} heuristic never overestimates
 the true value it is approximating. During planning in state space,
 when examining a state $s$, we want to estimate the total costs of the best
 plan getting us to a goal state from state $s$. In other words, because we are
@@ -131,13 +131,13 @@ trying to minimize the total cost,
 a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
 where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
 
-A slight modification of A*, called \textit{Weighted A*} \citep{Pohl1970},
+A slight modification of A$^{\kern-.15em*}{\kern-.30em,}$ called \textit{Weighted A$^{\kern-.15em*}$} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
 at the expense of
 sacrificing admissibility. The only difference
-when compared to A* is that the heuristic $h(x)$
+when compared to A$^{\kern-.15em*}$ is that the heuristic $h(x)$
 is substituted for $h_w(x) = w \cdot h(x),$
-where $w$ is a weight constant. Choosing a weight greater
+where $w \in \N_0$ is a weight constant. Choosing a weight greater
 than 1 makes the heuristic inadmissible,
 but guides the search towards a goal state faster.
 
@@ -145,8 +145,8 @@ but guides the search towards a goal state faster.
 \subsection{Heuristics for forward search in Transport}\label{seq-heuristics}
 
 When designing a heuristic, we want to provide an estimate
-of the total plan cost or duration
-that is as precise as possible. This
+of the total plan cost or makespan
+that is as precise as possible, which
 will help guide the search to a goal state as quickly as
 possible.
 
@@ -157,12 +157,12 @@ the target location of a package $p$ in the set of packages $P$.
 
 \subsubsection{Trivially admissible Transport heuristic}\label{sfa0}
 
-The simplest heuristic (apart from the zero heuristic $h_0 \equiv 0$) that is applicable to all variants of Transport
+The simplest domain-specific heuristic (apart from the zero heuristic $h_0 \equiv 0$) that is applicable to all variants of Transport
 is one that counts the minimum number of \pickup{} and \drop{} actions
 necessary to reach a goal state.
 To obtain the correct count, we add 1 for each
 package that is not yet at its destination (it will need to be dropped there) and another 1 for each package
-that is additionally not in a vehicle (it will need to be picked up):
+that is, additionally, not in a vehicle (it will need to be picked up):
 
 $$h'_{0}(s) = \sum_{\substack{
 p \in P\\ \mt{at}(p) \neq \mt{target}(p)}} 1
@@ -170,7 +170,7 @@ p \in P\\ \mt{at}(p) \neq \mt{target}(p)}} 1
 p \in P\\ \mt{at}(p) \neq \mt{target}(p)\\
 \mt{at}(p) \neq \mt{nil}}} 1.$$
 
-This $h'_0$ is admissible, but it is practically unusable, as it
+The heuristic $h'_0$ is admissible, but it is practically unusable, as it
 very poorly approximates 
 the cost of the optimal remaining actions to a goal state
 --- recall that costs of \drive{} actions are generally much higher than the costs of \pickup{} and \drop{} actions.
@@ -381,9 +381,9 @@ in our final evaluation (Chapter~\ref{experiments}).
 
 
 
-\subsection{Sequential Forward A*}\label{sfa}
+\subsection{Sequential Forward A$^{\kern-.15em*}$}\label{sfa}
 
-\textit{Sequential Forward A*} (SFA) is a planner for sequential Transport based on forward search using A* (Figure~\ref{alg:astar}).
+\textit{Sequential Forward A$^{\kern-.15em*}$} (SFA) is a planner for sequential Transport based on forward search using A$^{\kern-.15em*}$ (Figure~\ref{alg:astar}).
 It utilizes most of the domain knowledge described
 in Section~\ref{domain-info} and~\ref{datasets}
 to prune the search space as much as possible
@@ -400,12 +400,12 @@ on practical problems, as will be demonstrated
 later during experimental evaluation.
 
 A variant of SFA, 
-\textit{Weighted Sequential Forward A*} (WSFA)
-swaps A* search for Weighted A* in the SFA planner.
+\textit{Weighted Sequential Forward A$^{\kern-.15em*}$} (WSFA)
+swaps A$^{\kern-.15em*}$ search for Weighted A$^{\kern-.15em*}$ in the SFA planner.
 
-\subsection{Meta-heuristically weighted SFA*}\label{msfa}
+\subsection{Meta-heuristically weighted SFA$^{\kern-.15em*}$}\label{msfa}
 
-\textit{Meta-heuristically weighted SFA*} (MSFA) is
+\textit{Meta-heuristically weighted SFA$^{\kern-.15em*}$} (MSFA) is
 a meta-planner built on top of a WSFA planner with
 a given heuristic.
 
@@ -415,7 +415,7 @@ waits for the planner to find a plan,
 and then (exponentially) decays the 
 weight of the heuristic function: $w \gets \max(1, \floor*{\alpha \cdot w}).$
 Do note that this entails a change of values in the $f$ map
-of forward search with A*.
+of forward search with A$^{\kern-.15em*}$.
 
 Even though this meta-planning approach breaks
 admissibility guarantees, it works very well on

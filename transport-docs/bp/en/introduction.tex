@@ -6,15 +6,16 @@ Cheaper air, bus, and rail travel has enabled people to travel more than they ha
 Every day, thousands of companies need to deliver items from
 one place to the other. Due to economic, ecological, and safety reasons, making the use of transportation resources more efficient is essential not just for saving money,
 but for the future of our planet.
-It is only natural to try to automate the planning processes for various transportation problems.
+It is only natural to try to automate the planning processes for the various transportation problems.
 We want to calculate the shortest possible paths for our vehicles to take,
 make the calculated plans adhere to laws or regulations, and possibly even accommodate the drivers'
 wishes. Doing all of this by hand is a quite non-trivial task --- today's computers
-are far more effective for solving these problems.
+are far more effective at solving these problems.
 
-A major part of solving these problems, \textit{planning}, is usually defined as the reasoning side of acting \citep[Section~1.1]{Ghallab2004}.
+A major part of solving these problems, \textit{planning}, is usually defined as the ``reasoning side of acting'' \citep[Section~1.1]{Ghallab2004}.
 This means that we want to come up with a \textit{sequence of actions} that leads to a desired \textit{goal state}.
-In transportation, examples of planning problems include finding a sequence of orders for truck drivers to pick up and deliver packages in a given day,
+In transportation, examples of planning problems include finding a sequence of 
+requests for truck drivers to pick up and deliver packages in a given day,
 or orchestrating robots in a warehouse to wrap and transport ordered goods to the loading dock for shipping.
 
 Automated planning has historically been focused on \textit{domain-independent} planning --- planning without
@@ -43,7 +44,7 @@ a means of modeling a rush-hour scenario in a public transportation system.
 To aid in the construction of planners and analysis of generated
 plans, we will also develop a planning system called TransportEditor. It will consist of a problem visualizer and editor for the Transport domain. To give insight into plan deficiencies, it will be possible to trace plan actions and see how the planning
 state evolves as the plan is executed. For fast prototyping,
-it will be possible to generate plans by using built-in and external planners without leaving the system. Currently, only a handful of similar systems exist and to the best of our knowledge, none of them is specialized for problems modeling a graph with agents on it.
+it will be possible to generate plans by using built-in and external planners without leaving the system. Currently, only a handful of similar systems exist and to the best of our knowledge, none of them specialized for problems modeling a graph with agents on it.
 
 We aim to show that domain-dependent planning has an important
 role to play in the future and there are many problems to be solved,
@@ -60,5 +61,5 @@ solved. Afterward, we will describe the approaches we used
 to build planners for both a
 simple sequential transport domain and a more complicated
 temporal variant. Finally, we will design and run benchmarks,
-comparing the performance of our planners to the current
-state of the art domain-independent planners.
+comparing the performance of our planners to current
+state-of-the-art domain-independent planners.
