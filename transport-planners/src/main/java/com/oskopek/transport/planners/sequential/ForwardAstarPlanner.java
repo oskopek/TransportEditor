@@ -87,7 +87,6 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      * Resets to planner to an original state.
      */
     void resetState() {
-        formatLog("Initializing planning...");
         closedSet = new HashSet<>();
         openSet = new BinaryHeap<>();
         entryMap = new HashMap<>();
@@ -100,23 +99,6 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
     void resetBestPlan() {
         myBestPlan = null;
         myBestPlanScore = Integer.MAX_VALUE;
-    }
-
-    /**
-     * Recalculate the values we are sorting by in the open set using as little memory as possible.
-     */
-    protected void recalculateOpenStateValues() {
-        logger.debug("Recalculating open state values ({})...", openSet.getSize());
-        Map<ImmutablePlanState, Heap.Entry<Integer, ImmutablePlanState>> entryMap = new HashMap<>();
-        AbstractHeap<Integer, ImmutablePlanState> openSet = new BinaryHeap<>();
-        while (!this.openSet.isEmpty()) {
-            ImmutablePlanState state = this.openSet.extractMinimum().getValue();
-            Heap.Entry<Integer, ImmutablePlanState> tuple = openSet.insert(getHScore(state), state);
-            entryMap.put(state, tuple);
-        }
-        this.entryMap = entryMap;
-        this.openSet = openSet;
-        logger.debug("Recalculated new state values ({}).", this.openSet.getSize());
     }
 
     /**
@@ -133,10 +115,11 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
     @Override
     public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
-        resetState();
-        initialize(problem);
         Optional<Plan> maybePlan = planInternal(domain, problem, planTransformation);
-        resetState();
+        closedSet = null;
+        openSet = null;
+        entryMap = null;
+        distanceMatrix = null;
         return maybePlan;
     }
 
@@ -154,7 +137,12 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
      * @return the plan, or an empty optional if no plan was found
      */
     public Optional<Plan> planInternal(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
+        formatLog("Initializing planning...");
+
+        resetState();
+        initialize(problem);
         formatLog("Starting planning...");
+
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
             entryMap.remove(current);
