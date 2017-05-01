@@ -22,7 +22,7 @@ for ipc in ipc08 ipc11 ipc14; do
     done
 done
 
-i=9
+i=2
 for config in $exp_configs; do
     run-remotely "$TEvariant" "$config" "$i" &
     i=$((i+1))

@@ -7,6 +7,8 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  */
 public class SequentialPlanIO implements DataIO<Plan> {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Problem problem;
     private final Domain domain;
 
@@ -147,25 +150,25 @@ public class SequentialPlanIO implements DataIO<Plan> {
         if (plan == null) {
             return null;
         }
-        Map<Vehicle, Integer> capacityMap = new HashMap<>();
+        Map<String, Integer> capacityMap = new HashMap<>();
         StringBuilder builder = new StringBuilder();
         for (Action action : plan.getActions()) {
             Vehicle vehicle = (Vehicle) action.getWho();
-            int capacity = capacityMap.computeIfAbsent(vehicle, v -> v.getCurCapacity().getCost());
+            int capacity = capacityMap.computeIfAbsent(vehicle.getName(), v -> vehicle.getCurCapacity().getCost());
             builder.append(serializeAction(action, capacity)).append('\n');
 
             if (action instanceof PickUp) {
                 capacity--;
                 if (capacity < 0) {
-                    throw new IllegalStateException("Cur capacity cannot be less than zero capacity.");
+                    logger.warn("Cur capacity cannot be less than zero capacity.");
                 }
             } else if (action instanceof Drop) {
                 capacity++;
                 if (capacity > vehicle.getMaxCapacity().getCost()) {
-                    throw new IllegalStateException("Cur capacity cannot be bigger than max capacity.");
+                    logger.warn("Cur capacity cannot be bigger than max capacity.");
                 }
             }
-            capacityMap.put(vehicle, capacity);
+            capacityMap.put(vehicle.getName(), capacity);
         }
         ActionCost totalCost = plan.getActions().stream().map(Action::getCost).reduce(ActionCost.ZERO,
                 ActionCost::add);
