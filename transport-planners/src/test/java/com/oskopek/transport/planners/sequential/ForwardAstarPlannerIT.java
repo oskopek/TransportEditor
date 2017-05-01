@@ -91,24 +91,6 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         assertThat(plan.getTemporalPlanActions()).last().hasFieldOrPropertyWithValue("endTimestamp", 369);
     }
 
-
-
-    @Test
-    public void calculateHeuristic() throws Exception {
-    }
-
-    @Test
-    public void hasCycle() throws Exception {
-    }
-
-    @Test
-    public void getUnfinishedPackage() throws Exception {
-    }
-
-    @Test
-    public void pickupWhereDropoff() throws Exception {
-    }
-
     @Test
     public void simplePickupDrop() throws Exception {
         SequentialPlan plan = new SequentialPlanIO(domain, p03Problem).parse(IOUtils.concatReadAllLines(getClass()
@@ -174,14 +156,6 @@ public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and 
         planPart = Lists.reverse(planPart);
         assertThat(PlannerUtils.doesShorterPathExist(truck1, g.getLocation("city-loc-4"), planPart.iterator(),
                 planner.getDistanceMatrix())).isFalse();
-    }
-
-    @Test
-    public void calculateSumOfDistancesToPackageTargets() throws Exception {
-    }
-
-    @Test
-    public void getLengthToCorrect() throws Exception {
     }
 
 }

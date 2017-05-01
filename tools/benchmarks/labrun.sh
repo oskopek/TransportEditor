@@ -9,7 +9,7 @@ echo "source .shrc && cd git/$TEvariant/tools/benchmarks && ./benchmark.sh confi
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }
 
-configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa3sched tempo-sat-${ipc}-msfa5sched'
+configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa5sched'
 TEvariant="TransportEditor-final"
 exp_configs=""
 
@@ -22,7 +22,7 @@ for ipc in ipc08 ipc11 ipc14; do
     done
 done
 
-i=3
+i=2
 for config in $exp_configs; do
     run-remotely "$TEvariant" "$config" "$i" &
     i=$((i+1))

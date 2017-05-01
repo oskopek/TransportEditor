@@ -30,7 +30,7 @@ next action to apply (step 8).
 \Input a planning problem in a classical representation $\mathcal{P} = (S, O, \gamma, s_0, g)$
 \Output a plan $\pi$
 \Function{Forward-Search}{$\mathcal{P}$}
-\State $s \gets s_0$ 
+\State $s \gets s_0$
 \State $\pi \gets $ empty plan
 \Loop
 \If {$s$ satisfies $g$} \Return $\pi$ \EndIf
@@ -64,7 +64,7 @@ search algorithm, which makes the whole algorithm deterministic.
 State space search algorithms are a heavily studied area
 of computer science and any reasonable search algorithm applied
 to forward search will yield correct results.
-Examples of such algorithms are Breadth-First Search (BFS), 
+Examples of such algorithms are Breadth-First Search (BFS),
 Depth-First Search (DFS), and many more \citep[Section~3.5]{Russell1995}.
 The choice of a search algorithm greatly influence
 the quality of resulting plans when applied to forward search.
@@ -94,7 +94,7 @@ a consistent heuristic $h$
 
 \Function{Forward-Search-Astar}{$\mathcal{P}$}
 \State $\pi \gets $ empty map, $f[*] \gets \infty$, $g[*] \gets \infty$, $o \gets \{s_0\}$, $c \gets \emptyset$
-\State $\pi[s_0] \gets \emptyset$, 
+\State $\pi[s_0] \gets \emptyset$,
 $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \While{$o \neq \emptyset$}
 \State $s \gets \mt{argmin}_{s \in o} f[s]$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
@@ -102,7 +102,7 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \ForAll{actions $a \in$ \Call{Generate-Actions}{$s, \pi$}}
 	\State $s' \gets \gamma(s, a)$
 	\If{$s' \notin c$} \Comment{Not visited yet}
-		\If{$s' \notin o$} $o \gets o \cup \{s'\}$ \Comment{Discovered a new state} \EndIf 
+		\If{$s' \notin o$} $o \gets o \cup \{s'\}$ \Comment{Discovered a new state} \EndIf
 		\If{$g[s] + \mt{cost}(a) < g[s']$} \Comment{Found a better path}
 			\State $\pi[s'] \gets (s, a)$
 			\State $g[s'] \gets g[s] + \mt{cost}(a)$
@@ -171,7 +171,7 @@ p \in P\\ \mt{at}(p) \neq \mt{target}(p)\\
 \mt{at}(p) \neq \mt{nil}}} 1.$$
 
 The heuristic $h'_0$ is admissible, but it is practically unusable, as it
-very poorly approximates 
+very poorly approximates
 the cost of the optimal remaining actions to a goal state
 --- recall that costs of \drive{} actions are generally much higher than the costs of \pickup{} and \drop{} actions.
 
@@ -185,7 +185,7 @@ actions also have to occur in the optimal plan:
 $$h_1 = h'_0 + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
 where the $location: P \to L$ function,
 with values in the set of all locations $L$, is defined as:
-$$location(p) = \begin{cases} 
+$$location(p) = \begin{cases}
    \mt{at}(p) & \text{if } \mt{at}(p) \neq \mt{nil},\\
    \mt{at}(\mt{in}(p)) & \text{else}.
   \end{cases}$$
@@ -282,7 +282,7 @@ $h_4(s') \leq h^*(s'),$ which is a contradiction with $h_4(s) > h^*(s)$,
 as $s$ is the initial state of $\pi$.
 
 Let $n$ be the number of actions in $\pi$.
-If $n=0$, $s$ is a goal state and, therefore, 
+If $n=0$, $s$ is a goal state and, therefore,
 it holds that $h_4(s) = 0 = h^*(s)$.
 Let us number all intermediate states of $\pi$ in reverse order: $$\{s = s_k, s_{k-1}, \ldots, s_2, s_1, s_0 = s_g\}.$$
 Now, assume that our conjecture holds for the last $n < k$ states.
@@ -396,14 +396,14 @@ without sacrificing admissibility.
 However, domain knowledge alone does not
 prune away enough search space to
 generate plans efficiently.
-With the addition of 
+With the addition of
 heuristics
 from Section~\ref{seq-heuristics},
 implementations of the planner become reasonably useful
 on practical problems, as will be demonstrated
 later during experimental evaluation.
 
-A variant of SFA, 
+A variant of SFA,
 \textit{Weighted Sequential Forward A$^{\kern-.05em*}$} (WSFA)
 swaps A$^{\kern-.15em*}$ search for Weighted A$^{\kern-.15em*}$ in the SFA planner.
 
@@ -416,10 +416,18 @@ a given heuristic.
 Given two hyperparameters $\alpha \in [0, 1]$ and $w_0 \in [1, \infty)$,
 it runs the WSFA planner with the weight $w \gets w_0$,
 waits for the planner to find a plan,
-and then (exponentially) decays the 
+and then (exponentially) decays the
 weight of the heuristic function: $w \gets \max(1, \floor*{\alpha \cdot w}).$
-Do note that this entails a change of values in the $f$ map
-of forward search with A$^{\kern-.15em*}$.
+
+Do note that this is followed up by a complete restart of the internal WSFA planner.
+If only a recalculation of values in the $f$ map
+of forward search with A$^{\kern-.15em*}$ was done, all successive
+weight runs would almost immediately return, because we are in the vincinity of a goal state,
+but not necessarily the nearest one to the initial state.
+In some sense, this simulates a quick DFS run followed up
+by local search around the path found by DFS.
+Generally, better results are obtained by reexploring the
+state space from the initial state with an updated weight.
 
 Even though this meta-planning approach breaks
 admissibility guarantees, it works very well on
@@ -630,7 +638,7 @@ suboptimal plans, but also that for some problems,
 even the best plan they can produce will be suboptimal.
 This is easiest to prove for each planner individually,
 by constructing a counterexample for a corner
-case of the 
+case of the
 greedy
 choices
 the planners make.
@@ -686,24 +694,24 @@ TODO{recalculate + verify numbers}
 \begin{table}[tb]
 \begin{center}
 \begin{tabular}{l||rr}
-\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\
 \midrule
 \midrule
-\textbf{Best-known plan length} & 6 & 351 \\ 
-\textbf{Vehicles} & 2 & 4 \\ 
-\textbf{Vehicle variables} & 14 & 1 408 \\ 
-\textbf{Packages} & 2 & 20 \\ 
-\textbf{Package variables} & 14 & 7 040 \\ 
-\textbf{Locations} & 5 & 60 \\ 
+\textbf{Best-known plan length} & 6 & 351 \\
+\textbf{Vehicles} & 2 & 4 \\
+\textbf{Vehicle variables} & 14 & 1 408 \\
+\textbf{Packages} & 2 & 20 \\
+\textbf{Package variables} & 14 & 7 040 \\
+\textbf{Locations} & 5 & 60 \\
 \textbf{Roads} & 12 & 256 \\
-\textbf{Max capacity} & 4 & 4 \\ 
+\textbf{Max capacity} & 4 & 4 \\
 \midrule
-\textbf{Ground Drive actions} & 168 & 360 448 \\ 
-\textbf{Ground PickUp actions} & 140 & 1 689 600 \\ 
-\textbf{Ground Drop actions} & 140 & 1 689 600 \\ 
+\textbf{Ground Drive actions} & 168 & 360 448 \\
+\textbf{Ground PickUp actions} & 140 & 1 689 600 \\
+\textbf{Ground Drop actions} & 140 & 1 689 600 \\
 \midrule
-\textbf{Planning variables total} & 48 & 10 207 \\ 
-\textbf{Grounded actions total} & 448 & 1 189 838 848 \\ 
+\textbf{Planning variables total} & 48 & 10 207 \\
+\textbf{Grounded actions total} & 448 & 1 189 838 848 \\
 \textbf{Search Space Estimate} & $\approx 1.1 \cdot 10^{52}$ & $\approx 1.4 \cdot 10^{27 952}$ \\ % https://www.wolframalpha.com/input/?i=(245120%5E351)+*+4%5E1408+*+60%5E1408+*+1468%5E7040
 \end{tabular}
 \end{center}
@@ -740,7 +748,7 @@ We calculated the \textit{Search Space Size Estimate} (SSE) as
 &\cdot (\mt{\#locations} + \mt{\#vehicles})^{l \cdot \mt{\#pkg}}, & \textit{\footnotesize select locations/vehicles for package variables}
 \end{align*}
 where we set $l := \mt{length(plan) + 1}$.
-For comparison to the SSEs in the last table row, 
+For comparison to the SSEs in the last table row,
 the estimated number of atoms in the universe is generally estimated to be about $4 \cdot 10^{80}$.
 
 \subsection{Domain-dependent CSP representation}\label{csp-custom-repr}
@@ -763,25 +771,25 @@ TODO{recalculate + verify numbers}
 \begin{table}[tb]
 \begin{center}
 \begin{tabular}{l||rr}
-\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\ 
+\textbf{Features / estimates} & \textbf{p01} & \textbf{p20} \\
 \midrule
 \midrule
-\textbf{Best-known plan length} & 6 & 351 \\ 
-\textbf{Vehicles} & 2 & 4 \\ 
+\textbf{Best-known plan length} & 6 & 351 \\
+\textbf{Vehicles} & 2 & 4 \\
 \textbf{Vehicle shadow vars} & 14 & 1 408 \\
-\textbf{Packages} & 2 & 20 \\ 
+\textbf{Packages} & 2 & 20 \\
 \textbf{Package shadow vars} & 14 & 7 040 \\
 \textbf{Locations} & 5 & 60 \\
 \textbf{Roads} & 12 & 256 \\
-\textbf{Max capacity} & 4 & 4 \\ 
+\textbf{Max capacity} & 4 & 4 \\
 \midrule
-\textbf{Ground Drive actions} & 24 & 1024 \\ 
-\textbf{Ground PickUp actions} & 20 & 4800 \\ 
-\textbf{Ground Drop actions} & 20 & 4800 \\ 
+\textbf{Ground Drive actions} & 24 & 1024 \\
+\textbf{Ground PickUp actions} & 20 & 4800 \\
+\textbf{Ground Drop actions} & 20 & 4800 \\
 \midrule
-\textbf{Planning variables total} & 48 & 10 207 \\ 
-\textbf{Grounded actions in step} & 64 & 10 624 \\ 
-\textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\ 
+\textbf{Planning variables total} & 48 & 10 207 \\
+\textbf{Grounded actions in step} & 64 & 10 624 \\
+\textbf{Action type orderings} & 2 187 & $\approx 8.8 \cdot 10^{167}$ \\
 \textbf{Search Space Estimate} & $\approx 1.5 \cdot 10^{14}$ & $\approx 2.0 \cdot 10^{637}$ \\
 \end{tabular}
 \end{center}
@@ -790,7 +798,7 @@ TODO{recalculate + verify numbers}
 \end{table}
 
 Using the domain-dependent representation specified, we are now able to construct
-a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}). 
+a search space estimate table for the same Transport problems (Table~\ref{tab:csp-custom}).
 Do note, that this table cannot be compared directly to the previous one,
 because it hides the shadow variable management overhead.
 Also, while the table rows look similar, sections 2 and 3 are calculated

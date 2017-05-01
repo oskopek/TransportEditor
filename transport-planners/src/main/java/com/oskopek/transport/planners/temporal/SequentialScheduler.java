@@ -161,28 +161,15 @@ public abstract class SequentialScheduler extends AbstractPlanner {
     }
 
     /**
-     * Schedules a sequential plan using mutexes.
-     * Computes the following:
-     * <ol>
-     * <li>Find mutexes in the plan (ordered pairs of actions)</li>
-     * <li>Plan actions with no mutexes at 0 and incrementally plan others after the max mutex of previous ones,
-     * following a DAG</li>
-     * </ol>
-     * Mutexes are:
-     * <ul>
-     * <li>Drive, pickup, drop actions of the same vehicle</li>
-     * <li>Drop+pick-up actions of the same package</li>
-     * </ul>
+     * Add refuel actions to the sequential plan.
      *
-     * @param domain the temporal domain
+     * @param domain the domain
      * @param temporalProblem the temporal problem
-     * @param seqActions the sequential actions
-     * @return the scheduled plan
+     * @param seqActions the sequential plan actions
+     * @return the sequential plan with fuel capacities valid, or null
      */
-    public static TemporalPlan schedule(Domain domain, Problem temporalProblem, Collection<Action> seqActions) {
-        if (seqActions.isEmpty()) {
-            return new TemporalPlan(Collections.emptyList());
-        }
+    private static List<Action> addFuelToSeqPlan(Domain domain, Problem temporalProblem,
+            Collection<Action> seqActions) {
         Random random = new Random(2017L);
         List<Action> seqActionList = new ArrayList<>(seqActions);
         for (int i = 0; i < seqActionList.size(); i++) {
@@ -234,6 +221,36 @@ public abstract class SequentialScheduler extends AbstractPlanner {
                     return null;
                 }
             }
+        }
+        return seqActionList;
+    }
+
+    /**
+     * Schedules a sequential plan using mutexes.
+     * Computes the following:
+     * <ol>
+     * <li>Find mutexes in the plan (ordered pairs of actions)</li>
+     * <li>Plan actions with no mutexes at 0 and incrementally plan others after the max mutex of previous ones,
+     * following a DAG</li>
+     * </ol>
+     * Mutexes are:
+     * <ul>
+     * <li>Drive, pickup, drop actions of the same vehicle</li>
+     * <li>Drop+pick-up actions of the same package</li>
+     * </ul>
+     *
+     * @param domain the temporal domain
+     * @param temporalProblem the temporal problem
+     * @param seqActions the sequential actions
+     * @return the scheduled plan
+     */
+    public static TemporalPlan schedule(Domain domain, Problem temporalProblem, Collection<Action> seqActions) {
+        if (seqActions.isEmpty()) {
+            return new TemporalPlan(Collections.emptyList());
+        }
+        List<Action> seqActionList = addFuelToSeqPlan(domain, temporalProblem, seqActions);
+        if (seqActionList == null) { // invalid plan (due to fuel)
+            return null;
         }
 
         Graph mutexDag = new MultiGraph("mutexDag", true, false, seqActionList.size(),

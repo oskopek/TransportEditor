@@ -58,10 +58,7 @@ public class ForwardBFSPlanner extends AbstractPlanner {
                     PlannerUtils.getUnfinishedPackages(state.getProblem().getAllPackages()));
             generatedActions.forEach(generatedAction -> {
                 Optional<ImmutablePlanState> maybeNewState = state.apply(generatedAction);
-                if (maybeNewState.isPresent()) {
-                    ImmutablePlanState newState = maybeNewState.get();
-                    generatedStates.accept(newState);
-                }
+                maybeNewState.ifPresent(generatedStates::accept);
             });
 
             generatedStates.build().sorted(Comparator.comparing(ImmutablePlanState::getTotalTime))

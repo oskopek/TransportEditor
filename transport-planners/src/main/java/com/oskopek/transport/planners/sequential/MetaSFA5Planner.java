@@ -1,18 +1,9 @@
 package com.oskopek.transport.planners.sequential;
 
 import com.google.common.collect.ArrayTable;
-import com.oskopek.transport.model.domain.Domain;
-import com.oskopek.transport.model.plan.Plan;
-import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
-import com.oskopek.transport.planners.sequential.state.ShortestPath;
-import javaslang.Function3;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * SFA* with
@@ -20,67 +11,22 @@ import java.util.function.Function;
  * as a heuristic.
  * Acts as a Weighted A* with a metaheuristically decreasing weight.
  */
-public final class MetaSFA5Planner extends SFA5Planner { // TODO: deduplicate
+public final class MetaSFA5Planner extends MetaSFAPlanner {
 
-    private Function3<ImmutablePlanState, ArrayTable<String, String, ShortestPath>, Collection<Package>,
-            Integer> weightedHeuristic;
-
-    private Plan bestPlan;
-    private int bestPlanScore;
+    private SFA5Planner heuristicReferencePlanner;
 
     /**
      * Default constructor.
      */
     public MetaSFA5Planner() {
-        super(true);
         setName(MetaSFA5Planner.class.getSimpleName());
         logger = LoggerFactory.getLogger(getClass());
+        heuristicReferencePlanner = new SFA5Planner();
     }
 
     @Override
-    void resetBestPlan() {
-        // Intentionally do not reset: super.resetBestPlan();
-    }
-
-    @Override
-    public Optional<Plan> plan(Domain domain, Problem problem, Function<Plan, Plan> planTransformation) {
-        int weight = 400;
-        final float coef = 0.5f;
-        bestPlan = null;
-        bestPlanScore = Integer.MAX_VALUE;
-
-        while (true) {
-            final int newWeight = weight;
-            if (weight == 1) {
-                formatLog("Will not stop at first solution anymore, weight is {}.", weight);
-                setStopAtFirstSolution(false);
-            }
-            weightedHeuristic = (state, distanceMatrix, unfinishedPackages) -> newWeight * PlannerUtils
-                    .calculateSumOfDistancesToVehiclesPackageTargetsAdmissibleMark(unfinishedPackages,
-                            state.getProblem().getAllVehicles(), distanceMatrix);
-            formatLog("Setting weight to {}.", weight);
-            Optional<Plan> plan = super.plan(domain, problem, planTransformation);
-            plan.ifPresent(plan2 -> {
-                Double makespan = plan2.calculateMakespan();
-                if (makespan < bestPlanScore) {
-                    formatLog("Found new best plan (weight: {}, score: {})", newWeight, makespan);
-                    bestPlan = plan2;
-                    bestPlanScore = Math.round(makespan.floatValue());
-                }
-            });
-            if (shouldCancel() || weight == 1) { // plan ended with weight == 1
-                formatLog("Cancelling, returning WASTAR best plan so far with score: {}.", bestPlanScore);
-                return Optional.ofNullable(bestPlan);
-            }
-            float updatedWeight = coef * weight;
-            weight = Math.max(1, Math.round(updatedWeight));
-        }
-    }
-
-    @Override
-    protected Integer calculateHeuristic(ImmutablePlanState state,
-            ArrayTable<String, String, ShortestPath> distanceMatrix, Collection<Package> unfinishedPackages) {
-        return weightedHeuristic.apply(state, distanceMatrix, unfinishedPackages);
+    protected SFA5Planner getHeuristicReferencePlanner() {
+        return heuristicReferencePlanner;
     }
 
     @Override
