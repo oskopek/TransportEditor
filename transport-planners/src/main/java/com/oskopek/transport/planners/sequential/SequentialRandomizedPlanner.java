@@ -282,10 +282,14 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
     /**
      * Choose the locatable based on the distribution created by measuring inverse distances to a given location.
      *
+     * @param <Locatable_> the locatable type
+     * @param locatables the locatable elements to choose from
      * @param to the location to which we are measuring the distances
      * @param temperature evens out the distribution. For temperatures larger than 1, the probability of picking
      * more distant locatable rises. The neutral value is 1,
      * values less than 1 make the distribution prefer the nearest vehicles.
+     * @param inverse if true, perceives to as the target, else as the source of a path (in symmetric graphs
+     * this has no effect)
      * @return a locatable randomly sampled from the created distribution
      */
     protected  <Locatable_ extends Locatable> Locatable_ chooseFromDistanceDistribution(Stream<Locatable_> locatables,

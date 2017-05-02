@@ -72,8 +72,9 @@ public class TRRAPNSequentialScheduler extends SequentialScheduler {
 
         /**
          * Default constructor.
+         * @param tempProblem the temporal version of the problem
          */
-        public TemporalRandomizedRestartAroundPathNearbyPlanner(Problem tempProblem) {
+        TemporalRandomizedRestartAroundPathNearbyPlanner(Problem tempProblem) {
             setName(TemporalRandomizedRestartAroundPathNearbyPlanner.class.getSimpleName());
             this.tempProblem = tempProblem;
             logger = LoggerFactory.getLogger(getClass());
