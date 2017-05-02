@@ -32,6 +32,13 @@ and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
 All the datasets used (and more) are available in the
 software project sources (see the attached \nameref{cd-contents}).
 Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}} IPC~2011 \citep{Garcia-Olaya2011}, and IPC~2014 \citep{Vallati2015}.
+Due to space constraints, we only show the three
+best non-baseline planners from each competition
+in the result quality tables and plots, based on total quality.
+In the temporal dataset tempo-sat-6 quality table, we only show the two best
+and add another external domain-independent planner
+to the comparison, the 2014 version of Temporal Fast Downward (TFD2014).
+
 
 In all planners where nondeterminism occurs,
 we set the initial random seed to 2017
@@ -179,7 +186,7 @@ domain knowledge indeed helps us generate better plans.
 
 The 2011 competition featured 20 sequential Transport problems,
 with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
-Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA. The fourth best planner, dae\_yahsp, performed consistenly worse by a small margin, except for problems number 4 and 5, where it beat our planner RRAPN.
+Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA.
 
 RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 18 out of the 20 problems. This can again be attributed to the size
 of the problems (see Table~\ref{tab:dataset-dimensions}).
