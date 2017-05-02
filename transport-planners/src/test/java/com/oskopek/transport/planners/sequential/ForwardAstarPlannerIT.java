@@ -22,7 +22,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class ForwardAstarPlannerIT { // TODO: Split into planner utils test and Astar IT
+public class ForwardAstarPlannerIT {
 
     private ForwardAstarPlanner planner;
     private static final SequentialDomain domain = new SequentialDomain("");
