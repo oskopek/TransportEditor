@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 public final class TemporalPlannerMain {
 
     private static final Planner planner = new RRAPNSequentialScheduler();
+//    private static final Planner planner = new TRRAPNSequentialScheduler();
 //    private static final Planner planner = new MSFA3SequentialScheduler();
 //    private static final Planner planner = new MSFA5SequentialScheduler();
 

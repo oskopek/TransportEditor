@@ -53,7 +53,7 @@ public class RandomizedRestartAroundPathNearbyPlanner extends RandomizedRestartO
      * @param transformed the transformed plan, or null
      * @return the score
      */
-    private static int calculateCurrentScore(ImmutablePlanState current, Plan transformed) {
+    protected static int calculateCurrentScore(ImmutablePlanState current, Plan transformed) {
         int curScore = current.getTotalTime();
         if (transformed != null) {
             curScore = Math.round(transformed.calculateMakespan().floatValue());
@@ -69,7 +69,7 @@ public class RandomizedRestartAroundPathNearbyPlanner extends RandomizedRestartO
      * @param planTransformation the plan transformation, optionally null
      * @return the plan, or an empty optional
      */
-    private Optional<Plan> planWithOptionalTransformations(Domain domain, Problem problem,
+    protected Optional<Plan> planWithOptionalTransformations(Domain domain, Problem problem,
             Function<Plan, Plan> planTransformation) {
         formatLog("Initializing planning...");
         resetState();
