@@ -240,10 +240,10 @@ The results of MSFA3 and MSFA5 on this dataset are almost identical.
 
 In this section, we present the results of our temporal planners on the tempo-sat-6 dataset. The following planners are included in the experiment:
 \begin{description}
-\item[AdHocTemp] The ? Temporal planner (Section~\ref{temporal-approach})
 \item[MSFA5Sched] The scheduled MSFA5 planner (Sections~\ref{msfa} and~\ref{sfa5})
 \item[RRAPNSched] The scheduled (Section~\ref{sched}) RRAPN planner (Section~\ref{rrapn})
 \item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
+\item[TRRAPN] The Temporal RRAPN planner (Section~\ref{temporal-approach})
 \end{description}
 
 \subsection{Results}\label{temporal-results}
@@ -314,7 +314,7 @@ We observe an evident performance increase of Temporal Fast Downward,
 when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 
 Our results further show that using a simple domain-dependent scheduling approach
-of sequential plans yields an improvement over domain-independent temporal planners. Our planners RRAPNSched
+of sequential plans yields an improvement over domain-independent temporal planners. Our scheduling planners RRAPNSched
 and MSFA5Sched achieve total qualities of $25.54/30$
 and $10.59/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
@@ -327,8 +327,16 @@ by a significant margin.
 We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score estimate is closer
 to the optimum than the estimates for larger problems.
 An interesting case is problem number 10,
-which was not solved by any planner, except TFD2014. We were not able to reasonably explain
-this phenomenon. \TODO{explain + p21 explain or fix}
+which was not solved by any scheduled planner.
+Problem \#10 contains a petrol station at location \texttt{city-loc-1},
+which, unfortunately, is not present at many precomputed shortest
+paths and the vehicles therefore do not drive through it often.
+What is more, even less of these paths coincide with paths
+on which the planners deliver packages.
+
+This problem is ommitted by the TRRAPN planner,
+which knows about fuel during planning and 
+adds 
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
