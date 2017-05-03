@@ -37,7 +37,13 @@ rm -rf "$target"
 sleep 1s
 mkdir -p "$target"
 python3 scripts/merge-results.py $results "$target/results.json"
+
+if [ -n "$DISPLAY" ]; then
+echo "Generating reports..."
 . generate-reports.sh "$lastconfig" "$target/results.json"
+else
+echo "Not generating reports, no display found."
+fi
 
 }
 

@@ -9,6 +9,10 @@ if `which rsvg-convert >/dev/null`; then
 fi
 }
 
+if [ -z "$DISPLAY" ]; then
+echo "No display, cannot generate reports."
+exit
+fi
 if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
 fi
