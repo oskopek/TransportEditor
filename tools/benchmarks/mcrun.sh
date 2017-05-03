@@ -13,7 +13,7 @@ TEvaraint="$1"
 config="$2"
 
 cd $HOME/git/$TEvariant/tools/benchmarks
-qsub -l select=1:ncpus=16:mem=12gb:scratch_local=10gb -l walltime=2:00:00 "benchmark.sh configs/$config.json" &
+qsub -m abe -l select=1:ncpus=16:mem=12gb:scratch_local=10gb -l walltime=2:00:00 -- mcbenchmark.sh configs/$config.json &
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }
 
