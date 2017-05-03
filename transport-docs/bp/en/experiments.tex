@@ -44,12 +44,15 @@ In all planners where nondeterminism occurs,
 we set the initial random seed to 2017
 (on all individual problem runs).
 All the following experiments
-were run on a computer
+were run on
+\comment{a computer
 with an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
 and 16 GB of memory, running Gentoo Linux.
 A big thank you goes out to the faculty for providing access to these machines.
+}
+MetaCentrum\puncfootnote{\url{https://www.metacentrum.cz/en/}}.
 We run all Java programs on Oracle's OpenJDK 
-version \texttt{1.8.0\_121}, build \texttt{b13}.
+version \texttt{1.8.0\_131}.
 The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
 in the project module directories specify
 the exact versions of libraries used.
@@ -218,7 +221,7 @@ However, they do (marginally) outperform Mercury on some problems, like
 problems 4--7, 9--10, 12, and 18--19.
 The results of MSFA3 and MSFA5 on this dataset are almost identical.
 
-\TODO{fix seq-sat-8 quality plot for MSFA5}
+\TODO{Update with new results + check plots correctness}
 
 
 
@@ -257,6 +260,7 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \begin{subtable}{\textwidth}
 \centering
 \scriptsize
+%\setlength{\tabcolsep}{4.5pt}
 \renewcommand{\footnotesize}{\scriptsize}
 \input{../data/tempo-sat-6-ipc-scores}
 \caption{Quality and score of temporal planners on the tempo-sat-6 dataset.}
@@ -274,31 +278,42 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \label{fig:tempo-sat-6-results}
 \end{figure}
 
+\comment{
+\begin{figure}[tb]
+\centering
+\begin{subfigure}{0.49\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
+\caption{RRAPNSched}
+\label{fig:tempo-sat-6-gantt-12-rrapn}
+\end{subfigure}
+\begin{subfigure}{0.49\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
+\caption{TFD2014}
+\label{fig:tempo-sat-6-gantt-12-tfd}
+\end{subfigure}
+\caption{Gantt charts of RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt}
+\end{figure}
+}
 \begin{figure}[tbp]
 \centering
 \begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
-\caption{Gantt chart of the temporal planner RRAPNSched on the tempo-sat-6 \texttt{p12} problem.}
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
+\caption{RRAPNSched}
 \label{fig:tempo-sat-6-gantt-12-rrapn}
 \end{subfigure}
 
-\comment{
 \begin{subfigure}{\textwidth}
+\vspace{0.5cm}
 \centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-MSFA5}
-\caption{Gantt chart of the temporal planner MSFA5Sched on the tempo-sat-6 \texttt{p12} problem.}
-\label{fig:tempo-sat-6-gantt-12-msfa5}
-\end{subfigure}
-}
-
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
-\caption{Gantt chart of the temporal planner TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
+\caption{TFD2014}
 \label{fig:tempo-sat-6-gantt-12-tfd}
 \end{subfigure}
-\caption{Gantt charts of the temporal planner RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
+\caption{Gantt charts of the RRAPNSched and TFD2014 planners on the tempo-sat-6 \texttt{p12} problem.}
 \label{fig:tempo-sat-6-gantt}
 \end{figure}
 
@@ -364,16 +379,23 @@ In the 2014 IPC, we would have attained second place on overall quality in the T
 
 Another major advantage previously unmentioned is that
 our planners generate good solutions quite fast.
-In Table~\ref{tab:planner-results-short},
-we show results from a 10 second run of our planners on all datasets.
+To show this, we present results from running all our planners on all problems for 3 seconds each (Table~\ref{tab:planner-results-short}).
+The attained scores are usually very close to the
+scores from long planning runs, except for the problems
+where the planner did not find a plan at all in the
+given time limit.
+Note that the quality in these tables cannot be directly
+compared to the previous tables, but the score can.
+
 
 
 \begin{table}[tbp]
 \centering
 \begin{subtable}{0.48\textwidth}
 \centering
-\tiny
-\renewcommand{\footnotesize}{\tiny}
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
+\setlength{\tabcolsep}{3.5pt}
 \input{../data/seq-sat-6-ipc-scores-short}
 \caption{Quality and score of our planners on the seq-sat-6 dataset.}
 \label{tab:seq-sat-6-ipc-scores-short}
@@ -381,18 +403,20 @@ we show results from a 10 second run of our planners on all datasets.
 \quad
 \begin{subtable}{0.48\textwidth}
 \centering
-\tiny
-\renewcommand{\footnotesize}{\tiny}
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
+\setlength{\tabcolsep}{2pt}
 \input{../data/tempo-sat-6-ipc-scores-short}
-\caption{Quality and score of our planners on the tempo-sat-6 dataset. \TODO{remove TFD2014}}
+\caption{Quality and rounded score of our planners on the tempo-sat-6 dataset.}
 \label{tab:tempo-sat-6-ipc-scores-short}
 \end{subtable}
 
 \vspace{0.5cm}
 \begin{subtable}{0.48\textwidth}
 \centering
-\tiny
-\renewcommand{\footnotesize}{\tiny}
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
+\setlength{\tabcolsep}{3.5pt}
 \input{../data/seq-sat-7-ipc-scores-short}
 \caption{Quality and score of our planners on the seq-sat-7 dataset.}
 \label{tab:seq-sat-7-ipc-scores-short}
@@ -400,13 +424,14 @@ we show results from a 10 second run of our planners on all datasets.
 \quad
 \begin{subtable}{0.48\textwidth}
 \centering
-\tiny
-\renewcommand{\footnotesize}{\tiny}
+\scriptsize
+\renewcommand{\footnotesize}{\scriptsize}
+\setlength{\tabcolsep}{3.5pt}
 \input{../data/seq-sat-8-ipc-scores-short}
 \caption{Quality and score of our planners on the seq-sat-8 dataset.}
 \label{tab:seq-sat-8-ipc-scores-short}
 \end{subtable}
-\caption{Results of our planners when run for 10 seconds on all datasets.}
+\caption{Results of our planners when run for 3 seconds on all datasets.}
 \label{tab:planner-results-short}
 \end{table}
 
