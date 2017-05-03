@@ -26,6 +26,11 @@ eval "$JAVA_HOME/bin/java -Xmx10g -Dlogging.path=\"$logdir\" -Dtransport.root=\"
 endtime="`date -u '+%Y%m%d-%H%M%S'`"
 
 echo "End time UTC: $endtime"
-echo "Generating reports..."
+echo "Results: $resultdir"
 
+if [ -n "$DISPLAY" ]; then
+echo "Generating reports..."
 exec ./generate-reports.sh  "$config" "$resultdir/results.json"
+else
+echo "Not generating reports, no display found."
+fi
