@@ -317,6 +317,8 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \label{fig:tempo-sat-6-gantt}
 \end{figure}
 
+\TODO{add TRRAPN to the discussion}
+
 Planners that entered the 2008 temporal track at the IPC did not cope well with the Transport domain
 --- only two non-baseline planners (SGPlan$_6$ and TFD) were able to produce at least one plan
 for any problem. Additionally, only the smallest problem, problem number 1, was solved
@@ -341,17 +343,18 @@ RRAPNSched, on the other hand, is able to beat even newer temporal planners like
 by a significant margin.
 We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score estimate is closer
 to the optimum than the estimates for larger problems.
-An interesting case is problem number 10,
-which was not solved by any scheduled planner.
-Problem \#10 contains a petrol station at location \texttt{city-loc-1},
-which, unfortunately, is not present at many precomputed shortest
-paths and the vehicles therefore do not drive through it often.
-What is more, even less of these paths coincide with paths
-on which the planners deliver packages.
 
-This problem is ommitted by the TRRAPN planner,
+An interesting case is problem number 10,
+which was not solved by any of our planners based purely on scheduling.
+This problem contains a petrol station at location \texttt{city-loc-1},
+which, unfortunately, is not present in many precomputed shortest
+paths and the vehicles therefore do not drive through it often.
+What is more, even fewer of those paths coincide with ones
+on which the planners deliver packages.
+One way to solve the issue is to use the TRRAPN planner's approach,
 which knows about fuel during planning and 
-adds 
+sometimes adds fuel runs to the plan, during which a chosen vehicle
+drives to a petrol station to refuel.
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
