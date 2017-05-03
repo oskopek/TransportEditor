@@ -9,7 +9,9 @@ echo "source .shrc && cd git/$TEvariant/tools/benchmarks && ./benchmark.sh confi
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }
 
-configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa5sched tempo-sat-${ipc}-trrapn'
+configs='echo
+seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa5sched tempo-sat-${ipc}-trrapn
+seq-sat-${ipc}-rrapn-2 seq-sat-${ipc}-msfa3-2 seq-sat-${ipc}-msfa5-2 tempo-sat-${ipc}-tfd2014-2 tempo-sat-${ipc}-rrapnsched-2 tempo-sat-${ipc}-msfa5sched-2 tempo-sat-${ipc}-trrapn-2'
 TEvariant="TransportEditor-final"
 exp_configs=""
 

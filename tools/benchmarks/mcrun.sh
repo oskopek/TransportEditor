@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-configs='echo seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa5sched tempo-sat-${ipc}-trrapn'
+configs='echo
+seq-sat-${ipc}-rrapn seq-sat-${ipc}-msfa3 seq-sat-${ipc}-msfa5 tempo-sat-${ipc}-tfd2014 tempo-sat-${ipc}-rrapnsched tempo-sat-${ipc}-msfa5sched tempo-sat-${ipc}-trrapn
+seq-sat-${ipc}-rrapn-2 seq-sat-${ipc}-msfa3-2 seq-sat-${ipc}-msfa5-2 tempo-sat-${ipc}-tfd2014-2 tempo-sat-${ipc}-rrapnsched-2 tempo-sat-${ipc}-msfa5sched-2 tempo-sat-${ipc}-trrapn-2'
 TEvariant="TransportEditor"
 
 export HOME=/storage/brno2/home/oskopek
@@ -12,7 +14,7 @@ TEvaraint="$1"
 config="$2"
 
 cd $HOME/git/$TEvariant/tools/benchmarks
-qsub -m abe -l select=1:ncpus=24:mem=24gb:scratch_local=10gb -l walltime=2:00:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
+qsub -m abe -l select=1:ncpus=12:mem=12gb:scratch_local=10gb -l walltime=1:45:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }
 

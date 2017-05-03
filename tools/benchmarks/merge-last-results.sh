@@ -47,10 +47,10 @@ fi
 
 }
 
-ipc08seq="seq-sat-ipc08-rrapn seq-sat-ipc08-msfa3 seq-sat-ipc08-msfa5"
-ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-msfa3 seq-sat-ipc11-msfa5"
-ipc14seq="seq-sat-ipc14-rrapn seq-sat-ipc14-msfa3 seq-sat-ipc14-msfa5"
-ipc08temp="tempo-sat-ipc08-rrapnsched tempo-sat-ipc08-tfd2014 tempo-sat-ipc08-trrapn tempo-sat-ipc08-msfa5sched"
+ipc08seq="seq-sat-ipc08-rrapn seq-sat-ipc08-msfa3 seq-sat-ipc08-msfa5 seq-sat-ipc08-rrapn-2 seq-sat-ipc08-msfa3-2 seq-sat-ipc08-msfa5-2"
+ipc11seq="seq-sat-ipc11-rrapn seq-sat-ipc11-msfa3 seq-sat-ipc11-msfa5 seq-sat-ipc11-rrapn-2 seq-sat-ipc11-msfa3-2 seq-sat-ipc11-msfa5-2"
+ipc14seq="seq-sat-ipc14-rrapn seq-sat-ipc14-msfa3 seq-sat-ipc14-msfa5 seq-sat-ipc14-rrapn-2 seq-sat-ipc14-msfa3-2 seq-sat-ipc14-msfa5-2"
+ipc08temp="tempo-sat-ipc08-rrapnsched tempo-sat-ipc08-tfd2014 tempo-sat-ipc08-trrapn tempo-sat-ipc08-msfa5sched tempo-sat-ipc08-rrapnsched-2 tempo-sat-ipc08-tfd2014-2 tempo-sat-ipc08-trrapn-2 tempo-sat-ipc08-msfa5sched-2"
 
 #TEvariant="TransportEditor-final"
 #basepath="$HOME/git/$TEvariant/tools/benchmarks"

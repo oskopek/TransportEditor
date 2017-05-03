@@ -1,0 +1,73 @@
+{
+  "domain": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p01-domain.pddl",
+  "problems": {
+    "p16": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p16.pddl",
+      "bestScore": 1875
+    },
+    "p17": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p17.pddl",
+      "bestScore": 3331
+    },
+    "p18": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p18.pddl",
+      "bestScore": null
+    },
+    "p19": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p19.pddl",
+      "bestScore": null
+    },
+    "p20": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p20.pddl",
+      "bestScore": 6362
+    },
+    "p21": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p21.pddl",
+      "bestScore": 63
+    },
+    "p22": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p22.pddl",
+      "bestScore": 94
+    },
+    "p23": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p23.pddl",
+      "bestScore": 123
+    },
+    "p24": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p24.pddl",
+      "bestScore": 140
+    },
+    "p25": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p25.pddl",
+      "bestScore": 156
+    },
+    "p26": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p26.pddl",
+      "bestScore": null
+    },
+    "p27": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p27.pddl",
+      "bestScore": null
+    },
+    "p28": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p28.pddl",
+      "bestScore": null
+    },
+    "p29": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p29.pddl",
+      "bestScore": null
+    },
+    "p30": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p30.pddl",
+      "bestScore": null
+    }
+  },
+  "scoreFunctionType": "TOTAL_TIME",
+  "planners": {
+    "MSFA5Sched": {
+      "className": "com.oskopek.transport.planners.temporal.MSFA5SequentialScheduler"
+    }
+  },
+  "threadCount": 5,
+  "timeout": 600
+}
