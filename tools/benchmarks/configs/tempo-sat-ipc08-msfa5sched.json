@@ -128,6 +128,6 @@
       "className": "com.oskopek.transport.planners.temporal.MSFA5SequentialScheduler"
     }
   },
-  "threadCount": 4,
+  "threadCount": 10,
   "timeout": 600
 }
