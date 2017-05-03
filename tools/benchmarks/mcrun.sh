@@ -14,10 +14,11 @@ TEvaraint="$1"
 config="$2"
 
 cd $HOME/git/$TEvariant/tools/benchmarks
-qsub -m abe -l select=1:ncpus=12:mem=12gb:scratch_local=10gb -l walltime=1:45:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
+qsub -m e -l select=1:ncpus=10:mem=15gb:scratch_local=10gb -l walltime=0:45:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }
 
+chmod +x *.sh
 exp_configs=""
 for ipc in ipc08 ipc11 ipc14; do
     for config in `eval $configs`; do
