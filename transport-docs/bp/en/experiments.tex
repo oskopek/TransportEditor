@@ -183,9 +183,13 @@ They generally obtain better results than RRAPN on smaller problems
 (problems 2--3, 21--22),
 but they can generate very good results even on larger problems,
 like 14--20 or 28--29.
-In the final summary, MSFA5 comes out on top as the better one of the two planners on this dataset.
+The reason why RRAPN occasionally obtains better plans than the
+admissible heuristic of MSFA5 is that we weight the heuristic,
+therefore making it inadmissible.
+Based on total quality, MSFA5 comes out on top as the better one of the two MSFA planners on this dataset.
 
-All of our three planners beat all planners from the original competition based on total score,
+
+All of our three planners beat all planners from the original competition based on total quality,
 which despite the possible minor differences in the computing environment indicates that
 domain knowledge indeed helps us generate better plans.
 
