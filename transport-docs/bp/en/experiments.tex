@@ -170,7 +170,7 @@ the total quality of LAMA drops to $24.43/30$,
 because several larger problems were solved better than the
 best known solution from IPC 2008.
 Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.75/30$,
-which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to approximate
+which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to calculate
 solutions of larger problems fast, which can be observed on
 the results on problems 7--10 or 25--27,
 which are the largest problems.
@@ -179,7 +179,11 @@ on some smaller problems like problem number 2 or 12,
 due to its explicit nature.
 
 MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
-In the final summary, MSFA5 comes out on top as the better one of the two planners.
+They generally obtain better results than RRAPN on smaller problems
+(problems 2--3, 21--22),
+but they can generate very good results even on larger problems,
+like 14--20 or 28--29.
+In the final summary, MSFA5 comes out on top as the better one of the two planners on this dataset.
 
 All of our three planners beat all planners from the original competition based on total score,
 which despite the possible minor differences in the computing environment indicates that
@@ -191,17 +195,17 @@ The 2011 competition featured 20 sequential Transport problems,
 with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
 Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA.
 
-RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 18 out of the 20 problems. This can again be attributed to the size
+RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 17 out of the 20 problems (problem 4, 5, and 6). This can again be attributed to the size
 of the problems (see Table~\ref{tab:dataset-dimensions}).
 
 Even though RRAPN is better than the original planners more often than both MSFA planners,
-they are come out on top based on total cost. Even more interesting, the problems
+they come out on top based on total cost. Even more interesting, the problems
 where they perform well are complementary to the ones where RRAPN performs well,
 as is visible on the results of problems 3--6, 10--12, and 13--15.
 
 \subsubsection{IPC 2014}
 
-In the satisficing track of IPC 2014, the winner on the Transport domain
+In the sequential satisficing track of IPC 2014, the winner on the Transport domain
 was without a doubt the Mercury planner, achieving
 a stunning $20/20$ total quality. Even more interesting is the fact that
 the runner-up yahsp3-mt achieved a score of only $10.74/20$
@@ -315,9 +319,7 @@ The generated plans and benchmark results can be found in the attached \nameref{
 \label{fig:tempo-sat-6-gantt}
 \end{figure}
 
-\TODO{add TRRAPN to the discussion}
-
-Planners that entered the 2008 temporal track at the IPC did not cope well with the Transport domain
+Planners that entered the 2008 temporal satisficing track at the IPC did not cope well with the Transport domain
 --- only two non-baseline planners (SGPlan$_6$ and TFD) were able to produce at least one plan
 for any problem. Additionally, only the smallest problem, problem number 1, was solved
 to the best known score by any planner.
@@ -330,8 +332,8 @@ when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 
 Our results further show that using a simple domain-dependent scheduling approach
 of sequential plans yields an improvement over domain-independent temporal planners. Our scheduling planners RRAPNSched
-and MSFA5Sched achieve total qualities of $25.54/30$
-and $10.59/30$, respectively.
+and MSFA5Sched achieve total qualities of $27.03/30$
+and $14.50/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
 and therefore produces worse results when scheduled using our algorithm,
 mostly due to the inability of the scheduler to add enough \refuel{}
@@ -349,10 +351,15 @@ which, unfortunately, is not present in many precomputed shortest
 paths and the vehicles therefore do not drive through it often.
 What is more, even fewer of those paths coincide with ones
 on which the planners deliver packages.
-One way to solve the issue is to use the TRRAPN planner's approach,
+
+One way to solve the issue is to use TRRAPN planner's approach,
 which knows about fuel during planning and 
 sometimes adds fuel runs to the plan, during which a chosen vehicle
 drives to a petrol station to refuel.
+TRRAPN achieves the best total quality from all of our planners.
+It is marginally beaten on some problems by RRAPNSched (for example problems 4--6) but makes up for this by getting better scores on
+larger problems, where it takes more effort to plan with fuel correctly,
+like problems 10, 19, 29, and 30.
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
