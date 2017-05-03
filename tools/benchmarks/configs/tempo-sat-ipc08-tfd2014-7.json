@@ -1,21 +1,21 @@
 {
   "domain": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p01-domain.pddl",
   "problems": {
-    "p08": {
-      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p08.pddl",
+    "p27": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p27.pddl",
       "bestScore": null
     },
-    "p09": {
-      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p09.pddl",
+    "p28": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p28.pddl",
       "bestScore": null
     },
-    "p10": {
-      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p10.pddl",
+    "p29": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p29.pddl",
       "bestScore": null
     },
-    "p11": {
-      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p11.pddl",
-      "bestScore": 549
+    "p30": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p30.pddl",
+      "bestScore": null
     }
   },
   "scoreFunctionType": "TOTAL_TIME",

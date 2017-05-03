@@ -69,5 +69,5 @@
     }
   },
   "threadCount": 5,
-  "timeout": 600
+  "timeout": 1800
 }

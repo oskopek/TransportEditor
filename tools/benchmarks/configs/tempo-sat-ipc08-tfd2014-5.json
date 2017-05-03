@@ -1,0 +1,30 @@
+{
+  "domain": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p01-domain.pddl",
+  "problems": {
+    "p19": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p19.pddl",
+      "bestScore": null
+    },
+    "p20": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p20.pddl",
+      "bestScore": 6362
+    },
+    "p21": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p21.pddl",
+      "bestScore": 63
+    },
+    "p22": {
+      "filePath": "${transport.root}/datasets/ipc08/tempo-sat/transport-numeric/p22.pddl",
+      "bestScore": 94
+    }
+  },
+  "scoreFunctionType": "TOTAL_TIME",
+  "planners": {
+    "TFD2014": {
+      "className": "com.oskopek.transport.model.planner.ExternalPlanner",
+      "params": "tfd-plan.sh {0} {1} {2}"
+    }
+  },
+  "threadCount": 1,
+  "timeout": 1800
+}
