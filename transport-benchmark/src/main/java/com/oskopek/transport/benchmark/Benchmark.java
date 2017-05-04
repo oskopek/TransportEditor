@@ -115,7 +115,7 @@ public class Benchmark {
                             } else {
                                 logger.debug("Getting cancelled planner result {}, {}",
                                         benchmarkRun.getPlanner().getName(), benchmarkRun.getProblem().getName());
-                                BenchmarkRun planned = Try.of(() -> planningFuture.get(10, TimeUnit.SECONDS))
+                                BenchmarkRun planned = Try.of(() -> planningFuture.get(30, TimeUnit.SECONDS))
                                         .onFailure(e -> logger.warn("Waiting for planning future failed.", e))
                                         .getOrElse(defaultRun);
                                 runFuture.complete(planned);

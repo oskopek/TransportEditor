@@ -40,46 +40,6 @@
     "p10": {
       "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p10.pddl",
       "bestScore": 4690
-    },
-    "p11": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p11.pddl",
-      "bestScore": 1315
-    },
-    "p12": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p12.pddl",
-      "bestScore": 1835
-    },
-    "p13": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p13.pddl",
-      "bestScore": 2364
-    },
-    "p14": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p14.pddl",
-      "bestScore": 7925
-    },
-    "p15": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p15.pddl",
-      "bestScore": 6909
-    },
-    "p16": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p16.pddl",
-      "bestScore": 6951
-    },
-    "p17": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p17.pddl",
-      "bestScore": 5209
-    },
-    "p18": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p18.pddl",
-      "bestScore": 3902
-    },
-    "p19": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p19.pddl",
-      "bestScore": 5257
-    },
-    "p20": {
-      "filePath": "${transport.root}/datasets/ipc11/seq-sat/transport/p20.pddl",
-      "bestScore": 4435
     }
   },
   "scoreFunctionType": "TOTAL_TIME",
@@ -88,6 +48,6 @@
       "className": "com.oskopek.transport.planners.sequential.MetaSFA3Planner"
     }
   },
-  "threadCount": 4,
-  "timeout": 600
+  "threadCount": 5,
+  "timeout": 900
 }

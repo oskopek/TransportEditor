@@ -6,10 +6,8 @@ import com.oskopek.transport.model.domain.action.Action;
 import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.plan.TemporalPlan;
-import com.oskopek.transport.model.problem.Location;
+import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
-import com.oskopek.transport.model.problem.Problem;
-import com.oskopek.transport.model.problem.Vehicle;
 import com.oskopek.transport.model.problem.graph.RoadEdge;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
@@ -279,6 +277,53 @@ public abstract class SequentialRandomizedPlanner extends AbstractPlanner {
             }
         }
         return targetMap;
+    }
+
+    /**
+     * Choose the locatable based on the distribution created by measuring inverse distances to a given location.
+     *
+     * @param <Locatable_> the locatable type
+     * @param locatables the locatable elements to choose from
+     * @param to the location to which we are measuring the distances
+     * @param temperature evens out the distribution. For temperatures larger than 1, the probability of picking
+     * more distant locatable rises. The neutral value is 1,
+     * values less than 1 make the distribution prefer the nearest vehicles.
+     * @param inverse if true, perceives to as the target, else as the source of a path (in symmetric graphs
+     * this has no effect)
+     * @return a locatable randomly sampled from the created distribution
+     */
+    protected  <Locatable_ extends Locatable> Locatable_ chooseFromDistanceDistribution(Stream<Locatable_> locatables,
+            Location to, double temperature, boolean inverse) {
+        List<Tuple2<Double, Locatable_>> locatableDistances = locatables
+                .sorted(Comparator.comparing(ActionObject::getName))
+                .map(v -> {
+                    if (!inverse) {
+                        return Tuple.of((double) getShortestPathMatrix().get(v.getLocation().getName(), to.getName())
+                                .getDistance(), v);
+                    } else {
+                        return Tuple.of((double) getShortestPathMatrix().get(to.getName(), v.getLocation().getName())
+                                .getDistance(), v);
+                    }
+                })
+                .collect(Collectors.toList());
+        locatableDistances = locatableDistances.stream() // inverse + softmax
+                .map(t -> Tuple.of(Math.exp((1d / (t._1 + 1d)) / temperature), t._2)).collect(Collectors.toList());
+        double sumOfDistances = locatableDistances.stream().mapToDouble(t -> t._1).sum();
+        List<Double> locatableProbs = locatableDistances.stream()
+                .map(t -> t._1 / sumOfDistances).collect(Collectors.toList());
+        double intermediateSum = 0d;
+        for (int i = 0; i < locatableProbs.size(); i++) {
+            Double elem = locatableProbs.get(i);
+            intermediateSum += elem;
+            locatableProbs.set(i, intermediateSum);
+        }
+
+        double rand = getRandom().nextDouble();
+        int chosenIndex = 0;
+        while (chosenIndex < locatableProbs.size() && rand > locatableProbs.get(chosenIndex)) {
+            chosenIndex++;
+        }
+        return locatableDistances.get(chosenIndex)._2;
     }
 
     @Override

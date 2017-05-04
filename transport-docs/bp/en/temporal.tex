@@ -127,12 +127,11 @@ a sequential plan $\pi$
 \State $G \gets $ add node $a$ to $G$
 \EndFor
 \For{$i \gets 1 \textbf{ to } |\pi|$}
-\State $a \gets \pi[i]$
 \For{$j \gets i \textbf{ to } |\pi|$}
-\State $b \gets \pi[j]$
+\State $a \gets \pi[i]$, $b \gets \pi[j]$
 \If{$veh(a) = veh(b)$ and not \pickup{}/\drop{} and \refuel{}}
 \State $G \gets $ add edge $(a, b)$ to $G$
-\ElsIf{$a$ and $b$ are \pickup{} and \drop{} actions}
+\ElsIf{$a$ and~$b$ are \pickup{} and \drop{} actions}
 \State $G \gets $ add edge $(a, b)$ to $G$
 \EndIf
 \EndFor
@@ -162,7 +161,7 @@ a sequential plan $\pi$
 {A scheduling algorithm
 for temporal planning using sequential planners.}{A scheduling algorithm
 for temporal planning using sequential planners.
-The maps $t_s$ and $t_e$ represent the assigned start and end times (respectively) of planned actions. The parameter $\delta > 0$ is a constant used for separating different actions.
+The maps $t_s$ and $t_e$ represent the assigned start and end times of planned actions. The parameter $\delta > 0$ is a constant used for separating different actions.
 \textsc{Topological-Sort} returns the same graph, but with nodes sorted
 using Kahn's algorithm.
 \textsc{Add-Refuel-Actions} is briefly described in Section~\ref{sched}.}{sched}{tb}
@@ -242,4 +241,35 @@ and a meta-heuristically weighted forward planner (Section~\ref{msfa}) in Chapte
 
 
 
-\section{TODO: Ad-hoc temporal planning?}\label{temporal-approach}
+\section{Ad-hoc temporal planning}\label{temporal-approach}
+
+The problem with simply adding fuel to sequential plans generated
+by planners that have no notion of fuel is that
+for some problems, the generated plans may never be valid even if
+vehicles refuel at every opportunity they get.
+
+One possible solution to this issue is to create a fuel-aware ad-hoc planner
+similar to the ones created in Section~\ref{rand-restart}.
+We design the Temporal Randomized Restart
+Around Path Nearby Planner (TRRAPN) based on this idea,
+building on top of the RRAPN planner.
+
+Just before choosing between a random vehicle and the nearest vehicle
+in the original algorithm of RROPN, we uniformly sample a random number from the interval $[0,1]$
+and if it is smaller than some parameter $\Delta \in [0, 1]$,
+we do a fuel run instead. A \textit{fuel run} is a series of actions
+in which a vehicle drives to a petrol station.
+The rest of the algorithm stays the same.
+
+In TRRAPN, the vehicle is chosen at random from a uniform distribution.
+The petrol station is chosen at random from the inverse distance
+distribution of the vehicle's location towards the petrol stations,
+similar to the distribution defined for RRAPD in Section~\ref{rrapd}.
+The $\Delta$ parameter is exponentially increased during
+a planner run. After $\chi$ sequential plans are generated, which are all invalid fuel-wise (after adding back fuel and scheduling them), $\Delta$ is multiplied by $\delta$
+and capped at $0.5$:
+$$\Delta \gets \min(0.5, \delta \cdot \Delta).$$
+In all our experiments, the step $\delta = 2$, $\chi = 1000,$
+and $\Delta$ is initially set to $3 \cdot 10^{6}$.
+The temperature parameter $T$ in the inverse distance distribution of petrol stations is set to $0.05$. We will also evaluate this planner
+in Chapter~\ref{experiments}.

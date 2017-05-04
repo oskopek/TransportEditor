@@ -7,13 +7,10 @@ import com.oskopek.transport.model.plan.SequentialPlan;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
-import javaslang.Tuple;
-import javaslang.Tuple2;
 import javaslang.collection.Stream;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Chooses a package randomly and sample a nearby vehicle from a distribution based on inverse distance to the package,
@@ -53,8 +50,9 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
                 Package chosenPackage = unfinished.get(getRandom().nextInt(unfinished.size()));
                 Vehicle chosenVehicle;
                 while (true) {
-                    chosenVehicle = chooseFromDistanceDistribution(curProblem.getAllVehicles(),
-                            chosenPackage.getLocation(), chosenPackage.getSize().getCost(), temperature);
+                    chosenVehicle = chooseFromDistanceDistribution(Stream.ofAll(curProblem.getAllVehicles())
+                                    .filter(v -> v.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()),
+                            chosenPackage.getLocation(), temperature, false);
                     if (chosenVehicle.getCurCapacity().getCost() >= chosenPackage.getSize().getCost()) {
                         break;
                     }
@@ -83,46 +81,6 @@ public class RandomizedRestartAroundPathDistributionPlanner extends SequentialRa
                 savePlanIfBetter(totalTime, new SequentialPlan(current.getAllActionsInList()));
             }
         }
-    }
-
-    /**
-     * Choose the vehicle based on the distribution created by measuring inverse distances to a given location.
-     * Only considers vehicles that have a certain free capacity.
-     *
-     * @param vehicles the vehicles to choose from
-     * @param to the location to which we are measuring the distances
-     * @param minFreeCapacity the minimum capacity vehicles must have
-     * @param temperature evens out the distribution. For temperatures larger than 1, the probability of picking
-     * more distant vehicles rises. The neutral value is 1,
-     * values less than 1 make the distribution prefer the nearest vehicles.
-     * @return a vehicle randomly sampled from the created distribution
-     */
-    private Vehicle chooseFromDistanceDistribution(Collection<Vehicle> vehicles, Location to, int minFreeCapacity,
-            double temperature) {
-        List<Tuple2<Double, Vehicle>> vehDistances = vehicles.stream()
-                .filter(v -> v.getCurCapacity().getCost() >= minFreeCapacity)
-                .sorted(Comparator.comparing(Vehicle::getName))
-                .map(v -> Tuple.of((double) getShortestPathMatrix().get(v.getLocation().getName(), to.getName())
-                        .getDistance(), v))
-                .collect(Collectors.toList());
-        vehDistances = vehDistances.stream() // inverse + softmax
-                .map(t -> Tuple.of(Math.exp((1d / (t._1 + 1d)) / temperature), t._2)).collect(Collectors.toList());
-        double sumOfDistances = vehDistances.stream().mapToDouble(t -> t._1).sum();
-        List<Double> vehProbs = vehDistances.stream()
-                .map(t -> t._1 / sumOfDistances).collect(Collectors.toList());
-        double intermediateSum = 0d;
-        for (int i = 0; i < vehProbs.size(); i++) {
-            Double elem = vehProbs.get(i);
-            intermediateSum += elem;
-            vehProbs.set(i, intermediateSum);
-        }
-
-        double rand = getRandom().nextDouble();
-        int chosenIndex = 0;
-        while (chosenIndex < vehProbs.size() && rand > vehProbs.get(chosenIndex)) {
-            chosenIndex++;
-        }
-        return vehDistances.get(chosenIndex)._2;
     }
 
     @Override

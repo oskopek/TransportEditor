@@ -201,7 +201,8 @@ public abstract class SequentialScheduler extends AbstractPlanner {
                     if (fueled == null) {
                         return null;
                     } else {
-                        break;
+                        seqActionList = fueled;
+                        continue;
                     }
                 }
                 boolean foundEnoughFuel = false;

@@ -16,7 +16,7 @@ cp -v "$from/ipc-reports/runtime_line_chart.pdf" "$target/img/$dataset-runtime.p
 }
 
 prefix="$HOME/git"
-TEvariant="TransportEditor-final"
+TEvariant="TransportEditor"
 TE="TransportEditor"
 merged="$prefix/$TEvariant/tools/benchmarks/results/merged"
 target="$prefix/$TE/transport-docs/bp"
