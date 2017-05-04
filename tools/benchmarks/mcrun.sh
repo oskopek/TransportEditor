@@ -22,9 +22,9 @@ tfd_flag="$3"
 
 cd $HOME/git/$TEvariant/tools/benchmarks
 if [ -z "$tfd_flag" ]; then
-qsub -m e -l select=1:ncpus=10:mem=12gb:scratch_local=10gb -l walltime=1:55:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
+qsub -m e -l select=1:ncpus=6:mem=12gb:scratch_local=10gb -l walltime=1:45:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
 else
-qsub -m e -l select=1:ncpus=2:mem=35gb:scratch_local=10gb -l walltime=2:30:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
+qsub -m e -l select=1:ncpus=1:mem=50gb:scratch_local=10gb -l walltime=2:15:00 -- "$HOME/git/$TEvariant/tools/benchmarks/mcbenchmark.sh" "configs/$config.json" &
 fi
 echo "`date -u '+[%H:%M:%S]'` Finished: $config"
 }

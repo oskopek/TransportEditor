@@ -22,5 +22,5 @@
     }
   },
   "threadCount": 1,
-  "timeout": 1200
+  "timeout": 900
 }
