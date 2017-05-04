@@ -181,8 +181,8 @@ and \{0\} used to represent the domain file path, \{1\} the problem file path, a
                "problems" : { "<problem_name>" : <problem_config>
                           ( , "<problem_name>" : <problem_config> )* },
                "scoreFunctionType"  : "<score_function>",
-               "planners": { "<planner_name>" : "<planner_config>"
-                        ( , "<planner_name>" : "<planner_config>" )* },
+               "planners": { "<planner_name>" : <planner_config>
+                         ( , "<planner_name>" : <planner_config> )* },
                "threadCount": <integer>,
                "timeout": <integer> }
 <filepath> ::= <string>
@@ -192,8 +192,8 @@ and \{0\} used to represent the domain file path, \{1\} the problem file path, a
 <score> ::= null | <float>
 <score_function> ::= TOTAL_TIME | ACTION_COUNT
 <planner_name> ::= <string>
-<planner_config> ::= { "className" : "<class>",
-                       "params" : "<executable_templ>" }
+<planner_config> ::= { "className" : "<class>"
+                   ( , "params" : "<executable_templ>" ) }
 <class> ::= <string>
 <executable_templ> ::= <string>
 <string> ::= ( <character> )*
