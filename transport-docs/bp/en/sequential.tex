@@ -1,10 +1,9 @@
 \chapter{Sequential Transport planning}
 
 In this chapter, we describe the planning approaches we
-selected, implemented, and tested.
-We will attempt to leverage the acquired
-Transport domain knowledge
-while designing these approaches as much as possible.
+selected, implemented, and tested for the STRIPS variant of Transport.
+Throughout this, we will leverage the acquired
+Transport domain knowledge as much as possible.
 
 \section{State-space forward planning}\label{forward-planning}
 
@@ -14,12 +13,12 @@ in state space (Figure~\ref{alg:forward-search}).
 Although the algorithm is defined on a classical representation,
 it can be used on any planning problem, where we can:
 \begin{itemize}
-\item determine if a state is a goal state or not;
+\item determine whether a state is a goal state or not;
 \item iterate over all actions applicable to a state; and
 \item compute a successor state by applying an action to the current state.
 \end{itemize}
 Forward search, despite its simplicity, is one of the most frequently
-used in domain-independent planners.
+used approaches for domain-independent planners.
 There are two key steps of the algorithm, which
 cause the most problems in practice: representing
 the applicable actions (step 6) and choosing the
@@ -56,23 +55,23 @@ The forward search algorithm, in its specified form, is nondeterministic.
 If we knew which action to choose in step 8,
 we would know how to solve the planning problem.
 Since we generally do not know which action (state transition) to chose in a given state, the choice is usually delegated to a suitable
-search algorithm, which makes the whole algorithm deterministic.
+search algorithm, which makes forward search deterministic.
 
 
 \subsection{Deterministic search algorithms}
 
 State space search algorithms are a heavily studied area
 of computer science and any reasonable search algorithm applied
-to forward search will yield correct results.
+to forward search will yield results.
 Examples of such algorithms are Breadth-First Search (BFS),
 Depth-First Search (DFS), and many more \citep[Section~3.5]{Russell1995}.
-The choice of a search algorithm greatly influence
+The choice of a search algorithm greatly influences
 the quality of resulting plans when applied to forward search.
 
-As the sizes of planning problems grow,
+As sizes of planning problems grow,
 choosing a search algorithm is even more crucial.
 Several well-performing algorithms on small problems (like BFS)
-exceed reasonable run times and become unusable for practical applications.
+exceed reasonable run times and become unusable for practical application on larger problems.
 An important and practically useful search algorithm
 withstanding larger problem sizes is the \textit{A$^{\kern-.05em*}$ algorithm} (Figure~\ref{alg:astar})
 introduced in \citet{Hart1968}.
@@ -97,16 +96,16 @@ a consistent heuristic $h$
 \State $\pi[s_0] \gets \emptyset$,
 $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \While{$o \neq \emptyset$}
-\State $s \gets \mt{argmin}_{s \in o} f[s]$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
+\State $s \gets \mt{argmin}_{s' \in o} f[s']$, $o \gets o \setminus \{s\}$, $c \gets c \cup \{s\}$
 \If {$s$ satisfies $g$} \Return \Call{Collect-Plan}{$s$, $\pi$} \EndIf
 \ForAll{actions $a \in$ \Call{Generate-Actions}{$s, \pi$}}
-	\State $s' \gets \gamma(s, a)$
-	\If{$s' \notin c$} \Comment{Not visited yet}
-		\If{$s' \notin o$} $o \gets o \cup \{s'\}$ \Comment{Discovered a new state} \EndIf
-		\If{$g[s] + \mt{cost}(a) < g[s']$} \Comment{Found a better path}
-			\State $\pi[s'] \gets (s, a)$
-			\State $g[s'] \gets g[s] + \mt{cost}(a)$
-			\State $f[s'] \gets g[s'] + h(s')$
+	\State $s_n \gets \gamma(s, a)$ \Comment{Neighbor state}
+	\If{$s_n \notin c$} \Comment{Not visited yet}
+		\If{$s_n \notin o$} $o \gets o \cup \{s_n\}$ \Comment{Discovered a new state} \EndIf
+		\If{$g[s] + \mt{cost}(a) < g[s_n]$} \Comment{Found a better path}
+			\State $\pi[s_n] \gets (s, a)$
+			\State $g[s_n] \gets g[s] + \mt{cost}(a)$
+			\State $f[s_n] \gets g[s_n] + h(s_n)$
 		\EndIf
 	\EndIf
 \EndFor
@@ -115,7 +114,7 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \EndFunction
 }%
 {A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$}{A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$
-\textsc{Generate-Actions} is a function that produces actions applicable to the state $s$.}{astar}{tb}
+\textsc{Generate-Actions} is a function that produces actions applicable to the state $s$. The notation $x[*] \gets y$  reprensents initialization of all values of the map $x$ to $y$.}{astar}{tb}
 
 A$^{\kern-.15em*}$ has many important properties. We pinpoint one important to us, namely its admissibility.
 A search algorithm is \textit{admissible}
@@ -125,11 +124,11 @@ A$^{\kern-.15em*}$ is admissible and optimal given an admissible heuristic.
 
 An \textit{admissible} heuristic never overestimates
 the true value it is approximating. During planning in state space,
-when examining a state $s$, we want to estimate the total costs of the best
-plan getting us to a goal state from state $s$. In other words, because we are
+when examining a state $s$, we want to estimate the total cost of the best
+plan that gets us to a goal state from state $s$. In other words, because we are
 trying to minimize the total cost,
 a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
-where $h^*$ is the true total cost (in other words, the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
+where $h^*$ is the true total cost (i.e.\;the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
 
 A slight modification of A$^{\kern-.15em*}{\kern-.30em,}$ called \textit{Weighted A$^{\kern-.05em*}$} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
@@ -203,10 +202,10 @@ is not even admissible, so its value might sometimes overestimate the total cost
 To see why, let us consider a network with just two locations $A$ and $B$.
 A vehicle of capacity 2 and two packages are located at $A$ and both packages want to be
 transported to $B$. The road between $A$ and $B$ is symmetric and has length
-of a 100. It is trivial to see that the optimal plan consists of two \pickup{} actions,
-followed by a \drive{} and two \drop{} actions. This plan has a total cost of $2+100+2=104$,
+of a 1. It is trivial to see that the optimal plan consists of two \pickup{} actions,
+followed by a \drive{} and two \drop{} actions. This plan has a total cost of $2+1+2=5$,
 but the heuristic would estimate that we need actions
-that cost $204$.
+that cost $6$.
 
 \subsubsection{Minimum spanning tree marking heuristic}\label{sfa2}
 
@@ -216,10 +215,10 @@ on finding the shortest paths on a \textit{minimum spanning tree} (MST).
 Using an MST calculated using the algorithm presented in \citet{Kruskal1956}, we can solve one of the largest problems with $h_1$,
 namely that we count an excessive amount of \drive{} actions
 for packages to their targets.
-For each package, we will calculate
+For each package, we calculate
 shortest path distances only on the MST.
-Also, we will not calculate any edge twice --- we will mark
-the edge when it happens to be part of a shortest path and
+Also, we do not calculate any edge twice --- we mark
+the edge when it is part of a used shortest path and
 after marking edges of all shortest paths,
 we sum the lengths of the marked edges.
 In the same way as with $h_1$, we add the value of $h'_0$ to
@@ -229,13 +228,14 @@ Do note that this heuristic is yet again inadmissible:
 let the road network be a circle of $n$ locations with
 roads of lengths $1, 2, \ldots, n$ assigned clockwise.
 An MST on this network consists of all roads except the road
-with length $n$, lets denote the road $r = (A, B) \in L^2$.
+with length $n$, let us denote the road $r = (A, B) \in L^2$.
 Now, assume there is a package located at $A$ with a target
 location of $B$ and a vehicle also located at $A$.
 The optimal plan is obviously to pick up the package at $A$,
 drive along road $r$ to $B$, and drop the package there.
 The plan has a cost of $n+2$. The $h_2$ heuristic's estimate
-in the initial state is $$h_2(s_0) = 2 + \sum_{i=1}^{n-1} i = \frac{n^2}{2} - \frac{n}{2} + 2,$$
+in the initial state is:
+$$h_2(s_0) = 2 + \sum_{i=1}^{n-1} i = \frac{n^2}{2} - \frac{n}{2} + 2,$$
 which is evidently greater than $n+2$ for $n > 3$.
 
 \subsubsection{Package and vehicle distance heuristic}\label{sfa3}
@@ -251,8 +251,8 @@ is also inadmissible and nonoptimal.
 \subsubsection{Package or vehicle distance heuristic}\label{sfa4}
 
 A variation on the package and distance heuristic
-is one that does not sum, but instead takes
-the minimum distances.
+is one that does not sum the shortest path distances, but instead takes
+the minimum.
 Specifically, for each package, the minimum
 is taken from the distance to its target location,
 distance to the nearest vehicle,
@@ -305,7 +305,7 @@ $$\{\{A, B, 1\}, \{B, C, 2\}, \{B, D, 2\}\},$$
 where $\mt{at}(v) = A$, $\mt{at}(p_1) = C,$ and $\mt{at}(p_2) = D$
 hold in the initial state $s_0$.
 The target of $p_1$ is $D$ and the target of $p_2$ is $C$.
-The value
+The value:
 $$h_4(s_0) = 3+3+4 = 10$$ is greater than the cost
 of the applicable \drive{} action for vehicle $v$ from $A$ to $B$
 added to the heuristic value in the updated state:
@@ -333,8 +333,9 @@ Shortest path ties are broken arbitrarily.
 Do note that if a package is loaded in a vehicle, no roads are marked for it.
 
 The described heuristic is not optimal, but it is admissible.
-Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds.
-Additionally, we will prove consistency of $h_5$.
+Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds
+and they hold for $h_4$.
+Additionally, we will prove the consistency of $h_5$.
 
 \begin{thm}
 The heuristic $h_5$ is consistent for sequential Transport problems.
@@ -417,7 +418,8 @@ Given two hyperparameters $\alpha \in [0, 1]$ and $w_0 \in [1, \infty)$,
 it runs the WSFA planner with the weight $w \gets w_0$,
 waits for the planner to find a plan,
 and then (exponentially) decays the
-weight of the heuristic function: $w \gets \max(1, \floor*{\alpha \cdot w}).$
+weight of the heuristic function
+with a minimum at 1: $$w \gets \max(1, \floor*{\alpha \cdot w}).$$
 
 Do note that this is followed up by a complete restart of the internal WSFA planner.
 If only a recalculation of values in the $f$ map
@@ -545,7 +547,7 @@ It then tries all combinations of
 those packages that do not make the vehicle become
 overcapacitated over the whole course
 of the path, in order
-to find the combination that minimizes the minimum
+to find the combination that maximizes the minimum
 free capacity over the course of the path.
 If there are several such combinations, it minimizes the
 maximum package drop location index in the path.
@@ -599,11 +601,11 @@ time-consuming and not practically usable.
 
 Another variant of RRAPN, the
 Randomized Restart Around Path Distribution planner (RRAPD),
-changes the vehicle choice of inherited from RROPN.
+changes the vehicle choice inherited from RROPN.
 Instead of using a biased coin flip based on the $\varepsilon$
 hyperparameter, RRAPD samples the vehicle
 from a discrete probability distribution
-obtained by applying the \textit{softmax} function on the distances of vehicles to the selected package:
+obtained by applying the \textit{softmax} function on the inverse distances of vehicles to the selected package:
 \begin{align*}
 \varphi'_i &= \frac{1}{\mt{spd}(location(p), \mt{at}(v_i)) + 1},\\
 \varphi_i &= \frac{\exp(\varphi'_i/T)}{\sum_{j = 1}^{|V|} \exp(\varphi'_j/T)}.

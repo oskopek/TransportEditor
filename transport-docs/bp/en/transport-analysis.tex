@@ -10,9 +10,9 @@ When domain-independent planners solve a sequential Transport problem,
 they face a harder task than planners that have access to domain knowledge ahead of time.
 For domain-independent planners, deciding whether a plan of a given length exists
 (the \textsc{Plan-Length} decision problem) is
-a NEXPTIME-complete task
-and deciding if a plan exists at all (the \textsc{Plan-Existence} decision problem)
-an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
+a NEXPTIME-complete task.
+Deciding if a plan exists at all (the \textsc{Plan-Existence} decision problem)
+is an EXPSPACE-complete task \citep[Table~3.2]{Ghallab2004}.
 
 That does not mean domain knowledge makes Transport easy, as is evident from
 the very thorough analysis by \citet{Helmert2001, Helmert2001a}.
@@ -32,9 +32,9 @@ where:
 \end{itemize}
 $V$, $M$, and $P$ are pairwise disjoint.
 No Transport domain variants assume movement constraints, therefore, $road$ is a constant
-function $road(m) = E$.
+function $\forall m \in M : road(m) = E$.
 
-A simplified notation is also introduced by \citet{Helmert2001a} for special cases of \textsc{Transport} tasks.
+A simplified notation is also introduced in \citet{Helmert2001a} for special cases of \textsc{Transport} tasks.
 For $i,j \in \{1, \infty, *\},$ $k \in \{1, +, *\}$ a $\textsc{Transport}_{i,j,k}$ task is defined as a
 general \textsc{Transport} task (defined above) that satisfies:
 \begin{itemize}
@@ -47,8 +47,7 @@ general \textsc{Transport} task (defined above) that satisfies:
 \end{itemize}
 The $*$ value for $i$, $j$ or $k$ signifies no restriction on that property.
 Note that
-\textsc{Transport} refers to the notation of \citet{Helmert2001a} of a general transportation
-task, while Transport refers to our studied domain.
+\textsc{Transport} refers to the notation from \citet{Helmert2001a}, while Transport refers to our studied domain.
 
 Using this notation, the sequential Transport domain could be thought of as a $\textsc{Transport}_{c,\infty,+}$ task, where $c \in \N$
 (equivalent to $\textsc{Transport}_{1,\infty,+}$).
@@ -58,7 +57,7 @@ Similarly, the temporal variant represents a $\textsc{Transport}_{c,f,+}$ task, 
 For sequential and temporal Transport without fuel, the \textsc{Plan-Existence} problem
 reduces to verifying reachability of each package by at least one vehicle
 and the reachability of target locations from the starting locations of all packages,
-which we can do in polynomial time, as noted by \citet[Theorem 8]{Helmert2001}.
+which we can do in polynomial time, as noted in \citet[Theorem 8]{Helmert2001}.
 With fuel, there is no straightforward way of determining
 if a plan exists and this problem is NP-complete, which is proven in \citet[Theorem 9 and 10]{Helmert2001}.
 
@@ -75,7 +74,7 @@ Similarly, the \textsc{Plan-Length} problem is NP-complete for all mentioned var
 \citep[Section~3.6]{Helmert2001a}.
 The fact that all the mentioned proofs work for temporal variants is explained in \citet[Section~3.5]{Helmert2001a}.
 All of these results make clear that looking for an explicit planning algorithm is infeasible,
-despite the knowledge we acquire by only focusing on one planning domain.
+despite the advantage we gain by only focusing on one planning domain.
 
 
 
@@ -90,7 +89,7 @@ despite the knowledge we acquire by only focusing on one planning domain.
 
 \section{Domain information}\label{domain-info}
 
-There are several interesting properties and invariants that hold in both sequential and temporal Transport and might prove useful for designing planners:
+There are several interesting properties and invariants that hold in both sequential and temporal Transport, which might prove useful for designing planners:
 \begin{enumerate}
 \item \textbf{Do not pick up delivered packages}: The simplest and trivially correct decision is to never touch packages that are already at their destinations, since there is nothing
 we can do using those packages that would result in a plan with a lower total cost.
@@ -105,10 +104,10 @@ the same package by the same vehicle in succession. We will only get to the same
 by using a longer plan. This rule also applies if an action of a different vehicle
 gets between the two successive actions, even if it does an action with the
 dropped package.
-It is important to note that this is a symmetric property: picking up and dropping
-equally results in a worse plan.
+It is important to note that this is a symmetric property: picking up
+and then dropping equally results in a worse plan.
 \begin{enumerate}
-\item \textbf{Do not drop package where we picked it up}: A generalization
+\item \textbf{Do not drop a package where we picked it up}: A generalization
 of the previous rule is that vehicles should never drop a package
 at the location they last picked it up, independent of the actions they took
 between the relevant \pickup{} and \drop{}. This rule is also symmetric.
@@ -116,11 +115,12 @@ between the relevant \pickup{} and \drop{}. This rule is also symmetric.
 \item \textbf{Never drop after picking up at a location}:
 While the order of successive \pickup{} and \drop{} actions does not
 influence the optimality of a plan, it makes the search space smaller and the implementation of these rules simpler,
-without making the planner miss the minimum.
+without loss of generality.
 \end{enumerate}
 
 \item \textbf{Do not drive suboptimally}: If a vehicle does a series of
-\drive{} actions from location $A$ to $B$ without ``touching'' packages at any of the locations it visits,
+\drive{} actions from location $A$ to $B$ without ``touching'' packages
+or refueling at any of the locations it visits,
 it has to follow the shortest possible path from $A$ to $B$. If it does not,
 the induced plan can be made less costly or shorter by swapping the actual \drive{} actions
 for precalculated optimal \drive{} actions along the shortest path.
@@ -137,8 +137,9 @@ without having less than $|p|$ free space in any intermediate state between leav
 If this sequence of events occurs, the plan is suboptimal in a sequential setting, because
 $v$ could have picked up $p$ when driving through $A$, and the total plan cost
 would have gone down by at least 2. The reason is that a different vehicle had to pick up, drive, and drop package $p$ at $B$.
-While we cannot say if the \drive{} action itself
-was redundant, the \pickup{} and \drop{} actions definitely were, thereby saving
+While we cannot say if the \drive{} actions themself
+were redundant, the \pickup{} and \drop{} actions definitely were.
+By removing them, we save 
 2 on the total cost. 
 
 In a temporal domain without fuel, assuming that vehicles only drive along the shortest routes,
@@ -164,12 +165,12 @@ a \drop{} action
 occurs after an action of a different vehicle, we can swap that action with the \drop{} action without changing the total plan cost or changing the validity of the plan.
 
 Doing this repeatedly will yield an equivalent plan, in which the \drop{} action
-occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each \drop{} action will yield an equivalent plan to the original plan, thus we see that a not-pruned plan of the same length and validity to the same final state exists.
+occurs right after a different action of the same vehicle and the plan is of the same total cost and validity as the original plan. Repeating this process for each \drop{} action will yield a plan equivalent to the original plan, which additionally satisfies this rule.
 \end{enumerate}
-Finally, these are the useful properties that only meaningfully apply to the temporal variant:
+Finally, these are the properties that only meaningfully apply to the temporal variant:
 \begin{enumerate}
 \item \textbf{Refueling and dropping/picking up can occur at the same time}: 
-A plan in which a vehicle starts to pick up a package at the same location it refueled at is suboptimal, if there was a time point during the \refuel{} action
+A plan in which a vehicle starts to pick up a package at the same location it just refueled at is suboptimal, if there was a time point during the \refuel{} action
 when the vehicle was not dropping or picking up packages and the package was already
 co-located with the vehicle at that time.
 
@@ -220,13 +221,13 @@ seq-mco-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequen
 seq-opt-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimization} &  \\ 
 seq-sat-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} &  \\ 
 \end{tabular}
-\caption[Transport datasets from the 2008, 2011, and 2014 IPCs.]{Transport datasets from the 2008, 2011, and 2014 IPCs. All formulations assume capacitated vehicles, numeric and temporal formulations also contain fuel demands and capacities. The temporal formulation additionally adds concurrent actions and a notion of time. More information can be found in Section~\ref{domain-desc}.}
+\caption[Transport datasets from the 2008, 2011, and 2014 IPCs.]{Transport datasets from the 2008, 2011, and 2014 IPCs. All formulations assume capacitated vehicles. Numeric and temporal formulations also contain fuel demands and capacities. The temporal formulation additionally adds concurrent actions and a notion of time. More information can be found in Section~\ref{domain-desc}.}
 \label{tab:ipc-datasets}
 \end{table}
 
 Short descriptions of the various tracks and subtracks can be found in the rule pages of IPC-6,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
 IPC-7,\puncfootnote{\url{http://www.plg.inf.uc3m.es/ipc2011-deterministic/CompetitionRules.html}}
-and the rule pages of IPC-8.\puncfootnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
+and IPC-8.\puncfootnote{\url{https://helios.hud.ac.uk/scommv/IPC-14/rules.html}}
 We have decided to split our further research based on the tracks at the IPC: we will focus on constructing
 Transport-specific planners for the seq-sat-6, seq-sat-7, seq-sat-8, and tempo-sat-6 datasets,
 corresponding to the sequential and temporal variants of Transport.
@@ -244,7 +245,7 @@ We will not focus on
 these problems in this work.
 
 In addition to the domain definition, we need to take a look at the individual problems to fully utilize our knowledge advantage.
-Both the seq-sat-6 and tempo-sat-6 contain 30 problems, while seq-sat-7 and seq-sat-8 only contain 20 problems. Table~\ref{tab:dataset-dimensions} shows the
+Both the seq-sat-6 and tempo-sat-6 contain 30 problems, while seq-sat-7 and seq-sat-8 only contain 20 problems each. Table~\ref{tab:dataset-dimensions} shows the
 dimensions of each problem instance for each mentioned dataset.
 
 While the planners (including our domain-specific ones) do not know this,
@@ -258,7 +259,7 @@ are rare and usually significantly longer.
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
 \end{center}
-\caption[Visualization of the \texttt{p30} problem of temporal Transport from IPC 2008.]{Road graph visualization of the \texttt{p30} problem of the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problem, the circle of nodes in the center represents truck hubs and each of the attached subgraphs are individual cities.}
+\caption[Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008.]{Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problem, the circle of darker nodes in the center represents truck hubs and each of the attached subgraphs are individual cities.}
 \label{fig:ipc08_tempo-sat_p30}
 \end{figure}
 
@@ -315,27 +316,27 @@ Roads=\roads,Stateslat=\stateslat}%
 \end{subtable}
 \caption[Problem dimensions of selected Transport IPC datasets.]{Problem dimensions of selected Transport IPC datasets.
 The ``states'' value is a state space size estimate as discussed in Section~\ref{datasets} (in temporal domains calculated with $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s equal to 1).
-Bold problem instances correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30}.}
+Bold problem instances correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figure~\ref{fig:ipc08_tempo-sat_p30}, respectively.}
 \label{tab:dataset-dimensions}
 \end{table}
 
 
 All sequential problem instances in seq-sat datasets have symmetric roads and road lengths and can, therefore,
 be simplified by assuming the use of an undirected graph.
-Also, in sequential problems, vehicles do not need to finish at a specific target location.
-Although possible only assuming the domain model, all packages are always positioned at locations
+All packages are always positioned at locations
 in the initial state, not in vehicles (in all domain variants).
 
-The temporal problems in tempo-sat-6 do not have the same property;
+The temporal problems in tempo-sat-6 do not have the same properties;
 the problems 1--20 have symmetric roads and lengths, but
 the 21--30 problems only have symmetric roads, not lengths in general.
-The same applies to fuel demands of roads and as a bonus,
+The same applies to fuel demands of roads. Additionally,
 these problems have vehicle target locations, which means that not only packages,
 but also
 vehicles will need to be positioned at specific locations
 after package delivery finishes. We can interpret this goal
 in a similar way as in a VRP, where a vehicle target location is thought to be
 a truck depot or hub. A visualization of such a problem can be seen in Figure~\ref{fig:ipc08_tempo-sat_p30}.
+No sequential problem has this requirement, even though the domain formulation allows it.
 
 Given a specific Transport problem, we can calculate the size of the set of states $S$.
 For sequential Transport, the state space size can be estimated as: $$l^v \cdot (l+v)^p,$$ where $l$ is the number of locations,
@@ -360,7 +361,7 @@ and the choice of location for packages.
 
 We can see that problems vary not only in size but also in what features they include
 and what assumptions they make.
-A summary of the acquired insights is available in Table~\ref{tab:problem-properties}.
+A summary of the acquired dataset-specific insights is available in Table~\ref{tab:problem-properties}.
 
 \begin{table}
 \centering

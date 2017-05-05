@@ -36,6 +36,109 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 \newpage
 
+\section*{PDDL representations of Transport}
+
+\begin{figure}[h]
+\begin{code}
+(:action drive
+  :parameters (?v - vehicle ?l1 ?l2 - location)
+  :precondition (and
+      (at ?v ?l1)
+      (road ?l1 ?l2))
+  :effect (and
+      (not (at ?v ?l1))
+      (at ?v ?l2)
+      (increase (total-cost) (road-length ?l1 ?l2))))
+(:action pick-up
+  :parameters (?v - vehicle ?l - location ?p - package
+               ?s1 ?s2 - capacity-number)
+  :precondition (and
+      (at ?v ?l)
+      (at ?p ?l)
+      (capacity-predecessor ?s1 ?s2)
+      (capacity ?v ?s2))
+  :effect (and
+      (not (at ?p ?l))
+      (in ?p ?v)
+      (capacity ?v ?s1)
+      (not (capacity ?v ?s2))
+      (increase (total-cost) 1)))
+(:action drop
+  :parameters (?v - vehicle ?l - location ?p - package
+               ?s1 ?s2 - capacity-number)
+  :precondition (and
+      (at ?v ?l)
+      (in ?p ?v)
+      (capacity-predecessor ?s1 ?s2)
+      (capacity ?v ?s1))
+  :effect (and
+      (not (in ?p ?v))
+      (at ?p ?l)
+      (capacity ?v ?s2)
+      (not (capacity ?v ?s1))
+      (increase (total-cost) 1)))
+\end{code}
+\caption*{Formulation of actions in PDDL for \texttt{transport-strips}.}
+\label{code:pddl-strips}
+\end{figure}
+
+\begin{figure}[p]
+\begin{code}
+(:durative-action drive
+  :parameters (?v - vehicle ?l1 ?l2 - location)
+  :duration (= ?duration (road-length ?l1 ?l2))
+  :condition (and
+      (at start (at ?v ?l1))
+      (at start (road ?l1 ?l2))
+      (at start (>= (fuel-left ?v) (fuel-demand ?l1 ?l2))))
+  :effect (and
+      (at start (not (at ?v ?l1)))
+      (at end (at ?v ?l2))
+      (at start (decrease (fuel-left ?v) (fuel-demand ?l1 ?l2)))))
+(:durative-action pick-up
+  :parameters (?v - vehicle ?l - location ?p - package)
+  :duration (= ?duration 1)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))
+      (at start (at ?p ?l))
+      (at start (>= (capacity ?v) (package-size ?p)))
+      (at start (ready-loading ?v)))
+  :effect (and
+      (at start (not (at ?p ?l)))
+      (at end (in ?p ?v))
+      (at start (decrease (capacity ?v) (package-size ?p)))
+      (at start (not (ready-loading ?v))) ; lock vehicle
+      (at end (ready-loading ?v)))) ; unlock vehicle
+(:durative-action drop
+  :parameters (?v - vehicle ?l - location ?p - package)
+  :duration (= ?duration 1)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))   
+      (at start (in ?p ?v))
+      (at start (ready-loading ?v)))
+  :effect (and (at start (not (in ?p ?v)))
+      (at end (at ?p ?l))
+      (at end (increase (capacity ?v) (package-size ?p)))
+      (at start (not (ready-loading ?v))) ; lock vehicle
+      (at end (ready-loading ?v)))) ; unlock vehicle
+(:durative-action refuel
+  :parameters (?v - vehicle ?l - location)
+  :duration (= ?duration 10)
+  :condition (and
+      (at start (at ?v ?l))
+      (over all (at ?v ?l))
+      (at start (has-petrol-station ?l)))
+  :effect
+      (at end (assign (fuel-left ?v) (fuel-max ?v))))
+\end{code}
+\caption*{Formulation of durative actions in PDDL for temporal Transport.}
+\label{code:pddl-temporal}
+\end{figure}
+
+\newpage
+
 \section*{TransportEditor --- A Transportation Planning System}
 
 To enable effective transportation planning,

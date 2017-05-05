@@ -2,7 +2,7 @@
 
 In this chapter, we will describe and run experiments
 that compare our planners from the last two chapters
-with state-of-the-art domain-independent planners from the IPC.
+with domain-independent planners from the IPC.
 We will briefly discuss the acquired results and interpret them.
 
 \section{Methodology}
@@ -15,9 +15,8 @@ get canceled and prompted for a plan at that time point).
 Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
 
 The evaluation criteria remain the same as in the IPC:
-we focus on plan \textit{quality} in favor of planner run time,
-although we will mention runtimes.
-The quality of a plan for a specific planner and sequential problem $p$ is defined as
+we focus on plan \textit{quality} in favor of planner run time.
+The quality of a plan for a specific planner and sequential problem $p$ is defined as:
 $$\frac{\mt{total-cost}(\mt{planner}(p))}{\mt{total-cost}(BEST)},$$
 where the results called $BEST$
 are either precalculated outside of the competition environment or they are the best result of one of the planners in the competition, depending on which plan has a lower total cost.
@@ -29,7 +28,7 @@ for total time. We sometimes refer to total cost and total time as the \textit{s
 We will use four datasets for our experiments --- the seq-sat-6, seq-sat-7,
 and seq-sat-8 datasets for sequential
 and the tempo-sat-6 for temporal planners (Section~\ref{datasets}).
-All the datasets used (and more) are available in the
+All the datasets used are available in the
 software project sources (see the attached \nameref{cd-contents}).
 Descriptions of planners that we will refer to by their competition names can be found in the respective competition results or booklets for IPC~2008,\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/Planners.html}} IPC~2011 \citep{Garcia-Olaya2011}, and IPC~2014 \citep{Vallati2015}.
 Due to space constraints, we only show the three
@@ -184,14 +183,11 @@ They generally obtain better results than RRAPN on smaller problems
 but they can generate very good results even on larger problems,
 like 14--20 or 28--29.
 The reason why RRAPN occasionally obtains better plans than the
-admissible heuristic of MSFA5 is that we weight the heuristic,
-therefore making it inadmissible.
-Based on total quality, MSFA5 comes out on top as the better one of the two MSFA planners on this dataset.
-
-
-All of our three planners beat all planners from the original competition based on total quality,
-which despite the possible minor differences in the computing environment indicates that
-domain knowledge indeed helps us generate better plans.
+admissible heuristic of MSFA5 is that we weight it
+with weights greater than or equal to 1,
+therefore, making the heuristic inadmissible.
+Based on total quality, MSFA5 marginally comes out on top as the better one of the two MSFA planners on this dataset.
+All three of our planners beat all planners from the original competition based on total quality.
 
 \subsubsection{IPC 2011}
 
@@ -203,7 +199,10 @@ RRAPN consistenly achieves better scores than all domain-independent planners fr
 of the problems (see Table~\ref{tab:dataset-dimensions}).
 
 Even though RRAPN is better than the original planners more often than both MSFA planners,
-they come out on top based on total cost. Even more interesting, the problems
+they come out on top based on total cost.
+The differences in performance between MSFA planners
+is almost indistinguishable, even on individual problem instances.
+Even more interesting, the problems
 where they perform well are complementary to the ones where RRAPN performs well,
 as is visible on the results of problems 3--6, 10--12, and 13--15.
 
@@ -335,13 +334,14 @@ We observe an evident performance increase of Temporal Fast Downward,
 when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 
 Our results further show that using a simple domain-dependent scheduling approach
-of sequential plans yields an improvement over domain-independent temporal planners. Our scheduling planners RRAPNSched
+yields an improvement over domain-independent temporal planners
+that took part in IPC 2008. Our scheduling planners RRAPNSched
 and MSFA5Sched achieve total qualities of $27.03/30$
 and $14.50/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
 and therefore produces worse results when scheduled using our algorithm,
 mostly due to the inability of the scheduler to add enough \refuel{}
-actions to the existing plans.
+actions to the existing plans to make them feasible.
 
 RRAPNSched, on the other hand, is able to beat even newer temporal planners like TFD2014
 by a significant margin.
@@ -350,20 +350,21 @@ to the optimum than the estimates for larger problems.
 
 An interesting case is problem number 10,
 which was not solved by any of our planners based purely on scheduling.
-This problem contains a petrol station at location \texttt{city-loc-1},
+This problem contains a single petrol station at location \texttt{city-loc-1},
 which, unfortunately, is not present in many precomputed shortest
 paths and the vehicles therefore do not drive through it often.
 What is more, even fewer of those paths coincide with ones
 on which the planners deliver packages.
+This results in most generated plans being infeasible fuel-wise.
 
 One way to solve the issue is to use TRRAPN planner's approach,
 which knows about fuel during planning and 
 sometimes adds fuel runs to the plan, during which a chosen vehicle
 drives to a petrol station to refuel.
-TRRAPN achieves the best total quality from all of our planners.
+TRRAPN achieves the best total quality from all our planners.
 It is marginally beaten on some problems by RRAPNSched (for example problems 4--6) but makes up for this by getting better scores on
-larger problems, where it takes more effort to plan with fuel correctly,
-like problems 10, 19, 29, and 30.
+larger problems, where it takes RRAPNSched more effort to plan with fuel feasibly,
+as can be observed on problems 10, 19, 29, and 30.
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
@@ -377,7 +378,7 @@ while delivering \texttt{package-2} and then had to travel further to deliver it
 and it makes a difference in makespans of more than 50.
 Finally, observe that due to the nature of RRAPN, \texttt{truck-1}
 dropped \texttt{package-4} and then went back to pick it up, even though it had enough capacity
-to carry it. Another important observation, however, is that this had no effect on the total makespan
+to carry it for the whole time. Another important observation, however, is that this had no effect on the total makespan
 of the plan.
 
 \section{Overall results}
@@ -385,19 +386,19 @@ of the plan.
 The attained results show that domain-specific information can be leveraged
 to generate plans of better quality.
 We have designed and implemented Transport planners that are able to beat
-results from the original competitions in the sequential
+all results from the sequential
 and temporal satisficing tracks of the 2008 and 2011 IPCs.
 In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury.
 
 Another major advantage previously unmentioned is that
 our planners generate good solutions quite fast.
 To show this, we present results from running all our planners on all problems for 3 seconds each (Table~\ref{tab:planner-results-short}).
-The attained scores are usually very close to the
-scores from long planning runs, except for the problems
+The achieved scores are very close to the
+scores from long planning runs, except for problems
 where the planner did not find a plan at all in the
 given time limit.
-Note that the quality in these tables cannot be directly
-compared to the previous tables, but the score can.
+Note that qualities in these tables cannot be directly
+compared with qualities in the previous tables, but the scores can.
 
 
 
