@@ -178,7 +178,7 @@ After adding our planners to the results,
 the total quality of LAMA drops to $24.43/30$,
 because several larger problems were solved better than the
 best known solution from IPC 2008.
-Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.75/30$,
+Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.77/30$,
 which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to calculate
 solutions of larger problems fast, which can be observed on
 the results on problems 7--10 or 25--27,
@@ -230,7 +230,7 @@ the total quality of yahsp3-mt is lowered to $10.29/20$.
 Mercury loses its spotless results, but still significantly dominates all
 other planners, including ours, at $19.25/20$.
 
-RRAPN manages to outperform yahsp3-mt with $15.88/20$, yet it fails
+RRAPN manages to outperform yahsp3-mt with $15.80/20$, yet it fails
 to match the results of Mercury, not even in one problem.
 Both MSFA planners outperform RRAPN on this dataset with qualities around $18.50/20$,
 but still do not come reasonably close to beating Mercury.
@@ -350,8 +350,8 @@ when comparing the qualities of plans of TFD (from 2008) and TFD2014.
 Our results further show that using a simple domain-dependent scheduling approach
 yields an improvement over domain-independent temporal planners
 that took part in IPC 2008. Our scheduling planners RRAPNSched
-and MSFA5Sched achieve total qualities of $27.03/30$
-and $14.50/30$, respectively.
+and MSFA5Sched achieve total qualities of $27.13/30$
+and $14.52/30$, respectively.
 The scheduled MSFA5 planner does not generate plans of such variety as RRAPN,
 and therefore produces worse results when scheduled using our algorithm,
 mostly due to the inability of the scheduler to add enough \refuel{}
@@ -375,10 +375,11 @@ One way to solve the issue is to use TRRAPN planner's approach,
 which knows about fuel during planning and 
 sometimes adds fuel runs to the plan, during which a chosen vehicle
 drives to a petrol station to refuel.
-TRRAPN achieves the best total quality from all our planners.
-It is marginally beaten on some problems by RRAPNSched (for example problems 4--6) but makes up for this by getting better scores on
+TRRAPN achieves the best total quality from all our planners,
+beating RRAPNSched by about $0.8$,
+even though it is marginally worse on some problems (for example, problems 4--7). TRRAPN makes up for this by getting better scores on
 larger problems, where it takes RRAPNSched more effort to plan with fuel feasibly,
-as can be observed on problems 10, 19, 29, and 30.
+as can be observed on problems 10, 19, 26, and 30.
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
 of RRAPNSched and TFD2014 for problem number 12.
