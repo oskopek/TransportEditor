@@ -79,7 +79,7 @@ introduced in \citet{Hart1968}.
 \myalg{Forward Search with A$^{\kern-.15em*}$}%
 {%
 \Input a classical planning problem $\mathcal{P} = (S, O, \gamma, s_0, g)$,
-a consistent heuristic $h$
+a heuristic $h$
 \Output a plan $\pi$
 \Function{Collect-Plan}{$s, \pi$}
 \State $\pi' \gets $ empty list
@@ -129,6 +129,16 @@ plan that gets us to a goal state from state $s$. In other words, because we are
 trying to minimize the total cost,
 a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
 where $h^*$ is the true total cost (i.e.\;the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
+
+Furthermore, some heuristics have the property of being consistent. A heuristic $h$ is consistent
+if and only if $\forall s \in S : h(s) \leq cost(a) + h(s_n)$
+(where $a \in A : \gamma(s, a) = s_n$) and for all goal states $s_g$, it holds that $h(s_g) = 0$.
+Consistent heuristics are sometimes called monotonic, because their value
+does not increase along the best path to a goal state. Additionally,
+it can be proven that consistent heuristics are always admissible
+\citep[Section~4.1]{Russell1995}.
+
+
 
 A slight modification of A$^{\kern-.15em*}{\kern-.30em,}$ called \textit{Weighted A$^{\kern-.05em*}$} \citep{Pohl1970},
 tends to yield good quality plans in a shorter amount of time,
