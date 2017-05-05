@@ -8,11 +8,36 @@ We will briefly discuss the acquired results and interpret them.
 \section{Methodology}
 
 Using our benchmarking software (described in the attachments), we will now run experiments in an
-environment as similar to the original
-IPC as possible, following almost all of the official rules.\puncfootnote{\url{http://icaps-conference.org/ipc2008/deterministic/CompetitionRules.html}}
-All planners will be single-threaded and use a maximum of 2GB of memory, with a maximum run time of 30 minutes (planners will
-get canceled and prompted for a plan at that time point).
-Our planners explicitly and intentionally break the ``domain independence'' rule of the IPC.
+environment similar to the original
+IPCs. The rule pages state that
+planners have to be single-threaded and use a maximum of 2, 4, or 6 GB of memory (depending on the competition year), with a maximum run time of 30 minutes.
+
+Since the IPC rule pages vary on the exact processor specification or the amount of memory available to each planner between competitions,
+we adjust the parameters slightly by only running our planners
+for 15 minutes on each problem, using 4 GB of RAM.
+All our experiments are run on
+\comment{a computer
+with an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
+and 16 GB of memory, running Gentoo Linux.
+A big thank you goes out to the faculty for providing access to these machines.
+}
+the clusters of MetaCentrum.\puncfootnote{\url{https://www.metacentrum.cz/en/}}
+Due to the nature of computing on MetaCentrum, we were not able to guarantee that all problems and planners
+run on the exact same processor, only on very similar ones
+(approximately equivalent to \texttt{Intel Xeon E5-2650 v2 2.6 GHz}).
+The performance of our planners does not change significantly
+when prolonging the run from 15 to 30 minutes or when run
+on slightly different processors.
+Our planners will get canceled and prompted for a plan after the 15 minutes run out. 
+
+We run all our planner implementations in Java using Oracle's OpenJDK 
+version \texttt{1.8.0\_131}.
+The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
+in the project module directories specify
+the exact versions of libraries used.
+In all planners where nondeterminism occurs,
+we set the initial random seed to 2017
+(on all individual problem runs).
 
 The evaluation criteria remain the same as in the IPC:
 we focus on plan \textit{quality} in favor of planner run time.
@@ -39,22 +64,7 @@ and add another external domain-independent planner
 to the comparison, the 2014 version of Temporal Fast Downward (TFD2014).
 
 
-In all planners where nondeterminism occurs,
-we set the initial random seed to 2017
-(on all individual problem runs).
-All the following experiments
-were run on
-\comment{a computer
-with an 8 core 64-bit processor \texttt{Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz}
-and 16 GB of memory, running Gentoo Linux.
-A big thank you goes out to the faculty for providing access to these machines.
-}
-MetaCentrum.\puncfootnote{\url{https://www.metacentrum.cz/en/}}
-We run all Java programs on Oracle's OpenJDK 
-version \texttt{1.8.0\_131}.
-The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
-in the project module directories specify
-the exact versions of libraries used.
+
 
 
 
@@ -253,6 +263,10 @@ In this section, we present the results of our temporal planners on the tempo-sa
 \item[TFD2014] The Temporal Fast Downward planner, version 0.4 from IPC~2014 \citep[Preferring Preferred Operators in Temporal Fast Downward]{Vallati2015}
 \item[TRRAPN] The Temporal RRAPN planner (Section~\ref{temporal-approach})
 \end{description}
+
+An external temporal planner, TFD2014, was added to the experiments
+to be able to compare our planners to more recent systems.
+TFD2014 is a newer version of the original TFD planner that took part in IPC 2008. Additionally, it is the only planner which we allow to run for the full 30 minutes.
 
 \subsection{Results}\label{temporal-results}
 
