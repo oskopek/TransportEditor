@@ -1,11 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dreuw & Deselaer's Poster
+% baposter Landscape Poster
 % LaTeX Template
-% Version 1.0 (11/04/13)
+% Version 1.0 (11/06/13)
 %
-% Created by:
-% Philippe Dreuw and Thomas Deselaers
-% http://www-i6.informatik.rwth-aachen.de/~dreuw/latexbeamerposter.php
+% baposter Class Created by:
+% Brian Amberg (baposter@brian-amberg.de)
 %
 % This template has been downloaded from:
 % http://www.LaTeXTemplates.com
@@ -19,247 +18,277 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[final,hyperref={pdfpagelabels=false}]{beamer}
+\documentclass[a0paper,fontscale=0.285]{baposter} % Adjust the font scale/size here
 
-\usepackage[orientation=portrait,size=a0,scale=1.4]{beamerposter} % Use the beamerposter package for laying out the poster with a portrait orientation and an a0 paper size and scale 1.4
+\usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+\setcitestyle{round} % round brackets for citep and citet
 
-\usetheme{I6pd2} % Use the I6pd2 theme supplied with this template
+\usepackage{graphicx} % Required for including images
+\graphicspath{{../img/}} % Directory in which figures are stored
 
-\usepackage[english]{babel} % English language/hyphenation
-
-\usepackage{amsmath,amsthm,amssymb,latexsym} % For including math equations, theorems, symbols, etc
-\usepackage{lmodern}
-
-\boldmath % Use bold for everything within the math environment
+\usepackage{amsmath} % For typesetting math
+\usepackage{amssymb} % Adds new symbols to be used in math mode
 
 \usepackage{booktabs} % Top and bottom rules for tables
+\usepackage{enumitem} % Used to reduce itemize/enumerate spacing
+\usepackage{palatino} % Use the Palatino font
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 
-\graphicspath{{../img/}} % Location of the graphics files
+\usepackage{multicol} % Required for multiple columns
+\setlength{\columnsep}{1.5em} % Slightly increase the space between columns
+\setlength{\columnseprule}{0mm} % No horizontal rule between columns
 
-\usecaptiontemplate{\small\structure{\insertcaptionname~\insertcaptionnumber: }\insertcaption} % A fix for figure numbering
+\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}
 
-%----------------------------------------------------------------------------------------
-%	TITLE SECTION 
-%----------------------------------------------------------------------------------------
+\definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines the color used for content box headers
 
 \title{\huge Planning for Transportation Problems} % Poster title
 
 \author{Ondrej \v{S}kopek} % Author(s)
 
 \newcommand{\insertdepartment}{Department of Theoretical Computer Science and Mathematical Logic}
-\institute{Faculty of Mathematics and Physics, Charles University} % Institution(s)
-
-%----------------------------------------------------------------------------------------
+\newcommand{\institute}{Faculty of Mathematics and Physics, Charles University} % Institution(s)
 
 \begin{document}
 
-\addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
-
-\begin{frame}[t] % The whole poster is enclosed in one beamer frame
-
-\begin{columns}[t] % The whole poster consists of two major columns, each of which can be subdivided further with another \begin{columns} block - the [t] argument aligns each column's content to the top
-
-\begin{column}{.02\textwidth}\end{column} % Empty spacer column
-
-\begin{column}{.465\textwidth} % The first column
+\begin{poster}
+{
+headerborder=closed, % Adds a border around the header of content boxes
+colspacing=1em, % Column spacing
+bgColorOne=white, % Background color for the gradient on the left side of the poster
+bgColorTwo=white, % Background color for the gradient on the right side of the poster
+borderColor=white, % Border color
+headerColorOne=lightblue, % Background color for the header in the content boxes (left side)
+headerColorTwo=lightblue, % Background color for the header in the content boxes (right side)
+headerFontColor=white, % Text color for the header text in the content boxes
+boxColorOne=white, % Background color of the content boxes
+textborder=rectangle, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
+eyecatcher=false, % Set to false for ignoring the left logo in the title and move the title left
+headerheight=0.1\textheight, % Height of the header
+headershape=rectangle, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
+headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
+%textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
+linewidth=2pt % Width of the border lines around content boxes
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+%
+{\includegraphics[height=8em]{logo-en.pdf}} % First university/lab logo on the left
+{\vspace{0.2em}\huge\bf\textsc{Planning for Transportation Problems}\vspace{0.2em}%
+} % Poster title
+{\textsc{Ondrej {\v{S}}kopek\\\large\insertdepartment{}\\\institute{}}} % Author names and institution
+{\includegraphics[width=21em]{logo-en.pdf}} % Second university/lab logo on the right
 
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Objectives}
+\headerbox{Introduction}{name=introduction,column=0,row=0,span=2}{
 
-\begin{enumerate}
-\item Donec fringilla, velit id lobortis commodo, eros dui consectetur mi, ut interdum lorem dui sed mauris.
-\item Nulla ac nulla rhoncus est bibendum ullamcorper:
-\item Quisque vestibulum, nisl sit amet gravida ultricies dis parturient montes, nascetur ridiculus musobortis commodo, eros dui consectetur mi.
-\end{enumerate}
+\begin{multicols}{2}
+Automated planning has historically been focused on \textit{domain-independent} planning --- planning without
+the use of specific knowledge about the problem's domain.
+As \citet{Nau2007} states, this is mostly due to the research field of planning wanting to
+establish itself generally --- focusing on a set of domains would not be useful for that.
+They also believe that this bias against domain-dependent planning is not as useful anymore.
+We can now benefit from the attained theoretical results and an advancement in computing power,
+resulting in a wider range of practical problems that can now be solved using planning techniques.
 
-\end{block}
+In this thesis, we will study variants of a specific planning domain introduced in the 2008 International Planning Competition (IPC) called \textit{Transport}. It serves as an abstract representation of a family of related transportation problems
+and an important benchmark for planning.
 
-%----------------------------------------------------------------------------------------
-%	INTRODUCTION
-%----------------------------------------------------------------------------------------
-            
-\begin{block}{Introduction}
+The Transport domain, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
+using a fleet of vehicles. Our aim is to deliver all items
+with the least total cost, or in the shortest amount of time,
+where the cost and/or duration of individual actions is dependent on the domain variant.
 
-Donec fringilla, velit id lobortis commodo, eros dui consectetur mi, ut interdum lorem dui sed mauris. Duis id sem nunc, a pharetra odio. Phasellus posuere \alert{semper massa}, id bibendum ligula tristique at. Integer sit amet vulputate turpis. Sed erat lacus, faucibus at viverra et, mattis nec sem. Cras faucibus \alert{scelerisque} cursus. Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis. Nulla eu erat a urna laoreet auctor id a turpis. Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor.
+A natural interpretation of the Transport domain is that it represents a set of trucks
+delivering packages. However,
+the exact same domain formulation could be used to
+model a ride-sharing service like Uber, where cars drive around a city, picking up and dropping off people along the way, or
+a means of modeling a rush-hour scenario in a public transportation system.
 
-\end{block}
-
-%----------------------------------------------------------------------------------------
-%	MATERIALS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Materials}
-
-\begin{columns} % Subdivide the first main column
-\begin{column}{.54\textwidth} % The first subdivided column within the first main column
-\begin{itemize}
-\item Vestibulum nisl, quis euismod velit eros in ligula.
-\begin{itemize}
-\item Cras rhoncus quam et augue convallis in elementum urna tincidunt.
-\end{itemize}
-\item Proin ut vestibulum augue.
-\begin{itemize}
-\item Donec dapibus sagittis neque eu ultrices.
-\end{itemize}
-\end{itemize}
-\end{column}
-
-\begin{column}{.43\textwidth} % The second subdivided column within the first main column
-\centering
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{logo-en}
-\caption{Figure caption}
-\end{figure}
-\end{column}
-\end{columns} % End of the subdivision
-
-\begin{itemize}
-\item Curabitur sapien ligula, faucibus in feugiat quis, vestibulum a turpis.
-\begin{itemize}
-\item Phasellus quis nunc neque. Suspendisse mauris diam, suscipit non gravida in, placerat id enim. Ut nec ipsum in lectus ultrices sagittis.
-\item Ut nec ipsum in lectus ultrices sagittis.
-\item Phasellus quis nunc neque.
-\end{itemize}
-\end{itemize}
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-%	METHODS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Methods}
-
-\begin{itemize}
-\item Maecenas Vel Nisl Elit
-\begin{itemize}
-\item Suspendisse potenti. Fusce a est eget turpis rhoncus varius sed sed dui. Cras justo nibh, bibendum a cursus eget, consequat et dui. Maecenas vel nisl elit, sed dignissim dolor. 
-\item In hac habitasse platea dictumst.
-\end{itemize}
-
-\item Viewpoint Matching Constraints
-\begin{itemize}
-\item Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-\item Proin in nisi diam.
-\item Nam ultricies pellentesque nunc, ultrices volutpat nisl ultrices a.
-\end{itemize}
-
-\item Volutpat 
-\begin{itemize}
-\item Duis semper lorem eget dui dignissim porttitor.
-\item Nulla facilisi. In ullamcorper lorem quis dolor.
-\end{itemize}
-\end{itemize}
-
-\end{block}
-%----------------------------------------------------------------------------------------
-
-\end{column} % End of the first column
-
-\begin{column}{.03\textwidth}\end{column} % Empty spacer column
- 
-\begin{column}{.465\textwidth} % The second column
+We aim to show that domain-dependent planning has an important
+role to play in the future and there are many problems yet to be solved,
+despite the loss of generality when compared to domain-independent planning.
+To show this, we will design custom planners
+and try to come up with domain-specific heuristics and other features
+to aid our planners in solving Transport problems as well and as fast as
+possible.
+\end{multicols}
+}
 
 %----------------------------------------------------------------------------------------
 %	RESULTS
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Results: Table}
+\headerbox{Results}{name=results,column=0,span=3,below=introduction}{
 
-\begin{itemize}
-\item Ased Aliquet Luctus Lectus
+\begin{multicols}{3}
+\textbf{IPC 2008}
+
+In the updated results of the sequential satisficing track of IPC 2008 published after the competition,
+the overall winner LAMA (a Fast Downward based planner)
+was hands-down the best planner on the sequential Transport domain, winning
+with a total quality of $28.93/30$, where all other planners had less than $20/30$.
+Only 5 plans generated by LAMA had a worse total cost than the best known plans.
+
+After adding our planners to the results,
+the total quality of LAMA drops to $24.43/30$,
+because several larger problems were solved better than the
+best known solution from IPC 2008.
+Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.77/30$,
+which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to calculate
+solutions of larger problems fast, which can be observed on
+the results on problems 7--10 or 25--27,
+which are the largest problems.
+On the other hand, RRAPN fails to achieve optimal scores
+on some smaller problems like problem number 2 or 12,
+due to its explicit nature.
+
+MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
+They generally obtain better results than RRAPN on smaller problems
+(problems 2--3, 21--22),
+but they can generate very good results even on larger problems,
+like 14--20 or 28--29.
+The reason why RRAPN occasionally obtains better plans than the
+admissible heuristic of MSFA5 is that we weight it
+with weights greater than or equal to 1,
+therefore, making the heuristic inadmissible.
+Based on total quality, MSFA5 marginally comes out on top as the better one of the two MSFA planners on this dataset.
+All three of our planners beat all planners from the original competition based on total quality.
+
+\textbf{IPC 2011}
+
+The 2011 competition featured 20 sequential Transport problems,
+with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
+Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA.
+
+RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 17 out of the 20 problems (problem 4, 5, and 6). This can again be attributed to the size
+of the problems.
+
+Even though RRAPN is better than the original planners more often than both MSFA planners,
+they come out on top based on total cost.
+The differences in performance between MSFA planners
+is almost indistinguishable, even on individual problem instances.
+Even more interesting, the problems
+where they perform well are complementary to the ones where RRAPN performs well,
+as is visible on the results of problems 3--6, 10--12, and 13--15.
+
+\textbf{IPC 2014}
+
+In the sequential satisficing track of IPC 2014, the winner on the Transport domain
+was without a doubt the Mercury planner, achieving
+a stunning $20/20$ total quality. Even more interesting is the fact that
+the runner-up yahsp3-mt achieved a score of only $10.74/20$
+and all other planners achieved sub $10/20$ total quality,
+accentuating the performance of Mercury even more.
+
+After adding the results of our planners to the quality table,
+the total quality of yahsp3-mt is lowered to $10.29/20$.
+Mercury loses its spotless results, but still significantly dominates all
+other planners, including ours, at $19.25/20$.
+
+RRAPN manages to outperform yahsp3-mt with $15.80/20$, yet it fails
+to match the results of Mercury, not even in one problem.
+Both MSFA planners outperform RRAPN on this dataset with qualities around $18.50/20$,
+but still do not come reasonably close to beating Mercury.
+However, they do (marginally) outperform Mercury on some problems, like
+problems 4--7, 9--10, 12, and 18--19.
+The results of MSFA3 and MSFA5 on this dataset are almost identical.
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-6-quality.pdf}
+\captionof{figure}{seq-sat-6 quality}
+\end{center}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../bp/imga/tempo-sat-6-quality.pdf}
+\captionof{figure}{tempo-sat-6 quality}
+\end{center}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-7-quality.pdf}
+\captionof{figure}{seq-sat-7 quality}
+\end{center}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-8-quality.pdf}
+\captionof{figure}{seq-sat-8 quality}
+\end{center}
+
+\end{multicols}
+}
+
+%----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+
+\headerbox{References}{name=references,column=0,above=bottom,span=2}{
+
+\renewcommand{\section}[2]{\vskip 0.05em} % Get rid of the default "References" section title
+\nocite{*} % Insert publications even if they are not cited in the poster
+\small{ % Reduce the font size in this block
+\bibliographystyle{plainnat}
+\bibliography{../../bp/en/bibliography-poster.bib} % Use sample.bib as the bibliography file
+}}
+
+%----------------------------------------------------------------------------------------
+%	FUTURE RESEARCH
+%----------------------------------------------------------------------------------------
+
+\headerbox{Future Research}{name=futureresearch,column=2,span=1,above=references,below=results}{ % This block is as tall as the references block
+
+There remain more approaches to apply to
+to domain-specific planning:
+\begin{itemize}\compresslist
+\item \textit{Hierarchical Task Networks} use \textit{tasks} (sequences of operators)
+to carry out some goal. This approach is one of the most used in practice today (ad-hoc planners we designed are conceptually similar).
+
+\item \textit{Pointer Networks and Reinforcement Learning} use special architectures of neural networks to solve TSP instances in \citet{Bello2016}.
+
+\item \textit{Learning a domain-specific heuristic function} using neural networks \citep{Chen2011}. This
+approach aims to help solve the problem of coming up with a good heuristic for a domain (a similar approach is also used in DeepStack \citep{Moravcik2017}).
 \end{itemize}
 
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
-
-\begin{itemize}
-\item Sollicitudin Vel Orci
-\item Maecenas Ultricies Feugiat Velit Non Mattis.
-\end{itemize}
-
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
-     
-\end{block}
-
-%------------------------------------------------
-
-\begin{block}{Results: Figure}
-
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{logo-en}
-\caption{Figure caption}
-\end{figure}
-
-\end{block}
+}
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Conclusion}
-
-\begin{itemize}
-\item Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis.
-\item Nulla eu erat a urna laoreet auctor id a turpis. Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. 
-\item Aenean id neque dolor.
-\item Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis.
-\end{itemize}
-
-\end{block}
+\headerbox{Conclusion}{name=conclusion,column=0,span=2,above=references,below=results}{
+Conclusion
+}
 
 %----------------------------------------------------------------------------------------
-%	MATHEMATICAL SECTION
+%	Acknowledgements
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Mathematical Section}
+\headerbox{Acknowledgements}{name=ack,column=2,span=1,above=bottom,below=futureresearch}{
+Thank you to prof.\;RNDr.\;Roman\;Bart{\'{a}}k, Ph.D., my advisor.
 
-\begin{itemize}
-\item Maecenas Ultricies Feugiat Velit Non Mattis.
-\begin{itemize}
-\item Duis ante erat, bibendum nec tempus nec, interdum quis est. Nulla at mollis tortor. Phasellus quis leo dolor, aliquam laoreet orci $X$ Donec dapibus sagittis neque eu nec, interdum quis est. $Y_n, n=1,\cdots,N$ ndum nec tempus nec, interd
-\begin{align*}
-X \rightarrow r(X) & = \arg \max_{c} \Big\{ \max_n \big\{ \sum_{x_i \in X} \delta(x_i,Y_{n,c})\big\} \Big\} 
-\end{align*}
-\item Cras faucibus scelerisque cursus. Proin ut vestibulum augue. $\delta(x_i,Y_{n,c})$
-\end{itemize}
-\item Fusce tempus arcu id ligula varius dictum. Donec ut nisl dui, ac consectetur elit. In nec enim porta augue venenatis sollicitudin. Phasellus quis nunc neque. Suspendisse mauris diam, suscipit non gravida in, placerat id enim. Ut nec ipsum in lectus ultrices sagittis.
-\end{itemize}
+Provided access to computing facilities of MetaCentrum is greatly appreciated.
+}
 
-\end{block}
+%----------------------------------------------------------------------------------------
+%	MATERIALS AND METHODS
+%----------------------------------------------------------------------------------------
+
+\headerbox{Materials \& Methods}{name=method,column=2,row=0}{ % This block's bottom aligns with the bottom of the conclusion block
+
+Using several variants
+of this domain, we will compare the performance of our custom-built planners to that of the planners taking part in the original competition and discuss various advantages or shortcomings of these approaches.
+}
+
 
 %----------------------------------------------------------------------------------------
 
-\end{column} % End of the second column
-
-\begin{column}{.015\textwidth}\end{column} % Empty spacer column
-
-\end{columns} % End of all the columns in the poster
-
-\end{frame} % End of the enclosing frame
+\end{poster}
 
 \end{document}
