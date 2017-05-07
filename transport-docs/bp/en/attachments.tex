@@ -1,6 +1,6 @@
 \chapwithtoc{Attachments}
 
-\section*{CD contents}\label{cd-contents}
+\section*{1. CD contents}\label{cd-contents}
 
 The compact disk attached to this thesis contains the following:
 
@@ -36,7 +36,7 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 \newpage
 
-\section*{PDDL representations of Transport}
+\section*{2. PDDL representations of Transport}\label{pddl-repr}
 
 \begin{figure}[h]
 \begin{code}
@@ -139,7 +139,7 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 \newpage
 
-\section*{TransportEditor --- A Transportation Planning System}
+\section*{3. TransportEditor}\label{editor}
 
 To enable effective transportation planning,
 we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
@@ -175,7 +175,6 @@ of a truck currently driving along a road between \texttt{city-2-loc-6} and \tex
 
 TransportEditor will help researchers working on this domain fine-tune their planners; they can visualize the various corner cases their planner fails to handle, step through the generated plan and find the points where their approach fails.
 A secondary motivation is to be able to test approaches for creating plans for the domain.
-For screenshots of typical TransportEditor usage, see the attached \nameref{transport-editor-screenshots}.
 The basic user workflow of TransportEditor consists of the following steps:
 \begin{itemize}
 \item Selecting which formulation of the Transport domain they want to work with or create their own variant;
@@ -194,25 +193,22 @@ The user can step forward and backward in the plan and inspect each action resul
 \item Exit the application or go back to the first step.
 \end{itemize}
 
-TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see the attached \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
+TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see Attachment \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
 the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offering guidance when
 using the program and providing an in-depth description.
 
+Screenshots displaying typical TransportEditor usage follow.
+
 \newpage
 
-\section*{TransportEditor screenshots}\label{transport-editor-screenshots}
-
-Additional screenshots displaying typical TransportEditor usage.
-\medskip
-
 \begin{center}
-\includegraphics[width=0.91\textwidth]{../img/transporteditor_dom-creat}
+\includegraphics[width=0.94\textwidth]{../img/transporteditor_dom-creat}
 Selecting a domain variant.
 \end{center}
 \medskip
 
 \begin{center}
-\includegraphics[width=0.91\textwidth]{../img/transporteditor_planning}
+\includegraphics[width=0.94\textwidth]{../img/transporteditor_planning}
 Running an external planner on a sequential problem.
 \end{center}
 \medskip
@@ -230,7 +226,7 @@ Visualizing the plan as a Gantt chart.
 
 \newpage
 
-\section*{Accompanying software toolkit architecture}\label{transport-project}
+\section*{4. Accompanying software toolkit architecture}\label{transport-project}
 
 To run our experiments efficiently, we have implemented a software project,
 confusingly called TransportEditor, of which the editor described in

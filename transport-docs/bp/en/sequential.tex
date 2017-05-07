@@ -195,8 +195,8 @@ $$h_1(s) = h'_0(s) + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
 where the $location: P \to L$ function,
 with values in the set of all locations $L$, is defined as:
 $$location(p) = \begin{cases}
-   \mt{at}(p) & \text{if } \mt{at}(p) \neq \mt{nil},\\
-   \mt{at}(\mt{in}(p)) & \text{else}.
+   \mt{at}(p), & \text{if } \mt{at}(p) \neq \mt{nil},\\
+   \mt{at}(\mt{in}(p)), & \text{else}.
   \end{cases}$$
 The location of a package is, therefore, defined
 as the location it is at, or, if it is loaded in a vehicle,

@@ -149,8 +149,8 @@ The state-transition function is:
 $$\gamma(s, a) = 
 \begin{cases}
 (s \setminus \effects^-(a)) \,\cup\,
-\effects^+(a) &  \mt{if } a \mt{ is applicable to } s,\\
-\mt{undefined} & \mt{else.}
+\effects^+(a), &  \mt{if } a \mt{ is applicable to } s,\\
+\mt{undefined}, & \mt{else.}
 \end{cases}$$
 Goal states $S_g$ are defined as
 $S_g = \{s \in S \,|\, g \subseteq s\}$, where
