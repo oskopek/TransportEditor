@@ -191,7 +191,7 @@ path of each package to its destination and sums the lengths for all packages.
 To make the heuristic more precise, we can add the
 value of $h'_0$ to it, as the \pickup{} and \drop{}
 actions also have to occur in the optimal plan:
-$$h_1 = h'_0 + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
+$$h_1(s) = h'_0(s) + \sum_{p \in P} \mt{spd}(location(p), target(p)),$$
 where the $location: P \to L$ function,
 with values in the set of all locations $L$, is defined as:
 $$location(p) = \begin{cases}
@@ -253,7 +253,7 @@ which is evidently greater than $n+2$ for $n > 3$.
 As an extension of the package distance heuristic,
 we will also add the distance of the nearest vehicle for
 each package:
-$$h_3 = h_1 + \sum_{p \in P} \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),$$
+$$h_3(s) = h_1(s) + \sum_{p \in P} \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),$$
 where $V$ is the set of all vehicles.
 As follows from the inadmissibility of $h_1$, $h_3$
 is also inadmissible and nonoptimal.
@@ -268,7 +268,7 @@ is taken from the distance to its target location,
 distance to the nearest vehicle,
 and the distance to the nearest package:
 \begin{align*}
-h_4 = h'_0 + \sum_{p \in P} \min\lbrace
+h_4(s) = h'_0(s) + \sum_{p \in P} \min\lbrace
 &\mt{spd}(location(p), target(p)),
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
 &\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\rbrace.
@@ -285,32 +285,30 @@ it holds that
 $h_4(s') = 0 = h^*(s'),$ due to all packages being at their target locations.
 Let $s_g$ be the nearest goal state to $s$.
 
-Because $h_4(s) > h^*(s)$, there exists a finite plan $\pi$ from $s$ that ends in $s_g$,
-such that the total cost of $\pi$ is less than $h_4(s)$.
-Using induction, we prove that for all intermediate states $s'$ of $\pi$,
-$h_4(s') \leq h^*(s'),$ which is a contradiction with $h_4(s) > h^*(s)$,
-as $s$ is the initial state of $\pi$.
+Because $h_4(s) > h^*(s)$, there exists a finite plan $\pi$ from the initial state $s$ that ends in $s_g$,
+such that the total cost of $\pi$ is equal to $h^*(s)$.
+Let $h^{(p)}_4(s)$ denote the value of a package's term in the sum of $h_4(s)$,
+ignoring the contribution of $h'_0$.
+Let $p \in P$ be any package that is not yet at its destination,
+not loaded in a vehicle, and not at a location with any other packages
+(all of those have $h^{(p)}_4(s) = 0$).
 
-Let $n$ be the number of actions in $\pi$.
-If $n=0$, $s$ is a goal state and, therefore,
-it holds that $h_4(s) = 0 = h^*(s)$.
-Let us number all intermediate states of $\pi$ in reverse order: $$\{s = s_k, s_{k-1}, \ldots, s_2, s_1, s_0 = s_g\}.$$
-Now, assume that our conjecture holds for the last $n < k$ states.
-We will prove that it then also holds for the $(n+1)$-th state.
-Let us denote the transition action between $s_{n+1}$ and $s_{n}$ as $a$.
+In the plan $\pi$, $p$ had to be delivered.
+That means a vehicle (possibly more)
+had to arrive at the
+package's location, pick it up, drive it somewhere else and drop it,
+possibly several times.
+However, any vehicle could not have arrived at $p$'s current location from a location that is closer than: $$\min\{\min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),
+\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\} \leq h^{(p)}_4(s),$$
+and at least one vehicle had to arrive at the package's location.
+The \pickup{} and \drop{} actions for each package have to be planned in $\pi$ as well, at least in the corresponding counts that $h'_0$ adds.
 
-If $a$ were a \pickup{} or \drop{} action, only the value of $h'_0$
-would have changed, and by at most 1 in the correct direction,
-because $h_4(s_{n+1}) = h_4(s_{n}) - 1$ (for \drop{})
-or $h_4(s_{n+1}) = h_4(s_{n}) + 1$ (for \pickup{}), and the cost of $a$ is 1,
-which means that $h_4(s_{n+1}) \leq h^*(s_{n+1}).$
-
-
-If $a$ were a \drive{} action
-\TODO{finish proof}.
+This means, that $\pi$ had to have actions that correspond at least to the costs of:
+$$h'_0(s) + \sum_{p \in P} h_4^{(p)}(s) = h_4(s),$$
+which implies $h_4(s) \leq cost(\pi) = h^*(s),$ and that is a contradiction.
 \end{proof}
 
-However, the $h_4$ heuristic is not consistent. Assume the following road network (Figure~\ref{fig:heursit}):
+Despite its admissibility, the $h_4$ heuristic is not consistent. Let us assume the following road network (Figure~\ref{fig:heursit}):
 $$\{\{A, B, 1\}, \{B, C, 2\}, \{B, D, 2\}\},$$
 where $\mt{at}(v) = A$, $\mt{at}(p_1) = C,$ and $\mt{at}(p_2) = D$
 hold in the initial state $s_0$.
@@ -323,12 +321,23 @@ $$cost(a) + h_4(s') = 1 + (2+2+4) = 9.$$
 The heuristic is also not optimal, as is evident from the same
 example situation (for $s_0$, the optimal plan is of length $13$).
 
-\begin{figure}[tb]
+\begin{figure}[b]
 \centering
-\includegraphics[width=0.3\textwidth]{../imga/heursit}
-\caption{Visualization of the counterexample road network
-for consistency of $h_4$.}
+\begin{subfigure}{0.48\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{../imga/heursit}
+\caption{Counterexample for $h_4$.}
 \label{fig:heursit}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{../imga/heursit_h5}
+\caption{Counterexample for $h_5$.}
+\label{fig:heursit_h5}
+\end{subfigure}
+\caption{Visualization of the counterexample road networks
+for consistency of heuristics $h_4$ and $h_5$.}
+\label{fig:heursits}
 \end{figure}
 
 \subsubsection{General marking heuristic}\label{sfa5}
@@ -345,35 +354,21 @@ Do note that if a package is loaded in a vehicle, no roads are marked for it.
 The described heuristic is not optimal, but it is admissible.
 Both properties hold because $\forall s \in S : h_5(s) \leq h_4(s)$ holds
 and they hold for $h_4$.
-Additionally, we will prove the consistency of $h_5$.
 
-\begin{thm}
-The heuristic $h_5$ is consistent for sequential Transport problems.
-\end{thm}
-\begin{proof}
-Let $s$ be a state and $s_g$ the nearest goal state.
-We will (equivalently) show that $h_5(s) \leq h_5(s') + cost(a),$ where
-$s' = \gamma(s, a)$ for all applicable $a \in A$.
-
-If $a$ is a \pickup{} or \drop{} action,
-no road will be marked because of the package that was picked up/dropped,
-due to the nearest vehicle being present at the same location.
-The markings of other packages do not change, because
-the vehicle picking up or dropping the package does not move
-and shortest distances are calculated to packages and vehicles.
-Therefore, even if the minimum was previously hit at the package that was
-picked up, it would be hit at the vehicle that was picking up
-the package anyway (analogously for the \drop{} action).
-Therefore, the inequality holds trivially, because $h_5(s) = h_5(s') - 1$ (for \drop{})
-or $h_5(s) = h_5(s') + 1$ (for \pickup{}), and the cost of $a$ is 1.
-
-Assume $a$ is a \drive{} action of the vehicle $v$.
-We can ignore all packages that are loaded onto the vehicle,
-as they only contribute to the value with 1 for the \drop{} action
-that has to happen. That does not change by appending a \drive{} action.
-\TODO{finish proof}
-\end{proof}
-
+Even though $h_5$ is consistent in far more situations (combinations of states and applicable actions) than $h_4$, it is still not consistent in general.
+Assume the following road network (Figure~\ref{fig:heursit_h5}):
+$$\{\{A, B, 1\}, \{A, C, 1\}, \{A, D, 1\}, \{B, C, 2\}, \{B, E, 10\}, \{C, D, 2\}, \{D, E, 10\}\},$$
+where $\mt{at}(v) = C$, $\mt{at}(p_1) = B,$ and $\mt{at}(p_2) = D$
+hold in the initial state $s_0$.
+The target of both $p_1$ and $p_2$ is $E$.
+If the heuristic selects the red edges for $s_0$, the value:
+$$h_5(s_0) = 2+2+4 = 8$$ is greater than the cost
+of the applicable \drive{} action for vehicle $v$ from $C$ to $A$
+added to the heuristic value in the updated state (assuming selection of blue edges):
+$$cost(a) + h_5(s') = 1 + (1+1+4) = 7.$$
+Note that the $h_5$ heuristic could have likewise selected the blue edges along
+with the $\{A, C, 1\}$ edge, which would have resulted in $h_5(s_0) = 7,$
+and this case would not be a counterexample. This points to the possibility that th $h_5$ heuristic will work reasonably ``consistenly'' in practice.
 
 \subsubsection{Summary}
 
@@ -384,7 +379,7 @@ The $h_3$ heuristic, while having no significant
 theoretical properties performs surprisingly well in practice.
 The $h_4$ heuristic on the other hand, while being admissible, does not
 perform well empirically.
-Due to its consistency, the $h_5$ heuristic has the best theoretical properties out of all the discussed heuristics and also
+Due to its closeness to consistency, the $h_5$ heuristic has the best properties out of all the discussed heuristics and also
 performs well in practice.
 We will include planners utilizing the $h_3$ and $h_5$ heuristics
 in our final evaluation (Chapter~\ref{experiments}).
