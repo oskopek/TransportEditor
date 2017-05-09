@@ -6,7 +6,7 @@ The compact disk attached to this thesis contains the following:
 
 \begin{itemize}
 \item \verb+thesis.pdf+, the PDF version of this thesis;
-\item \verb+TransportEditor/+, the \TEver{} release (Git Tag \TEtag{}) of the TransportEditor software, also obtainable at:\\
+\item \verb+TransportEditor-\TEver{}/+, the \TEver{} release (Git Tag \TEtag{}) of the TransportEditor software, also obtainable at:\\
 \url{https://github.com/oskopek/TransportEditor/releases}. Contains:
 \begin{itemize}
 \item \verb+datasets/+, the datasets used at IPC;
@@ -16,6 +16,7 @@ The compact disk attached to this thesis contains the following:
 from Sections~\ref{sequential-results} and~\ref{temporal-results}.
 \end{itemize}
 \end{itemize}
+The VAL validator (needed for experiments) can be obtained at \url{https://github.com/KCL-Planning/VAL}.
 
 \subsection*{TransportEditor User Manual}\label{transporteditor-user-manual}
 
@@ -115,7 +116,7 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
   :duration (= ?duration 1)
   :condition (and
       (at start (at ?v ?l))
-      (over all (at ?v ?l))   
+      (over all (at ?v ?l))
       (at start (in ?p ?v))
       (at start (ready-loading ?v)))
   :effect (and (at start (not (in ?p ?v)))
@@ -143,7 +144,7 @@ Generated API documentation using JavaDoc is also available on the attached CD, 
 
 To enable effective transportation planning,
 we have developed \textit{TransportEditor}, a system for creating and visualizing transportation problems and plans.
-Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application 
+Specifically, TransportEditor aims to be a problem editor and plan visualizer for the Transport domain (and its variants). It is an intuitive and cross-platform graphical desktop application
 written in Java (see attached screenshot).
 
 It allows the users to create a planning session, where they
@@ -254,7 +255,7 @@ Independent on the other modules is \texttt{transport-docs},
 the module containing this thesis,
 along with our other textual works relating to researching the Transport domain.
 Information about the model in \texttt{core} and the
-\texttt{editor}  
+\texttt{editor}
 is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
 All the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
 data conversion. The only important scripts reside in the \texttt{tools} folder;
