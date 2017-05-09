@@ -40,7 +40,7 @@ if __name__ == '__main__':
     with open(out_file, 'r') as file:
         runs = json.loads(file.read())
     for run in runs["runs"]:
-        run["results"]["bestScore"] = get_best_from_run(best_scores, run)
+        run["results"]["bestScore"] = best_scores[run["problem"]]
     json_text = json.dumps(runs, indent=4, sort_keys=True)
     with open(out_file, 'w') as file:
         file.write(json_text)
