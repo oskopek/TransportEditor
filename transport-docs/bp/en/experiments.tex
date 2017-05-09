@@ -402,8 +402,46 @@ The attained results show that domain-specific information can be leveraged
 to generate plans of better quality.
 We have designed and implemented Transport planners that are able to beat
 all results from the sequential
-and temporal satisficing tracks of the 2008 and 2011 IPCs.
+and temporal satisficing tracks of the 2008 and 2011 IPCs
+and even achieve satistfactory results across datasets (Table~\ref{tab:planner-summary}).
 In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury.
+
+\begin{table}[tbp]
+\centering
+\begin{subtable}[t]{0.48\textwidth}
+\centering
+\begin{tabular}{lr}
+\toprule
+\multirow{2}{*}{\textbf{Planner}} & \textbf{Average}\\
+& \textbf{quality}\\
+\midrule
+MSFA3 & 0.924\\
+MSFA5 & \textbf{0.928}\\
+RRAPN & 0.890\\
+\bottomrule
+\end{tabular}
+\caption{Average quality of our planners on sequential datasets.}
+\label{tab:seq-summary}
+\end{subtable}
+\quad
+\begin{subtable}[t]{0.48\textwidth}
+\centering
+\begin{tabular}{lr}
+\toprule
+\multirow{2}{*}{\textbf{Planner}} & \textbf{Average}\\
+& \textbf{quality}\\
+\midrule
+MSFA5Sched & 0.484\\
+RRAPNSched & 0.904\\
+TRRAPN & \textbf{0.932}\\
+\bottomrule
+\end{tabular}
+\caption{Average quality of our planners across datasets.}
+\label{tab:tempo-summary}
+\end{subtable}
+\caption{Average quality of our planners across datasets.}
+\label{tab:planner-summary}
+\end{table}
 
 Another major advantage previously unmentioned is that
 our planners generate good solutions quite fast.

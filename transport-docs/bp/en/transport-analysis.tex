@@ -203,9 +203,9 @@ Table~\ref{tab:ipc-datasets} provides an overview of the individual datasets, th
 
 \begin{table}[tb]
 \centering
-\begin{tabular}{c||ccc}
-\textbf{Dataset} & \textbf{Competition} & \textbf{IPC Track} & \textbf{Formulation} \\ 
-\midrule
+\begin{tabular}{lclc}
+\toprule
+{\hspace{0.75em}\textbf{Dataset}} & \textbf{Competition} & {\hspace{2.5em}\textbf{IPC Track}} & \textbf{Formulation}\\ 
 \midrule
 netben-opt-6 & \multirow{4}{*}{IPC-6} & \href{http://icaps-conference.org/ipc2008/deterministic/NetBenefitOptimization.html}{Net-benefit: optimization} & Numeric \\ 
 seq-opt-6 & & \href{http://icaps-conference.org/ipc2008/deterministic/SequentialOptimization.html}{Sequential: optimization} & STRIPS \\ 
@@ -220,6 +220,7 @@ seq-agl-8 & \multirow{4}{*}{IPC-8} & \href{https://helios.hud.ac.uk/scommv/IPC-1
 seq-mco-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqmulti.html}{Sequential: multi-core} &  \\ 
 seq-opt-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqopt.html}{Sequential: optimization} &  \\ 
 seq-sat-8 & & \href{https://helios.hud.ac.uk/scommv/IPC-14/seqsat.html}{Sequential: satisficing} &  \\ 
+\bottomrule
 \end{tabular}
 \caption[Transport datasets from the 2008, 2011, and 2014 IPCs.]{Transport datasets from the 2008, 2011, and 2014 IPCs. All formulations assume capacitated vehicles. Numeric and temporal formulations also contain fuel demands and capacities. The temporal formulation additionally adds concurrent actions and a notion of time. More information can be found in Section~\ref{domain-desc}.}
 \label{tab:ipc-datasets}
@@ -267,10 +268,11 @@ are rare and usually significantly longer.
 \scriptsize
 \centering
 \begin{subtable}[t]{0.42\textwidth}
-\csvreader[tabular=r||rrrrrl,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
+\centering
+\csvreader[tabular=rrrrrrl,
+    table head=\toprule\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule,
+    late after line=\mbox{},
+    table foot=\\\bottomrule]%
 {../data/seq-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Cities=\cities,Locations=\locations,%
 Roads=\roads,Stateslat=\stateslat}%
 {\problem & \vehicles & \packages & \cities & \locations & \roads & \stateslat}%
@@ -279,10 +281,11 @@ Roads=\roads,Stateslat=\stateslat}%
 \end{subtable}
 \quad
 \begin{subtable}[t]{0.54\textwidth}
-\csvreader[tabular=r||rrrrrrl,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{Petrol}} & \rot{\textbf{States}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
+\centering
+\csvreader[tabular=rrrrrrrl,
+    table head=\toprule\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{Petrol}} & \rot{\textbf{States}}\\\midrule,
+    late after line=\mbox{},
+    table foot=\\\bottomrule]%
 {../data/tempo-sat-6.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Cities=\cities,Locations=\locations,%
 Roads=\roads,Petrol=\petrol,Stateslat=\stateslat}%
 {\problem & \vehicles & \packages & \cities & \locations & \roads & \petrol & \stateslat}%
@@ -290,12 +293,13 @@ Roads=\roads,Petrol=\petrol,Stateslat=\stateslat}%
 \label{tab:tempo-sat-6-dims}
 \end{subtable} 
 
-\vspace{0.5cm}
+\vspace{0.21cm}
 \begin{subtable}[t]{0.42\textwidth}
-\csvreader[tabular=r||rrrrrl,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
+\centering
+\csvreader[tabular=rrrrrrl,
+    table head=\toprule\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule,
+    late after line=\mbox{},
+    table foot=\\\bottomrule]%
 {../data/seq-sat-7.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Cities=\cities,Locations=\locations,%
 Roads=\roads,Stateslat=\stateslat}%
 {\problem & \vehicles & \packages & \cities & \locations & \roads & \stateslat}%
@@ -304,10 +308,11 @@ Roads=\roads,Stateslat=\stateslat}%
 \end{subtable}
 \quad
 \begin{subtable}[t]{0.54\textwidth}
-\csvreader[tabular=r||rrrrrl,
-    table head=\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule\midrule,
-    late after line=\mbox{}]
-%    table foot=\\\bottomrule]%
+\centering
+\csvreader[tabular=rrrrrrl,
+    table head=\toprule\textbf{\#} & \rot{\textbf{Vehicles}} & \rot{\textbf{Packages}} & \rot{\textbf{Cities}} & \rot{\textbf{Locations}} & \rot{\textbf{Roads}} & \rot{\textbf{States}}\\\midrule,
+    late after line=\mbox{},
+    table foot=\\\bottomrule]%
 {../data/seq-sat-8.csv}{Problem=\problem,Vehicles=\vehicles,Packages=\packages,Cities=\cities,Locations=\locations,%
 Roads=\roads,Stateslat=\stateslat}%
 {\problem & \vehicles & \packages & \cities & \locations & \roads & \stateslat}%
@@ -365,15 +370,18 @@ A summary of the acquired dataset-specific insights is available in Table~\ref{t
 
 \begin{table}
 \centering
-\begin{tabular}{cc||cccr}
-\textbf{Dataset} & \textbf{Problems} & \rott{\textbf{Symmetric road lengths}} & \rott{\textbf{Symmetric fuel demands}} & \rott{\textbf{Vehicle target locations}} & \textbf{$\approx$ \# states}\\
-\midrule
+\begin{tabular}{cccccr}
+\toprule
+\multirow{3}{*}{\textbf{Dataset}} & \multirow{3}{*}{\textbf{Problems}} & \textbf{Sym.} & \textbf{Sym.} & \textbf{Vehicle} & \multirow{3}{*}{\textbf{$\approx$ \# states}}\\
+& &  \textbf{road} & \textbf{fuel} & \textbf{fuel} &\\
+& & \textbf{lengths} & \textbf{demands} & \textbf{locations} &\\
 \midrule
 seq-sat-6 & 01--30 & Yes & N/A & No & $10^{3} \to 10^{43}$\\
 seq-sat-7 & 01--30 & Yes & N/A & No & $10^{25} \to 10^{59}$\\
 seq-sat-8 & 01--30 & Yes & N/A & No & $10^{50} \to 10^{78}$\\\midrule
 \multirow{2}{*}{tempo-sat-6} & 01--20 & Yes & Yes & No & $10^{8} \to 10^{52}$\\
-& 21--30 & No & No & Yes & $10^{18} \to 10^{81}$
+& 21--30 & No & No & Yes & $10^{18} \to 10^{81}$\\
+\bottomrule
 \end{tabular} 
 \caption[Summary of problem instance properties in IPC Transport datasets.]{Summary of problem instance properties in IPC Transport datasets.
 State space size estimates in temporal domains
