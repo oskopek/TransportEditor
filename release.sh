@@ -96,7 +96,7 @@ cp -r tools "$tmpdir"/
 rm -rf "$tmpdir"/tools/benchmarks/results
 mkdir -p "$tmpdir"/tools/benchmarks/results
 
-cp README.adoc LICENSE "$tmpdir"/
+cp README.adoc LICENSE.txt "$tmpdir"/
 cp "NOTICE.adoc" "AUTHORS.adoc" "$tmpdir"/
 
 relName="TransportEditor-$relVersion"

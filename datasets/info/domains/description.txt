@@ -1,2 +1,0 @@
-ipc2014 data https://helios.hud.ac.uk/scommv/IPC-14/benchmark.html
-ipc2008 data http://icaps-conference.org/ipc2008/deterministic/Domains.html
