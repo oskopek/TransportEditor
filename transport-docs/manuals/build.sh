@@ -27,8 +27,10 @@ fi
 verification="`grep -qE 'inValid="0"' log/validation-out-user.xml && grep -qE 'inValid="0"' log/validation-out-dev.xml; echo $?`"
 if [ "$verification" -ne 0 ]; then
     echo "PDF validation FAILED!"
+    rm -rf log/
     return "$verification"
 fi
 echo "PDF validation PASSED!"
+rm -rf log/
 return 0
 

@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -rf target/
+rm -rf build/ pdf/ backups/

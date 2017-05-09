@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-bash makescript.sh
-bash clean.sh
+rm -rf target/
+. makescript.sh
 mkdir target
 cp pdf/*.pdf target/
+. clean.sh

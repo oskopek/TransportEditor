@@ -4,7 +4,7 @@ set -e
 rm -rf log
 . clean.sh
 #. update-biblio.sh
-. convert-images.sh
+./convert-images.sh
 cd en
 make all
 cd ..
@@ -25,8 +25,10 @@ fi
 verification="`grep -qE 'inValid="0"' log/validation-out.xml; echo $?`"
 if [ "$verification" -ne 0 ]; then
     echo "PDF validation FAILED!"
+    rm -rf log/
     return "$verification"
 fi
 echo "PDF validation PASSED!"
+rm -rf log/
 return 0
 
