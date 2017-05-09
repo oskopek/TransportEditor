@@ -103,6 +103,11 @@ public abstract class LineChartReporter implements Reporter {
             + ">\n" + g2.getSVGElement();
     }
 
+    /**
+     * Get the value axis label.
+     *
+     * @return the value axis label
+     */
     public String getValueAxisLabel() {
         return valueAxisLabel;
     }
