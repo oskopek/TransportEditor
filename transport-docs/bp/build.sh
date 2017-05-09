@@ -18,7 +18,8 @@ if ! which verapdf >/dev/null; then
 fi
 
 echo "Validating PDF/A-2u..."
-verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/bp/target/thesis.pdf > log/validation-out.xml
+#verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/bp/target/thesis.pdf > log/validation-out.xml
+verapdf -p ../verapdf/uk-profile.xml --format mrr ~/git/TransportEditor/transport-docs/bp/target/thesis.pdf > log/validation-out.xml
 if which xmllint >/dev/null; then
     cat log/validation-out.xml | xmllint --format - > log/validation.xml
 fi
