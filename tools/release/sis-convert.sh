@@ -7,7 +7,6 @@
 # NOTE 2: If you find any bugs, please report/fix them at:
 #                 https://gist.github.com/oskopek/cca1a553c612e24f8326e6bc0b5d84f7
 
-
 set -e
 
 root_dir="$1"
@@ -18,7 +17,10 @@ whitelist="pdf jpg wav wave mp3 vob mp4 csv xml txt" # whitelist of all file end
 uninstall_file="sis-unconvert.sh.txt"
 uninstall_file_win="sis-unconvert.bat.txt"
 
-files="`find "$root_dir" -not \( -name '\.git' -type d -prune \) -type f`"
+orig_dir="`pwd`"
+cd "$root_dir"
+
+files="`find . -not \( -name '\.git' -type d -prune \) -type f`"
 for ending in $whitelist; do
     files="`echo "$files" | grep -v "\.$ending\$"`"
 done
@@ -32,3 +34,5 @@ for file in $files; do
     echo mv -v "$file".txt "$file" >> "$uninstall_file"
     echo 'move /y' "$file".txt "$file" >> "$uninstall_file_win"
 done
+
+cd "$orig_dir"

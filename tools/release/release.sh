@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 MVN_PROFILES="it,docs"
 base_branch="`git status | grep "On branch" | sed -E 's/On branch\s+(.*)/\1/' | tr -d '[:blank:]'`"
 
@@ -72,7 +74,7 @@ git tag -a "$tagName" -m "Release $relVersion"
 
 tmpdir="TEMP`date +%s`"
 mkdir "$tmpdir"
-mvn clean install -P"$MVN_PROFILES"
+mvn clean install -P"$MVN_PROFILES" -DskipTests
 
 mkdir -p "$tmpdir"/datasets
 cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
@@ -85,9 +87,13 @@ for apidocs in `find . -wholename '*target/apidocs' -type d`; do
 done
 
 for module in `ls | grep 'transport-.*'`; do
+    if [ "$module" = "transport-docs" ]; then
+        continue
+    fi
     mkdir -p "$tmpdir/sources/$module"
-    rsync -av --exclude='*/.git*' --exclude='.idea/' --exclude='*.iml' --exclude 'target/' --exclude 'tools/' "$module"/ "$tmpdir"/sources/"$module"
+    rsync -av --exclude='*/.git*' --exclude='.idea/' --exclude='*.iml' --exclude 'target/' "$module"/ "$tmpdir"/sources/"$module"
 done
+cp -r "config/" "pom.xml" "$tmpdir/sources/"
 
 mkdir -p "$tmpdir"/bin
 cp `find . -wholename '*target/*jar-with-dependencies.jar' | tr '\n' ' '` "$tmpdir"/bin
@@ -96,8 +102,7 @@ cp -r tools "$tmpdir"/
 rm -rf "$tmpdir"/tools/benchmarks/results
 mkdir -p "$tmpdir"/tools/benchmarks/results
 
-cp README.adoc LICENSE.txt "$tmpdir"/
-cp "NOTICE.adoc" "AUTHORS.adoc" "$tmpdir"/
+cp "NOTICE.adoc" "AUTHORS.adoc" "LICENSE.txt" "README.adoc" "$tmpdir"/
 
 relName="TransportEditor-$relVersion"
 mv "$tmpdir" "$relName"
