@@ -131,6 +131,8 @@ public class RightPaneController extends AbstractController {
         stepRow.managedProperty().bind(stepPreviewEnabled);
         stepRow.visibleProperty().bind(stepRow.managedProperty());
 
+        ganttPlanTab.disableProperty().bind(temporalPlanTab.disabledProperty());
+
         updateTimeSpinner();
         timeSpinner.valueProperty().addListener(l -> {
             Double value = timeSpinner.getValue();
@@ -367,8 +369,9 @@ public class RightPaneController extends AbstractController {
                 actionTableFilter.getFilteredList().addListener(lastChangeListener);
                 actionTableFilter.getTableView().getSelectionModel().selectedItemProperty()
                         .addListener(rowSelectionChangeListener);
-                ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(actionTableFilter.getFilteredList()));
-
+                if (!ganttPlanTab.isDisabled()) {
+                    ganttPlanTabScrollPane.setContent(TemporalGanttChart.build(actionTableFilter.getFilteredList()));
+                }
             }
         });
     }
