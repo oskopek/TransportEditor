@@ -297,45 +297,6 @@ The generated plans and benchmark results can be found in Attachment 1\comment{\
 \label{fig:tempo-sat-6-results}
 \end{figure}
 
-\comment{
-\begin{figure}[tb]
-\centering
-\begin{subfigure}{0.49\textwidth}
-\centering
-\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
-\caption{RRAPNSched}
-\label{fig:tempo-sat-6-gantt-12-rrapn}
-\end{subfigure}
-\begin{subfigure}{0.49\textwidth}
-\centering
-\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
-\caption{TFD2014}
-\label{fig:tempo-sat-6-gantt-12-tfd}
-\end{subfigure}
-\caption{Gantt charts of RRAPNSched and TFD2014 on the tempo-sat-6 \texttt{p12} problem.}
-\label{fig:tempo-sat-6-gantt}
-\end{figure}
-}
-\begin{figure}[tbp]
-\centering
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
-\caption{RRAPNSched}
-\label{fig:tempo-sat-6-gantt-12-rrapn}
-\end{subfigure}
-
-\begin{subfigure}{\textwidth}
-\vspace{0.5cm}
-\centering
-\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
-\caption{TFD2014}
-\label{fig:tempo-sat-6-gantt-12-tfd}
-\end{subfigure}
-\caption{Gantt charts of the RRAPNSched and TFD2014 planners on the tempo-sat-6 \texttt{p12} problem.}
-\label{fig:tempo-sat-6-gantt}
-\end{figure}
-
 Planners that entered the 2008 temporal satisficing track at the IPC did not cope well with the Transport domain
 --- only two non-baseline planners (SGPlan$_6$ and TFD) were able to produce at least one plan
 for any problem. Additionally, only the smallest problem, problem number 1, was solved
@@ -402,11 +363,12 @@ The attained results show that domain-specific information can be leveraged
 to generate plans of better quality.
 We have designed and implemented Transport planners that are able to beat
 all results from the sequential
-and temporal satisficing tracks of the 2008 and 2011 IPCs
-and even achieve satistfactory results across datasets (Table~\ref{tab:planner-summary}).
-In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury.
+and temporal satisficing tracks of the 2008 and 2011 IPCs.
+In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury. 
+Our planners achieve satisfactory results across datasets,
+as can be observed in Table~\ref{tab:planner-summary}.
 
-\begin{table}[tbp]
+\begin{table}[tb]
 \centering
 \begin{subtable}[t]{0.48\textwidth}
 \centering
@@ -420,7 +382,7 @@ MSFA5 & \textbf{0.928}\\
 RRAPN & 0.890\\
 \bottomrule
 \end{tabular}
-\caption{Average quality of our planners on sequential datasets.}
+\caption{Average quality on sequential datasets.}
 \label{tab:seq-summary}
 \end{subtable}
 \quad
@@ -436,7 +398,7 @@ RRAPNSched & 0.904\\
 TRRAPN & \textbf{0.932}\\
 \bottomrule
 \end{tabular}
-\caption{Average quality of our planners across datasets.}
+\caption{Average quality the temporal dataset.}
 \label{tab:tempo-summary}
 \end{subtable}
 \caption{Average quality of our planners across datasets.}
@@ -451,7 +413,27 @@ scores from long planning runs, except for problems
 where the planner did not find a plan at all in the
 given time limit.
 
-\begin{table}[tbp]
+\begin{figure}[!b]
+\centering
+\begin{subfigure}{0.8\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
+\caption{RRAPNSched}
+\label{fig:tempo-sat-6-gantt-12-rrapn}
+\end{subfigure}
+
+\begin{subfigure}{0.8\textwidth}
+\vspace{0.2cm}
+\centering
+\includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
+\caption{TFD2014}
+\label{fig:tempo-sat-6-gantt-12-tfd}
+\end{subfigure}
+\caption{Gantt charts of the RRAPNSched and TFD2014 planners on the tempo-sat-6 \texttt{p12} problem.}
+\label{fig:tempo-sat-6-gantt}
+\end{figure}
+
+\begin{table}[p]
 \centering
 \begin{subtable}{0.48\textwidth}
 \centering

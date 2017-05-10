@@ -256,14 +256,6 @@ tends to be dense and road lengths small, while roads connecting cities
 are rare and usually significantly longer.
 
 
-\begin{figure}[tb]
-\begin{center}
-\includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
-\end{center}
-\caption[Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008.]{Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problem, the circle of darker nodes in the center represents truck hubs and each of the attached subgraphs are individual cities.}
-\label{fig:ipc08_tempo-sat_p30}
-\end{figure}
-
 \begin{table}[p]
 \scriptsize
 \centering
@@ -325,6 +317,12 @@ Bold problem instances correspond to Figure~\ref{fig:ipc08_seq-sat_p13} and Figu
 \label{tab:dataset-dimensions}
 \end{table}
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=1.0\textwidth]{../img/ipc08_tempo-sat_p30_land}
+\caption[Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008.]{Road network visualization of the \texttt{p30} problem from the tempo-sat track of IPC 2008. Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares. Darker red dots represent locations with petrol stations. In this specific problem, the circle of darker nodes in the center represents truck hubs and each of the attached subgraphs are individual cities.}
+\label{fig:ipc08_tempo-sat_p30}
+\end{figure}
 
 All sequential problem instances in seq-sat datasets have symmetric roads and road lengths and can, therefore,
 be simplified by assuming the use of an undirected graph.
@@ -355,10 +353,10 @@ capacity in this estimate because it can be computed from the locations of packa
 
 For temporal Transport, the problem state space size estimate is more complicated,
 due to actions being parallel. A reasonable estimate could be:
-$$(l+r)^v \cdot \left(\frac{f_{max}}{\mt{GCD} \{\mt{fuel-demand}(l_1, l_2) | (l_1, l_2) \in R\}}\right)^v \cdot (l+v)^p,$$ where $R$ represents the set of roads, $r = |R|$,
-$\mt{GCD}$ is the greatest common divisor function
-and $f_{max}$ is the maximum fuel capacity for vehicles (this is a simplification where all vehicles
-have an equal maximum fuel capacity).
+$$(l+r)^v \cdot \left(\frac{f_{max}}{\mt{GCD} \{\mt{fuel-demand}(l_1, l_2) | (l_1, l_2) \in R\}}\right)^v \cdot (l+v)^p,$$ where $R$ represents the set of roads, $r = |R|$ is the number of roads,
+$\mt{GCD}$ is the greatest common divisor function,
+and $f_{max}$ is the maximum fuel capacity for vehicles. The $f_{max}$ value presents a simplification, where all vehicles
+have an equal maximum fuel capacity.
 The formula expresses the choice of positions of vehicles (vehicles can now be in the middle
 of a \drive{} action), the choice of the current fuel capacity of vehicles (cannot be simply
 calculated from the other state variables, only from all previous actions),
@@ -368,7 +366,7 @@ We can see that problems vary not only in size but also in what features they in
 and what assumptions they make.
 A summary of the acquired dataset-specific insights is available in Table~\ref{tab:problem-properties}.
 
-\begin{table}
+\begin{table}[tb]
 \centering
 \begin{tabular}{cccccr}
 \toprule
@@ -390,20 +388,4 @@ are calculated using $f_{max} = 100$ and the $\mt{GCD}$ of \texttt{fuel-demand}s
 % https://www.wolframalpha.com/input/?i=l%5Ev+*+(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D+5
 % https://www.wolframalpha.com/input/?i=(l%2Br)%5Ev+*+c%5Ev+*(v%2Bl)%5Ep,+p+%3D+2,+v+%3D+2,+l+%3D5,+r%3D12,+c%3D100
 \end{table}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

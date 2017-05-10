@@ -268,8 +268,8 @@ is taken from the distance to its target location,
 distance to the nearest vehicle,
 and the distance to the nearest package:
 \begin{align*}
-h_4(s) = h'_0(s) + \sum_{p \in P} \min\lbrace
-&\mt{spd}(location(p), target(p)),
+h_4(s) = h'_0(s) + \sum_{p \in P} &\min\lbrace
+\mt{spd}(location(p), target(p)),
 \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),\\
 &\min_{\substack{p' \in P\\p' \neq p}} \mt{spd}(location(p), location(p'))\rbrace.
 \end{align*}
