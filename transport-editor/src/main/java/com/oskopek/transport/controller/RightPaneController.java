@@ -274,6 +274,7 @@ public class RightPaneController extends AbstractController {
             disableAddRoadButtonBinding.invalidate();
             problemLockedBinding.invalidate();
             disableStepButtonBinding.invalidate();
+            redrawPlansInternal(null);
         };
         application.planningSessionProperty().addListener(invalidatePlanButtonBindingListener);
         application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {

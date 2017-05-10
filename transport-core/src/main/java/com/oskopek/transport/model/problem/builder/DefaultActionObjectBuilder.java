@@ -52,7 +52,7 @@ public abstract class DefaultActionObjectBuilder<T extends DefaultActionObject> 
     }
 
     @Override
-    public void update() {
+    public void update() throws InvalidValueException {
         if (updateFunction != null) {
             updateFunction.accept(build());
         }

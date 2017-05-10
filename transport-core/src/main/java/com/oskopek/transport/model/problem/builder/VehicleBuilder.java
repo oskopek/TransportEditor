@@ -3,6 +3,8 @@ package com.oskopek.transport.model.problem.builder;
 import com.oskopek.transport.model.domain.action.ActionCost;
 import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
  * Action object builder for {@link Vehicle}s.
  */
 public class VehicleBuilder extends LocatableBuilder<Vehicle> {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Location target;
     private ActionCost curCapacity;
@@ -50,7 +54,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
      *
      * @return the current capacity
      */
-    @FieldLocalization(key = "vehicle.curcapacity", priority = 3, editable = false)
+    @FieldLocalization(key = "vehicle.curcapacity", priority = 3)
     public ActionCost getCurCapacity() {
         return curCapacity;
     }
@@ -88,7 +92,7 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
      *
      * @return the current fuel capacity
      */
-    @FieldLocalization(key = "vehicle.curfuelcapacity", priority = 4) // TODO: Validate to be max maxFuelCapacity
+    @FieldLocalization(key = "vehicle.curfuelcapacity", priority = 4)
     public ActionCost getCurFuelCapacity() {
         return curFuelCapacity;
     }
@@ -160,7 +164,13 @@ public class VehicleBuilder extends LocatableBuilder<Vehicle> {
     }
 
     @Override
-    public Vehicle build() {
+    public Vehicle build() throws InvalidValueException {
+        if (curCapacity.compareTo(maxCapacity) > 0) {
+            throw new InvalidValueException("max. capacity > capacity");
+        }
+        if (curFuelCapacity.compareTo(maxFuelCapacity) > 0) {
+            throw new InvalidValueException("max. fuel capacity > fuel capacity");
+        }
         return new Vehicle(getName(), getLocation(), target, curCapacity, maxCapacity, curFuelCapacity, maxFuelCapacity,
                 true, packageList);
     }

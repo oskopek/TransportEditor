@@ -1,6 +1,7 @@
 package com.oskopek.transport.view;
 
 import com.oskopek.transport.model.problem.builder.ActionObjectBuilder;
+import com.oskopek.transport.model.problem.builder.InvalidValueException;
 import com.oskopek.transport.view.editor.ActionObjectPropertyEditorFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -47,7 +48,13 @@ public class PropertyEditorDialogPaneCreator extends ActionObjectBuilderConsumer
             application.centerInPrimaryStage(alert, -100, -150);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && ButtonType.APPLY.equals(result.get())) {
-                builder.update();
+                try {
+                    builder.update();
+                } catch (InvalidValueException e) {
+                    AlertCreator.showAlert(Alert.AlertType.ERROR,
+                            messages.getString("editor.invalidvalue") + " (" + e.getMessage() + ").",
+                            a -> application.centerInPrimaryStage(a, -200, -50));
+                }
             }
             return null;
         };
