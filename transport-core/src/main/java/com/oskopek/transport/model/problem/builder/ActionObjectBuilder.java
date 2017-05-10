@@ -15,8 +15,9 @@ public interface ActionObjectBuilder<T extends ActionObject> {
      * Build the action object from properties of the builder.
      *
      * @return the built action object
+     * @throws InvalidValueException if a property's value was invalid
      */
-    T build();
+    T build() throws InvalidValueException;
 
     /**
      * Initialize all related properties of the builder from the action object.
@@ -35,7 +36,8 @@ public interface ActionObjectBuilder<T extends ActionObject> {
 
     /**
      * Execute the update callback with the built action object.
+     * @throws InvalidValueException if a property's value was invalid
      */
-    void update();
+    void update() throws InvalidValueException;
 
 }

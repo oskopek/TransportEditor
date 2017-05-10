@@ -4,7 +4,6 @@ import com.oskopek.transport.model.problem.*;
 import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.graph.DefaultRoadGraph;
 import com.oskopek.transport.model.problem.graph.RoadGraph;
-import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import com.oskopek.transport.model.state.PlanState;
 import com.oskopek.transport.persistence.IOUtils;
@@ -140,7 +139,6 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
         this.setAttribute("ui.stylesheet", style);
         // this.setAttribute("ui.quality");
         this.setAttribute("ui.antialias");
-        getAllLocations().forEach(this::setPetrolStationStyle);
         createNewSpriteManager();
     }
 
@@ -148,6 +146,7 @@ public final class DefaultVisualRoadGraph extends DefaultRoadGraph implements Vi
      * Create a new sprite manager for the current graph (reset).
      */
     private synchronized void createNewSpriteManager() {
+        getAllLocations().forEach(this::setPetrolStationStyle);
         spriteManager = new SpriteManager(this);
     }
 
