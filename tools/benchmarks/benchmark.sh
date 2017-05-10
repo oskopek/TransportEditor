@@ -2,6 +2,9 @@
 
 if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
+if ls "$transportroot" | grep "sources" >/dev/null; then
+transportroot="$transportroot/sources"
+fi
 fi
 if [ -z "$benchmarker" ]; then
 benchmarker="$transportroot/transport-benchmark/target/""`ls "$transportroot/transport-benchmark/target/" | grep 'transport-benchmark-.*-jar-with-dependencies.jar' | tail -n 1`"
