@@ -1,39 +1,51 @@
 \chapwithtoc{Attachments}
 
-\section*{1. CD contents}\label{cd-contents}
+\section*{1.\;CD contents}\label{cd-contents}
 
-The compact disk attached to this thesis contains the following:
+The compact disc attached to this thesis contains the following:
 
 \begin{itemize}
 \item \verb+thesis.pdf+, the PDF version of this thesis;
 \item \texttt{TransportEditor-\TEver{}/}, the \TEver{} release of the TransportEditor software, also obtainable at (Git tag \TEtag{}):\\
 \url{https://github.com/oskopek/TransportEditor/releases}. Contains:
 \begin{itemize}
+\item \verb+bin/+, built executable JAR files (with dependencies included);
 \item \verb+datasets/+, the datasets used at IPC;
 \item \verb+docs/+, the user, developer, and JavaDoc documentation and a specification document for TransportEditor;
 \item \verb+sources/+, sources of TransportEditor along with source of planners, benchmarks and the report generator; and
-\item \verb+tools/+, the benchmarker execution scripts and configuration files, along with other tools used. The folder \verb+tools/benchmarks/results+ contains the benchmark results
+\item \verb+tools/+, the benchmarker execution scripts and configuration files, along with other tools used. The \verb+tools/benchmarks/results-long/+ directory contains the benchmark results
 from Sections~\ref{sequential-results} and~\ref{temporal-results}.
 \end{itemize}
 \end{itemize}
+To compile and run executables of this project, you need
+Java 1.8 update 40+ and Maven 3+.
+To run:
+\begin{itemize}
+\item TransportEditor, execute:
+\begin{center}
+\texttt{java -jar bin/TransportEditor-\TEver{}-jar-with-dependencies.jar}
+\end{center}
+from the \texttt{TransportEditor-\TEver{}/} directory.
+\item the experiments from this work, execute:
+\begin{center}
+\texttt{./benchmark.sh configs/<config\_name>.json}
+\end{center}
+from the \texttt{TransportEditor-\TEver{}/tools/benchmarks/} directory.
+\end{itemize}
 The VAL validator (needed for validation of plans in experiments) can be obtained at: \url{https://github.com/KCL-Planning/VAL}.
 
-\subsection*{TransportEditor User Manual}\label{transporteditor-user-manual}
+\subsection*{TransportEditor User \& Developer Manuals}\label{transporteditor-manuals}
 
-A user manual explaining use-cases, the user interface, saving and loading files,
-and other actions is also available on the attached CD, in the folder:\\
-\verb+TransportEditor/docs/manuals/+.
+A user manual explaining use-cases, the user interface, saving and loading files, together with a developer manual explaining the architecture, technical choices, and program flow
+is also available on the attached CD, in the directory:
+\begin{center}
+\texttt{TransportEditor-\TEver{}/docs/manuals/}.
+\end{center}
+Generated API documentation using JavaDoc is also available on the attached CD, in the directory:
+\begin{center}
+\texttt{TransportEditor-\TEver{}/docs/javadoc/}.
+\end{center}
 
-\subsection*{TransportEditor Developer Manual}\label{transporteditor-developer-manual}
-
-A developer manual explaining the architecture, technical choices, and program flow
-is also available on the attached CD, in the folder:\\
-\verb+TransportEditor/docs/manuals/+.
-
-\subsection*{TransportEditor Developer JavaDoc}\label{transporteditor-developer-javadoc}
-
-Generated API documentation using JavaDoc is also available on the attached CD, in the folder:\\
-\verb+TransportEditor/docs/javadoc+.
 
 \newpage
 
@@ -194,8 +206,8 @@ The user can step forward and backward in the plan and inspect each action resul
 \item Exit the application or go back to the first step.
 \end{itemize}
 
-TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see Attachment \nameref{cd-contents} for more information). Both the \nameref{transporteditor-user-manual},
-the \nameref{transporteditor-developer-manual}, and the \nameref{transporteditor-developer-javadoc} are attached to this thesis in a digital format, offering guidance when
+TransportEditor is a part of this thesis and the reader can find it on the attachment CD (see Attachment \nameref{cd-contents} for more information). Both the \nameref{transporteditor-manuals}
+are attached to this thesis in a digital format, offering guidance when
 using the program and providing an in-depth description.
 
 Screenshots displaying typical TransportEditor usage follow.
@@ -256,9 +268,9 @@ the module containing this thesis,
 along with our other textual works relating to researching the Transport domain.
 Information about the model in \texttt{core} and the
 \texttt{editor}
-is available in the \nameref{transporteditor-user-manual} and the \nameref{transporteditor-developer-manual}.
+is available in the \nameref{transporteditor-manuals}.
 All the modules are written in Java and attached to this thesis (see \nameref{cd-contents} for details). Also included are a few shell scripts, usually for quick
-data conversion. The only important scripts reside in the \texttt{tools} folder;
+data conversion. The only important scripts reside in the \texttt{tools} directory;
 the \texttt{benchmark.sh} script, used for running experimental benchmarks,
 and \texttt{generate-reports.sh}, used for generating SVG and PDF plots or \LaTeX{} tables of the scores and runtimes from benchmark results.
 
