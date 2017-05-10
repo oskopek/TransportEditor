@@ -32,6 +32,7 @@ chmod +x "$uninstall_file_win"
 for file in $files; do
     mv -v "$file" "$file".txt
     echo mv -v "$file".txt "$file" >> "$uninstall_file"
+    file="`echo $file | sed -E 's@/@\\\\@g'`"
     echo 'move /y' "$file".txt "$file" >> "$uninstall_file_win"
 done
 
