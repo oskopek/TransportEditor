@@ -61,6 +61,7 @@ mkdir -p "$tmpdir"/datasets
 cp -r datasets/description.txt datasets/ipc* "$tmpdir"/datasets/
 
 cp -r transport-docs/target/docs "$tmpdir"/
+rm -rf "$tmpdir"/docs/poster "$tmpdir"/docs/abstract* "$tmpdir"/docs/diary* "$tmpdir"/docs/report.html
 
 mkdir -p "$tmpdir"/docs/javadoc
 for apidocs in `find . -wholename '*target/apidocs' -type d`; do
