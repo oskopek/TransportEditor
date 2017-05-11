@@ -409,6 +409,13 @@ implementations of the planner become reasonably useful
 on practical problems, as will be demonstrated
 later during experimental evaluation.
 
+To limit memory usage, we add an if statement to line 17 of the algorithm
+(Figure~\ref{alg:astar}),
+which checks if the open set is larger than a given hyperparameter.
+If it is, it removes the state with the largest $f$ value in the open set,
+making room for the addition of the new state. In our experiments,
+the hyperparameter is always set to 800 000.
+
 A variant of SFA,
 \textit{Weighted Sequential Forward A$^{\kern-.05em*}$} (WSFA)
 swaps A$^{\kern-.15em*}$ search for Weighted A$^{\kern-.15em*}$ in the SFA planner.

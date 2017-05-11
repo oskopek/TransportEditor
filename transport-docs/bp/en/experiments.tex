@@ -13,8 +13,9 @@ IPCs. The rule pages state that
 planners have to be single-threaded and use a maximum of 2, 4, or 6 GB of memory (depending on the competition year), with a maximum run time of 30 minutes.
 
 Since the IPC rule pages vary on the exact processor specification or the amount of memory available to each planner between competitions,
-we adjust the parameters slightly by only running our planners
-for 15 minutes on each problem, using 4 GB of RAM.
+we adjust the parameters slightly by running our planners
+for 30 minutes on each problem, using 4 GB of RAM.
+Our planners will get canceled and prompted for a plan after the time runs out. 
 All our experiments are run on
 \comment{a computer
 with an 8 core 64-bit processor \texttt{Intel Core i7-6700 CPU @ 3.40GHz}
@@ -26,12 +27,11 @@ Due to the nature of computing on MetaCentrum, we were not able to guarantee tha
 run on the exact same processor, only on very similar ones
 (approximately equivalent to \texttt{Intel Xeon E5-2650 v2 2.6 GHz}).
 The performance of our planners does not change significantly
-when prolonging the run from 15 to 30 minutes or when run
+when changing the run time from 30 to 15 minutes or when run
 on slightly different processors.
-Our planners will get canceled and prompted for a plan after the 15 minutes run out. 
 
 We run all our planner implementations in Java using Oracle's OpenJDK 
-version \texttt{1.8.0\_131}.
+version \texttt{1.8.0\_131-b11}.
 The results presented here were obtained with the \TEver{} version of the TransportEditor project.\puncfootnote{Git tag \TEtag{}, available at \url{https://github.com/oskopek/TransportEditor}} The \texttt{NOTICE.txt} files
 in the project module directories specify
 the exact versions of libraries used.
