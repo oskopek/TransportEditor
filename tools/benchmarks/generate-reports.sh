@@ -15,6 +15,9 @@ exit
 fi
 if [ -z "$transportroot" ]; then
 transportroot="`realpath "../../"`"
+if ls "$transportroot" | grep "sources" >/dev/null; then
+transportroot="$transportroot/sources"
+fi
 fi
 if [ -z "$reportGenerator" ]; then
 reportGenerator="$transportroot/transport-report/target/""`ls "$transportroot/transport-report/target/" | grep 'transport-report-.*-jar-with-dependencies.jar' | tail -n 1`"

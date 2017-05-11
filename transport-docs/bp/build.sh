@@ -4,7 +4,7 @@ set -e
 rm -rf log
 . clean.sh
 #. update-biblio.sh
-. convert-images.sh
+./convert-images.sh
 cd en
 make all
 cd ..
@@ -18,15 +18,18 @@ if ! which verapdf >/dev/null; then
 fi
 
 echo "Validating PDF/A-2u..."
-verapdf -f 2u --format mrr ~/git/TransportEditor/transport-docs/bp/target/thesis.pdf > log/validation-out.xml
+#verapdf -f 2u --format mrr target/thesis.pdf > log/validation-out.xml
+verapdf -p ../verapdf/uk-profile.xml --format mrr target/thesis.pdf > log/validation-out.xml
 if which xmllint >/dev/null; then
     cat log/validation-out.xml | xmllint --format - > log/validation.xml
 fi
 verification="`grep -qE 'inValid="0"' log/validation-out.xml; echo $?`"
 if [ "$verification" -ne 0 ]; then
     echo "PDF validation FAILED!"
+    rm -rf log/
     return "$verification"
 fi
 echo "PDF validation PASSED!"
+rm -rf log/
 return 0
 

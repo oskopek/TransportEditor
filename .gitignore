@@ -3,6 +3,7 @@
 *.class
 target/
 out.val
+sis-unconvert.*.txt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

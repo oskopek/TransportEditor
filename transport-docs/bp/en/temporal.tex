@@ -1,8 +1,8 @@
 \chapter{Temporal Transport planning}
 
-The temporal domain not only has the added challenge of time,
+The temporal domain variant not only has the added challenge of time,
 but fuel demands and vehicle target locations are also present.
-In this chapter, we describe approaches used
+In this chapter, we describe planning approaches used
 for tackling these additional challenges.
 
 
@@ -26,11 +26,13 @@ technique that is surprisingly effective in practice
 is one that simply forgets about time,
 finds a plan, and reintroduces time and concurrency as an afterthought
 into the generated plan.
+The sequential variant of Transport, however, also does not assume fuel.
+As a result, not all valid sequentially relaxed plans are valid temporal Transport plans when scheduled.
 
 To be able to precisely formulate our algorithm, we
-have to define the concept of a mutex first.
+have to define the concept of a \textit{mutex} first.
 We say that a pair of instantiated temporal operators $a$, $b$
-is in a mutual exclusion relation (mutex)
+is in a \textit{mutual exclusion} relation (mutex)
 if and only if $a$ and $b$
 cannot overlap in a valid plan.
 For example, a pair of \pickup{} actions 
@@ -45,8 +47,8 @@ Leveraging our domain knowledge, we pre-construct mutex relations for Transport.
 \begin{itemize}
 \item any pair of actions
 of the same vehicle, except a \refuel{} and \pickup{}/\drop{} pair (in any order); and
-\item a \drop{} and \pickup{} pair (in any order)
-of the same package.
+\item a \drop{} and \pickup{} pair
+of the same package (in any order).
 \end{itemize}
 
 Our algorithm starts with relaxing the temporal
@@ -67,7 +69,7 @@ and all mutex relations as edges.
 The direction of added edges is based on the order
 the actions of a mutex appear in the original plan $\pi$.
 
-To find a topological ordering in the mutex DAG,
+To find a topological ordering of the mutex DAG,
 we use the algorithm described in \citet{Kahn1962}.
 We traverse actions of the sequential plan $\pi$
 (nodes of the DAG)
@@ -177,7 +179,7 @@ This approach, however, does not always lead to a valid plan,
 because not all
 sequential plans go through enough locations that have a petrol station
 to allow all vehicles to be sufficiently fueled.
-The problem is solved by simply giving up on the current plan
+The problem can be avoided by simply giving up on the current plan
 and attempting to generate another sequential plan.
 We keep track of the best-known plan and always update it
 if we find a better scheduled and valid plan.

@@ -3,9 +3,7 @@ package com.oskopek.transport.report.reporters;
 import com.oskopek.transport.benchmark.data.BenchmarkResults;
 import com.oskopek.transport.report.Reporter;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
@@ -55,6 +53,15 @@ public abstract class LineChartReporter implements Reporter {
     }
 
     /**
+     * Build the value (Y) axis.
+     *
+     * @return the value axis
+     */
+    protected ValueAxis createValueAxis() {
+        return new NumberAxis(valueAxisLabel);
+    }
+
+    /**
      * Renders the actual chart.
      *
      * @param dataset the dataset to render
@@ -62,14 +69,18 @@ public abstract class LineChartReporter implements Reporter {
      */
     private JFreeChart renderLineChart(CategoryDataset dataset) {
         CategoryAxis categoryAxis = new CategoryAxis("Problem");
-        ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
+        categoryAxis.setLowerMargin(0.01d);
+        categoryAxis.setUpperMargin(0.01d);
+        ValueAxis valueAxis = createValueAxis();
 
         LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(PlotOrientation.VERTICAL);
-        return new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, true);
+        chart.setBackgroundPaint(Color.WHITE);
+        return chart;
     }
 
     @Override
@@ -90,5 +101,14 @@ public abstract class LineChartReporter implements Reporter {
         chart.draw(g2, r);
         return "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\""
             + ">\n" + g2.getSVGElement();
+    }
+
+    /**
+     * Get the value axis label.
+     *
+     * @return the value axis label
+     */
+    public String getValueAxisLabel() {
+        return valueAxisLabel;
     }
 }

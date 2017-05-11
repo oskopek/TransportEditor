@@ -3,6 +3,7 @@ package com.oskopek.transport.view.plan;
 import com.oskopek.transport.model.domain.action.TemporalPlanAction;
 import com.oskopek.transport.model.problem.ActionObject;
 import com.oskopek.transport.model.problem.Location;
+import com.oskopek.transport.model.problem.PlaceholderActionObject;
 import com.oskopek.transport.persistence.SequentialPlanIO;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.XYChart;
@@ -60,7 +61,7 @@ public final class TemporalGanttChart extends GanttChart {
                 temporalPlanActionSet).groupBy(ta -> ta.getAction().getWho());
         javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> what = Stream.ofAll(
                 temporalPlanActionSet).groupBy(ta -> ta.getAction().getWhat())
-                .filter(t -> !Location.class.isInstance(t._1));
+                .filter(t -> !Location.class.isInstance(t._1) && !(t._1 instanceof PlaceholderActionObject));
         javaslang.collection.Map<ActionObject, javaslang.collection.Stream<TemporalPlanAction>> objs = who.merge(what);
 
         return objs.map((actionObject, temporalPlanActions) -> {

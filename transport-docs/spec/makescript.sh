@@ -13,7 +13,7 @@ cd tex
 
 IFS=" "; for name in $names; do
     pdflatex $parameters "$name".tex $quiet
-    bibtex "$name".aux #:> /dev/null
+    #bibtex "$name".aux #:> /dev/null
     pdflatex $parameters "$name".tex $quiet
     pdflatex $parameters "$name".tex $quiet
     pdflatex $parameters "$name".tex $quiet
@@ -30,3 +30,5 @@ mv *.toc ../build/ || true
 mv *.idx ../build/ || true
 
 mv *~* ../backups/ || true
+
+cd ..

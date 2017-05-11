@@ -1,14 +1,17 @@
 \chapter{Transport domain formulation}
 
-In this chapter, we will formalize variants of the Transport domain and mention a few related transportation problems that have been studied in the past.
+In this chapter, we will formulate and later formalize variants of the Transport domain. We will also mention a few related transportation problems that have been studied in the past.
 
 \section{Description of Transport domain variants}\label{domain-desc}
 
 Transport is a planning domain designed for
 the International Planning
-Competition\footnote{\url{http://www.icaps-conference.org/index.php/Main/Competitions}}
+Competition
+%\footnote{\url{http://www.icaps-conference.org/index.php/Main/Competitions}}
 (IPC), which is part of the International Conference on Automated Planning and
-Scheduling\footnote{\url{http://www.icaps-conference.org/index.php/Main/HomePage}} (ICAPS).
+Scheduling
+%\footnote{\url{http://www.icaps-conference.org/index.php/Main/HomePage}}
+(ICAPS).
 Originally, Transport appeared at 
 IPC-6\footnote{\url{http://icaps-conference.org/ipc2008/deterministic/Domains.html}} which took place in 2008.
 Since then, it has been used in two IPCs,
@@ -71,17 +74,17 @@ This formulation contains three basic planning operators:
 \item \drive{}, where a vehicle drives to an adjacent location
 along a road that is connected to its current location;
 \item \pickup{}, where a vehicle that is stationary at a location picks up a co-located package; and
-\item \drop{}, where a stationary vehicle drops a package off at its location.
+\item \drop{}, where a stationary vehicle drops a package off at the vehicle's location.
 \end{itemize}
 
 In all the datasets, this domain variant is denoted as \textit{Transport sequential}
-or \textit{transport-strips} and we will alternate between these terms in this text. See Figure~\ref{fig:ipc08_seq-sat_p13} for a visual example.
+or \textit{transport-strips} and we will alternate between these terms in this text. See Figure~\ref{fig:ipc08_seq-sat_p13} for a visualization of an example problem for this domain.
 
 \begin{figure}[tbp]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{../img/ipc08_seq-sat_p13_land2}
 \end{center}
-\caption[Visualization of the \texttt{p13} problem of sequential Transport from IPC 2008.]{Road graph visualization of the \texttt{p13} problem of the seq-sat track of IPC 2008.
+\caption[Road network visualization of the \texttt{p13} problem from the seq-sat track of IPC 2008.]{Road network visualization of the \texttt{p13} problem from the seq-sat track of IPC 2008.
 Red dots represent locations (graph nodes), roads (graph edges) are represented by black arrows, vehicles are plotted as blue squares, and packages as purple squares.}
 \label{fig:ipc08_seq-sat_p13}
 \end{figure}
@@ -104,7 +107,7 @@ The temporal Transport domain is usually denoted as \textit{Transport temporal} 
 also \textit{transport-numeric}. A major difference with respect to the numeric variant is
 the addition of time. All actions now have a duration (\pickup{} and \drop{} both have a
 duration of 1, \refuel{} has a duration of 10, and the duration of \drive{} is
-equal to the length of the road we are driving along). Furthermore, packages can now have any integral size.
+equal to the length of the road we are driving along). Furthermore, packages  now have various sizes (positive integers).
 
 The addition of time poses numerous technical complications when formalizing this variant
 --- its PDDL formulation significantly differs from the two previous ones, but only in technical details, not in objectives of the model.
@@ -145,16 +148,16 @@ the classical representation (Figure~\ref{code:classical-strips}).
 For practical reasons, we will use a slight modification, obtained by adding a limited concept of functions
 with finite integer values.
 It is obvious that we could substitute these functions for the appropriate relations
-and a finite amount of literals for the numbers for any given problem instance of
+and a finite amount of literals for the values for any given problem instance of
 the domain in this representation,
 so that it adheres to the definition of a classical formulation.
 For example, we could add literals representing a finite set of
 natural numbers and a predicate that represents
 a successor relation, defined as $\texttt{successor}(a, b) \equiv a + 1 = b$.
 
-Note that this representation does not contain the notion of a \textit{total cost}
+Note that this representation does not contain the notion of a total cost
 of a plan that we will optimize for later.
-The predicates used are:
+The predicates and functions used are:
 \begin{itemize}
 \item \verb+at(o, l)+, the package or vehicle \verb+o+ is at the
 location \verb+l+;
@@ -210,16 +213,15 @@ the vehicle \verb+v+; and
 \item \verb+fuel-max(v)+, the maximum amount of fuel
 the vehicle \verb+v+ can contain, i.e.\;its fuel tank capacity.
 \end{itemize}
+See Figure~\ref{code:classical-numeric} for the exact differences
+in the representation after adding fuel.
 
-
-
-We also abuse the notation with \verb+decrease+ and \verb+assign+;
+We also slightly abuse the notation with \verb+decrease+ and \verb+assign+;
 the left parameter's value is to be decreased by the right
 parameter's value or the left parameter's value is to be overridden
 by the right parameter's value, respectively.
 
-See Figure~\ref{code:classical-numeric} for the exact differences
-in the representation after adding fuel.
+
 
 \begin{figure}[tbp]
 \begin{code}
@@ -242,10 +244,10 @@ refuel(v, l)
 
 We are now also able to show the sequential Transport domain
 in the state-variable representation (Figure~\ref{code:statevar-strips}).
-Some predicates (\verb+at+, \verb+capacity+ and \verb+in+) have been transformed
+Some predicates (\verb+at+, \verb+capacity+, and \verb+in+) have been transformed
 into state-variable functions with largely the same semantics as in
 Section~\ref{transport-classical-representation}. Again, we leave out
-the \textit{total cost} notion.
+the total cost notion.
 
 \begin{figure}[tbp]
 \begin{code}
@@ -270,7 +272,7 @@ drop(v, l, p, s1, s2)
 \label{code:statevar-strips}
 \end{figure}
 
-The numeric variant again adds the \refuel{} operator along with
+As before, the numeric variant adds the \refuel{} operator along with
 a few fuel-related state-variable functions and predicates, and changes 
 the \drive{} operator (Figure~\ref{code:statevar-numeric}).
 
@@ -288,19 +290,19 @@ refuel(v, l)
   precond: at(v) = l, has-petrol-station(l)
   effects: fuel-left(v) <- fuel-max(v)
 \end{code}
-\caption[Partial state-variable formulation of \texttt{transport-numeric}.]{State-variable formulation of \texttt{transport-numeric}'s differences
+\caption[Partial state-variable formulation of \texttt{transport-numeric}.]{Partial state-variable formulation of \texttt{transport-numeric}. Shows the  differences when
 compared to \texttt{transport-strips}.}
 \label{code:statevar-numeric}
 \end{figure}
 
 We will represent the temporal variant of Transport using a variant of the state-variable representation using temporal planning operators, further referred to as the \textit{temporal state-variable representation}.
-On top of fuel-related predicates and functions from \verb+transport-numeric+, temporal Transport adds:
+On top of fuel-related predicates and functions from numeric Transport, temporal Transport adds:
 \begin{itemize}
 \item \verb+package-size(p)+, a function with positive integer values representing the size of the package \verb+p+ (does not change during planning); and
-\item \verb+ready-loading(v)+, a predicate used for ``locking'' the vehicle \verb+v+ during \pickup{} and \drop{} actions (enforcing the property of these two actions happening sequentially in time for a given vehicle). It is important to note that the \refuel{} action does not
-lock the vehicle, which means the vehicle can be refueled while dropping off and picking up packages.
+\item \verb+ready-loading(v)+, a predicate used for ``locking'' the vehicle \verb+v+ during \pickup{} and \drop{} actions (enforcing the property of pairs of these two actions happening sequentially in time for a given vehicle). It is important to note that the \refuel{} action does not
+lock the vehicle, which means that vehicles can be refueled while dropping off and picking up packages.
 \end{itemize}
-Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a shorter but clearer notation.
+Figure~\ref{code:statevar-temporal} shows the temporal state-variable representation of Transport temporal, using a slightly shorter, but clearer notation.
 Note that both \pickup{} and \drop{} cancel the \verb+at+ predicate at the start of the action, which forbids parallel picking up and dropping.
 
 \begin{figure}[tb]
@@ -357,107 +359,11 @@ requires \verb+numeric-fluents+, which introduces native PDDL support for functi
 The temporal domain is similar in requirements to the numeric one, except for
 substituting \verb+goal-utilities+ for \verb+durative-actions+ (introduces time
 and the duration of actions).
-For reference, we will now show the PDDL representation of the sequential and temporal variant of
-the Transport domain in Figure~\ref{code:pddl-strips} and Figure~\ref{code:pddl-temporal} respectively.
 
-\begin{figure}[tbp]
-\begin{code}
-(:action drive
-  :parameters (?v - vehicle ?l1 ?l2 - location)
-  :precondition (and
-      (at ?v ?l1)
-      (road ?l1 ?l2))
-  :effect (and
-      (not (at ?v ?l1))
-      (at ?v ?l2)
-      (increase (total-cost) (road-length ?l1 ?l2))))
-(:action pick-up
-  :parameters (?v - vehicle ?l - location ?p - package
-               ?s1 ?s2 - capacity-number)
-  :precondition (and
-      (at ?v ?l)
-      (at ?p ?l)
-      (capacity-predecessor ?s1 ?s2)
-      (capacity ?v ?s2))
-  :effect (and
-      (not (at ?p ?l))
-      (in ?p ?v)
-      (capacity ?v ?s1)
-      (not (capacity ?v ?s2))
-      (increase (total-cost) 1)))
-(:action drop
-  :parameters (?v - vehicle ?l - location ?p - package
-               ?s1 ?s2 - capacity-number)
-  :precondition (and
-      (at ?v ?l)
-      (in ?p ?v)
-      (capacity-predecessor ?s1 ?s2)
-      (capacity ?v ?s1))
-  :effect (and
-      (not (in ?p ?v))
-      (at ?p ?l)
-      (capacity ?v ?s2)
-      (not (capacity ?v ?s1))
-      (increase (total-cost) 1)))
-\end{code}
-\caption{Formulation of actions in PDDL for \texttt{transport-strips}.}
-\label{code:pddl-strips}
-\end{figure}
+For reference, the PDDL representations of sequential and temporal variants of
+the Transport domain are attached to this thesis in Attachment 2\comment{\nameref{pddl-repr}}.
 
-\begin{figure}[tbp]
-\begin{code}
-(:durative-action drive
-  :parameters (?v - vehicle ?l1 ?l2 - location)
-  :duration (= ?duration (road-length ?l1 ?l2))
-  :condition (and
-      (at start (at ?v ?l1))
-      (at start (road ?l1 ?l2))
-      (at start (>= (fuel-left ?v) (fuel-demand ?l1 ?l2))))
-  :effect (and
-      (at start (not (at ?v ?l1)))
-      (at end (at ?v ?l2))
-      (at start (decrease (fuel-left ?v) (fuel-demand ?l1 ?l2)))))
-(:durative-action pick-up
-  :parameters (?v - vehicle ?l - location ?p - package)
-  :duration (= ?duration 1)
-  :condition (and
-      (at start (at ?v ?l))
-      (over all (at ?v ?l))
-      (at start (at ?p ?l))
-      (at start (>= (capacity ?v) (package-size ?p)))
-      (at start (ready-loading ?v)))
-  :effect (and
-      (at start (not (at ?p ?l)))
-      (at end (in ?p ?v))
-      (at start (decrease (capacity ?v) (package-size ?p)))
-      (at start (not (ready-loading ?v))) ; lock vehicle
-      (at end (ready-loading ?v)))) ; unlock vehicle
-(:durative-action drop
-  :parameters (?v - vehicle ?l - location ?p - package)
-  :duration (= ?duration 1)
-  :condition (and
-      (at start (at ?v ?l))
-      (over all (at ?v ?l))   
-      (at start (in ?p ?v))
-      (at start (ready-loading ?v)))
-  :effect (and (at start (not (in ?p ?v)))
-      (at end (at ?p ?l))
-      (at end (increase (capacity ?v) (package-size ?p)))
-      (at start (not (ready-loading ?v))) ; lock vehicle
-      (at end (ready-loading ?v)))) ; unlock vehicle
-(:durative-action refuel
-  :parameters (?v - vehicle ?l - location)
-  :duration (= ?duration 10)
-  :condition (and
-      (at start (at ?v ?l))
-      (over all (at ?v ?l))
-      (at start (has-petrol-station ?l)))
-  :effect
-      (at end (assign (fuel-left ?v) (fuel-max ?v))))
-\end{code}
-\caption{Formulation of durative actions in PDDL for temporal Transport.}
-\label{code:pddl-temporal}
-\end{figure}
+
 
 
 
@@ -477,21 +383,21 @@ the Transport domain in Figure~\ref{code:pddl-strips} and Figure~\ref{code:pddl-
 \section{Related problems}
 
 To the best of our knowledge, there has been no attempt at producing domain-dependent planners
-for Transport (IPC 2008, 2011, 2014 and unsolvability IPC 2016) or any other similar IPC domain, like Logistics (IPC 1998\comment{\footnote{\url{https://web.archive.org/web/20151017170331/http://ipc98.icaps-conference.org/}}} and 2000),
+for Transport (IPC 2008, 2011, 2014, and unsolvability IPC 2016) or any other similar IPC domain, like Logistics (IPC 1998\comment{\footnote{\url{https://web.archive.org/web/20151017170331/http://ipc98.icaps-conference.org/}}} and 2000),
 Depots (IPC 2002\comment{\footnote{\url{https://web.archive.org/web/20170408120817/http://ipc02.icaps-conference.org/domains.html}}}),
 DriverLog (IPC 2002 and 2014),
 or Trucks (IPC 2006).
 All techniques we know of applied to Transport so far are the
 domain-independent planners used in the three before-mentioned competitions.
 
-Most of the research done on transportation-related problems and their automation
+Most of the research done on transportation related problems and their automation
 generally focuses
-on a famous combinatorial optimization problem, the \textit{Traveling Salesman Problem} (TSP), on which an
-exhaustive amount of research has been done \citep{Applegate1998, Applegate2011}. Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
+on a famous combinatorial optimization problem, the \textit{Traveling Salesman Problem} (TSP). An
+exhaustive amount of research has been done on the TSP \citep{Applegate1998, Applegate2011}. Its precise origins are unknown, but the problem has been on the minds of researchers at least since the end of the 19$^\textrm{th}$ century. The TSP is defined by \citet{Applegate2011} as follows:
 \begin{quote}
 Given a set of cities along with the cost of travel between each pair of them, the \textit{traveling salesman problem}, or \textit{TSP} for short, is to find the cheapest way of visiting all the cities and returning to the starting point. The ``way of visiting all the cities'' is simply the order in which the cities are visited; the ordering is called a \textit{tour} or \textit{circuit} through the cities.
 \end{quote}
-However, the problem we aim to study is more similar to a different optimization problem based on the TSP. See Figure~\ref{fig:tsp} for an illustrative example of a TSP solution.
+However, the problem we aim to study is more similar to a different optimization problem similar to the TSP. See Figure~\ref{fig:tsp} for an illustrative example of a TSP problem's solution.
 
 \begin{figure}[tbp]
 \begin{center}
@@ -507,24 +413,23 @@ The \textit{Vehicle Routing Problem} (VRP) was first formulated as the \textit{T
 as a generalization of the TSP with multiple vehicles, but it could equivalently be stated that the TSP is a specialization of the VRP
 with a single vehicle. The precise formulation of the Truck Dispatching Problem in \citet[Section~2]{Dantzig1959} presents a model with a fleet of identical vehicles departing from a single depot. According to \citet[Section~3]{Braekers2016}, this defines what we would call \textit{Capacitated VRP} (CVRP) today (Figure~\ref{fig:vrp}).
 
-\begin{figure}[tbp]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{../img/vrp}
-\end{center}
-\caption[An example CVRP solution for 32 customers and one depot.]{An example CVRP solution for 32 customers and one depot. Screenshot taken from OptaPlanner \citep{DeSmet2017}.}
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.76\textwidth]{../imga/vrp}
+\caption[An example CVRP solution for 32 customers and one depot.]{An example CVRP solution for 32 customers and one depot. The dashed line represents the last drive of each vehicle's route. Image adapted from OptaPlanner \citep{DeSmet2017}.}
 \label{fig:vrp}
 \end{figure}
 
 Many VRP variants have emerged since. \citet{Eksioglu2009} and \citet{Braekers2016} both
 review and classify hundreds of papers related to the VRP, with many more left out.
-Most of these works tend to study the CVRP problem with minor modifications, hence creating
-a broad landscape of problems and a platform to build on for the future.
-According to the data in \citet[Table~4]{Braekers2016}, there has been a recent uptick
+Most of the classified works tend to study the CVRP problem with minor modifications, hence creating
+a broad landscape of problems and a platform to build on in the future.
+According to the data provided by \citet[Table~4]{Braekers2016}, there has been a recent uptick
 in popularity for models relatively similar to Transport --- specifically, VRPs with
 backhauls (returning items from customers to depots),
 multiple depots (multiple starting points for vehicles), and with allowed split deliveries (multiple
 vehicles can serve a single customer).
-The literature review on multiple depot VRP (MDVRP) in \citet{Montoya-Torres2015}
+The literature review on Multiple Depot VRP (MDVRP) in \citet{Montoya-Torres2015}
 suggests a big rise in popularity for MDVRP in the recent past,
 which provides further proof of relevance for studying the Transport domain.
 
@@ -532,7 +437,7 @@ Traditional solutions for the VRP include exact approaches like branch and bound
 or constraint satisfaction
 programming
 that explore the large parts of the feasible search space,
-classical heuristics which limit the search space, and also metaheuristics (general heuristics for devising specific heuristics), like genetic algorithms, local search, tabu search, and many more.
+classical heuristics which limit the search space, and also metaheuristics (general heuristics for devising specific heuristics), like genetic algorithms,  tabu search, and many more.
 \comment{TODO{CSP}
 Note that the translation of a VRP into a CSP representation (Section~\ref{csp}) is straightforward and natural \citep[Solution Methods / Constraint Programming]{ResearchGroup2013}, which is usually not the case for planning problems.
 }
@@ -581,16 +486,16 @@ Finally, the cost of the problem solution ${S}$ is: ${F_{VRP} = \sum_{i=1}^{m} F
 \subsection{Comparison of Transport and VRP}
 
 The work of \citet{ResearchGroup2013} resulted in a website, which serves as a comprehensive resource on the history of VRP,
-definitions of its various flavors, and an overview of the popular solution methods and state-of-the-art results. According to the taxonomy they propose, we could characterize a Transport domain problem
-as a \textit{Multiple Depot, Split Delivery, Capacitated VRP with Satellite Facilities}. Multiple Depot
+definitions of its various flavors, and an overview of popular solution methods and state-of-the-art results. According to the taxonomy they propose, a Transport problem could be characterized
+as a \textit{Multiple Depot, Split Delivery, Capacitated VRP with Satellite Facilities}. Multiple depot
 means that vehicles can start driving from multiple locations, split delivery
 means a single customer can be served by multiple vehicles, capacitated VRP adds maximum
 capacities to vehicles, and satellite facilities mean that vehicles can pick items up
 while on a delivery route. This does not characterize the Transport domain in every detail, but it is a fairly accurate approximation.
 
 According to another VRP taxonomy and study of papers, presented in \citet{Eksioglu2009} and adapted in \citet{Braekers2016}, no research has been done on a VRP variant with a similar subset of features to those of Transport in any single study, to the best of our knowledge.
-Usually, the studied problems are more constrained than Transport --- for example, they make additional assumptions about the places where vehicles start or end. Also, VRP in general
-makes cooperation of vehicles practically hard to model, whereas in Transport this is one of the fundamental elements.
+Usually, the studied problems are more constrained than Transport --- for example, they make additional assumptions about places where vehicles start or end. Also, VRP in general
+makes cooperation of vehicles hard to model, whereas in Transport this is one of the fundamental elements.
 
 \comment{Transport could be characterized as \textit{2.1.1, 2.2.1, 2.4.1, 2.5.1, 2.8.1, 3.1.1, 3.2.2, 3.3.3, 3.4.2, 3.5.2, 3.7.1, 3.8.1, 3.9.3, 3.10.1, 3.11.1, 4.1.1, 4.2.1, 4.3.2, 4.4.1, 5.1.2.}}
 

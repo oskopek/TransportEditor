@@ -2,7 +2,7 @@
 
 set -e
 
-sprint="`cat config/CURRENT_SPRINT`"
+sprint="`cat config/CURRENT_SPRINT.txt`"
 out=/dev/stdout
 startdate="`date --date='last week' "+%d. %m. %Y"`"
 enddate="`date "+%d. %m. %Y"`"

@@ -12,38 +12,37 @@ we have discussed the theoretical challenges underlying
 planning in general and how the challenges change when
 domain knowledge is added.
 We have analyzed variants of the Transport domain from the International Planning Competition
-and designed various planning approaches specific to the domains.
-Using the designed experimental evaluation of several discussed approaches to
-domain-specific planning on datasets of the Transport domain, we have shown the ability to achieve comparable results to state-of-the-art domain-independent planners.
-The performance of the domain-independent planners is generally very impressive, given the difficulty of the problem they are solving. Despite the broad misconception that they are not useful in practice,
+and designed various planners specific to the domain.
+Using results of the experimental evaluation of several discussed approaches  on datasets of the Transport domain, we have shown the ability to achieve comparable results to state-of-the-art domain-independent planners.
+The performance of domain-independent planners is generally very impressive, given the difficulty of the problem they are solving. Despite the broad misconception that they are not useful in practice,
 we have not managed to beat all of them even when leveraging domain-specific knowledge acquired by our analysis.
 
 There remain more promising approaches to apply to planning
 for the Transport domain
 and to domain-specific planning in general.
-We list a few, in our opinion, perspective methods for domain-specific planning, which were not
-evaluated in this work due to time constraints:
+We list a few, in our opinion, perspective methods, which were not
+evaluated in this work:
 \begin{itemize}
-\item Hierarchical Task Networks (HTN): 
+\item Hierarchical Task Networks: 
 HTN planning uses \textit{tasks},
 a higher level and usually domain-specific description of sequences of operators
 to carry out some goal \citep[Chapter~11]{Ghallab2004}.
-An HTN planner decomposes these tasks and embeds them in a classical plan. This approach has been thoroughly studied and is arguably one of the most used in practice today.
+An HTN planner decomposes these tasks and embeds them in a classical plan. This approach has been thoroughly studied and is arguably one of the most used in practice today. The ad-hoc planners we designed are conceptually similar to HTN planning.
 
 \item Pointer Networks and Reinforcement Learning: 
 A recent attempt at training special architectures of neural networks to solve TSP problem instances using reinforcement learning by \citet{Bello2016} shows
 reasonable promise for the future. While this technique is highly experimental at the moment,
-neural networks have helped push the limits of other fields before.
+neural networks have successfully helped in pushing the limits of other fields before.
 
 \item Learning a domain-specific heuristic function: Another neural network
-approach aims to help solve a standard problem: coming up with a good heuristic for a domain. \citet{Chen2011}
+approach aims to help solve the problem of coming up with a good heuristic for a domain. \citet{Chen2011}
 train a neural network to use as a heuristic for state space search,
 which may help when creating a heuristic is simply too challenging or time-consuming.
-This approach has also been part of the recent DeepStack success at
-beating human players in Poker \citep{Moravcik2017}, which is a good example of a problem with a large search space.
+A similar approach is also used in DeepStack \citep{Moravcik2017}, which recently succeeded in
+beating human players in poker (a good example of a problem with a very large search space).
 \end{itemize}
 
-To make the analysis and planner design easier, we have developed TransportEditor,
+To make the analysis and planner design easier, we have developed TransportEditor (see Attachment 3\comment{\nameref{editor}}),
 an intuitive graphical desktop application for transportation planning.
 TransportEditor was recently accepted to the System Demonstrations and Exhibits
 track at the 27$^\mt{th}$ International Conference on Automated Planning and Scheduling \citep{Skopek2017}. 

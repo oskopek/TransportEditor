@@ -1,0 +1,42 @@
+17:44:23.219 [main] DEBUG Reflections: going to scan these urls:
+jar:file:/afs/ms.mff.cuni.cz/u/s/skopeko/git/TransportEditor-final/transport-report/target/transport-report-0.9.0-SNAPSHOT-jar-with-dependencies.jar!/
+17:44:23.273 [main] INFO  Reflections: Reflections took 52 ms to scan 1 urls, producing 73 keys and 340 values 
+17:44:23.278 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.Recognizer -> org.antlr.v4.runtime.Lexer
+17:44:23.279 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.TokenSource -> org.antlr.v4.runtime.Lexer
+17:44:23.279 [main] DEBUG Reflections: expanded subtype java.lang.Comparable -> java.lang.Enum
+17:44:23.279 [main] DEBUG Reflections: expanded subtype java.io.Serializable -> java.lang.Enum
+17:44:23.279 [main] DEBUG Reflections: expanded subtype java.nio.file.FileVisitor -> java.nio.file.SimpleFileVisitor
+17:44:23.280 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.RuleContext -> org.antlr.v4.runtime.ParserRuleContext
+17:44:23.280 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.tree.RuleNode -> org.antlr.v4.runtime.RuleContext
+17:44:23.280 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.tree.ParseTree -> org.antlr.v4.runtime.tree.RuleNode
+17:44:23.280 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.tree.SyntaxTree -> org.antlr.v4.runtime.tree.ParseTree
+17:44:23.280 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.tree.Tree -> org.antlr.v4.runtime.tree.SyntaxTree
+17:44:23.280 [main] DEBUG Reflections: expanded subtype javaslang.λ -> javaslang.Function3
+17:44:23.280 [main] DEBUG Reflections: expanded subtype java.io.Serializable -> javaslang.λ
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.Element -> org.graphstream.graph.Graph
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.Pipe -> org.graphstream.graph.Graph
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.Source -> org.graphstream.stream.Pipe
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.Sink -> org.graphstream.stream.Pipe
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.AttributeSink -> org.graphstream.stream.Sink
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.ElementSink -> org.graphstream.stream.Sink
+17:44:23.281 [main] DEBUG Reflections: expanded subtype java.lang.Iterable -> org.graphstream.graph.Graph
+17:44:23.281 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.Structure -> org.graphstream.graph.Graph
+17:44:23.282 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.implementations.AdjacencyListGraph -> org.graphstream.graph.implementations.MultiGraph
+17:44:23.282 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.implementations.AbstractGraph -> org.graphstream.graph.implementations.AdjacencyListGraph
+17:44:23.282 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.implementations.AbstractElement -> org.graphstream.graph.implementations.AbstractGraph
+17:44:23.282 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.Element -> org.graphstream.graph.implementations.AbstractElement
+17:44:23.283 [main] DEBUG Reflections: expanded subtype org.graphstream.graph.Graph -> org.graphstream.graph.implementations.AbstractGraph
+17:44:23.283 [main] DEBUG Reflections: expanded subtype org.graphstream.stream.Replayable -> org.graphstream.graph.implementations.AbstractGraph
+17:44:23.283 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.Recognizer -> org.antlr.v4.runtime.Parser
+17:44:23.283 [main] DEBUG Reflections: expanded subtype org.antlr.v4.runtime.tree.ParseTreeVisitor -> org.antlr.v4.runtime.tree.AbstractParseTreeVisitor
+17:44:23.284 [main] DEBUG Reflections: expanded subtype com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter -> com.thoughtworks.xstream.converters.basic.BooleanConverter
+17:44:23.284 [main] DEBUG Reflections: expanded subtype com.thoughtworks.xstream.converters.SingleValueConverter -> com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter
+17:44:23.284 [main] DEBUG Reflections: expanded subtype com.thoughtworks.xstream.converters.ConverterMatcher -> com.thoughtworks.xstream.converters.SingleValueConverter
+17:44:23.621 [main] INFO  ReportGenerator: Generating report: quality_table.tex
+17:44:23.630 [main] INFO  ReportGenerator: Generating report: runtime_table.tex
+17:44:23.635 [main] INFO  ReportGenerator: Generating report: score_table.tex
+17:44:23.639 [main] INFO  ReportGenerator: Generating report: exitstatus_table.tex
+17:44:23.656 [main] INFO  ReportGenerator: Generating report: ipc_score_table.tex
+17:44:23.829 [main] INFO  ReportGenerator: Generating report: quality_line_chart.svg
+17:44:23.852 [main] INFO  ReportGenerator: Generating report: score_line_chart.svg
+17:44:23.878 [main] INFO  ReportGenerator: Generating report: runtime_line_chart.svg

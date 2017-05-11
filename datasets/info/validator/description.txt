@@ -1,9 +1,0 @@
-Validator -- IPC14 resources
-
-https://helios.hud.ac.uk/scommv/IPC-14/software.html
-
-Plan Validator
-The 4.2.09 version of VAL will be used: http://www.inf.kcl.ac.uk/research/groups/PLANNING/index.php?option=com_content&view=article&id=70&Itemid=77
-Here you can download it: https://helios.hud.ac.uk/scommv/IPC-14/repository/VAL-4.2.09.tar.gz
-We gratefully acknowledge the organizers of IPC-11 for providing this software.
-

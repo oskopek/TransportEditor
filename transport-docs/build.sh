@@ -4,7 +4,7 @@ set -e
 
 origdir="`pwd`"
 projectdir="$origdir"/target/docs/
-subdirs="spec diary bp manuals poster"
+subdirs="spec diary bp manuals poster abstract_cz abstract_en"
 
 rm -rf "$projectdir"
 mkdir -p "$projectdir"

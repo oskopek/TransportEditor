@@ -8,3 +8,5 @@
 *.lof
 *.lot
 *.bak
+*.xmpi
+*.synctex.gz

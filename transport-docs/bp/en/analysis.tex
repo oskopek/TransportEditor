@@ -35,13 +35,13 @@ a conceptual model similar to the restricted model in \citep[Section~1.4, Sectio
 A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma)$, where:
 \begin{itemize}
 \item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states;
-\item $A = \{\noop, a_1, a_2, \ldots\}$ is a finite set of actions;
+\item $A = \{\noop{}, a_1, a_2, \ldots\}$ is a finite set of actions;
 \item $\gamma: S \times A \to S \cup \{\emptyset\}$ is a state-transition function,
 such that for all $s \in S$ the function $\gamma(s, \noop) = s$; and
 \item $\Sigma$ is static and offline,
-it only changes when an action is applied to it and does not change while planning.
+it only changes when an action is applied to it and does not change during planning.
 \end{itemize}
-In the basic version, all actions have no duration.
+It is assumed that all actions have no duration.
 \end{defn}
 
 For a state $s \in S$, the actions $A_s = \{a \in A \,|\, \gamma(s, a) \neq \emptyset\}$ are called \textit{applicable}
@@ -56,8 +56,8 @@ Given a state-transition system $\Sigma$, planning aims to find a
 sequence of actions to apply to the initial state in order to achieve some objective.
 The objective can be defined in various ways --- we might want the planner
 to devise a plan that
-does not enter specific states, or contrary to that, visits each of a set of states,
-or one that just ends at a chosen state.
+does not enter chosen states, or contrary to that, visits each of a set of states,
+or one that just ends at a specified state.
 We will use the last option for formalizing the notion of a \textit{planning problem}.
 
 \begin{defn}[Planning problem]\label{defn:planning-problem}\citep[Part~I]{Ghallab2004}
@@ -85,7 +85,9 @@ we want to plan for, consists of three components (Figure~\ref{fig:planning-mode
 \begin{itemize}
 \item A \textit{state-transition system} $\Sigma$, that evolves by using its state-transition function on the actions
 it receives;
-\item A \textit{controller}, that given an input state $s \in S$ and a generated plan, provides an action $a \in A$ as output; and
+\item A \textit{controller}, that given an input state $s \in S$ and a generated plan, provides an action $a \in A$ as output
+to the state-transition system, and receives the new
+state as feedback; and
 \item A \textit{planner}, that uses a description of the state-transition system $\Sigma$ to synthesize a plan for the controller
 to execute in order to reach a goal state from the initial state.
 \end{itemize}
@@ -119,19 +121,19 @@ resulting in larger problems now being practically solvable.
 
 We will now describe several theoretical domain-independent representations
 of planning problems used in classical planning \citep[Chapter~2]{Ghallab2004},
-so that we can formulate our domain using them.
+so that we can formulate the Transport domain using them.
 
 \subsection{Set-theoretic representation}
 
 Leveraging propositional logic, both the planning domain and problem
 are represented with the notion
 of proposition symbols $L = \{p_1, p_2, \ldots\}$.
-Each state is defined as a subset of propositions of $L$ --- those propositions
+Each state $s \in S = 2^L$ is defined as a subset of propositions of $L$ --- those propositions
 which hold in the given state. $S$ is closed under the application of each
 action $a \in A$.
 
 An action $a$
-is a triple of sets of propositions of $L$.
+is a triple of sets of propositions from $L$.
 We denote the triple $a = (\precond(a), \effects^-(a), \effects^+(a))$, where:
 \begin{itemize}
 \item $\precond(a)$ are the \textit{preconditions} of an action: the set of
@@ -143,9 +145,14 @@ that will no longer hold in the state once the action is applied; and
 the set of propositions that will be true in the state once the action is applied.
 \end{itemize}
 Note that an action cannot have the same proposition as a negative and positive effect at the same time --- the sets $\effects^+(a)$ and $\effects^-(a)$ are disjunct for all actions $a$.
-The state-transition function is $\gamma(s, a) = (s \setminus \effects^-(a)) \,\cup\,
-\effects^+(a)$ if $a$ is applicable to $s$,
-otherwise $\gamma(s, a)$ is undefined. Goal states $S_g$ are defined as
+The state-transition function is:
+$$\gamma(s, a) = 
+\begin{cases}
+(s \setminus \effects^-(a)) \,\cup\,
+\effects^+(a), &  \mt{if } a \mt{ is applicable to } s,\\
+\mt{undefined}, & \mt{else.}
+\end{cases}$$
+Goal states $S_g$ are defined as
 $S_g = \{s \in S \,|\, g \subseteq s\}$, where
 $g \subseteq L$ is any chosen set of propositions. The propositions $g$ are called
 \textit{goal propositions}.
@@ -161,7 +168,7 @@ triples $o = (\name(o), \precond(o), \effects(o))$:
 \begin{itemize}
 \item $\name(o)$ is a syntactic expression of the given operator;
 \item $\precond(o)$ and $\effects(o)$ are sets of literals
-(atoms and their negations), similar in use to their equivalents
+(atoms or their negations), similar in use to their equivalents
 in the set-theoretic case.
 \end{itemize}
 The definition of the state-transition function also stays the same.
@@ -169,10 +176,10 @@ Goal states are defined as the set of states that satisfy $g$,
 the \textit{goal}, where $g$ is any set of ground literals.
 
 The following is an example of a planning operator for driving a vehicle between two connected locations:
-$$o_d = (\mt{drive}(v, f, t), \{\mt{at}(v, f), \mt{road}(f, t)\}, \{\mt{at}(v, t), \neg \mt{at}(v, f)\}).$$
-The variable $v$ denotes a vehicle, $f$ and $t$ are the source and destination locations, respectively. The \textit{at} predicate is true if and only if the vehicle is located at that position in the given state and the road predicate
+$$o_{\mt{drive}} = (\mt{drive}(v, f, t), \{\mt{at}(v, f), \mt{road}(f, t)\}, \{\mt{at}(v, t), \neg \mt{at}(v, f)\}).$$
+The variable $v$ denotes a vehicle, $f$ and $t$ denote the source and destination locations, respectively. The at predicate is true if and only if the vehicle is located at that position in the given state and the road predicate
 is true if and only if a road exists between the two locations.
-An example of an action instantiated from the operator (sometimes referred to as \textit{operator instance})
+An example of an action instantiated from the operator (sometimes referred to as an \textit{operator instance})
 for a vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$ would be:
 $$a_{\mt{drive}, \mt{v}_1, \mt{l}_1, \mt{l}_2} = (\mt{drive}(\mt{v}_1, \mt{l}_1, \mt{l}_2), \{\mt{at}(\mt{v}_1, \mt{l}_1),
 \mt{road}(\mt{l}_1, \mt{l}_2)\}, \{\mt{at}(\mt{v}_1, \mt{l}_2), \neg \mt{at}(\mt{v}_1, \mt{l}_1)\}).$$
@@ -185,7 +192,7 @@ Both the set-theoretic and the classical representations follow the \textit{Clos
 The state-variable representation substitutes the use of relations of the previous
 representation for functions,
 using the concept of state variables. State variables are functions
-that take the state as an input and serve as characteristic attributes, defining the state. We usually use a more practical way of defining these functions --- we assume
+that take the state as an input and serve as characteristic attributes, defining the state. We usually use a more practical way of defining these functions when planning --- we assume
 the current state as an input without denoting it, and instead add different inputs.
 
 For example, a useful set of state-variable functions for a domain that contains a road
@@ -193,7 +200,7 @@ network and vehicles might be: $$\mathrm{location}_{v}: S \to \mathrm{locations}
 where $v \in \mathrm{vehicles}$.
 Instead, we could define a single function:
 $$\mathrm{location'}: \mathrm{vehicles} \times S \to \mathrm{locations},$$
-and afterwards 
+using $\mathrm{location}'(v, s) = \mathrm{location}_v(s),$ and afterwards:
 $$\mathrm{location''}: \mathrm{vehicles} \to \mathrm{locations},$$
 using $\mathrm{location''}(v) = \mathrm{location'}(v, state_{cur})$, where $state_{cur}$ is the current state.
 
@@ -201,9 +208,9 @@ Planning operators are defined similarly to the classical representation, but
 $\precond(o)$ is now a set of expressions on state variables and relations.
 Also, $\effects(o)$ is defined as a set of assignments of values to state variables.
 For comparison, we show the same planning operator as in the classical representation:
-$$o_d = \left(\mt{drive}(v, f, t), \{\mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right),$$
-and an example of an action instantiated from this operator
-for vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$:
+$$o_{\mt{drive}} = \left(\mt{drive}(v, f, t), \{\mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right).$$
+An example of an action instantiated from this operator
+for vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$ is:
 $$a_{\mt{drive}, \mt{v}_1, \mt{l}_1, \mt{l}_2} = \left(\mt{drive}(\mt{v}_1, \mt{l}_1, \mt{l}_2), \{\mt{at}(\mt{v}_1) = \mt{l}_1,
 \mt{road}(\mt{l}_1, \mt{l}_2)\}, \{\mt{at}(\mt{v}_1) \leftarrow \mt{l}_2\}\right).$$
 
@@ -218,33 +225,32 @@ The goal is defined as a set of ground state variables and their corresponding v
 
 \subsection{Extensions of representations}
 
-We will later extend these representations using types.
+We will later extend the representations using types.
 To see how types fit into our previously defined representations, we can
 define a \textit{type} as a unary predicate, which has the value true
 if and only if the predicate's argument is of the given type.
 We can then add these predicates as preconditions of actions.
-Adding types will make the domain and problem formulations
+Adding types makes domain and problem formulations
 easier to read and gives additional information
 to planners, making them more efficient \citep[Section 2.4.1]{Ghallab2004}. As an example of adding types, we show the previous planning operator for driving with the added vehicle type $veh$ and location type $loc$:
-$$o_d = \left(\mt{drive}(v, f, t), \{\mt{veh}(v), \mt{loc}(f), \mt{loc}(t), \mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right).$$
+$$o_{\mt{drive}} = \left(\mt{drive}(v, f, t), \{\mt{veh}(v), \mt{loc}(f), \mt{loc}(t), \mt{at}(v) = f, \mt{road}(f, t)\}, \{\mt{at}(v) \leftarrow t\}\right).$$
 
 \subsection{State-space planning and Plan-space planning}
 
 A different way of viewing the state-transition system $\Sigma = (S, A, \gamma)$ in a
 planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$ (Definition~\ref{defn:state-transition-sys}~and~\ref{defn:planning-problem}), is that of a labeled, directed graph $G(S, E, w)$, where:
 \begin{itemize}
-\item $E = \{(u, v) \in S^2 \;|\; \exists a \in A : \; \gamma(u, a) = v\}$;
-\item $w: E \to A$; and
-\item $\forall (u, v) = e \in E : w(e) = \{a \in A \;|\; \gamma(u, a) = v\}$. 
+\item $E = \{(u, v) \in S^2 \;|\; \exists a \in A : \; \gamma(u, a) = v\}$; and
+\item $w: E \to 2^A$, such that $\forall (u, v) = e \in E : w(e) = \{a \in A \;|\; \gamma(u, a) = v\}$. 
 \end{itemize}
-From the definition above, we see that applicable actions correspond to state transitions. While planning, the plan represented by the current position in
+From the definition above, we see that applicable actions correspond to state transitions. During planning, the plan represented by the current position in
 the state space is the sequence of transitions from the start
 state $s_0$ to the current state \citep[Section~4.1]{Ghallab2004}.
 \textit{State-space planning} is a term used for planning techniques
 that use the state space for searching for a plan.
 
-An alternative for using the state space is offered by \textit{plan-space planning}.
-The state space is substituted for the \textit{plan space}.
+An alternative to using the state space is offered by \textit{plan-space planning}.
+The state space is substituted for \textit{plan space}.
 Nodes in this space represent \textit{partially specified plans},
 edges are \textit{plan refinement operations} \citep[Section~5.1]{Ghallab2004}.
 We will not explicitly use plan-space planning in this work, as according to
@@ -255,25 +261,25 @@ incorporating domain-specific knowledge.
 
 The addition of time makes modeling planning problems difficult and
 solving them even more difficult.
-However, adding time makes most models more realistic and practically usable.
+However, it also makes most models more realistic and practically usable.
 
 For an exhaustive introduction to temporal planning, see \citet[Chapter~13~and~14]{Ghallab2004}. We will only use the \textit{durative action} modeling approach
-specified by \citet[Section~5]{Fox2003}. We will adapt the following concepts presented
+specified by \citet[Section~5]{Fox2003}. We adapt the following concepts presented
 in \citet[Section~14.2]{Ghallab2004} that are relevant to modeling temporal transportation planning problems:
 \begin{itemize}
 \item A \textit{temporally qualified expression} (tqe) is any
-expression in the form $$p(x_1, x_2, \ldots, x_k)@[t_s, t_e),$$ where $p$
+expression in the form: $$p(x_1, x_2, \ldots, x_k)@[t_s, t_e),$$ where $p$
 is a relation of the planning domain and $x_1, \ldots, x_k$ are constants or \textit{object
 variables}. These are similar to state variables in the state-variable representation,
-but the values change in time, not between states).
-
-The temporal variables $t_s$ and $t_e$ do not specifically represent a numerical time value, but together with other variables and constraints form a consistent set.
-It holds that $t_s < t_e$. For a more precise definition, see \citet[Section~14.2.1]{Ghallab2004}.
-
+but the values change in time, not between states.
 
 The tqe $p(x_1, \ldots, x_k)@[t_s, t_e)$
 asserts that the relation $p(x_1, \ldots, x_k)$ holds for any time $t$, where
 $t_s \leq t < t_e$.
+
+The temporal variables $t_s$ and $t_e$ do not specifically represent a numerical time value, but together with other variables and constraints form a consistent set.
+It holds that $t_s < t_e$. For a more precise definition, see \citet[Section~14.2.1]{Ghallab2004}.
+
 
 \item A \textit{temporal planning operator} is a tuple $o$, defined similarly to the planning operator in classical representations, but $\precond(o)$ and $\effects(o)$ are tqes.
 \end{itemize}
@@ -297,14 +303,14 @@ Competition,\puncfootnote{\url{http://ipc98.icaps-conference.org/}}
 the Planning Domain Definition Language (PDDL) has become
 a de facto standard language for modeling planning domains and problems,
 continually evolving to the needs of the  
-research community and the needs of the IPC itself in the future years.
-We will also use it as input for our planners.
+research community and the needs of the IPC itself throughout the years.
+We will use it as input for our planners.
 
 PDDL was inspired by the language used to describe STRIPS \citep{Fikes1971}
 and the numerous languages that sparked from it.
 It has a Lisp-like\footnote{\url{https://en.wikipedia.org/wiki/Lisp_(programming_language)}}
 declarative syntax and is very extensible.
-A basic (without using extensions) PDDL domain and problem definition essentially correspond to representation format of the already defined planning domains and problems. Confusingly, we call PDDL planning operators \textit{actions}.
+A basic PDDL domain and problem definition (without extensions) essentially correspond to the representations defined previously. Confusingly, we call PDDL planning operators \textit{actions}.
 Each action has a list of \textit{parameters} to be grounded by the planner,
 a \textit{precondition}, and an \textit{effect}. To denote multiple
 preconditions and effects, we use the n-ary predicate \texttt{and}.
@@ -327,7 +333,7 @@ denoted using three unary PDDL predicates:
 \begin{itemize}
 \item \texttt{at start}, where the parameter predicate must hold or the parameter effect must be applied at the start of the action;
 \item \texttt{at end}, where it must hold or be applied at the end of the action; and
-\item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is only applicable to preconditions of an action. When using \textit{continuous} durative actions which have continuous effects (for example, generating heat and boiling water), these effects are modeled
+\item \texttt{over all}, where the parameter must hold over the duration of the action, start and end non-inclusive. This temporal predicate is only applicable to preconditions of an action. When using \textit{continuous} durative actions which have continuous effects (for example, generating heat and boiling water), effects are modeled
 using different syntactical constructs \citep[Section~5.3]{Fox2003}.
 \end{itemize}
 
@@ -339,7 +345,7 @@ Probabilistic PDDL\comment{\footnote{\url{http://www.tempastic.org/papers/CMU-CS
 (PPDDL).
 
 PDDL does not specify a representation for plans. For a specific planning domain and problem in PDDL,
-we represent the plan in a format that is a field-wide consensus --- we will refer to is
+we represent the plan in a format that is a field-wide consensus. We refer to it
 as the \textit{VAL-like} format. VAL \citep{Howey2003} is a plan validator created for the IPC.
 It takes as input (among several options) three filenames: filename of a planning domain and
 problem in PDDL, and a filename for a plan in the mentioned format.
@@ -348,13 +354,13 @@ consists of multiple lines in the following format:
 \begin{center}
 \verb+(action_name action_object_literals*)+
 \end{center}
-For temporal domains, the format adds a start time and duration for each line, like so:
+For temporal domains, the format adds a start time and duration for each line:
 \begin{center}
 \verb+start_time: (action_name action_object_literals*) [duration]+
 \end{center}
-Both \verb+start_time+ and \verb+duration+ are floating-point numbers, with a dot
+Both \verb+start_time+ and \verb+duration+ are floating-point numbers with a dot
 (\verb+.+) as a decimal delimiter.
-Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all parsers.
+Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all PDDL parsers.
 
 
 
@@ -365,7 +371,7 @@ Note that all text between a semicolon \verb+;+ and an end-of-line character seq
 \section{Planning in practice}
 
 In practice, many of the assumptions we made will get violated and many additional requirements will arise,
-due to various business or social requirements.
+due to various business or societal requirements.
 These assumptions allow us, however, to work
 on problems that are more general and can, therefore, be applied to multiple scenarios.
 Businesses can often add minor tweaks on top of the obtained results so that
@@ -376,8 +382,8 @@ repeating the process regularly.
 
 Planners, in practice, are computer programs that are fed two files as input
 --- the domain file and the problem file. After that, they proceed with their internal calculations
-and upon finishing return a plan (or not). 
-We can then evaluate the plan, see if it meets our criteria and, potentially,
+and upon finishing, return a plan (or not). 
+We can then evaluate the plan, see if it meets our criteria, and, potentially,
 execute it in the real world.
 
 What we are missing from a bare plan is the allocation of specific resources.
