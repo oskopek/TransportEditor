@@ -127,12 +127,12 @@
             "problem": "p10",
             "results": {
                 "bestScore": 1059.0,
-                "durationMs": 1800014,
-                "endTimeMs": 1494496217779,
+                "durationMs": 1800009,
+                "endTimeMs": 1494511087032,
                 "exitStatus": "VALID",
                 "quality": 1.2134088762983948,
                 "score": 1059.0,
-                "startTimeMs": 1494494417765
+                "startTimeMs": 1494509287023
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-loc-36 city-loc-15) [18.00000]",
@@ -271,12 +271,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 54.0,
-                "durationMs": 1800020,
-                "endTimeMs": 1494496217785,
+                "durationMs": 1800009,
+                "endTimeMs": 1494511087032,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 54.0,
-                "startTimeMs": 1494494417765
+                "startTimeMs": 1494509287023
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-4 package-2) [1.00000]",
@@ -326,12 +326,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 795.0,
-                "durationMs": 1800014,
-                "endTimeMs": 1494496217779,
+                "durationMs": 1800010,
+                "endTimeMs": 1494511087033,
                 "exitStatus": "VALID",
                 "quality": 0.911697247706422,
                 "score": 872.0,
-                "startTimeMs": 1494494417765
+                "startTimeMs": 1494509287023
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-5 city-2-loc-6) [29.00000]",
@@ -386,12 +386,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 473.0,
-                "durationMs": 1800013,
-                "endTimeMs": 1494496217778,
+                "durationMs": 1800010,
+                "endTimeMs": 1494511087033,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 473.0,
-                "startTimeMs": 1494494417765
+                "startTimeMs": 1494509287023
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-2 city-2-loc-3) [47.00000]",
@@ -452,12 +452,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 369.0,
-                "durationMs": 1800014,
-                "endTimeMs": 1494496217779,
+                "durationMs": 1800009,
+                "endTimeMs": 1494511087032,
                 "exitStatus": "VALID",
                 "quality": 0.8806682577565632,
                 "score": 419.0,
-                "startTimeMs": 1494494417765
+                "startTimeMs": 1494509287023
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-loc-3 city-loc-15) [25.00000]",
@@ -578,12 +578,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 1582.0,
-                "durationMs": 1800011,
-                "endTimeMs": 1494498019119,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512887582,
                 "exitStatus": "VALID",
                 "quality": 1.0971515768056967,
                 "score": 1966.0,
-                "startTimeMs": 1494496219108
+                "startTimeMs": 1494511087581
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-12 city-1-loc-12) [115.00000]",
@@ -689,12 +689,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 270.0,
-                "durationMs": 1800007,
-                "endTimeMs": 1494498019188,
+                "durationMs": 1800000,
+                "endTimeMs": 1494512887740,
                 "exitStatus": "VALID",
                 "quality": 0.9375,
                 "score": 288.0,
-                "startTimeMs": 1494496219181
+                "startTimeMs": 1494511087740
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-6 package-3) [1.00000]",
@@ -767,11 +767,11 @@
             "results": {
                 "bestScore": 965.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494498019228,
+                "endTimeMs": 1494512887816,
                 "exitStatus": "VALID",
                 "quality": 1.16580310880829,
                 "score": 965.0,
-                "startTimeMs": 1494496219227
+                "startTimeMs": 1494511087815
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-4 city-2-loc-9) [16.00000]",
@@ -881,11 +881,11 @@
             "results": {
                 "bestScore": 582.0,
                 "durationMs": 1800000,
-                "endTimeMs": 1494498019282,
+                "endTimeMs": 1494512887886,
                 "exitStatus": "VALID",
                 "quality": 1.0257731958762886,
                 "score": 582.0,
-                "startTimeMs": 1494496219282
+                "startTimeMs": 1494511087886
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-4 package-3) [1.00000]",
@@ -995,12 +995,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 363.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498019340,
+                "durationMs": 1800000,
+                "endTimeMs": 1494512887962,
                 "exitStatus": "VALID",
                 "quality": 0.8810679611650486,
                 "score": 412.0,
-                "startTimeMs": 1494496219339
+                "startTimeMs": 1494511087962
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-19 package-8) [1.00000]",
@@ -1152,12 +1152,12 @@
             "problem": "p15",
             "results": {
                 "bestScore": 2280.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494499819292,
+                "durationMs": 1800000,
+                "endTimeMs": 1494514687794,
                 "exitStatus": "VALID",
                 "quality": 0.9440715883668904,
                 "score": 3129.0,
-                "startTimeMs": 1494498019291
+                "startTimeMs": 1494512887794
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-8 city-2-loc-3) [19.00000]",
@@ -1264,39 +1264,7 @@
         },
         {
             "actions": [
-                "(drive truck-2 city-loc-29 city-loc-19)",
-                "(pick-up truck-2 city-loc-19 package-2 capacity-3 capacity-4)",
-                "(drive truck-2 city-loc-19 city-loc-2)",
-                "(drive truck-2 city-loc-2 city-loc-7)",
-                "(drop truck-2 city-loc-7 package-2 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-11 city-loc-29)",
-                "(pick-up truck-3 city-loc-29 package-8 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-29 city-loc-26)",
-                "(drive truck-3 city-loc-26 city-loc-9)",
-                "(drive truck-3 city-loc-9 city-loc-18)",
-                "(drive truck-3 city-loc-18 city-loc-16)",
-                "(drop truck-3 city-loc-16 package-8 capacity-3 capacity-4)",
-                "(pick-up truck-1 city-loc-16 package-6 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-16 city-loc-14)",
-                "(drive truck-1 city-loc-14 city-loc-25)",
-                "(pick-up truck-1 city-loc-25 package-11 capacity-2 capacity-3)",
-                "(drive truck-1 city-loc-25 city-loc-30)",
-                "(drive truck-1 city-loc-30 city-loc-34)",
-                "(drop truck-1 city-loc-34 package-11 capacity-2 capacity-3)",
-                "(pick-up truck-1 city-loc-34 package-9 capacity-2 capacity-3)",
-                "(drive truck-1 city-loc-34 city-loc-30)",
-                "(pick-up truck-1 city-loc-30 package-3 capacity-1 capacity-2)",
-                "(drive truck-1 city-loc-30 city-loc-33)",
-                "(drop truck-1 city-loc-33 package-6 capacity-1 capacity-2)",
-                "(drop truck-1 city-loc-33 package-3 capacity-2 capacity-3)",
-                "(drive truck-1 city-loc-33 city-loc-11)",
-                "(drop truck-1 city-loc-11 package-9 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-11 city-loc-33)",
-                "(pick-up truck-1 city-loc-33 package-3 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-33 city-loc-9)",
-                "(drive truck-1 city-loc-9 city-loc-18)",
-                "(drive truck-1 city-loc-18 city-loc-10)",
-                "(drop truck-1 city-loc-10 package-3 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-16 city-loc-10)",
                 "(drive truck-1 city-loc-10 city-loc-8)",
                 "(drive truck-1 city-loc-8 city-loc-1)",
                 "(pick-up truck-1 city-loc-1 package-4 capacity-3 capacity-4)",
@@ -1304,18 +1272,6 @@
                 "(drive truck-1 city-loc-8 city-loc-5)",
                 "(drive truck-1 city-loc-5 city-loc-2)",
                 "(drop truck-1 city-loc-2 package-4 capacity-3 capacity-4)",
-                "(pick-up truck-2 city-loc-7 package-10 capacity-3 capacity-4)",
-                "(drive truck-2 city-loc-7 city-loc-35)",
-                "(drive truck-2 city-loc-35 city-loc-31)",
-                "(drive truck-2 city-loc-31 city-loc-21)",
-                "(drop truck-2 city-loc-21 package-10 capacity-3 capacity-4)",
-                "(drive truck-2 city-loc-21 city-loc-24)",
-                "(drive truck-2 city-loc-24 city-loc-4)",
-                "(pick-up truck-2 city-loc-4 package-13 capacity-3 capacity-4)",
-                "(drive truck-2 city-loc-4 city-loc-7)",
-                "(drive truck-2 city-loc-7 city-loc-2)",
-                "(drive truck-2 city-loc-2 city-loc-19)",
-                "(drop truck-2 city-loc-19 package-13 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-2 city-loc-6)",
                 "(pick-up truck-1 city-loc-6 package-5 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-6 city-loc-35)",
@@ -1331,6 +1287,44 @@
                 "(drop truck-1 city-loc-32 package-5 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-32 city-loc-17)",
                 "(drop truck-1 city-loc-17 package-14 capacity-3 capacity-4)",
+                "(drive truck-2 city-loc-29 city-loc-19)",
+                "(pick-up truck-2 city-loc-19 package-2 capacity-3 capacity-4)",
+                "(drive truck-2 city-loc-19 city-loc-2)",
+                "(drive truck-2 city-loc-2 city-loc-7)",
+                "(drop truck-2 city-loc-7 package-2 capacity-3 capacity-4)",
+                "(pick-up truck-2 city-loc-7 package-10 capacity-3 capacity-4)",
+                "(drive truck-2 city-loc-7 city-loc-35)",
+                "(drive truck-2 city-loc-35 city-loc-31)",
+                "(drive truck-2 city-loc-31 city-loc-21)",
+                "(drop truck-2 city-loc-21 package-10 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-11 city-loc-29)",
+                "(pick-up truck-3 city-loc-29 package-8 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-29 city-loc-26)",
+                "(drive truck-3 city-loc-26 city-loc-9)",
+                "(drive truck-3 city-loc-9 city-loc-18)",
+                "(drive truck-3 city-loc-18 city-loc-16)",
+                "(drop truck-3 city-loc-16 package-8 capacity-3 capacity-4)",
+                "(pick-up truck-3 city-loc-16 package-6 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-16 city-loc-14)",
+                "(drive truck-3 city-loc-14 city-loc-25)",
+                "(pick-up truck-3 city-loc-25 package-11 capacity-2 capacity-3)",
+                "(drive truck-3 city-loc-25 city-loc-30)",
+                "(drive truck-3 city-loc-30 city-loc-34)",
+                "(drop truck-3 city-loc-34 package-11 capacity-2 capacity-3)",
+                "(pick-up truck-3 city-loc-34 package-9 capacity-2 capacity-3)",
+                "(drive truck-3 city-loc-34 city-loc-30)",
+                "(pick-up truck-3 city-loc-30 package-3 capacity-1 capacity-2)",
+                "(drive truck-3 city-loc-30 city-loc-33)",
+                "(drop truck-3 city-loc-33 package-6 capacity-1 capacity-2)",
+                "(drop truck-3 city-loc-33 package-3 capacity-2 capacity-3)",
+                "(drive truck-3 city-loc-33 city-loc-11)",
+                "(drop truck-3 city-loc-11 package-9 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-11 city-loc-33)",
+                "(pick-up truck-3 city-loc-33 package-3 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-33 city-loc-9)",
+                "(drive truck-3 city-loc-9 city-loc-18)",
+                "(drive truck-3 city-loc-18 city-loc-10)",
+                "(drop truck-3 city-loc-10 package-3 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-17 city-loc-32)",
                 "(drive truck-1 city-loc-32 city-loc-28)",
                 "(pick-up truck-1 city-loc-28 package-12 capacity-3 capacity-4)",
@@ -1344,6 +1338,13 @@
                 "(drive truck-1 city-loc-19 city-loc-29)",
                 "(drive truck-1 city-loc-29 city-loc-11)",
                 "(drop truck-1 city-loc-11 package-12 capacity-3 capacity-4)",
+                "(drive truck-2 city-loc-21 city-loc-24)",
+                "(drive truck-2 city-loc-24 city-loc-4)",
+                "(pick-up truck-2 city-loc-4 package-13 capacity-3 capacity-4)",
+                "(drive truck-2 city-loc-4 city-loc-7)",
+                "(drive truck-2 city-loc-7 city-loc-2)",
+                "(drive truck-2 city-loc-2 city-loc-19)",
+                "(drop truck-2 city-loc-19 package-13 capacity-3 capacity-4)",
                 "(pick-up truck-2 city-loc-19 package-7 capacity-3 capacity-4)",
                 "(drive truck-2 city-loc-19 city-loc-9)",
                 "(drop truck-2 city-loc-9 package-7 capacity-3 capacity-4)",
@@ -1354,112 +1355,113 @@
                 "(drive truck-2 city-loc-19 city-loc-29)",
                 "(drive truck-2 city-loc-29 city-loc-27)",
                 "(drop truck-2 city-loc-27 package-1 capacity-3 capacity-4)",
-                "; cost = 965 (general cost)"
+                "; cost = 982 (general cost)"
             ],
             "domain": "Transport sequential",
             "planner": "RRAPN",
             "problem": "p07",
             "results": {
-                "bestScore": 965.0,
-                "durationMs": 1800009,
-                "endTimeMs": 1494499819350,
+                "bestScore": 982.0,
+                "durationMs": 1800001,
+                "endTimeMs": 1494514687867,
                 "exitStatus": "VALID",
-                "quality": 1.305699481865285,
-                "score": 965.0,
-                "startTimeMs": 1494498019341
+                "quality": 1.2830957230142566,
+                "score": 982.0,
+                "startTimeMs": 1494512887866
             },
             "temporalPlanActions": [
-                "0.00000: (drive truck-2 city-loc-29 city-loc-19) [21.00000]",
-                "21.00000: (pick-up truck-2 city-loc-19 package-2) [1.00000]",
-                "22.00000: (drive truck-2 city-loc-19 city-loc-2) [11.00000]",
-                "33.00000: (drive truck-2 city-loc-2 city-loc-7) [22.00000]",
-                "55.00000: (drop truck-2 city-loc-7 package-2) [1.00000]",
-                "56.00000: (drive truck-3 city-loc-11 city-loc-29) [11.00000]",
-                "67.00000: (pick-up truck-3 city-loc-29 package-8) [1.00000]",
-                "68.00000: (drive truck-3 city-loc-29 city-loc-26) [13.00000]",
-                "81.00000: (drive truck-3 city-loc-26 city-loc-9) [16.00000]",
-                "97.00000: (drive truck-3 city-loc-9 city-loc-18) [22.00000]",
-                "119.00000: (drive truck-3 city-loc-18 city-loc-16) [17.00000]",
-                "136.00000: (drop truck-3 city-loc-16 package-8) [1.00000]",
-                "137.00000: (pick-up truck-1 city-loc-16 package-6) [1.00000]",
-                "138.00000: (drive truck-1 city-loc-16 city-loc-14) [13.00000]",
-                "151.00000: (drive truck-1 city-loc-14 city-loc-25) [15.00000]",
-                "166.00000: (pick-up truck-1 city-loc-25 package-11) [1.00000]",
-                "167.00000: (drive truck-1 city-loc-25 city-loc-30) [19.00000]",
-                "186.00000: (drive truck-1 city-loc-30 city-loc-34) [21.00000]",
-                "207.00000: (drop truck-1 city-loc-34 package-11) [1.00000]",
-                "208.00000: (pick-up truck-1 city-loc-34 package-9) [1.00000]",
-                "209.00000: (drive truck-1 city-loc-34 city-loc-30) [21.00000]",
-                "230.00000: (pick-up truck-1 city-loc-30 package-3) [1.00000]",
-                "231.00000: (drive truck-1 city-loc-30 city-loc-33) [16.00000]",
-                "247.00000: (drop truck-1 city-loc-33 package-6) [1.00000]",
-                "248.00000: (drop truck-1 city-loc-33 package-3) [1.00000]",
-                "249.00000: (drive truck-1 city-loc-33 city-loc-11) [22.00000]",
-                "271.00000: (drop truck-1 city-loc-11 package-9) [1.00000]",
-                "272.00000: (drive truck-1 city-loc-11 city-loc-33) [22.00000]",
-                "294.00000: (pick-up truck-1 city-loc-33 package-3) [1.00000]",
-                "295.00000: (drive truck-1 city-loc-33 city-loc-9) [20.00000]",
-                "315.00000: (drive truck-1 city-loc-9 city-loc-18) [22.00000]",
-                "337.00000: (drive truck-1 city-loc-18 city-loc-10) [13.00000]",
-                "350.00000: (drop truck-1 city-loc-10 package-3) [1.00000]",
-                "351.00000: (drive truck-1 city-loc-10 city-loc-8) [17.00000]",
-                "368.00000: (drive truck-1 city-loc-8 city-loc-1) [13.00000]",
-                "381.00000: (pick-up truck-1 city-loc-1 package-4) [1.00000]",
-                "382.00000: (drive truck-1 city-loc-1 city-loc-8) [13.00000]",
-                "395.00000: (drive truck-1 city-loc-8 city-loc-5) [19.00000]",
-                "414.00000: (drive truck-1 city-loc-5 city-loc-2) [16.00000]",
-                "430.00000: (drop truck-1 city-loc-2 package-4) [1.00000]",
-                "431.00000: (pick-up truck-2 city-loc-7 package-10) [1.00000]",
-                "432.00000: (drive truck-2 city-loc-7 city-loc-35) [18.00000]",
-                "450.00000: (drive truck-2 city-loc-35 city-loc-31) [13.00000]",
-                "463.00000: (drive truck-2 city-loc-31 city-loc-21) [21.00000]",
-                "484.00000: (drop truck-2 city-loc-21 package-10) [1.00000]",
-                "485.00000: (drive truck-2 city-loc-21 city-loc-24) [16.00000]",
-                "501.00000: (drive truck-2 city-loc-24 city-loc-4) [15.00000]",
-                "516.00000: (pick-up truck-2 city-loc-4 package-13) [1.00000]",
-                "517.00000: (drive truck-2 city-loc-4 city-loc-7) [22.00000]",
-                "539.00000: (drive truck-2 city-loc-7 city-loc-2) [22.00000]",
-                "561.00000: (drive truck-2 city-loc-2 city-loc-19) [11.00000]",
-                "572.00000: (drop truck-2 city-loc-19 package-13) [1.00000]",
-                "573.00000: (drive truck-1 city-loc-2 city-loc-6) [11.00000]",
-                "584.00000: (pick-up truck-1 city-loc-6 package-5) [1.00000]",
-                "585.00000: (drive truck-1 city-loc-6 city-loc-35) [19.00000]",
-                "604.00000: (drive truck-1 city-loc-35 city-loc-31) [13.00000]",
-                "617.00000: (drive truck-1 city-loc-31 city-loc-12) [22.00000]",
-                "639.00000: (pick-up truck-1 city-loc-12 package-14) [1.00000]",
-                "640.00000: (drive truck-1 city-loc-12 city-loc-3) [11.00000]",
-                "651.00000: (pick-up truck-1 city-loc-3 package-7) [1.00000]",
-                "652.00000: (drive truck-1 city-loc-3 city-loc-20) [18.00000]",
-                "670.00000: (drive truck-1 city-loc-20 city-loc-15) [19.00000]",
-                "689.00000: (drop truck-1 city-loc-15 package-7) [1.00000]",
-                "690.00000: (drive truck-1 city-loc-15 city-loc-32) [12.00000]",
-                "702.00000: (drop truck-1 city-loc-32 package-5) [1.00000]",
-                "703.00000: (drive truck-1 city-loc-32 city-loc-17) [14.00000]",
-                "717.00000: (drop truck-1 city-loc-17 package-14) [1.00000]",
-                "718.00000: (drive truck-1 city-loc-17 city-loc-32) [14.00000]",
-                "732.00000: (drive truck-1 city-loc-32 city-loc-28) [21.00000]",
-                "753.00000: (pick-up truck-1 city-loc-28 package-12) [1.00000]",
-                "754.00000: (drive truck-1 city-loc-28 city-loc-15) [12.00000]",
-                "766.00000: (pick-up truck-1 city-loc-15 package-7) [1.00000]",
-                "767.00000: (drive truck-1 city-loc-15 city-loc-13) [17.00000]",
-                "784.00000: (drive truck-1 city-loc-13 city-loc-8) [19.00000]",
-                "803.00000: (drive truck-1 city-loc-8 city-loc-5) [19.00000]",
-                "822.00000: (drive truck-1 city-loc-5 city-loc-19) [17.00000]",
-                "839.00000: (drop truck-1 city-loc-19 package-7) [1.00000]",
-                "840.00000: (drive truck-1 city-loc-19 city-loc-29) [21.00000]",
-                "861.00000: (drive truck-1 city-loc-29 city-loc-11) [11.00000]",
-                "872.00000: (drop truck-1 city-loc-11 package-12) [1.00000]",
-                "873.00000: (pick-up truck-2 city-loc-19 package-7) [1.00000]",
-                "874.00000: (drive truck-2 city-loc-19 city-loc-9) [13.00000]",
-                "887.00000: (drop truck-2 city-loc-9 package-7) [1.00000]",
-                "888.00000: (drive truck-2 city-loc-9 city-loc-19) [13.00000]",
-                "901.00000: (drive truck-2 city-loc-19 city-loc-2) [11.00000]",
-                "912.00000: (pick-up truck-2 city-loc-2 package-1) [1.00000]",
-                "913.00000: (drive truck-2 city-loc-2 city-loc-19) [11.00000]",
-                "924.00000: (drive truck-2 city-loc-19 city-loc-29) [21.00000]",
-                "945.00000: (drive truck-2 city-loc-29 city-loc-27) [19.00000]",
-                "964.00000: (drop truck-2 city-loc-27 package-1) [1.00000]",
-                "; total-time = 965.0 (general-cost)"
+                "0.00000: (drive truck-1 city-loc-16 city-loc-10) [17.00000]",
+                "17.00000: (drive truck-1 city-loc-10 city-loc-8) [17.00000]",
+                "34.00000: (drive truck-1 city-loc-8 city-loc-1) [13.00000]",
+                "47.00000: (pick-up truck-1 city-loc-1 package-4) [1.00000]",
+                "48.00000: (drive truck-1 city-loc-1 city-loc-8) [13.00000]",
+                "61.00000: (drive truck-1 city-loc-8 city-loc-5) [19.00000]",
+                "80.00000: (drive truck-1 city-loc-5 city-loc-2) [16.00000]",
+                "96.00000: (drop truck-1 city-loc-2 package-4) [1.00000]",
+                "97.00000: (drive truck-1 city-loc-2 city-loc-6) [11.00000]",
+                "108.00000: (pick-up truck-1 city-loc-6 package-5) [1.00000]",
+                "109.00000: (drive truck-1 city-loc-6 city-loc-35) [19.00000]",
+                "128.00000: (drive truck-1 city-loc-35 city-loc-31) [13.00000]",
+                "141.00000: (drive truck-1 city-loc-31 city-loc-12) [22.00000]",
+                "163.00000: (pick-up truck-1 city-loc-12 package-14) [1.00000]",
+                "164.00000: (drive truck-1 city-loc-12 city-loc-3) [11.00000]",
+                "175.00000: (pick-up truck-1 city-loc-3 package-7) [1.00000]",
+                "176.00000: (drive truck-1 city-loc-3 city-loc-20) [18.00000]",
+                "194.00000: (drive truck-1 city-loc-20 city-loc-15) [19.00000]",
+                "213.00000: (drop truck-1 city-loc-15 package-7) [1.00000]",
+                "214.00000: (drive truck-1 city-loc-15 city-loc-32) [12.00000]",
+                "226.00000: (drop truck-1 city-loc-32 package-5) [1.00000]",
+                "227.00000: (drive truck-1 city-loc-32 city-loc-17) [14.00000]",
+                "241.00000: (drop truck-1 city-loc-17 package-14) [1.00000]",
+                "242.00000: (drive truck-2 city-loc-29 city-loc-19) [21.00000]",
+                "263.00000: (pick-up truck-2 city-loc-19 package-2) [1.00000]",
+                "264.00000: (drive truck-2 city-loc-19 city-loc-2) [11.00000]",
+                "275.00000: (drive truck-2 city-loc-2 city-loc-7) [22.00000]",
+                "297.00000: (drop truck-2 city-loc-7 package-2) [1.00000]",
+                "298.00000: (pick-up truck-2 city-loc-7 package-10) [1.00000]",
+                "299.00000: (drive truck-2 city-loc-7 city-loc-35) [18.00000]",
+                "317.00000: (drive truck-2 city-loc-35 city-loc-31) [13.00000]",
+                "330.00000: (drive truck-2 city-loc-31 city-loc-21) [21.00000]",
+                "351.00000: (drop truck-2 city-loc-21 package-10) [1.00000]",
+                "352.00000: (drive truck-3 city-loc-11 city-loc-29) [11.00000]",
+                "363.00000: (pick-up truck-3 city-loc-29 package-8) [1.00000]",
+                "364.00000: (drive truck-3 city-loc-29 city-loc-26) [13.00000]",
+                "377.00000: (drive truck-3 city-loc-26 city-loc-9) [16.00000]",
+                "393.00000: (drive truck-3 city-loc-9 city-loc-18) [22.00000]",
+                "415.00000: (drive truck-3 city-loc-18 city-loc-16) [17.00000]",
+                "432.00000: (drop truck-3 city-loc-16 package-8) [1.00000]",
+                "433.00000: (pick-up truck-3 city-loc-16 package-6) [1.00000]",
+                "434.00000: (drive truck-3 city-loc-16 city-loc-14) [13.00000]",
+                "447.00000: (drive truck-3 city-loc-14 city-loc-25) [15.00000]",
+                "462.00000: (pick-up truck-3 city-loc-25 package-11) [1.00000]",
+                "463.00000: (drive truck-3 city-loc-25 city-loc-30) [19.00000]",
+                "482.00000: (drive truck-3 city-loc-30 city-loc-34) [21.00000]",
+                "503.00000: (drop truck-3 city-loc-34 package-11) [1.00000]",
+                "504.00000: (pick-up truck-3 city-loc-34 package-9) [1.00000]",
+                "505.00000: (drive truck-3 city-loc-34 city-loc-30) [21.00000]",
+                "526.00000: (pick-up truck-3 city-loc-30 package-3) [1.00000]",
+                "527.00000: (drive truck-3 city-loc-30 city-loc-33) [16.00000]",
+                "543.00000: (drop truck-3 city-loc-33 package-6) [1.00000]",
+                "544.00000: (drop truck-3 city-loc-33 package-3) [1.00000]",
+                "545.00000: (drive truck-3 city-loc-33 city-loc-11) [22.00000]",
+                "567.00000: (drop truck-3 city-loc-11 package-9) [1.00000]",
+                "568.00000: (drive truck-3 city-loc-11 city-loc-33) [22.00000]",
+                "590.00000: (pick-up truck-3 city-loc-33 package-3) [1.00000]",
+                "591.00000: (drive truck-3 city-loc-33 city-loc-9) [20.00000]",
+                "611.00000: (drive truck-3 city-loc-9 city-loc-18) [22.00000]",
+                "633.00000: (drive truck-3 city-loc-18 city-loc-10) [13.00000]",
+                "646.00000: (drop truck-3 city-loc-10 package-3) [1.00000]",
+                "647.00000: (drive truck-1 city-loc-17 city-loc-32) [14.00000]",
+                "661.00000: (drive truck-1 city-loc-32 city-loc-28) [21.00000]",
+                "682.00000: (pick-up truck-1 city-loc-28 package-12) [1.00000]",
+                "683.00000: (drive truck-1 city-loc-28 city-loc-15) [12.00000]",
+                "695.00000: (pick-up truck-1 city-loc-15 package-7) [1.00000]",
+                "696.00000: (drive truck-1 city-loc-15 city-loc-13) [17.00000]",
+                "713.00000: (drive truck-1 city-loc-13 city-loc-8) [19.00000]",
+                "732.00000: (drive truck-1 city-loc-8 city-loc-5) [19.00000]",
+                "751.00000: (drive truck-1 city-loc-5 city-loc-19) [17.00000]",
+                "768.00000: (drop truck-1 city-loc-19 package-7) [1.00000]",
+                "769.00000: (drive truck-1 city-loc-19 city-loc-29) [21.00000]",
+                "790.00000: (drive truck-1 city-loc-29 city-loc-11) [11.00000]",
+                "801.00000: (drop truck-1 city-loc-11 package-12) [1.00000]",
+                "802.00000: (drive truck-2 city-loc-21 city-loc-24) [16.00000]",
+                "818.00000: (drive truck-2 city-loc-24 city-loc-4) [15.00000]",
+                "833.00000: (pick-up truck-2 city-loc-4 package-13) [1.00000]",
+                "834.00000: (drive truck-2 city-loc-4 city-loc-7) [22.00000]",
+                "856.00000: (drive truck-2 city-loc-7 city-loc-2) [22.00000]",
+                "878.00000: (drive truck-2 city-loc-2 city-loc-19) [11.00000]",
+                "889.00000: (drop truck-2 city-loc-19 package-13) [1.00000]",
+                "890.00000: (pick-up truck-2 city-loc-19 package-7) [1.00000]",
+                "891.00000: (drive truck-2 city-loc-19 city-loc-9) [13.00000]",
+                "904.00000: (drop truck-2 city-loc-9 package-7) [1.00000]",
+                "905.00000: (drive truck-2 city-loc-9 city-loc-19) [13.00000]",
+                "918.00000: (drive truck-2 city-loc-19 city-loc-2) [11.00000]",
+                "929.00000: (pick-up truck-2 city-loc-2 package-1) [1.00000]",
+                "930.00000: (drive truck-2 city-loc-2 city-loc-19) [11.00000]",
+                "941.00000: (drive truck-2 city-loc-19 city-loc-29) [21.00000]",
+                "962.00000: (drive truck-2 city-loc-29 city-loc-27) [19.00000]",
+                "981.00000: (drop truck-2 city-loc-27 package-1) [1.00000]",
+                "; total-time = 982.0 (general-cost)"
             ]
         },
         {
@@ -1562,12 +1564,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 755.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494499819386,
+                "durationMs": 1800001,
+                "endTimeMs": 1494514687949,
                 "exitStatus": "VALID",
                 "quality": 0.7373046875,
                 "score": 1024.0,
-                "startTimeMs": 1494498019386
+                "startTimeMs": 1494512887948
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-loc-25 city-loc-13) [14.00000]",
@@ -1777,11 +1779,11 @@
             "results": {
                 "bestScore": 932.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494499819427,
+                "endTimeMs": 1494514688018,
                 "exitStatus": "VALID",
                 "quality": 1.0740343347639485,
                 "score": 932.0,
-                "startTimeMs": 1494498019426
+                "startTimeMs": 1494512888017
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-1 package-10) [1.00000]",
@@ -1906,55 +1908,52 @@
                 "(drive truck-3 city-loc-30 city-loc-36)",
                 "(drop truck-3 city-loc-36 package-6 capacity-2 capacity-3)",
                 "(drop truck-3 city-loc-36 package-14 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-2 city-loc-24)",
-                "(drive truck-1 city-loc-24 city-loc-4)",
-                "(pick-up truck-1 city-loc-4 package-3 capacity-3 capacity-4)",
-                "(pick-up truck-1 city-loc-4 package-11 capacity-2 capacity-3)",
-                "(drive truck-1 city-loc-4 city-loc-3)",
-                "(drive truck-1 city-loc-3 city-loc-1)",
-                "(drive truck-1 city-loc-1 city-loc-13)",
-                "(drive truck-1 city-loc-13 city-loc-26)",
-                "(drive truck-1 city-loc-26 city-loc-14)",
-                "(drop truck-1 city-loc-14 package-11 capacity-2 capacity-3)",
-                "(drive truck-1 city-loc-14 city-loc-19)",
-                "(drive truck-1 city-loc-19 city-loc-16)",
-                "(drop truck-1 city-loc-16 package-3 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-36 city-loc-33)",
+                "(drive truck-3 city-loc-36 city-loc-30)",
+                "(pick-up truck-3 city-loc-30 package-7 capacity-3 capacity-4)",
+                "(drive truck-3 city-loc-30 city-loc-22)",
+                "(drop truck-3 city-loc-22 package-7 capacity-3 capacity-4)",
+                "(pick-up truck-4 city-loc-27 package-5 capacity-1 capacity-2)",
+                "(drive truck-4 city-loc-27 city-loc-37)",
+                "(drop truck-4 city-loc-37 package-5 capacity-1 capacity-2)",
+                "(drive truck-3 city-loc-22 city-loc-33)",
                 "(pick-up truck-3 city-loc-33 package-16 capacity-3 capacity-4)",
-                "(pick-up truck-3 city-loc-33 package-8 capacity-2 capacity-3)",
-                "(pick-up truck-3 city-loc-33 package-2 capacity-1 capacity-2)",
+                "(pick-up truck-3 city-loc-33 package-4 capacity-2 capacity-3)",
+                "(pick-up truck-3 city-loc-33 package-8 capacity-1 capacity-2)",
+                "(pick-up truck-3 city-loc-33 package-2 capacity-0 capacity-1)",
                 "(drive truck-3 city-loc-33 city-loc-30)",
-                "(pick-up truck-3 city-loc-30 package-7 capacity-0 capacity-1)",
                 "(drive truck-3 city-loc-30 city-loc-20)",
                 "(drop truck-3 city-loc-20 package-16 capacity-0 capacity-1)",
-                "(drop truck-3 city-loc-20 package-7 capacity-1 capacity-2)",
+                "(drop truck-3 city-loc-20 package-4 capacity-1 capacity-2)",
                 "(drive truck-3 city-loc-20 city-loc-6)",
                 "(drop truck-3 city-loc-6 package-2 capacity-2 capacity-3)",
                 "(drive truck-3 city-loc-6 city-loc-26)",
                 "(drop truck-3 city-loc-26 package-8 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-16 city-loc-11)",
-                "(drive truck-1 city-loc-11 city-loc-34)",
-                "(pick-up truck-1 city-loc-34 package-1 capacity-3 capacity-4)",
-                "(drive truck-1 city-loc-34 city-loc-32)",
-                "(drive truck-1 city-loc-32 city-loc-20)",
-                "(drive truck-1 city-loc-20 city-loc-35)",
-                "(drop truck-1 city-loc-35 package-1 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-2 city-loc-7)",
+                "(drive truck-1 city-loc-7 city-loc-29)",
+                "(drive truck-1 city-loc-29 city-loc-23)",
+                "(drive truck-1 city-loc-23 city-loc-38)",
+                "(pick-up truck-1 city-loc-38 package-13 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-38 city-loc-40)",
+                "(drive truck-1 city-loc-40 city-loc-35)",
+                "(drop truck-1 city-loc-35 package-13 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-35 city-loc-20)",
-                "(pick-up truck-1 city-loc-20 package-16 capacity-3 capacity-4)",
-                "(pick-up truck-1 city-loc-20 package-7 capacity-2 capacity-3)",
+                "(pick-up truck-1 city-loc-20 package-4 capacity-3 capacity-4)",
+                "(pick-up truck-1 city-loc-20 package-16 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-20 city-loc-15)",
-                "(drop truck-1 city-loc-15 package-7 capacity-2 capacity-3)",
-                "(pick-up truck-1 city-loc-15 package-9 capacity-2 capacity-3)",
+                "(pick-up truck-1 city-loc-15 package-9 capacity-1 capacity-2)",
                 "(drive truck-1 city-loc-15 city-loc-5)",
                 "(drive truck-1 city-loc-5 city-loc-3)",
+                "(drop truck-1 city-loc-3 package-4 capacity-1 capacity-2)",
                 "(drop truck-1 city-loc-3 package-9 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-3 city-loc-31)",
                 "(drop truck-1 city-loc-31 package-16 capacity-3 capacity-4)",
                 "(pick-up truck-1 city-loc-31 package-15 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-31 city-loc-3)",
                 "(pick-up truck-1 city-loc-3 package-9 capacity-2 capacity-3)",
+                "(pick-up truck-1 city-loc-3 package-4 capacity-1 capacity-2)",
                 "(drive truck-1 city-loc-3 city-loc-28)",
-                "(drop truck-1 city-loc-28 package-9 capacity-2 capacity-3)",
+                "(drop truck-1 city-loc-28 package-9 capacity-1 capacity-2)",
+                "(drop truck-1 city-loc-28 package-4 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-28 city-loc-18)",
                 "(drive truck-1 city-loc-18 city-loc-35)",
                 "(drive truck-1 city-loc-35 city-loc-40)",
@@ -1964,48 +1963,51 @@
                 "(drop truck-1 city-loc-12 package-15 capacity-3 capacity-4)",
                 "(pick-up truck-1 city-loc-12 package-10 capacity-3 capacity-4)",
                 "(drive truck-1 city-loc-12 city-loc-33)",
-                "(pick-up truck-1 city-loc-33 package-4 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-33 city-loc-22)",
                 "(drive truck-1 city-loc-22 city-loc-40)",
                 "(drive truck-1 city-loc-40 city-loc-35)",
                 "(drive truck-1 city-loc-35 city-loc-18)",
                 "(drive truck-1 city-loc-18 city-loc-28)",
-                "(drop truck-1 city-loc-28 package-10 capacity-2 capacity-3)",
-                "(pick-up truck-1 city-loc-28 package-9 capacity-2 capacity-3)",
+                "(drop truck-1 city-loc-28 package-10 capacity-3 capacity-4)",
+                "(pick-up truck-1 city-loc-28 package-9 capacity-3 capacity-4)",
+                "(pick-up truck-1 city-loc-28 package-4 capacity-2 capacity-3)",
                 "(drive truck-1 city-loc-28 city-loc-4)",
-                "(drop truck-1 city-loc-4 package-4 capacity-2 capacity-3)",
-                "(drop truck-1 city-loc-4 package-9 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-26 city-loc-14)",
-                "(pick-up truck-3 city-loc-14 package-11 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-14 city-loc-6)",
-                "(drop truck-3 city-loc-6 package-11 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-6 city-loc-15)",
-                "(pick-up truck-3 city-loc-15 package-7 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-15 city-loc-35)",
-                "(drive truck-3 city-loc-35 city-loc-40)",
-                "(drive truck-3 city-loc-40 city-loc-22)",
-                "(drop truck-3 city-loc-22 package-7 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-22 city-loc-38)",
-                "(pick-up truck-3 city-loc-38 package-13 capacity-3 capacity-4)",
-                "(drive truck-3 city-loc-38 city-loc-40)",
-                "(drive truck-3 city-loc-40 city-loc-35)",
-                "(drop truck-3 city-loc-35 package-13 capacity-3 capacity-4)",
-                "(pick-up truck-4 city-loc-27 package-5 capacity-1 capacity-2)",
-                "(drive truck-4 city-loc-27 city-loc-37)",
-                "(drop truck-4 city-loc-37 package-5 capacity-1 capacity-2)",
-                "; cost = 923 (general cost)"
+                "(drop truck-1 city-loc-4 package-9 capacity-2 capacity-3)",
+                "(drop truck-1 city-loc-4 package-4 capacity-3 capacity-4)",
+                "(pick-up truck-1 city-loc-4 package-3 capacity-3 capacity-4)",
+                "(pick-up truck-1 city-loc-4 package-11 capacity-2 capacity-3)",
+                "(drive truck-1 city-loc-4 city-loc-3)",
+                "(drive truck-1 city-loc-3 city-loc-5)",
+                "(drive truck-1 city-loc-5 city-loc-15)",
+                "(drop truck-1 city-loc-15 package-3 capacity-2 capacity-3)",
+                "(drive truck-1 city-loc-15 city-loc-6)",
+                "(drop truck-1 city-loc-6 package-11 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-6 city-loc-15)",
+                "(pick-up truck-1 city-loc-15 package-3 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-15 city-loc-6)",
+                "(drive truck-1 city-loc-6 city-loc-19)",
+                "(drive truck-1 city-loc-19 city-loc-16)",
+                "(drop truck-1 city-loc-16 package-3 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-16 city-loc-11)",
+                "(drive truck-1 city-loc-11 city-loc-34)",
+                "(pick-up truck-1 city-loc-34 package-1 capacity-3 capacity-4)",
+                "(drive truck-1 city-loc-34 city-loc-32)",
+                "(drive truck-1 city-loc-32 city-loc-20)",
+                "(drive truck-1 city-loc-20 city-loc-35)",
+                "(drop truck-1 city-loc-35 package-1 capacity-3 capacity-4)",
+                "; cost = 924 (general cost)"
             ],
             "domain": "Transport sequential",
             "planner": "RRAPN",
             "problem": "p08",
             "results": {
-                "bestScore": 923.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494499819469,
+                "bestScore": 924.0,
+                "durationMs": 1800001,
+                "endTimeMs": 1494514688086,
                 "exitStatus": "VALID",
-                "quality": 1.3174431202600216,
-                "score": 923.0,
-                "startTimeMs": 1494498019469
+                "quality": 1.316017316017316,
+                "score": 924.0,
+                "startTimeMs": 1494512888085
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-18 package-12) [1.00000]",
@@ -2022,94 +2024,94 @@
                 "95.00000: (drive truck-3 city-loc-30 city-loc-36) [15.00000]",
                 "110.00000: (drop truck-3 city-loc-36 package-6) [1.00000]",
                 "111.00000: (drop truck-3 city-loc-36 package-14) [1.00000]",
-                "112.00000: (drive truck-1 city-loc-2 city-loc-24) [12.00000]",
-                "124.00000: (drive truck-1 city-loc-24 city-loc-4) [14.00000]",
-                "138.00000: (pick-up truck-1 city-loc-4 package-3) [1.00000]",
-                "139.00000: (pick-up truck-1 city-loc-4 package-11) [1.00000]",
-                "140.00000: (drive truck-1 city-loc-4 city-loc-3) [21.00000]",
-                "161.00000: (drive truck-1 city-loc-3 city-loc-1) [13.00000]",
-                "174.00000: (drive truck-1 city-loc-1 city-loc-13) [15.00000]",
-                "189.00000: (drive truck-1 city-loc-13 city-loc-26) [17.00000]",
-                "206.00000: (drive truck-1 city-loc-26 city-loc-14) [12.00000]",
-                "218.00000: (drop truck-1 city-loc-14 package-11) [1.00000]",
-                "219.00000: (drive truck-1 city-loc-14 city-loc-19) [13.00000]",
-                "232.00000: (drive truck-1 city-loc-19 city-loc-16) [19.00000]",
-                "251.00000: (drop truck-1 city-loc-16 package-3) [1.00000]",
-                "252.00000: (drive truck-3 city-loc-36 city-loc-33) [11.00000]",
-                "263.00000: (pick-up truck-3 city-loc-33 package-16) [1.00000]",
-                "264.00000: (pick-up truck-3 city-loc-33 package-8) [1.00000]",
-                "265.00000: (pick-up truck-3 city-loc-33 package-2) [1.00000]",
-                "266.00000: (drive truck-3 city-loc-33 city-loc-30) [18.00000]",
-                "284.00000: (pick-up truck-3 city-loc-30 package-7) [1.00000]",
-                "285.00000: (drive truck-3 city-loc-30 city-loc-20) [18.00000]",
-                "303.00000: (drop truck-3 city-loc-20 package-16) [1.00000]",
-                "304.00000: (drop truck-3 city-loc-20 package-7) [1.00000]",
-                "305.00000: (drive truck-3 city-loc-20 city-loc-6) [22.00000]",
-                "327.00000: (drop truck-3 city-loc-6 package-2) [1.00000]",
-                "328.00000: (drive truck-3 city-loc-6 city-loc-26) [20.00000]",
-                "348.00000: (drop truck-3 city-loc-26 package-8) [1.00000]",
-                "349.00000: (drive truck-1 city-loc-16 city-loc-11) [16.00000]",
-                "365.00000: (drive truck-1 city-loc-11 city-loc-34) [15.00000]",
-                "380.00000: (pick-up truck-1 city-loc-34 package-1) [1.00000]",
-                "381.00000: (drive truck-1 city-loc-34 city-loc-32) [15.00000]",
-                "396.00000: (drive truck-1 city-loc-32 city-loc-20) [18.00000]",
-                "414.00000: (drive truck-1 city-loc-20 city-loc-35) [21.00000]",
-                "435.00000: (drop truck-1 city-loc-35 package-1) [1.00000]",
-                "436.00000: (drive truck-1 city-loc-35 city-loc-20) [21.00000]",
-                "457.00000: (pick-up truck-1 city-loc-20 package-16) [1.00000]",
-                "458.00000: (pick-up truck-1 city-loc-20 package-7) [1.00000]",
-                "459.00000: (drive truck-1 city-loc-20 city-loc-15) [15.00000]",
-                "474.00000: (drop truck-1 city-loc-15 package-7) [1.00000]",
-                "475.00000: (pick-up truck-1 city-loc-15 package-9) [1.00000]",
-                "476.00000: (drive truck-1 city-loc-15 city-loc-5) [22.00000]",
-                "498.00000: (drive truck-1 city-loc-5 city-loc-3) [17.00000]",
-                "515.00000: (drop truck-1 city-loc-3 package-9) [1.00000]",
-                "516.00000: (drive truck-1 city-loc-3 city-loc-31) [12.00000]",
-                "528.00000: (drop truck-1 city-loc-31 package-16) [1.00000]",
-                "529.00000: (pick-up truck-1 city-loc-31 package-15) [1.00000]",
-                "530.00000: (drive truck-1 city-loc-31 city-loc-3) [12.00000]",
-                "542.00000: (pick-up truck-1 city-loc-3 package-9) [1.00000]",
-                "543.00000: (drive truck-1 city-loc-3 city-loc-28) [12.00000]",
-                "555.00000: (drop truck-1 city-loc-28 package-9) [1.00000]",
-                "556.00000: (drive truck-1 city-loc-28 city-loc-18) [16.00000]",
-                "572.00000: (drive truck-1 city-loc-18 city-loc-35) [14.00000]",
-                "586.00000: (drive truck-1 city-loc-35 city-loc-40) [14.00000]",
-                "600.00000: (drive truck-1 city-loc-40 city-loc-22) [12.00000]",
-                "612.00000: (drive truck-1 city-loc-22 city-loc-33) [19.00000]",
-                "631.00000: (drive truck-1 city-loc-33 city-loc-12) [12.00000]",
-                "643.00000: (drop truck-1 city-loc-12 package-15) [1.00000]",
-                "644.00000: (pick-up truck-1 city-loc-12 package-10) [1.00000]",
-                "645.00000: (drive truck-1 city-loc-12 city-loc-33) [12.00000]",
-                "657.00000: (pick-up truck-1 city-loc-33 package-4) [1.00000]",
-                "658.00000: (drive truck-1 city-loc-33 city-loc-22) [19.00000]",
-                "677.00000: (drive truck-1 city-loc-22 city-loc-40) [12.00000]",
-                "689.00000: (drive truck-1 city-loc-40 city-loc-35) [14.00000]",
-                "703.00000: (drive truck-1 city-loc-35 city-loc-18) [14.00000]",
-                "717.00000: (drive truck-1 city-loc-18 city-loc-28) [16.00000]",
-                "733.00000: (drop truck-1 city-loc-28 package-10) [1.00000]",
-                "734.00000: (pick-up truck-1 city-loc-28 package-9) [1.00000]",
-                "735.00000: (drive truck-1 city-loc-28 city-loc-4) [21.00000]",
-                "756.00000: (drop truck-1 city-loc-4 package-4) [1.00000]",
-                "757.00000: (drop truck-1 city-loc-4 package-9) [1.00000]",
-                "758.00000: (drive truck-3 city-loc-26 city-loc-14) [12.00000]",
-                "770.00000: (pick-up truck-3 city-loc-14 package-11) [1.00000]",
-                "771.00000: (drive truck-3 city-loc-14 city-loc-6) [18.00000]",
-                "789.00000: (drop truck-3 city-loc-6 package-11) [1.00000]",
-                "790.00000: (drive truck-3 city-loc-6 city-loc-15) [15.00000]",
-                "805.00000: (pick-up truck-3 city-loc-15 package-7) [1.00000]",
-                "806.00000: (drive truck-3 city-loc-15 city-loc-35) [17.00000]",
-                "823.00000: (drive truck-3 city-loc-35 city-loc-40) [14.00000]",
-                "837.00000: (drive truck-3 city-loc-40 city-loc-22) [12.00000]",
-                "849.00000: (drop truck-3 city-loc-22 package-7) [1.00000]",
-                "850.00000: (drive truck-3 city-loc-22 city-loc-38) [16.00000]",
-                "866.00000: (pick-up truck-3 city-loc-38 package-13) [1.00000]",
-                "867.00000: (drive truck-3 city-loc-38 city-loc-40) [19.00000]",
-                "886.00000: (drive truck-3 city-loc-40 city-loc-35) [14.00000]",
-                "900.00000: (drop truck-3 city-loc-35 package-13) [1.00000]",
-                "901.00000: (pick-up truck-4 city-loc-27 package-5) [1.00000]",
-                "902.00000: (drive truck-4 city-loc-27 city-loc-37) [20.00000]",
-                "922.00000: (drop truck-4 city-loc-37 package-5) [1.00000]",
-                "; total-time = 923.0 (general-cost)"
+                "112.00000: (drive truck-3 city-loc-36 city-loc-30) [15.00000]",
+                "127.00000: (pick-up truck-3 city-loc-30 package-7) [1.00000]",
+                "128.00000: (drive truck-3 city-loc-30 city-loc-22) [13.00000]",
+                "141.00000: (drop truck-3 city-loc-22 package-7) [1.00000]",
+                "142.00000: (pick-up truck-4 city-loc-27 package-5) [1.00000]",
+                "143.00000: (drive truck-4 city-loc-27 city-loc-37) [20.00000]",
+                "163.00000: (drop truck-4 city-loc-37 package-5) [1.00000]",
+                "164.00000: (drive truck-3 city-loc-22 city-loc-33) [19.00000]",
+                "183.00000: (pick-up truck-3 city-loc-33 package-16) [1.00000]",
+                "184.00000: (pick-up truck-3 city-loc-33 package-4) [1.00000]",
+                "185.00000: (pick-up truck-3 city-loc-33 package-8) [1.00000]",
+                "186.00000: (pick-up truck-3 city-loc-33 package-2) [1.00000]",
+                "187.00000: (drive truck-3 city-loc-33 city-loc-30) [18.00000]",
+                "205.00000: (drive truck-3 city-loc-30 city-loc-20) [18.00000]",
+                "223.00000: (drop truck-3 city-loc-20 package-16) [1.00000]",
+                "224.00000: (drop truck-3 city-loc-20 package-4) [1.00000]",
+                "225.00000: (drive truck-3 city-loc-20 city-loc-6) [22.00000]",
+                "247.00000: (drop truck-3 city-loc-6 package-2) [1.00000]",
+                "248.00000: (drive truck-3 city-loc-6 city-loc-26) [20.00000]",
+                "268.00000: (drop truck-3 city-loc-26 package-8) [1.00000]",
+                "269.00000: (drive truck-1 city-loc-2 city-loc-7) [15.00000]",
+                "284.00000: (drive truck-1 city-loc-7 city-loc-29) [14.00000]",
+                "298.00000: (drive truck-1 city-loc-29 city-loc-23) [16.00000]",
+                "314.00000: (drive truck-1 city-loc-23 city-loc-38) [13.00000]",
+                "327.00000: (pick-up truck-1 city-loc-38 package-13) [1.00000]",
+                "328.00000: (drive truck-1 city-loc-38 city-loc-40) [19.00000]",
+                "347.00000: (drive truck-1 city-loc-40 city-loc-35) [14.00000]",
+                "361.00000: (drop truck-1 city-loc-35 package-13) [1.00000]",
+                "362.00000: (drive truck-1 city-loc-35 city-loc-20) [21.00000]",
+                "383.00000: (pick-up truck-1 city-loc-20 package-4) [1.00000]",
+                "384.00000: (pick-up truck-1 city-loc-20 package-16) [1.00000]",
+                "385.00000: (drive truck-1 city-loc-20 city-loc-15) [15.00000]",
+                "400.00000: (pick-up truck-1 city-loc-15 package-9) [1.00000]",
+                "401.00000: (drive truck-1 city-loc-15 city-loc-5) [22.00000]",
+                "423.00000: (drive truck-1 city-loc-5 city-loc-3) [17.00000]",
+                "440.00000: (drop truck-1 city-loc-3 package-4) [1.00000]",
+                "441.00000: (drop truck-1 city-loc-3 package-9) [1.00000]",
+                "442.00000: (drive truck-1 city-loc-3 city-loc-31) [12.00000]",
+                "454.00000: (drop truck-1 city-loc-31 package-16) [1.00000]",
+                "455.00000: (pick-up truck-1 city-loc-31 package-15) [1.00000]",
+                "456.00000: (drive truck-1 city-loc-31 city-loc-3) [12.00000]",
+                "468.00000: (pick-up truck-1 city-loc-3 package-9) [1.00000]",
+                "469.00000: (pick-up truck-1 city-loc-3 package-4) [1.00000]",
+                "470.00000: (drive truck-1 city-loc-3 city-loc-28) [12.00000]",
+                "482.00000: (drop truck-1 city-loc-28 package-9) [1.00000]",
+                "483.00000: (drop truck-1 city-loc-28 package-4) [1.00000]",
+                "484.00000: (drive truck-1 city-loc-28 city-loc-18) [16.00000]",
+                "500.00000: (drive truck-1 city-loc-18 city-loc-35) [14.00000]",
+                "514.00000: (drive truck-1 city-loc-35 city-loc-40) [14.00000]",
+                "528.00000: (drive truck-1 city-loc-40 city-loc-22) [12.00000]",
+                "540.00000: (drive truck-1 city-loc-22 city-loc-33) [19.00000]",
+                "559.00000: (drive truck-1 city-loc-33 city-loc-12) [12.00000]",
+                "571.00000: (drop truck-1 city-loc-12 package-15) [1.00000]",
+                "572.00000: (pick-up truck-1 city-loc-12 package-10) [1.00000]",
+                "573.00000: (drive truck-1 city-loc-12 city-loc-33) [12.00000]",
+                "585.00000: (drive truck-1 city-loc-33 city-loc-22) [19.00000]",
+                "604.00000: (drive truck-1 city-loc-22 city-loc-40) [12.00000]",
+                "616.00000: (drive truck-1 city-loc-40 city-loc-35) [14.00000]",
+                "630.00000: (drive truck-1 city-loc-35 city-loc-18) [14.00000]",
+                "644.00000: (drive truck-1 city-loc-18 city-loc-28) [16.00000]",
+                "660.00000: (drop truck-1 city-loc-28 package-10) [1.00000]",
+                "661.00000: (pick-up truck-1 city-loc-28 package-9) [1.00000]",
+                "662.00000: (pick-up truck-1 city-loc-28 package-4) [1.00000]",
+                "663.00000: (drive truck-1 city-loc-28 city-loc-4) [21.00000]",
+                "684.00000: (drop truck-1 city-loc-4 package-9) [1.00000]",
+                "685.00000: (drop truck-1 city-loc-4 package-4) [1.00000]",
+                "686.00000: (pick-up truck-1 city-loc-4 package-3) [1.00000]",
+                "687.00000: (pick-up truck-1 city-loc-4 package-11) [1.00000]",
+                "688.00000: (drive truck-1 city-loc-4 city-loc-3) [21.00000]",
+                "709.00000: (drive truck-1 city-loc-3 city-loc-5) [17.00000]",
+                "726.00000: (drive truck-1 city-loc-5 city-loc-15) [22.00000]",
+                "748.00000: (drop truck-1 city-loc-15 package-3) [1.00000]",
+                "749.00000: (drive truck-1 city-loc-15 city-loc-6) [15.00000]",
+                "764.00000: (drop truck-1 city-loc-6 package-11) [1.00000]",
+                "765.00000: (drive truck-1 city-loc-6 city-loc-15) [15.00000]",
+                "780.00000: (pick-up truck-1 city-loc-15 package-3) [1.00000]",
+                "781.00000: (drive truck-1 city-loc-15 city-loc-6) [15.00000]",
+                "796.00000: (drive truck-1 city-loc-6 city-loc-19) [21.00000]",
+                "817.00000: (drive truck-1 city-loc-19 city-loc-16) [19.00000]",
+                "836.00000: (drop truck-1 city-loc-16 package-3) [1.00000]",
+                "837.00000: (drive truck-1 city-loc-16 city-loc-11) [16.00000]",
+                "853.00000: (drive truck-1 city-loc-11 city-loc-34) [15.00000]",
+                "868.00000: (pick-up truck-1 city-loc-34 package-1) [1.00000]",
+                "869.00000: (drive truck-1 city-loc-34 city-loc-32) [15.00000]",
+                "884.00000: (drive truck-1 city-loc-32 city-loc-20) [18.00000]",
+                "902.00000: (drive truck-1 city-loc-20 city-loc-35) [21.00000]",
+                "923.00000: (drop truck-1 city-loc-35 package-1) [1.00000]",
+                "; total-time = 924.0 (general-cost)"
             ]
         },
         {
@@ -2249,12 +2251,12 @@
             "problem": "p10",
             "results": {
                 "bestScore": 1059.0,
-                "durationMs": 1800204,
-                "endTimeMs": 1494496214280,
+                "durationMs": 1801154,
+                "endTimeMs": 1494511088228,
                 "exitStatus": "VALID",
                 "quality": 0.9448529411764706,
                 "score": 1360.0,
-                "startTimeMs": 1494494414076
+                "startTimeMs": 1494509287074
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-30 package-16) [1.00000]",
@@ -2403,12 +2405,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 54.0,
-                "durationMs": 1799999,
-                "endTimeMs": 1494496214075,
+                "durationMs": 1800002,
+                "endTimeMs": 1494511087076,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 54.0,
-                "startTimeMs": 1494494414076
+                "startTimeMs": 1494509287074
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-4 package-1) [1.00000]",
@@ -2453,12 +2455,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 795.0,
-                "durationMs": 1801043,
-                "endTimeMs": 1494496215119,
+                "durationMs": 1801116,
+                "endTimeMs": 1494511088190,
                 "exitStatus": "VALID",
                 "quality": 0.9659781287970839,
                 "score": 823.0,
-                "startTimeMs": 1494494414076
+                "startTimeMs": 1494509287074
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-5 city-2-loc-6) [29.00000]",
@@ -2508,12 +2510,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 473.0,
-                "durationMs": 113339,
-                "endTimeMs": 1494494527415,
+                "durationMs": 133854,
+                "endTimeMs": 1494509420928,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 473.0,
-                "startTimeMs": 1494494414076
+                "startTimeMs": 1494509287074
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-2 city-2-loc-3) [47.00000]",
@@ -2570,12 +2572,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 369.0,
-                "durationMs": 1800316,
-                "endTimeMs": 1494496214392,
+                "durationMs": 1801561,
+                "endTimeMs": 1494511088635,
                 "exitStatus": "VALID",
                 "quality": 0.902200488997555,
                 "score": 409.0,
-                "startTimeMs": 1494494414076
+                "startTimeMs": 1494509287074
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-5 package-3) [1.00000]",
@@ -2677,12 +2679,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 1582.0,
-                "durationMs": 1800002,
-                "endTimeMs": 1494496335201,
+                "durationMs": 1800004,
+                "endTimeMs": 1494511228697,
                 "exitStatus": "VALID",
                 "quality": 1.36346396965866,
                 "score": 1582.0,
-                "startTimeMs": 1494494535199
+                "startTimeMs": 1494509428693
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-12 city-1-loc-12) [115.00000]",
@@ -2772,12 +2774,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 270.0,
-                "durationMs": 1800332,
-                "endTimeMs": 1494498014556,
+                "durationMs": 1800065,
+                "endTimeMs": 1494512888149,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 270.0,
-                "startTimeMs": 1494496214224
+                "startTimeMs": 1494511088084
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-6 package-3) [1.00000]",
@@ -2853,12 +2855,12 @@
             "problem": "p13",
             "results": {
                 "bestScore": 965.0,
-                "durationMs": 1800449,
-                "endTimeMs": 1494498014824,
+                "durationMs": 1801129,
+                "endTimeMs": 1494512889406,
                 "exitStatus": "VALID",
                 "quality": 1.0264598540145986,
                 "score": 1096.0,
-                "startTimeMs": 1494496214375
+                "startTimeMs": 1494511088277
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-4 city-2-loc-9) [16.00000]",
@@ -2972,12 +2974,12 @@
             "problem": "p05",
             "results": {
                 "bestScore": 582.0,
-                "durationMs": 1800205,
-                "endTimeMs": 1494498014647,
+                "durationMs": 1800077,
+                "endTimeMs": 1494512888462,
                 "exitStatus": "VALID",
                 "quality": 0.8480113636363636,
                 "score": 704.0,
-                "startTimeMs": 1494496214442
+                "startTimeMs": 1494511088385
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-4 package-10) [1.00000]",
@@ -3088,12 +3090,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 363.0,
-                "durationMs": 1800400,
-                "endTimeMs": 1494498015564,
+                "durationMs": 1800196,
+                "endTimeMs": 1494512888913,
                 "exitStatus": "VALID",
                 "quality": 0.7823275862068966,
                 "score": 464.0,
-                "startTimeMs": 1494496215164
+                "startTimeMs": 1494511088717
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-19 package-8) [1.00000]",
@@ -3225,12 +3227,12 @@
             "problem": "p15",
             "results": {
                 "bestScore": 2280.0,
-                "durationMs": 1800003,
-                "endTimeMs": 1494498135331,
+                "durationMs": 1800010,
+                "endTimeMs": 1494513028877,
                 "exitStatus": "VALID",
                 "quality": 1.2479932403886778,
                 "score": 2367.0,
-                "startTimeMs": 1494496335328
+                "startTimeMs": 1494511228867
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-8 city-2-loc-3) [19.00000]",
@@ -3407,13 +3409,13 @@
             "planner": "MSFA3",
             "problem": "p07",
             "results": {
-                "bestScore": 965.0,
-                "durationMs": 1800013,
-                "endTimeMs": 1494499814668,
+                "bestScore": 982.0,
+                "durationMs": 1800099,
+                "endTimeMs": 1494514688424,
                 "exitStatus": "VALID",
                 "quality": 1.2462908011869436,
                 "score": 1011.0,
-                "startTimeMs": 1494498014655
+                "startTimeMs": 1494512888325
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-29 package-8) [1.00000]",
@@ -3589,12 +3591,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 755.0,
-                "durationMs": 1800183,
-                "endTimeMs": 1494499814885,
+                "durationMs": 1800141,
+                "endTimeMs": 1494514688681,
                 "exitStatus": "VALID",
                 "quality": 0.7633973710819009,
                 "score": 989.0,
-                "startTimeMs": 1494498014702
+                "startTimeMs": 1494512888540
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-loc-29 city-loc-1) [10.00000]",
@@ -3786,12 +3788,12 @@
             "problem": "p09",
             "results": {
                 "bestScore": 932.0,
-                "durationMs": 1800406,
-                "endTimeMs": 1494499815274,
+                "durationMs": 1800204,
+                "endTimeMs": 1494514689192,
                 "exitStatus": "VALID",
                 "quality": 0.9746835443037974,
                 "score": 1027.0,
-                "startTimeMs": 1494498014868
+                "startTimeMs": 1494512888988
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-20 package-2) [1.00000]",
@@ -4000,13 +4002,13 @@
             "planner": "MSFA3",
             "problem": "p08",
             "results": {
-                "bestScore": 923.0,
-                "durationMs": 1800232,
-                "endTimeMs": 1494499815842,
+                "bestScore": 924.0,
+                "durationMs": 1800066,
+                "endTimeMs": 1494514689552,
                 "exitStatus": "VALID",
                 "quality": 1.154795821462488,
                 "score": 1053.0,
-                "startTimeMs": 1494498015610
+                "startTimeMs": 1494512889486
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-18 package-12) [1.00000]",
@@ -4243,12 +4245,12 @@
             "problem": "p10",
             "results": {
                 "bestScore": 1059.0,
-                "durationMs": 1800015,
-                "endTimeMs": 1494496213978,
+                "durationMs": 1800035,
+                "endTimeMs": 1494511087375,
                 "exitStatus": "VALID",
                 "quality": 0.9448529411764706,
                 "score": 1360.0,
-                "startTimeMs": 1494494413963
+                "startTimeMs": 1494509287340
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-30 package-16) [1.00000]",
@@ -4397,12 +4399,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 54.0,
-                "durationMs": 1799997,
-                "endTimeMs": 1494496213960,
+                "durationMs": 1800012,
+                "endTimeMs": 1494511087352,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 54.0,
-                "startTimeMs": 1494494413963
+                "startTimeMs": 1494509287340
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-4 package-1) [1.00000]",
@@ -4447,12 +4449,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 795.0,
-                "durationMs": 1800136,
-                "endTimeMs": 1494496214099,
+                "durationMs": 1800493,
+                "endTimeMs": 1494511087833,
                 "exitStatus": "VALID",
                 "quality": 0.9659781287970839,
                 "score": 823.0,
-                "startTimeMs": 1494494413963
+                "startTimeMs": 1494509287340
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-5 city-2-loc-6) [29.00000]",
@@ -4502,12 +4504,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 473.0,
-                "durationMs": 119643,
-                "endTimeMs": 1494494533606,
+                "durationMs": 123671,
+                "endTimeMs": 1494509411011,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 473.0,
-                "startTimeMs": 1494494413963
+                "startTimeMs": 1494509287340
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-2 city-2-loc-3) [47.00000]",
@@ -4564,12 +4566,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 369.0,
-                "durationMs": 1801600,
-                "endTimeMs": 1494496215563,
+                "durationMs": 1800104,
+                "endTimeMs": 1494511087445,
                 "exitStatus": "VALID",
                 "quality": 0.9066339066339066,
                 "score": 407.0,
-                "startTimeMs": 1494494413963
+                "startTimeMs": 1494509287341
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-5 package-3) [1.00000]",
@@ -4671,12 +4673,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 1582.0,
-                "durationMs": 1800357,
-                "endTimeMs": 1494496341226,
+                "durationMs": 1800466,
+                "endTimeMs": 1494511218332,
                 "exitStatus": "VALID",
                 "quality": 1.36346396965866,
                 "score": 1582.0,
-                "startTimeMs": 1494494540869
+                "startTimeMs": 1494509417866
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-12 city-1-loc-12) [115.00000]",
@@ -4766,12 +4768,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 270.0,
-                "durationMs": 1800123,
-                "endTimeMs": 1494498014219,
+                "durationMs": 1800019,
+                "endTimeMs": 1494512887537,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 270.0,
-                "startTimeMs": 1494496214096
+                "startTimeMs": 1494511087518
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-6 package-3) [1.00000]",
@@ -4847,12 +4849,12 @@
             "problem": "p13",
             "results": {
                 "bestScore": 965.0,
-                "durationMs": 1800091,
-                "endTimeMs": 1494498014281,
+                "durationMs": 1800132,
+                "endTimeMs": 1494512887753,
                 "exitStatus": "VALID",
                 "quality": 1.0264598540145986,
                 "score": 1096.0,
-                "startTimeMs": 1494496214190
+                "startTimeMs": 1494511087621
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-4 city-2-loc-9) [16.00000]",
@@ -4966,12 +4968,12 @@
             "problem": "p05",
             "results": {
                 "bestScore": 582.0,
-                "durationMs": 1800138,
-                "endTimeMs": 1494498014372,
+                "durationMs": 1800344,
+                "endTimeMs": 1494512888067,
                 "exitStatus": "VALID",
                 "quality": 0.8480113636363636,
                 "score": 704.0,
-                "startTimeMs": 1494496214234
+                "startTimeMs": 1494511087723
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-4 package-10) [1.00000]",
@@ -5083,12 +5085,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 363.0,
-                "durationMs": 1801124,
-                "endTimeMs": 1494498016759,
+                "durationMs": 1800347,
+                "endTimeMs": 1494512888255,
                 "exitStatus": "VALID",
                 "quality": 0.7408163265306122,
                 "score": 490.0,
-                "startTimeMs": 1494496215635
+                "startTimeMs": 1494511087908
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-4 package-7) [1.00000]",
@@ -5220,12 +5222,12 @@
             "problem": "p15",
             "results": {
                 "bestScore": 2280.0,
-                "durationMs": 1800447,
-                "endTimeMs": 1494498141803,
+                "durationMs": 1800236,
+                "endTimeMs": 1494513018750,
                 "exitStatus": "VALID",
                 "quality": 1.2956140350877192,
                 "score": 2280.0,
-                "startTimeMs": 1494496341356
+                "startTimeMs": 1494511218514
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-8 city-2-loc-3) [19.00000]",
@@ -5401,13 +5403,13 @@
             "planner": "MSFA5",
             "problem": "p07",
             "results": {
-                "bestScore": 965.0,
-                "durationMs": 1800290,
-                "endTimeMs": 1494499814628,
+                "bestScore": 982.0,
+                "durationMs": 1800387,
+                "endTimeMs": 1494514688134,
                 "exitStatus": "VALID",
                 "quality": 1.2462908011869436,
                 "score": 1011.0,
-                "startTimeMs": 1494498014338
+                "startTimeMs": 1494512887747
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-29 package-8) [1.00000]",
@@ -5583,12 +5585,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 755.0,
-                "durationMs": 1800078,
-                "endTimeMs": 1494499814468,
+                "durationMs": 1800480,
+                "endTimeMs": 1494514688312,
                 "exitStatus": "VALID",
                 "quality": 0.7807652533609101,
                 "score": 967.0,
-                "startTimeMs": 1494498014390
+                "startTimeMs": 1494512887832
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-loc-29 city-loc-1) [10.00000]",
@@ -5780,12 +5782,12 @@
             "problem": "p09",
             "results": {
                 "bestScore": 932.0,
-                "durationMs": 1800066,
-                "endTimeMs": 1494499814506,
+                "durationMs": 1800038,
+                "endTimeMs": 1494514688190,
                 "exitStatus": "VALID",
                 "quality": 0.9746835443037974,
                 "score": 1027.0,
-                "startTimeMs": 1494498014440
+                "startTimeMs": 1494512888152
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-6 package-8) [1.00000]",
@@ -5994,13 +5996,13 @@
             "planner": "MSFA5",
             "problem": "p08",
             "results": {
-                "bestScore": 923.0,
-                "durationMs": 1800325,
-                "endTimeMs": 1494499817132,
+                "bestScore": 924.0,
+                "durationMs": 1800004,
+                "endTimeMs": 1494514688336,
                 "exitStatus": "VALID",
                 "quality": 1.154795821462488,
                 "score": 1053.0,
-                "startTimeMs": 1494498016807
+                "startTimeMs": 1494512888332
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-18 package-12) [1.00000]",
@@ -6278,12 +6280,12 @@
             "problem": "p30",
             "results": {
                 "bestScore": 3595.0,
-                "durationMs": 1800009,
-                "endTimeMs": 1494496219217,
+                "durationMs": 1800010,
+                "endTimeMs": 1494511084935,
                 "exitStatus": "VALID",
                 "quality": 1.533518776077886,
                 "score": 3595.0,
-                "startTimeMs": 1494494419208
+                "startTimeMs": 1494509284925
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-15 city-2-loc-19) [28.00000]",
@@ -6475,12 +6477,12 @@
             "problem": "p21",
             "results": {
                 "bestScore": 431.0,
-                "durationMs": 1800010,
-                "endTimeMs": 1494496219218,
+                "durationMs": 1800008,
+                "endTimeMs": 1494511084936,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 431.0,
-                "startTimeMs": 1494494419208
+                "startTimeMs": 1494509284928
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-1 city-1-loc-2) [45.00000]",
@@ -6719,12 +6721,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3636.0,
-                "durationMs": 1800008,
-                "endTimeMs": 1494496219217,
+                "durationMs": 1800007,
+                "endTimeMs": 1494511084935,
                 "exitStatus": "VALID",
                 "quality": 1.470154113305839,
                 "score": 4607.0,
-                "startTimeMs": 1494494419209
+                "startTimeMs": 1494509284928
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-9 city-2-loc-10) [13.00000]",
@@ -6987,12 +6989,12 @@
             "problem": "p23",
             "results": {
                 "bestScore": 837.0,
-                "durationMs": 1800009,
-                "endTimeMs": 1494496219217,
+                "durationMs": 1800007,
+                "endTimeMs": 1494511084935,
                 "exitStatus": "VALID",
                 "quality": 0.9331103678929766,
                 "score": 897.0,
-                "startTimeMs": 1494494419208
+                "startTimeMs": 1494509284928
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-3-loc-1 package-3) [1.00000]",
@@ -7061,11 +7063,11 @@
             "results": {
                 "bestScore": 675.0,
                 "durationMs": 1800009,
-                "endTimeMs": 1494496219217,
+                "endTimeMs": 1494511084937,
                 "exitStatus": "VALID",
                 "quality": 0.9970457902511078,
                 "score": 677.0,
-                "startTimeMs": 1494494419208
+                "startTimeMs": 1494509284928
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-3-loc-2 city-3-loc-1) [29.00000]",
@@ -7177,12 +7179,12 @@
             "problem": "p25",
             "results": {
                 "bestScore": 1785.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498019833,
+                "durationMs": 1799985,
+                "endTimeMs": 1494512885351,
                 "exitStatus": "VALID",
                 "quality": 1.026890756302521,
                 "score": 1785.0,
-                "startTimeMs": 1494496219832
+                "startTimeMs": 1494511085366
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-3-loc-5 city-3-loc-6) [29.00000]",
@@ -7324,11 +7326,11 @@
             "results": {
                 "bestScore": 1227.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494498019879,
+                "endTimeMs": 1494512885443,
                 "exitStatus": "VALID",
                 "quality": 0.9622781065088757,
                 "score": 1352.0,
-                "startTimeMs": 1494496219878
+                "startTimeMs": 1494511085442
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-1-loc-3 city-1-loc-1) [22.00000]",
@@ -7505,12 +7507,12 @@
             "problem": "p16",
             "results": {
                 "bestScore": 2321.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498019993,
+                "durationMs": 1800008,
+                "endTimeMs": 1494512885536,
                 "exitStatus": "VALID",
                 "quality": 1.7829232995658466,
                 "score": 2764.0,
-                "startTimeMs": 1494496219992
+                "startTimeMs": 1494511085528
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-6 city-2-loc-5) [29.00000]",
@@ -7740,12 +7742,12 @@
             "problem": "p27",
             "results": {
                 "bestScore": 2440.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498020043,
+                "durationMs": 1800004,
+                "endTimeMs": 1494512885550,
                 "exitStatus": "VALID",
                 "quality": 1.3594262295081967,
                 "score": 2440.0,
-                "startTimeMs": 1494496220042
+                "startTimeMs": 1494511085546
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-1-loc-3 city-1-loc-7) [16.00000]",
@@ -7944,12 +7946,12 @@
             "problem": "p26",
             "results": {
                 "bestScore": 1753.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494498020099,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512885600,
                 "exitStatus": "VALID",
                 "quality": 1.4272675413576725,
                 "score": 1753.0,
-                "startTimeMs": 1494496220099
+                "startTimeMs": 1494511085599
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-1-loc-3 city-1-loc-7) [16.00000]",
@@ -8214,12 +8216,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 2936.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494499819980,
+                "durationMs": 1800003,
+                "endTimeMs": 1494514685417,
                 "exitStatus": "VALID",
                 "quality": 1.1332241332241333,
                 "score": 3663.0,
-                "startTimeMs": 1494498019979
+                "startTimeMs": 1494512885414
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-14 city-2-loc-1) [13.00000]",
@@ -8546,11 +8548,11 @@
             "results": {
                 "bestScore": 2795.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494499820028,
+                "endTimeMs": 1494514685471,
                 "exitStatus": "VALID",
                 "quality": 1.1785330948121646,
                 "score": 2795.0,
-                "startTimeMs": 1494498020027
+                "startTimeMs": 1494512885470
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-1-loc-17 city-1-loc-10) [21.00000]",
@@ -8880,12 +8882,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 3209.0,
-                "durationMs": 1800005,
-                "endTimeMs": 1494499820091,
+                "durationMs": 1800001,
+                "endTimeMs": 1494514685565,
                 "exitStatus": "VALID",
                 "quality": 0.9717265353418308,
                 "score": 4315.0,
-                "startTimeMs": 1494498020086
+                "startTimeMs": 1494512885564
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-2 city-2-loc-18) [19.00000]",
@@ -9194,12 +9196,12 @@
             "problem": "p28",
             "results": {
                 "bestScore": 2465.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494499820139,
+                "durationMs": 1800000,
+                "endTimeMs": 1494514685609,
                 "exitStatus": "VALID",
                 "quality": 1.1755339805825242,
                 "score": 2575.0,
-                "startTimeMs": 1494498020138
+                "startTimeMs": 1494512885609
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-9 city-1-loc-13) [29.00000]",
@@ -9562,11 +9564,11 @@
             "results": {
                 "bestScore": 5051.0,
                 "durationMs": 1800000,
-                "endTimeMs": 1494499820220,
+                "endTimeMs": 1494514685637,
                 "exitStatus": "VALID",
                 "quality": 1.5075891977133846,
                 "score": 5073.0,
-                "startTimeMs": 1494498020220
+                "startTimeMs": 1494512885637
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-15 city-2-loc-19) [17.00000]",
@@ -9985,12 +9987,12 @@
             "problem": "p30",
             "results": {
                 "bestScore": 3595.0,
-                "durationMs": 1801369,
-                "endTimeMs": 1494496220457,
+                "durationMs": 1800125,
+                "endTimeMs": 1494511097061,
                 "exitStatus": "VALID",
                 "quality": 1.1722304911758452,
                 "score": 4703.0,
-                "startTimeMs": 1494494419088
+                "startTimeMs": 1494509296936
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-9 package-14) [1.00000]",
@@ -10191,12 +10193,12 @@
             "problem": "p21",
             "results": {
                 "bestScore": 431.0,
-                "durationMs": 1800019,
-                "endTimeMs": 1494496219107,
+                "durationMs": 1800026,
+                "endTimeMs": 1494511096962,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 431.0,
-                "startTimeMs": 1494494419088
+                "startTimeMs": 1494509296936
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-1 city-1-loc-2) [45.00000]",
@@ -10393,12 +10395,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3636.0,
-                "durationMs": 1800007,
-                "endTimeMs": 1494496219095,
+                "durationMs": 1800012,
+                "endTimeMs": 1494511096948,
                 "exitStatus": "VALID",
                 "quality": 1.8627612761276127,
                 "score": 3636.0,
-                "startTimeMs": 1494494419088
+                "startTimeMs": 1494509296936
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-4) [14.00000]",
@@ -10619,12 +10621,12 @@
             "problem": "p23",
             "results": {
                 "bestScore": 837.0,
-                "durationMs": 1800296,
-                "endTimeMs": 1494496219384,
+                "durationMs": 1800033,
+                "endTimeMs": 1494511096969,
                 "exitStatus": "VALID",
                 "quality": 0.7342105263157894,
                 "score": 1140.0,
-                "startTimeMs": 1494494419088
+                "startTimeMs": 1494509296936
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-2 package-6) [1.00000]",
@@ -10690,12 +10692,12 @@
             "problem": "p22",
             "results": {
                 "bestScore": 675.0,
-                "durationMs": 1800190,
-                "endTimeMs": 1494496219278,
+                "durationMs": 1800266,
+                "endTimeMs": 1494511097202,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 675.0,
-                "startTimeMs": 1494494419088
+                "startTimeMs": 1494509296936
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-3 city-2-loc-2) [39.00000]",
@@ -10799,12 +10801,12 @@
             "problem": "p25",
             "results": {
                 "bestScore": 1785.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498019580,
+                "durationMs": 1800006,
+                "endTimeMs": 1494512898446,
                 "exitStatus": "VALID",
                 "quality": 0.9433865156973752,
                 "score": 1943.0,
-                "startTimeMs": 1494496219579
+                "startTimeMs": 1494511098440
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-3 package-6) [1.00000]",
@@ -10931,12 +10933,12 @@
             "problem": "p24",
             "results": {
                 "bestScore": 1227.0,
-                "durationMs": 1800094,
-                "endTimeMs": 1494498019737,
+                "durationMs": 1800617,
+                "endTimeMs": 1494512899169,
                 "exitStatus": "VALID",
                 "quality": 1.0603096984515077,
                 "score": 1227.0,
-                "startTimeMs": 1494496219643
+                "startTimeMs": 1494511098552
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-1 city-1-loc-5) [37.00000]",
@@ -11079,11 +11081,11 @@
             "results": {
                 "bestScore": 2321.0,
                 "durationMs": 1800004,
-                "endTimeMs": 1494498019693,
+                "endTimeMs": 1494512899474,
                 "exitStatus": "VALID",
                 "quality": 2.123222748815166,
                 "score": 2321.0,
-                "startTimeMs": 1494496219689
+                "startTimeMs": 1494511099470
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-5 city-1-loc-12) [128.00000]",
@@ -11284,12 +11286,12 @@
             "problem": "p27",
             "results": {
                 "bestScore": 2440.0,
-                "durationMs": 1800212,
-                "endTimeMs": 1494498019944,
+                "durationMs": 1800818,
+                "endTimeMs": 1494512900398,
                 "exitStatus": "VALID",
                 "quality": 1.019047619047619,
                 "score": 3255.0,
-                "startTimeMs": 1494496219732
+                "startTimeMs": 1494511099580
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-2-loc-14 package-8) [1.00000]",
@@ -11485,12 +11487,12 @@
             "problem": "p26",
             "results": {
                 "bestScore": 1753.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498020560,
+                "durationMs": 1800726,
+                "endTimeMs": 1494512900391,
                 "exitStatus": "VALID",
                 "quality": 1.033457249070632,
                 "score": 2421.0,
-                "startTimeMs": 1494496220559
+                "startTimeMs": 1494511099665
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-2-loc-12 package-6) [1.00000]",
@@ -11732,12 +11734,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 2936.0,
-                "durationMs": 1800004,
-                "endTimeMs": 1494499819760,
+                "durationMs": 1800002,
+                "endTimeMs": 1494514698710,
                 "exitStatus": "VALID",
                 "quality": 1.2495484647802528,
                 "score": 3322.0,
-                "startTimeMs": 1494498019756
+                "startTimeMs": 1494512898708
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-14 city-2-loc-1) [13.00000]",
@@ -12015,12 +12017,12 @@
             "problem": "p29",
             "results": {
                 "bestScore": 2795.0,
-                "durationMs": 1800132,
-                "endTimeMs": 1494499819934,
+                "durationMs": 1800555,
+                "endTimeMs": 1494514699822,
                 "exitStatus": "VALID",
                 "quality": 1.1693290734824282,
                 "score": 2817.0,
-                "startTimeMs": 1494498019802
+                "startTimeMs": 1494512899267
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-1-loc-17 package-9) [1.00000]",
@@ -12282,12 +12284,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 3209.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494499819855,
+                "durationMs": 1800002,
+                "endTimeMs": 1494514699591,
                 "exitStatus": "VALID",
                 "quality": 1.3066375818011842,
                 "score": 3209.0,
-                "startTimeMs": 1494498019854
+                "startTimeMs": 1494512899589
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-13 city-2-loc-9) [26.00000]",
@@ -12539,12 +12541,12 @@
             "problem": "p28",
             "results": {
                 "bestScore": 2465.0,
-                "durationMs": 1800002,
-                "endTimeMs": 1494499820010,
+                "durationMs": 1800015,
+                "endTimeMs": 1494514700508,
                 "exitStatus": "VALID",
                 "quality": 1.2279918864097363,
                 "score": 2465.0,
-                "startTimeMs": 1494498020008
+                "startTimeMs": 1494512900493
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-1-loc-9 package-5) [1.00000]",
@@ -12880,12 +12882,12 @@
             "problem": "p19",
             "results": {
                 "bestScore": 5051.0,
-                "durationMs": 1800002,
-                "endTimeMs": 1494499820620,
+                "durationMs": 1800001,
+                "endTimeMs": 1494514700593,
                 "exitStatus": "VALID",
                 "quality": 1.5141556127499505,
                 "score": 5051.0,
-                "startTimeMs": 1494498020618
+                "startTimeMs": 1494512900592
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-15 city-2-loc-19) [17.00000]",
@@ -13293,12 +13295,12 @@
             "problem": "p30",
             "results": {
                 "bestScore": 3595.0,
-                "durationMs": 1800013,
-                "endTimeMs": 1494496219146,
+                "durationMs": 1800145,
+                "endTimeMs": 1494511094084,
                 "exitStatus": "VALID",
                 "quality": 1.1722304911758452,
                 "score": 4703.0,
-                "startTimeMs": 1494494419133
+                "startTimeMs": 1494509293939
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-9 package-14) [1.00000]",
@@ -13499,12 +13501,12 @@
             "problem": "p21",
             "results": {
                 "bestScore": 431.0,
-                "durationMs": 1800036,
-                "endTimeMs": 1494496219169,
+                "durationMs": 1800017,
+                "endTimeMs": 1494511093961,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 431.0,
-                "startTimeMs": 1494494419133
+                "startTimeMs": 1494509293944
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-1 city-1-loc-2) [45.00000]",
@@ -13724,12 +13726,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3636.0,
-                "durationMs": 1800007,
-                "endTimeMs": 1494496219140,
+                "durationMs": 1800008,
+                "endTimeMs": 1494511093953,
                 "exitStatus": "VALID",
                 "quality": 1.7487735605473793,
                 "score": 3873.0,
-                "startTimeMs": 1494494419133
+                "startTimeMs": 1494509293945
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-4) [14.00000]",
@@ -13973,12 +13975,12 @@
             "problem": "p23",
             "results": {
                 "bestScore": 837.0,
-                "durationMs": 1800666,
-                "endTimeMs": 1494496219799,
+                "durationMs": 1800232,
+                "endTimeMs": 1494511094178,
                 "exitStatus": "VALID",
                 "quality": 0.7342105263157894,
                 "score": 1140.0,
-                "startTimeMs": 1494494419133
+                "startTimeMs": 1494509293946
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-2 package-6) [1.00000]",
@@ -14044,12 +14046,12 @@
             "problem": "p22",
             "results": {
                 "bestScore": 675.0,
-                "durationMs": 1800066,
-                "endTimeMs": 1494496219199,
+                "durationMs": 1800495,
+                "endTimeMs": 1494511094441,
                 "exitStatus": "VALID",
                 "quality": 1.0,
                 "score": 675.0,
-                "startTimeMs": 1494494419133
+                "startTimeMs": 1494509293946
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-3-loc-2 city-3-loc-1) [29.00000]",
@@ -14153,12 +14155,12 @@
             "problem": "p25",
             "results": {
                 "bestScore": 1785.0,
-                "durationMs": 1800011,
-                "endTimeMs": 1494498019650,
+                "durationMs": 1800007,
+                "endTimeMs": 1494512895323,
                 "exitStatus": "VALID",
                 "quality": 0.9433865156973752,
                 "score": 1943.0,
-                "startTimeMs": 1494496219639
+                "startTimeMs": 1494511095316
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-2-loc-3 package-6) [1.00000]",
@@ -14285,12 +14287,12 @@
             "problem": "p24",
             "results": {
                 "bestScore": 1227.0,
-                "durationMs": 1800143,
-                "endTimeMs": 1494498019850,
+                "durationMs": 1800114,
+                "endTimeMs": 1494512895529,
                 "exitStatus": "VALID",
                 "quality": 1.0603096984515077,
                 "score": 1227.0,
-                "startTimeMs": 1494496219707
+                "startTimeMs": 1494511095415
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-1 city-1-loc-5) [37.00000]",
@@ -14432,12 +14434,12 @@
             "problem": "p16",
             "results": {
                 "bestScore": 2321.0,
-                "durationMs": 1800021,
-                "endTimeMs": 1494498019771,
+                "durationMs": 1800006,
+                "endTimeMs": 1494512895490,
                 "exitStatus": "VALID",
                 "quality": 2.123222748815166,
                 "score": 2321.0,
-                "startTimeMs": 1494496219750
+                "startTimeMs": 1494511095484
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-5 city-1-loc-12) [128.00000]",
@@ -14638,12 +14640,12 @@
             "problem": "p27",
             "results": {
                 "bestScore": 2440.0,
-                "durationMs": 1800029,
-                "endTimeMs": 1494498019910,
+                "durationMs": 1800269,
+                "endTimeMs": 1494512895873,
                 "exitStatus": "VALID",
                 "quality": 1.019047619047619,
                 "score": 3255.0,
-                "startTimeMs": 1494496219881
+                "startTimeMs": 1494511095604
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-2-loc-14 package-8) [1.00000]",
@@ -14839,12 +14841,12 @@
             "problem": "p26",
             "results": {
                 "bestScore": 1753.0,
-                "durationMs": 1800012,
-                "endTimeMs": 1494498019964,
+                "durationMs": 1800015,
+                "endTimeMs": 1494512895677,
                 "exitStatus": "VALID",
                 "quality": 1.033457249070632,
                 "score": 2421.0,
-                "startTimeMs": 1494496219952
+                "startTimeMs": 1494511095662
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-2-loc-12 package-6) [1.00000]",
@@ -15073,12 +15075,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 2936.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494499819806,
+                "durationMs": 1800044,
+                "endTimeMs": 1494514695625,
                 "exitStatus": "VALID",
                 "quality": 1.4138283378746594,
                 "score": 2936.0,
-                "startTimeMs": 1494498019805
+                "startTimeMs": 1494512895581
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-14 city-2-loc-1) [13.00000]",
@@ -15348,12 +15350,12 @@
             "problem": "p29",
             "results": {
                 "bestScore": 2795.0,
-                "durationMs": 1800002,
-                "endTimeMs": 1494499819859,
+                "durationMs": 1800024,
+                "endTimeMs": 1494514695688,
                 "exitStatus": "VALID",
                 "quality": 1.1397923875432525,
                 "score": 2890.0,
-                "startTimeMs": 1494498019857
+                "startTimeMs": 1494512895664
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-3-loc-15 package-16) [1.00000]",
@@ -15620,12 +15622,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 3209.0,
-                "durationMs": 1800311,
-                "endTimeMs": 1494499820216,
+                "durationMs": 1800304,
+                "endTimeMs": 1494514696061,
                 "exitStatus": "VALID",
                 "quality": 1.3066375818011842,
                 "score": 3209.0,
-                "startTimeMs": 1494498019905
+                "startTimeMs": 1494512895757
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-13 city-2-loc-9) [26.00000]",
@@ -15877,12 +15879,12 @@
             "problem": "p28",
             "results": {
                 "bestScore": 2465.0,
-                "durationMs": 1800013,
-                "endTimeMs": 1494499819986,
+                "durationMs": 1800004,
+                "endTimeMs": 1494514695872,
                 "exitStatus": "VALID",
                 "quality": 1.2279918864097363,
                 "score": 2465.0,
-                "startTimeMs": 1494498019973
+                "startTimeMs": 1494512895868
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-1-loc-9 package-5) [1.00000]",
@@ -16218,12 +16220,12 @@
             "problem": "p19",
             "results": {
                 "bestScore": 5051.0,
-                "durationMs": 1800006,
-                "endTimeMs": 1494499820034,
+                "durationMs": 1800002,
+                "endTimeMs": 1494514695968,
                 "exitStatus": "VALID",
                 "quality": 1.5141556127499505,
                 "score": 5051.0,
-                "startTimeMs": 1494498020028
+                "startTimeMs": 1494512895966
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-15 city-2-loc-19) [17.00000]",

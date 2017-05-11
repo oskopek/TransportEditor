@@ -182,12 +182,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 1309.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494496220567,
+                "durationMs": 1800008,
+                "endTimeMs": 1494511173585,
                 "exitStatus": "VALID",
                 "quality": 0.8401797175866496,
                 "score": 1558.0,
-                "startTimeMs": 1494494420566
+                "startTimeMs": 1494509373577
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-loc-32 city-loc-10) [14.00000]",
@@ -578,12 +578,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 1539.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494496220567,
+                "durationMs": 1800008,
+                "endTimeMs": 1494511173585,
                 "exitStatus": "VALID",
                 "quality": 0.8626681614349776,
                 "score": 1784.0,
-                "startTimeMs": 1494494420566
+                "startTimeMs": 1494509373577
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-loc-10 city-loc-49) [16.00000]",
@@ -1042,12 +1042,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 2109.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494496220567,
+                "durationMs": 1800007,
+                "endTimeMs": 1494511173585,
                 "exitStatus": "VALID",
                 "quality": 0.9336555360281195,
                 "score": 2276.0,
-                "startTimeMs": 1494494420567
+                "startTimeMs": 1494509373578
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-31 package-12) [1.00000]",
@@ -1811,12 +1811,12 @@
             "problem": "p05",
             "results": {
                 "bestScore": 5394.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494496220568,
+                "durationMs": 1800006,
+                "endTimeMs": 1494511173585,
                 "exitStatus": "VALID",
                 "quality": 0.834113712374582,
                 "score": 7475.0,
-                "startTimeMs": 1494494420568
+                "startTimeMs": 1494509373579
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-20 city-2-loc-38) [13.00000]",
@@ -2825,12 +2825,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494496220569,
+                "durationMs": 1800004,
+                "endTimeMs": 1494511173585,
                 "exitStatus": "VALID",
                 "quality": 0.756259989344699,
                 "score": 7508.0,
-                "startTimeMs": 1494494420569
+                "startTimeMs": 1494509373581
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -3685,11 +3685,11 @@
             "results": {
                 "bestScore": 4202.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494498021059,
+                "endTimeMs": 1494512974148,
                 "exitStatus": "VALID",
                 "quality": 0.9685748598879104,
                 "score": 4996.0,
-                "startTimeMs": 1494496221058
+                "startTimeMs": 1494511174147
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -4543,12 +4543,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494498021238,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512974273,
                 "exitStatus": "VALID",
                 "quality": 0.756259989344699,
                 "score": 7508.0,
-                "startTimeMs": 1494496221238
+                "startTimeMs": 1494511174272
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -5402,12 +5402,12 @@
             "problem": "p09",
             "results": {
                 "bestScore": 4202.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494498021380,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512974407,
                 "exitStatus": "VALID",
                 "quality": 0.9685748598879104,
                 "score": 4996.0,
-                "startTimeMs": 1494496221380
+                "startTimeMs": 1494511174406
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -6145,12 +6145,12 @@
             "problem": "p08",
             "results": {
                 "bestScore": 4467.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494498021445,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512974532,
                 "exitStatus": "VALID",
                 "quality": 0.8502093642938713,
                 "score": 5254.0,
-                "startTimeMs": 1494496221445
+                "startTimeMs": 1494511174531
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-3-loc-23 city-3-loc-4) [16.00000]",
@@ -6906,11 +6906,11 @@
             "results": {
                 "bestScore": 4473.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494498021509,
+                "endTimeMs": 1494512974621,
                 "exitStatus": "VALID",
                 "quality": 0.8177479229273467,
                 "score": 5657.0,
-                "startTimeMs": 1494496221508
+                "startTimeMs": 1494511174620
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-32 city-2-loc-40) [12.00000]",
@@ -7449,12 +7449,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 1309.0,
-                "durationMs": 1800083,
-                "endTimeMs": 1494496245699,
+                "durationMs": 1800220,
+                "endTimeMs": 1494511179190,
                 "exitStatus": "VALID",
                 "quality": 0.8201754385964912,
                 "score": 1596.0,
-                "startTimeMs": 1494494445616
+                "startTimeMs": 1494509378970
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-14 package-22) [1.00000]",
@@ -7802,12 +7802,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 1539.0,
-                "durationMs": 1800363,
-                "endTimeMs": 1494496245979,
+                "durationMs": 1800081,
+                "endTimeMs": 1494511179051,
                 "exitStatus": "VALID",
                 "quality": 0.8190526875997871,
                 "score": 1879.0,
-                "startTimeMs": 1494494445616
+                "startTimeMs": 1494509378970
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-36 package-21) [1.00000]",
@@ -8206,12 +8206,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 2109.0,
-                "durationMs": 1800645,
-                "endTimeMs": 1494496246259,
+                "durationMs": 1800446,
+                "endTimeMs": 1494511179416,
                 "exitStatus": "VALID",
                 "quality": 1.0075865339023233,
                 "score": 2109.0,
-                "startTimeMs": 1494494445614
+                "startTimeMs": 1494509378970
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-31 package-12) [1.00000]",
@@ -8790,12 +8790,12 @@
             "problem": "p05",
             "results": {
                 "bestScore": 5394.0,
-                "durationMs": 1800006,
-                "endTimeMs": 1494496245620,
+                "durationMs": 1800019,
+                "endTimeMs": 1494511178990,
                 "exitStatus": "VALID",
                 "quality": 1.1559139784946237,
                 "score": 5394.0,
-                "startTimeMs": 1494494445614
+                "startTimeMs": 1494509378971
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-20 city-2-loc-38) [13.00000]",
@@ -9501,12 +9501,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800072,
-                "endTimeMs": 1494496245686,
+                "durationMs": 1800002,
+                "endTimeMs": 1494511178974,
                 "exitStatus": "VALID",
                 "quality": 1.0997482084059655,
                 "score": 5163.0,
-                "startTimeMs": 1494494445614
+                "startTimeMs": 1494509378972
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -10137,12 +10137,12 @@
             "problem": "p07",
             "results": {
                 "bestScore": 4202.0,
-                "durationMs": 1800075,
-                "endTimeMs": 1494498046428,
+                "durationMs": 1800445,
+                "endTimeMs": 1494512979962,
                 "exitStatus": "VALID",
                 "quality": 1.1515944788196097,
                 "score": 4202.0,
-                "startTimeMs": 1494496246353
+                "startTimeMs": 1494511179517
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -10773,12 +10773,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800017,
-                "endTimeMs": 1494498046474,
+                "durationMs": 1800003,
+                "endTimeMs": 1494512979650,
                 "exitStatus": "VALID",
                 "quality": 1.0997482084059655,
                 "score": 5163.0,
-                "startTimeMs": 1494496246457
+                "startTimeMs": 1494511179647
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -11409,12 +11409,12 @@
             "problem": "p09",
             "results": {
                 "bestScore": 4202.0,
-                "durationMs": 1800606,
-                "endTimeMs": 1494498047149,
+                "durationMs": 1800252,
+                "endTimeMs": 1494512979984,
                 "exitStatus": "VALID",
                 "quality": 1.1515944788196097,
                 "score": 4202.0,
-                "startTimeMs": 1494496246543
+                "startTimeMs": 1494511179732
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -12048,12 +12048,12 @@
             "problem": "p08",
             "results": {
                 "bestScore": 4467.0,
-                "durationMs": 1800008,
-                "endTimeMs": 1494498046623,
+                "durationMs": 1800016,
+                "endTimeMs": 1494512979834,
                 "exitStatus": "VALID",
                 "quality": 0.894115292233787,
                 "score": 4996.0,
-                "startTimeMs": 1494496246615
+                "startTimeMs": 1494511179818
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-38 city-2-loc-52) [12.00000]",
@@ -12688,12 +12688,12 @@
             "problem": "p10",
             "results": {
                 "bestScore": 4473.0,
-                "durationMs": 1800237,
-                "endTimeMs": 1494498046965,
+                "durationMs": 1800124,
+                "endTimeMs": 1494512980072,
                 "exitStatus": "VALID",
                 "quality": 1.0342052313883299,
                 "score": 4473.0,
-                "startTimeMs": 1494496246728
+                "startTimeMs": 1494511179948
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-3-loc-47 city-3-loc-59) [11.00000]",
@@ -13147,12 +13147,12 @@
             "problem": "p01",
             "results": {
                 "bestScore": 1309.0,
-                "durationMs": 1800505,
-                "endTimeMs": 1494496223207,
+                "durationMs": 1800127,
+                "endTimeMs": 1494511174887,
                 "exitStatus": "VALID",
                 "quality": 0.8201754385964912,
                 "score": 1596.0,
-                "startTimeMs": 1494494422702
+                "startTimeMs": 1494509374760
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-14 package-22) [1.00000]",
@@ -13500,12 +13500,12 @@
             "problem": "p03",
             "results": {
                 "bestScore": 1539.0,
-                "durationMs": 1800069,
-                "endTimeMs": 1494496222772,
+                "durationMs": 1800200,
+                "endTimeMs": 1494511174964,
                 "exitStatus": "VALID",
                 "quality": 0.8190526875997871,
                 "score": 1879.0,
-                "startTimeMs": 1494494422703
+                "startTimeMs": 1494509374764
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-36 package-21) [1.00000]",
@@ -13904,12 +13904,12 @@
             "problem": "p02",
             "results": {
                 "bestScore": 2109.0,
-                "durationMs": 1800204,
-                "endTimeMs": 1494496222915,
+                "durationMs": 1800152,
+                "endTimeMs": 1494511174920,
                 "exitStatus": "VALID",
                 "quality": 1.0075865339023233,
                 "score": 2109.0,
-                "startTimeMs": 1494494422711
+                "startTimeMs": 1494509374768
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-2 city-loc-31 package-12) [1.00000]",
@@ -14517,12 +14517,12 @@
             "problem": "p05",
             "results": {
                 "bestScore": 5394.0,
-                "durationMs": 1800414,
-                "endTimeMs": 1494496223144,
+                "durationMs": 1800241,
+                "endTimeMs": 1494511175013,
                 "exitStatus": "VALID",
                 "quality": 1.0464921114467942,
                 "score": 5958.0,
-                "startTimeMs": 1494494422730
+                "startTimeMs": 1494509374772
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-20 city-2-loc-38) [13.00000]",
@@ -15253,12 +15253,12 @@
             "problem": "p04",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800010,
-                "endTimeMs": 1494496222760,
+                "durationMs": 1800071,
+                "endTimeMs": 1494511174847,
                 "exitStatus": "VALID",
                 "quality": 1.1150824823252161,
                 "score": 5092.0,
-                "startTimeMs": 1494494422750
+                "startTimeMs": 1494509374776
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -15885,12 +15885,12 @@
             "problem": "p07",
             "results": {
                 "bestScore": 4202.0,
-                "durationMs": 1800327,
-                "endTimeMs": 1494498024490,
+                "durationMs": 1800131,
+                "endTimeMs": 1494512975680,
                 "exitStatus": "VALID",
                 "quality": 1.1515944788196097,
                 "score": 4202.0,
-                "startTimeMs": 1494496224163
+                "startTimeMs": 1494511175549
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -16517,12 +16517,12 @@
             "problem": "p06",
             "results": {
                 "bestScore": 5092.0,
-                "durationMs": 1800018,
-                "endTimeMs": 1494498024478,
+                "durationMs": 1800024,
+                "endTimeMs": 1494512975747,
                 "exitStatus": "VALID",
                 "quality": 1.1150824823252161,
                 "score": 5092.0,
-                "startTimeMs": 1494496224460
+                "startTimeMs": 1494511175723
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-23 city-2-loc-49) [17.00000]",
@@ -17149,12 +17149,12 @@
             "problem": "p09",
             "results": {
                 "bestScore": 4202.0,
-                "durationMs": 1800303,
-                "endTimeMs": 1494498025153,
+                "durationMs": 1800182,
+                "endTimeMs": 1494512976048,
                 "exitStatus": "VALID",
                 "quality": 1.1515944788196097,
                 "score": 4202.0,
-                "startTimeMs": 1494496224850
+                "startTimeMs": 1494511175866
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-2-loc-27 package-6) [1.00000]",
@@ -17786,12 +17786,12 @@
             "problem": "p08",
             "results": {
                 "bestScore": 4467.0,
-                "durationMs": 1800058,
-                "endTimeMs": 1494498025078,
+                "durationMs": 1800529,
+                "endTimeMs": 1494512976516,
                 "exitStatus": "VALID",
                 "quality": 0.902789005658852,
                 "score": 4948.0,
-                "startTimeMs": 1494496225020
+                "startTimeMs": 1494511175987
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-38 city-2-loc-52) [12.00000]",
@@ -18424,12 +18424,12 @@
             "problem": "p10",
             "results": {
                 "bestScore": 4473.0,
-                "durationMs": 1800760,
-                "endTimeMs": 1494498026040,
+                "durationMs": 1800220,
+                "endTimeMs": 1494512976280,
                 "exitStatus": "VALID",
                 "quality": 1.0342052313883299,
                 "score": 4473.0,
-                "startTimeMs": 1494496225280
+                "startTimeMs": 1494511176060
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-3-loc-47 city-3-loc-59) [11.00000]",
@@ -18978,12 +18978,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 1579.0,
-                "durationMs": 1800024,
-                "endTimeMs": 1494496221006,
+                "durationMs": 1800010,
+                "endTimeMs": 1494511174342,
                 "exitStatus": "VALID",
                 "quality": 0.7916063675832128,
                 "score": 2073.0,
-                "startTimeMs": 1494494420982
+                "startTimeMs": 1494509374332
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-loc-36 city-loc-56) [13.00000]",
@@ -19432,12 +19432,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 1336.0,
-                "durationMs": 1800023,
-                "endTimeMs": 1494496221005,
+                "durationMs": 1800011,
+                "endTimeMs": 1494511174343,
                 "exitStatus": "VALID",
                 "quality": 0.8591639871382637,
                 "score": 1555.0,
-                "startTimeMs": 1494494420982
+                "startTimeMs": 1494509374332
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-loc-1 city-loc-22) [16.00000]",
@@ -20100,12 +20100,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 5974.0,
-                "durationMs": 1800022,
-                "endTimeMs": 1494496221004,
+                "durationMs": 1800011,
+                "endTimeMs": 1494511174343,
                 "exitStatus": "VALID",
                 "quality": 0.8832052040212892,
                 "score": 6764.0,
-                "startTimeMs": 1494494420982
+                "startTimeMs": 1494509374332
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-53 city-2-loc-27) [13.00000]",
@@ -20749,12 +20749,12 @@
             "problem": "p13",
             "results": {
                 "bestScore": 1147.0,
-                "durationMs": 1800022,
-                "endTimeMs": 1494496221004,
+                "durationMs": 1800010,
+                "endTimeMs": 1494511174342,
                 "exitStatus": "VALID",
                 "quality": 0.7462589459986988,
                 "score": 1537.0,
-                "startTimeMs": 1494494420982
+                "startTimeMs": 1494509374332
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-loc-19 city-loc-27) [15.00000]",
@@ -21375,12 +21375,12 @@
             "problem": "p16",
             "results": {
                 "bestScore": 4695.0,
-                "durationMs": 1800023,
-                "endTimeMs": 1494496221005,
+                "durationMs": 1800009,
+                "endTimeMs": 1494511174342,
                 "exitStatus": "VALID",
                 "quality": 0.6868051492100644,
                 "score": 6836.0,
-                "startTimeMs": 1494494420982
+                "startTimeMs": 1494509374333
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-2 city-2-loc-14) [13.00000]",
@@ -22323,12 +22323,12 @@
             "problem": "p15",
             "results": {
                 "bestScore": 5320.0,
-                "durationMs": 1800021,
-                "endTimeMs": 1494498021495,
+                "durationMs": 1800001,
+                "endTimeMs": 1494512975104,
                 "exitStatus": "VALID",
                 "quality": 0.6729066531748039,
                 "score": 7906.0,
-                "startTimeMs": 1494496221474
+                "startTimeMs": 1494511175103
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-44 city-2-loc-57) [11.00000]",
@@ -23240,12 +23240,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 4585.0,
-                "durationMs": 1800000,
-                "endTimeMs": 1494498021601,
+                "durationMs": 1799970,
+                "endTimeMs": 1494512975261,
                 "exitStatus": "VALID",
                 "quality": 0.8725437173246801,
                 "score": 5547.0,
-                "startTimeMs": 1494496221601
+                "startTimeMs": 1494511175291
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-40 city-2-loc-20) [17.00000]",
@@ -24044,12 +24044,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 4540.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498021711,
+                "durationMs": 1800000,
+                "endTimeMs": 1494512975356,
                 "exitStatus": "VALID",
                 "quality": 0.8582230623818525,
                 "score": 5290.0,
-                "startTimeMs": 1494496221710
+                "startTimeMs": 1494511175356
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-1-loc-52 city-1-loc-37) [10.00000]",
@@ -24753,12 +24753,12 @@
             "problem": "p19",
             "results": {
                 "bestScore": 3812.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498021781,
+                "durationMs": 1800000,
+                "endTimeMs": 1494512975457,
                 "exitStatus": "VALID",
                 "quality": 0.8248671625929862,
                 "score": 4705.0,
-                "startTimeMs": 1494496221780
+                "startTimeMs": 1494511175457
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-2-loc-60 city-2-loc-35) [17.00000]",
@@ -25435,12 +25435,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3853.0,
-                "durationMs": 1800001,
-                "endTimeMs": 1494498021874,
+                "durationMs": 1800000,
+                "endTimeMs": 1494512975582,
                 "exitStatus": "VALID",
                 "quality": 0.7719895812462433,
                 "score": 4991.0,
-                "startTimeMs": 1494496221873
+                "startTimeMs": 1494511175582
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-5 city-2-loc-17 city-2-loc-4) [14.00000]",
@@ -25977,12 +25977,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 1579.0,
-                "durationMs": 1800663,
-                "endTimeMs": 1494496225533,
+                "durationMs": 1800426,
+                "endTimeMs": 1494511175187,
                 "exitStatus": "VALID",
                 "quality": 1.039265357821406,
                 "score": 1579.0,
-                "startTimeMs": 1494494424870
+                "startTimeMs": 1494509374761
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-loc-22 package-10) [1.00000]",
@@ -26321,12 +26321,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 1336.0,
-                "durationMs": 1800485,
-                "endTimeMs": 1494496225355,
+                "durationMs": 1800255,
+                "endTimeMs": 1494511175020,
                 "exitStatus": "VALID",
                 "quality": 0.9577060931899641,
                 "score": 1395.0,
-                "startTimeMs": 1494494424870
+                "startTimeMs": 1494509374765
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-39 package-21) [1.00000]",
@@ -26935,12 +26935,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 5974.0,
-                "durationMs": 1800073,
-                "endTimeMs": 1494496224943,
+                "durationMs": 1800029,
+                "endTimeMs": 1494511174798,
                 "exitStatus": "VALID",
                 "quality": 0.830183435241801,
                 "score": 7196.0,
-                "startTimeMs": 1494494424870
+                "startTimeMs": 1494509374769
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-53 city-2-loc-27) [13.00000]",
@@ -27570,12 +27570,12 @@
             "problem": "p13",
             "results": {
                 "bestScore": 1147.0,
-                "durationMs": 1800072,
-                "endTimeMs": 1494496224943,
+                "durationMs": 1800091,
+                "endTimeMs": 1494511174864,
                 "exitStatus": "VALID",
                 "quality": 0.6815210932857991,
                 "score": 1683.0,
-                "startTimeMs": 1494494424871
+                "startTimeMs": 1494509374773
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-3 city-loc-48 package-20) [1.00000]",
@@ -28083,12 +28083,12 @@
             "problem": "p16",
             "results": {
                 "bestScore": 4695.0,
-                "durationMs": 1800077,
-                "endTimeMs": 1494496224949,
+                "durationMs": 1800081,
+                "endTimeMs": 1494511174858,
                 "exitStatus": "VALID",
                 "quality": 0.9065456651863294,
                 "score": 5179.0,
-                "startTimeMs": 1494494424872
+                "startTimeMs": 1494509374777
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-39 city-2-loc-16) [12.00000]",
@@ -28858,12 +28858,12 @@
             "problem": "p15",
             "results": {
                 "bestScore": 5320.0,
-                "durationMs": 1800009,
-                "endTimeMs": 1494498025924,
+                "durationMs": 1800036,
+                "endTimeMs": 1494512975573,
                 "exitStatus": "VALID",
                 "quality": 0.69352105331769,
                 "score": 7671.0,
-                "startTimeMs": 1494496225915
+                "startTimeMs": 1494511175537
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-44 city-2-loc-57) [11.00000]",
@@ -29622,12 +29622,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 4585.0,
-                "durationMs": 1800311,
-                "endTimeMs": 1494498026326,
+                "durationMs": 1800034,
+                "endTimeMs": 1494512975678,
                 "exitStatus": "VALID",
                 "quality": 1.0556161395856052,
                 "score": 4585.0,
-                "startTimeMs": 1494496226015
+                "startTimeMs": 1494511175644
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-38 city-2-loc-21) [14.00000]",
@@ -30260,12 +30260,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 4540.0,
-                "durationMs": 1800004,
-                "endTimeMs": 1494498026107,
+                "durationMs": 1800142,
+                "endTimeMs": 1494512975879,
                 "exitStatus": "VALID",
                 "quality": 0.9413228281152809,
                 "score": 4823.0,
-                "startTimeMs": 1494496226103
+                "startTimeMs": 1494511175737
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-1-loc-25 package-13) [1.00000]",
@@ -30847,12 +30847,12 @@
             "problem": "p19",
             "results": {
                 "bestScore": 3812.0,
-                "durationMs": 1800017,
-                "endTimeMs": 1494498026215,
+                "durationMs": 1800046,
+                "endTimeMs": 1494512975928,
                 "exitStatus": "VALID",
                 "quality": 1.0181007345225603,
                 "score": 3812.0,
-                "startTimeMs": 1494496226198
+                "startTimeMs": 1494511175882
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-46 city-1-loc-60) [12.00000]",
@@ -31404,12 +31404,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3853.0,
-                "durationMs": 1800028,
-                "endTimeMs": 1494498026346,
+                "durationMs": 1801414,
+                "endTimeMs": 1494512977427,
                 "exitStatus": "VALID",
                 "quality": 0.9233165588305775,
                 "score": 4173.0,
-                "startTimeMs": 1494496226318
+                "startTimeMs": 1494511176013
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-3-loc-47 city-3-loc-59) [11.00000]",
@@ -31875,12 +31875,12 @@
             "problem": "p12",
             "results": {
                 "bestScore": 1579.0,
-                "durationMs": 1800234,
-                "endTimeMs": 1494496221002,
+                "durationMs": 1800267,
+                "endTimeMs": 1494511174196,
                 "exitStatus": "VALID",
                 "quality": 1.039265357821406,
                 "score": 1579.0,
-                "startTimeMs": 1494494420768
+                "startTimeMs": 1494509373929
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-loc-22 package-10) [1.00000]",
@@ -32219,12 +32219,12 @@
             "problem": "p11",
             "results": {
                 "bestScore": 1336.0,
-                "durationMs": 1800075,
-                "endTimeMs": 1494496220843,
+                "durationMs": 1800038,
+                "endTimeMs": 1494511173968,
                 "exitStatus": "VALID",
                 "quality": 0.9577060931899641,
                 "score": 1395.0,
-                "startTimeMs": 1494494420768
+                "startTimeMs": 1494509373930
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-39 package-21) [1.00000]",
@@ -32833,12 +32833,12 @@
             "problem": "p14",
             "results": {
                 "bestScore": 5974.0,
-                "durationMs": 1800009,
-                "endTimeMs": 1494496220777,
+                "durationMs": 1800017,
+                "endTimeMs": 1494511173947,
                 "exitStatus": "VALID",
                 "quality": 0.830183435241801,
                 "score": 7196.0,
-                "startTimeMs": 1494494420768
+                "startTimeMs": 1494509373930
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-53 city-2-loc-27) [13.00000]",
@@ -33468,12 +33468,12 @@
             "problem": "p13",
             "results": {
                 "bestScore": 1147.0,
-                "durationMs": 1800273,
-                "endTimeMs": 1494496221041,
+                "durationMs": 1800191,
+                "endTimeMs": 1494511174121,
                 "exitStatus": "VALID",
                 "quality": 0.6815210932857991,
                 "score": 1683.0,
-                "startTimeMs": 1494494420768
+                "startTimeMs": 1494509373930
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-1 city-loc-19 package-18) [1.00000]",
@@ -33977,12 +33977,12 @@
             "problem": "p16",
             "results": {
                 "bestScore": 4695.0,
-                "durationMs": 1800011,
-                "endTimeMs": 1494496220780,
+                "durationMs": 1800062,
+                "endTimeMs": 1494511173993,
                 "exitStatus": "VALID",
                 "quality": 0.9193264147248874,
                 "score": 5107.0,
-                "startTimeMs": 1494494420769
+                "startTimeMs": 1494509373931
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-3 city-2-loc-39 city-2-loc-16) [12.00000]",
@@ -34749,11 +34749,11 @@
             "results": {
                 "bestScore": 5320.0,
                 "durationMs": 1800001,
-                "endTimeMs": 1494498022192,
+                "endTimeMs": 1494512974446,
                 "exitStatus": "VALID",
                 "quality": 0.69352105331769,
                 "score": 7671.0,
-                "startTimeMs": 1494496222191
+                "startTimeMs": 1494511174445
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-2-loc-44 city-2-loc-57) [11.00000]",
@@ -35512,12 +35512,12 @@
             "problem": "p18",
             "results": {
                 "bestScore": 4585.0,
-                "durationMs": 1800072,
-                "endTimeMs": 1494498022344,
+                "durationMs": 1800019,
+                "endTimeMs": 1494512974575,
                 "exitStatus": "VALID",
                 "quality": 1.0556161395856052,
                 "score": 4585.0,
-                "startTimeMs": 1494496222272
+                "startTimeMs": 1494511174556
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-4 city-2-loc-38 city-2-loc-21) [14.00000]",
@@ -36147,12 +36147,12 @@
             "problem": "p17",
             "results": {
                 "bestScore": 4540.0,
-                "durationMs": 1800033,
-                "endTimeMs": 1494498022350,
+                "durationMs": 1800071,
+                "endTimeMs": 1494512974723,
                 "exitStatus": "VALID",
                 "quality": 0.977184674989238,
                 "score": 4646.0,
-                "startTimeMs": 1494496222317
+                "startTimeMs": 1494511174652
             },
             "temporalPlanActions": [
                 "0.00000: (pick-up truck-4 city-1-loc-25 package-13) [1.00000]",
@@ -36731,12 +36731,12 @@
             "problem": "p19",
             "results": {
                 "bestScore": 3812.0,
-                "durationMs": 1800018,
-                "endTimeMs": 1494498022383,
+                "durationMs": 1800002,
+                "endTimeMs": 1494512974772,
                 "exitStatus": "VALID",
                 "quality": 1.0181007345225603,
                 "score": 3812.0,
-                "startTimeMs": 1494496222365
+                "startTimeMs": 1494511174770
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-2 city-1-loc-46 city-1-loc-60) [12.00000]",
@@ -37287,12 +37287,12 @@
             "problem": "p20",
             "results": {
                 "bestScore": 3853.0,
-                "durationMs": 1800131,
-                "endTimeMs": 1494498022608,
+                "durationMs": 1800105,
+                "endTimeMs": 1494512974989,
                 "exitStatus": "VALID",
                 "quality": 0.9821565128728015,
                 "score": 3923.0,
-                "startTimeMs": 1494496222477
+                "startTimeMs": 1494511174884
             },
             "temporalPlanActions": [
                 "0.00000: (drive truck-1 city-3-loc-47 city-3-loc-59) [11.00000]",
