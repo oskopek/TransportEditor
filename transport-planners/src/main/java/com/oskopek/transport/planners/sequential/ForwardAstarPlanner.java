@@ -142,7 +142,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         resetState();
         initialize(problem);
         formatLog("Starting planning...");
-        int openMaxSize = 1_000_000;
+        int openMaxSize = 800_000;
 
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
