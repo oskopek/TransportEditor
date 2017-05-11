@@ -32,5 +32,5 @@ if __name__ == '__main__':
     for quality in qualities:
         lst = qualities[quality]
         #print("DEBUG-SIZE", sum(lst))
-        #print("DEBUG-LEN", len(lst))
+        print("DEBUG-LEN", len(lst))
         print(quality, sum(lst)/len(lst))
