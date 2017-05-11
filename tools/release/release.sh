@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 MVN_PROFILES="it,docs"
 base_branch="`git status | grep "On branch" | sed -E 's/On branch\s+(.*)/\1/' | tr -d '[:blank:]'`"
 
