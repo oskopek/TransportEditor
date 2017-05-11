@@ -38,11 +38,14 @@
 \setlength{\columnsep}{1.5em} % Slightly increase the space between columns
 \setlength{\columnseprule}{0mm} % No horizontal rule between columns
 
-\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
-\setlength{\itemsep}{1pt}
-\setlength{\parskip}{0pt}
-\setlength{\parsep}{0pt}
-}
+\setlist[itemize]{itemsep=1pt, topsep=0pt, parsep=0pt}
+\setlist[description]{itemsep=1pt, topsep=0pt, parsep=0pt}
+\setlist[enumerate]{itemsep=1pt, topsep=0pt, parsep=0pt}
+%\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
+%\setlength{\itemsep}{1pt}
+%\setlength{\parskip}{0pt}
+%\setlength{\parsep}{0pt}
+%}
 
 \definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines the color used for content box headers
 
@@ -88,38 +91,48 @@ linewidth=2pt % Width of the border lines around content boxes
 %	OBJECTIVES
 %----------------------------------------------------------------------------------------
 
-\headerbox{Introduction}{name=introduction,column=0,row=0,span=2}{
+\headerbox{Introduction}{name=introduction,column=0,row=0,span=1}{
+
+Automated planning has historically been focused on \textit{domain-independent} planning. Our goal is to design \textit{domain-specific} planners 
+for variants of the \textit{Transport} domain, introduced in the 2008 International Planning Competition (IPC).
+Transport, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
+using a fleet of vehicles. Our aim is to deliver all items
+with the least total cost, where the cost of individual actions is dependent on the domain variant.
+}
+
+
+%----------------------------------------------------------------------------------------
+%	MATERIALS AND METHODS
+%----------------------------------------------------------------------------------------
+
+\headerbox{Materials \& Methods}{name=method,column=1,span=2,row=0,aligned=introduction}{ % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{multicols}{2}
-Automated planning has historically been focused on \textit{domain-independent} planning --- planning without
-the use of specific knowledge about the problem's domain.
-As \citet{Nau2007} states, this is mostly due to the research field of planning wanting to
-establish itself generally --- focusing on a set of domains would not be useful for that.
-They also believe that this bias against domain-dependent planning is not as useful anymore.
-We can now benefit from the attained theoretical results and an advancement in computing power,
-resulting in a wider range of practical problems that can now be solved using planning techniques.
+We compare the performance of our planners to that of the planners taking part in the original competitions and discuss the results.
 
-In this thesis, we will study variants of a specific planning domain introduced in the 2008 International Planning Competition (IPC) called \textit{Transport}. It serves as an abstract representation of a family of related transportation problems
-and an important benchmark for planning.
+Sequential planners:
+\begin{description}
+\item[MSFA3] Meta-heuristically weighted SFA planner with the package and vehicle distance heuristic
+\item[MSFA5] Meta-heuristically weighted SFA planner with the general marking heuristic
+\item[RRAPN] Randomized Restart Around Path Nearby planner
+\end{description}
 
-The Transport domain, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
-using a fleet of vehicles. Our aim is to deliver all items
-with the least total cost, or in the shortest amount of time,
-where the cost and/or duration of individual actions is dependent on the domain variant.
+Temporal planners:
+\begin{description}
+\item[MSFA5Sched] Scheduled MSFA5 planner
+\item[RRAPNSched] Scheduled RRAPN planner
+\item[TFD2014] Temporal Fast Downward planner, version 0.4 (external planner)
+\item[TRRAPN] Temporal RRAPN planner
+\end{description}
 
-A natural interpretation of the Transport domain is that it represents a set of trucks
-delivering packages. However,
-the exact same domain formulation could be used to
-model a ride-sharing service like Uber, where cars drive around a city, picking up and dropping off people along the way, or
-a means of modeling a rush-hour scenario in a public transportation system.
-
-We aim to show that domain-dependent planning has an important
-role to play in the future and there are many problems yet to be solved,
-despite the loss of generality when compared to domain-independent planning.
-To show this, we will design custom planners
-and try to come up with domain-specific heuristics and other features
-to aid our planners in solving Transport problems as well and as fast as
-possible.
+\vspace{1em}
+Planners are benchmarked with:
+\begin{itemize}
+\item 30 minutes of CPU time;
+\item 4 GB of RAM;
+\item limited to one core per planner; and
+\item run on the clusters of MetaCentrum.
+\end{itemize}
 \end{multicols}
 }
 
@@ -130,96 +143,109 @@ possible.
 \headerbox{Results}{name=results,column=0,span=3,below=introduction}{
 
 \begin{multicols}{3}
-\textbf{IPC 2008}
+\textbf{IPC 2008 --- Sequential satisficing} (Figure~1)
+\vspace{0.15cm}
 
-In the updated results of the sequential satisficing track of IPC 2008 published after the competition,
-the overall winner LAMA (a Fast Downward based planner)
-was hands-down the best planner on the sequential Transport domain, winning
-with a total quality of $28.93/30$, where all other planners had less than $20/30$.
-Only 5 plans generated by LAMA had a worse total cost than the best known plans.
+LAMA (overall IPC 2008 winner)
+was the best planner on the sequential Transport domain, 
+with a total quality of 28.93/30 (all others had less than 20).
+After adding our planners, the total quality of LAMA drops to 24.36/30.
 
-After adding our planners to the results,
-the total quality of LAMA drops to $24.43/30$,
-because several larger problems were solved better than the
-best known solution from IPC 2008.
-Our best planner on the IPC 2008 dataset, RRAPN, achieves a total quality of $27.77/30$,
-which is a slight improvement over LAMA and other planners. The biggest gain of RRAPN is in being able to calculate
-solutions of larger problems fast, which can be observed on
-the results on problems 7--10 or 25--27,
-which are the largest problems.
-On the other hand, RRAPN fails to achieve optimal scores
-on some smaller problems like problem number 2 or 12,
+Our best planner on the this dataset, RRAPN:
+\begin{itemize}
+\item achieves a total quality of \textbf{27.85}/30;
+\item is able to calculate
+solutions of larger problems fast (7--10, 25--27); and
+\item fails to achieve optimal scores
+on smaller problems (2, 12),
 due to its explicit nature.
-
-MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
-They generally obtain better results than RRAPN on smaller problems
-(problems 2--3, 21--22),
-but they can generate very good results even on larger problems,
-like 14--20 or 28--29.
-The reason why RRAPN occasionally obtains better plans than the
-admissible heuristic of MSFA5 is that we weight it
-with weights greater than or equal to 1,
-therefore, making the heuristic inadmissible.
+\end{itemize}
+MSFA3 and MSFA5 are similar in their construction and results on this dataset. They:
+\begin{itemize}
+\item obtain better results than RRAPN on smaller problems
+(2--3, 21--22); and
+\item are able to generate very good results even on larger problems (14--20, 28--29).
+\end{itemize}
 Based on total quality, MSFA5 marginally comes out on top as the better one of the two MSFA planners on this dataset.
 All three of our planners beat all planners from the original competition based on total quality.
 
-\textbf{IPC 2011}
+\vspace{0.15cm}
+\textbf{IPC 2008 --- Temporal satisficing} (Figure~3)
+\vspace{0.15cm}
 
-The 2011 competition featured 20 sequential Transport problems,
-with 4 planners (dae\_yahsp, LAMA 2008 and 2011, and roamer) achieving a total quality of more than $15/20$.
-Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12 out of 20 problems. The overall winner on Transport in 2011, roamer, achieved comparable scores on most problems to both versions of LAMA.
+Temporal planners did not cope well with the Transport domain
+--- the best total quality was only 7.5/30 by SGPlan$_6$.
+Our results show a performance increase when comparing TFD (from 2008) and TFD2014.
 
-RRAPN consistenly achieves better scores than all domain-independent planners from the original competition in 17 out of the 20 problems (problem 4, 5, and 6). This can again be attributed to the size
-of the problems.
+The three presented approaches yield improvements even over recent domain-independent temporal planners, like TFD2014:
+\begin{itemize}
+\item MSFA5Sched achieves a total of 9.25/30;
+\item RRAPNSched achieves 27.18/30; and
+\item TRRAPN beats both with 28.04/30.
+\end{itemize}
+MSFA5 does not generate plans of enough variety,
+and therefore produces worse results when scheduled
+(scheduler can't add enough refuel actions to make the plan feasible).
 
-Even though RRAPN is better than the original planners more often than both MSFA planners,
-they come out on top based on total cost.
-The differences in performance between MSFA planners
-is almost indistinguishable, even on individual problem instances.
-Even more interesting, the problems
-where they perform well are complementary to the ones where RRAPN performs well,
-as is visible on the results of problems 3--6, 10--12, and 13--15.
+TRRAPN achieves the best total quality,
+beating RRAPNSched by about 0.8,
+even though it is marginally worse on some problems (4--7). TRRAPN gets better scores on
+larger problems (10, 19, or 30), where RRAPNSched can't plan well with fuel.
 
-\textbf{IPC 2014}
 
-In the sequential satisficing track of IPC 2014, the winner on the Transport domain
-was without a doubt the Mercury planner, achieving
-a stunning $20/20$ total quality. Even more interesting is the fact that
-the runner-up yahsp3-mt achieved a score of only $10.74/20$
-and all other planners achieved sub $10/20$ total quality,
-accentuating the performance of Mercury even more.
+\vspace{0.15cm}
+\textbf{IPC 2011 --- Sequential satisficing} (Figure~2)
+\vspace{0.15cm}
 
-After adding the results of our planners to the quality table,
-the total quality of yahsp3-mt is lowered to $10.29/20$.
-Mercury loses its spotless results, but still significantly dominates all
-other planners, including ours, at $19.25/20$.
+Only 4 planners achieved a total quality of more than 15/20, roamer was the winner on Transport overall.
+Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12/20 problems.
 
-RRAPN manages to outperform yahsp3-mt with $15.80/20$, yet it fails
-to match the results of Mercury, not even in one problem.
-Both MSFA planners outperform RRAPN on this dataset with qualities around $18.50/20$,
-but still do not come reasonably close to beating Mercury.
-However, they do (marginally) outperform Mercury on some problems, like
-problems 4--7, 9--10, 12, and 18--19.
+Results of our planners:
+\begin{itemize}
+\item RRAPN achieves better scores than all planners from the competition on all individual problems, with a total quality of 18.77/20;
+\item the performance of MSFA planners
+is almost indistinguishable, even on individual problems --- in total, MSFA3 achieves 18.78 and MSFA5 achieves 18.75; and
+\item the performance of MSFA planners is complementary to RRAPN on some problems (3--6, 10--12, and 13--15).
+\end{itemize}
+
+\vspace{0.15cm}
+\textbf{IPC 2014 --- Sequential satisficing} (Figure~4)
+\vspace{0.15cm}
+
+The winner on Transport was the Mercury planner, achieving
+a stunning 20/20 total quality. The runner-up, yahsp3-mt, achieved a score of only 10.74/20
+and all other planners achieved sub 10/20 total quality.
+
+After adding the results of our planners:
+\begin{itemize}
+\item RRAPN manages to outperform yahsp3-mt with 15.91/20, yet it fails
+to match the results of Mercury.
+\item Both MSFA planners outperform RRAPN with qualities of 18.44 (MSFA3)
+and 18.49 (MSFA5).
+
 The results of MSFA3 and MSFA5 on this dataset are almost identical.
+\end{itemize}
+None of our planners came reasonably close to beating Mercury (at 19.25/20).
+However, they do marginally outperform it on problems 4--7, 9--10, 12, and 18--19.
+\end{multicols}
 
+\begin{multicols}{2}
 \begin{center}
 \includegraphics[width=\linewidth]{../../bp/imga/seq-sat-6-quality.pdf}
-\captionof{figure}{seq-sat-6 quality}
+\captionof{figure}{Quality chart of seq-sat-6.}
+\end{center}
+\begin{center}
+\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-7-quality.pdf}
+\captionof{figure}{Quality chart of seq-sat-7.}
 \end{center}
 
 \begin{center}
 \includegraphics[width=\linewidth]{../../bp/imga/tempo-sat-6-quality.pdf}
-\captionof{figure}{tempo-sat-6 quality}
+\captionof{figure}{Quality chart of tempo-sat-6.}
 \end{center}
-
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-7-quality.pdf}
-\captionof{figure}{seq-sat-7 quality}
-\end{center}
-
 \begin{center}
 \includegraphics[width=\linewidth]{../../bp/imga/seq-sat-8-quality.pdf}
-\captionof{figure}{seq-sat-8 quality}
+\captionof{figure}{Quality chart of seq-sat-8.}
 \end{center}
 
 \end{multicols}
@@ -246,7 +272,7 @@ The results of MSFA3 and MSFA5 on this dataset are almost identical.
 
 There remain more approaches to apply to
 to domain-specific planning:
-\begin{itemize}\compresslist
+\begin{itemize}
 \item \textit{Hierarchical Task Networks} use \textit{tasks} (sequences of operators)
 to carry out some goal. This approach is one of the most used in practice today (ad-hoc planners we designed are conceptually similar).
 
@@ -263,7 +289,12 @@ approach aims to help solve the problem of coming up with a good heuristic for a
 %----------------------------------------------------------------------------------------
 
 \headerbox{Conclusion}{name=conclusion,column=0,span=2,above=references,below=results}{
-Conclusion
+The attained results show that domain-specific information can be leveraged
+to generate plans of better quality.
+We have designed and implemented Transport planners that are able to beat
+all results from the sequential
+and temporal satisficing tracks of the 2008 and 2011 IPCs.
+In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury. 
 }
 
 %----------------------------------------------------------------------------------------
@@ -276,15 +307,6 @@ Thank you to prof.\;RNDr.\;Roman\;Bart{\'{a}}k, Ph.D., my advisor.
 Provided access to computing facilities of MetaCentrum is greatly appreciated.
 }
 
-%----------------------------------------------------------------------------------------
-%	MATERIALS AND METHODS
-%----------------------------------------------------------------------------------------
-
-\headerbox{Materials \& Methods}{name=method,column=2,row=0}{ % This block's bottom aligns with the bottom of the conclusion block
-
-Using several variants
-of this domain, we will compare the performance of our custom-built planners to that of the planners taking part in the original competition and discuss various advantages or shortcomings of these approaches.
-}
 
 
 %----------------------------------------------------------------------------------------
