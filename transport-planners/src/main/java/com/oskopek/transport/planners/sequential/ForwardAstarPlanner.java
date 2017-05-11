@@ -142,6 +142,7 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
         resetState();
         initialize(problem);
         formatLog("Starting planning...");
+        int openMaxSize = 800_000;
 
         while (!entryMap.isEmpty()) {
             ImmutablePlanState current = openSet.extractMinimum().getValue();
@@ -190,6 +191,15 @@ public abstract class ForwardAstarPlanner extends AbstractPlanner {
 
                     Heap.Entry<Integer, ImmutablePlanState> neighborEntry = entryMap.get(neighbor);
                     if (neighborEntry == null) {
+                        if (entryMap.size() >= openMaxSize) {
+                            Heap.Entry<Integer, ImmutablePlanState> maxEntry = entryMap.values().stream()
+                                    .max(Comparator.comparing(Heap.Entry::getKey)).get();
+                            if (maxEntry.getKey() <= neighborFScore) {
+                                return;
+                            }
+                            entryMap.remove(maxEntry.getValue());
+                            openSet.delete(maxEntry);
+                        }
                         neighborEntry = openSet.insert(neighborFScore, neighbor);
                         entryMap.put(neighbor, neighborEntry);
                     } else if (tentativeGScore >= neighborEntry.getValue().getTotalTime()) {
