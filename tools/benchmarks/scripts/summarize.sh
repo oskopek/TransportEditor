@@ -1,5 +1,5 @@
 #!/bin/bash
-root="results/merged"
+root="results-long/merged"
 files=""
 for dir in `ls $root | grep seq`; do
     files="$files `realpath $root/$dir/results.json`"
