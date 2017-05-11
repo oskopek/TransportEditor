@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.oskopek.transport</groupId>
         <artifactId>transport</artifactId>
-        <version>0.9.1</version>
+        <version>0.9.2-SNAPSHOT</version>
     </parent>
     <artifactId>transport-editor</artifactId>
     <packaging>jar</packaging>
@@ -24,12 +24,12 @@
         <dependency>
             <groupId>com.oskopek.transport</groupId>
             <artifactId>transport-core</artifactId>
-            <version>0.9.1</version>
+            <version>0.9.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.oskopek.transport</groupId>
             <artifactId>transport-planners</artifactId>
-            <version>0.9.1</version>
+            <version>0.9.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
