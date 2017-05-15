@@ -1,6 +1,6 @@
 \chapter{Formal background}
 
-In this chapter, we introduce the concept of planning to help us  formalize the studied transportation problems.
+In this chapter, we introduce the concept of planning to help us formalize the studied transportation problems.
 
 \section{Automated planning}
 
@@ -32,7 +32,7 @@ As a basis for the later-defined representation of planning, we first define
 a conceptual model similar to the restricted model in \citep[Section~1.4, Section~1.5]{Ghallab2004}.
 
 \begin{defn}[State-transition system]\label{defn:state-transition-sys}
-A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma)$, where:
+A (restricted) state-transition system is a 3-tuple $\Sigma = (S, A, \gamma),$ where:
 \begin{itemize}
 \item $S = \{s_1, s_2, \ldots\}$ is a finite and fully observable set of states;
 \item $A = \{\noop{}, a_1, a_2, \ldots\}$ is a finite set of actions;
@@ -77,7 +77,7 @@ call this sequence a \textit{plan}.
 For a planning problem $\mathcal{P} = (S, A, \gamma, s_0, g)$,
 a plan is a finite sequence of actions $(a_1, a_2, \ldots, a_k),\, k \in \N$ where
 $\forall i \in \kset : a_i \in A$ and
-$\forall i \in \kset : \gamma(s_{i-1}, a_i) = s_i \in S$, while $s_k \in g$.
+$\forall i \in \kset : \gamma(s_{i-1}, a_i) = s_i \in S,$ while $s_k \in g$.
 \end{defn}
 
 A basic \textit{planning model}, i.e.\;the abstraction of a whole real-life scenario
@@ -163,7 +163,7 @@ The classical representation generalizes the set-theoretic representation using 
 without functions.
 States are sets of ground atoms of a first-order language.
 Actions are ground instances of \textit{planning operators},
-triples $o = (\name(o), \precond(o), \effects(o))$:
+triples denoted $o = (\name(o), \precond(o), \effects(o))$:
 
 \begin{itemize}
 \item $\name(o)$ is a syntactic expression of the given operator;
@@ -365,7 +365,7 @@ For temporal domains, the format adds a start time and duration for each line:
 \end{center}
 Both \verb+start_time+ and \verb+duration+ are floating-point numbers with a dot
 (\verb+.+) as a decimal delimiter.
-Note that all text between a semicolon \verb+;+ and an end-of-line character sequence \verb+\r+, \verb+\n+, or \verb+\r\n+ is regarded as a comment and ignored by all PDDL parsers.
+Note that all text between a semicolon (\verb+;+) and an end-of-line character sequence (\verb+\r+, \verb+\n+, or \verb+\r\n+) is regarded as a comment and ignored by all PDDL parsers.
 
 
 
@@ -385,7 +385,7 @@ For example, online planning can often be foregone for some form of \textit{wind
 where we plan a certain time window offline and move on to the next window,
 repeating the process regularly.
 
-Planners, in practice, are computer programs that are fed two files as input
+Planners, in practice, are computer programs that are fed two text files as input
 --- the domain file and the problem file. After that, they proceed with their internal calculations
 and upon finishing, return a plan (or not). 
 We can then evaluate the plan, see if it meets our criteria, and, potentially,

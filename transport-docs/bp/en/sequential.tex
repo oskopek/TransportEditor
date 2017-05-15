@@ -2,7 +2,7 @@
 
 In this chapter, we describe the planning approaches we
 selected, implemented, and tested for the STRIPS variant of Transport.
-Throughout this, we will leverage the acquired
+Throughout this process, we will leverage the acquired
 Transport domain knowledge as much as possible.
 
 \section{State-space forward planning}\label{forward-planning}
@@ -126,12 +126,12 @@ the true value it is approximating. During planning in state space,
 when examining a state $s$, we want to estimate the total cost of the best
 plan that gets us to a goal state from state $s$. In other words, because we are
 trying to minimize the total cost,
-a planning heuristic $h: S \to \N_0$ is admissible if and only if $\forall s \in S : h(s) \leq h^*(s),$
+a planning heuristic $h: S \to \N_0$ is admissible if and only if: $$\forall s \in S : h(s) \leq h^*(s),$$
 where $h^*$ is the true total cost (i.e.\;the optimal heuristic). A similar definition is applicable for minimizing makespan in the temporal variant.
 
 Furthermore, some heuristics have the property of being consistent. A heuristic $h$ is consistent
-if and only if $\forall s \in S : h(s) \leq cost(a) + h(s_n)$
-(where $a \in A : \gamma(s, a) = s_n$) and for all goal states $s_g$, it holds that $h(s_g) = 0$.
+if and only if: $$\forall s \in S : h(s) \leq cost(a) + h(s_n),$$
+where $a \in A : \gamma(s, a) = s_{n},$ and for all goal states $s_g$, it holds that $h(s_g) = 0$.
 Consistent heuristics are sometimes called monotonic, because their value
 does not increase along the best path to a goal state. Additionally,
 it can be proved that consistent heuristics are always admissible
@@ -165,13 +165,13 @@ the target location of a package $p$ in the set of packages $P$.
 
 \subsubsection{Trivially admissible Transport heuristic}\label{sfa0}
 
-The simplest domain-specific heuristic (apart from the zero heuristic $h_0 \equiv 0$) that is applicable to all variants of Transport
+The simplest domain-specific heuristic that is applicable to all variants of Transport, apart from the zero heuristic $h_0 \equiv 0$,
 is one that counts the minimum number of \pickup{} and \drop{} actions
 necessary to reach a goal state.
-To obtain the correct count, we add 1 for each
-package that is not yet at its destination (it will need to be dropped there) and another 1 for each package
-that is, additionally, not in a vehicle (it will need to be picked up):
 
+To obtain the correct count, we simply add 1 for each
+package that is not yet at its destination (it will need to be dropped there), and another 1 for each package
+that is, additionally, not in a vehicle (it will need to be picked up):
 $$h'_{0}(s) = \sum_{\substack{
 p \in P\\ \mt{at}(p) \neq \mt{target}(p)}} 1
 + \sum_{\substack{

@@ -185,7 +185,7 @@ solutions of larger problems fast, which can be observed on
 the results on problems 7--10 or 25--27,
 which are some of the largest problems.
 On the other hand, RRAPN fails to achieve optimal scores
-on some smaller problems like problem number 2 or 12,
+on some smaller problems like problem 2 or 12,
 due to its explicit nature.
 
 MSFA3 and MSFA5 are quite similar both in their construction and results on this dataset.
@@ -228,7 +228,7 @@ accentuating the performance of Mercury even more.
 
 After adding the results of our planners to the quality table,
 the total quality of yahsp3-mt is lowered to 10.29/20.
-Mercury loses its spotless results, but still significantly dominates all
+Mercury loses its spotless result, but still significantly dominates all
 other planners, including ours, at 19.25/20.
 
 RRAPN manages to outperform yahsp3-mt with 15.91/20, yet it fails
@@ -300,7 +300,7 @@ The generated plans and benchmark results can be found in Attachment 1\comment{\
 
 Planners that entered the 2008 temporal satisficing track at the IPC did not cope well with the Transport domain
 --- only two non-baseline planners (SGPlan$_6$ and TFD) were able to produce at least one plan
-for any problem. Additionally, only the smallest problem, problem number 1, was solved
+for any problem. Additionally, only the smallest problem, problem 1, was solved
 to the best known score by any planner.
 The best total quality was only 7.5/30, achieved by
 {SGPlan$_6$. No other domain in the temporal track had a lower best total quality
@@ -324,7 +324,7 @@ by a significant margin.
 We see that RRAPNSched produces plans with worse scores than the best known score on smaller problems, which is mainly due to the fact that plans for smaller problems are easier to precalculate and hence the best known score estimate is closer
 to the optimum than the estimates for larger problems.
 
-An interesting case is problem number 10,
+An interesting case is problem 10,
 which was not solved by any of our planners based purely on scheduling.
 This problem contains a single petrol station at location \texttt{city-loc-1},
 which, unfortunately, is not present in many precomputed shortest
@@ -344,7 +344,7 @@ larger problems, where it takes RRAPNSched more effort to plan with fuel feasibl
 as can be observed on problems 10, 19, 25, and 30.
 
 In Figure~\ref{fig:tempo-sat-6-gantt}, we see a comparison of the plans
-of RRAPNSched and TFD2014 for problem number 12.
+of RRAPNSched and TFD2014 for problem 12.
 Observe that the important difference between the two plans
 is that \texttt{truck-1} chooses to pick up and move \texttt{package-4}
 while it is delivering \texttt{package-2}. It then later picks it up again and delivers
@@ -372,7 +372,7 @@ as can be observed in Table~\ref{tab:planner-summary}.
 
 \begin{table}[tb]
 \centering
-\begin{subtable}[t]{0.48\textwidth}
+\begin{subtable}[t]{0.47\textwidth}
 \centering
 \begin{tabular}{lr}
 \toprule
@@ -388,7 +388,7 @@ RRAPN & 0.894\\
 \label{tab:seq-summary}
 \end{subtable}
 \quad
-\begin{subtable}[t]{0.48\textwidth}
+\begin{subtable}[t]{0.47\textwidth}
 \centering
 \begin{tabular}{lr}
 \toprule
@@ -415,16 +415,16 @@ scores from long planning runs, except for problems
 where the planner did not find a plan at all in the
 given time limit.
 
-\begin{figure}[!b]
+\begin{figure}[tb]
 \centering
-\begin{subfigure}{0.8\textwidth}
+\begin{subfigure}{0.76\textwidth}
 \centering
 \includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-RRAPN}
 \caption{RRAPNSched}
 \label{fig:tempo-sat-6-gantt-12-rrapn}
 \end{subfigure}
 
-\begin{subfigure}{0.8\textwidth}
+\begin{subfigure}{0.76\textwidth}
 \vspace{0.2cm}
 \centering
 \includegraphics[width=1\textwidth]{../imga/tempo-sat-6-gantt-p12-TFD}
