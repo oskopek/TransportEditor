@@ -113,7 +113,7 @@ $g[s_0] \gets 0$, $f[s_0] \gets h(s_0)$
 \EndFunction
 }%
 {A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$}{A forward search planning algorithm using A$^{\kern-.15em*}{\kern-.30em.}$
-\textsc{Generate-Actions} is a function that produces actions applicable to the state $s$. The notation $x[*] \gets y$  reprensents initialization of all values of the map $x$ to $y$.}{astar}{tb}
+\textsc{Generate-Actions} is a function that produces actions applicable to the state $s$. The notation $x[*] \gets y$ represents initialization of all values of the map $x$ to $y$.}{astar}{tb}
 
 A$^{\kern-.15em*}$ has many important properties. We pinpoint one important to us, namely its admissibility.
 A search algorithm is \textit{admissible}
@@ -268,7 +268,7 @@ each package:
 $$h_3(s) = h_1(s) + \sum_{p \in P} \min_{v \in V} \mt{spd}(location(p), \mt{at}(v)),$$
 where $V$ is the set of all vehicles.
 As follows from the inadmissibility of $h_1$, $h_3$
-is also inadmissible and nonoptimal.
+is also inadmissible and non-optimal.
 
 \subsubsection{Package or vehicle distance heuristic}\label{sfa4}
 
@@ -382,7 +382,7 @@ added to the heuristic value in the updated state (assuming selection of blue ro
 $$cost(a) + h_5(s') = 1 + (1+1+4) = 7.$$
 Note that the $h_5$ heuristic could have likewise selected the blue roads along
 with the $\{A, C, 1\}$ road, which would have resulted in $h_5(s_0) = 7,$
-and this case would not be a counterexample. This points to the possibility that the $h_5$ heuristic will work reasonably ``consistenly'' in practice.
+and this case would not be a counterexample. This points to the possibility that the $h_5$ heuristic will work reasonably ``consistently'' in practice.
 
 \subsubsection{Summary}
 
@@ -450,7 +450,7 @@ $$w \gets \max(1, \floor*{\alpha \cdot w}).$$
 Do note that this is followed up by a complete restart of search in the internal WSFA planner.
 If only a recalculation of values in the $f$ map
 of forward search with A$^{\kern-.15em*}$ was done, all successive
-weight runs would almost immediately return, because we are in the vincinity of a goal state,
+weight runs would almost immediately return, because we are in the vicinity of a goal state,
 but not necessarily the nearest one to the initial state.
 In some sense, this simulates a quick DFS run followed up
 by local search around the path found by DFS.
@@ -848,6 +848,6 @@ for constructing a CSP-based planner.
 
 TODO{try to run a CSP in OptaPlanner to solve this and compare results, using Section~\ref{csp-custom-repr}}
 
-TODO{Advantages and shortcommings of a CSP-based planner}
+TODO{Advantages and shortcomings of a CSP-based planner}
 
 }
