@@ -144,7 +144,7 @@ that will no longer hold in the state once the action is applied; and
 \item similarly, $\effects^+(a)$ are the \textit{positive effects} of an action:
 the set of propositions that will be true in the state once the action is applied.
 \end{itemize}
-Note that an action cannot have the same proposition as a negative and positive effect at the same time --- the sets $\effects^+(a)$ and $\effects^-(a)$ are disjunct for all actions $a$.
+Note that an action cannot have the same proposition as a negative and positive effect at the same time --- the sets $\effects^+(a)$ and $\effects^-(a)$ are disjoint for all actions $a$.
 The state-transition function is:
 $$\gamma(s, a) = 
 \begin{cases}
@@ -169,15 +169,20 @@ triples $o = (\name(o), \precond(o), \effects(o))$:
 \item $\name(o)$ is a syntactic expression of the given operator;
 \item $\precond(o)$ and $\effects(o)$ are sets of literals
 (atoms or their negations), similar in use to their equivalents
-in the set-theoretic case.
+in the set-theoretic case. $\precond^+(o)$ and $\precond^-(o)$
+are the positive and negative preconditions of $o$. Likewise,
+$\effects^+(o)$ and $\effects^-(o)$ are the positive and negative effects of $o$. 
 \end{itemize}
-The definition of the state-transition function also stays the same.
+Note that for a set of literals $L$, $L^+$ is the set of all atoms in $L$,
+and $L^-$ is the set of all atoms whose negations are in $L$.
+The state-transition function is defined similarly to the set-theoretic
+representation, but using the updated definition of $\effects(o)$.
 Goal states are defined as the set of states that satisfy $g$,
 the \textit{goal}, where $g$ is any set of ground literals.
 
 The following is an example of a planning operator for driving a vehicle between two connected locations:
 $$o_{\mt{drive}} = (\mt{drive}(v, f, t), \{\mt{at}(v, f), \mt{road}(f, t)\}, \{\mt{at}(v, t), \neg \mt{at}(v, f)\}).$$
-The variable $v$ denotes a vehicle, $f$ and $t$ denote the source and destination locations, respectively. The at predicate is true if and only if the vehicle is located at that position in the given state and the road predicate
+The variable $v$ denotes a vehicle, $f$ and $t$ denote the origin and destination locations, respectively. The at predicate is true if and only if the vehicle is located at that position in the given state and the road predicate
 is true if and only if a road exists between the two locations.
 An example of an action instantiated from the operator (sometimes referred to as an \textit{operator instance})
 for a vehicle $\mt{v}_1$ and two locations $\mt{l}_1$ and $\mt{l}_2$ would be:
@@ -185,7 +190,7 @@ $$a_{\mt{drive}, \mt{v}_1, \mt{l}_1, \mt{l}_2} = (\mt{drive}(\mt{v}_1, \mt{l}_1,
 \mt{road}(\mt{l}_1, \mt{l}_2)\}, \{\mt{at}(\mt{v}_1, \mt{l}_2), \neg \mt{at}(\mt{v}_1, \mt{l}_1)\}).$$
 
 
-Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} --- that any atom/predicate not present in the state does not hold in that state.
+Both the set-theoretic and the classical representations follow the \textit{Closed world assumption} --- any atom/predicate not present in the state does not hold in that state.
 
 \subsection{State-variable representation}
 

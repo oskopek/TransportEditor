@@ -55,8 +55,7 @@ The forward search algorithm, in its specified form, is nondeterministic.
 If we knew which action to choose in step 8,
 we would know how to solve the planning problem.
 Since we generally do not know which action (state transition) to chose in a given state, the choice is usually delegated to a suitable
-search algorithm, which makes forward search deterministic.
-
+search algorithm. When forward search is implemented using such a search algorithm, the result is a deterministic forward search algorithm.
 
 \subsection{Deterministic search algorithms}
 
@@ -135,7 +134,7 @@ if and only if $\forall s \in S : h(s) \leq cost(a) + h(s_n)$
 (where $a \in A : \gamma(s, a) = s_n$) and for all goal states $s_g$, it holds that $h(s_g) = 0$.
 Consistent heuristics are sometimes called monotonic, because their value
 does not increase along the best path to a goal state. Additionally,
-it can be proven that consistent heuristics are always admissible
+it can be proved that consistent heuristics are always admissible
 \citep[Section~4.1]{Russell1995}.
 
 
@@ -222,17 +221,27 @@ that cost $6$.
 A different extension of the $h'_0$ heuristic
 is the heuristic $h_2$ defined below, based
 on finding the shortest paths on a \textit{minimum spanning tree} (MST).
-Using an MST calculated using the algorithm presented in \citet{Kruskal1956}, we can solve one of the largest problems with $h_1$,
+Using an MST calculated by the algorithm presented in \citet{Kruskal1956}, we can solve one of the largest problems with $h_1$,
 namely that we count an excessive amount of \drive{} actions
 for packages to their targets.
-For each package, we calculate
+
+
+For each package, the $h_2$ heuristic calculates
 shortest path distances only on the MST.
 Also, we do not calculate any edge twice --- we mark
-the edge when it is part of a used shortest path and
-after marking edges of all shortest paths,
+the edge when it is part of a used shortest path.
+After marking edges of all shortest paths,
 we sum the lengths of the marked edges.
 In the same way as with $h_1$, we add the value of $h'_0$ to
 the sum.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.4\textwidth]{../imga/heursit_h2}
+\caption{Visualization of the counterexample road networks
+for consistency of heuristics $h_4$ and $h_5$.}
+\label{fig:heursit_h2}
+\end{figure}
 
 Do note that this heuristic is yet again inadmissible:
 let the road network be a circle of $n$ locations with
@@ -368,7 +377,7 @@ added to the heuristic value in the updated state (assuming selection of blue ed
 $$cost(a) + h_5(s') = 1 + (1+1+4) = 7.$$
 Note that the $h_5$ heuristic could have likewise selected the blue edges along
 with the $\{A, C, 1\}$ edge, which would have resulted in $h_5(s_0) = 7,$
-and this case would not be a counterexample. This points to the possibility that th $h_5$ heuristic will work reasonably ``consistenly'' in practice.
+and this case would not be a counterexample. This points to the possibility that the $h_5$ heuristic will work reasonably ``consistenly'' in practice.
 
 \subsubsection{Summary}
 
@@ -635,11 +644,11 @@ In our experiments, we used a fixed $T = 0.1$, to prefer the nearest vehicles.
 
 The implementations
 of RRFL, RROP, and RROPN have empirically shown
-lesser performance in our tests than RRAPN and RRAPD.
+worse performance in our tests than RRAPN and RRAPD.
 RRAPD, however, performs worse than RRAPN on
 average.
 As mentioned previously, RBAPN is unusable on larger
-problems due to catastrophic run time in practice.
+problems due to its long run time in practice.
 We will evaluate the Nearby planner
 of the Randomized Restart Around Path
 kind in our experiments in Chapter~\ref{experiments},
