@@ -54,7 +54,7 @@ on demand, as are the corresponding successor states
 The forward search algorithm, in its specified form, is nondeterministic.
 If we knew which action to choose in step 8,
 we would know how to solve the planning problem.
-Since we generally do not know which action (state transition) to chose in a given state, the choice is usually delegated to a suitable
+Since we generally do not know which action (state transition) to choose in a given state, the choice is usually delegated to a suitable
 search algorithm. When forward search is implemented using such a search algorithm, the result is a deterministic forward search algorithm.
 
 \subsection{Deterministic search algorithms}
@@ -548,7 +548,7 @@ and using most of the other insights discussed in Section~\ref{domain-info}.
 
 \subsubsection{Randomized Restart From Location Planner}\label{rrfl}
 
-In each iteration of the before mentioned algorithm,
+In each iteration of the aforementioned algorithm,
 the Randomized Restart From Location planner (RRFL)
 randomly chooses a vehicle and a location.
 It adds \drive{} actions along the shortest path
@@ -571,7 +571,7 @@ and the shortest path from the package to its target location.
 Afterwards, it finds all packages that have current and target locations on the path, taking into account the direction of driving.
 It then tries all combinations of
 those packages that do not make the vehicle become
-overcapacitated over the whole course
+over capacitated over the whole course
 of the path, in order
 to find the combination that maximizes the minimum
 free capacity over the course of the path.
