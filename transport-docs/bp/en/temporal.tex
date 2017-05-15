@@ -50,6 +50,12 @@ of the same vehicle, except a \refuel{} and \pickup{}/\drop{} pair (in any order
 \item a \drop{} and \pickup{} pair
 of the same package (in any order).
 \end{itemize}
+Since we only schedule valid sequential plans,
+it cannot happen that a package is scheduled to be concurrently loaded
+into two different vehicles --- in such sequential plans,
+pairs of \pickup{} and \drop{} actions for a single package
+do not overlap each other. Therefore, a mutex relation will be constructed
+between the \drop{} action of the first pair and the \pickup{} action of the second pair.
 
 Our algorithm starts with relaxing the temporal
 problem to a sequential one by removing fuel demands
@@ -196,6 +202,8 @@ in the quality of scheduled plans. Planners
 that generate various different plans generally perform better
 in such a scenario, because the scheduler has more
 opportunities to find an extension of the plan with respect to fuel demands.
+In case it is efficient to change the internals of sequential planners,
+we could incorporate fuel directly into the sequential planner, and only employ scheduling for parallelizing actions in the plan.
 
 Also, suboptimal plans in the sequential domain
 sometimes yield better scheduled plans than optimal ones.
