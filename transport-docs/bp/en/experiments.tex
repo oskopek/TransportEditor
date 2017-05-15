@@ -210,8 +210,8 @@ of the problems (see Table~\ref{tab:dataset-dimensions}).
 
 Even though RRAPN is better than the original planners more often than both MSFA planners,
 MSFA3 comes out on top based on total cost.
-The differences in performance between all three of our planners
-is, however, almost indistinguishable, even on most problem instances individually.
+Nonetheless, the differences in performance between all three of our planners
+are almost indistinguishable, even on most problem instances individually.
 Even more interesting, the problems
 where MSFA planners perform well are complementary to the ones where RRAPN performs well,
 as is visible on the results of problems 4--6, 10--12, and 13--15.
@@ -354,7 +354,8 @@ while delivering \texttt{package-2} and then had to travel further to deliver it
 and it makes a difference in makespans of more than 50.
 Finally, observe that due to the nature of RRAPN, \texttt{truck-1}
 dropped \texttt{package-4} and then went back to pick it up, even though it had enough capacity
-to carry it for the whole time. Another important observation, however, is that this had no effect on the total makespan
+to carry it for the whole time. 
+Nonetheless, it is important to note that this had no effect on the total makespan
 of the plan.
 
 \section{Overall results}
@@ -382,7 +383,7 @@ MSFA5 & \textbf{0.924}\\
 RRAPN & 0.894\\
 \bottomrule
 \end{tabular}
-\caption{Average quality on sequential datasets.}
+\caption{Avg.\;quality on sequential datasets.}
 \label{tab:seq-summary}
 \end{subtable}
 \quad
@@ -398,7 +399,7 @@ RRAPNSched & 0.905\\
 TRRAPN & \textbf{0.934}\\
 \bottomrule
 \end{tabular}
-\caption{Average quality on the temporal dataset.}
+\caption{Avg.\;quality on the temporal dataset.}
 \label{tab:tempo-summary}
 \end{subtable}
 \caption{Average quality of our planners across datasets.}
