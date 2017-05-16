@@ -20,8 +20,8 @@
 
 \documentclass[a0paper,fontscale=0.285]{baposter} % Adjust the font scale/size here
 
-\usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
-\setcitestyle{round} % round brackets for citep and citet
+\usepackage[numbers]{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+%\setcitestyle{round} % round brackets for citep and citet
 
 \usepackage{graphicx} % Required for including images
 \graphicspath{{../img/}} % Directory in which figures are stored
@@ -71,21 +71,23 @@ headerFontColor=white, % Text color for the header text in the content boxes
 boxColorOne=white, % Background color of the content boxes
 textborder=rectangle, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
 eyecatcher=false, % Set to false for ignoring the left logo in the title and move the title left
-headerheight=0.1\textheight, % Height of the header
+headerheight=0.13\textheight, % Height of the header
 headershape=rectangle, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
 headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
 %textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
-linewidth=2pt % Width of the border lines around content boxes
+linewidth=0pt % Width of the border lines around content boxes
 }
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
 %
 {\includegraphics[height=8em]{logo-en.pdf}} % First university/lab logo on the left
-{\vspace{0.2em}\huge\bf\textsc{Planning for Transportation Problems}\vspace{0.2em}%
+{\vspace{0.2em}\huge\bf\textsc{Planning for Transportation Problems}\vspace{0.3em}%
 } % Poster title
-{\textsc{Ondrej {\v{S}}kopek\\\large\insertdepartment{}\\\institute{}}} % Author names and institution
-{\includegraphics[width=21em]{logo-en.pdf}} % Second university/lab logo on the right
+{\Large\textsc{Ondrej {\v{S}}kopek}\\\vspace{0.1em}%
+\large\texttt{<oskopek@oskopek.com>}\\\vspace{0.3em}%
+\large\textsc{\insertdepartment{}}} % Author names and institution
+{\includegraphics[width=30em]{logo-en.pdf}} % Second university/lab logo on the right
 
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
@@ -93,8 +95,9 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \headerbox{Introduction}{name=introduction,column=0,row=0,span=1}{
 
-Automated planning has historically been focused on \textit{domain-independent} planning. Our goal is to design \textit{domain-specific} planners 
+Our goal is to design \textit{domain-specific} planners 
 for variants of the \textit{Transport} domain, introduced in the 2008 International Planning Competition (IPC).
+
 Transport, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
 using a fleet of vehicles. Our aim is to deliver all items
 with the least total cost, where the cost of individual actions is dependent on the domain variant.
@@ -108,31 +111,33 @@ with the least total cost, where the cost of individual actions is dependent on 
 \headerbox{Materials \& Methods}{name=method,column=1,span=2,row=0,aligned=introduction}{ % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{multicols}{2}
-We compare the performance of our planners to that of the planners taking part in the original competitions and discuss the results.
-
-Sequential planners:
-\begin{description}
-\item[MSFA3] Meta-heuristically weighted SFA planner with the package and vehicle distance heuristic
-\item[MSFA5] Meta-heuristically weighted SFA planner with the general marking heuristic
-\item[RRAPN] Randomized Restart Around Path Nearby planner
-\end{description}
-
-Temporal planners:
-\begin{description}
-\item[MSFA5Sched] Scheduled MSFA5 planner
-\item[RRAPNSched] Scheduled RRAPN planner
-\item[TFD2014] Temporal Fast Downward planner, version 0.4 (external planner)
-\item[TRRAPN] Temporal RRAPN planner
-\end{description}
-
-\vspace{1em}
-Planners are benchmarked with:
+We compare the performance of our planners to that of the planners taking part in the original competitions.
+Our planners are benchmarked with:
 \begin{itemize}
 \item 30 minutes of CPU time;
 \item 4 GB of RAM;
 \item limited to one core per planner; and
 \item run on the clusters of MetaCentrum.
 \end{itemize}
+\end{multicols}
+\vspace{-0.5em}
+\hrule
+\vspace{-1em}
+\begin{multicols}{2}
+Sequential planners:
+\begin{description}
+\item[MSFA3] Meta-heuristically weighted SFA with the package and vehicle  dist.\;heuristic
+\item[MSFA5] Meta-heuristically weighted SFA with the general marking heuristic
+\item[RRAPN] Rand.\;Restart Around Path Nearby
+\end{description}
+
+Temporal planners:
+\begin{description}
+\item[MSFA5Sched] Scheduled MSFA5
+\item[RRAPNSched] Scheduled RRAPN
+\item[TFD2014] Temporal Fast Downward 2014
+\item[TRRAPN] Temporal RRAPN
+\end{description}
 \end{multicols}
 }
 
@@ -144,69 +149,53 @@ Planners are benchmarked with:
 
 \begin{multicols}{3}
 \textbf{IPC 2008 --- Sequential satisficing} (Figure~1)
+
 \vspace{0.15cm}
-
-LAMA (overall IPC 2008 winner)
-was the best planner on the sequential Transport domain, 
-with a total quality of 28.93/30 (all others had less than 20).
-After adding our planners, the total quality of LAMA drops to 24.38/30.
-
 Our best planner on the this dataset, RRAPN:
 \begin{itemize}
-\item achieves a total quality of \textbf{27.85}/30;
-\item is able to calculate
-solutions of larger problems fast (7--10, 25--27); and
-\item fails to achieve optimal scores
-on smaller problems (2, 12),
-due to its explicit nature.
+\item RRAPN achieves the best total quality of \textbf{27.85}/30;
+\item MSFA3 and MSFA5 obtain better results than RRAPN on smaller problems
+(2--3, 21--22), and are able to generate very good results even on larger problems (14--20, 28--29).
 \end{itemize}
-MSFA3 and MSFA5 are similar in their construction and results on this dataset. They:
-\begin{itemize}
-\item obtain better results than RRAPN on smaller problems
-(2--3, 21--22); and
-\item are able to generate very good results even on larger problems (14--20, 28--29).
-\end{itemize}
-Based on total quality, MSFA5 marginally comes out on top as the better one of the two MSFA planners on this dataset.
-All three of our planners beat all planners from the original competition based on total quality.
+MSFA5 marginally comes out on top as the better one of the two MSFA planners on total quality. All three of our planners beat all planners from the original competition.
+\begin{center}
+\includegraphics[width=\linewidth]{seq-sat-6-quality.pdf}
+\captionof{figure}{Quality chart of seq-sat-6.}
+\includegraphics[width=\linewidth]{tempo-sat-6-quality.pdf}
+\captionof{figure}{Quality chart of tempo-sat-6.}
+\end{center}
 
 \vspace{0.15cm}
-\textbf{IPC 2008 --- Temporal satisficing} (Figure~3)
+\textbf{IPC 2008 --- Temporal satisficing} (Figure~2)
 \vspace{0.15cm}
 
-Temporal planners did not cope well with the Transport domain
---- the best total quality was only 7.5/30 by SGPlan$_6$.
-Our results show a performance increase when comparing TFD (from 2008) and TFD2014.
-
-The three presented approaches yield improvements even over recent domain-independent temporal planners, like TFD2014:
+We improved over recent domain-independent temporal planners (TFD2014):
 \begin{itemize}
 \item MSFA5Sched achieves a total of 14.50/30;
 \item RRAPNSched achieves 27.16/30; and
 \item TRRAPN beats both with 28.02/30.
 \end{itemize}
-MSFA5 does not generate plans of enough variety,
-and therefore produces worse results when scheduled
-(scheduler can't add enough refuel actions to make the plan feasible).
+MSFA5 does not generate plans of much variety,
+hence produces worse scheduled plans.
 
-TRRAPN achieves the best total quality,
-beating RRAPNSched by about 0.8,
-even though it is marginally worse on some problems (4--7). TRRAPN gets better scores on
-larger problems (10, 19, or 30), where RRAPNSched can't plan well with fuel.
+TRRAPN performs
+better on
+large problems (10, 19, or 30), where RRAPNSched cannot plan well with fuel,
+and worse on smaller ones (4--7).
+
 
 
 \vspace{0.15cm}
-\textbf{IPC 2011 --- Sequential satisficing} (Figure~2)
+\textbf{IPC 2011 --- Sequential satisficing} (Figure~3)
 \vspace{0.15cm}
 
-Only 4 planners achieved a total quality of more than 15/20, roamer was the winner on Transport overall.
-Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12/20 problems.
-
-Results of our planners:
+All our planners beat all competition planners:
 \begin{itemize}
-\item RRAPN achieves better scores than all planners from the competition on all individual problems, with a total quality of 18.81/20;
-\item the performance of MSFA planners
-is almost indistinguishable, even on individual problems --- in total, MSFA3 achieves 18.78 and MSFA5 achieves 18.75; and
-\item the performance of MSFA planners is complementary to RRAPN on some problems (3--6, 10--12, and 13--15).
+\item RRAPN even achieves better scores than all original planners on all individual problems, with a total of 18.81/20; and
+\item MSFA planners' performance
+is almost indistinguishable, even on single problems. In total, MSFA3 achieves 18.78 and MSFA5 achieves 18.75.
 \end{itemize}
+MSFA planner results are complementary to RRAPN on some problems (3--6, 10--12, 13--15).
 
 \vspace{0.15cm}
 \textbf{IPC 2014 --- Sequential satisficing} (Figure~4)
@@ -226,27 +215,12 @@ The results of MSFA3 and MSFA5 on this dataset are almost identical.
 \end{itemize}
 None of our planners came reasonably close to beating Mercury (at 19.25/20).
 However, they do marginally outperform it on problems 4--7, 9--10, 12, and 18--19.
-\end{multicols}
-
-\begin{multicols}{2}
 \begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-6-quality.pdf}
-\captionof{figure}{Quality chart of seq-sat-6.}
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-7-quality.pdf}
+\includegraphics[width=\linewidth]{seq-sat-7-quality.pdf}
 \captionof{figure}{Quality chart of seq-sat-7.}
-\end{center}
-
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/tempo-sat-6-quality.pdf}
-\captionof{figure}{Quality chart of tempo-sat-6.}
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-8-quality.pdf}
+\includegraphics[width=\linewidth]{seq-sat-8-quality.pdf}
 \captionof{figure}{Quality chart of seq-sat-8.}
 \end{center}
-
 \end{multicols}
 }
 
@@ -258,8 +232,9 @@ However, they do marginally outperform it on problems 4--7, 9--10, 12, and 18--1
 
 \renewcommand{\section}[2]{\vskip 0.05em} % Get rid of the default "References" section title
 \nocite{*} % Insert publications even if they are not cited in the poster
-\small{ % Reduce the font size in this block
-\bibliographystyle{plainnat}
+\scriptsize{ % Reduce the font size in this block
+\setlength{\bibsep}{0pt plus 0.3ex}
+\bibliographystyle{plain}
 \bibliography{../../bp/en/bibliography-poster.bib} % Use sample.bib as the bibliography file
 }}
 
@@ -267,18 +242,18 @@ However, they do marginally outperform it on problems 4--7, 9--10, 12, and 18--1
 %	FUTURE RESEARCH
 %----------------------------------------------------------------------------------------
 
-\headerbox{Future Research}{name=futureresearch,column=2,span=1,above=references,below=results}{ % This block is as tall as the references block
+\headerbox{Future\,\,Research}{name=futureresearch,column=1,span=2,above=references,below=results}{ % This block is as tall as the references block
 
 There remain more approaches to apply to
 to domain-specific planning:
 \begin{itemize}
 \item \textit{Hierarchical Task Networks} use \textit{tasks} (sequences of operators)
-to carry out some goal. This approach is one of the most used in practice today (ad-hoc planners we designed are conceptually similar).
+to carry out some goal. Ad-hoc planners we designed are conceptually similar.
 
-\item \textit{Pointer Networks and Reinforcement Learning} use special architectures of neural networks to solve TSP instances in \citet{Bello2016}.
+\item \textit{Pointer Networks and Reinforcement Learning} use special architectures of neural networks to solve TSP instances \citep{Bello2016}.
 
 \item \textit{Learning a domain-specific heuristic function} using neural networks \citep{Chen2011}. This
-approach aims to help solve the problem of coming up with a good heuristic for a domain (a similar approach is also used in DeepStack \citep{Moravcik2017}).
+approach aims to help solve the problem of coming up with a good heuristic for a domain. A similar approach is also used in DeepStack \citep{Moravcik2017}.
 \end{itemize}
 
 }
@@ -287,7 +262,7 @@ approach aims to help solve the problem of coming up with a good heuristic for a
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\headerbox{Conclusion}{name=conclusion,column=0,span=2,above=references,below=results}{
+\headerbox{Conclusion}{name=conclusion,column=0,span=1,above=references,below=results}{
 The attained results show that domain-specific information can be leveraged
 to generate plans of better quality.
 We have designed and implemented Transport planners that are able to beat
