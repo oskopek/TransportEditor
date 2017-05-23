@@ -1054,7 +1054,7 @@
     %
     %      % Draw Header%
     \draw (north west) +(0em,1em+0.5\headerheight) node(image)[anchor=west]   { {\usebox{\baposter@titleimage@left }} };%
-    \draw (north east) +(8.5em,1em+0.5\headerheight) node(logo) [anchor=east]   { {\usebox{\baposter@titleimage@right}} };%
+    \draw (north east) +(9.5em,1em+0.5\headerheight) node(logo) [anchor=east]   { {\usebox{\baposter@titleimage@right}} };%
     %
     \ifbaposter@eyecatcher% Has eye catcher%
       \draw (image.east) node(title)[anchor=west,text width=\baposter@titleimage@textwidth]{%
