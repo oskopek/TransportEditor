@@ -1098,7 +1098,7 @@
         \end{minipage}
       };%
     \else% Has no eye catcher
-      \draw (image.east) node(title)[anchor=west]  { {\begin{minipage}{\baposter@titleimage@textwidth}{\bfseries\Huge #3}\\{\Large #4}\end{minipage}} };%
+      \draw (image.east) node(title)[anchor=west]  { {\begin{minipage}{\baposter@titleimage@textwidth}{\centering \bfseries\Huge #3}\\{\centering \Large #4}\end{minipage}} };%
     \fi
   }% END poster begin
 % The body
