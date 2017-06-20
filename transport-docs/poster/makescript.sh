@@ -17,6 +17,9 @@ cd tex
 
 IFS=" "; for name in $names; do
     pdflatex $parameters "$name".tex $quiet
+    bibtex "$name" $quiet
+    pdflatex $parameters "$name".tex $quiet
+    pdflatex $parameters "$name".tex $quiet
     pdflatex $parameters "$name".tex $quiet
     mv "$name".pdf ../pdf/
 done

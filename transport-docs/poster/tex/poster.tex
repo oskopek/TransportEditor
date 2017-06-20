@@ -18,74 +18,92 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[a0paper,fontscale=0.285]{baposter} % Adjust the font scale/size here
+\documentclass[a0paper,portrait,fontscale=0.2975]{TUTposter} % Adjust the font scale/size here
 
-\usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
-\setcitestyle{round} % round brackets for citep and citet
+\usepackage[numbers]{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+%\setcitestyle{round} % round brackets for citep and citet
 
 \usepackage{graphicx} % Required for including images
 \graphicspath{{../img/}} % Directory in which figures are stored
 
 \usepackage{amsmath} % For typesetting math
 \usepackage{amssymb} % Adds new symbols to be used in math mode
+\usepackage{multirow}
 
 \usepackage{booktabs} % Top and bottom rules for tables
 \usepackage{enumitem} % Used to reduce itemize/enumerate spacing
 \usepackage{palatino} % Use the Palatino font
-\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+%\usepackage{charter}
+\usepackage[font=small,labelfont=bf, labelformat=empty]{caption} % Required for specifying captions to tables and figures
+
+\usepackage{url}
+\usepackage[capbesideposition=outside,capbesidesep=quad]{floatrow}
 
 \usepackage{multicol} % Required for multiple columns
-\setlength{\columnsep}{1.5em} % Slightly increase the space between columns
+\setlength{\columnsep}{2em} % Slightly increase the space between columns
 \setlength{\columnseprule}{0mm} % No horizontal rule between columns
 
-\setlist[itemize]{itemsep=1pt, topsep=0pt, parsep=0pt}
-\setlist[description]{itemsep=1pt, topsep=0pt, parsep=0pt}
-\setlist[enumerate]{itemsep=1pt, topsep=0pt, parsep=0pt}
+\setlist[itemize]{itemsep=2pt, topsep=3pt, parsep=0pt,leftmargin=2em}
+\setlist[description]{itemsep=2pt, topsep=3pt, parsep=0pt, font=\normalfont\emph, leftmargin=5ex}
+\setlist[enumerate]{itemsep=2pt, topsep=3pt, parsep=0pt}
 %\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
 %\setlength{\itemsep}{1pt}
 %\setlength{\parskip}{0pt}
 %\setlength{\parsep}{0pt}
 %}
 
-\definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines the color used for content box headers
+\usepackage{fix-cm} 
+\usepackage{xcolor}   
 
-\title{\huge Planning for Transportation Problems} % Poster title
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{35}{45}}
+\makeatother   
+
+\definecolor{bgr}{RGB}{229, 229, 229} % Defines the color used for content box headers
+
+\title{Planning for Transportation Problems} % Poster title
 
 \author{Ondrej \v{S}kopek} % Author(s)
 
 \newcommand{\insertdepartment}{Department of Theoretical Computer Science and Mathematical Logic}
 \newcommand{\institute}{Faculty of Mathematics and Physics, Charles University} % Institution(s)
+\newcommand{\comment}[1]{}
 
 \begin{document}
 
 \begin{poster}
 {
-headerborder=closed, % Adds a border around the header of content boxes
-colspacing=1em, % Column spacing
-bgColorOne=white, % Background color for the gradient on the left side of the poster
-bgColorTwo=white, % Background color for the gradient on the right side of the poster
+headerborder=open, % Adds a border around the header of content boxes
+colspacing=2.25em, % Column spacing
+bgColorOne=bgr, % Background color for the gradient on the left side of the poster
+bgColorTwo=bgr, % Background color for the gradient on the right side of the poster
 borderColor=white, % Border color
-headerColorOne=lightblue, % Background color for the header in the content boxes (left side)
-headerColorTwo=lightblue, % Background color for the header in the content boxes (right side)
-headerFontColor=white, % Text color for the header text in the content boxes
+headerColorOne=white, % Background color for the header in the content boxes (left side)
+headerColorTwo=white, % Background color for the header in the content boxes (right side)
+headerFontColor=black, % Text color for the header text in the content boxes
 boxColorOne=white, % Background color of the content boxes
 textborder=rectangle, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
 eyecatcher=false, % Set to false for ignoring the left logo in the title and move the title left
 headerheight=0.1\textheight, % Height of the header
+boxshade=plain,
 headershape=rectangle, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
-headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
+headerfont=\hspace{0.2em}\LARGE\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
 %textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
-linewidth=2pt % Width of the border lines around content boxes
+linewidth=0pt, % Width of the border lines around content boxes
+boxpadding=1.2em,
+boxheaderheight=3em
 }
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
 %
-{\includegraphics[height=8em]{logo-en.pdf}} % First university/lab logo on the left
-{\vspace{0.2em}\huge\bf\textsc{Planning for Transportation Problems}\vspace{0.2em}%
+{\includegraphics[height=30em]{logo-en.pdf}} % First university/lab logo on the left
+{\vspace{0.8em}\hspace{0.5em}\HUGE\textsf{\textcolor{black}{Planning for Transportation Problems}}\vspace{0.3em}%
 } % Poster title
-{\textsc{Ondrej {\v{S}}kopek\\\large\insertdepartment{}\\\institute{}}} % Author names and institution
-{\includegraphics[width=21em]{logo-en.pdf}} % Second university/lab logo on the right
+{%
+\LARGE\textsf{Ondrej {\v{S}}kopek}\\%
+}
+%{\includegraphics[width=36em]{logo-en.pdf}} % Second university/lab logo on the right
 
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
@@ -93,220 +111,274 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \headerbox{Introduction}{name=introduction,column=0,row=0,span=1}{
 
-Automated planning has historically been focused on \textit{domain-independent} planning. Our goal is to design \textit{domain-specific} planners 
-for variants of the \textit{Transport} domain, introduced in the 2008 International Planning Competition (IPC).
-Transport, in its basic form, consists of a road network with items located at specified locations. The items are to be delivered to their destinations
-using a fleet of vehicles. Our aim is to deliver all items
-with the least total cost, where the cost of individual actions is dependent on the domain variant.
+\vspace{-1em}
+\begin{flushleft}
+Our goal is to design \textit{domain-specific} planners 
+for several variants of the \textit{Transport} domain, used in International Planning Competitions (IPC).
+
+\vspace{0.3em}
+
+\textbf{Transport domain}:
+\vspace{-0.3em}
+\begin{itemize}
+\item road network with items located at specified locations
+\item items are to be delivered to their destinations
+\item using a fleet of (different) vehicles
+\item \textit{Goal}: deliver all items
+with the least total cost or duration
+\end{itemize}
+\end{flushleft}
 }
 
 
-%----------------------------------------------------------------------------------------
-%	MATERIALS AND METHODS
-%----------------------------------------------------------------------------------------
 
-\headerbox{Materials \& Methods}{name=method,column=1,span=2,row=0,aligned=introduction}{ % This block's bottom aligns with the bottom of the conclusion block
-
-\begin{multicols}{2}
-We compare the performance of our planners to that of the planners taking part in the original competitions and discuss the results.
-
-Sequential planners:
-\begin{description}
-\item[MSFA3] Meta-heuristically weighted SFA planner with the package and vehicle distance heuristic
-\item[MSFA5] Meta-heuristically weighted SFA planner with the general marking heuristic
-\item[RRAPN] Randomized Restart Around Path Nearby planner
-\end{description}
-
-Temporal planners:
-\begin{description}
-\item[MSFA5Sched] Scheduled MSFA5 planner
-\item[RRAPNSched] Scheduled RRAPN planner
-\item[TFD2014] Temporal Fast Downward planner, version 0.4 (external planner)
-\item[TRRAPN] Temporal RRAPN planner
-\end{description}
-
-\vspace{1em}
-Planners are benchmarked with:
-\begin{itemize}
-\item 30 minutes of CPU time;
-\item 4 GB of RAM;
-\item limited to one core per planner; and
-\item run on the clusters of MetaCentrum.
-\end{itemize}
-\end{multicols}
-}
-
-%----------------------------------------------------------------------------------------
-%	RESULTS
-%----------------------------------------------------------------------------------------
-
-\headerbox{Results}{name=results,column=0,span=3,below=introduction}{
-
-\begin{multicols}{3}
-\textbf{IPC 2008 --- Sequential satisficing} (Figure~1)
-\vspace{0.15cm}
-
-LAMA (overall IPC 2008 winner)
-was the best planner on the sequential Transport domain, 
-with a total quality of 28.93/30 (all others had less than 20).
-After adding our planners, the total quality of LAMA drops to 24.38/30.
-
-Our best planner on the this dataset, RRAPN:
-\begin{itemize}
-\item achieves a total quality of \textbf{27.85}/30;
-\item is able to calculate
-solutions of larger problems fast (7--10, 25--27); and
-\item fails to achieve optimal scores
-on smaller problems (2, 12),
-due to its explicit nature.
-\end{itemize}
-MSFA3 and MSFA5 are similar in their construction and results on this dataset. They:
-\begin{itemize}
-\item obtain better results than RRAPN on smaller problems
-(2--3, 21--22); and
-\item are able to generate very good results even on larger problems (14--20, 28--29).
-\end{itemize}
-Based on total quality, MSFA5 marginally comes out on top as the better one of the two MSFA planners on this dataset.
-All three of our planners beat all planners from the original competition based on total quality.
-
-\vspace{0.15cm}
-\textbf{IPC 2008 --- Temporal satisficing} (Figure~3)
-\vspace{0.15cm}
-
-Temporal planners did not cope well with the Transport domain
---- the best total quality was only 7.5/30 by SGPlan$_6$.
-Our results show a performance increase when comparing TFD (from 2008) and TFD2014.
-
-The three presented approaches yield improvements even over recent domain-independent temporal planners, like TFD2014:
-\begin{itemize}
-\item MSFA5Sched achieves a total of 14.50/30;
-\item RRAPNSched achieves 27.16/30; and
-\item TRRAPN beats both with 28.02/30.
-\end{itemize}
-MSFA5 does not generate plans of enough variety,
-and therefore produces worse results when scheduled
-(scheduler can't add enough refuel actions to make the plan feasible).
-
-TRRAPN achieves the best total quality,
-beating RRAPNSched by about 0.8,
-even though it is marginally worse on some problems (4--7). TRRAPN gets better scores on
-larger problems (10, 19, or 30), where RRAPNSched can't plan well with fuel.
-
-
-\vspace{0.15cm}
-\textbf{IPC 2011 --- Sequential satisficing} (Figure~2)
-\vspace{0.15cm}
-
-Only 4 planners achieved a total quality of more than 15/20, roamer was the winner on Transport overall.
-Interestingly, LAMA 2008 was able to produce better plans than its 2011 version in 12/20 problems.
-
-Results of our planners:
-\begin{itemize}
-\item RRAPN achieves better scores than all planners from the competition on all individual problems, with a total quality of 18.81/20;
-\item the performance of MSFA planners
-is almost indistinguishable, even on individual problems --- in total, MSFA3 achieves 18.78 and MSFA5 achieves 18.75; and
-\item the performance of MSFA planners is complementary to RRAPN on some problems (3--6, 10--12, and 13--15).
-\end{itemize}
-
-\vspace{0.15cm}
-\textbf{IPC 2014 --- Sequential satisficing} (Figure~4)
-\vspace{0.15cm}
-
-The winner on Transport was the Mercury planner, achieving
-a stunning 20/20 total quality. The runner-up, yahsp3-mt, achieved a score of only 10.74/20
-and all other planners achieved sub 10/20 total quality.
-
-After adding the results of our planners:
-\begin{itemize}
-\item RRAPN manages to outperform yahsp3-mt with 15.91/20, yet it fails
-to match the results of Mercury.
-\item Both MSFA planners outperform RRAPN with qualities just under 18.50/20.
-
-The results of MSFA3 and MSFA5 on this dataset are almost identical.
-\end{itemize}
-None of our planners came reasonably close to beating Mercury (at 19.25/20).
-However, they do marginally outperform it on problems 4--7, 9--10, 12, and 18--19.
-\end{multicols}
-
-\begin{multicols}{2}
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-6-quality.pdf}
-\captionof{figure}{Quality chart of seq-sat-6.}
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-7-quality.pdf}
-\captionof{figure}{Quality chart of seq-sat-7.}
-\end{center}
-
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/tempo-sat-6-quality.pdf}
-\captionof{figure}{Quality chart of tempo-sat-6.}
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{../../bp/imga/seq-sat-8-quality.pdf}
-\captionof{figure}{Quality chart of seq-sat-8.}
-\end{center}
-
-\end{multicols}
-}
 
 %----------------------------------------------------------------------------------------
 %	REFERENCES
 %----------------------------------------------------------------------------------------
 
-\headerbox{References}{name=references,column=0,above=bottom,span=2}{
+\headerbox{References}{name=references,column=0,above=bottom,span=1}{
 
+\vspace{-0.5em}
+\begin{flushleft}
 \renewcommand{\section}[2]{\vskip 0.05em} % Get rid of the default "References" section title
 \nocite{*} % Insert publications even if they are not cited in the poster
-\small{ % Reduce the font size in this block
-\bibliographystyle{plainnat}
+\scriptsize{ % Reduce the font size in this block
+\vspace{-0.9em}
+\setlength{\bibsep}{0pt plus 0.3ex}
+\bibliographystyle{plain}
 \bibliography{../../bp/en/bibliography-poster.bib} % Use sample.bib as the bibliography file
-}}
+\vspace{-0.8em}
+}
+\end{flushleft}
+}
 
 %----------------------------------------------------------------------------------------
-%	FUTURE RESEARCH
+%	MATERIALS AND METHODS
 %----------------------------------------------------------------------------------------
 
-\headerbox{Future Research}{name=futureresearch,column=2,span=1,above=references,below=results}{ % This block is as tall as the references block
+\headerbox{Materials \& Methods}{name=method,column=0,below=introduction}{ % This block's bottom aligns with the bottom of the conclusion block
 
-There remain more approaches to apply to
-to domain-specific planning:
+\vspace{-1em}
+\begin{flushleft}
+Our planners are compared to those taking part in past IPCs. Experiments were run using:
+\vspace{-0.1em}
 \begin{itemize}
-\item \textit{Hierarchical Task Networks} use \textit{tasks} (sequences of operators)
-to carry out some goal. This approach is one of the most used in practice today (ad-hoc planners we designed are conceptually similar).
-
-\item \textit{Pointer Networks and Reinforcement Learning} use special architectures of neural networks to solve TSP instances in \citet{Bello2016}.
-
-\item \textit{Learning a domain-specific heuristic function} using neural networks \citep{Chen2011}. This
-approach aims to help solve the problem of coming up with a good heuristic for a domain (a similar approach is also used in DeepStack \citep{Moravcik2017}).
+\item 30 minutes of CPU time
+\item 4 GB of RAM
+\item limited to one core per planner
+\item run on the clusters of MetaCentrum
 \end{itemize}
 
+\vspace{0.1em}
+\textbf{Sequential planners}:
+\vspace{0.1em}
+
+{
+\setlength{\tabcolsep}{3pt} % General space between cols (6pt standard)
+\renewcommand{\arraystretch}{1} % General space between rows (1 standard)
+\begin{tabular}{@{}ll}
+\multirow{2}{*}{\textit{MSFA3}} & Meta-heuristically weighted SFA\\
+&  with package and vehicle distance\\[4pt]
+\multirow{2}{*}{\textit{MSFA5}} & Meta-heuristically weighted SFA\\
+& with the general marking heuristic\\[4pt]
+\textit{RRAPN} & Rand. Restart Around Path Nearby
+\end{tabular}
+
+\vspace{0.4em}
+\textbf{Temporal planners}:
+\vspace{0.1em}
+
+{
+\setlength{\tabcolsep}{2pt} % General space between cols (6pt standard)
+\renewcommand{\arraystretch}{1} % General space between rows (1 standard)
+\begin{tabular}{@{}ll}
+\textit{MSFA5Sched} & Scheduled MSFA5\\[2pt]
+\textit{RRAPNSched} & Scheduled RRAPN\\[2pt]
+\textit{TRRAPN} & Temporal RRAPN
+\end{tabular}
+}
+}
+\end{flushleft}
+}
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	RESULTS
+%----------------------------------------------------------------------------------------
+
+\headerbox{Results}{name=results,column=1,row=0,span=2}{
+
+\vspace{-1.3em}
+\begin{multicols}{2}
+\begin{flushleft}
+We have designed Transport planners that are able to beat
+all planners from the:
+\begin{itemize}
+\item sequential and temporal tracks of IPC 2008 (Figure~1 and 2)
+\item sequential track of IPC 2011 (Figure~3)
+\end{itemize}
+
+\vspace{0.5em}
+In the 2014 IPC (Figure 4), we would have attained second place, behind the impressive result of Mercury (domain-independent).
+
+\vspace{0.5em}
+Our planners perform well across datasets, as can be observed in Table~1 and 2.
+
+\vspace{0.7em}
+\footnotesize{Figures only show the three best planners from IPC on
+each dataset.}
+
+\begin{center}
+\small
+\begin{tabular}{lr}
+\toprule
+\textbf{Planner} & \textbf{Avg.\;quality}\\
+\midrule
+MSFA3 & 0.923\\
+MSFA5 & \textbf{0.924}\\
+RRAPN & 0.894\\
+\bottomrule
+\end{tabular}
+\vspace{-0.5em}
+\captionof{table}{\textbf{Table 1:} Average quality on sequential datasets.}
+
+\vspace{1em}
+\begin{tabular}{lr}
+\toprule
+\textbf{Planner} & \textbf{Avg.\;quality}\\
+\midrule
+MSFA5Sched & 0.483\\
+RRAPNSched & 0.905\\
+TRRAPN & \textbf{0.934}\\
+\bottomrule
+\end{tabular}
+\vspace{-0.5em}
+\captionof{table}{\textbf{Table 2:} Average quality on the temporal dataset.}
+\end{center}
+\end{flushleft}
+\end{multicols}
+
+\vspace{-1.5em}
+\begin{center}
+\floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},
+capbesidewidth=9em}}]{figure}[0.4\paperwidth]
+{\caption{\textbf{Figure 1:} IPC 2008\\Sequential satisficing}}
+{\includegraphics[width=0.92\linewidth]{seq-sat-6-quality.pdf}}
+
+\vspace{0.4em}
+\floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},
+capbesidewidth=9em}}]{figure}[0.4\paperwidth]
+{\caption{\textbf{Figure 2:} IPC 2008\\Temporal satisficing}}
+{\includegraphics[width=0.92\linewidth]{tempo-sat-6-quality.pdf}}
+
+\vspace{0.4em}
+\floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},
+capbesidewidth=9em}}]{figure}[0.4\paperwidth]
+{\caption{\textbf{Figure 3:} IPC 2011\\Sequential satisficing}}
+{\includegraphics[width=0.92\linewidth{}]{seq-sat-7-quality.pdf}}
+
+\vspace{0.4em}
+\floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},
+capbesidewidth=9em}}]{figure}[0.4\paperwidth]
+{\caption{\textbf{Figure 4:} IPC 2014\\Sequential satisficing}}
+{\includegraphics[width=0.92\linewidth{}]{seq-sat-8-quality.pdf}}
+\end{center}
+\vspace{-2.4em}
+}
+
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Acknowledgements
+%----------------------------------------------------------------------------------------
+
+\headerbox{Acknowledgements}{name=ack,column=1,span=1,aligned=references}{
+
+\vspace{-1em}
+\begin{flushleft}
+\footnotesize
+Thank you to prof.\,RNDr.\,Roman\,Bart{\'{a}}k,\,Ph.D.,\\
+my advisor.
+\vspace{0.8em}
+
+Provided access to the computing facilities of
+MetaCentrum is greatly appreciated.
+
+\vspace{-0.22em}
+\phantom{a}
+\end{flushleft}
+}
+
+%----------------------------------------------------------------------------------------
+%	TE
+%----------------------------------------------------------------------------------------
+
+\headerbox{TransportEditor}{name=te,column=0,span=1,below=method,above=references}{
+
+\vspace{-1.5em}
+\begin{flushleft}
+Editor for transportation problem analysis and planner design \citep{Skopek2017}.
+\begin{center}
+\vspace{-0.5em}
+\includegraphics[width=\linewidth{},height=14em]{../../bp/img/transporteditor_planstates.png}
+\captionof{figure}{\textbf{Figure 5:} Tracing a plan in TransportEditor.}
+\end{center} 
+Will be presented at the System Demonstrations track of ICAPS 2017.
+\end{flushleft}
 }
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\headerbox{Conclusion}{name=conclusion,column=0,span=2,above=references,below=results}{
-The attained results show that domain-specific information can be leveraged
-to generate plans of better quality.
-We have designed and implemented Transport planners that are able to beat
-all results from the sequential
-and temporal satisficing tracks of the 2008 and 2011 IPCs.
-In the 2014 IPC, we would have attained second place on overall quality in the Transport domain, behind the impressive result of Mercury. 
+\headerbox{Conclusion}{name=conclusion,column=1,span=1,below=results,above=ack}{
+
+\vspace{-1.5em}
+\begin{flushleft}
+\small
+\begin{itemize}[leftmargin=1em,itemsep=0.3em]
+\item \textbf{Domain knowledge} can be \textbf{effectively used}
+to generate better plans faster.
+\item State-of-the-art \textbf{domain-independent planners}
+are often very \textbf{effective} even without domain knowledge.
+\end{itemize}
+\end{flushleft}
+}
+
+\headerbox{}{name=logo,column=2,span=1,aligned=ack,
+,boxpadding=0em,bottomaligned=ack}{
+\vspace{1.2em}
+\begin{center}
+\includegraphics[trim={1.5em 2em 0em 2.5em},clip, width=29em]{logo-en.pdf}
+\end{center}
 }
 
 %----------------------------------------------------------------------------------------
-%	Acknowledgements
+%	Further Information
 %----------------------------------------------------------------------------------------
 
-\headerbox{Acknowledgements}{name=ack,column=2,span=1,above=bottom,below=futureresearch}{
-Thank you to prof.\;RNDr.\;Roman\;Bart{\'{a}}k, Ph.D., my advisor.
+\headerbox{Further Information}{name=further,column=2,span=1,aligned=conclusion,bottomaligned=conclusion,boxpadding=0.8em}{
 
-Provided access to computing facilities of MetaCentrum is greatly appreciated.
+\vspace{-0.8em}
+\begin{flushleft}
+\setlength{\tabcolsep}{0.4em}
+\footnotesize
+\begin{tabular}{@{}cl@{}}
+\parbox[c]{1.5em}{\includegraphics[width=1.5em]{github.pdf}} & \url{github.com/oskopek/TransportEditor} \\[1em]
+\parbox[c]{1.5em}{\includegraphics[width=1.5em]{mail.pdf}} & \url{oskopek@oskopek.com} \\[1em]
+\textsc{WWW} & \url{oskopek.com/docs/bc-thesis.pdf}
+\end{tabular} 
+\end{flushleft}
 }
-
-
 
 %----------------------------------------------------------------------------------------
 
