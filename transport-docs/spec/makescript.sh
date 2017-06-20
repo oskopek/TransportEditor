@@ -3,6 +3,8 @@ names="spec"
 parameters="-halt-on-error -file-line-error"
 #quiet="> /dev/null"
 
+set +e
+
 rm -rvf pdf/ build/
 
 mkdir pdf
