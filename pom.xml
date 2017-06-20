@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.oskopek.transport</groupId>
     <artifactId>transport</artifactId>
-    <version>0.9.3</version>
+    <version>0.9.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Transport multiproject parent</name>
     <description>A problem editor, plan visualizer and set of planners for the Transport domain from the IPC 2008.</description>
