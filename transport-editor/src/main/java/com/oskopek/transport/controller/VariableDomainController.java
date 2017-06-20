@@ -38,27 +38,12 @@ public class VariableDomainController extends AbstractController {
     private CheckBox fuelCheck;
     private ValidationProperty fuelCheckValid;
     @FXML
-    private CheckBox numericCheck;
-    private ValidationProperty numericCheckValid;
-    @FXML
-    private TextArea goalArea;
-    private ValidationProperty goalAreaValid;
-    @FXML
-    private TextArea metricArea;
-    private ValidationProperty metricAreaValid;
-    @FXML
     private CheckBox capacityCheck;
     private ValidationProperty capacityCheckValid;
-    @FXML
-    private Label goalLabel;
-    @FXML
-    private Label metricLabel;
     @FXML
     private Label fuelLabel;
     @FXML
     private Label capacityLabel;
-    @FXML
-    private Label numericLabel;
     @FXML
     private Button applyButton;
     @FXML
@@ -78,9 +63,6 @@ public class VariableDomainController extends AbstractController {
                 sequentialRadio);
         temporalRadioValid = new ValidationProperty(messages.getString("vdcreator.valid.domainType"), temporalRadio);
         fuelCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.fuelCheck"), fuelCheck);
-        numericCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.numericCheck"), numericCheck);
-        goalAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.goalArea"), goalArea);
-        metricAreaValid = new ValidationProperty(messages.getString("vdcreator.valid.metricArea"), metricArea);
         capacityCheckValid = new ValidationProperty(messages.getString("vdcreator.valid.capacity"), capacityCheck);
 
         nameFieldValid.bind(nameField.textProperty().isNotEmpty());
@@ -91,18 +73,9 @@ public class VariableDomainController extends AbstractController {
 
         fuelCheckValid.set(true);
         capacityCheckValid.set(true);
-        numericCheckValid.set(true);
-
-        goalAreaValid.bind(new ObservableStringValidator(goalArea.textProperty(),
-                s -> goalArea.isDisabled() || !s.isEmpty())
-                .revalidateWhenChanged(goalArea.disabledProperty()).isValidProperty()); // TODO goal area validation
-        metricAreaValid.bind(new ObservableStringValidator(metricArea.textProperty(),
-                s -> metricArea.isDisabled() || !s.isEmpty())
-                .revalidateWhenChanged(metricArea.disabledProperty()).isValidProperty()); // TODO metric area validation
 
         allValidationsValid = nameFieldValid.and(sequentialRadioValid).and(temporalRadioValid).and(fuelCheckValid)
-                .and(numericCheckValid)
-                .and(goalAreaValid).and(metricAreaValid).and(capacityCheckValid);
+                .and(capacityCheckValid);
         applyButton.disableProperty().bind(allValidationsValid.not());
 
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
@@ -119,24 +92,11 @@ public class VariableDomainController extends AbstractController {
 
         domainBuilder.capacityProperty().bind(capacityCheck.selectedProperty());
         domainBuilder.fuelProperty().bind(fuelCheck.selectedProperty());
-        domainBuilder.numericProperty().bind(numericCheck.selectedProperty());
 
-        // TODO: Metric and goal parsing
-        // domainBuilder.goalTextProperty().bind(goalArea.textProperty());
-        // domainBuilder.metricTextProperty().bind(metricArea.textProperty());
-
-        ReadOnlyBooleanWrapper disableBind = new ReadOnlyBooleanWrapper(true);
-        numericLabel.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
-        numericCheck.disableProperty().bind(group.selectedToggleProperty().isNull().or(disableBind)); // TODO re-enable
         capacityLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         capacityCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelLabel.disableProperty().bind(group.selectedToggleProperty().isNull());
         fuelCheck.disableProperty().bind(group.selectedToggleProperty().isNull());
-
-        metricArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
-        metricLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
-        goalArea.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
-        goalLabel.disableProperty().bind(numericCheck.selectedProperty().not().or(disableBind)); // TODO re-enable
     }
 
     /**

@@ -46,17 +46,12 @@
                                   GridPane.rowIndex="0"/>
                         <CheckBox fx:id="fuelCheck" mnemonicParsing="false" text="%vdcreator.fuel"
                                   GridPane.rowIndex="1"/>
-                        <CheckBox fx:id="numericCheck" mnemonicParsing="false" text="%vdcreator.numeric"
-                                  GridPane.rowIndex="2"/>
                         <Label fx:id="capacityLabel" text="%vdcreator.label.capacity" GridPane.columnIndex="1"
                                GridPane.rowIndex="0"/>
                         <Label fx:id="fuelLabel" text="%vdcreator.label.fuel" GridPane.columnIndex="1"
                                GridPane.rowIndex="1"/>
-                        <Label fx:id="numericLabel" text="%vdcreator.label.numeric" GridPane.columnIndex="1"
-                               GridPane.rowIndex="2"/>
                     </children>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
                         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
                         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
                     </rowConstraints>
@@ -66,37 +61,6 @@
                     </columnConstraints>
                     <VBox.margin>
                         <Insets bottom="5.0" top="5.0"/>
-                    </VBox.margin>
-                </GridPane>
-                <Separator prefWidth="200.0"/>
-                <GridPane>
-                    <children>
-
-                        <Label fx:id="goalLabel" text="%vdcreator.goal" GridPane.rowIndex="0"/>
-                        <TextArea fx:id="goalArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                                  GridPane.rowIndex="0">
-                            <GridPane.margin>
-                                <Insets bottom="5.0"/>
-                            </GridPane.margin>
-                        </TextArea>
-                        <Label fx:id="metricLabel" text="%vdcreator.metric" GridPane.rowIndex="1"/>
-                        <TextArea fx:id="metricArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                                  GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets top="5.0"/>
-                            </GridPane.margin>
-                        </TextArea>
-                    </children>
-                    <columnConstraints>
-                        <ColumnConstraints minWidth="100.0" prefWidth="200.0"/>
-                        <ColumnConstraints minWidth="200.0" prefWidth="300.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="100.0"/>
-                        <RowConstraints minHeight="10.0" prefHeight="100.0"/>
-                    </rowConstraints>
-                    <VBox.margin>
-                        <Insets top="5.0"/>
                     </VBox.margin>
                 </GridPane>
             </children>
