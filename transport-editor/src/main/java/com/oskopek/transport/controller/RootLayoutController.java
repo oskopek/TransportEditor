@@ -28,6 +28,7 @@ import com.oskopek.transport.view.problem.VisualProblem;
 import com.oskopek.transport.view.problem.VisualProblemIO;
 import com.oskopek.transport.view.problem.DefaultVisualRoadGraph;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -168,6 +169,17 @@ public class RootLayoutController extends AbstractController {
         fileSetPlannerMenu.disableProperty().bind(application.planningSessionProperty().isNull());
         fileSetValidatorMenu.disableProperty().bind(application.planningSessionProperty().isNull());
 
+        InvalidationListener plannerChangeListener = l -> markSelectedPlanner();
+        application.planningSessionProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.plannerProperty().removeListener(plannerChangeListener);
+            }
+            if (newValue != null) {
+                newValue.plannerProperty().addListener(plannerChangeListener);
+            }
+            markSelectedPlanner();
+        });
+
         populatePlanners();
     }
 
@@ -192,6 +204,20 @@ public class RootLayoutController extends AbstractController {
                 .filter(tuple -> tuple._2.isAvailable())
                 .sortBy(tuple -> tuple._1)
                 .forEach(tuple -> addPlanner(tuple._1, tuple._2));
+    }
+
+    /**
+     * Mark the selected planner in the menu.
+     */
+    private void markSelectedPlanner() {
+        fileSetPlannerMenu.getItems().forEach(i -> i.setDisable(false));
+        String plannerName = application.getPlanningSessionOptional().map(PlanningSession::getPlanner)
+                .map(p -> p.getClass().getSimpleName()).orElse("");
+        logger.debug("Marking {}", plannerName);
+        fileSetPlannerMenu.getItems().stream().filter(i -> i.getText().equals(plannerName)).findAny().ifPresent(i -> {
+            logger.debug("Found {}, marking.", plannerName);
+            i.setDisable(true);
+        });
     }
 
     /**
