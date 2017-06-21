@@ -14,6 +14,7 @@ import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.PlannerUtils;
 import com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner;
 import com.oskopek.transport.planners.sequential.state.ImmutablePlanState;
+import com.oskopek.transport.tools.executables.LogListener;
 import javaslang.collection.Stream;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,11 @@ public class TRRAPNSequentialScheduler extends SequentialScheduler {
     @Override
     public Optional<Plan> plan(Domain domain, Problem tempProblem) {
         planner = new TemporalRandomizedRestartAroundPathNearbyPlanner(tempProblem);
-        return super.plan(domain, tempProblem);
+        LogListener listener = s -> this.log(s.trim());
+        planner.subscribe(listener);
+        Optional<Plan> plan = super.plan(domain, tempProblem);
+        planner.unsubscribe(listener);
+        return plan;
     }
 
     @Override

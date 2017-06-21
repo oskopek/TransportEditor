@@ -5,6 +5,7 @@ import com.oskopek.transport.model.plan.Plan;
 import com.oskopek.transport.model.problem.Problem;
 import com.oskopek.transport.planners.AbstractPlanner;
 import com.oskopek.transport.planners.sequential.RandomizedRestartAroundPathNearbyPlanner;
+import com.oskopek.transport.tools.executables.LogListener;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -19,7 +20,11 @@ public class RRAPNSequentialScheduler extends SequentialScheduler {
     @Override
     public Optional<Plan> plan(Domain seqDomain, Problem seqProblem,
             Function<Plan, Plan> planTransformation) {
-        return planner.plan(seqDomain, seqProblem, planTransformation);
+        LogListener listener = s -> this.log(s.trim());
+        planner.subscribe(listener);
+        Optional<Plan> plan = planner.plan(seqDomain, seqProblem, planTransformation);
+        planner.unsubscribe(listener);
+        return plan;
     }
 
     @Override
