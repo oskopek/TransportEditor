@@ -5,7 +5,7 @@
     <parent>
         <artifactId>transport</artifactId>
         <groupId>com.oskopek.transport</groupId>
-        <version>0.9.4</version>
+        <version>0.9.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>transport-benchmark</artifactId>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.oskopek.transport</groupId>
             <artifactId>transport-planners</artifactId>
-            <version>0.9.4</version>
+            <version>0.9.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
