@@ -5,16 +5,12 @@ import com.oskopek.transport.view.ExecutableParametersCreator;
 import com.oskopek.transport.view.ValidationProperty;
 import com.oskopek.transport.tools.executables.DefaultExecutableWithParameters;
 import com.oskopek.transport.tools.executables.ExecutableWithParameters;
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import javafx.beans.binding.BooleanBinding;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.stage.Stage;
@@ -66,21 +62,6 @@ public class ExecutableParametersController extends AbstractController {
 
         ButtonBar.setButtonData(applyButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        EventHandler<? super KeyEvent> textAreaTabHandler = event -> {
-            if (event.getCode().equals(KeyCode.TAB)) {
-                TextArea textArea = (TextArea) event.getSource();
-                TextAreaSkin skin = (TextAreaSkin) textArea.getSkin();
-                if (event.isShiftDown()) {
-                    skin.getBehavior().traversePrevious();
-                } else {
-                    skin.getBehavior().traverseNext();
-                }
-                event.consume();
-            }
-        };
-        executableArea.setOnKeyPressed(textAreaTabHandler);
-        parametersArea.setOnKeyPressed(textAreaTabHandler);
     }
 
     /**

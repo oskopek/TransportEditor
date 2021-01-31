@@ -1,14 +1,13 @@
 package com.oskopek.transport.controller;
 
 import com.google.common.eventbus.Subscribe;
+import com.oskopek.transport.event.DisposeGraphViewerEvent;
 import com.oskopek.transport.event.GraphUpdatedEvent;
-import com.oskopek.transport.model.problem.graph.RoadEdge;
-import com.oskopek.transport.model.problem.Problem;
+import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.model.problem.*;
+import com.oskopek.transport.model.problem.graph.RoadEdge;
 import com.oskopek.transport.model.problem.graph.VisualRoadGraph;
 import com.oskopek.transport.view.*;
-import com.oskopek.transport.event.DisposeGraphViewerEvent;
-import com.oskopek.transport.model.problem.Package;
 import com.oskopek.transport.view.plan.ActionObjectDetailPopup;
 import javafx.application.Platform;
 import javafx.beans.property.*;

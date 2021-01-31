@@ -1,7 +1,6 @@
 = TransportEditor
 
-image:https://github.com/oskopek/TransportEditor/workflows/Java%20CI%20with%20Maven/badge.svg["Java CI with Maven"]
-image:https://www.openhub.net/p/TransportEditor/widgets/project_thin_badge?format=gif["Ohloh widget", link="https://www.openhub.net/p/TransportEditor"]
+image:https://github.com/oskopek/TransportEditor/workflows/Java%20CI%20with%20Maven/badge.svg["build status", link="https://github.com/oskopek/TransportEditor/actions?query=workflow%3A%22Java+CI+with+Maven%22"]
 
 My Bachelor thesis and individual software project, TransportEditor.
 
