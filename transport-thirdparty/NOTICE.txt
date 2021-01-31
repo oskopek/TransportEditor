@@ -1,6 +1,6 @@
 
 Lists of 12 third-party dependencies.
-     (Eclipse Public License 1.0) JUnit (junit:junit:4.12 - http://junit.org)
+     (Eclipse Public License 1.0) JUnit (junit:junit:4.13.1 - http://junit.org)
      (Apache License, Version 2.0) Apache Commons Lang (org.apache.commons:commons-lang3:3.5 - http://commons.apache.org/proper/commons-lang/)
      (The Apache Software License, Version 2.0) Commons Math (org.apache.commons:commons-math:2.1 - http://commons.apache.org/math/)
      (The Apache Software License, Version 2.0) Apache Commons Math (org.apache.commons:commons-math3:3.4.1 - http://commons.apache.org/proper/commons-math/)

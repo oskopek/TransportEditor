@@ -143,7 +143,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>24.1.1</version>
+                <version>30.1-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>
@@ -426,14 +426,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.17</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>8.29</version>
-                        </dependency>
-                    </dependencies>
+                    <version>3.1.2</version>
                     <executions>
                         <execution>
                             <id>validate</id>
@@ -445,6 +438,10 @@
                                 <checkstyleRules>
                                     <module name="Checker">
                                         <property name="fileExtensions" value="java, properties, xml"/>
+                                        <module name="LineLength">
+                                            <property name="fileExtensions" value="java"/>
+                                            <property name="max" value="120"/>
+                                        </module>
                                         <module name="SuppressionFilter">
                                             <property name="file" value="${rootLevelDir}/config/checkstyle/suppression.xml"/>
                                         </module>
@@ -478,7 +475,6 @@
                                             <property name="message" value="Line has trailing spaces."/>
                                         </module>
                                         <module name="TreeWalker">
-                                            <property name="cacheFile" value="target/cachefile"/>
                                             <property name="tabWidth" value="4"/>
                                             <!-- Checks for Javadoc comments.                     -->
                                             <!-- See http://checkstyle.sf.net/config_javadoc.html -->
@@ -509,9 +505,6 @@
                                             </module>
                                             <!-- Checks for Size Violations.                    -->
                                             <!-- See http://checkstyle.sf.net/config_sizes.html -->
-                                            <module name="LineLength">
-                                                <property name="max" value="120"/>
-                                            </module>
                                             <module name="MethodLength"/>
                                             <module name="ParameterNumber">
                                                 <property name="max" value="9"/>
